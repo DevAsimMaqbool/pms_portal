@@ -14,42 +14,21 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-         // Reset cached roles and permissions
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-
-        // Define permissions
-        $permissions = [
-            // Admin permissions
-            'add user',
-            'edit user',
-            'delete user',
-            'add question',
-            'edit question',
-            'delete question',
-            'add answer',
-            'edit answer',
-            'delete answer',
-            'view user',
-            'view reports',
-
-            // User permissions
-            'view reports',
-            'view questions',
-        ];
-
-        // Create permissions
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
-        }
-
-        // Create roles
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $userRole  = Role::firstOrCreate(['name' => 'user']);
-
-        // Assign permissions to user
-        $userRole->syncPermissions(['view reports', 'view questions']);
-
-        // Assign all permissions to admin
-        $adminRole->syncPermissions(Permission::all());
+        Role::create(['name' => 'QEC']);
+        Role::create(['name' => 'Automation and Policy Control']);
+        Role::create(['name' => 'Examination']);
+        Role::create(['name' => 'OEC']);
+        Role::create(['name' => 'ORIC']);
+        Role::create(['name' => 'DOPS']);
+        Role::create(['name' => 'Finance']);
+        Role::create(['name' => 'International Office']);
+        Role::create(['name' => 'SEP']);
+        Role::create(['name' => 'Human Resources']);
+        Role::create(['name' => 'Registrar Secretariat']);
+        Role::create(['name' => 'Discipline Expert']);
+        Role::create(['name' => 'Self Reported']);
+        Role::create(['name' => 'CMACED']);
+        Role::create(['name' => 'Sports']);
+        Role::create(['name' => 'Chairman Secretariat']);
     }
 }
