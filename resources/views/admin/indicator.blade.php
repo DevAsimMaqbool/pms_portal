@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 
         <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
+        <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
 @endpush
 @section('content')
    <!-- Content -->
@@ -19,9 +20,8 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Indicator</th>
             <th>Indicator Category</th>
-            <th>KFA</th>
+            <th>Indicator</th>
             <th>Created Date</th>
             <th>ACTIONS</th>
           </tr>
@@ -88,6 +88,7 @@
 
 <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
 <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
+<script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 @endpush
 @push('script')
 <script>
@@ -115,16 +116,13 @@
                     const formattedDate = createdAt.toISOString().split('T')[0];
                     return [
                         i + 1,
-                        c.indicator || 'N/A',
-                        c.category?.indicator_category || 'N/A',
-                        c.category?.key_performance_area?.performance_area || 'N/A',
+                        c.indicator_category || 'N/A',
+                        Array.isArray(c.indicators) && c.indicators.length
+                        ? c.indicators.map(ind => ind.indicator).join('<br>') : 'N/A',
                         formattedDate,
                         `<div class="d-flex align-items-center">
                             <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="editIndicatorCategory(${c.id})">
                                 <i class="icon-base ti tabler-edit icon-22px"></i>
-                            </a>
-                            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteIndicatorCategory(${c.id})">
-                                <i class="icon-base ti tabler-trash icon-md"></i>
                             </a>
                         </div>`
                     ];
@@ -142,7 +140,6 @@
                             { title: "#" },
                             { title: "Indicator" },
                             { title: "Indicator Category" },
-                            { title: "KFA" },
                             { title: "Created Date" },
                             { title: "Actions", orderable: false }
                         ],
@@ -191,35 +188,84 @@
         modal.show();
     }
 
-    function editIndicatorCategory(id) {
+    function editIndicatorCategory11(id) {
         isEdit = true;
         $.get(`/indicator/${id}/edit`, function (data) {
             let options_s = '<option value="">Select Category</option>';
-            options_s += `<option value="${data.category.id}">${data.category.indicator_category}</option>`;
-            $('#indicator-category').html(options_s).val(data.category.id);
+            options_s += `<option value="${data.id}">${data.indicator_category}</option>`;
+            $('#indicator-category').html(options_s).val(data.id);
             $('#indicator_Id').val(data.id);
             $('#key-performance-area').val(data.category.key_performance_area.id);
-            $('#indicator-category').val(data.category.id);
+            $('#indicator-category').val(data.id);
+
             $('#indicator').val(data.indicator);
+
+             // Set the tag list in Tagify field
+            let tagInput = document.querySelector('#indicator');
+            if (tagInput && tagInput._tagify) {
+                // If already initialized, use set value
+                tagInput._tagify.removeAllTags();
+                tagInput._tagify.addTags(data.indicator.split(','));
+            } else {
+                // If not initialized yet, initialize with value
+                tagInput.value = data.indicator;
+                new Tagify(tagInput);
+            }
+            $('#modalTitle').text('Edit Indicator Category');
+            $('#nameError').text('');
+            modal.show();
+        });
+    }
+    function editIndicatorCategory(id) {
+        isEdit = true;
+
+        $.get(`/indicator/${id}/edit`, function (data) {
+            // Clear current options
+            $('#indicator-category').empty();
+            // Set selected Indicator Category in a dropdown (if dropdown is used)
+            let options_s = '<option value="">Select Category</option>';
+            options_s += `<option value="${data.id}" selected>${data.indicator_category}</option>`;
+            $('#indicator-category').html(options_s).val(data.id);
+
+
+            // Set hidden input for ID
+            $('#indicator_Id').val(data.id);
+            // Set Key Performance Area dropdown
+            $('#key-performance-area').val(data.key_performance_area_id).trigger('change');
+
+            // Set the indicators using Tagify
+            let tagInput = document.querySelector('#indicator');
+            if (tagInput && tagInput._tagify) {
+                tagInput._tagify.removeAllTags();
+                tagInput._tagify.addTags(data.indicator.split(','));
+            } else {
+                tagInput.value = data.indicator;
+                new Tagify(tagInput);
+            }
+
+            // Show modal and reset error message
             $('#modalTitle').text('Edit Indicator Category');
             $('#nameError').text('');
             modal.show();
         });
     }
 
+
     $('#indicatorCategoryForm').submit(function (e) {
         e.preventDefault();
         const id = $('#indicator_Id').val();
         const url = isEdit ? `/indicator/${id}` : "{{ route('indicator.store') }}";
         const method = isEdit ? 'PUT' : 'POST';
+        let rawTags = $('#indicator').val();
+        let parsedTags = [];
+        parsedTags = JSON.parse(rawTags).map(tag => tag.value).join(',');
         const formData = {
             _token: "{{ csrf_token() }}",
             _method: method,
             key_performance_area: $('#key-performance-area').val(),
             indicator_category: $('#indicator-category').val(),
-            indicator: $('#indicator').val()
+            indicator: parsedTags
         };
-
         $.ajax({
             url: url,
             method: method,
@@ -246,46 +292,6 @@
             }
         });
     });
-    function deleteIndicatorCategory(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: `/indicator/${id}`,
-                    method: 'POST',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        _method: 'DELETE'
-                    },
-                    success: function (res) {
-                        fetchIndicatorCategory(); // Refresh the table
-                        Swal.fire({
-                            title: 'Deleted!',
-                            text: 'The Indicator Category has been deleted.',
-                            icon: 'success',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-                    },
-                    error: function (xhr) {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Something went wrong while deleting.',
-                            icon: 'error'
-                        });
-                    }
-                });
-            }
-        });
-    }
 
     $('#key-performance-area').change(function () {
         const kpaId = $(this).val();
@@ -303,6 +309,12 @@
     });
     $(document).ready(function () {
         fetchIndicatorCategory();
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        const basicInput = document.querySelector("#indicator");
+        if (basicInput) {
+            new Tagify(basicInput);
+        }
     });
 </script>
 @endpush

@@ -25,6 +25,9 @@ Route::middleware('pms.auth')->group(function () {
     Route::resource('/indicator', IndicatorController::class);
     Route::get('/indicator-categories/{kpaId}', [IndicatorController::class, 'getCategoriesByKPA'])->name('indicators.categories');
     Route::get('/performance/{id}', [KeyPerformanceAreaController::class, 'report'])->name('performance.report');
+    Route::get('/teaching_learning', function () {
+        return view('admin.form.teaching_learning');
+    });
 });
 
 require __DIR__ . '/auth.php';

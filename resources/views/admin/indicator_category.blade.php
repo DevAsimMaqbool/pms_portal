@@ -111,15 +111,13 @@
                     const formattedDate = createdAt.toISOString().split('T')[0];
                     return [
                         i + 1,
-                        c.indicator_category || 'N/A',
-                        c.key_performance_area?.performance_area || 'N/A',
+                        c.performance_area || 'N/A',
+                        Array.isArray(c.indicator_categories) && c.indicator_categories.length
+                        ? c.indicator_categories.map(cat => cat.indicator_category).join('<br>'): 'N/A',
                         formattedDate,
                         `<div class="d-flex align-items-center">
                             <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="editIndicatorCategory(${c.id})">
                                 <i class="icon-base ti tabler-edit icon-22px"></i>
-                            </a>
-                            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteIndicatorCategory(${c.id})">
-                                <i class="icon-base ti tabler-trash icon-md"></i>
                             </a>
                         </div>`
                     ];
@@ -188,9 +186,23 @@
     function editIndicatorCategory(id) {
         isEdit = true;
         $.get(`/indicator-category/${id}/edit`, function (data) {
-            $('#indicatorca_categoryId').val(data.id);
-            $('#key-performance-area').val(data.key_performance_area.id);
-            $('#indicator-category').val(data.indicator_category);
+           
+            // Set the key performance area dropdown
+            $('#indicatorca_categoryId').val(data.key_performance_area_id);
+            $('#key-performance-area').val(data.key_performance_area_id).trigger('change');
+
+            // Set the tag list in Tagify field
+            let tagInput = document.querySelector('#indicator-category');
+            if (tagInput && tagInput._tagify) {
+                // If already initialized, use set value
+                tagInput._tagify.removeAllTags();
+                tagInput._tagify.addTags(data.indicator_category.split(','));
+            } else {
+                // If not initialized yet, initialize with value
+                tagInput.value = data.indicator_category;
+                new Tagify(tagInput);
+            }
+
             $('#modalTitle').text('Edit Indicator Category');
             $('#nameError').text('');
             modal.show();
@@ -237,46 +249,7 @@
             }
         });
     });
-    function deleteIndicatorCategory(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: `/indicator-category/${id}`,
-                    method: 'POST',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        _method: 'DELETE'
-                    },
-                    success: function (res) {
-                        fetchIndicatorCategory(); // Refresh the table
-                        Swal.fire({
-                            title: 'Deleted!',
-                            text: 'The Indicator Category has been deleted.',
-                            icon: 'success',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-                    },
-                    error: function (xhr) {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Something went wrong while deleting.',
-                            icon: 'error'
-                        });
-                    }
-                });
-            }
-        });
-    }
+    
 
 
     $(document).ready(function () {
