@@ -19,16 +19,21 @@ class IndicatorCategoryController extends Controller
             $IndicatorCategory = IndicatorCategory::with(['keyPerformanceArea'])->get();
             $KeyPerformanceArea = KeyPerformanceArea::select('id', 'performance_area')->get();
             if ($request->ajax()) {
-                    return response()->json([
+                return response()->json([
                     'IndicatorCategory' => $IndicatorCategory,
                     'KeyPerformanceArea' => $KeyPerformanceArea,
                 ]);
             }
             return view('admin.indicator_category');
         } catch (\Exception $e) {
-            return apiResponse('Oops! Something went wrong', [],
-                false, 500,'');
-        } 
+            return apiResponse(
+                'Oops! Something went wrong',
+                [],
+                false,
+                500,
+                ''
+            );
+        }
     }
 
     /**
@@ -44,22 +49,22 @@ class IndicatorCategoryController extends Controller
      */
     public function store(Request $request)
     {
-            $request->validate([
-                'key_performance_area' => 'required|exists:key_performance_areas,id',
-                'indicator_category' => 'required',
-            ]);
-            $userId = session('user_id');
-             // Split the comma-separated tags into an array
-             $categories = array_map('trim', explode(',', $request->indicator_category));
-            foreach ($categories as $category) {
-                $indicatorCategory = new IndicatorCategory();
-                $indicatorCategory->key_performance_area_id = $request->key_performance_area;
-                $indicatorCategory->indicator_category = $category;
-                $indicatorCategory->created_by = $userId;
-                $indicatorCategory->updated_by = $userId;
-                $indicatorCategory->save();
-            }
-            return response()->json(['message' => 'Indicator Category created successfully']);
+        $request->validate([
+            'key_performance_area' => 'required|exists:key_performance_areas,id',
+            'indicator_category' => 'required',
+        ]);
+        $userId = session('user_id');
+        // Split the comma-separated tags into an array
+        $categories = array_map('trim', explode(',', $request->indicator_category));
+        foreach ($categories as $category) {
+            $indicatorCategory = new IndicatorCategory();
+            $indicatorCategory->key_performance_area_id = $request->key_performance_area;
+            $indicatorCategory->indicator_category = $category;
+            $indicatorCategory->created_by = $userId;
+            $indicatorCategory->updated_by = $userId;
+            $indicatorCategory->save();
+        }
+        return response()->json(['message' => 'Indicator Category created successfully']);
     }
 
     /**
@@ -76,8 +81,8 @@ class IndicatorCategoryController extends Controller
     public function edit(string $id)
     {
         $IndicatorCategory = IndicatorCategory::with([
-                'keyPerformanceArea:id,performance_area', 
-            ])->findOrFail($id);
+            'keyPerformanceArea:id,performance_area',
+        ])->findOrFail($id);
         return response()->json($IndicatorCategory);
     }
 
@@ -85,7 +90,7 @@ class IndicatorCategoryController extends Controller
      * Update the specified resource in storage.
      */
     public function update_new(Request $request, $id)
-    {  
+    {
         $request->validate([
             'key_performance_area' => 'required|exists:key_performance_areas,id',
             'indicator_category' => 'required',
@@ -134,19 +139,24 @@ class IndicatorCategoryController extends Controller
 
         return response()->json(['message' => 'Indicator Categories updated successfully']);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id,Request $request)
+    public function destroy(string $id, Request $request)
     {
         try {
             $IndicatorCategory = IndicatorCategory::findOrFail($id);
             $IndicatorCategory->delete();
             return response()->json(['status' => 'success', 'message' => 'Indicator Category deleted successfully']);
         } catch (\Exception $e) {
-            return apiResponse('Oops! Something went wrong', [],
-                false, 500,'');
+            return apiResponse(
+                'Oops! Something went wrong',
+                [],
+                false,
+                500,
+                ''
+            );
         }
     }
 

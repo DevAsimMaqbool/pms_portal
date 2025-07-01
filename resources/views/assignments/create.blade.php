@@ -92,7 +92,6 @@
 
             kpaDropdown.addEventListener('change', function () {
                 let kpaId = this.value;
-                alert('asim'); // This should show
                 fetch(`/categories/${kpaId}`)
                     .then(res => res.json())
                     .then(data => {
