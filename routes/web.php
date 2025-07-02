@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AssignUserKpaController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\IndicatorCategoryController;
@@ -29,9 +30,13 @@ Route::middleware('pms.auth')->group(function () {
     Route::get('/indicator-categories/{kpaId}', [IndicatorController::class, 'getCategoriesByKPA'])->name('indicators.categories');
     Route::get('/performance/{id}', [KeyPerformanceAreaController::class, 'report'])->name('performance.report');
   
-    Route::get('/teaching_learning', function () {
-        return view('admin.form.teaching_learning');
-    });
+    
+    Route::get('/teaching_learning', [AssignUserKpaController::class, 'index']);
+    Route::post('/get-indicator-categories', [AssignUserKpaController::class, 'getIndicatorCategories'])->name('indicatorCategory.getIndicatorCategories');
+    Route::post('/get-indicators', [AssignUserKpaController::class, 'getIndicators'])->name('indicator.getIndicators');
+
+
+
 
     Route::get('/assignments', [RoleKpaAssignmentController::class, 'create'])->name('assignments.create');
     Route::post('/assignments', [RoleKpaAssignmentController::class, 'store'])->name('assignments.store');
