@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class KeyPerformanceAreaController extends Controller
 {
-     public function index(Request $request)
+    public function index(Request $request)
     {
         try {
             $kfa = KeyPerformanceArea::all();
@@ -16,9 +16,14 @@ class KeyPerformanceAreaController extends Controller
                 return response()->json($kfa);
             }
             return view('admin.key_performance_area');
-        }catch (\Exception $e) {
-            return apiResponse('Oops! Something went wrong', [],
-                false, 500,'');
+        } catch (\Exception $e) {
+            return apiResponse(
+                'Oops! Something went wrong',
+                [],
+                false,
+                500,
+                ''
+            );
         }
     }
 
@@ -83,15 +88,20 @@ class KeyPerformanceAreaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id,Request $request)
+    public function destroy(string $id, Request $request)
     {
         try {
             $kfa = KeyPerformanceArea::findOrFail($id);
             $kfa->delete();
             return response()->json(['status' => 'success', 'message' => 'Survey deleted successfully']);
-        }catch (\Exception $e) {
-            return apiResponse('Oops! Something went wrong', [],
-                false, 500,'');
+        } catch (\Exception $e) {
+            return apiResponse(
+                'Oops! Something went wrong',
+                [],
+                false,
+                500,
+                ''
+            );
         }
     }
     public function report($id)

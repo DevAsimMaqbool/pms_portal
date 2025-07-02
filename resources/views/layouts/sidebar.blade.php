@@ -6,7 +6,7 @@
     <a href="{{ route('dashboard') }}" class="app-brand-link">
       <img style="width: 175px;" src="{{ asset('admin/assets/img/avatars/superior.svg') }}">
     </a>
-    
+
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
       <i class="icon-base ti menu-toggle-icon d-none d-xl-block"></i>
@@ -21,8 +21,8 @@
 
     <li class="menu-item active open">
       <a href="{{ route('dashboard') }}" class="menu-link">
-      <i class="menu-icon icon-base ti tabler-smart-home"></i>
-      <div data-i18n="Dashboard">Dashboard</div>
+        <i class="menu-icon icon-base ti tabler-smart-home"></i>
+        <div data-i18n="Dashboard">Dashboard</div>
       </a>
       <!-- <ul class="menu-sub">
         <li class="menu-item active">
@@ -52,12 +52,18 @@
         <div data-i18n="Indicator">Indicator</div>
       </a>
     </li>
-    {{-- <li class="menu-item">
-      <a href="#" class="menu-link">
-        <i class="menu-icon icon-base ti tabler-message-circle-question"></i>
-        <div data-i18n="Complaints">Complaints</div>
+    <li class="menu-item">
+      <a href="{{ route('assignments.create') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-settings"></i>
+        <div data-i18n="Assign Indicators">Assign Indicators</div>
       </a>
-    </li> --}}
+    </li>
+    <li class="menu-item">
+      <a href="{{ route('user.kpa') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-eye"></i>
+        <div data-i18n="View Assigned Indicators">View Assigned Indicators</div>
+      </a>
+    </li>
     <!-- <li class="menu-item">
       <a href="/charts" class="menu-link">
         <i class="menu-icon icon-base ti tabler-list-details"></i>
@@ -115,4 +121,4 @@
     <i class="ti tabler-chevron-right icon-base"></i>
   </a>
 </div>
-<!-- / Menu -->
+<!-- Menu -->
