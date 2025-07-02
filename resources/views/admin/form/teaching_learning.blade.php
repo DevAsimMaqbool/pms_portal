@@ -21,70 +21,35 @@
                         <h6>1. Account Details</h6>
                         <div class="row g-6">
                             <div class="col-md-6">
-                            <label class="form-label" for="multicol-username">Username</label>
-                            <input type="text" id="multicol-username" class="form-control" placeholder="john.doe" />
+                            <label for="roleMultiple" class="form-label">Role</label>
+                            <select id="roleMultiple" name="user_role" class="select2 form-select" multiple>
+                            @foreach($kfarea as $kfa)
+                              <option value="{{ $kfa->id }}">{{ $kfa->performance_area }}</option>
+                            @endforeach
+                            </select>
                             </div>
                              <div class="col-md-6">
-                            <label class="form-label" for="multicol-email">Email</label>
-                            <div class="input-group input-group-merge">
-                                <input type="text" id="multicol-email" class="form-control" placeholder="john.doe" aria-label="john.doe" aria-describedby="multicol-email2" />
-                                <span class="input-group-text" id="multicol-email2">@example.com</span>
-                            </div>
-                            </div>
-                            <div class="col-md-6">
-                            <label class="form-label" for="multicol-first-name">First Name</label>
-                            <input type="text" id="multicol-first-name" class="form-control" placeholder="John" />
-                            </div>
-                            <div class="col-md-6">
-                            <label class="form-label" for="multicol-last-name">Last Name</label>
-                            <input type="text" id="multicol-last-name" class="form-control" placeholder="Doe" />
-                            </div>
-                            <div class="col-md-6">
-                            <label class="form-label" for="multicol-country">Country</label>
-                            <select id="multicol-country" class="select2 form-select" data-allow-clear="true">
-                                <option value="">Select</option>
-                                <option value="Australia">Australia</option>
-                                <option value="Bangladesh">Bangladesh</option>
-                                <option value="Belarus">Belarus</option>
-                                <option value="Brazil">Brazil</option>
-                                <option value="Canada">Canada</option>
-                                <option value="China">China</option>
-                                <option value="France">France</option>
-                                <option value="Germany">Germany</option>
-                                <option value="India">India</option>
-                                <option value="Indonesia">Indonesia</option>
-                                <option value="Israel">Israel</option>
-                                <option value="Italy">Italy</option>
-                                <option value="Japan">Japan</option>
-                                <option value="Korea">Korea, Republic of</option>
-                                <option value="Mexico">Mexico</option>
-                                <option value="Philippines">Philippines</option>
-                                <option value="Russia">Russian Federation</option>
-                                <option value="South Africa">South Africa</option>
-                                <option value="Thailand">Thailand</option>
-                                <option value="Turkey">Turkey</option>
-                                <option value="Ukraine">Ukraine</option>
-                                <option value="United Arab Emirates">United Arab Emirates</option>
-                                <option value="United Kingdom">United Kingdom</option>
-                                <option value="United States">United States</option>
-                            </select>
-                            </div>
-                            <div class="col-md-6 select2-primary">
-                            <label class="form-label" for="multicol-language">Language</label>
-                            <select id="multicol-language" class="select2 form-select" multiple>
-                                <option value="en" selected>English</option>
-                                <option value="fr" selected>French</option>
-                                <option value="de">German</option>
-                                <option value="pt">Portuguese</option>
+                            <label for="userMultiple" class="form-label">User </label>
+                            <select id="userMultiple" name="user" class="select2 form-select" multiple>
                             </select>
                             </div>
                             <div class="col-md-6">
-                            <label class="form-label" for="multicol-birthdate">Birth Date</label>
-                            <input type="text" id="multicol-birthdate" class="form-control dob-picker" placeholder="YYYY-MM-DD" />
+                            <label for="apkMultiple" class="form-label">Key Performance Area </label>
+                            <select id="apkMultiple" name="key_performance_area" class="select2 form-select" multiple>
+                            @foreach($kfarea as $kfa)
+                              <option value="{{ $kfa->id }}">{{ $kfa->performance_area }}</option>
+                            @endforeach
+                            </select>
                             </div>
                             <div class="col-md-6">
-                            <label class="form-label" for="multicol-phone">Phone No</label>
-                            <input type="text" id="multicol-phone" class="form-control phone-mask" placeholder="658 799 8941" aria-label="658 799 8941" />
+                            <label for="indiatorCategoryMultiple" class="form-label">Indicator Category </label>
+                            <select id="indiatorCategoryMultiple" name="indicator_category" class="select2 form-select" multiple>
+                            </select>
+                            </div>
+                            <div class="col-md-6">
+                            <label for="indiatorMultiple" class="form-label">Indicator </label>
+                            <select id="indiatorMultiple" name="indicator" class="select2 form-select" multiple>
+                            </select>
                             </div>
                         </div>
                         <div class="pt-6">
@@ -108,3 +73,67 @@
 <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
 <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 @endpush
+@push('script')
+<script>
+    $(document).ready(function () {
+        // Initialize all
+        $('#userMultiple, #roleMultiple, #apkMultiple, #indiatorCategoryMultiple, #indiatorMultiple').select2({
+            placeholder: 'Select option(s)',
+            allowClear: true
+        });
+
+        // On KeyPerformanceArea change
+        $('#apkMultiple').on('change', function () {
+            let kpaIds = $(this).val();
+
+            $.ajax({
+                url: "{{ route('indicatorCategory.getIndicatorCategories') }}",
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    kpa_ids: kpaIds
+                },
+                success: function (data) {
+                    let $categorySelect = $('#indiatorCategoryMultiple');
+                    $categorySelect.empty();
+
+                    data.forEach(function (item) {
+                        $categorySelect.append(
+                            new Option(item.indicator_category, item.id, false, false)
+                        );
+                    });
+
+                    $categorySelect.trigger('change');
+                }
+            });
+        });
+
+        // On IndicatorCategory change
+        $('#indiatorCategoryMultiple').on('change', function () {
+            let categoryIds = $(this).val();
+
+            $.ajax({
+                url: "{{ route('indicator.getIndicators') }}",
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    category_ids: categoryIds
+                },
+                success: function (data) {
+                    let $indicatorSelect = $('#indiatorMultiple');
+                    $indicatorSelect.empty();
+
+                    data.forEach(function (item) {
+                        $indicatorSelect.append(
+                            new Option(item.indicator, item.id, false, false)
+                        );
+                    });
+
+                    $indicatorSelect.trigger('change');
+                }
+            });
+        });
+    });
+</script>
+@endpush
+
