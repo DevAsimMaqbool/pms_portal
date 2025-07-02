@@ -22,7 +22,7 @@
     <li class="menu-item active open">
       <a href="{{ route('dashboard') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-smart-home"></i>
-        <div data-i18n="Dashboard">Dashboard</div>
+        <div data-i18n="Home">Home</div>
       </a>
       <!-- <ul class="menu-sub">
         <li class="menu-item active">
@@ -64,12 +64,12 @@
         <div data-i18n="View Assigned Indicators">View Assigned Indicators</div>
       </a>
     </li>
-    <!-- <li class="menu-item">
-      <a href="/charts" class="menu-link">
+    <li class="menu-item">
+      <a href="{{ route('departments.index') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-list-details"></i>
-        <div data-i18n="View Details">View Details</div>
+        <div data-i18n="View Departents">View Departents</div>
       </a>
-    </li> -->
+    </li>
     <!-- <li class="menu-item active">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon icon-base ti tabler-settings"></i>

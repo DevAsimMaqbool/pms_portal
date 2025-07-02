@@ -10,6 +10,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleKpaAssignmentController;
 use App\Http\Controllers\UserKPAController;
+use App\Http\Controllers\DepartmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,6 +38,8 @@ Route::middleware('pms.auth')->group(function () {
 
     // To show data for logged-in user
     Route::get('/my-kpa-data', [UserKPAController::class, 'index'])->name('user.kpa');
+
+    Route::resource('/departments', DepartmentController::class);
 });
 
 require __DIR__ . '/auth.php';
