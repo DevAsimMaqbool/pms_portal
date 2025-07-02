@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleKpaAssignmentController;
 use App\Http\Controllers\UserKPAController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\RectorDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,7 +29,7 @@ Route::middleware('pms.auth')->group(function () {
     Route::resource('/indicator', IndicatorController::class);
     Route::get('/indicator-categories/{kpaId}', [IndicatorController::class, 'getCategoriesByKPA'])->name('indicators.categories');
     Route::get('/performance/{id}', [KeyPerformanceAreaController::class, 'report'])->name('performance.report');
-  
+
     Route::get('/teaching_learning', function () {
         return view('admin.form.teaching_learning');
     });
@@ -44,6 +45,7 @@ Route::middleware('pms.auth')->group(function () {
     Route::get('/my-kpa-data', [UserKPAController::class, 'index'])->name('user.kpa');
 
     Route::resource('/departments', DepartmentController::class);
+    Route::resource('/rector-dashboard', RectorDashboardController::class);
 });
 
 require __DIR__ . '/auth.php';
