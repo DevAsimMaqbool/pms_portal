@@ -102,6 +102,249 @@
           'Vite' => 'Illuminate\\Support\\Facades\\Vite',
         ),
     ),
+
+    'markdown' => 
+    array (
+      'theme' => 'default',
+      'paths' => 
+      array (
+        0 => 'C:\\wamp64\\www\\pms\\resources\\views/vendor/mail',
+      ),
+    ),
+  ),
+  'permission' => 
+  array (
+    'models' => 
+    array (
+      'permission' => 'Spatie\\Permission\\Models\\Permission',
+      'role' => 'Spatie\\Permission\\Models\\Role',
+    ),
+    'table_names' => 
+    array (
+      'roles' => 'roles',
+      'permissions' => 'permissions',
+      'model_has_permissions' => 'model_has_permissions',
+      'model_has_roles' => 'model_has_roles',
+      'role_has_permissions' => 'role_has_permissions',
+    ),
+    'column_names' => 
+    array (
+      'role_pivot_key' => NULL,
+      'permission_pivot_key' => NULL,
+      'model_morph_key' => 'model_id',
+      'team_foreign_key' => 'team_id',
+    ),
+    'register_permission_check_method' => true,
+    'register_octane_reset_listener' => false,
+    'events_enabled' => false,
+    'teams' => false,
+    'team_resolver' => 'Spatie\\Permission\\DefaultTeamResolver',
+    'use_passport_client_credentials' => false,
+    'display_permission_in_exception' => false,
+    'display_role_in_exception' => false,
+    'enable_wildcard_permission' => false,
+    'cache' => 
+    array (
+      'expiration_time' => 
+      \DateInterval::__set_state(array(
+         'from_string' => true,
+         'date_string' => '24 hours',
+      )),
+      'key' => 'spatie.permission.cache',
+      'store' => 'default',
+    ),
+  ),
+  'queue' => 
+  array (
+    'default' => 'database',
+    'connections' => 
+    array (
+      'sync' => 
+      array (
+        'driver' => 'sync',
+      ),
+      'database' => 
+      array (
+        'driver' => 'database',
+        'connection' => NULL,
+        'table' => 'jobs',
+        'queue' => 'default',
+        'retry_after' => 90,
+        'after_commit' => false,
+      ),
+      'beanstalkd' => 
+      array (
+        'driver' => 'beanstalkd',
+        'host' => 'localhost',
+        'queue' => 'default',
+        'retry_after' => 90,
+        'block_for' => 0,
+        'after_commit' => false,
+      ),
+      'sqs' => 
+      array (
+        'driver' => 'sqs',
+        'key' => '',
+        'secret' => '',
+        'prefix' => 'https://sqs.us-east-1.amazonaws.com/your-account-id',
+        'queue' => 'default',
+        'suffix' => NULL,
+        'region' => 'us-east-1',
+        'after_commit' => false,
+      ),
+      'redis' => 
+      array (
+        'driver' => 'redis',
+        'connection' => 'default',
+        'queue' => 'default',
+        'retry_after' => 90,
+        'block_for' => NULL,
+        'after_commit' => false,
+      ),
+    ),
+    'batching' => 
+    array (
+      'database' => 'mysql',
+      'table' => 'job_batches',
+    ),
+    'failed' => 
+    array (
+      'driver' => 'database-uuids',
+      'database' => 'mysql',
+      'table' => 'failed_jobs',
+    ),
+  ),
+  'sanctum' => 
+  array (
+    'stateful' => 
+    array (
+      0 => 'localhost',
+      1 => 'localhost:3000',
+      2 => '127.0.0.1',
+      3 => '127.0.0.1:8000',
+      4 => '::1',
+      5 => 'localhost',
+    ),
+    'guard' => 
+    array (
+      0 => 'web',
+    ),
+    'expiration' => NULL,
+    'token_prefix' => '',
+    'middleware' => 
+    array (
+      'authenticate_session' => 'Laravel\\Sanctum\\Http\\Middleware\\AuthenticateSession',
+      'encrypt_cookies' => 'Illuminate\\Cookie\\Middleware\\EncryptCookies',
+      'validate_csrf_token' => 'Illuminate\\Foundation\\Http\\Middleware\\ValidateCsrfToken',
+    ),
+  ),
+  'services' => 
+  array (
+    'postmark' => 
+    array (
+      'token' => NULL,
+    ),
+    'ses' => 
+    array (
+      'key' => '',
+      'secret' => '',
+      'region' => 'us-east-1',
+    ),
+    'resend' => 
+    array (
+      'key' => NULL,
+    ),
+    'slack' => 
+    array (
+      'notifications' => 
+      array (
+        'bot_user_oauth_token' => NULL,
+        'channel' => NULL,
+      ),
+    ),
+    'pms' => 
+    array (
+      'base_url' => 'http://10.25.25.108:8000',
+    ),
+  ),
+  'session' => 
+  array (
+    'driver' => 'database',
+    'lifetime' => 120,
+    'expire_on_close' => false,
+    'encrypt' => false,
+    'files' => 'C:\\wamp64\\www\\pms\\storage\\framework/sessions',
+    'connection' => NULL,
+    'table' => 'sessions',
+    'store' => NULL,
+    'lottery' => 
+    array (
+      0 => 2,
+      1 => 100,
+    ),
+    'cookie' => 'assessmentportal_session',
+    'path' => '/',
+    'domain' => NULL,
+    'secure' => NULL,
+    'http_only' => true,
+    'same_site' => 'lax',
+    'partitioned' => false,
+  ),
+  'broadcasting' => 
+  array (
+    'default' => 'log',
+    'connections' => 
+    array (
+      'reverb' => 
+      array (
+        'driver' => 'reverb',
+        'key' => NULL,
+        'secret' => NULL,
+        'app_id' => NULL,
+        'options' => 
+        array (
+          'host' => NULL,
+          'port' => 443,
+          'scheme' => 'https',
+          'useTLS' => true,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'pusher' => 
+      array (
+        'driver' => 'pusher',
+        'key' => NULL,
+        'secret' => NULL,
+        'app_id' => NULL,
+        'options' => 
+        array (
+          'cluster' => NULL,
+          'host' => 'api-mt1.pusher.com',
+          'port' => 443,
+          'scheme' => 'https',
+          'encrypted' => true,
+          'useTLS' => true,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'ably' => 
+      array (
+        'driver' => 'ably',
+        'key' => NULL,
+      ),
+      'log' => 
+      array (
+        'driver' => 'log',
+      ),
+      'null' => 
+      array (
+        'driver' => 'null',
+      ),
+
   'auth' =>
     array(
       'defaults' =>
@@ -327,6 +570,7 @@
               'database' => '1',
             ),
         ),
+
     ),
   'filesystems' =>
     array(

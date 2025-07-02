@@ -16,8 +16,9 @@ class IndicatorCategoryController extends Controller
     public function index(Request $request)
     {
         try {
-            $IndicatorCategory = IndicatorCategory::with(['keyPerformanceArea'])->get();
+            //$IndicatorCategory = IndicatorCategory::with(['keyPerformanceArea'])->get();
             $KeyPerformanceArea = KeyPerformanceArea::select('id', 'performance_area')->get();
+            $IndicatorCategory = KeyPerformanceArea::with('indicatorCategories')->get();
             if ($request->ajax()) {
                 return response()->json([
                     'IndicatorCategory' => $IndicatorCategory,
@@ -80,10 +81,14 @@ class IndicatorCategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $IndicatorCategory = IndicatorCategory::with([
-            'keyPerformanceArea:id,performance_area',
-        ])->findOrFail($id);
-        return response()->json($IndicatorCategory);
+        $categories  = IndicatorCategory::with([
+                'keyPerformanceArea:id,performance_area', 
+            ])->where('key_performance_area_id', $id)->get();
+         return response()->json([
+        'key_performance_area_id' => $id,
+        'indicator_category' => $categories->pluck('indicator_category')->implode(','),
+        'performance_area' => $categories->first()?->keyPerformanceArea?->performance_area
+    ]);
     }
 
     /**
@@ -112,7 +117,7 @@ class IndicatorCategoryController extends Controller
 
         $userId = session('user_id');
 
-        // Step 1: Convert the comma-separated string into an array of trimmed tags
+        // Step 1: Convert the comma-separated string into an array of trimmed tagsgit
         $newCategories = array_filter(array_map('trim', explode(',', $request->indicator_category)));
 
         // Step 2: Get existing categories for the key_performance_area
