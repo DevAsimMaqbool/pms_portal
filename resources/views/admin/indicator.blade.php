@@ -98,6 +98,7 @@
 @endpush
 @push('script')
     <script>
+        let selectedCategoryId = null;
         const modal = new bootstrap.Modal(document.getElementById('indicatorCategorytModal'));
         let isEdit = false;
 
@@ -127,10 +128,10 @@
                                 ? c.indicators.map(ind => ind.indicator).join('<br>') : 'N/A',
                             formattedDate,
                             `<div class="d-flex align-items-center">
-                                                                            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="editIndicatorCategory(${c.id})">
-                                                                                <i class="icon-base ti tabler-edit icon-22px"></i>
-                                                                            </a>
-                                                                        </div>`
+                                                                                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="editIndicatorCategory(${c.id})">
+                                                                                    <i class="icon-base ti tabler-edit icon-22px"></i>
+                                                                                </a>
+                                                                            </div>`
                         ];
                     });
 
@@ -226,12 +227,11 @@
             isEdit = true;
 
             $.get(`/indicator/${id}/edit`, function (data) {
+                selectedCategoryId = data.id;
                 // Clear current options
                 $('#indicator-category').empty();
                 // Set selected Indicator Category in a dropdown (if dropdown is used)
-                let options_s = '<option value="">Select Category</option>';
-                options_s += `<option value="${data.id}" selected>${data.indicator_category}</option>`;
-                $('#indicator-category').html(options_s).val(data.id);
+
 
 
                 // Set hidden input for ID
@@ -306,9 +306,11 @@
                 $.get(`/indicator-categories/${kpaId}`, function (data) {
                     let options = '<option value="">Select Category</option>';
                     data.forEach(function (cat) {
-                        options += `<option value="${cat.id}">${cat.indicator_category}</option>`;
+                        const selected = (cat.id == selectedCategoryId) ? 'selected' : '';
+                        options += `<option value="${cat.id}" ${selected}>${cat.indicator_category}</option>`;
                     });
                     $('#indicator-category').html(options);
+                    selectedCategoryId = null;
                 });
             } else {
                 $('#indicator-category').html('<option value="">Select KPA first</option>');
