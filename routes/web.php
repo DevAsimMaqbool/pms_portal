@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AssignUserKpaController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ComplaintController;
@@ -13,6 +14,8 @@ use App\Http\Controllers\RoleKpaAssignmentController;
 use App\Http\Controllers\UserKPAController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RectorDashboardController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RolePermissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,6 +29,9 @@ Route::middleware('pms.auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
     Route::resource('/key-performance-area', KeyPerformanceAreaController::class);
+    Route::resource('/user-role', RoleController::class);
+    Route::get('roles/permissions/list', [RoleController::class, 'permissionsList'])->name('roles.permissions.list');
+    Route::resource('/role-permission', RolePermissionController::class);
     Route::resource('/indicator-category', IndicatorCategoryController::class);
     Route::resource('/indicator', IndicatorController::class);
     Route::get('/indicator-categories/{kpaId}', [IndicatorController::class, 'getCategoriesByKPA'])->name('indicators.categories');
@@ -34,6 +40,7 @@ Route::middleware('pms.auth')->group(function () {
 
     Route::get('/teaching_learning', [AssignUserKpaController::class, 'index']);
     Route::post('/get-indicator-categories', [AssignUserKpaController::class, 'getIndicatorCategories'])->name('indicatorCategory.getIndicatorCategories');
+    Route::post('/get-users', [AssignUserKpaController::class, 'getUsers'])->name('indicatorCategory.getUsers');
     Route::post('/get-indicators', [AssignUserKpaController::class, 'getIndicators'])->name('indicator.getIndicators');
 
 
@@ -51,6 +58,8 @@ Route::middleware('pms.auth')->group(function () {
 
     Route::resource('/departments', DepartmentController::class);
     Route::resource('/rector-dashboard', RectorDashboardController::class);
+
+    Route::post('/get-role-users', [UserController::class, 'index'])->name('userRole.index');
 });
 
 require __DIR__ . '/auth.php';

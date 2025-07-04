@@ -53,7 +53,7 @@
       </a>
     </li>
     <li class="menu-item">
-      <a href="{{ route('assignments.create') }}" class="menu-link">
+      <a href="teaching_learning" class="menu-link">
         <i class="menu-icon icon-base ti tabler-settings"></i>
         <div data-i18n="Assign Indicators">Assign Indicators</div>
       </a>
@@ -68,6 +68,18 @@
       <a href="{{ route('departments.index') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-list-details"></i>
         <div data-i18n="View Departents">View Departents</div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="{{ route('user-role.index') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-list-details"></i>
+        <div data-i18n="Roles">Roles</div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="{{ route('role-permission.index') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-list-details"></i>
+        <div data-i18n="Permission">Permission</div>
       </a>
     </li>
     <!-- <li class="menu-item active">

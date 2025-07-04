@@ -14,7 +14,7 @@
         <!-- Permission Table -->
         <div class="card">
             <div class="card-datatable table-responsive">
-                <table class="table border-top" id="keyPerformanceTable">
+                <table class="table border-top" id="roleTable">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -31,24 +31,22 @@
 
         <!-- Modal -->
         <!-- Add Permission Modal -->
-        <div class="modal fade" id="keyPerformanceModal" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="roleModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-simple">
                 <div class="modal-content">
                     <div class="modal-body">
                         <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                         <div class="text-center mb-6">
-                            <h3 class="modal-title" id="modalTitle">Add Key Performance Area</h3>
-                            <!-- <p class="text-body-secondary">Key Performance Area you may use and assign to your users.</p> -->
+                            <h3 class="modal-title" id="modalTitle">Add Role</h3>
                         </div>
 
-                        <form id="keyPerformanceForm" class="row">
-                            <input type="hidden" id="keyPerformanceId">
+                        <form id="roleForm" class="row">
+                            <input type="hidden" id="role_id">
                             <div class="col-12 form-control-validation mb-4">
-                                <label class="form-label" for="key-performance-area">KPA Name</label>
-                                <input type="text" id="key-performance-area" name="key_performance_area" required
-                                    class="form-control" />
-                                <div class="invalid-feedback" id="key-performance-areaError"></div>
+                                <label class="form-label" for="role-permission">Role Name</label>
+                                <input type="text" id="role-permission" name="name" required class="form-control" />
+                                <div class="invalid-feedback" id="role-permissionError"></div>
                             </div>
                             <div class="col-12 text-center demo-vertical-spacing">
                                 <button type="submit" class="btn btn-primary me-sm-4 me-1">Save</button>
@@ -77,12 +75,12 @@
 @endpush
 @push('script')
     <script>
-        const modal = new bootstrap.Modal(document.getElementById('keyPerformanceModal'));
+        const modal = new bootstrap.Modal(document.getElementById('roleModal'));
         let isEdit = false;
 
-        function fetchKeyperformance() {
+        function fetchRole() {
             $.ajax({
-                url: "{{ route('key-performance-area.index') }}",
+                url: "{{ route('role-permission.index') }}",
                 method: "GET",
                 dataType: "json",
                 success: function (data) {
@@ -92,15 +90,15 @@
                         const formattedDate = createdAt.toISOString().split('T')[0];
                         return [
                             i + 1,
-                            s.performance_area || 'N/A',
+                            s.name || 'N/A',
                             formattedDate,
-                            `<div class="d-flex align-items-center"><a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="editKeyperformance(${s.id})"><i class="icon-base ti tabler-edit icon-22px"></i></a><a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteKeyperformance(${s.id})"><i class="icon-base ti tabler-trash icon-md"></i></a><a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="performance/${s.id}"><i class="icon-base ti tabler-eye icon-md"></i></a></div>`
+                            `<div class="d-flex align-items-center"><a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="editRole(${s.id})"><i class="icon-base ti tabler-edit icon-22px"></i></a><a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteRole(${s.id})"><i class="icon-base ti tabler-trash icon-md"></i></a></div>`
                         ];
                     });
 
                     // Initialize DataTable only once
-                    if (!$.fn.DataTable.isDataTable('#keyPerformanceTable')) {
-                        window.keyPerformanceTable = $('#keyPerformanceTable').DataTable({
+                    if (!$.fn.DataTable.isDataTable('#roleTable')) {
+                        window.roleTable = $('#roleTable').DataTable({
                             processing: true,
                             paging: true,
                             searching: true,
@@ -125,10 +123,10 @@
                                         {
                                             buttons: [
                                                 {
-                                                    text: '<i class="icon-base ti tabler-plus icon-xs me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Add Key Performance Area</span>',
+                                                    text: '<i class="icon-base ti tabler-plus icon-xs me-0 me-sm-2"></i> <span class="d-none d-sm-inline-block">Add Role</span>',
                                                     className: "btn",
                                                     action: function () {
-                                                        openAddKeyPerformanceModal();
+                                                        openRoleModal();
                                                     }
                                                 }
                                             ]
@@ -139,7 +137,7 @@
                         });
                     } else {
                         // If already initialized, just refresh data
-                        window.keyPerformanceTable.clear().rows.add(rowData).draw();
+                        window.roleTable.clear().rows.add(rowData).draw();
                     }
                 },
                 error: function (xhr) {
@@ -148,44 +146,44 @@
             });
         }
 
-        function openAddKeyPerformanceModal() {
+        function openRoleModal() {
             isEdit = false;
-            $('#modalTitle').text('Add Key Performance Area');
-            $('#keyPerformanceForm')[0].reset();
-            $('#keyPerformanceId').val('');
+            $('#modalTitle').text('Add Role');
+            $('#roleForm')[0].reset();
+            $('#role_id').val('');
             $('.invalid-feedback').text('');
             modal.show();
         }
 
-        function editKeyperformance(id) {
+        function editRole(id) {
             isEdit = true;
-            $.get(`/key-performance-area/${id}/edit`, function (data) {
-                $('#keyPerformanceId').val(data.id);
-                $('#key-performance-area').val(data.performance_area);
-                $('#modalTitle').text('Edit Key Performance Area');
+            $.get(`/role-permission/${id}/edit`, function (data) {
+                $('#role_id').val(data.id);
+                $('#role-permission').val(data.name);
+                $('#modalTitle').text('Edit Role');
                 $('.invalid-feedback').text('');
                 modal.show();
             });
         }
 
-        $('#keyPerformanceForm').submit(function (e) {
+        $('#roleForm').submit(function (e) {
             e.preventDefault();
-            const id = $('#keyPerformanceId').val();
-            const url = isEdit ? `/key-performance-area/${id}` : "{{ route('key-performance-area.store') }}";
+            const id = $('#role_id').val();
+            const url = isEdit ? `/role-permission/${id}` : "{{ route('role-permission.store') }}";
             const method = isEdit ? 'PUT' : 'POST';
             const message = isEdit ? 'Updated successfully!' : 'Added successfully!';
             const formData = {
                 _token: "{{ csrf_token() }}",
                 _method: method,
-                key_performance_area: $('#key-performance-area').val()
+                name: $('#role-permission').val()
             };
             $.ajax({
                 url: url,
                 method: method,
                 data: formData,
                 success: function (res) {
-                    $('#keyPerformanceForm')[0].reset();
-                    $('#keyPerformanceId').val('');
+                    $('#roleForm')[0].reset();
+                    $('#role_id').val('');
                     modal.hide();
                     Swal.fire({
                         title: message,
@@ -195,7 +193,7 @@
                         },
                         buttonsStyling: !1
                     });
-                    fetchKeyperformance();
+                    fetchRole();
                 },
                 error: function (xhr) {
                     const errors = xhr.responseJSON.errors;
@@ -205,7 +203,7 @@
                 }
             });
         });
-        function deleteKeyperformance(id) {
+        function deleteRole(id) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -218,17 +216,17 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: `/key-performance-area/${id}`,
+                        url: `/role-permission/${id}`,
                         method: 'POST',
                         data: {
                             _token: "{{ csrf_token() }}",
                             _method: 'DELETE'
                         },
                         success: function (res) {
-                            fetchKeyperformance(); // Refresh the table
+                            fetchRole(); // Refresh the table
                             Swal.fire({
                                 title: 'Deleted!',
-                                text: 'The Key Performance Area has been deleted.',
+                                text: 'Role has been deleted.',
                                 icon: 'success',
                                 timer: 1500,
                                 showConfirmButton: false
@@ -248,7 +246,7 @@
 
 
         $(document).ready(function () {
-            fetchKeyperformance();
+            fetchRole();
         });
     </script>
 @endpush

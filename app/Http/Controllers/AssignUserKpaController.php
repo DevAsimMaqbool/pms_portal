@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Indicator;
 use App\Models\IndicatorCategory;
 use App\Models\KeyPerformanceArea;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AssignUserKpaController extends Controller
@@ -18,7 +19,20 @@ class AssignUserKpaController extends Controller
             $kfarea = KeyPerformanceArea::all();
             return view('admin.form.teaching_learning', compact('kfarea'));
         } catch (\Exception $e) {
-            return apiResponse('Oops! Something went wrong',[],false,500,'');
+            return apiResponse('Oops! Something went wrong', [], false, 500, '');
+        }
+    }
+
+    public function getUsers()
+    {
+        try {
+            $users = User::limit(5)->get();
+            $kfarea = KeyPerformanceArea::all();
+            return response()->json([
+                'users' => $users,
+            ]);
+        } catch (\Exception $e) {
+            return apiResponse('Oops! Something went wrong', [], false, 500, '');
         }
     }
 

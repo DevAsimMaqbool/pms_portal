@@ -20,16 +20,21 @@ class IndicatorController extends Controller
             $indicators = IndicatorCategory::with('indicators')->get();
             $KeyPerformanceArea = KeyPerformanceArea::select('id', 'performance_area')->get();
             if ($request->ajax()) {
-                    return response()->json([
+                return response()->json([
                     'indicators' => $indicators,
                     'KeyPerformanceArea' => $KeyPerformanceArea,
                 ]);
             }
             return view('admin.indicator');
         } catch (\Exception $e) {
-            return apiResponse('Oops! Something went wrong', [],
-                false, 500,'');
-        } 
+            return apiResponse(
+                'Oops! Something went wrong',
+                [],
+                false,
+                500,
+                ''
+            );
+        }
     }
 
     /**
@@ -45,25 +50,25 @@ class IndicatorController extends Controller
      */
     public function store(Request $request)
     {
-            $request->validate([
-                'key_performance_area' => 'required',
-                'indicator_category' => 'required',
-                'indicator' => 'required',
-            ]);
-            $userId = session('user_id');
-            $categories = array_map('trim', explode(',', $request->indicator));
-            // Create new complaint
-            foreach ($categories as $category) {
-                $IndicatorCategory = new Indicator();
-                $IndicatorCategory->indicator_category_id = $request->indicator_category;
-                $IndicatorCategory->indicator = $category;
-                $IndicatorCategory->created_by = $userId;
-                $IndicatorCategory->updated_by = $userId;
-                $IndicatorCategory->save();
-            }
-            return response()->json(['message' => 'Indicator Category created successfully']);
+        $request->validate([
+            'key_performance_area' => 'required',
+            'indicator_category' => 'required',
+            'indicator' => 'required',
+        ]);
+        $userId = session('user_id');
+        $categories = array_map('trim', explode(',', $request->indicator));
+        // Create new complaint
+        foreach ($categories as $category) {
+            $IndicatorCategory = new Indicator();
+            $IndicatorCategory->indicator_category_id = $request->indicator_category;
+            $IndicatorCategory->indicator = $category;
+            $IndicatorCategory->created_by = $userId;
+            $IndicatorCategory->updated_by = $userId;
+            $IndicatorCategory->save();
+        }
+        return response()->json(['message' => 'Indicator Category created successfully']);
 
-            
+
 
 
     }
@@ -81,7 +86,7 @@ class IndicatorController extends Controller
      */
     public function edit(string $id)
     {
-         $category = IndicatorCategory::with('keyPerformanceArea')->findOrFail($id);
+        $category = IndicatorCategory::with('keyPerformanceArea')->findOrFail($id);
         $indicators = $category->indicators()->pluck('indicator');
 
         return response()->json([
@@ -96,22 +101,22 @@ class IndicatorController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {  
+    {
         $request->validate([
-                'key_performance_area' => 'required',
-                'indicator_category' => 'required',
-                'indicator' => 'required',
+            'key_performance_area' => 'required',
+            'indicator_category' => 'required',
+            'indicator' => 'required',
         ]);
         $userId = session('user_id');
         // Parse incoming indicators (comma-separated string to array)
-         $newIndicators = array_filter(array_map('trim', explode(',', $request->indicator)));
-            $existingIndicators = Indicator::where('indicator_category_id', $request->indicator_category)
+        $newIndicators = array_filter(array_map('trim', explode(',', $request->indicator)));
+        $existingIndicators = Indicator::where('indicator_category_id', $request->indicator_category)
             ->pluck('indicator')
             ->toArray();
         // Normalize arrays to lowercase for case-insensitive comparison
         $existingIndicatorsLower = array_map('strtolower', $existingIndicators);
-        $newIndicatorsLower = array_map('strtolower', $newIndicators);    
-            // Add new indicators that don't already exist
+        $newIndicatorsLower = array_map('strtolower', $newIndicators);
+        // Add new indicators that don't already exist
         foreach ($newIndicators as $index => $indicator) {
             if (!in_array(strtolower($indicator), $existingIndicatorsLower)) {
                 Indicator::create([
@@ -123,7 +128,7 @@ class IndicatorController extends Controller
             }
         }
 
-         // Delete indicators that were removed by the user
+        // Delete indicators that were removed by the user
         foreach ($existingIndicators as $existingIndicator) {
             if (!in_array(strtolower($existingIndicator), $newIndicatorsLower)) {
                 Indicator::where('indicator_category_id', $request->indicator_category)
@@ -133,24 +138,29 @@ class IndicatorController extends Controller
         }
 
         return response()->json(['message' => 'Indicator updated successfully']);
-        
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id,Request $request)
+    public function destroy(string $id, Request $request)
     {
         try {
             $IndicatorCategory = Indicator::findOrFail($id);
             $IndicatorCategory->delete();
             return response()->json(['status' => 'success', 'message' => 'Indicator deleted successfully']);
         } catch (\Exception $e) {
-            return apiResponse('Oops! Something went wrong', [],
-                false, 500,'');
+            return apiResponse(
+                'Oops! Something went wrong',
+                [],
+                false,
+                500,
+                ''
+            );
         }
     }
-     public function getCategoriesByKPA($kpaId)
+    public function getCategoriesByKPA($kpaId)
     {
         $categories = IndicatorCategory::where('key_performance_area_id', $kpaId)->get();
         return response()->json($categories);

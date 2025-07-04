@@ -12,7 +12,7 @@ use Spatie\Permission\Models\Permission;
 class PermissionController extends Controller
 {
     protected string $baseUrl;
-     public function __construct()
+    public function __construct()
     {
         $this->baseUrl = config('services.pms.base_url');
     }
