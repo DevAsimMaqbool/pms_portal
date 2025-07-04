@@ -16,23 +16,11 @@ class RectorDashboardController extends Controller
     {
         try {
             // $indicators = Indicator::with('category.keyPerformanceArea')->get();
-            $indicators = IndicatorCategory::with('indicators')->get();
+            //$indicators = IndicatorCategory::with('indicators')->get();
             $KeyPerformanceArea = KeyPerformanceArea::select('id', 'performance_area')->get();
-            if ($request->ajax()) {
-                return response()->json([
-                    'indicators' => $indicators,
-                    'KeyPerformanceArea' => $KeyPerformanceArea,
-                ]);
-            }
-            return view('admin.rector_dashboard');
+            return view('admin.rector_dashboard', compact('KeyPerformanceArea'));
         } catch (\Exception $e) {
-            return apiResponse(
-                'Oops! Something went wrong',
-                [],
-                false,
-                500,
-                ''
-            );
+            return apiResponse( 'Oops! Something went wrong', [], false, 500, '');
         }
     }
 
