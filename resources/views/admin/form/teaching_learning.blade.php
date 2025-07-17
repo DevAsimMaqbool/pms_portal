@@ -16,49 +16,50 @@
     <div class="container-xxl flex-grow-1 container-p-y">
 
         <!-- Multi Column with Form Separator -->
-        <div class="card mb-6">
-            <h5 class="card-header">Multi Column with Form Separator</h5>
-            <form class="card-body">
-                <h6>1. Account Details</h6>
-                <div class="row g-6">
-                    <div class="col-md-6">
-                        <label for="apkMultiple" class="form-label">Key Performance Area </label>
-                        <select id="apkMultiple" name="key_performance_area" class="select2 form-select" multiple>
-                            @foreach($kfarea as $kfa)
-                                <option value="{{ $kfa->id }}">{{ $kfa->performance_area }}</option>
-                            @endforeach
-                        </select>
+        <div class="card">
+            <div class="card-datatable table-responsive card-body">
+                <h5>KPA to role</h5>
+                <form action="{{ route('assignments.store') }}" method="POST" class="row">
+                    @csrf
+                    <div class="row g-6">
+                        <div class="col-md-6">
+                            <label for="apkMultiple" class="form-label">Key Performance Area </label>
+                            <select id="apkMultiple" name="key_performance_area_id[]" class="select2 form-select" multiple>
+                                @foreach($kfarea as $kfa)
+                                    <option value="{{ $kfa->id }}">{{ $kfa->performance_area }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="indiatorCategoryMultiple" class="form-label">Indicator Category </label>
+                            <select id="indiatorCategoryMultiple" name="indicator_category_id[]" class="select2 form-select"
+                                multiple>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="indiatorMultiple" class="form-label">Indicator </label>
+                            <select id="indiatorMultiple" name="indicators[]" class="select2 form-select" multiple>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="roleMultiple" class="form-label">Role</label>
+                            <select id="roleMultiple" name="user_role" class="form-select">
+                                <option value="">Select Role</option>
+                                <option value="Dean">Dean</option>
+                                <option value="HOD">HOD</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="userMultiple" class="form-label">User </label>
+                            <select id="userMultiple" name="user[]" class="select2 form-select" multiple>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label for="indiatorCategoryMultiple" class="form-label">Indicator Category </label>
-                        <select id="indiatorCategoryMultiple" name="indicator_category" class="select2 form-select"
-                            multiple>
-                        </select>
+                    <div class="col-4 text-center demo-vertical-spacing">
+                        <button class="btn btn-primary w-100 waves-effect waves-light">Assign</button>
                     </div>
-                    <div class="col-md-6">
-                        <label for="indiatorMultiple" class="form-label">Indicator </label>
-                        <select id="indiatorMultiple" name="indicator" class="select2 form-select" multiple>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="roleMultiple" class="form-label">Role</label>
-                        <select id="roleMultiple" name="user_role" class="form-select">
-                            <option value="">Select Role</option>
-                            <option value="Dean">Dean</option>
-                            <option value="HOD">HOD</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="userMultiple" class="form-label">User </label>
-                        <select id="userMultiple" name="user" class="select2 form-select" multiple>
-                        </select>
-                    </div>
-                </div>
-                <div class="pt-6">
-                    <button type="submit" class="btn btn-primary me-4">Submit</button>
-                    <button type="reset" class="btn btn-label-secondary">Cancel</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
     <!-- / Content -->
@@ -138,16 +139,15 @@
 
             // On Rrle change
             $('#roleMultiple').on('change', function () {
-                let kpaIds = $(this).val();
+                let role = $('#roleMultiple').val();
                 $.ajax({
                     url: "{{ route('indicatorCategory.getUsers') }}",  // Fixed route
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
-                        kpa_ids: kpaIds
+                        role: role
                     },
                     success: function (data) {
-                        console.log(data);
                         let $categorySelect = $('#userMultiple');
                         $categorySelect.empty();
 

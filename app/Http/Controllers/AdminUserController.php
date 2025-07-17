@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\UserAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
 
 class AdminUserController extends Controller
 {
@@ -36,23 +34,16 @@ class AdminUserController extends Controller
                 ]);
             }
 
-            $answerCounts = UserAnswer::select('user_id', DB::raw('COUNT(*) as total_answers'))
-                ->whereNull('for_user_id')
-                ->groupBy('user_id')
-                ->get();
-            $stakeholderCounts = UserAnswer::select('user_id', 'for_user_id', DB::raw('COUNT(*) as total_answers'))
-                ->whereNotNull('user_id')
-                ->whereNotNull('for_user_id')
-                ->groupBy('user_id', 'for_user_id')
-                ->get();
             $totalUsers = User::count();
-            $answeredSelf = $answerCounts->count();
-            $answeredStakeholders = $stakeholderCounts->count();
-            $pendding = $totalUsers - ($answeredSelf + $answeredStakeholders);
-            return view('admin.user', compact('totalUsers', 'answeredSelf', 'answeredStakeholders', 'pendding'));
+            return view('admin.user', compact('totalUsers'));
         } catch (\Exception $e) {
-            return apiResponse('Oops! Something went wrong', [],
-                false, 500,'');
+            return apiResponse(
+                'Oops! Something went wrong',
+                [],
+                false,
+                500,
+                ''
+            );
         }
     }
 
@@ -88,16 +79,21 @@ class AdminUserController extends Controller
         $user->level = $request->level;
         $user->manager_id = $request->manager_id;
         $user->status = $request->status;
-        $user->password = Hash::make('default123'); // Default password
+        $user->password = Hash::make('Admin@123'); // Default password
 
         $user->save();
 
         // Assign role
         $user->assignRole($request->role);
         if ($request->expectsJson() && $request->is('api/*')) {
-                return apiResponse('User created successfully.', ['user' => $user],
-                true, 201,'');
-            }
+            return apiResponse(
+                'User created successfully.',
+                ['user' => $user],
+                true,
+                201,
+                ''
+            );
+        }
         return response()->json(['message' => 'User created successfully', 'user' => $user]);
     }
 
@@ -152,8 +148,13 @@ class AdminUserController extends Controller
         // Sync role
         $user->syncRoles([$request->role]);
         if ($request->expectsJson() && $request->is('api/*')) {
-                return apiResponse('User update successfully', ['user' => $user],
-                true, 201,'');
+            return apiResponse(
+                'User update successfully',
+                ['user' => $user],
+                true,
+                201,
+                ''
+            );
         }
         return response()->json(['message' => 'User updated successfully', 'user' => $user]);
     }
@@ -162,19 +163,29 @@ class AdminUserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id,Request $request)
+    public function destroy($id, Request $request)
     {
         try {
             $user = User::findOrFail($id);
             $user->delete();
             if ($request->expectsJson() && $request->is('api/*')) {
-                return apiResponse('User deleted successfully', [],
-                true, 200,'');
+                return apiResponse(
+                    'User deleted successfully',
+                    [],
+                    true,
+                    200,
+                    ''
+                );
             }
             return response()->json(['status' => 'success', 'message' => 'User deleted successfully']);
         } catch (\Exception $e) {
-            return apiResponse('Oops! Something went wrong', [],
-                false, 500,'');
+            return apiResponse(
+                'Oops! Something went wrong',
+                [],
+                false,
+                500,
+                ''
+            );
         }
     }
 

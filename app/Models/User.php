@@ -21,6 +21,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'id',
+        'employee_id',
         'name',
         'gender',
         'marital',
@@ -43,6 +45,7 @@ class User extends Authenticatable
         'status',
         'password',
     ];
+    public $incrementing = false;
 
     /**
      * The attributes that should be hidden for serialization.
@@ -65,5 +68,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class);
+    }
+
+    public function departments()
+    {
+        return $this->belongsToMany(Department::class);
     }
 }

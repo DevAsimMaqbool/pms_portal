@@ -28,16 +28,25 @@ class AuthenticatedSessionController extends Controller
     {
         $baseUrl = config('services.pms.base_url');
         $response = Http::post("{$baseUrl}/employee-login", [
-        'username' => $request->email,
-        'password' => $request->password,
+            'username' => $request->email,
+            'password' => $request->password,
         ]);
 
         if ($response->successful()) {
+
+
             $userData = $response->json();
+
+            $responseUserData = Http::withToken($userData['access_token'])
+                ->get("{$baseUrl}/get-employee-info", [
+                    'user_id' => $userData['user_id'],
+                ])->json();
+
             // Store user details and token in session
             session([
                 'access_token' => $userData['access_token'],
                 'token_type' => $userData['token_type'],
+                'employee_id' => $responseUserData['employee_id'],
                 'user_id' => $userData['user_id'],
                 'username' => $userData['username'],
                 'user_type' => $userData['user_type'],
@@ -47,11 +56,11 @@ class AuthenticatedSessionController extends Controller
             //     return redirect()->intended(route('admin.dashboard'));
             // }
 
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('rector-dashboard.index'));
         }
-         return back()->withErrors([
-                'email' => 'Invalid credentials or login failed.',
-            ]);
+        return back()->withErrors([
+            'email' => 'Invalid credentials or login failed.',
+        ]);
     }
 
     /**

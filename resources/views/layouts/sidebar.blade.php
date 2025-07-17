@@ -19,7 +19,14 @@
   <ul class="menu-inner py-1">
     <!-- Dashboards -->
 
-    <li class="menu-item active open">
+    <li class="menu-item {{ request()->routeIs('rector-dashboard.index') ? 'active' : '' }}">
+      <a href="{{ route('rector-dashboard.index') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
+        <div data-i18n="Dashboard">Dashboard</div>
+      </a>
+    </li>
+
+    <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
       <a href="{{ route('dashboard') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-smart-home"></i>
         <div data-i18n="Home">Home</div>
@@ -32,54 +39,65 @@
         </li>
       </ul> -->
     </li>
+    <li class="menu-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
+      <a href="{{ route('users.index') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-users"></i>
+        <div data-i18n="Users">Users</div>
+      </a>
+    </li>
 
-
-    <li class="menu-item">
+    <li class="menu-item {{ request()->routeIs('key-performance-area.index') ? 'active' : '' }}">
       <a href="{{ route('key-performance-area.index') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-message-star"></i>
         <div data-i18n="Key Performance Area">Key Performance Area</div>
       </a>
     </li>
-    <li class="menu-item">
+    <li class="menu-item {{ request()->routeIs('indicator-category.index') ? 'active' : '' }}">
       <a href="{{ route('indicator-category.index') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-users-group"></i>
         <div data-i18n="Indicator Category">Indicator Category</div>
       </a>
     </li>
-    <li class="menu-item">
+    <li class="menu-item {{ request()->routeIs('indicator.index') ? 'active' : '' }}">
       <a href="{{ route('indicator.index') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-message-heart"></i>
         <div data-i18n="Indicator">Indicator</div>
       </a>
     </li>
-    <li class="menu-item">
+    <li class="menu-item {{ request()->is('teaching_learning') ? 'active' : '' }}">
       <a href="teaching_learning" class="menu-link">
         <i class="menu-icon icon-base ti tabler-settings"></i>
         <div data-i18n="Assign Indicators">Assign Indicators</div>
       </a>
     </li>
-    <li class="menu-item">
+    <li class="menu-item {{ request()->routeIs('user.kpa') ? 'active' : '' }}">
       <a href="{{ route('user.kpa') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-eye"></i>
         <div data-i18n="View Assigned Indicators">View Assigned Indicators</div>
       </a>
     </li>
-    <li class="menu-item">
+    <li class="menu-item {{ request()->routeIs('departments.index') ? 'active' : '' }}">
       <a href="{{ route('departments.index') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-list-details"></i>
         <div data-i18n="View Departents">View Departents</div>
       </a>
     </li>
-    <li class="menu-item">
+    <li class="menu-item {{ request()->routeIs('user-role.index') ? 'active' : '' }}">
       <a href="{{ route('user-role.index') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-list-details"></i>
         <div data-i18n="Roles">Roles</div>
       </a>
     </li>
-    <li class="menu-item">
+    <li class="menu-item {{ request()->routeIs('role-permission.index') ? 'active' : '' }}">
       <a href="{{ route('role-permission.index') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-list-details"></i>
         <div data-i18n="Permission">Permission</div>
+      </a>
+    </li>
+    <li class="menu-item {{ request()->routeIs('assigndepartment.index') ? 'active' : '' }}">
+      <a href="{{ route('assigndepartment.index') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-message-heart"></i>
+        <div data-i18n="Assign Department">Assign Department</div>
       </a>
     </li>
     <!-- <li class="menu-item active">

@@ -8,6 +8,7 @@ use App\Models\IndicatorCategory;
 use App\Models\Indicator;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class RoleKpaAssignmentController extends Controller
 {
@@ -46,24 +47,48 @@ class RoleKpaAssignmentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'role_id' => 'required|exists:roles,id',
-            'key_performance_area_id' => 'required|exists:key_performance_areas,id',
-            'indicator_category_id' => 'required|exists:indicator_categories,id',
-            'indicators' => 'required|array',
-        ]);
+        try {
 
-        foreach ($request->indicators as $indicatorId) {
-            RoleKpaAssignment::updateOrCreate([
-                'role_id' => $request->role_id,
-                'key_performance_area_id' => $request->key_performance_area_id,
-                'indicator_category_id' => $request->indicator_category_id,
-                'indicator_id' => $indicatorId,
+            $validated = $request->validate([
+                'key_performance_area_id' => 'sometimes|required|array',
+                'key_performance_area_id.*' => 'exists:key_performance_areas,id',
+                'indicator_category_id' => 'sometimes|required|array',
+                'indicator_category_id.*' => 'exists:indicator_categories,id',
+                'indicators' => 'sometimes|required|array',
+                'indicators.*' => 'exists:indicators,id',
+                'user_role' => 'required|string|in:Dean,HOD',
+                'user' => 'sometimes|required|array',
+                'user.*' => 'exists:users,id',
             ]);
-        }
 
-        return back()->with('success', 'Assignments saved.');
+            //dd($validated);
+            if (!empty($validated['user'])) {
+                foreach ($validated['user'] as $userId) {
+                    foreach ($validated['key_performance_area_id'] as $kpaId) {
+                        foreach ($validated['indicator_category_id'] as $categoryId) {
+                            foreach ($validated['indicators'] as $indicatorId) {
+                                RoleKpaAssignment::updateOrCreate(
+                                    [
+                                        'role_id' => 3,
+                                        'user_id' => $userId,
+                                        'key_performance_area_id' => $kpaId,
+                                        'indicator_category_id' => $categoryId,
+                                        'indicator_id' => $indicatorId,
+                                    ],
+                                    [] // Add update fields here if needed
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+
+            return back()->with('success', 'Assignments saved successfully.');
+        } catch (ValidationException $e) {
+            dd('Validation failed', $e->errors(), $request->all());
+        }
     }
+
 
     /**
      * Display the specified resource.

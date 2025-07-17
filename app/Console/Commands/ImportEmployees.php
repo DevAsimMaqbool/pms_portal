@@ -30,7 +30,7 @@ class ImportEmployees extends Command
     {
         $this->info("Fetching employee records...");
 
-        $response = Http::withToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNTY4NzAiLCJleHAiOjE3NDg4NTc5OTJ9.MPayVRjyZ847APtQ8EPj0JByM8pdiUMw617lAyN6XuE')
+        $response = Http::withToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNTY4NzAiLCJleHAiOjE3NTE4NzAxMTR9.5SoXTjAmI29yNCUYPbPL5-93ug6wSqK6S1M5yRzSpcw')
             ->get('http://103.62.235.19:8000/get-employee-detail');
 
         if ($response->failed()) {
@@ -42,16 +42,32 @@ class ImportEmployees extends Command
 
         $employees = $response->json();
         $count = 0;
+        // $threshold = 40030;
         foreach ($employees as $emp) {
-            $email = $emp['work_email'] ?? ('test' . (++$count) . '@example.com');
-            $existingUser = User::where('employee_code', $emp['registration_number'])->first();
+
+            // if ((int) $emp['employee_id'] <= $threshold) {
+            //     continue;
+            // }
+
+            $invalidEmails = ['N/A', 'N/A ', 'NA', 'Pending', '-', 'NBMN', 'None'];
+
+            if (!isset($emp['work_email']) || $emp['work_email'] === null) {
+                $email = 'dummy' . (++$count) . '@example.com';
+            } elseif (in_array($emp['work_email'], $invalidEmails, true)) {
+                $email = 'dummy' . (++$count) . '@example.com';
+            } else {
+                $email = $emp['work_email'];
+            }
+            $existingUser = User::where('employee_id', $emp['employee_id'])->first();
+
             if (!$existingUser && User::where('email', $email)->exists()) {
-                \Log::warning("Skipped duplicate email: {$email} (employee_code: {$emp['registration_number']})");
+                \Log::warning("Skipped duplicate email: {$email} (employee_id: {$emp['employee_id']})");
                 continue;
             }
-            User::updateOrCreate(
-                ['employee_code' => $emp['registration_number']], // Unique key
+            $user = User::updateOrCreate(
+                ['id' => $emp['employee_id']], // Unique key
                 [
+                    'employee_id' => $emp['employee_id'],
                     'name' => $emp['name'],
                     'gender' => $emp['gender'] ?? 'null',
                     'marital' => $emp['marital'] ?? 'null',
@@ -65,6 +81,8 @@ class ImportEmployees extends Command
                     'work_location' => $emp['work_location'] ?? 'null',
                     'blood_group' => $emp['blood_group'] ?? 'null',
                     'email' => $email,
+                    'parent_department_id' => $emp['parent_department_id'] ?? 'null',
+                    'parent_department_name' => $emp['parent_department_name'] ?? 'null',
                     'department' => $emp['department_name'] ?? 'null',
                     'department_id' => $emp['department_id'] ?? 'null',
                     'employee_code' => $emp['registration_number'] ?? '000',
@@ -73,22 +91,11 @@ class ImportEmployees extends Command
                     'position' => $emp['job_title'] ?? 'null',
                     'level' => 'Managerial',
                     'status' => $emp['status'] ? 'active' : 'in-active',
-                    'password' => $emp['password'] ?? Hash::make('Admin@123'), // Assuming already hashed
+                    'password' => Hash::make('Admin@123'), // Assuming already hashed
 
                 ]
             );
-        }
-        foreach ($employees as $emp) {
-            $user = User::where('employee_code', $emp['registration_number'])->first();
-
-            if (!empty($emp['manager_id'])) {
-                $manager = User::where('employee_code', $emp['manager_id'])->first();
-
-                if ($user && $manager) {
-                    $user->manager_id = $manager->id;
-                    $user->save();
-                }
-            }
+            $user->assignRole('user');
         }
 
         $this->info("Imported " . count($employees) . " employee records.");

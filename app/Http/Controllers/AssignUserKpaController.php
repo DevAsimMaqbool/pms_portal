@@ -23,11 +23,12 @@ class AssignUserKpaController extends Controller
         }
     }
 
-    public function getUsers()
+    public function getUsers(Request $request)
     {
         try {
-            $users = User::limit(5)->get();
-            $kfarea = KeyPerformanceArea::all();
+            $role = $request->input('role');
+
+            $users = User::where('job_title', 'like', "%{$role}%")->limit(5)->get();
             return response()->json([
                 'users' => $users,
             ]);

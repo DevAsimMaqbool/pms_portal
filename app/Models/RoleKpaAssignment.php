@@ -8,6 +8,7 @@ class RoleKpaAssignment extends Model
 {
     protected $fillable = [
         'role_id',
+        'user_id',
         'key_performance_area_id',
         'indicator_category_id',
         'indicator_id',
