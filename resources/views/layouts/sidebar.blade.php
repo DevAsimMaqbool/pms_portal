@@ -100,6 +100,12 @@
         <div data-i18n="Assign Department">Assign Department</div>
       </a>
     </li>
+    <!-- <li class="menu-item {{ request()->routeIs('forms.create') ? 'active' : '' }}">
+      <a href="{{ route('forms.create') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-message-heart"></i>
+        <div data-i18n="Forms">Forms</div>
+      </a>
+    </li> -->
     <!-- <li class="menu-item active">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon icon-base ti tabler-settings"></i>

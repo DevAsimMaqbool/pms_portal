@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Department;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -85,7 +86,11 @@ class UserController extends Controller
         }
 
         // For blade dropdown
-        $departments = User::distinct()->pluck('department')->filter()->sort()->values();
+        $departments = Department::distinct()
+            ->get(['name', 'complete_name'])
+            ->unique('name') // optional, if needed
+            ->sortBy('complete_name')
+            ->values();
 
         $totalUsers = User::count();
         $roles = Role::all();
