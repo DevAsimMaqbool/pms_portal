@@ -16,6 +16,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\DepartmentAssignmentController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -63,6 +64,8 @@ Route::resource('/assigndepartment', DepartmentAssignmentController::class);
 Route::get('/assign-department', [DepartmentAssignmentController::class, 'index'])->name('assign.form');
 Route::post('/assign-department', [DepartmentAssignmentController::class, 'store'])->name('assign.store');
 Route::get('/faculty/{faculty}/departments', [DepartmentAssignmentController::class, 'getDepartments']);
+
+Route::get('/students', [StudentController::class, 'index'])->name('students.index');
 
 //});
 
