@@ -17,6 +17,7 @@ use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\DepartmentAssignmentController;
 use App\Http\Controllers\FormBuilderController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -65,6 +66,8 @@ Route::get('/assign-department', [DepartmentAssignmentController::class, 'index'
 Route::post('/assign-department', [DepartmentAssignmentController::class, 'store'])->name('assign.store');
 Route::get('/faculty/{faculty}/departments', [DepartmentAssignmentController::class, 'getDepartments']);
 
+Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+
 Route::get('/forms/create', [FormBuilderController::class, 'create'])->name('forms.create');
 Route::post('/forms/store', [FormBuilderController::class, 'store'])->name('forms.store');
 Route::get('/forms/{slug}', [FormBuilderController::class, 'show'])->name('forms.show');
@@ -72,9 +75,6 @@ Route::post('/forms/{form}', [FormBuilderController::class, 'submit'])->name('fo
 
 Route::get('/forms/{form}/edit', [FormBuilderController::class, 'edit'])->name('forms.edit');
 Route::put('/forms/{form}', [FormBuilderController::class, 'update'])->name('forms.update');
-
-
-
 //});
 
 require __DIR__ . '/auth.php';
