@@ -62,10 +62,10 @@ class FormBuilderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($slug)
+    public function show($id, $slug)
     {
         $form = Form::where('title', $slug)->with('fields')->firstOrFail();
-        return view('admin.form.form_show', ['form' => $form]);
+        return view('admin.form.form_show', ['form' => $form,'id'=>$id]);
     }
 
     /**

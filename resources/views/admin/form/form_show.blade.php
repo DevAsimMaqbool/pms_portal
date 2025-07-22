@@ -23,6 +23,7 @@
                     class="row">
                     @csrf
                     <div class="row g-6">
+                    <input type="hidden" name="student_id" value="{{ $id }}">
                         @foreach($form->fields as $field)
                             @php
                                 $required = $field->required ? 'required' : '';
