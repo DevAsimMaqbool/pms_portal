@@ -14,9 +14,12 @@ class StudentController extends Controller
             $students = Student::select(['id', 'full_name', 'email', 'created_at', 'updated_at']);
 
             return DataTables::of($students)
-                ->addColumn('actions', function ($row) {
-                    return '<button type="button" class="btn btn-primary waves-effect waves-light"><span class="icon-xs icon-base ti tabler-layout-navbar me-2"></span>Form</button>';
-                })
+                                    ->addColumn('actions', function ($row) {
+                        $url = route('forms.show', ['id' => $row->id, 'slug' => 'Employability']);
+                        return '<a href="' . $url . '" class="btn btn-primary waves-effect waves-light">
+                                    <span class="icon-xs icon-base ti tabler-layout-navbar me-2"></span>Employability
+                                </a>';
+                    })
                 ->rawColumns(['actions'])
                 ->make(true);
         }

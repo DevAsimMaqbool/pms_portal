@@ -70,7 +70,7 @@ Route::get('/students', [StudentController::class, 'index'])->name('students.ind
 
 Route::get('/forms/create', [FormBuilderController::class, 'create'])->name('forms.create');
 Route::post('/forms/store', [FormBuilderController::class, 'store'])->name('forms.store');
-Route::get('/forms/{slug}', [FormBuilderController::class, 'show'])->name('forms.show');
+Route::get('/{id}/forms/{slug}', [FormBuilderController::class, 'show'])->name('forms.show');
 Route::post('/forms/{form}', [FormBuilderController::class, 'submit'])->name('forms.submit');
 
 Route::get('/forms/{form}/edit', [FormBuilderController::class, 'edit'])->name('forms.edit');
