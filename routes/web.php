@@ -18,6 +18,7 @@ use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\DepartmentAssignmentController;
 use App\Http\Controllers\FormBuilderController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\AssignFormToUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -75,6 +76,15 @@ Route::post('/forms/{form}', [FormBuilderController::class, 'submit'])->name('fo
 
 Route::get('/forms/{form}/edit', [FormBuilderController::class, 'edit'])->name('forms.edit');
 Route::put('/forms/{form}', [FormBuilderController::class, 'update'])->name('forms.update');
+
+Route::resource('/assign-form', AssignFormToUserController::class);
+Route::post('/assign-forms', [AssignFormToUserController::class, 'store'])->name('forms.assign');
+
+Route::get('/assigned-forms', [AssignFormToUserController::class, 'showAssignedFormDropdown'])->name('forms.assigned');
+Route::get('/assigned-forms/view/{userId}/{title}', [AssignFormToUserController::class, 'view'])
+    ->name('forms.assigned.view');
+
+
 //});
 
 require __DIR__ . '/auth.php';

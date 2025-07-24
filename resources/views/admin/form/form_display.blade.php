@@ -14,24 +14,13 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-        <!-- Permission Table -->
+
+        <!-- Multi Column with Form Separator -->
         <div class="card">
-            <div class="card-datatable table-responsive">
-                <table class="table table-bordered" id="studentTable">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Roll Number</th>
-                            <th>Full Name</th>
-                            <th>Email</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                </table>
+            <div class="card-datatable table-responsive card-body">
+
             </div>
         </div>
-        <!--/ Permission Table -->
-
     </div>
     <!-- / Content -->
 @endsection
@@ -46,21 +35,4 @@
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
-
-    <script>
-        $(document).ready(function () {
-            $('#studentTable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route("students.index") }}', // <-- match your route name
-                columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'roll_number', name: 'roll_number' },
-                    { data: 'full_name', name: 'full_name' },
-                    { data: 'email', name: 'email' },
-                    { data: 'actions', orderable: false, searchable: false }
-                ]
-            });
-        });
-    </script>
 @endpush

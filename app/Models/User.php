@@ -79,4 +79,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Department::class);
     }
+
+    public function forms()
+    {
+        return $this->belongsToMany(Form::class, 'form_user', 'user_id', 'form_id')->withTimestamps();
+    }
 }

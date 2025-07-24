@@ -94,18 +94,30 @@
         <div data-i18n="Permission">Permission</div>
       </a>
     </li>
-    <li class="menu-item {{ request()->routeIs('assigndepartment.index') ? 'active' : '' }}">
+    <!-- <li class="menu-item {{ request()->routeIs('assigndepartment.index') ? 'active' : '' }}">
       <a href="{{ route('assigndepartment.index') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-message-heart"></i>
         <div data-i18n="Assign Department">Assign Department</div>
       </a>
-    </li>
-    <!-- <li class="menu-item {{ request()->routeIs('forms.create') ? 'active' : '' }}">
-      <a href="{{ route('forms.create') }}" class="menu-link">
-        <i class="menu-icon icon-base ti tabler-message-heart"></i>
-        <div data-i18n="Forms">Forms</div>
-      </a>
     </li> -->
+    <li class="menu-item {{ request()->routeIs('students.index') ? 'active' : '' }}">
+      <a href="{{ route('students.index') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-message-heart"></i>
+        <div data-i18n="Students">Students</div>
+      </a>
+    </li>
+    <li class="menu-item {{ request()->routeIs('assign-form.index') ? 'active' : '' }}">
+      <a href="{{ route('assign-form.index') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-message-heart"></i>
+        <div data-i18n="Assign Form To User">Assign Form To User</div>
+      </a>
+    </li>
+    <li class="menu-item {{ request()->routeIs('forms.assigned') ? 'active' : '' }}">
+      <a href="{{ route('forms.assigned') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-message-heart"></i>
+        <div data-i18n="Go To Forms">Go To Forms</div>
+      </a>
+    </li>
     <!-- <li class="menu-item active">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon icon-base ti tabler-settings"></i>
