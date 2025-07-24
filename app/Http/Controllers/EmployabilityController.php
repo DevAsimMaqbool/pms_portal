@@ -40,16 +40,26 @@ class EmployabilityController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'key_performance_area' => 'required',
+            'student_id' => 'required',
+            'secure_job' => 'required',
         ]);
 
         $userId = session('user_id');
         $data = new Employability();
-        $data->performance_area = $request->key_performance_area;
-        $data->created_by = $userId;
-        $data->updated_by = $userId;
+        $data->student_id = $request->student_id;
+        $data->secure_job = $request->secure_job;
+        $data->job_relevancy = $request->job_relevancy;
+        $data->salary = $request->salary;
+        $data->job_nature = $request->job_nature;
+        $data->joining_date = $request->joining_date;
+        $data->created_by = '1338';
+        $data->updated_by = '1338';
         $data->save();
-        return response()->json(['message' => 'Survey created successfully']);
+        return redirect()->route('forms.show', [
+            'id' => $request->student_id,
+            'slug' => 'Employability'
+        ])->with('message', 'Employability added successfully');
+
     }
 
     /**

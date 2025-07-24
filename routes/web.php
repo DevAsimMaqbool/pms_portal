@@ -19,6 +19,7 @@ use App\Http\Controllers\DepartmentAssignmentController;
 use App\Http\Controllers\FormBuilderController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AssignFormToUserController;
+use App\Http\Controllers\EmployabilityController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -83,6 +84,7 @@ Route::post('/assign-forms', [AssignFormToUserController::class, 'store'])->name
 Route::get('/assigned-forms', [AssignFormToUserController::class, 'showAssignedFormDropdown'])->name('forms.assigned');
 Route::get('/assigned-forms/view/{userId}/{title}', [AssignFormToUserController::class, 'view'])
     ->name('forms.assigned.view');
+Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
 
 
 //});
