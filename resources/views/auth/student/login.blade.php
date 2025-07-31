@@ -1,11 +1,11 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-    <!-- <h4 class="mb-1">Welcome to Assessment!</h4> -->
+    <h4 class="mb-1">Welcome to Student!</h4>
     <!-- <p class="mb-6">Make your app management easy and fun!</p> -->
     <form method="POST" action="{{ route('login') }}" id="formAuthentication" class="mb-4">
         @csrf
-         <input type="hidden" name="user_status" value="{{ encrypt('other') }}">
+        <input type="hidden" name="user_status" value="{{ encrypt('student') }}">
         <!-- Email Address -->
         <div class="mb-6 form-control-validation">
             <x-input-label for="email" :value="__('Email')" />

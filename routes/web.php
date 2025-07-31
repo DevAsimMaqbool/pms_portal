@@ -28,7 +28,10 @@ Route::get('/', function () {
 
 
 //Route::middleware('pms.auth')->group(function () {
+Route::middleware('auth')->group(function () {
 Route::get('/dashboard', [PermissionController::class, 'dashboard'])->name('dashboard');
+Route::get('student/dashboard', [PermissionController::class, 'dashboard'])->name('student.dashboard');
+Route::get('teacher/dashboard', [PermissionController::class, 'dashboard'])->name('teacher.dashboard');
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
@@ -87,6 +90,6 @@ Route::get('/assigned-forms/view/{userId}/{title}', [AssignFormToUserController:
 Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
 
 
-//});
+});
 
 require __DIR__ . '/auth.php';

@@ -91,6 +91,14 @@
                         <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
                         <span class="d-none d-md-block">Login</span>
                     </a>
+                    <a href="{{ route('teacher.login') }}" class="btn btn-primary">
+                        <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
+                        <span class="d-none d-md-block">Teacher Login</span>
+                    </a>
+                    <a href="{{ route('student.login') }}" class="btn btn-primary">
+                        <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
+                        <span class="d-none d-md-block">Student Login</span>
+                    </a>
                 </li>
             @endif
         @endif

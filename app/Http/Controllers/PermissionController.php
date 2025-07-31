@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Category;
+use App\Models\User;
 use App\Models\UserCategoryScore;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -20,18 +21,29 @@ class PermissionController extends Controller
      * Display the user's profile form.
      */
     public function dashboard(Request $request)
-    {
-        $token = session('access_token');
-        $userId = session('user_id');
-        $baseUrl = config('services.pms.base_url');
-        $response = Http::withToken($token)->get("{$this->baseUrl}/get-employee-info", [
-            'user_id' => $userId,
-        ]);
-        if ($response->successful()) {
-            $employee = $response->json();
+    {   
+        // $token = session('access_token');
+        // $userId = session('user_id');
+        // $baseUrl = config('services.pms.base_url');
+        // $response = Http::withToken($token)->get("{$this->baseUrl}/get-employee-info", [
+        //     'user_id' => $userId,
+        // ]);
+        // if ($response->successful()) {
+        //     $employee = $response->json();
 
-            // ✅ Pass employee data to a Blade view
-            return view('admin.dashbord', compact('employee'));
+        //     // ✅ Pass employee data to a Blade view
+        //     return view('admin.dashbord', compact('employee'));
+        // }
+        $userId = Auth::id(); // Get the authenticated user's ID
+
+        // Fetch the user from the database
+        $employee = User::find($userId);
+
+        if (!$employee) {
+            abort(404, 'User not found');
         }
+
+        // Pass the user data to the view
+        return view('admin.dashbord', compact('employee'));
     }
 }
