@@ -25,12 +25,20 @@
         <script src="{{ asset('admin/assets/vendor/js/template-customizer.js') }}"></script>
         <script src="{{ asset('admin/assets/js/config.js') }}"></script>
     </head>
-    <body>
+    <body @if (Request::is('login'))
+              
+          @elseif (Request::is('teacher/login'))
+              style="background-image: url(https://www.superior.edu.pk/wp-content/uploads/2025/05/Group-2-scaled-1-2048x1281.jpg);background-repeat: no-repeat;background-size: cover;background-position: center;"
+          @elseif (Request::is('student/login'))
+              style="background-color: #7267f051;"
+          @endif>
           <div class="container-xxl">
             <div class="authentication-wrapper authentication-basic container-p-y">
               <div class="authentication-inner py-6">
                 <!-- Login -->
-                <div class="card">
+                <div class="card" @if (Request::is('student/login'))
+                      style="border-radius:6rem 0.375rem 0.375rem 0.375rem"
+                  @endif>
                   <div class="card-body">
                     <!-- Logo -->
                     <div class="app-brand justify-content-center mb-6">
