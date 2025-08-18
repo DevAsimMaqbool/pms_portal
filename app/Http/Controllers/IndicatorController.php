@@ -361,7 +361,7 @@ class IndicatorController extends Controller
         $request->validate([
             'ids' => 'required|array',
             'ids.*' => 'exists:achievement_of_research_publications_target,id',
-            'status' => 'required|in:1,2'
+            'status' => 'required|in:1,2,3'
         ]);
 
         AchievementOfResearchPublicationsTarget::whereIn('id', $request->ids)
