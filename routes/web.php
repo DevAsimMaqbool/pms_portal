@@ -94,15 +94,11 @@ Route::middleware(['auth', 'role:Teacher'])->group(function () {
     Route::get('/kpa/{area}/category/{category}/indicator/{indicator}', [IndicatorController::class, 'indicator_form'])->name('indicator.form');
     Route::post('/indicator-form/', [IndicatorController::class, 'indicator_form_store'])->name('indicatorForm.store');
 });
-Route::middleware(['auth', 'role:HOD'])->group(function () {
+Route::middleware('role:Teacher|HOD|ORIC')->group(function () {
     Route::get('/view-forms', [IndicatorController::class, 'indicator_form_show'])->name('indicatorForm.show');
     Route::post('/achievement-of-research-publications-target/{id}/update-status',[IndicatorController::class, 'updateStatus']);
     Route::post('/achievement-of-research-publications-target/bulk-update-status', [IndicatorController::class, 'bulkUpdateStatus']) ->name('indicatorForm.bulkUpdateStatus');
-});
-Route::middleware(['auth', 'role:ORIC'])->group(function () {
-
-});
-
+    });
 
 });
 
