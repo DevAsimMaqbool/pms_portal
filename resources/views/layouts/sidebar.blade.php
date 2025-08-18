@@ -40,6 +40,12 @@
       </ul> -->
     </li>
     @if(auth()->user()->hasRole('Teacher'))
+     <li class="menu-item">
+          <a href="{{ route('indicatorForm.show') }}" class="menu-link">
+            <i class="menu-icon icon-base ti tabler-toggle-left"></i>
+            <div data-i18n="View Publications">View Publications</div>
+          </a>
+        </li>
     @php
         $kfa = \App\Models\KeyPerformanceArea::with(['indicatorCategories.indicators'])->get();
     @endphp
@@ -96,12 +102,13 @@
                 @endforeach
             </ul>
         </li>
+        
     @endforeach
     @elseif(auth()->user()->hasRole(['HOD', 'ORIC']))
        <li class="menu-item">
           <a href="{{ route('indicatorForm.show') }}" class="menu-link">
-            <i class="menu-icon icon-base ti tabler-users"></i>
-            <div data-i18n="View Form">View Form</div>
+            <i class="menu-icon icon-base ti tabler-toggle-left"></i>
+            <div data-i18n="View Publications">View Publications</div>
           </a>
         </li>
     @else

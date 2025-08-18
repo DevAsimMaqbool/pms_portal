@@ -92,6 +92,9 @@
 @endpush
 @push('script')
 <script>
+    window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+</script>
+<script>
 function fetchIndicatorForms() {
     $.ajax({
         url: "{{ route('indicatorForm.show') }}",
@@ -199,8 +202,46 @@ $(document).ready(function () {
         $('#modalTargetOfpublications').text(form.target_of_publications || 'N/A');
         $('#modalStatus').text(form.status || 'Pending');
         $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+
+        if (window.currentUserRole === 'HOD') {
         $('#approveCheckbox').prop('checked', form.status == 2);
-        $('#approveCheckbox').data('id', form.id); // store ID for later use
+        $('#approveCheckbox').data('id', form.id);
+         // Label text for HOD
+            let statusLabel = "Pending"; 
+            if (form.status == 1) {
+                statusLabel = "Verified";
+            } else if (form.status == 2) {
+                statusLabel = "Verified";
+            }
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        }else if(window.currentUserRole === 'ORIC'){
+            
+            $('#approveCheckbox').prop('checked', form.status == 3);
+            $('#approveCheckbox').data('id', form.id);
+            let statusLabel = "Pending"; 
+            if (form.status == 1) {
+                statusLabel = "Verified";
+            } else if (form.status == 2) {
+                statusLabel = "Approved"; 
+            } else if (form.status == 3) {
+                statusLabel = "Approved";
+            }
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        } else {
+            $('#approveCheckbox').closest('.form-check-input').hide();
+
+            let statusLabel = "Pending"; // default
+            if (form.status == 1) {
+                statusLabel = "Not Verified";
+            } else if (form.status == 2) {
+                statusLabel = "Verified";
+            } else if (form.status == 3) {
+                statusLabel = "Approved";
+            }
+
+            // update the label text
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        }
          if (form.draft_stage) {
             $('#modalExtraFields').append(`<tr class="optional-field"><th>Draft Stage</th><td>${form.draft_stage}</td></tr>`);
         }
@@ -225,7 +266,12 @@ $(document).ready(function () {
     });
     $(document).on('change', '#approveCheckbox', function () {
     let id = $(this).data('id');
-    let status = $(this).is(':checked') ? 2 : 1;
+    let status;
+     if (window.currentUserRole === "ORIC") {
+        status = $(this).is(':checked') ? 3 : 2;
+    } if (window.currentUserRole === "HOD"){
+        status = $(this).is(':checked') ? 2 : 1;
+    }
 
     $.ajax({
         url: `/achievement-of-research-publications-target/${id}/update-status`,
@@ -237,6 +283,7 @@ $(document).ready(function () {
         success: function (response) {
             if (response.success) {
                 alert('Status updated successfully!');
+                fetchIndicatorForms();
             } else {
                 alert('Failed to update status.');
             }

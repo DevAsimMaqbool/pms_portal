@@ -234,27 +234,99 @@ class IndicatorController extends Controller
             'data' => $record
         ]);
     }
+    // public function indicator_form_show(Request $request)
+    // {
+    //     try {
+    //         $employee_id = Auth::user()->employee_id;
+
+    //         // Step 1: Get employee IDs of users managed by this manager
+    //         $employeeIds = User::where('manager_id', $employee_id)
+    //             ->pluck('employee_id');
+
+    //         // Step 2: Get forms + eager load creator's name
+    //         $forms = AchievementOfResearchPublicationsTarget::with(['creator' => function ($q) {
+    //                 $q->select('employee_id', 'name');
+    //             }])
+    //             ->whereIn('created_by', $employeeIds)
+    //             ->get()
+    //             ->map(function ($form) {
+    //                 if ($form->email_screenshot) {
+    //                     $form->email_screenshot_url = Storage::url($form->email_screenshot);
+    //                 }
+    //                 return $form;
+    //             });
+    //         if ($request->ajax()) {
+    //             return response()->json([
+    //                 'forms' => $forms
+    //             ]);
+    //         }
+
+    //         return view('admin.form.form_indicator_show');
+
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'message' => 'Oops! Something went wrong',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
     public function indicator_form_show(Request $request)
     {
         try {
-            $employee_id = Auth::user()->employee_id;
+            $user = Auth::user();
+            $userId = Auth::id(); 
+            $employee_id = $user->employee_id;
 
-            // Step 1: Get employee IDs of users managed by this manager
-            $employeeIds = User::where('manager_id', $employee_id)
-                ->pluck('employee_id');
+            if ($user->hasRole('Teacher')) {
+                // Teacher: only own forms
+                $forms = AchievementOfResearchPublicationsTarget::with(['creator' => function ($q) {
+                        $q->select('employee_id', 'name');
+                    }])
+                    ->where('created_by', $userId)
+                    ->get()
+                    ->map(function ($form) {
+                        if ($form->email_screenshot) {
+                            $form->email_screenshot_url = Storage::url($form->email_screenshot);
+                        }
+                        return $form;
+                    });
 
-            // Step 2: Get forms + eager load creator's name
-            $forms = AchievementOfResearchPublicationsTarget::with(['creator' => function ($q) {
-                    $q->select('employee_id', 'name');
-                }])
-                ->whereIn('created_by', $employeeIds)
-                ->get()
-                ->map(function ($form) {
-                    if ($form->email_screenshot) {
-                        $form->email_screenshot_url = Storage::url($form->email_screenshot);
-                    }
-                    return $form;
-                });
+            } elseif ($user->hasRole('HOD')) {
+                // HOD: forms of managed employees
+                $employeeIds = User::where('manager_id', $employee_id)
+                    ->pluck('employee_id');
+
+                $forms = AchievementOfResearchPublicationsTarget::with(['creator' => function ($q) {
+                        $q->select('employee_id', 'name');
+                    }])
+                    ->whereIn('created_by', $employeeIds)
+                    ->whereIn('status', [1, 2])
+                    ->get()
+                    ->map(function ($form) {
+                        if ($form->email_screenshot) {
+                            $form->email_screenshot_url = Storage::url($form->email_screenshot);
+                        }
+                        return $form;
+                    });
+
+            } elseif ($user->hasRole('ORIC')) {
+                // ORIC: only approved forms (status = 2)
+                $forms = AchievementOfResearchPublicationsTarget::with(['creator' => function ($q) {
+                        $q->select('employee_id', 'name');
+                    }])
+                    ->where('status', 2)
+                    ->get()
+                    ->map(function ($form) {
+                        if ($form->email_screenshot) {
+                            $form->email_screenshot_url = Storage::url($form->email_screenshot);
+                        }
+                        return $form;
+                    });
+
+            } else {
+                $forms = collect();
+            }
+
             if ($request->ajax()) {
                 return response()->json([
                     'forms' => $forms
@@ -270,10 +342,11 @@ class IndicatorController extends Controller
             ], 500);
         }
     }
+
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:1,2'
+            'status' => 'required|in:1,2,3'
         ]);
 
         $target = AchievementOfResearchPublicationsTarget::findOrFail($id);
