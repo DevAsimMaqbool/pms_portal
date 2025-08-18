@@ -17,14 +17,30 @@
         <!-- Permission Table -->
         <div class="card">
             <div class="card-datatable table-responsive">
-                <div class="d-flex m-5">
-                    <select id="bulkAction" class="form-select w-auto me-2">
-                        <option value="">-- Select Action --</option>
-                        <option value="2">Approve</option>
-                        <option value="1">Unapprove</option>
-                    </select>
-                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                </div>
+                @php
+                    $role = auth()->user()->getRoleNames()->first(); // assuming you're using Spatie roles
+                @endphp
+                @if($role === 'Teacher')
+                    {{-- Do not show bulkAction for Teachers --}}
+                @elseif($role === 'HOD')
+                    <div class="d-flex m-5">
+                        <select id="bulkAction" class="form-select w-auto me-2">
+                            <option value="">-- Select Action --</option>
+                            <option value="2">Verified</option>
+                            <option value="1">UnVerified</option>
+                        </select>
+                        <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                    </div>
+                @elseif($role === 'ORIC')
+                    <div class="d-flex m-5">
+                        <select id="bulkAction" class="form-select w-auto me-2">
+                            <option value="">-- Select Action --</option>
+                            <option value="3">Approve</option>
+                            <option value="2">Unapprove</option>
+                        </select>
+                        <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                    </div>
+                @endif
                 <table id="complaintTable" class="table table-bordered table-striped" style="width:100%">
                 <thead>
                     <tr>
