@@ -475,7 +475,7 @@
                   <li class="timeline-item ps-6 border-dashed">
                     <span class="timeline-indicator-advanced timeline-indicator-success border-0 shadow-none">
                       <i class="icon-base ti tabler-circle-check"></i>
-                    </span>
+                    </span> 
                     <div class="timeline-event ps-1">
                       <div class="timeline-header">
                         <small class="text-success text-uppercase">sender</small>

@@ -54,6 +54,7 @@ class UserController extends Controller
                     $icon = match ($role) {
                         'admin' => '<i class="icon-base ti tabler-device-desktop icon-md text-danger me-2"></i>',
                         'user' => '<i class="icon-base ti tabler-user icon-md text-success me-2"></i>',
+                        'Teacher' => '<i class="icon-base ti tabler-chalkboard icon-md text-info me-2"></i>',
                         default => '<i class="icon-base ti tabler-circle icon-md text-primary me-2"></i>',
                     };
                     return '<span class="d-flex align-items-center text-heading">' . $icon . ' ' . $role . '</span>';

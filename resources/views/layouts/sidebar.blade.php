@@ -39,6 +39,74 @@
         </li>
       </ul> -->
     </li>
+    @if(auth()->user()->hasRole('Teacher'))
+    @php
+        $kfa = \App\Models\KeyPerformanceArea::with(['indicatorCategories.indicators'])->get();
+    @endphp
+
+    @foreach($kfa as $area)
+        <li class="menu-item active">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <span class="menu-icon" style="
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    background: #eee;
+                    font-weight: bold;
+                    font-size: 14px;">
+                    {{ $loop->iteration }}
+                </span>
+                <div data-i18n="{{ $area->performance_area }}">
+                    {{ $area->performance_area }}
+                </div>
+            </a>
+
+            {{-- Level 2: Indicator Categories --}}
+            <ul class="menu-sub">
+                @foreach($area->indicatorCategories as $category)
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <div data-i18n="{{ $category->indicator_category }}">
+                                {{ $category->indicator_category }}
+                            </div>
+                        </a>
+
+                        {{-- Level 3: Indicators --}}
+                        @if($category->indicators->count())
+                            <ul class="menu-sub">
+                                @foreach($category->indicators as $indicator)
+                                    <li class="menu-item">
+                                        <a href="{{ route('indicator.form', [
+                                            'area' => $area->id,
+                                            'category' => $category->id,
+                                            'indicator' => $indicator->id
+                                        ]) }}" class="menu-link">
+                                            <div data-i18n="{{ $indicator->indicator }}">
+                                                {{ $indicator->indicator }}
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+        </li>
+    @endforeach
+    @elseif(auth()->user()->hasRole(['HOD', 'ORIC']))
+       <li class="menu-item">
+          <a href="{{ route('indicatorForm.show') }}" class="menu-link">
+            <i class="menu-icon icon-base ti tabler-users"></i>
+            <div data-i18n="View Form">View Form</div>
+          </a>
+        </li>
+    @else
+   
+
     <li class="menu-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
       <a href="{{ route('users.index') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-users"></i>
@@ -118,7 +186,8 @@
         <div data-i18n="Go To Forms">Go To Forms</div>
       </a>
     </li>
-    <!-- <li class="menu-item active">
+     @endif
+    {{-- <li class="menu-item active">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon icon-base ti tabler-settings"></i>
         <div data-i18n="Roles & Permissions">Roles & Permissions</div>
@@ -135,7 +204,7 @@
           </a>
         </li>
       </ul>
-    </li> -->
+    </li> --}}
     <!-- Charts & Maps -->
     <!-- <li class="menu-header small">
       <span class="menu-header-text" data-i18n="Charts & Maps">Charts &amp; Maps</span>

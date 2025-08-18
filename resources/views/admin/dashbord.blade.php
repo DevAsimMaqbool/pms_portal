@@ -24,7 +24,7 @@
                 <h4 class="mb-2 mt-lg-6">{{ $employee['name'] }}</h4>
                 <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-4 my-2">
                   <li class="list-inline-item d-flex gap-2 align-items-center"><i class="icon-base ti tabler-palette icon-lg"></i><span class="fw-medium">{{ $employee['job_title'] }}</span></li>
-                  <li class="list-inline-item d-flex gap-2 align-items-center"><i class="icon-base ti tabler-map-pin  icon-lg"></i><span class="fw-medium">Vatican City</span></li>
+                  <li class="list-inline-item d-flex gap-2 align-items-center"><i class="icon-base ti tabler-gender-bigender  icon-lg"></i><span class="fw-medium">{{ $employee['gender'] }}</span></li>
                   <li class="list-inline-item d-flex gap-2 align-items-center"><i class="icon-base ti tabler-calendar  icon-lg"></i><span class="fw-medium"> {{ $employee['birthday'] }} </span></li>
                 </ul>
               </div>
@@ -42,32 +42,44 @@
       <!-- About User -->
       <div class="card mb-6">
         <div class="card-body">
-          <p class="card-text text-uppercase text-body-secondary small mb-0">About</p>
-          <ul class="list-unstyled my-3 py-1">
-            <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-user icon-lg"></i><span class="fw-medium mx-2">Full Name:</span> <span>{{ $employee['name'] }}</span></li>
-            <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-check icon-lg"></i><span class="fw-medium mx-2">Status:</span> <span>Active</span></li>
-            <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-crown icon-lg"></i><span class="fw-medium mx-2">Role:</span> <span>{{ $employee['job_title'] }}</span></li>
-            <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-flag icon-lg"></i><span class="fw-medium mx-2">Country:</span> <span>USA</span></li>
-            <li class="d-flex align-items-center mb-2"><i class="icon-base ti tabler-language icon-lg"></i><span class="fw-medium mx-2">Languages:</span> <span>English</span></li>
-          </ul>
-          <p class="card-text text-uppercase text-body-secondary small mb-0">Contacts</p>
-          <ul class="list-unstyled my-3 py-1">
-            <li class="d-flex align-items-center mb-4">
-              <i class="icon-base ti tabler-phone-call icon-lg"></i><span class="fw-medium mx-2">Contact:</span>
-              <span>{{ $employee['emergency_phone'] }}</span>
-            </li>
+         <div class="row">
+           <div class="col-md-6">
+              <p class="card-text text-uppercase text-body-secondary small mb-0">About</p>
+              <ul class="list-unstyled my-3 py-1">
+                <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-user icon-lg"></i><span class="fw-medium mx-2">Full Name:</span> <span>{{ $employee['name'] }}</span></li>
+                <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-check icon-lg"></i><span class="fw-medium mx-2">Status:</span> <span>{{ $employee['status'] }}</span></li>
+                <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-crown icon-lg"></i><span class="fw-medium mx-2">Role:</span> <span>{{ $employee['level'] }}</span></li>
+                <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-id-badge-2 icon-lg"></i><span class="fw-medium mx-2">CNIC:</span> <span>{{ $employee['cnic'] }}</span></li>
+                <li class="d-flex align-items-center mb-2"><i class="icon-base ti tabler-blob icon-lg"></i><span class="fw-medium mx-2">Blood G:</span> <span>{{ $employee['blood_group'] }}</span></li>
+              </ul>
+           </div>
+           <div class="col-md-6">
+                <p class="card-text text-uppercase text-body-secondary small mb-0">Contacts</p>
+              <ul class="list-unstyled my-3 py-1">
+                <li class="d-flex align-items-center mb-4">
+                  <i class="icon-base ti tabler-phone-call icon-lg"></i><span class="fw-medium mx-2">Contact:</span>
+                  <span>{{ $employee['mobile_phone'] }}</span>
+                </li>
 
-            <li class="d-flex align-items-center mb-4">
-              <i class="icon-base ti tabler-mail icon-lg"></i><span class="fw-medium mx-2">Email:</span>
-              <span>{{ $employee['work_email'] }}</span>
-            </li>
-             <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-map-pin icon-lg"></i><span class="fw-medium mx-2">location:</span> <span>{{ $employee['work_location'] }}</span></li>
-          </ul>
-          <p class="card-text text-uppercase text-body-secondary small mb-0">Teams</p>
-          <ul class="list-unstyled mb-0 mt-3 pt-1">
-            <li class="d-flex flex-wrap mb-4"><span class="fw-medium me-2">Backend Developer</span><span>(126 Members)</span></li>
-            <li class="d-flex flex-wrap"><span class="fw-medium me-2">React Developer</span><span>(98 Members)</span></li>
-          </ul>
+                <li class="d-flex align-items-center mb-4">
+                  <i class="icon-base ti tabler-mail icon-lg"></i><span class="fw-medium mx-2">Email:</span>
+                  <span>{{ $employee['email'] }}</span>
+                </li>
+                <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-map-pin icon-lg"></i><span class="fw-medium mx-2">location:</span> <span>{{ $employee['work_location'] }}</span></li>
+              </ul>
+              <p class="card-text text-uppercase text-body-secondary small mb-0">other</p>
+              <ul class="list-unstyled mb-0 mt-3 pt-1">
+                <li class="d-flex align-items-center mb-4">
+                  <span class="fw-medium mx-2">Department:</span><span>{{ $employee['department'] }}</span>
+                </li>
+                <li class="d-flex align-items-center mb-4">
+                  <span class="fw-medium mx-2">Manager:</span><span>{{ $employee['manager_name'] }}</span>
+                </li>
+              </ul>
+           </div>
+         </div>
+          
+         
         </div>
       </div>
       <!--/ About User -->
