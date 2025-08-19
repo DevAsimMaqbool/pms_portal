@@ -171,9 +171,9 @@ class IndicatorController extends Controller
         $categories = IndicatorCategory::where('key_performance_area_id', $kpaId)->get();
         return response()->json($categories);
     }
-     public function indicator_form($areaId, $categoryId, $indicatorId)
+    public function indicator_form($areaId, $categoryId, $indicatorId)
     {
-         try {
+        try {
             return view('admin.form.form_display', compact('areaId', 'categoryId', 'indicatorId'));
         } catch (\Exception $e) {
             return apiResponse('Oops! Something went wrong', [], false, 500, '');
@@ -181,7 +181,7 @@ class IndicatorController extends Controller
     }
     public function indicator_form_store(Request $request)
     {
-       
+
         $rules = [
             'kpa_id' => 'required',
             'sp_category_id' => 'required',
@@ -274,14 +274,16 @@ class IndicatorController extends Controller
     {
         try {
             $user = Auth::user();
-            $userId = Auth::id(); 
+            $userId = Auth::id();
             $employee_id = $user->employee_id;
 
             if ($user->hasRole('Teacher')) {
                 // Teacher: only own forms
-                $forms = AchievementOfResearchPublicationsTarget::with(['creator' => function ($q) {
+                $forms = AchievementOfResearchPublicationsTarget::with([
+                    'creator' => function ($q) {
                         $q->select('employee_id', 'name');
-                    }])
+                    }
+                ])
                     ->where('created_by', $userId)
                     ->get()
                     ->map(function ($form) {
@@ -296,9 +298,11 @@ class IndicatorController extends Controller
                 $employeeIds = User::where('manager_id', $employee_id)
                     ->pluck('employee_id');
 
-                $forms = AchievementOfResearchPublicationsTarget::with(['creator' => function ($q) {
+                $forms = AchievementOfResearchPublicationsTarget::with([
+                    'creator' => function ($q) {
                         $q->select('employee_id', 'name');
-                    }])
+                    }
+                ])
                     ->whereIn('created_by', $employeeIds)
                     ->whereIn('status', [1, 2])
                     ->get()
@@ -311,9 +315,11 @@ class IndicatorController extends Controller
 
             } elseif ($user->hasRole('ORIC')) {
                 // ORIC: only approved forms (status = 2)
-                $forms = AchievementOfResearchPublicationsTarget::with(['creator' => function ($q) {
+                $forms = AchievementOfResearchPublicationsTarget::with([
+                    'creator' => function ($q) {
                         $q->select('employee_id', 'name');
-                    }])
+                    }
+                ])
                     ->where('status', 2)
                     ->get()
                     ->map(function ($form) {
@@ -368,6 +374,16 @@ class IndicatorController extends Controller
             ->update(['status' => $request->status, 'updated_by' => Auth::id()]);
 
         return response()->json(['success' => true]);
+    }
+
+
+    public function loadForm(Request $request, $form)
+    {
+        try {
+            return view("admin.form.$form");
+        } catch (\Exception $e) {
+            return apiResponse('Oops! Something went wrong', [], false, 500, $e->getMessage());
+        }
     }
 
 
