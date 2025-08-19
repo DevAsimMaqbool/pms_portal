@@ -99,6 +99,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/view-forms', [IndicatorController::class, 'indicator_form_show'])->name('indicatorForm.show');
         Route::post('/achievement-of-research-publications-target/{id}/update-status', [IndicatorController::class, 'updateStatus']);
         Route::post('/achievement-of-research-publications-target/bulk-update-status', [IndicatorController::class, 'bulkUpdateStatus'])->name('indicatorForm.bulkUpdateStatus');
+        Route::get('//kpa_test/{area}/category_test/{category}/indicator_test/{indicator}', [StudentController::class, 'test_forms'])->name('test.forms');
     });
 
 });

@@ -39,7 +39,7 @@
         </li>
       </ul> -->
     </li>
-    @if(auth()->user()->hasRole('Teacher'))
+    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
      <li class="menu-item">
           <a href="{{ route('indicatorForm.show') }}" class="menu-link">
             <i class="menu-icon icon-base ti tabler-toggle-left"></i>
@@ -104,7 +104,7 @@
         </li>
         
     @endforeach
-    @elseif(auth()->user()->hasRole(['HOD', 'ORIC']))
+    @elseif(auth()->user()->hasRole(['ORIC']))
        <li class="menu-item">
           <a href="{{ route('indicatorForm.show') }}" class="menu-link">
             <i class="menu-icon icon-base ti tabler-toggle-left"></i>
