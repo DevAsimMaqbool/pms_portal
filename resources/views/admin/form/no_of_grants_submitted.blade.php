@@ -25,7 +25,7 @@
                     <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
                     <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                     
-                    <div class="row">
+                    <div class="row g-6">
                     <h5>Grants</h5>
                         <div id="grant-details-container" >
                             <div class="grant-group row g-3 mb-3">

@@ -35,7 +35,9 @@ class StudentController extends Controller
              $employee_id = $user->employee_id;
              $facultyMembers = User::where('manager_id', $employee_id)->get(['id','name','department','job_title']);
             // return view('admin.form.no_of_grants_submitted',compact('facultyMembers', 'areaId', 'categoryId', 'indicatorId'));
-            return view('admin.form.no_of_grants_submitted',compact('facultyMembers', 'areaId', 'categoryId', 'indicatorId'));
+            //return view('admin.form.no_of_grants_submitted',compact('facultyMembers', 'areaId', 'categoryId', 'indicatorId'));
+            //return view('admin.form.achievement_of_multidisciplinary',compact('facultyMembers', 'areaId', 'categoryId', 'indicatorId'));
+            return view('admin.form.commercial_gains_counsultancy_research',compact('facultyMembers', 'areaId', 'categoryId', 'indicatorId'));
         } catch (\Exception $e) {
             return apiResponse('Oops! Something went wrong', [], false, 500, '');
         }
