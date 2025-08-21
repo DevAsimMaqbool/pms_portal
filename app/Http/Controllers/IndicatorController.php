@@ -6,6 +6,7 @@ use App\Models\AchievementOfResearchPublicationsTarget;
 use App\Models\Department;
 use App\Models\Indicator;
 use App\Models\IndicatorCategory;
+use App\Models\IndicatorForm;
 use App\Models\KeyPerformanceArea;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -171,13 +172,32 @@ class IndicatorController extends Controller
         $categories = IndicatorCategory::where('key_performance_area_id', $kpaId)->get();
         return response()->json($categories);
     }
-     public function indicator_form($areaId, $categoryId, $indicatorId)
+    //  public function indicator_form($areaId, $categoryId, $indicatorId)
+    // {
+    //      try {
+    //         return view('admin.form.form_display', compact('areaId', 'categoryId', 'indicatorId'));
+    //     } catch (\Exception $e) {
+    //         return apiResponse('Oops! Something went wrong', [], false, 500, '');
+    //     }
+    // }
+    public function indicator_form($areaId, $categoryId, $indicatorId)
     {
-         try {
-            return view('admin.form.form_display', compact('areaId', 'categoryId', 'indicatorId'));
+        try {
+            $user = Auth::user();
+            $employee_id = $user->employee_id;
+            $facultyMembers = User::where('manager_id', $employee_id)->get(['id','name','department','job_title']);
+            $indicatorForms = IndicatorForm::where('indicator_id', $indicatorId)->first();
+            // if no forms exist at all
+            if (!$indicatorForms) {
+                abort(404, 'Form not found');
+            }
+            return view("admin.form." . $indicatorForms->slug, compact('facultyMembers','areaId', 'categoryId', 'indicatorId'));
+
         } catch (\Exception $e) {
-            return apiResponse('Oops! Something went wrong', [], false, 500, '');
+            report($e);
+            abort(500, 'Oops! Something went wrong');
         }
+
     }
     public function indicator_form_store(Request $request)
     {
