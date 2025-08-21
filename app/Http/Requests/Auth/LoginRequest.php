@@ -43,9 +43,9 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
-            
+
 
             if ($this->wantsJson() || $this->is('api/*')) {
                 throw new HttpResponseException(response()->json([
@@ -68,7 +68,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -89,9 +89,9 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
-     // Return JSON if API request fails validation
+    // Return JSON if API request fails validation
     protected function failedValidation(Validator $validator)
     {
         if ($this->wantsJson() || $this->is('api/*')) {
@@ -104,7 +104,7 @@ class LoginRequest extends FormRequest
 
         parent::failedValidation($validator);
     }
-     protected function failedAuthorization()
+    protected function failedAuthorization()
     {
         if ($this->wantsJson() || $this->is('api/*')) {
             throw new HttpResponseException(response()->json([

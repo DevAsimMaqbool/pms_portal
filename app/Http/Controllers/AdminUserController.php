@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -36,7 +37,7 @@ class AdminUserController extends Controller
 
             $totalUsers = User::count();
             return view('admin.user', compact('totalUsers'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return apiResponse(
                 'Oops! Something went wrong',
                 [],
@@ -178,7 +179,7 @@ class AdminUserController extends Controller
                 );
             }
             return response()->json(['status' => 'success', 'message' => 'User deleted successfully']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return apiResponse(
                 'Oops! Something went wrong',
                 [],

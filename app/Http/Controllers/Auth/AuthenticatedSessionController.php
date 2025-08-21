@@ -68,14 +68,14 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-       
+
         try {
             $userStatus = decrypt($request->input('user_status'));
 
             return match ($userStatus) {
                 'student' => redirect()->route('student.dashboard'),
                 'teacher' => redirect()->route('teacher.dashboard'),
-                default   => redirect()->route('dashboard'),
+                default => redirect()->route('dashboard'),
             };
 
         } catch (DecryptException $e) {
