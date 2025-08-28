@@ -39,7 +39,7 @@
         </li>
       </ul> -->
     </li>
-    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+    @if(auth()->user()->hasRole(['HOD', 'Teacher','Dean']))
      <li class="menu-item">
           <a href="{{ route('indicatorForm.show') }}" class="menu-link">
             <i class="menu-icon icon-base ti tabler-toggle-left"></i>

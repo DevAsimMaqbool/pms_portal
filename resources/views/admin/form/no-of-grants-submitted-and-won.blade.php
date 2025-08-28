@@ -58,9 +58,9 @@
                                     <label class="form-label">Proof of Submission</label>
                                     <input type="text" name="grants[0][proof]" class="form-control">
                                 </div>
-                                <div class="col-md-2 d-flex align-items-end">
+                                {{-- <div class="col-md-2 d-flex align-items-end">
                                     <button type="button" class="btn btn-label-danger mt-xl-6 waves-effec remove-grant"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="col-12 mb-3">
@@ -84,9 +84,9 @@
                                     <label class="form-label">Grant Award Letter</label>
                                     <input type="file" name="grants_won[0][letter]" class="form-control" />
                                 </div>
-                                <div class="col-md-2 d-flex align-items-end">
+                                {{-- <div class="col-md-2 d-flex align-items-end">
                                     <button type="button" class="btn btn-label-danger mt-xl-6 waves-effec remove-grants-won"><i class="icon-base ti tabler-x me-1"></i> <span class="align-middle">Delete</span></button>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="col-12 mb-3">
@@ -124,7 +124,7 @@ $(document).ready(function () {
 
     // Add new grant group
     $('#add-grant').click(function () {
-        let newGroup = `<hr>
+        let newGroup = `
         <div class="grant-group row g-3 mb-3">
             <div class="col-md-4">
                 <label class="form-label">Name of Grant</label>
@@ -166,7 +166,7 @@ $(document).ready(function () {
 
     // ===================== Grants Won Add =====================
     $("#addGrantsWon").click(function () {
-        let html = `<hr>
+        let html = `
         <div class="grants-won-group row g-3 mb-3">
             <div class="col-md-4">
                 <label class="form-label">No of Grants Won</label>

@@ -20,6 +20,12 @@ class AchievementOfResearchPublicationsTarget extends Model
         'email_screenshot',
         'scopus_link',
         'status',
+        'faculty_member_id',
+        'capacity_building',
+        'need',
+        'any_specifics_related_to_capacity_building',
+        'frequency',
+        'form_status',
         'created_by',
         'updated_by',
     ];
