@@ -34,9 +34,15 @@ Route::middleware('guest')->group(function () {
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
 
-
-    Route::get('teacher/login',function () { return view('auth.teacher.login'); })->name('teacher.login');;
-    Route::get('student/login',function () { return view('auth.student.login'); })->name('student.login');;
+    Route::get('survey/login', function () {
+        return view('auth.survey.login');
+    })->name('survey.login');
+    Route::get('teacher/login', function () {
+        return view('auth.teacher.login');
+    })->name('teacher.login');
+    Route::get('student/login', function () {
+        return view('auth.student.login');
+    })->name('student.login');
 });
 
 Route::middleware('auth')->group(function () {
