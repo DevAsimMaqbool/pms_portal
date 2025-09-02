@@ -84,4 +84,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Form::class, 'form_user', 'user_id', 'form_id')->withTimestamps();
     }
+    public function roleKpaAssignments()
+    {
+        return $this->hasMany(RoleKpaAssignment::class, 'role_id', 'role_id');
+    }
 }

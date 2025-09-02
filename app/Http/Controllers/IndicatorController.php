@@ -61,7 +61,7 @@ class IndicatorController extends Controller
             'indicator_category' => 'required',
             'indicator' => 'required',
         ]);
-        $userId = session('user_id');
+        $userId = Auth::id(); //session('user_id');
         $categories = array_map('trim', explode(',', $request->indicator));
         // Create new complaint
         foreach ($categories as $category) {
@@ -113,7 +113,7 @@ class IndicatorController extends Controller
             'indicator_category' => 'required',
             'indicator' => 'required',
         ]);
-        $userId = session('user_id');
+        $userId = Auth::id(); //session('user_id');
         // Parse incoming indicators (comma-separated string to array)
         $newIndicators = array_filter(array_map('trim', explode(',', $request->indicator)));
         $existingIndicators = Indicator::where('indicator_category_id', $request->indicator_category)

@@ -14,23 +14,24 @@ class RoleKpaAssignment extends Model
         'indicator_id',
     ];
 
+    public function kpa()
+    {
+        return $this->belongsTo(KeyPerformanceArea::class, 'key_performance_area_id', 'id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(IndicatorCategory::class, 'indicator_category_id', 'id');
+    }
+
+    public function indicator()
+    {
+        return $this->belongsTo(Indicator::class, 'indicator_id', 'id');
+    }
+
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
-    public function keyPerformanceArea()
-    {
-        return $this->belongsTo(KeyPerformanceArea::class);
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(IndicatorCategory::class);
-    }
-
-    public function indicator()
-    {
-        return $this->belongsTo(Indicator::class);
-    }
 }
