@@ -41,6 +41,7 @@
             margin: 0;
             font-size: 22px;
             font-weight: bold;
+            color: #004080;
         }
 
         .header p {

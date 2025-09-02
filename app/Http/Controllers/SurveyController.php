@@ -154,5 +154,131 @@ class SurveyController extends Controller
         return $pdf->download('survey_report.pdf');
     }
 
+    public function preview($faculty_code)
+    {
+        $record = DB::select("
+            -- Overall Faculty Total (all courses combined, excluding Humility and Service)
+            SELECT 
+                s.faculty_code,
+                s.faculty,
+                NULL AS course,
+                NULL AS question,
+                SUM(CAST(s.answer AS DECIMAL(10,2))) AS obtained_score,
+                COUNT(s.answer) * 5 AS max_score,
+                ROUND(SUM(CAST(s.answer AS DECIMAL(10,2))) / (COUNT(s.answer) * 5) * 100, 2) AS percentage,
+                'FACULTY_TOTAL' AS row_type
+            FROM surveys s
+            WHERE s.faculty_code = ? 
+              AND s.question <> 'Humility and Service'
+            GROUP BY s.faculty_code, s.faculty
+
+            UNION ALL
+
+            -- Course total (no question, excluding Humility and Service)
+            SELECT 
+                s.faculty_code,
+                s.faculty,
+                s.course,
+                NULL AS question,
+                SUM(CAST(s.answer AS DECIMAL(10,2))) AS obtained_score,
+                COUNT(s.answer) * 5 AS max_score,
+                ROUND(SUM(CAST(s.answer AS DECIMAL(10,2))) / (COUNT(s.answer) * 5) * 100, 2) AS percentage,
+                'COURSE_TOTAL' AS row_type
+            FROM surveys s
+            WHERE s.faculty_code = ? 
+              AND s.question <> 'Humility and Service'
+            GROUP BY s.faculty_code, s.faculty, s.course
+
+            UNION ALL
+
+            -- Question-level detail (excluding Humility and Service)
+            SELECT 
+                s.faculty_code,
+                s.faculty,
+                s.course,
+                s.question,
+                SUM(CAST(s.answer AS DECIMAL(10,2))) AS obtained_score,
+                COUNT(s.answer) * 5 AS max_score,
+                ROUND(SUM(CAST(s.answer AS DECIMAL(10,2))) / (COUNT(s.answer) * 5) * 100, 2) AS percentage,
+                'QUESTION_DETAIL' AS row_type
+            FROM surveys s
+            WHERE s.faculty_code = ? 
+              AND s.question <> 'Humility and Service'
+            GROUP BY s.faculty_code, s.faculty, s.course, s.question
+
+            ORDER BY row_type DESC, course, question
+        ", [$faculty_code, $faculty_code, $faculty_code]);
+
+        return view('admin.survey_single_report', [
+            'record' => collect($record),
+            'faculty_code' => $faculty_code
+        ]);
+    }
+
+    // 🔹 Download directly
+    public function downloadPdf($faculty_code)
+    {
+        $record = DB::select("
+            -- Overall Faculty Total (all courses combined, excluding Humility and Service)
+            SELECT 
+                s.faculty_code,
+                s.faculty,
+                NULL AS course,
+                NULL AS question,
+                SUM(CAST(s.answer AS DECIMAL(10,2))) AS obtained_score,
+                COUNT(s.answer) * 5 AS max_score,
+                ROUND(SUM(CAST(s.answer AS DECIMAL(10,2))) / (COUNT(s.answer) * 5) * 100, 2) AS percentage,
+                'FACULTY_TOTAL' AS row_type
+            FROM surveys s
+            WHERE s.faculty_code = ? 
+              AND s.question <> 'Humility and Service'
+            GROUP BY s.faculty_code, s.faculty
+
+            UNION ALL
+
+            -- Course total (no question, excluding Humility and Service)
+            SELECT 
+                s.faculty_code,
+                s.faculty,
+                s.course,
+                NULL AS question,
+                SUM(CAST(s.answer AS DECIMAL(10,2))) AS obtained_score,
+                COUNT(s.answer) * 5 AS max_score,
+                ROUND(SUM(CAST(s.answer AS DECIMAL(10,2))) / (COUNT(s.answer) * 5) * 100, 2) AS percentage,
+                'COURSE_TOTAL' AS row_type
+            FROM surveys s
+            WHERE s.faculty_code = ? 
+              AND s.question <> 'Humility and Service'
+            GROUP BY s.faculty_code, s.faculty, s.course
+
+            UNION ALL
+
+            -- Question-level detail (excluding Humility and Service)
+            SELECT 
+                s.faculty_code,
+                s.faculty,
+                s.course,
+                s.question,
+                SUM(CAST(s.answer AS DECIMAL(10,2))) AS obtained_score,
+                COUNT(s.answer) * 5 AS max_score,
+                ROUND(SUM(CAST(s.answer AS DECIMAL(10,2))) / (COUNT(s.answer) * 5) * 100, 2) AS percentage,
+                'QUESTION_DETAIL' AS row_type
+            FROM surveys s
+            WHERE s.faculty_code = ? 
+              AND s.question <> 'Humility and Service'
+            GROUP BY s.faculty_code, s.faculty, s.course, s.question
+
+            ORDER BY row_type DESC, course, question
+        ", [$faculty_code, $faculty_code, $faculty_code]);
+
+        $pdf = Pdf::loadView('admin.download_single_report_pdf', [
+            'record' => $record,
+            'faculty_code' => $faculty_code,
+        ])->setPaper('a4', 'landscape');
+
+        return $pdf->download("Survey_Report_{$faculty_code}.pdf");
+    }
+
+
 
 }

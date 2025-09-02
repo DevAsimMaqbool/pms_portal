@@ -106,10 +106,10 @@
                             s.percentage_score || 'N/A',         // Student ID
                             s.avg_score || 'N/A',         // Student ID
                             `<div class="d-flex align-items-center">
-                                                            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="survey/${s.id}">
-                                                                <i class="icon-base ti tabler-eye icon-md"></i>
-                                                            </a>
-                                                        </div>`
+                                    <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/report/preview/${s.faculty_code}">
+                                        <i class="icon-base ti tabler-eye icon-md"></i>
+                                    </a>
+                                </div>`
                         ];
                     });
 

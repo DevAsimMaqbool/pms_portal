@@ -108,7 +108,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/survey-report', [SurveyController::class, 'report'])->name('survey.report');
     // routes/web.php
     Route::get('/survey/report/pdf', [SurveyController::class, 'exportPdf'])->name('survey.report.pdf');
-
+    Route::get('/report/preview/{faculty_code}', [SurveyController::class, 'preview'])->name('report.preview');
+    Route::get('/survey/{faculty_code}/download-pdf', [SurveyController::class, 'downloadPdf'])
+        ->name('survey.downloadPdf');
 
 });
 

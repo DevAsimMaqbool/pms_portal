@@ -10,6 +10,7 @@
   <!-- Page CSS -->
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
 @endpush
+@php use Illuminate\Support\Str; @endphp
 @section('content')
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
@@ -19,135 +20,40 @@
       <div class="swiper-container swiper-container-horizontal swiper swiper-card-advance-bg"
       id="swiper-with-pagination-cards">
       <div class="swiper-wrapper">
-        <div class="swiper-slide">
+        @foreach($grouped as $kpa)
+      <div class="swiper-slide">
+      <div class="row">
+        <div class="col-12">
+        <h5 class="text-white mb-0">{{ $kpa['kpa_name'] }}</h5>
+        <small>Weight of the KPA - Core 95%</small>
+        </div>
         <div class="row">
-          <div class="col-12">
-          <h5 class="text-white mb-0">Teacher Dashboard</h5>
-          <small>Weight of the KPA - Core 45%</small>
-          </div>
-          <div class="row">
-          <div class="col-lg-7 col-md-9 col-12 order-2 order-md-1 pt-md-9">
-            <h6 class="text-white mt-0 mt-md-3 mb-4">Traffic</h6>
-            <div class="row">
-            <div class="col-6">
-              <ul class="list-unstyled mb-0">
-              <li class="d-flex mb-4 align-items-center">
-                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">28%</p>
-                <p class="mb-0">Sessions</p>
-              </li>
-              <li class="d-flex align-items-center">
-                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">1.2k</p>
-                <p class="mb-0">Leads</p>
-              </li>
-              </ul>
-            </div>
-            <div class="col-6">
-              <ul class="list-unstyled mb-0">
-              <li class="d-flex mb-4 align-items-center">
-                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">3.1k</p>
-                <p class="mb-0">Page Views</p>
-              </li>
-              <li class="d-flex align-items-center">
-                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">12%</p>
-                <p class="mb-0">Conversions</p>
-              </li>
-              </ul>
-            </div>
-            </div>
-          </div>
-          <div class="col-lg-5 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center">
-            <img src="{{ asset('admin/assets/img/illustrations/card-website-analytics-1.png') }}"
-            alt="Website Analytics" height="150" class="card-website-analytics-img" />
-          </div>
-          </div>
-        </div>
-        </div>
-        <div class="swiper-slide">
+        <div class="col-lg-7 col-md-10 col-12 order-2 order-md-1 pt-md-9">
+        <h6 class="text-white mt-0 mt-md-3 mb-4">
         <div class="row">
-          <div class="col-12">
-          <h5 class="text-white mb-0">Teacher Dashboard</h5>
-          <small>Weight of the KPA - Core 45%</small>
-          </div>
-          <div class="col-lg-7 col-md-9 col-12 order-2 order-md-1 pt-md-9">
-          <h6 class="text-white mt-0 mt-md-3 mb-4">Spending</h6>
-          <div class="row">
-            <div class="col-6">
-            <ul class="list-unstyled mb-0">
-              <li class="d-flex mb-4 align-items-center">
-              <p class="mb-0 fw-medium me-2 website-analytics-text-bg">12h</p>
-              <p class="mb-0">Spend</p>
-              </li>
-              <li class="d-flex align-items-center">
-              <p class="mb-0 fw-medium me-2 website-analytics-text-bg">127</p>
-              <p class="mb-0">Order</p>
-              </li>
-            </ul>
-            </div>
-            <div class="col-6">
-            <ul class="list-unstyled mb-0">
-              <li class="d-flex mb-4 align-items-center">
-              <p class="mb-0 fw-medium me-2 website-analytics-text-bg">18</p>
-              <p class="mb-0">Order Size</p>
-              </li>
-              <li class="d-flex align-items-center">
-              <p class="mb-0 fw-medium me-2 website-analytics-text-bg">2.3k</p>
-              <p class="mb-0">Items</p>
-              </li>
-            </ul>
-            </div>
-          </div>
-          </div>
-          <div class="col-lg-5 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center">
-          <img src="{{ asset('admin/assets/img/illustrations/card-website-analytics-2.png') }}"
-            alt="Website Analytics" height="150" class="card-website-analytics-img" />
-          </div>
+          @foreach($kpa['categories'] as $category)
+        <div class="col-6 mb-3 d-flex align-items-center">
+        <p class="mb-0 fw-medium me-2 website-analytics-text-bg">88%</p>
+        <p class="mb-0">{{ Str::limit($category['category_name'], 15, '...') }}</p>
+        </div>
+      @endforeach
+        </div>
+        </h6>
+        </div>
+
+        <div class="col-lg-5 col-md-2 col-12 order-1 order-md-2 my-4 my-md-0 text-center">
+        <img src="{{ asset('admin/assets/img/illustrations/card-website-analytics-1.png') }}"
+        alt="Website Analytics" height="150" class="card-website-analytics-img" />
         </div>
         </div>
-        <div class="swiper-slide">
-        <div class="row">
-          <div class="col-12">
-          <h5 class="text-white mb-0">Teacher Dashboard</h5>
-          <small>Weight of the KPA - Core 45%</small>
-          </div>
-          <div class="col-lg-7 col-md-9 col-12 order-2 order-md-1 pt-md-9">
-          <h6 class="text-white mt-0 mt-md-3 mb-4">Revenue Sources</h6>
-          <div class="row">
-            <div class="col-6">
-            <ul class="list-unstyled mb-0">
-              <li class="d-flex mb-4 align-items-center">
-              <p class="mb-0 fw-medium me-2 website-analytics-text-bg">268</p>
-              <p class="mb-0">Direct</p>
-              </li>
-              <li class="d-flex align-items-center">
-              <p class="mb-0 fw-medium me-2 website-analytics-text-bg">62</p>
-              <p class="mb-0">Referral</p>
-              </li>
-            </ul>
-            </div>
-            <div class="col-6">
-            <ul class="list-unstyled mb-0">
-              <li class="d-flex mb-4 align-items-center">
-              <p class="mb-0 fw-medium me-2 website-analytics-text-bg">890</p>
-              <p class="mb-0">Organic</p>
-              </li>
-              <li class="d-flex align-items-center">
-              <p class="mb-0 fw-medium me-2 website-analytics-text-bg">1.2k</p>
-              <p class="mb-0">Campaign</p>
-              </li>
-            </ul>
-            </div>
-          </div>
-          </div>
-          <div class="col-lg-5 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center">
-          <img src="{{ asset('admin/assets/img/illustrations/card-website-analytics-3.png') }}"
-            alt="Website Analytics" height="150" class="card-website-analytics-img" />
-          </div>
-        </div>
-        </div>
+      </div>
+      </div>
+      @endforeach
       </div>
       <div class="swiper-pagination"></div>
       </div>
     </div>
+
     <!--/ Website Analytics -->
 
     <!-- Average Daily Sales -->
@@ -315,8 +221,7 @@
       <div class="card-body row">
         <div class="col-12 col-sm-4">
         <div class="mt-lg-4 mt-lg-2 mb-lg-6 mb-2">
-          <!-- <h2 class="mb-0">100</h2>
-    <p class="mb-0">Total</p> -->
+          <!-- <h2 class="mb-0">100</h2> <p class="mb-0">Total</p> -->
         </div>
         <ul class="p-0 m-0">
           <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
@@ -359,8 +264,6 @@
             <small class="text-body-secondary">20%</small>
           </div>
           </li>
-
-
         </ul>
         </div>
         <div class="col-12 col-md-8">
@@ -371,300 +274,78 @@
     </div>
     <!--/ Support Tracker -->
 
-    <!-- Monthly Campaign State -->
-    <div class="col-xxl-4 col-md-6">
+    <!-- Orders last week -->
+    <!-- <div class="col-xxl-4 col-md-6">
       <div class="card h-100">
       <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-        <h5 class="mb-1">Teaching Delivery</h5>
-        <p class="card-subtitle">8.52k Social Visiters</p>
-        </div>
-        <div class="dropdown">
-        <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-          id="MonthlyCampaign" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
-          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-          <a class="dropdown-item" href="javascript:void(0);">Download</a>
-          <a class="dropdown-item" href="javascript:void(0);">View All</a>
-        </div>
-        </div>
+      <div class="card-title mb-0">
+      <h4 class="mb-0">2.84k</h4>
+      <small class="text-body">Avg Daily Traffic</small>
+      </div>
+      <div class="badge bg-label-success">+15%</div>
       </div>
       <div class="card-body">
-        <ul class="p-0 m-0">
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Student Teaching Satisfaction (feedback)</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">12,346</p> -->
-            <p class="ms-4 text-success mb-0">0.3%</p>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-info rounded p-1_5"><i class="icon-base ti tabler-link icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">QEC - Observation / Peer review</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">8,734</p> -->
-            <p class="ms-4 text-success mb-0">2.1%</p>
-          </div>
-          </div>
-        </li>
-        </ul>
+      <div id="averageDailyTraffic"></div>
       </div>
       </div>
-    </div>
+    </div> -->
+    <!-- Orders last week -->
+
+    <!-- Monthly Campaign State -->
+    @foreach ($grouped as $kpa)
+      @foreach ($kpa['categories'] as $category)
+      <div class="col-xxl-4 col-md-6">
+      <div class="card h-100">
+      <div class="card-header d-flex justify-content-between">
+      <div class="card-title mb-0">
+      <h5 class="mb-1">{{ $category['category_name'] }}</h5>
+      <p class="card-subtitle">
+        KPA: {{ $kpa['kpa_name'] }} | Weight: {{ $kpa['kpa_weight'] }}
+      </p>
+      </div>
+      <div class="dropdown">
+      <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
+        id="MonthlyCampaign" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
+        <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
+        <a class="dropdown-item" href="javascript:void(0);">Download</a>
+        <a class="dropdown-item" href="javascript:void(0);">View All</a>
+      </div>
+      </div>
+      </div>
+
+      <div class="card-body">
+      <ul class="p-0 m-0">
+      @foreach ($category['indicators'] as $indicator)
+      <li class="mb-6 d-flex justify-content-between align-items-center">
+      <div class="badge bg-label-success rounded p-1_5">
+      <i class="icon-base ti tabler-mail icon-md"></i>
+      </div>
+      <div class="d-flex justify-content-between w-100 flex-wrap">
+      <h6 class="mb-0 ms-4">{{ $indicator['indicator_name'] }}</h6>
+      <div class="d-flex">
+      <p class="ms-4 text-success mb-0">
+      {{ $indicator['indicator_score'] ?? 'N/A' }}
+      </p>
+      </div>
+      </div>
+      </li>
+      @endforeach
+      </ul>
+      </div>
+      </div>
+      </div>
+      @endforeach
+    @endforeach
+
     <!--/ Monthly Campaign State -->
 
     <!-- Monthly Campaign State -->
-    <div class="col-xxl-4 col-md-6">
-      <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-        <h5 class="mb-1">Teaching Management</h5>
-        <p class="card-subtitle">8.52k Social Visiters</p>
-        </div>
-        <div class="dropdown">
-        <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-          id="MonthlyCampaign" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
-          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-          <a class="dropdown-item" href="javascript:void(0);">Download</a>
-          <a class="dropdown-item" href="javascript:void(0);">View All</a>
-        </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <ul class="p-0 m-0">
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Classes Held in Time</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">12,346</p> -->
-            <p class="ms-4 text-success mb-0">0.3%</p>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-info rounded p-1_5"><i class="icon-base ti tabler-link icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Student Attendance (class/lab)</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">8,734</p> -->
-            <p class="ms-4 text-success mb-0">2.1%</p>
-          </div>
-          </div>
-        </li>
+    <!-- <div class="col-xxl-4 col-md-6">
 
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-info rounded p-1_5"><i class="icon-base ti tabler-link icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Student Punctuality</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">8,734</p> -->
-            <p class="ms-4 text-success mb-0">2.1%</p>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-info rounded p-1_5"><i class="icon-base ti tabler-link icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Completion of Course Folder in Hard</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">8,734</p> -->
-            <p class="ms-4 text-success mb-0">2.1%</p>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-info rounded p-1_5"><i class="icon-base ti tabler-link icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Compliance and Usage of CMS</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">8,734</p> -->
-            <p class="ms-4 text-success mb-0">2.1%</p>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-info rounded p-1_5"><i class="icon-base ti tabler-link icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Timely Exam Result Submission</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">8,734</p> -->
-            <p class="ms-4 text-success mb-0">2.1%</p>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-info rounded p-1_5"><i class="icon-base ti tabler-link icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Quality of Assessment</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">8,734</p> -->
-            <p class="ms-4 text-success mb-0">2.1%</p>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-info rounded p-1_5"><i class="icon-base ti tabler-link icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Course Load</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">8,734</p> -->
-            <p class="ms-4 text-success mb-0">2.1%</p>
-          </div>
-          </div>
-        </li>
-        </ul>
-      </div>
-      </div>
-    </div>
-    <!--/ Monthly Campaign State -->
-
-    <!-- Monthly Campaign State -->
-    <div class="col-xxl-4 col-md-6">
-      <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-        <h5 class="mb-1">Teaching Innovation</h5>
-        <p class="card-subtitle">8.52k Social Visiters</p>
-        </div>
-        <div class="dropdown">
-        <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-          id="MonthlyCampaign" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
-          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-          <a class="dropdown-item" href="javascript:void(0);">Download</a>
-          <a class="dropdown-item" href="javascript:void(0);">View All</a>
-        </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <ul class="p-0 m-0">
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Innovative Teaching Practices</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">12,346</p> -->
-            <p class="ms-4 text-success mb-0">0.3%</p>
-          </div>
-          </div>
-        </li>
-        </ul>
-      </div>
-      </div>
-    </div>
-    <!--/ Monthly Campaign State -->
-
-    <!-- Monthly Campaign State -->
-    <div class="col-xxl-4 col-md-6">
-      <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-        <h5 class="mb-1">Teaching Output</h5>
-        <p class="card-subtitle">8.52k Social Visiters</p>
-        </div>
-        <div class="dropdown">
-        <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-          id="MonthlyCampaign" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
-          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-          <a class="dropdown-item" href="javascript:void(0);">Download</a>
-          <a class="dropdown-item" href="javascript:void(0);">View All</a>
-        </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <ul class="p-0 m-0">
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Student Pass Percentage</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">12,346</p> -->
-            <p class="ms-4 text-success mb-0">0.3%</p>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Improvement in Student Performance</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">12,346</p> -->
-            <p class="ms-4 text-success mb-0">0.3%</p>
-          </div>
-          </div>
-        </li>
-        </ul>
-      </div>
-      </div>
-    </div>
-    <!--/ Monthly Campaign State -->
-
-    <!-- Monthly Campaign State -->
-    <div class="col-xxl-4 col-md-6">
-      <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-        <h5 class="mb-1">Teaching Outcomes - Student</h5>
-        <p class="card-subtitle">8.52k Social Visiters</p>
-        </div>
-        <div class="dropdown">
-        <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-          id="MonthlyCampaign" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
-          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-          <a class="dropdown-item" href="javascript:void(0);">Download</a>
-          <a class="dropdown-item" href="javascript:void(0);">View All</a>
-        </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <ul class="p-0 m-0">
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Testimonials</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">12,346</p> -->
-            <p class="ms-4 text-success mb-0">0.3%</p>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6 d-flex justify-content-between align-items-center">
-          <div class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-mail icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap">
-          <h6 class="mb-0 ms-4">Student Project Guidance for Research</h6>
-          <div class="d-flex">
-            <!-- <p class="mb-0">12,346</p> -->
-            <p class="ms-4 text-success mb-0">0.3%</p>
-          </div>
-          </div>
-        </li>
-        </ul>
-      </div>
-      </div>
-    </div>
-    <!--/ Monthly Campaign State -->
-    <!-- Monthly Campaign State -->
-    <div class="col-xxl-4 col-md-6">
-
-    </div>
+    </div> -->
     <!--/ Monthly Campaign State -->
 
     <!-- Source Visit -->
@@ -818,11 +499,61 @@
 @endsection
 @push('script')
   <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
-  <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+  <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}
+    "></script>
   <script src="{{ asset('admin/assets/js/app-logistics-dashboard.js') }}"></script>
-  <script src="{{ asset('admin/assets/js/cards-statistics.js') }}"></script>
-  <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
-  <script src="{{ asset('admin/assets/vendor/libs/swiper/swiper.js') }}"></script>
-  <script src="{{ asset('admin/assets/js/cards-statistics.js') }}"></script>
+  <script src="{{ asset('admin/assets/vendor/libs/swiper/swiper.js') }}
+      "></script>
+  <!-- <script src="{{ asset('admin/assets/js/cards-statistics.js') }}"></script> -->
   <script src="{{ asset('admin/assets/js/dashboards-analytics.js') }}"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    var options = {
+      chart: {
+      height: 145,
+      type: "bar",
+      parentHeightOffset: 0,
+      toolbar: { show: false }
+      },
+      plotOptions: {
+      bar: {
+        barHeight: "100%",
+        columnWidth: "11px",
+        startingShape: "rounded",
+        endingShape: "rounded",
+        borderRadius: 5
+      }
+      },
+      colors: ["#FFB300"],
+      grid: {
+      show: false,
+      padding: { top: -30, left: -18, bottom: -13, right: -18 }
+      },
+      dataLabels: { enabled: false },
+      tooltip: { enabled: true },
+      series: [{
+      name: "Traffic",
+      data: @json($data)  // ✅ Laravel array to JS
+      }],
+      legend: { show: false },
+      xaxis: {
+      categories: @json($categories), // ✅ Laravel array to JS
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+      labels: {
+        style: { fontSize: "13px", fontFamily: "Arial" },
+        show: true
+      }
+      },
+      yaxis: {
+      labels: { show: false }
+      }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#averageDailyTraffic"), options);
+    chart.render();
+    });
+  </script>
+
 @endpush
