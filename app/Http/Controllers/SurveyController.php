@@ -42,7 +42,7 @@ class SurveyController extends Controller
         $surveyTrendData = [20, 35, 40, 25];
 
         // Teacher overall ratings
-        $teacherNames = ['Ali', 'Sara', 'John'];
+        $teacherNames = ['Ali', 'Afnan', 'Moazzam'];
         $teacherRatings = [4.5, 4.2, 3.9];
 
         // Single teacher course breakdown
@@ -68,7 +68,7 @@ class SurveyController extends Controller
                 'best_course' => 'Science'
             ],
             (object) [
-                'name' => 'John',
+                'name' => 'Moazzam',
                 'avg_rating' => 3.9,
                 'responses_count' => 30,
                 'best_course' => 'History'
