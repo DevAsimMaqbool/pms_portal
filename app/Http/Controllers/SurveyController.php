@@ -25,6 +25,74 @@ class SurveyController extends Controller
             return apiResponse($e->getMessage(), [], false, 500, '');
         }
     }
+    public function surveyReportDashboard()
+    {
+        // 🔹 Mock Data — replace these with actual DB queries
+
+        // Survey overview ratings
+        $surveyRatings = [
+            'Excellent' => 12,
+            'Good' => 8,
+            'Average' => 5,
+            'Poor' => 2,
+        ];
+
+        // Participation trend (x: months, y: responses)
+        $surveyTrendLabels = ['Jan', 'Feb', 'Mar', 'Apr'];
+        $surveyTrendData = [20, 35, 40, 25];
+
+        // Teacher overall ratings
+        $teacherNames = ['Ali', 'Sara', 'John'];
+        $teacherRatings = [4.5, 4.2, 3.9];
+
+        // Single teacher course breakdown
+        $courseNames = ['Math', 'Science', 'History'];
+        $courseRatings = [4.7, 4.2, 3.8];
+
+        // Radar chart (teacher strengths/weaknesses)
+        $criteriaLabels = ['Knowledge', 'Communication', 'Punctuality', 'Engagement', 'Clarity'];
+        $teacherRadarData = [80, 70, 90, 60, 85];
+
+        // Leaderboard (table)
+        $teachers = [
+            (object) [
+                'name' => 'Ali',
+                'avg_rating' => 4.5,
+                'responses_count' => 50,
+                'best_course' => 'Math'
+            ],
+            (object) [
+                'name' => 'Sara',
+                'avg_rating' => 4.2,
+                'responses_count' => 40,
+                'best_course' => 'Science'
+            ],
+            (object) [
+                'name' => 'John',
+                'avg_rating' => 3.9,
+                'responses_count' => 30,
+                'best_course' => 'History'
+            ],
+        ];
+
+        return view('admin.survey_report_dashboard', [
+            // Chart data
+            'surveyRatings' => array_values($surveyRatings),
+            'surveyLabels' => array_keys($surveyRatings),
+            'surveyTrendData' => $surveyTrendData,
+            'surveyTrendLabels' => $surveyTrendLabels,
+            'teacherRatings' => $teacherRatings,
+            'teacherNames' => $teacherNames,
+            'courseRatings' => $courseRatings,
+            'courseNames' => $courseNames,
+            'teacherRadarData' => $teacherRadarData,
+            'criteriaLabels' => $criteriaLabels,
+
+            // Table
+            'teachers' => $teachers,
+        ]);
+    }
+
 
     public function index(Request $request)
     {

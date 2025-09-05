@@ -111,6 +111,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/report/preview/{faculty_code}', [SurveyController::class, 'preview'])->name('report.preview');
     Route::get('/survey/{faculty_code}/download-pdf', [SurveyController::class, 'downloadPdf'])
         ->name('survey.downloadPdf');
+    Route::get('/survey-report-dashboard', [SurveyController::class, 'surveyReportDashboard'])->name('survey_dashboard.report');
 
 });
 
