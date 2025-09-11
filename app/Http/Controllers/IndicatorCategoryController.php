@@ -54,7 +54,7 @@ class IndicatorCategoryController extends Controller
             'key_performance_area' => 'required|exists:key_performance_areas,id',
             'indicator_category' => 'required',
         ]);
-        $userId = session('user_id');
+        $userId = Auth::id(); //session('user_id');
         // Split the comma-separated tags into an array
         $categories = array_map('trim', explode(',', $request->indicator_category));
         foreach ($categories as $category) {
@@ -81,14 +81,14 @@ class IndicatorCategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $categories  = IndicatorCategory::with([
-                'keyPerformanceArea:id,performance_area', 
-            ])->where('key_performance_area_id', $id)->get();
-         return response()->json([
-        'key_performance_area_id' => $id,
-        'indicator_category' => $categories->pluck('indicator_category')->implode(','),
-        'performance_area' => $categories->first()?->keyPerformanceArea?->performance_area
-    ]);
+        $categories = IndicatorCategory::with([
+            'keyPerformanceArea:id,performance_area',
+        ])->where('key_performance_area_id', $id)->get();
+        return response()->json([
+            'key_performance_area_id' => $id,
+            'indicator_category' => $categories->pluck('indicator_category')->implode(','),
+            'performance_area' => $categories->first()?->keyPerformanceArea?->performance_area
+        ]);
     }
 
     /**
@@ -100,7 +100,7 @@ class IndicatorCategoryController extends Controller
             'key_performance_area' => 'required|exists:key_performance_areas,id',
             'indicator_category' => 'required',
         ]);
-        $userId = session('user_id');
+        $userId = Auth::id();//session('user_id');
         $IndicatorCategory = IndicatorCategory::findOrFail($id);
         $IndicatorCategory->key_performance_area_id = $request->key_performance_area;
         $IndicatorCategory->indicator_category = $request->indicator_category;
@@ -115,7 +115,7 @@ class IndicatorCategoryController extends Controller
             'indicator_category' => 'required',
         ]);
 
-        $userId = session('user_id');
+        $userId = Auth::id(); //session('user_id');
 
         // Step 1: Convert the comma-separated string into an array of trimmed tagsgit
         $newCategories = array_filter(array_map('trim', explode(',', $request->indicator_category)));

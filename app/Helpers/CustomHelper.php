@@ -4,8 +4,6 @@
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\User;
-use App\Models\UserAnswer;
-use App\Models\CategoryStrength;
 
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -36,10 +34,10 @@ if (!function_exists('apiResponse')) {
     function apiResponse(string $apimessage, $apidata = [], bool $apistatusFlag = true, int $apihttpStatus = 200, string $token = null): JsonResponse
     {
         return response()->json([
-            'data'    => $apidata,
-            'status'  => $apistatusFlag,
+            'data' => $apidata,
+            'status' => $apistatusFlag,
             'message' => $apimessage,
-            'token'   => $token,
+            'token' => $token,
         ], $apihttpStatus);
     }
 }
@@ -102,29 +100,7 @@ function getUserLevel($UserID)
     return $user->level;
 }
 
-function getSocialMirrorScores($userId, $surveyId, $userLevel)
-{
-    $scores = UserAnswer::selectRaw('questions.category_id, categories.name as category_name, AVG(user_answers.answer) as average_score')
-        ->join('questions', 'user_answers.question_id', '=', 'questions.id')
-        ->join('categories', 'questions.category_id', '=', 'categories.id')
-        ->where('user_answers.for_user_id', $userId)
-        ->where('user_answers.survey_id', $surveyId)
-        ->where('questions.type', 'stakeholder') // social mirror (360°)
-        ->where('questions.level', $userLevel) // match the evaluated user's level
-        ->groupBy('questions.category_id', 'categories.name')
-        ->get();
 
-    return response()->json($scores);
-}
-
-function getUserCategoryWithDescription($category)
-{
-    return CategoryStrength::where('category', $category)->where('type', 'strength')->firstOrFail();
-}
-function getUserCategoryWithWeaknessDescription($category)
-{
-    return CategoryStrength::where('category', $category)->where('type', 'weakness')->firstOrFail();
-}
 
 function generateComment($label, $score, $type, $score2 = null, $selfRank = null, $peerRank = null, $gapType = null, $gapText = null, $ordinalSuffix = '', $peerSuffix = '', $performanceLevel = '')
 {

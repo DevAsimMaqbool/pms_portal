@@ -30,6 +30,7 @@ use App\Http\Controllers\RatingOnImpactOfResearchConferencesOrganizedController;
 use App\Http\Controllers\SpinOffController;
 use App\Http\Controllers\TrainingsSeminarsWorkshopConductedWithImpactController;
 use App\Models\RatingOnImpactOfResearchConferencesOrganized;
+use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PermissionController::class, 'dashboard'])->name('dashboard');
     Route::get('student/dashboard', [PermissionController::class, 'dashboard'])->name('student.dashboard');
     Route::get('teacher/dashboard', [PermissionController::class, 'dashboard'])->name('teacher.dashboard');
+    Route::get('survey/dashboard', [PermissionController::class, 'dashboard'])->name('survey.dashboard');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
@@ -118,6 +120,15 @@ Route::middleware('auth')->group(function () {
         Route::resource('international-Coauthored-Paper', InternationalCoauthoredPaperController::class);
         Route::resource('achievement-ofmultidisciplinary', NoAchievementOfMultidisciplinaryProjectsTargetController::class);
     });
+
+    Route::resource('/survey', SurveyController::class);
+    Route::get('/survey-report', [SurveyController::class, 'report'])->name('survey.report');
+    // routes/web.php
+    Route::get('/survey/report/pdf', [SurveyController::class, 'exportPdf'])->name('survey.report.pdf');
+    Route::get('/report/preview/{faculty_code}', [SurveyController::class, 'preview'])->name('report.preview');
+    Route::get('/survey/{faculty_code}/download-pdf', [SurveyController::class, 'downloadPdf'])
+        ->name('survey.downloadPdf');
+    Route::get('/survey-report-dashboard', [SurveyController::class, 'surveyReportDashboard'])->name('survey_dashboard.report');
 
 });
 

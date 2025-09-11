@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KeyPerformanceArea;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KeyPerformanceAreaController extends Controller
 {
@@ -44,7 +45,7 @@ class KeyPerformanceAreaController extends Controller
             'key_performance_area' => 'required',
         ]);
 
-        $userId = session('user_id');
+        $userId = Auth::id();
         $kfa = new KeyPerformanceArea();
         $kfa->performance_area = $request->key_performance_area;
         $kfa->created_by = $userId;
@@ -77,7 +78,7 @@ class KeyPerformanceAreaController extends Controller
         $request->validate([
             'key_performance_area' => 'required',
         ]);
-        $userId = session('user_id');
+        $userId = Auth::id();
         $kfa = KeyPerformanceArea::findOrFail($id);
         $kfa->performance_area = $request->key_performance_area;
         $kfa->updated_by = $userId;

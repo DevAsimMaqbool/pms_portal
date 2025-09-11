@@ -45,15 +45,16 @@
                             <label for="roleMultiple" class="form-label">Role</label>
                             <select id="roleMultiple" name="user_role" class="form-select">
                                 <option value="">Select Role</option>
-                                <option value="Dean">Dean</option>
-                                <option value="HOD">HOD</option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                @endforeach
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label for="userMultiple" class="form-label">User </label>
-                            <select id="userMultiple" name="user[]" class="select2 form-select" multiple>
-                            </select>
-                        </div>
+                        <!-- <div class="col-md-6">
+                                <label for="userMultiple" class="form-label">User </label>
+                                <select id="userMultiple" name="user[]" class="select2 form-select" multiple>
+                                </select>
+                            </div> -->
                     </div>
                     <div class="col-4 text-center demo-vertical-spacing">
                         <button class="btn btn-primary w-100 waves-effect waves-light">Assign</button>

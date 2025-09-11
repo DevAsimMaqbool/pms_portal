@@ -79,29 +79,33 @@
 
           <!-- navbar button: Start -->
           @if (Route::has('login'))
-            @if (session()->has('access_token') && session()->has('user_id'))
-                <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-1">
-                    <a href="{{ url('/dashboard') }}" class="btn btn-primary">
-                        Dashboard
-                    </a>
-                </li>
-            @else
-                <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-1">
-                    <a href="{{ route('login') }}" class="btn btn-primary">
-                        <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
-                        <span class="d-none d-md-block">Login</span>
-                    </a>
-                    <a href="{{ route('teacher.login') }}" class="btn btn-primary">
-                        <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
-                        <span class="d-none d-md-block">Teacher Login</span>
-                    </a>
-                    <a href="{{ route('student.login') }}" class="btn btn-primary">
-                        <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
-                        <span class="d-none d-md-block">Student Login</span>
-                    </a>
-                </li>
-            @endif
+          @if (session()->has('access_token') && session()->has('user_id'))
+        <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-1">
+        <a href="{{ url('/dashboard') }}" class="btn btn-primary">
+          Dashboard
+        </a>
+        </li>
+        @else
+        <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-1">
+        <a href="{{ route('login') }}" class="btn btn-primary">
+          <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
+          <span class="d-none d-md-block">Login</span>
+        </a>
+        <a href="{{ route('survey.login') }}" class="btn btn-primary">
+          <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
+          <span class="d-none d-md-block">Survey Manager Login</span>
+        </a>
+        <a href="{{ route('teacher.login') }}" class="btn btn-primary">
+          <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
+          <span class="d-none d-md-block">Teacher Login</span>
+        </a>
+        <a href="{{ route('student.login') }}" class="btn btn-primary">
+          <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
+          <span class="d-none d-md-block">Student Login</span>
+        </a>
+        </li>
         @endif
+      @endif
           <!-- navbar button: End -->
         </ul>
         <!-- Toolbar: End -->

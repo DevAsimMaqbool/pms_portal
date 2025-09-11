@@ -6,6 +6,7 @@ use App\Models\Indicator;
 use App\Models\IndicatorCategory;
 use App\Models\KeyPerformanceArea;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class AssignUserKpaController extends Controller
@@ -16,8 +17,9 @@ class AssignUserKpaController extends Controller
     public function index()
     {
         try {
+            $roles = Role::select('id', 'name')->get();
             $kfarea = KeyPerformanceArea::all();
-            return view('admin.form.teaching_learning', compact('kfarea'));
+            return view('admin.form.teaching_learning', compact('kfarea', 'roles'));
         } catch (\Exception $e) {
             return apiResponse('Oops! Something went wrong', [], false, 500, '');
         }

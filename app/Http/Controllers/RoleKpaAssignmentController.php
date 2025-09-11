@@ -48,46 +48,71 @@ class RoleKpaAssignmentController extends Controller
     public function store(Request $request)
     {
         try {
-
             $validated = $request->validate([
-                'key_performance_area_id' => 'sometimes|required|array',
+                'key_performance_area_id' => 'required|array',
                 'key_performance_area_id.*' => 'exists:key_performance_areas,id',
-                'indicator_category_id' => 'sometimes|required|array',
+                'indicator_category_id' => 'required|array',
                 'indicator_category_id.*' => 'exists:indicator_categories,id',
-                'indicators' => 'sometimes|required|array',
+                'indicators' => 'required|array',
                 'indicators.*' => 'exists:indicators,id',
-                'user_role' => 'required|string|in:Dean,HOD',
-                'user' => 'sometimes|required|array',
-                'user.*' => 'exists:users,id',
+                'user_role' => 'required|exists:roles,id',
             ]);
-
             //dd($validated);
-            if (!empty($validated['user'])) {
-                foreach ($validated['user'] as $userId) {
-                    foreach ($validated['key_performance_area_id'] as $kpaId) {
-                        foreach ($validated['indicator_category_id'] as $categoryId) {
-                            foreach ($validated['indicators'] as $indicatorId) {
-                                RoleKpaAssignment::updateOrCreate(
-                                    [
-                                        'role_id' => 3,
-                                        'user_id' => $userId,
-                                        'key_performance_area_id' => $kpaId,
-                                        'indicator_category_id' => $categoryId,
-                                        'indicator_id' => $indicatorId,
-                                    ],
-                                    [] // Add update fields here if needed
-                                );
-                            }
-                        }
+            // --- Validate hierarchy ---
+            // 1. Categories must belong to one of the selected KPAs
+            $validCategoryIds = IndicatorCategory::whereIn('key_performance_area_id', $validated['key_performance_area_id'])
+                ->pluck('id')
+                ->toArray();
+
+            foreach ($validated['indicator_category_id'] as $catId) {
+                if (!in_array($catId, $validCategoryIds)) {
+                    return back()->withErrors(['indicator_category_id' => 'One or more categories do not belong to the selected KPAs.'])->withInput();
+                }
+            }
+
+            // 2. Indicators must belong to one of the selected categories
+            $validIndicatorIds = Indicator::whereIn('indicator_category_id', $validated['indicator_category_id'])
+                ->pluck('id')
+                ->toArray();
+
+            foreach ($validated['indicators'] as $indId) {
+                if (!in_array($indId, $validIndicatorIds)) {
+                    return back()->withErrors(['indicators' => 'One or more indicators do not belong to the selected categories.'])->withInput();
+                }
+            }
+
+            // --- Save valid hierarchy ---
+            foreach ($validated['key_performance_area_id'] as $kpaId) {
+                $categories = IndicatorCategory::whereIn('id', $validated['indicator_category_id'])
+                    ->where('key_performance_area_id', $kpaId)
+                    ->get();
+
+                foreach ($categories as $category) {
+                    $indicators = Indicator::whereIn('id', $validated['indicators'])
+                        ->where('indicator_category_id', $category->id)
+                        ->get();
+
+                    foreach ($indicators as $indicator) {
+                        RoleKpaAssignment::updateOrCreate(
+                            [
+                                'role_id' => $validated['user_role'],
+                                'user_id' => 0,
+                                'key_performance_area_id' => $kpaId,
+                                'indicator_category_id' => $category->id,
+                                'indicator_id' => $indicator->id,
+                            ],
+                            [] // Add update fields if needed
+                        );
                     }
                 }
             }
 
             return back()->with('success', 'Assignments saved successfully.');
         } catch (ValidationException $e) {
-            dd('Validation failed', $e->errors(), $request->all());
+            return back()->withErrors($e->errors())->withInput();
         }
     }
+
 
 
     /**

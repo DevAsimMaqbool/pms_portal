@@ -74,6 +74,7 @@ class AuthenticatedSessionController extends Controller
 
             return match ($userStatus) {
                 'student' => redirect()->route('student.dashboard'),
+                'survey' => redirect()->route('survey_dashboard.report'),
                 'teacher' => redirect()->route('teacher.dashboard'),
                 default => redirect()->route('dashboard'),
             };
