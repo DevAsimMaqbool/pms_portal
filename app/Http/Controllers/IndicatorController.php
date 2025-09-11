@@ -6,6 +6,7 @@ use App\Models\AchievementOfResearchPublicationsTarget;
 use App\Models\Department;
 use App\Models\Indicator;
 use App\Models\IndicatorCategory;
+use App\Models\IndicatorForm;
 use App\Models\KeyPerformanceArea;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -171,68 +172,32 @@ class IndicatorController extends Controller
         $categories = IndicatorCategory::where('key_performance_area_id', $kpaId)->get();
         return response()->json($categories);
     }
+    //  public function indicator_form($areaId, $categoryId, $indicatorId)
+    // {
+    //      try {
+    //         return view('admin.form.form_display', compact('areaId', 'categoryId', 'indicatorId'));
+    //     } catch (\Exception $e) {
+    //         return apiResponse('Oops! Something went wrong', [], false, 500, '');
+    //     }
+    // }
     public function indicator_form($areaId, $categoryId, $indicatorId)
     {
         try {
-            return view('admin.form.form_display', compact('areaId', 'categoryId', 'indicatorId'));
+            $user = Auth::user();
+            $employee_id = $user->employee_id;
+            $facultyMembers = User::where('manager_id', $employee_id)->get(['id','name','department','job_title']);
+            $indicatorForms = IndicatorForm::where('indicator_id', $indicatorId)->first();
+            // if no forms exist at all
+            if (!$indicatorForms) {
+                abort(404, 'Form not found');
+            }
+            return view("admin.form." . $indicatorForms->slug, compact('facultyMembers','areaId', 'categoryId', 'indicatorId'));
+
         } catch (\Exception $e) {
-            return apiResponse('Oops! Something went wrong', [], false, 500, '');
-        }
-    }
-    public function indicator_form_store(Request $request)
-    {
-
-        $rules = [
-            'kpa_id' => 'required',
-            'sp_category_id' => 'required',
-            'indicator_id' => 'required',
-            'target_category' => 'required|string',
-            'target_of_publications' => 'required|string',
-            'progress_on_publication' => 'required|string',
-            'draft_stage' => 'required_if:progress_on_publication,At draft stage|string|nullable',
-            'email_screenshot' => 'required_if:progress_on_publication,In Review|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'scopus_link' => 'required_if:progress_on_publication,Published|nullable|url',
-        ];
-
-        $messages = [
-            'scopus_link.url' => 'Please provide a valid URL for the Scopus link.',
-            'email_screenshot.mimes' => 'Upload JPG / PNG / PDF only.',
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
+            report($e);
+            abort(500, 'Oops! Something went wrong');
         }
 
-        $data = $request->only([
-            'kpa_id',
-            'sp_category_id',
-            'indicator_id',
-            'target_category',
-            'target_of_publications',
-            'draft_stage',
-            'scopus_link'
-        ]);
-
-        if ($request->hasFile('email_screenshot')) {
-            $data['email_screenshot'] = $request->file('email_screenshot')->store('screenshots', 'public');
-        }
-
-        $employeeId = Auth::user()->employee_id;
-        $data['created_by'] = $employeeId;
-        $data['updated_by'] = $employeeId;
-
-        $record = AchievementOfResearchPublicationsTarget::create($data);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Record saved successfully',
-            'data' => $record
-        ]);
     }
     // public function indicator_form_show(Request $request)
     // {

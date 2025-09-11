@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AchievementOfResearchPublicationsTargetController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AssignUserKpaController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -19,7 +20,16 @@ use App\Http\Controllers\DepartmentAssignmentController;
 use App\Http\Controllers\FormBuilderController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AssignFormToUserController;
+use App\Http\Controllers\CommercialGainsCounsultancyResearchIncomeController;
 use App\Http\Controllers\EmployabilityController;
+use App\Http\Controllers\IntellectualPropertyController;
+use App\Http\Controllers\InternationalCoauthoredPaperController;
+use App\Http\Controllers\NoAchievementOfMultidisciplinaryProjectsTargetController;
+use App\Http\Controllers\PublicationOfHecRecognizedJournalController;
+use App\Http\Controllers\RatingOnImpactOfResearchConferencesOrganizedController;
+use App\Http\Controllers\SpinOffController;
+use App\Http\Controllers\TrainingsSeminarsWorkshopConductedWithImpactController;
+use App\Models\RatingOnImpactOfResearchConferencesOrganized;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
 
@@ -92,16 +102,23 @@ Route::middleware('auth')->group(function () {
     Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
 
 
-    Route::middleware(['auth', 'role:Teacher'])->group(function () {
-        Route::get('/kpa/{area}/category/{category}/indicator/{indicator}', [IndicatorController::class, 'indicator_form'])->name('indicator.form');
-        Route::post('/indicator-form/', [IndicatorController::class, 'indicator_form_store'])->name('indicatorForm.store');
-        Route::get('/load-forms/{form}', [IndicatorController::class, 'loadForm']);
-    });
-    Route::middleware('role:Teacher|HOD|ORIC')->group(function () {
+   
+    Route::middleware('role:Teacher|HOD|ORIC|Dean')->group(function () {
         Route::get('/view-forms', [IndicatorController::class, 'indicator_form_show'])->name('indicatorForm.show');
         Route::post('/achievement-of-research-publications-target/{id}/update-status', [IndicatorController::class, 'updateStatus']);
         Route::post('/achievement-of-research-publications-target/bulk-update-status', [IndicatorController::class, 'bulkUpdateStatus'])->name('indicatorForm.bulkUpdateStatus');
-        Route::get('//kpa_test/{area}/category_test/{category}/indicator_test/{indicator}', [StudentController::class, 'test_forms'])->name('test.forms');
+
+        Route::get('/kpa/{area}/category/{category}/indicator/{indicator}', [IndicatorController::class, 'indicator_form'])->name('indicator.form');
+        Route::resource('indicator-form', AchievementOfResearchPublicationsTargetController::class);
+        Route::get('/load-forms/{form}', [IndicatorController::class, 'loadForm']);
+        Route::resource('publication-of-hecRecognized', PublicationOfHecRecognizedJournalController::class);
+        Route::resource('rating-onimpact-of-research', RatingOnImpactOfResearchConferencesOrganizedController::class);
+        Route::resource('trainings-seminars-workshops', TrainingsSeminarsWorkshopConductedWithImpactController::class);
+        Route::resource('spin-offs', SpinOffController::class);
+        Route::resource('intellectual-properties', IntellectualPropertyController::class);
+        Route::resource('counsultancy', CommercialGainsCounsultancyResearchIncomeController::class);
+        Route::resource('international-Coauthored-Paper', InternationalCoauthoredPaperController::class);
+        Route::resource('achievement-ofmultidisciplinary', NoAchievementOfMultidisciplinaryProjectsTargetController::class);
     });
 
     Route::resource('/survey', SurveyController::class);
