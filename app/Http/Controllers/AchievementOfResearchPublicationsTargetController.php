@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AchievementOfResearchPublicationsTarget;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class AchievementOfResearchPublicationsTargetController extends Controller
@@ -20,14 +22,119 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             $employee_id = $user->employee_id;
 
             if ($user->hasRole('Dean')) {
+                   $status = $request->input('status');
+                   $hod_ids = User::where('manager_id', $employee_id)
+                   ->role('HOD')->pluck('employee_id');
+                    if($status=="HOD"){
+                           $forms = AchievementOfResearchPublicationsTarget::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])
+                            ->whereIn('created_by', $hod_ids)
+                            ->whereIn('status', [1, 2])
+                            ->where('form_status', $status)
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->email_screenshot) {
+                                    $form->email_screenshot_url = Storage::url($form->email_screenshot);
+                                }
+                                return $form;
+                            });
+                    }
+                    if($status=="RESEARCHER"){
+                        $teacher_id = User::whereIn('manager_id', $hod_ids)
+                        ->role('Teacher')->pluck('employee_id');
+                          $all_ids = $teacher_id->merge($hod_ids);
+                          $forms = AchievementOfResearchPublicationsTarget::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])
+                            ->whereIn('created_by', $all_ids)
+                            ->whereIn('status', [3, 2])
+                            ->where('form_status', $status)
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->email_screenshot) {
+                                    $form->email_screenshot_url = Storage::url($form->email_screenshot);
+                                }
+                                return $form;
+                            });
+                    }
 
             }if ($user->hasRole('HOD')) {
+                $employeeIds = User::where('manager_id', $employee_id)
+                    ->role('Teacher')->pluck('employee_id');
+                    $forms = AchievementOfResearchPublicationsTarget::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])
+                         ->whereIn('created_by', $employeeIds)
+                        ->whereIn('status', [1, 2])
+                        ->where('form_status', 'RESEARCHER')
+                        ->get()
+                        ->map(function ($form) {
+                            if ($form->email_screenshot) {
+                                $form->email_screenshot_url = Storage::url($form->email_screenshot);
+                            }
+                            return $form;
+                        });
                 
             }if ($user->hasRole('ORIC')) {
-                
+                $status = $request->input('status');
+                    if($status=="HOD"){
+                           $forms = AchievementOfResearchPublicationsTarget::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])
+                            ->whereIn('status', [2, 3])
+                            ->where('form_status', $status)
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->email_screenshot) {
+                                    $form->email_screenshot_url = Storage::url($form->email_screenshot);
+                                }
+                                return $form;
+                            });
+                    }
+                    if($status=="RESEARCHER"){
+                          $forms = AchievementOfResearchPublicationsTarget::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])
+                            ->whereIn('status', [4, 3])
+                            ->where('form_status', $status)
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->email_screenshot) {
+                                    $form->email_screenshot_url = Storage::url($form->email_screenshot);
+                                }
+                                return $form;
+                            });
+                    }
 
-            }if ($user->hasRole('HR')) {
-
+            }if ($user->hasRole('Human Resources')) {
+                   $status = $request->input('status');
+                    if($status=="HOD"){
+                           $forms = AchievementOfResearchPublicationsTarget::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])
+                            ->whereIn('status', [3, 4])
+                            ->where('form_status', $status)
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->email_screenshot) {
+                                    $form->email_screenshot_url = Storage::url($form->email_screenshot);
+                                }
+                                return $form;
+                            });
+                    }
             }
 
             if ($request->ajax()) {
@@ -109,7 +216,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                         'target_category' => 'required|string|in:Scopus-Indexed,HEC',
                         'target_of_publications' => 'required|string|max:255',
                         'capacity_building' => 'required|boolean',
-                        'need' => 'required_if:capacity_building,1|nullable|string',
+                        'need' => 'required_if:capacity_building,1|string|nullable',
                         'any_specifics_related_to_capacity_building' => 'nullable|string|max:500',
                         'frequency' => 'nullable|integer|min:0',
                         'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
@@ -177,9 +284,18 @@ class AchievementOfResearchPublicationsTargetController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, $id)
+    {   
+        $request->validate([
+            'status' => 'required|in:1,2,3,4,5,6'
+        ]);
+
+        $target = AchievementOfResearchPublicationsTarget::findOrFail($id);
+        $target->status = $request->status;
+        $target->updated_by = Auth::id();
+        $target->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**

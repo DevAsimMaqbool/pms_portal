@@ -23,4 +23,8 @@ class RatingOnImpactOfResearchConferencesOrganized extends Model
         'created_by',
         'updated_by',
     ];
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'employee_id');
+    }
 }

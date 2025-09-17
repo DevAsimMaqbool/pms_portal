@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('target_of_new_spin_offs')->nullable();
             $table->string('target_of_pre_spin_offs')->nullable();
             $table->string('name_of_lead_faculty_member')->nullable();
-            $table->enum('status', ['1', '2', '3'])->default('1');
+            $table->enum('status', ['1', '2', '3','4','5','6'])->default('1');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();

@@ -17,16 +17,16 @@ return new class extends Migration
             $table->unsignedBigInteger('sp_category_id');
             $table->unsignedBigInteger('indicator_id');
             $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN','OTHER'])->default('RESEARCHER');
-            $table->enum('status', ['1', '2', '3'])->default('1');
+            $table->enum('status', ['1', '2', '3','4','5','6'])->default('1');
 
-             $table->string('name_of_project_initiated')->nullable();
+            $table->string('name_of_project_initiated')->nullable();
             $table->string('other_disciplines_engaged')->nullable();
             $table->string('partner_industry')->nullable();
             $table->string('identified_public_sector_entity')->nullable();
             $table->string('completion_time_of_project')->nullable();
             $table->enum('product_developed', ['YES', 'NO', 'NA'])->default('NO');
             $table->enum('third_party_validation', ['YES', 'NO', 'NA'])->default('NO');
-            $table->enum('capacity_building', ['YES', 'NO'])->default('NO');
+            $table->enum('ip_claim', ['YES', 'NO'])->default('NO');
             $table->string('provide_details')->nullable();
 
 

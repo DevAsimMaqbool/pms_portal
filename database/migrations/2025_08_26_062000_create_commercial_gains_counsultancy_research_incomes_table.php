@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('title_of_consultancy')->nullable();
             $table->string('duration_of_consultancy')->nullable();
             $table->string('name_of_client_organization')->nullable();
-            $table->enum('status', ['1', '2', '3'])->default('1');
+            $table->enum('status', ['1', '2', '3','4','5','6'])->default('1');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();

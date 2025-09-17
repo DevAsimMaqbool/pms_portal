@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('no_of_participants')->nullable();
             $table->string('no_of_participants_from_the_industry')->nullable();
             $table->string('no_of_participants_from_the_public_sector')->nullable();
-            $table->enum('status', ['1', '2', '3'])->default('1');
+            $table->enum('status', ['1', '2', '3','4','5','6'])->default('1');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();

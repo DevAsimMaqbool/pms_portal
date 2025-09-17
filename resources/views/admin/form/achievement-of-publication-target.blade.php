@@ -17,7 +17,7 @@
 
     <div class="card">
         <div class="card-body">
-            @if(auth()->user()->hasRole(['HOD','Dean','HR','ORIC']))
+            @if(auth()->user()->hasRole(['Dean','ORIC']))
             <!-- Nav tabs -->
             <ul class="nav nav-tabs mb-3" role="tablist">
                 <li class="nav-item">
@@ -25,6 +25,20 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
+                </li>
+            </ul>
+            @endif
+            @if(auth()->user()->hasRole(['HOD']))
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs mb-3" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">% Achievement of Publication</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
                 </li>
             </ul>
             @endif
@@ -134,7 +148,7 @@
 
                             <div class="col-md-6" id="extra_select_container" style="display: none;">
                                 <label for="need" class="form-label">Select the need</label>
-                                <select id="need" name="need" class="form-select" required>
+                                <select id="need" name="need" class="form-select">
                                     <option value="">-- Select Option --</option>
                                     <option value="Basics-of-research">Basics of research</option>
                                     <option value="Analytical-tools">Analytical tools</option>
@@ -158,9 +172,41 @@
                         </div>
                     </form>
                 </div>
+                 <div class="tab-pane fade" id="form3" role="tabpanel">
+                  @if(auth()->user()->hasRole(['HOD']))
+                            <div class="d-flex">
+                                <select id="bulkAction" class="form-select w-auto me-2">
+                                    <option value="">-- Select Action --</option>
+                                    <option value="2">Verified</option>
+                                    <option value="1">UnVerified</option>
+                                </select>
+                                <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                            </div>
+                  @endif
+                   <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll"></th>
+                                <th>#</th>
+                                <th>Created By</th>
+                                <th>Indicator Category</th>
+                                <th>Created Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                 </div>
                  @endif
-                 @if(auth()->user()->hasRole(['Dean','ORIC','HR']))
+                 @if(auth()->user()->hasRole(['Dean','ORIC']))
                  <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                    <div class="d-flex">
+                        <select id="bulkAction" class="form-select w-auto me-2">
+                            <option value="">-- Select Action --</option>
+                            <option value="3">Review</option>
+                            <option value="2">UnReview</option>
+                        </select>
+                        <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                    </div>
                    <table id="complaintTable1" class="table table-bordered table-striped" style="width:100%">
                         <thead>
                             <tr>
@@ -175,7 +221,15 @@
                     </table>
                  </div>
                  <div class="tab-pane fade" id="form2" role="tabpanel">
-                     <table id="complaintTable1" class="table table-bordered table-striped" style="width:100%">
+                  <div class="d-flex">
+                        <select id="bulkAction" class="form-select w-auto me-2">
+                            <option value="">-- Select Action --</option>
+                            <option value="2">Verified</option>
+                            <option value="1">UnVerified</option>
+                        </select>
+                        <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                    </div>
+                     <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
                         <thead>
                             <tr>
                                 <th><input type="checkbox" id="selectAll"></th>
@@ -189,10 +243,53 @@
                     </table>
                  </div>
                  @endif
+                 @if(auth()->user()->hasRole(['Human Resources']))
+                   <div>
+                   <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll"></th>
+                                <th>#</th>
+                                <th>Created By</th>
+                                <th>Indicator Category</th>
+                                <th>Created Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table></div>
+                 @endif
             </div>
         </div>
     </div>
-
+ <!-- Modal -->
+        <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewFormModalLabel">Form Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <tr><th>Created By</th><td id="modalCreatedBy"></td></tr>
+                    <tr><th>Target Category</th><td id="modalTargetCategory"></td></tr>
+                    <tr><th>Target Of Publications</th><td id="modalTargetOfpublications"></td></tr>
+                    <tr><th>Status</th><td>
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="approveCheckbox">
+                        <label class="form-check-label" for="approveCheckbox">Approved</label>
+                    </div></td></tr>
+                    <tr><th>Created Date</th><td id="modalCreatedDate"></td></tr>
+                    <tbody id="modalExtraFields"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>
+        <!--/ Add Permission Modal -->
 </div>
 @endsection
 
@@ -207,6 +304,9 @@
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
+    <script>
+    window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+    </script>
     @if(auth()->user()->hasRole(['HOD','Teacher']))
     <script>
     $(document).ready(function () {
@@ -275,8 +375,58 @@
     @endif
     @if(auth()->user()->hasRole(['HOD']))
     <script>
-    $(document).ready(function () {
+    function fetchIndicatorForms3() {
+    $.ajax({
+        url: "{{ route('indicator-form.index') }}",
+        method: "GET",
+         data: {
+            status: "HOD" // you can send more values
+        },
+        dataType: "json",
+        success: function (data) {
+            //alert(data.forms);
+            const forms = data.forms || [];
+            
+            const rowData = forms.map((form, i) => {
+                const createdAt = form.created_at 
+                    ? new Date(form.created_at).toISOString().split('T')[0] 
+                    : 'N/A';
 
+                // Pass entire form as JSON in button's data attribute
+                return [
+                    `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
+                    i + 1,
+                    form.creator ? form.creator.name : 'N/A',
+                    form.target_category || 'N/A',
+                    createdAt,
+                    `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                ];
+            });
+
+            if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
+                $('#complaintTable3').DataTable({
+                    data: rowData,
+                    columns: [
+                        { title: "<input type='checkbox' id='selectAll'>" },
+                        { title: "#" },
+                        { title: "Created By" },
+                        { title: "Indicator Category" },
+                        { title: "Created Date" },
+                        { title: "Actions" }
+                    ]
+                });
+            } else {
+                $('#complaintTable3').DataTable().clear().rows.add(rowData).draw();
+            }
+        },
+        error: function(xhr) {
+            console.error('Error fetching data:', xhr.responseText);
+            alert('Unable to load data.');
+        }
+    });
+}
+    $(document).ready(function () {
+         fetchIndicatorForms3();
         // Extra fields for Form 2
          $('#faculty_member').on('change', function () {
             let selected = $(this).find(':selected');
@@ -337,17 +487,131 @@
                 }
             });
         });
+         $(document).on('click', '.view-form-btn', function() {
+                const form = $(this).data('form');
+                $('#modalExtraFields').find('.optional-field').remove();
+
+                $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
+                $('#modalTargetCategory').text(form.target_category || 'N/A');
+                $('#modalTargetOfpublications').text(form.target_of_publications || 'N/A');
+                $('#modalStatus').text(form.status || 'Pending');
+                $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+                  if (window.currentUserRole === 'HOD') {
+                    $('#approveCheckbox').prop('checked', form.status == 2);
+                    $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                    // Label text for HOD
+                        let statusLabel = "Pending"; 
+                        if (form.status == 1) {
+                            statusLabel = "Verified";
+                        } else if (form.status == 2) {
+                            statusLabel = "Verified";
+                        }
+                        $('label[for="approveCheckbox"]').text(statusLabel);
+                    }else if(window.currentUserRole === 'ORIC'){
+                    
+                    $('#approveCheckbox').prop('checked', form.status == 3);
+                    $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                    let statusLabel = "Pending"; 
+                    if (form.status == 1) {
+                        statusLabel = "Verified";
+                    } else if (form.status == 2) {
+                        statusLabel = "Approved"; 
+                    } else if (form.status == 3) {
+                        statusLabel = "Approved";
+                    }
+                    $('label[for="approveCheckbox"]').text(statusLabel);
+                } else {
+                    $('#approveCheckbox').closest('.form-check-input').hide();
+
+                    let statusLabel = "Pending"; // default
+                    if (form.status == 1) {
+                        statusLabel = "Not Verified";
+                    } else if (form.status == 2) {
+                        statusLabel = "Verified";
+                    } else if (form.status == 3) {
+                        statusLabel = "Approved";
+                    }
+
+                    // update the label text
+                    $('label[for="approveCheckbox"]').text(statusLabel);
+                }
+                if (form.draft_stage) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Draft Stage</th><td>${form.draft_stage}</td></tr>`);
+                }
+                
+                if (form.email_screenshot_url) {
+                    $('#modalExtraFields').append(`
+                        <tr class="optional-field">
+                            <th>Email Screenshot</th>
+                            <td>
+                                <a href="${form.email_screenshot_url}" target="_blank">
+                                    <img src="${form.email_screenshot_url}" alt="Screenshot" style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
+                                </a>
+                            </td>
+                        </tr>
+                    `);
+                }
+
+
+                if (form.scopus_link) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Scopus Link</th><td><a href="${form.scopus_link}" target="_blank">${form.scopus_link}</a></td></tr>`);
+                }
+                if (form.frequency) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Frequency/No of trainings</th><td>${form.frequency}</td></tr>`);
+                }
+                if (form.need) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Need</th><td>${form.need}</td></tr>`);
+                }
+                if (form.any_specifics_related_to_capacity_building) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Any Specifics related to capacity building</th><td>${form.any_specifics_related_to_capacity_building}</td></tr>`);
+                }
+                $('#viewFormModal').modal('show');
+            });
+            $(document).on('change', '#approveCheckbox', function () {
+                let id = $(this).data('id');
+                let table_status = $(this).data('table_status');
+                let status;
+                if (window.currentUserRole === "HOD"){
+                    status = $(this).is(':checked') ? 2 : 1;
+                }
+
+                $.ajax({
+                    url: `/indicator-form/${id}`,
+                    type: 'POST',
+                    data: {
+                        _method: 'PUT',
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: status
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Status updated successfully!');
+                            fetchIndicatorForms3();
+                        } else {
+                            alert('Failed to update status.');
+                        }
+                    },
+                    error: function () {
+                        alert('Error updating status.');
+                    }
+                });
+            });
+
     });
     </script>
     @endif
-@if(auth()->user()->hasRole(['Dean']))
+@if(auth()->user()->hasRole(['Dean','ORIC','Human Resources']))
 <script>
 function fetchIndicatorForms() {
     $.ajax({
-        url: "{{ route('indicatorForm.show') }}",
+        url: "{{ route('indicator-form.index') }}",
         method: "GET",
+         data: {
+            status: "HOD" // you can send more values
+        },
         dataType: "json",
         success: function (data) {
+            //alert(data.forms);
             const forms = data.forms || [];
             
             const rowData = forms.map((form, i) => {
@@ -366,8 +630,8 @@ function fetchIndicatorForms() {
                 ];
             });
 
-            if (!$.fn.DataTable.isDataTable('#complaintTable')) {
-                $('#complaintTable').DataTable({
+            if (!$.fn.DataTable.isDataTable('#complaintTable2')) {
+                $('#complaintTable2').DataTable({
                     data: rowData,
                     columns: [
                         { title: "<input type='checkbox' id='selectAll'>" },
@@ -379,7 +643,57 @@ function fetchIndicatorForms() {
                     ]
                 });
             } else {
-                $('#complaintTable').DataTable().clear().rows.add(rowData).draw();
+                $('#complaintTable2').DataTable().clear().rows.add(rowData).draw();
+            }
+        },
+        error: function(xhr) {
+            console.error('Error fetching data:', xhr.responseText);
+            alert('Unable to load data.');
+        }
+    });
+}
+function fetchIndicatorForms1() {
+    $.ajax({
+        url: "{{ route('indicator-form.index') }}",
+        method: "GET",
+         data: {
+            status: "RESEARCHER" // you can send more values
+        },
+        dataType: "json",
+        success: function (data) {
+            //alert(data.forms);
+            const forms = data.forms || [];
+            
+            const rowData = forms.map((form, i) => {
+                const createdAt = form.created_at 
+                    ? new Date(form.created_at).toISOString().split('T')[0] 
+                    : 'N/A';
+
+                // Pass entire form as JSON in button's data attribute
+                return [
+                    `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
+                    i + 1,
+                    form.creator ? form.creator.name : 'N/A',
+                    form.target_category || 'N/A',
+                    createdAt,
+                    `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                ];
+            });
+
+            if (!$.fn.DataTable.isDataTable('#complaintTable1')) {
+                $('#complaintTable1').DataTable({
+                    data: rowData,
+                    columns: [
+                        { title: "<input type='checkbox' id='selectAll'>" },
+                        { title: "#" },
+                        { title: "Created By" },
+                        { title: "Indicator Category" },
+                        { title: "Created Date" },
+                        { title: "Actions" }
+                    ]
+                });
+            } else {
+                $('#complaintTable1').DataTable().clear().rows.add(rowData).draw();
             }
         },
         error: function(xhr) {
@@ -389,9 +703,193 @@ function fetchIndicatorForms() {
     });
 }
     $(document).ready(function () {
+      if (window.currentUserRole === 'Dean') {
+          fetchIndicatorForms();
+          fetchIndicatorForms1();
+      }if (window.currentUserRole === 'ORIC') {
+          fetchIndicatorForms();
+          fetchIndicatorForms1();
+      }if (window.currentUserRole === 'Human Resources') {
+          fetchIndicatorForms();
+      }
+      
+       // Handle click on View button
+    $(document).on('click', '.view-form-btn', function() {
+        const form = $(this).data('form');
+        $('#modalExtraFields').find('.optional-field').remove();
 
-      fetchIndicatorForms();
+        $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
+        $('#modalTargetCategory').text(form.target_category || 'N/A');
+        $('#modalTargetOfpublications').text(form.target_of_publications || 'N/A');
+        $('#modalStatus').text(form.status || 'Pending');
+        $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+        if (window.currentUserRole === 'Dean') {
+            let statusLabel = "Review"; 
+            if(form.form_status=='RESEARCHER'){
+                $('#approveCheckbox').closest('.form-check-input').show();
+                $('#approveCheckbox').prop('checked', form.status == 3);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 2) {
+                        statusLabel = "Review";
+                    } else if (form.status == 3) {
+                        statusLabel = "Review";
+                    }
+            }if(form.form_status=='HOD'){
+                $('#approveCheckbox').closest('.form-check-input').show();
+                $('#approveCheckbox').prop('checked', form.status == 2);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 1) {
+                        statusLabel = "Verified";
+                    } else if (form.status == 2) {
+                        statusLabel = "Verified";
+                    }
+            }
+        
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        }else if(window.currentUserRole === 'ORIC'){
+            
+            let statusLabel = "Verify"; 
+            if(form.form_status=='RESEARCHER'){
+                $('#approveCheckbox').closest('.form-check-input').show();
+                $('#approveCheckbox').prop('checked', form.status == 4);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 3) {
+                        statusLabel = "Verify";
+                    } else if (form.status == 4) {
+                        statusLabel = "Verify";
+                    }
+            }if(form.form_status=='HOD'){
+                $('#approveCheckbox').closest('.form-check-input').show();
+                $('#approveCheckbox').prop('checked', form.status == 3);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 2) {
+                        statusLabel = "Verify";
+                    } else if (form.status == 3) {
+                        statusLabel = "Verify";
+                    }
+            }
+        
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        }else if(window.currentUserRole === 'Human Resources'){
+            
+            let statusLabel = "Verify"; 
+            if(form.form_status=='HOD'){
+                $('#approveCheckbox').closest('.form-check-input').show();
+                $('#approveCheckbox').prop('checked', form.status == 4);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 3) {
+                        statusLabel = "Verify";
+                    } else if (form.status == 3) {
+                        statusLabel = "Verify";
+                    }
+            }
+        
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        }
+         else {
+            $('#approveCheckbox').closest('.form-check-input').hide();
+
+            let statusLabel = "Pending"; // default
+            if (form.status == 1) {
+                statusLabel = "Not Verified";
+            } else if (form.status == 2) {
+                statusLabel = "Verified";
+            } else if (form.status == 3) {
+                statusLabel = "Approved";
+            }
+
+            // update the label text
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        }
+         if (form.draft_stage) {
+            $('#modalExtraFields').append(`<tr class="optional-field"><th>Draft Stage</th><td>${form.draft_stage}</td></tr>`);
+        }
+        
+        if (form.email_screenshot_url) {
+            $('#modalExtraFields').append(`
+                <tr class="optional-field">
+                    <th>Email Screenshot</th>
+                    <td>
+                        <a href="${form.email_screenshot_url}" target="_blank">
+                            <img src="${form.email_screenshot_url}" alt="Screenshot" style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
+                        </a>
+                    </td>
+                </tr>
+            `);
+        }
+
+
+        if (form.scopus_link) {
+            $('#modalExtraFields').append(`<tr class="optional-field"><th>Scopus Link</th><td><a href="${form.scopus_link}" target="_blank">${form.scopus_link}</a></td></tr>`);
+        }
+        if (form.frequency) {
+            $('#modalExtraFields').append(`<tr class="optional-field"><th>Frequency/No of trainings</th><td>${form.frequency}</td></tr>`);
+        }
+         if (form.need) {
+            $('#modalExtraFields').append(`<tr class="optional-field"><th>Need</th><td>${form.need}</td></tr>`);
+        }
+        if (form.any_specifics_related_to_capacity_building) {
+            $('#modalExtraFields').append(`<tr class="optional-field"><th>Any Specifics related to capacity building</th><td>${form.any_specifics_related_to_capacity_building}</td></tr>`);
+        }
+        $('#viewFormModal').modal('show');
+    });
        
+     $(document).on('change', '#approveCheckbox', function () {
+                let id = $(this).data('id');
+                let table_status = $(this).data('table_status');
+                let status;
+                if (window.currentUserRole === "Dean"){
+                    if(table_status=="RESEARCHER"){
+                       status = $(this).is(':checked') ? 3 : 2;
+                    }if(table_status=="HOD"){
+                       status = $(this).is(':checked') ? 2 : 1;
+                    }
+                }
+                if (window.currentUserRole === "ORIC"){
+                    if(table_status=="RESEARCHER"){
+                       status = $(this).is(':checked') ? 4 : 3;
+                    }if(table_status=="HOD"){
+                       status = $(this).is(':checked') ? 3 : 2;
+                    }
+                }
+                 if (window.currentUserRole === "Human Resources"){
+                    if(table_status=="HOD"){
+                       status = $(this).is(':checked') ? 4 : 3;
+                    }
+                }
+
+                $.ajax({
+                    url: `/indicator-form/${id}`,
+                    type: 'POST',
+                    data: {
+                        _method: 'PUT',
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: status
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Status updated successfully!');
+                            if (table_status === "RESEARCHER") {
+                                fetchIndicatorForms1(); // refresh only researcher table
+                            }
+                            if (table_status === "HOD") {
+                                fetchIndicatorForms(); // refresh only researcher table
+                            }
+                        } else {
+                            alert('Failed to update status.');
+                        }
+                    },
+                    error: function () {
+                        alert('Error updating status.');
+                    }
+                });
+            });
+
     });
     </script>
     @endif
