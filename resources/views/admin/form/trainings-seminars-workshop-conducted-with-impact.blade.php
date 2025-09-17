@@ -96,7 +96,7 @@
             let formData = new FormData(this);
 
             $.ajax({
-                url: "{{ route('trainings-seminars-workshops'.store') }}",
+                url: "{{ route('trainings-seminars-workshops.store') }}",
                 type: "POST",
                 data: formData,
                 contentType: false,

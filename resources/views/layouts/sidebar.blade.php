@@ -39,13 +39,7 @@
         </li>
       </ul> -->
     </li>
-    @if(auth()->user()->hasRole(['HOD', 'Teacher','Dean']))
-     <li class="menu-item">
-          <a href="{{ route('indicatorForm.show') }}" class="menu-link">
-            <i class="menu-icon icon-base ti tabler-toggle-left"></i>
-            <div data-i18n="View Publications">View Publications</div>
-          </a>
-        </li>
+    @if(auth()->user()->hasRole(['HOD', 'Teacher','Dean','ORIC','Human Resources']))
     @php
         $kfa = \App\Models\KeyPerformanceArea::with(['indicatorCategories.indicators'])->get();
       @endphp

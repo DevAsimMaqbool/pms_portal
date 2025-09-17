@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('draft_stage')->nullable();
             $table->string('email_screenshot')->nullable();
             $table->string('scopus_link')->nullable();
-            $table->enum('status', ['1', '2', '3'])->default('1');
+            $table->enum('status', ['1', '2', '3','4','5','6'])->default('1');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();

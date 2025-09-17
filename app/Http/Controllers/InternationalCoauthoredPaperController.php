@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\InternationalCoauthoredPaper;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -12,9 +13,67 @@ class InternationalCoauthoredPaperController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+     public function index(Request $request)
     {
-        //
+         try {
+            $user = Auth::user();
+            $userId = Auth::id();
+            $employee_id = $user->employee_id;
+
+            if ($user->hasRole('Dean')) {
+                   $status = $request->input('status');
+                   $hod_ids = User::where('manager_id', $employee_id)
+                   ->role('HOD')->pluck('employee_id');
+                    if($status=="RESEARCHER"){
+                        $teacher_id = User::whereIn('manager_id', $hod_ids)
+                        ->role('Teacher')->pluck('employee_id');
+                          $all_ids = $teacher_id->merge($hod_ids);
+                          $forms = InternationalCoauthoredPaper::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])->whereIn('created_by', $all_ids)->whereIn('status', [3,2])
+                            ->where('form_status', $status)->get();
+                    }
+
+            }if ($user->hasRole('HOD')) {
+                $status = $request->input('status');
+                   $hod_ids = User::where('manager_id', $employee_id)
+                   ->role(['Teacher','HOD'])->pluck('employee_id');
+                    if($status=="RESEARCHER"){
+                          $forms = InternationalCoauthoredPaper::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])->whereIn('created_by', $hod_ids)->whereIn('status', [1, 2])
+                            ->where('form_status', $status)->get();
+                    }
+                
+            }if ($user->hasRole('ORIC')) {
+                 $status = $request->input('status');
+                    if($status=="RESEARCHER"){
+                          $forms = InternationalCoauthoredPaper::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])->whereIn('status', [4,3])
+                            ->where('form_status', $status)->get();
+                    }
+
+            }
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'forms' => $forms
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Oops! Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -99,9 +158,18 @@ class InternationalCoauthoredPaperController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'status' => 'required|in:1,2,3,4,5,6'
+        ]);
+
+        $target = InternationalCoauthoredPaper::findOrFail($id);
+        $target->status = $request->status;
+        $target->updated_by = Auth::id();
+        $target->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**

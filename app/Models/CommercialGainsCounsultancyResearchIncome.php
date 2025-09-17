@@ -22,6 +22,10 @@ class CommercialGainsCounsultancyResearchIncome extends Model
         'created_by',
         'updated_by',
     ];
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'employee_id');
+    }
     public function Projects()
     {
         return $this->hasMany(CommercialGainsCounsultancyResearchIncomeProject::class, 'consultancy_id');

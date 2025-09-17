@@ -103,7 +103,7 @@ Route::middleware('auth')->group(function () {
 
 
    
-    Route::middleware('role:Teacher|HOD|ORIC|Dean')->group(function () {
+    Route::middleware('role:Teacher|HOD|ORIC|Dean|Human Resources')->group(function () {
         Route::get('/view-forms', [IndicatorController::class, 'indicator_form_show'])->name('indicatorForm.show');
         Route::post('/achievement-of-research-publications-target/{id}/update-status', [IndicatorController::class, 'updateStatus']);
         Route::post('/achievement-of-research-publications-target/bulk-update-status', [IndicatorController::class, 'bulkUpdateStatus'])->name('indicatorForm.bulkUpdateStatus');
