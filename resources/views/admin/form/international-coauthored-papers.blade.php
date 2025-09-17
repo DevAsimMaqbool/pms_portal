@@ -18,54 +18,115 @@
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['HOD', 'Teacher']))
-                <h6>International co-Authored Papers</h6>
-                <form id="researchForm1" enctype="multipart/form-data" class="row">
-                    @csrf
-                    <input type="hidden" name="kpa_id" value="{{ $areaId }}">
-                    <input type="hidden" name="sp_category_id" value="{{ $categoryId }}">
-                    <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-                    <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER">
+               @if(auth()->user()->hasRole(['HOD']))
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs mb-3" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">International co-Authored Papers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
+                    </li>
+                </ul>
+                @endif
+                <div class="tab-content">
+                    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+                    <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                    <form id="researchForm1" enctype="multipart/form-data" class="row">
+                        @csrf
+                        <input type="hidden" name="kpa_id" value="{{ $areaId }}">
+                        <input type="hidden" name="sp_category_id" value="{{ $categoryId }}">
+                        <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                        <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER">
 
-                    <div class="row">
-                        <div id="author-past-container">
-                            <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded" >
-                                <div class="col-md-4">
-                                    <label for="name_of_coauthers" class="form-label">Names of co-authers</label>
-                                    <input type="text" name="papers[0][name_of_co_authers]" class="form-control">
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Author Rank</label>
-                                    <input type="text" name="papers[0][author_rank]" class="form-control">
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Name of University & Country</label>
-                                    <input type="text" name="papers[0][name_of_university_country]" class="form-control">
-                                </div>
-                                <div class="col-md-4">
-                                <label for="designation" class="form-label">Designation</label>
-                                <input type="text" id="designation" class="form-control" name="papers[0][designation]">
-                                 </div>
-                                 <div class="col-md-4">
-                                    <label class="form-label">No of papers co-authored with this person in the past</label>
-                                    <input type="text" name="papers[0][no_of_papers_past]" class="form-control" >
+                        <div class="row">
+                            <div id="author-past-container">
+                                <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded" >
+                                    <div class="col-md-4">
+                                        <label for="name_of_coauthers" class="form-label">Names of co-authers</label>
+                                        <input type="text" name="papers[0][name_of_co_authers]" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Author Rank</label>
+                                        <input type="text" name="papers[0][author_rank]" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Name of University & Country</label>
+                                        <input type="text" name="papers[0][name_of_university_country]" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                    <label for="designation" class="form-label">Designation</label>
+                                    <input type="text" id="designation" class="form-control" name="papers[0][designation]">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">No of papers co-authored with this person in the past</label>
+                                        <input type="text" name="papers[0][no_of_papers_past]" class="form-control" >
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 mb-3">
-                            <button type="button" class="btn btn-primary waves-effect waves-light" id="add-coauthor"><i
-                                    class="icon-base ti tabler-plus me-1"></i> <span
-                                    class="align-middle">Add</span></button>
-                        </div>
+                            <div class="col-12 mb-3">
+                                <button type="button" class="btn btn-primary waves-effect waves-light" id="add-coauthor"><i
+                                        class="icon-base ti tabler-plus me-1"></i> <span
+                                        class="align-middle">Add</span></button>
+                            </div>
 
+                        </div>
+                        <div class="col-4 text-center demo-vertical-spacing">
+                            <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
+                        </div>
+                    </form>
                     </div>
-                    <div class="col-4 text-center demo-vertical-spacing">
-                        <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
+                    @endif
+                    @if(auth()->user()->hasRole(['Dean', 'HOD','ORIC']))
+                    <div class="tab-pane fade show {{ auth()->user()->hasRole(['Dean', 'ORIC']) ? 'active' : '' }}" id="form2" role="tabpanel">
+                        <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll"></th>
+                                    <th>#</th>
+                                    <th>Created By</th>
+                                    <th>Co Authers</th>
+                                    <th>Author Rank</th>
+                                    <th>Created Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
-                </form>
-                 @endif
+                    @endif
+                 </div>
             </div>
         </div>
+
+         <!-- Modal -->
+        <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewFormModalLabel">Form Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <tr><th>Created By</th><td id="modalCreatedBy"></td></tr>
+                    <tr><th>Co-Author</th><td id="modalCoAuthers"></td></tr>
+                    <tr><th>Author Rank</th><td id="modalAuthorRank"></td></tr>
+                    <tr><th>Status</th><td>
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="approveCheckbox">
+                        <label class="form-check-label" for="approveCheckbox">Approved</label>
+                    </div></td></tr>
+                    <tr><th>Created Date</th><td id="modalCreatedDate"></td></tr>
+                    <tbody id="modalExtraFields"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>
+        <!--/ Add Permission Modal -->
     </div>
     <!-- / Content -->
 @endsection
@@ -139,7 +200,6 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    alert(response)
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                     form[0].reset();
@@ -176,4 +236,192 @@
 });
     </script>
 @endif
+@if(auth()->user()->hasRole(['Dean','HOD','ORIC']))
+<script>
+    window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+</script>
+<script>
+function fetchIndicatorForms() {
+    $.ajax({
+        url: "{{ route('international-Coauthored-Paper.index') }}",
+        method: "GET",
+         data: {
+            status: "RESEARCHER" // you can send more values
+        },
+        dataType: "json",
+        success: function (data) {
+            //alert(data.forms);
+            const forms = data.forms || [];
+            
+            const rowData = forms.map((form, i) => {
+                const createdAt = form.created_at 
+                    ? new Date(form.created_at).toISOString().split('T')[0] 
+                    : 'N/A';
+
+                // Pass entire form as JSON in button's data attribute
+                return [
+                    `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
+                    i + 1,
+                    form.creator ? form.creator.name : 'N/A',
+                    form.name_of_co_authers || 'N/A',
+                    form.author_rank || 'N/A',
+                    createdAt,
+                    `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                ];
+            });
+
+            if (!$.fn.DataTable.isDataTable('#complaintTable2')) {
+                $('#complaintTable2').DataTable({
+                    data: rowData,
+                    columns: [
+                        { title: "<input type='checkbox' id='selectAll'>" },
+                        { title: "#" },
+                        { title: "Created By" },
+                        { title: "Co Authers" },
+                        { title: "Author Rank" },
+                        { title: "Created Date" },
+                        { title: "Actions" }
+                    ]
+                });
+            } else {
+                $('#complaintTable2').DataTable().clear().rows.add(rowData).draw();
+            }
+        },
+        error: function(xhr) {
+            console.error('Error fetching data:', xhr.responseText);
+            alert('Unable to load data.');
+        }
+    });
+}
+    $(document).ready(function () {
+
+      fetchIndicatorForms();
+       // Handle click on View button
+    $(document).on('click', '.view-form-btn', function() {
+        const form = $(this).data('form');
+        $('#modalExtraFields').find('.optional-field').remove();
+
+        $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
+        $('#modalCoAuthers').text(form.name_of_co_authers || 'N/A');
+        $('#modalAuthorRank').text(form.author_rank || 'N/A');
+        $('#modalStatus').text(form.status || 'Pending');
+        $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+        
+        if (window.currentUserRole === 'HOD') {
+            let statusLabel = "Review"; 
+            if(form.form_status=='RESEARCHER'){
+                $('#approveCheckbox').prop('checked', form.status == 2);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 1) {
+                        statusLabel = "Verified";
+                    } else if (form.status == 2) {
+                        statusLabel = "Verified";
+                    }
+            }
+        
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        }
+        else if (window.currentUserRole === 'Dean') {
+            let statusLabel = "Review"; 
+             if(form.form_status=='RESEARCHER'){
+                $('#approveCheckbox').closest('.form-check-input').show();
+                $('#approveCheckbox').prop('checked', form.status == 3);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 2) {
+                        statusLabel = "Review";
+                    } else if (form.status == 3) {
+                        statusLabel = "Review";
+                    }
+                }
+        
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        }else if(window.currentUserRole === 'ORIC'){
+            
+            $('#approveCheckbox').prop('checked', form.status == 4);
+            $('#approveCheckbox').data('id', form.id);
+            let statusLabel = "Pending"; 
+            if (form.status == 1) {
+                statusLabel = "Verified";
+            } else if (form.status == 3) {
+                statusLabel = "Verified"; 
+            } else if (form.status == 4) {
+                statusLabel = "Verified";
+            }
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        } else {
+            $('#approveCheckbox').closest('.form-check-input').hide();
+
+            let statusLabel = "Pending"; // default
+            if (form.status == 1) {
+                statusLabel = "Not Verified";
+            } else if (form.status == 2) {
+                statusLabel = "Verified";
+            } else if (form.status == 3) {
+                statusLabel = "Approved";
+            }
+
+            // update the label text
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        }
+         if (form.name_of_university_country) {
+            $('#modalExtraFields').append(`<tr class="optional-field"><th>Name of University & Country</th><td>${form.name_of_university_country}</td></tr>`);
+        }
+        
+        if (form.designation) {
+            $('#modalExtraFields').append(`<tr class="optional-field"><th>Designation</th><td>${form.designation}</td></tr>`);
+        }
+         if (form.no_of_papers_past) {
+            $('#modalExtraFields').append(`<tr class="optional-field"><th>No of Papers Past</th><td>${form.no_of_papers_past}</td></tr>`);
+        }
+        $('#viewFormModal').modal('show');
+    });
+
+     $(document).on('change', '#approveCheckbox', function () {
+                let id = $(this).data('id');
+                let table_status = $(this).data('table_status');
+                let status;
+                if (window.currentUserRole === "Dean"){
+                    if(table_status=="RESEARCHER"){
+                       status = $(this).is(':checked') ? 3 : 2;
+                    }
+                }
+                if (window.currentUserRole === "HOD"){
+                    if(table_status=="RESEARCHER"){
+                       status = $(this).is(':checked') ? 2 : 1;
+                    }
+                }
+                if (window.currentUserRole === "ORIC"){
+                    if(table_status=="RESEARCHER"){
+                       status = $(this).is(':checked') ? 4 : 3;
+                    }
+                }
+
+                $.ajax({
+                    url: `/international-Coauthored-Paper/${id}`,
+                    type: 'POST',
+                    data: {
+                        _method: 'PUT',
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: status
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Status updated successfully!');
+                           fetchIndicatorForms();
+                        } else {
+                            alert('Failed to update status.');
+                        }
+                    },
+                    error: function () {
+                        alert('Error updating status.');
+                    }
+                });
+            });
+
+
+    });
+    </script>
+    @endif
 @endpush
