@@ -41,9 +41,15 @@
       <!-- Menu -->
       @if(auth()->user()->hasRole('Survey'))
       @include('layouts.survey_sidebar')
-    @else
-      @include('layouts.sidebar')
-    @endif
+      @elseif(auth()->user()->hasRole('Teacher'))
+      @include('layouts.teacher_sidebar')
+      @elseif(auth()->user()->hasRole('HOD'))
+      @include('layouts.hod_sidebar')
+      @elseif(auth()->user()->hasRole('Dean'))
+      @include('layouts.dean_sidebar')
+      @else
+        @include('layouts.sidebar')
+      @endif
       <!-- / Menu -->
       <!-- Layout container -->
       <div class="layout-page">

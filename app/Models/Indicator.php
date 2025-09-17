@@ -20,5 +20,9 @@ class Indicator extends Model
     {
         return $this->belongsTo(IndicatorCategory::class, 'indicator_category_id');
     }
+    public function indicatorForm()
+    {
+        return $this->hasMany(IndicatorForm::class, 'indicator_id', 'id');
+    }
 
 }
