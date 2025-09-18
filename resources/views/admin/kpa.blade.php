@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @push('style')
+<link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
    <style>
         .avatar-xl{ width:72px; height:72px; border-radius:50%; object-fit:cover; }
         .metric{ font-size:.9rem; color:#6c757d; }
@@ -19,34 +20,25 @@
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row g-6">
-    <div class="col-12 col-md-6">
-      <div class="card h-100">
-          <div class="card-body">
-              <div class="d-flex align-items-center mb-3">
-                  <img class="avatar-xl me-3" src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="avatar"/>
-                  <div>
-                      <h4 class="mb-1" id="empName">{{ $employee['name'] }}</h4>
-                      <div class="text-muted">{{ $employee['job_title'] }}</div>
-                      <div class="metric">{{ $employee['level'] }}</div>
-                      <div class="metric">DOJ: <span id="doj">2015-09-01</span></div>
-                      <div class="fw-semibold text-primary" id="serviceYears">—</div>
-                  </div>
-              </div>
-              <div class="row g-3">
-                  <div class="col-6"><div class="mini-tile text-center"><div class="label">Grade</div><div class="value">B+</div></div></div>
-                  <div class="col-6"><div class="mini-tile text-center"><div class="label">Appraisal</div><div class="value">Exceeds</div></div></div>
-                  <div class="col-6"><div class="mini-tile text-center"><div class="label">Courses (AY)</div><div class="value">10</div></div></div>
-                  <div class="col-6"><div class="mini-tile text-center"><div class="label">Papers</div><div class="value">5</div></div></div>
-                  <div class="col-12">
-                    <div class="mini-tile">
-                        <div class="d-flex justify-content-between"><span class="label">Awards</span><i class="ti ti-award"></i></div>
-                        <div class="mt-2"><span class="badge bg-label-primary me-1">Best Teacher</span><span class="badge bg-label-success me-1">Research Grant</span><span class="badge bg-label-info">Mentor</span></div>
-                    </div>
-                </div>
-              </div>
+        <div class="col-12 col-md-6">
+          <div class="card">
+        <div class="d-flex align-items-end row">
+          <div class="col-7">
+            <div class="card-body text-nowrap">
+              <h5 class="card-title mb-0">Congratulations John! 🎉</h5>
+              <p class="mb-2">Best seller of the month</p>
+              <h4 class="text-primary mb-1">$48.9k</h4>
+              <a href="javascript:;" class="btn btn-primary waves-effect waves-light">View Sales</a>
+            </div>
           </div>
+          <div class="col-5 text-center text-sm-left">
+            <div class="card-body pb-0 px-0 px-md-4">
+              <img src="{{ asset('admin/assets/img/illustrations/card-advance-sale.png') }}" height="140" alt="view sales">
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+        </div>
     <!-- course --> 
     <!-- Vehicles overview -->
     <div class="col-12 col-md-6">
@@ -61,85 +53,30 @@
     </div>
     <!--/ Sales Overview -->
    <!-- Total Profit -->
+   @foreach ($area->indicatorCategories as $category)
     <div class="col-xxl-2 col-md-3 col-6">
-        <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
-            <div class="card h-100">
+            <div class="card h-100 kpa-category" data-id="{{ $category->id }}" style="cursor: pointer;">
                 <div class="card-body">
                     <div class="badge p-2 bg-label-danger mb-3 rounded"></div>
-                    <h6 class="card-title mb-1">Teaching and Learning</h6>
-                    <div>
-                        <span class="badge bg-label-danger">80%</span>
-                    </div>
+                    <h6 class="card-title mb-1">{{ $category->indicator_category }}</h6>
                 </div>
             </div>
-        </a>
     </div>
-
-  <!-- Total Profit -->
-    <div class="col-xxl-2 col-md-3 col-6">
-     <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+    @endforeach
+        <!-- Assignment Progress -->
+    <div class="col-md-6 col-xxl-4 mb-6">
       <div class="card h-100">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h5 class="card-title m-0 me-2">Assignment Progress</h5>
+        </div>
         <div class="card-body">
-          <div class="badge p-2 bg-label-danger mb-3 rounded"></div>
-          <h6 class="card-title mb-1">Research, Innovation and Commercialisation</h6>
-          <div>
-            <span class="badge bg-label-danger">85%</span>
-          </div>
+            <ul class="list-unstyled mb-0" id="indicatorList"></ul>
         </div>
       </div>
-      </a>
     </div>
-    <!-- Total Profit -->
-    <div class="col-xxl-2 col-md-3 col-6">
-      <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="badge p-2 bg-label-danger mb-3 rounded"></i></div>
-          <h6 class="card-title mb-1">Institutional Engagement (Core only)</h6>
-          <div>
-            <span class="badge bg-label-danger">90%</span>
-          </div>
-        </div>
-      </div>
-      </a>
-    </div>
-     <!-- Total Profit -->
-    <div class="col-xxl-2 col-md-3 col-6">
-     <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="badge p-2 bg-label-danger mb-3 rounded"></i></div>
-          <h6 class="card-title mb-1">Institutional Engagement (Operational+ Character Strengths)</h6>
-          <div>
-            <span class="badge bg-label-danger">95%</span>
-          </div>
-        </div>
-      </div>
-      </a>
-    </div>
+    <!--/ Assignment Progress -->
+    <div class="col-12 col-md-12" id="indicator-results"></div>
     <!-- Support Tracker -->
-    <div class="col-12 col-md-6">
-      <div class="card mb-4">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="mb-0">Semester Performance Trend</h5>
-                <span class="text-muted small">Semesters</span>
-            </div>
-            <div id="performance_semester"></div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6">
-      <div class="card mb-4">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="mb-0">Year Performance Trend</h5>
-                <span class="text-muted small">Years</span>
-            </div>
-            <div id="performance_year"></div>
-        </div>
-      </div>
-    </div>
 
     </div>
   </div>
@@ -149,7 +86,7 @@
   <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
   <script src="{{ asset('admin/assets/js/app-logistics-dashboard.js') }}"></script>
   <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
-
+  <script src="{{ asset('admin/assets/js/cards-advance.js') }}"></script>
   <script>
 document.addEventListener("DOMContentLoaded", function () {
     var trendScores = [90, 95]; // ✅ your scores
@@ -300,6 +237,51 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+$(document).on('click', '.kpa-category', function () {
+    let categoryId = $(this).data('id');
+  
+    $.ajax({
+        url: '{{ route("indicator.getIndicator") }}',
+        type: 'POST',
+        data: { 
+            _token: '{{ csrf_token() }}',
+            id: categoryId 
+            },
+        success: function (response) {
+            let $list = $('#indicatorList');
+            $list.empty();
+
+            if (response.indicators && response.indicators.length > 0) {
+                $.each(response.indicators, function (index, indicator) {
+                    $list.append(`
+                        <li class="mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i class="icon-base ti tabler-shadow icon-md"></i></div>
+                                <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
+                                <div class="me-2">
+                                    <h6 class="mb-0">${indicator.indicator}</h6>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <p class="mb-0">1.2k</p>
+                                    <div class="ms-4 badge bg-label-success">+4.2%</div>
+                                </div>
+                                </div>
+                            </div>
+                            </li>
+                    `);
+                });
+                
+            } else {
+                $list.append('<li>No indicators found</li>');
+            }
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+        }
+    });
+});
+
 </script>
 
 @endpush

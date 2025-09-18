@@ -63,11 +63,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('/indicator', IndicatorController::class);
     Route::get('/indicator-categories/{kpaId}', [IndicatorController::class, 'getCategoriesByKPA'])->name('indicators.categories');
     Route::get('/performance/{id}', [KeyPerformanceAreaController::class, 'report'])->name('performance.report');
+    Route::get('/kpa/{id}', [KeyPerformanceAreaController::class, 'kpa'])->name('kpa.report');
 
     Route::get('/teaching_learning', [AssignUserKpaController::class, 'index']);
     Route::post('/get-indicator-categories', [AssignUserKpaController::class, 'getIndicatorCategories'])->name('indicatorCategory.getIndicatorCategories');
     Route::post('/get-users', [AssignUserKpaController::class, 'getUsers'])->name('indicatorCategory.getUsers');
     Route::post('/get-indicators', [AssignUserKpaController::class, 'getIndicators'])->name('indicator.getIndicators');
+    Route::post('/get-indicator', [KeyPerformanceAreaController::class, 'getIndicators'])->name('indicator.getIndicator');
 
     Route::get('/assignments', [RoleKpaAssignmentController::class, 'create'])->name('assignments.create');
     Route::post('/assignments', [RoleKpaAssignmentController::class, 'store'])->name('assignments.store');
