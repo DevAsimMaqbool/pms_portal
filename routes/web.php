@@ -37,7 +37,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
+Route::get('/v1', function () {
+    return view('admin.v1');
+});
+Route::get('/v2', function () {
+    return view('admin.v2');
+});
+Route::get('/v3', function () {
+    return view('admin.v3');
+});
 //Route::middleware('pms.auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PermissionController::class, 'dashboard'])->name('dashboard');
