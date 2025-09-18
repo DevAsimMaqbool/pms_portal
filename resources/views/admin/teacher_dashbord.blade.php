@@ -428,15 +428,15 @@
     </div>
 
     <div class="col-12 col-md-12">
-    <div class="card mb-4">
-      <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-              <h5 class="mb-0">Performance Trend</h5>
-              <span class="text-muted small">Semesters</span>
-          </div>
-          <div id="trendArea"></div>
+      <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Performance Trend</h5>
+                <span class="text-muted small">Semesters</span>
+            </div>
+            <div id="trendArea"></div>
+        </div>
       </div>
-  </div>
     </div>
     <!--/ Support Tracker -->
 
@@ -672,7 +672,7 @@
       "></script>
   <!-- <script src="{{ asset('admin/assets/js/cards-statistics.js') }}"></script> -->
   <script src="{{ asset('admin/assets/js/dashboards-analytics.js') }}"></script>
-  <script src="{{ asset('admin/assets/js/charts-apex.js') }}"></script>
+  {{-- <script src="{{ asset('admin/assets/js/charts-apex.js') }}"></script> --}}
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -812,7 +812,39 @@
     chart.render();
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    var trendScores = [10, 25, 35, 50, 65, 80, 95]; // ✅ your scores
+    var trendSemesters = ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5", "Sem 6", "Sem 7"]; // ✅ your categories
 
+    var options = {
+        chart: { 
+            type: 'area', 
+            height: 290, 
+            toolbar: { show: false } 
+        },
+        series: [{ 
+            name: 'Overall %', 
+            data: trendScores 
+        }],
+        xaxis: { 
+            categories: trendSemesters
+        },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth', width: 3 },
+        colors: ['#7367f0'],
+        fill: { 
+            type: 'gradient', 
+            gradient: { 
+                shadeIntensity: 0.5, 
+                opacityFrom: 0.4, 
+                opacityTo: 0.05 
+            } 
+        }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#trendArea"), options);
+    chart.render();
+});
 </script>
 
 @endpush
