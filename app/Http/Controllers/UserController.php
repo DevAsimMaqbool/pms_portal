@@ -26,7 +26,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = User::with('roles')->select('users.*');
+            $query = User::with('roles')->select('users.*')->where('manager_id', auth()->id());
 
             // Apply department filter if provided
             if ($request->filled('department')) {

@@ -40,10 +40,14 @@
     <div class="layout-container">
       <!-- Menu -->
       @if(auth()->user()->hasRole('Survey'))
-      @include('layouts.survey_sidebar')
-    @else
-      @include('layouts.sidebar')
-    @endif
+        @include('layouts.survey_sidebar')
+      @elseif(auth()->user()->hasRole('Dean'))
+        @include('layouts.dean_sidebar')
+      @elseif(auth()->user()->hasRole('HOD'))
+        @include('layouts.dean_sidebar')
+      @else
+        @include('layouts.sidebar')
+      @endif
       <!-- / Menu -->
       <!-- Layout container -->
       <div class="layout-page">
