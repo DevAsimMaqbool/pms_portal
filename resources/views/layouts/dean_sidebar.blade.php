@@ -31,13 +31,6 @@
                 <i class="menu-icon icon-base ti tabler-smart-home"></i>
                 <div data-i18n="Home">Home</div>
             </a>
-            <!-- <ul class="menu-sub">
-        <li class="menu-item active">
-          <a href="" class="menu-link">
-            <div data-i18n="Analytics">Analytics</div>
-          </a>
-        </li>
-      </ul> -->
         </li>
         <li class="menu-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
             <a href="{{ route('users.index') }}" class="menu-link">

@@ -1,14 +1,5 @@
 @extends('layouts.app')
 @push('style')
-  <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
-  <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/swiper/swiper.css') }}" />
-  <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
-  <link rel="stylesheet"
-    href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
-  <link rel="stylesheet" href="{{ asset('admin/assets/vendor/fonts/flag-icons.css') }}" />
-
-  <!-- Page CSS -->
-  <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
    <style>
         .avatar-xl{ width:72px; height:72px; border-radius:50%; object-fit:cover; }
         .metric{ font-size:.9rem; color:#6c757d; }
@@ -28,793 +19,132 @@
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row g-6">
-    <div class="col-12 col-md-4">
-                                    <div class="card h-100">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center mb-3">
-                                                <img class="avatar-xl me-3" src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="avatar"/>
-                                                <div>
-                                                    <h4 class="mb-1" id="empName">Dr. Ali Raza</h4>
-                                                    <div class="text-muted">Professor – Computer Science</div>
-                                                    <div class="metric">Department: Information Technology</div>
-                                                    <div class="metric">DOJ: <span id="doj">2015-09-01</span></div>
-                                                    <div class="fw-semibold text-primary" id="serviceYears">—</div>
-                                                </div>
-                                            </div>
-                                            <div class="row g-3">
-                                                <div class="col-6"><div class="mini-tile text-center"><div class="label">Grade</div><div class="value">B+</div></div></div>
-                                                <div class="col-6"><div class="mini-tile text-center"><div class="label">Appraisal</div><div class="value">Exceeds</div></div></div>
-                                                <div class="col-6"><div class="mini-tile text-center"><div class="label">Courses (AY)</div><div class="value">10</div></div></div>
-                                                <div class="col-6"><div class="mini-tile text-center"><div class="label">Papers</div><div class="value">5</div></div></div>
-                                                <div class="col-12">
-                                                  <div class="mini-tile">
-                                                      <div class="d-flex justify-content-between"><span class="label">Awards</span><i class="ti ti-award"></i></div>
-                                                      <div class="mt-2"><span class="badge bg-label-primary me-1">Best Teacher</span><span class="badge bg-label-success me-1">Research Grant</span><span class="badge bg-label-info">Mentor</span></div>
-                                                  </div>
-                                              </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-    <!-- course --> 
-      <!-- Vehicles overview -->
-    <div class="col-12 col-md-4">
-      <div class="card h-100">
-        <div class="card-header d-flex align-items-center justify-content-between">
-          <div class="card-title mb-0">
-            <h5 class="m-0 me-2">Course Load (Fall 2025)</h5>
-          </div>
-          <div class="dropdown">
-            <button class="btn btn-text-secondary rounded-pill p-2 border-0 me-n1" type="button" id="vehiclesOverview" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="vehiclesOverview">
-              <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="d-none d-lg-flex vehicles-progress-labels mb-6">
-            <div class="vehicles-progress-label on-the-way-text" style="width: 50%;">Course Name</div>
-            <div class="vehicles-progress-label unloading-text" style="width: 30%;">Marked</div>
-            <div class="vehicles-progress-label loading-text" style="width: 20%;">Schedule</div>
-          </div>
-          <div class="vehicles-overview-progress progress rounded-3 mb-3 bg-transparent overflow-hidden" style="height: 46px;">
-            <div class="progress-bar fw-medium text-start shadow-none bg-lighter text-heading px-4 rounded-0" role="progressbar" style="width: 50%" aria-valuenow="39.7" aria-valuemin="0" aria-valuemax="100">39.7%</div>
-            <div class="progress-bar fw-medium text-start shadow-none bg-primary px-4" role="progressbar" style="width: 30%" aria-valuenow="28.3" aria-valuemin="0" aria-valuemax="100">28.3%</div>
-            <div class="progress-bar fw-medium text-start shadow-none text-bg-info px-2 px-sm-4" role="progressbar" style="width: 20%" aria-valuenow="17.4" aria-valuemin="0" aria-valuemax="100">17.4%</div>
-          </div>
-          <div class="table-responsive">
-            <table class="table card-table table-border-top-0 table-border-bottom-0">
-            {{-- <thead>
-            <tr>
-            <th>Course Name</th>
-             <th>Marked</th>
-              <th>Schedule</th>
-            </tr>
-            </thead> --}}
-              <tbody>
-                <tr>
-                  <td class="w-50 ps-0">
-                    <div class="d-flex justify-content-start align-items-center">
-                      <h6 class="mb-0 fw-normal">Introduction to Computing</h6>
-                    </div>
-                  </td>
-                  <td class="text-end pe-0 text-nowrap">
-                    <h6 class="mb-0">2</h6>
-                  </td>
-                  <td class="text-end pe-0">
-                    <span>2</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="w-50 ps-0">
-                    <div class="d-flex justify-content-start align-items-center">
-                      <h6 class="mb-0 fw-normal">Web Development</h6>
-                    </div>
-                  </td>
-                  <td class="text-end pe-0 text-nowrap">
-                    <h6 class="mb-0">3</h6>
-                  </td>
-                  <td class="text-end pe-0">
-                    <span>1</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="w-50 ps-0">
-                    <div class="d-flex justify-content-start align-items-center">
-                      <h6 class="mb-0 fw-normal">Objected Oriented Programming</h6>
-                    </div>
-                  </td>
-                  <td class="text-end pe-0 text-nowrap">
-                    <h6 class="mb-0">4</h6>
-                  </td>
-                  <td class="text-end pe-0">
-                    <span>3</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--/ Vehicles overview -->
-    <!-- /course -->                         
-    <!-- Website Analytics -->
-    {{-- <div class="col-xl-6 col">
-      <div class="swiper-container swiper-container-horizontal swiper swiper-card-advance-bg"
-      id="swiper-with-pagination-cards">
-      <div class="swiper-wrapper">
-        @foreach($grouped as $kpa)
-      <div class="swiper-slide">
-      <div class="row">
-        <div class="col-12">
-        <h5 class="text-white mb-0">{{ $kpa['kpa_name'] }}</h5>
-        <small>Weight of the KPA - Core 95%</small>
-        </div>
-        <div class="row">
-        <div class="col-lg-7 col-md-10 col-12 order-2 order-md-1 pt-md-9">
-        <h6 class="text-white mt-0 mt-md-3 mb-4">
-        <div class="row">
-          @foreach($kpa['categories'] as $category)
-        <div class="col-6 mb-3 d-flex align-items-center">
-        <p class="mb-0 fw-medium me-2 website-analytics-text-bg">88%</p>
-        <p class="mb-0">{{ Str::limit($category['category_name'], 15, '...') }}</p>
-        </div>
-      @endforeach
-        </div>
-        </h6>
-        </div>
-
-        <div class="col-lg-5 col-md-2 col-12 order-1 order-md-2 my-4 my-md-0 text-center">
-        <img src="{{ asset('admin/assets/img/illustrations/card-website-analytics-1.png') }}"
-        alt="Website Analytics" height="150" class="card-website-analytics-img" />
-        </div>
-        </div>
-      </div>
-      </div>
-      @endforeach
-      </div>
-      <div class="swiper-pagination"></div>
-      </div>
-    </div> --}}
-
-    <!--/ Website Analytics -->
-
-    <!-- Average Daily Sales -->
-    {{-- <div class="col-xl-3 col-sm-6">
-      <div class="card h-100">
-      <div class="card-header pb-0">
-        <h5 class="mb-3 card-title">Average Daily Sales</h5>
-        <p class="mb-0 text-body">Total Sales This Month</p>
-        <h4 class="mb-0">$28,450</h4>
-      </div>
-      <div class="card-body px-0">
-        <div id="averageDailySales"></div>
-      </div>
-      </div>
-    </div> --}}
-    <!--/ Average Daily Sales -->
-
-    <!-- Sales Overview -->
-    {{-- <div class="col-xl-3 col-sm-6">
-      <div class="card h-100">
-      <div class="card-header">
-        <div class="d-flex justify-content-between">
-        <p class="mb-0 text-body">Sales Overview</p>
-        <p class="card-text fw-medium text-success">+18.2%</p>
-        </div>
-        <h4 class="card-title mb-1">$42.5k</h4>
-      </div>
-      <div class="card-body">
-        <div class="row">
-        <div class="col-4">
-          <div class="d-flex gap-2 align-items-center mb-2">
-          <span class="badge bg-label-info p-1 rounded"><i
-            class="icon-base ti tabler-shopping-cart icon-sm"></i></span>
-          <p class="mb-0">Order</p>
-          </div>
-          <h5 class="mb-0 pt-1">62.2%</h5>
-          <small class="text-body-secondary">6,440</small>
-        </div>
-        <div class="col-4">
-          <div class="divider divider-vertical">
-          <div class="divider-text">
-            <span class="badge-divider-bg bg-label-secondary">VS</span>
-          </div>
-          </div>
-        </div>
-        <div class="col-4 text-end">
-          <div class="d-flex gap-2 justify-content-end align-items-center mb-2">
-          <p class="mb-0">Visits</p>
-          <span class="badge bg-label-primary p-1 rounded"><i class="icon-base ti tabler-link icon-sm"></i></span>
-          </div>
-          <h5 class="mb-0 pt-1">25.5%</h5>
-          <small class="text-body-secondary">12,749</small>
-        </div>
-        </div>
-        <div class="d-flex align-items-center mt-6">
-        <div class="progress w-100" style="height: 10px;">
-          <div class="progress-bar bg-info" style="width: 70%" role="progressbar" aria-valuenow="70"
-          aria-valuemin="0" aria-valuemax="100"></div>
-          <div class="progress-bar bg-primary" role="progressbar" style="width: 30%" aria-valuenow="30"
-          aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        </div>
-      </div>
-      </div>
-    </div> --}}
-    <!--/ Sales Overview -->
-      <!-- Donut Chart -->
-    <div class="col-md-4 col-12">
-      <div class="card">
-        <div class="card-header d-flex align-items-center justify-content-between">
-          <div>
-            <h5 class="card-title mb-0">KPA Score card</h5>
-          </div>
-          {{-- <div class="dropdown">
-            <button type="button" class="btn dropdown-toggle px-0" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="icon-base ti tabler-calendar"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Today</a></li>
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Yesterday</a></li>
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last 7 Days</a></li>
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last 30 Days</a></li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Current Month</a></li>
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last Month</a></li>
-            </ul>
-          </div> --}}
-        </div>
-        <div class="card-body">
-          <div id="donutCharts"></div>
-        </div>
-      </div>
-    </div>
-    <!-- /Donut Chart -->
-    <!-- Earning Reports -->
-    <div class="col-md-6">
-      <div class="card h-100">
-      <div class="card-header pb-0 d-flex justify-content-between">
-        <div class="card-title mb-0">
-        <h5 class="mb-1">Weekly Attendance Report</h5>
-        <p class="card-subtitle">Overview</p>
-        </div>
-        <div class="dropdown">
-        Fall 2024
-        {{-- <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-          id="earningReportsId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="earningReportsId">
-          <a class="dropdown-item" href="javascript:void(0);">View More</a>
-        </div> --}}
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="row align-items-center g-md-8">
-        <div class="col-12 col-md-5 d-flex flex-column">
-          <div class="d-flex gap-2 align-items-center mb-3 flex-wrap">
-          <h2 class="mb-0">45 hrs</h2>
-          {{-- <div class="badge rounded bg-label-success">+4.2%</div> --}}
-          </div>
-          <small class="text-body">You informed of this week compared to last week</small>
-        </div>
-        <div class="col-12 col-md-7 ps-xl-8">
-          <div id="weeklyEarningReports"></div>
-        </div>
-        </div>
-        <div class="border rounded p-5 mt-5">
-        <div class="row gap-4 gap-sm-0">
-          <div class="col-12 col-sm-4">
-          <div class="d-flex gap-2 align-items-center">
-            <div class="badge rounded bg-label-primary p-1"><i
-              class="icon-base ti tabler-clock icon-18px"></i></div>
-            <h6 class="mb-0 fw-normal">Avg. Working hrs</h6>
-          </div>
-          <h4 class="my-2">09</h4>
-          <div class="progress w-75" style="height:4px">
-            <div class="progress-bar" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0"
-            aria-valuemax="100"></div>
-          </div>
-          </div>
-          <div class="col-12 col-sm-4">
-          <div class="d-flex gap-2 align-items-center">
-            <div class="badge rounded bg-label-info p-1"><i class="icon-base ti tabler-input-check icon-18px"></i>
-            </div>
-            <h6 class="mb-0 fw-normal">Avg. check-in</h6>
-          </div>
-          <h4 class="my-2">09:05</h4>
-          <div class="progress w-75" style="height:4px">
-            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50"
-            aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          </div>
-          <div class="col-12 col-sm-4">
-          <div class="d-flex gap-2 align-items-center">
-            <div class="badge rounded bg-label-danger p-1"><i
-              class="icon-base ti tabler-input-check icon-18px"></i></div>
-            <h6 class="mb-0 fw-normal">Avg. check-out</h6>
-          </div>
-          <h4 class="my-2">18:10</h4>
-          <div class="progress w-75" style="height:4px">
-            <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65"
-            aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          </div>
-        </div>
-        </div>
-      </div>
-      </div>
-    </div>
-    <!--/ Earning Reports -->
-
-    <!-- Support Tracker -->
     <div class="col-12 col-md-6">
       <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-        <h5 class="mb-1">KPA Chart</h5>
-        <p class="card-subtitle">Fall 2024</p>
-        </div>
-        <div class="dropdown">
-        <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-          id="supportTrackerMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="supportTrackerMenu">
-          <a class="dropdown-item" href="javascript:void(0);">View More</a>
-          <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-        </div>
-        </div>
-      </div>
-      <div class="card-body row">
-        <div class="col-12 col-sm-4">
-        <div class="mt-lg-4 mt-lg-2 mb-lg-6 mb-2">
-          <!-- <h2 class="mb-0">100</h2> <p class="mb-0">Total</p> -->
-        </div>
-        <ul class="p-0 m-0">
-          <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-          <div class="badge rounded bg-label-primary p-1_5"><i class="icon-base ti tabler-ticket icon-md"></i>
+          <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                  <img class="avatar-xl me-3" src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="avatar"/>
+                  <div>
+                      <h4 class="mb-1" id="empName">{{ $employee['name'] }}</h4>
+                      <div class="text-muted">{{ $employee['job_title'] }}</div>
+                      <div class="metric">{{ $employee['level'] }}</div>
+                      <div class="metric">DOJ: <span id="doj">2015-09-01</span></div>
+                      <div class="fw-semibold text-primary" id="serviceYears">—</div>
+                  </div>
+              </div>
+              <div class="row g-3">
+                  <div class="col-6"><div class="mini-tile text-center"><div class="label">Grade</div><div class="value">B+</div></div></div>
+                  <div class="col-6"><div class="mini-tile text-center"><div class="label">Appraisal</div><div class="value">Exceeds</div></div></div>
+                  <div class="col-6"><div class="mini-tile text-center"><div class="label">Courses (AY)</div><div class="value">10</div></div></div>
+                  <div class="col-6"><div class="mini-tile text-center"><div class="label">Papers</div><div class="value">5</div></div></div>
+                  <div class="col-12">
+                    <div class="mini-tile">
+                        <div class="d-flex justify-content-between"><span class="label">Awards</span><i class="ti ti-award"></i></div>
+                        <div class="mt-2"><span class="badge bg-label-primary me-1">Best Teacher</span><span class="badge bg-label-success me-1">Research Grant</span><span class="badge bg-label-info">Mentor</span></div>
+                    </div>
+                </div>
+              </div>
           </div>
-          <div>
-            <h6 class="mb-0 text-nowrap">Teaching Delivery</h6>
-            <small class="text-body-secondary">25%</small>
-          </div>
-          </li>
-          <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-          <div class="badge rounded bg-label-info p-1_5"><i class="icon-base ti tabler-circle-check icon-md"></i>
-          </div>
-          <div>
-            <h6 class="mb-0 text-nowrap">Teaching Management</h6>
-            <small class="text-body-secondary">15%</small>
-          </div>
-          </li>
-          <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-          <div class="badge rounded bg-label-warning p-1_5"><i class="icon-base ti tabler-clock icon-md"></i>
-          </div>
-          <div>
-            <h6 class="mb-0 text-nowrap">Teaching Innovation</h6>
-            <small class="text-body-secondary">10%</small>
-          </div>
-          </li>
-          <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-          <div class="badge rounded bg-label-warning p-1_5"><i class="icon-base ti tabler-clock icon-md"></i>
-          </div>
-          <div>
-            <h6 class="mb-0 text-nowrap">Teaching Output</h6>
-            <small class="text-body-secondary">30%</small>
-          </div>
-          </li>
-          <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-          <div class="badge rounded bg-label-warning p-1_5"><i class="icon-base ti tabler-clock icon-md"></i>
-          </div>
-          <div>
-            <h6 class="mb-0 text-nowrap">Teaching Outcomes-student</h6>
-            <small class="text-body-secondary">20%</small>
-          </div>
-          </li>
-        </ul>
-        </div>
-        <div class="col-12 col-md-8">
-        <div id="supportTracker"></div>
-        </div>
-      </div>
       </div>
     </div>
-
-    <div class="col-12 col-md-12">
+    <!-- course --> 
+    <!-- Vehicles overview -->
+    <div class="col-12 col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Radar Chart</h5>
+        </div>
+        <div class="card-body pt-2">
+          <canvas class="chartjs" id="radarChart" data-height="355"></canvas>
+        </div>
+      </div>
+    </div>
+    <!--/ Sales Overview -->
+   <!-- Total Profit -->
+    <div class="col-xxl-2 col-md-3 col-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="badge p-2 bg-label-danger mb-3 rounded"></div>
+          <h6 class="card-title mb-1">Teaching and Learning</h6>
+          <div>
+            <span class="badge bg-label-danger">80%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- Total Profit -->
+    <div class="col-xxl-2 col-md-3 col-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="badge p-2 bg-label-danger mb-3 rounded"></div>
+          <h6 class="card-title mb-1">Research, Innovation and Commercialisation</h6>
+          <div>
+            <span class="badge bg-label-danger">85%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Total Profit -->
+    <div class="col-xxl-2 col-md-3 col-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="badge p-2 bg-label-danger mb-3 rounded"></i></div>
+          <h6 class="card-title mb-1">Institutional Engagement (Core only)</h6>
+          <div>
+            <span class="badge bg-label-danger">90%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+     <!-- Total Profit -->
+    <div class="col-xxl-2 col-md-3 col-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="badge p-2 bg-label-danger mb-3 rounded"></i></div>
+          <h6 class="card-title mb-1">Institutional Engagement (Operational+ Character Strengths)</h6>
+          <div>
+            <span class="badge bg-label-danger">95%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Support Tracker -->
+    <div class="col-12 col-md-6">
       <div class="card mb-4">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="mb-0">Performance Trend</h5>
+                <h5 class="mb-0">Semester Performance Trend</h5>
                 <span class="text-muted small">Semesters</span>
             </div>
-            <div id="trendArea"></div>
+            <div id="performance_semester"></div>
         </div>
       </div>
     </div>
-    <!--/ Support Tracker -->
-
-    <!-- Orders last week -->
-    <!-- <div class="col-xxl-4 col-md-6">
-      <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-      <div class="card-title mb-0">
-      <h4 class="mb-0">2.84k</h4>
-      <small class="text-body">Avg Daily Traffic</small>
-      </div>
-      <div class="badge bg-label-success">+15%</div>
-      </div>
-      <div class="card-body">
-      <div id="averageDailyTraffic"></div>
-      </div>
-      </div>
-    </div> -->
-    <!-- Orders last week -->
-
-    <!-- Monthly Campaign State -->
-    @foreach ($grouped as $kpa)
-      @foreach ($kpa['categories'] as $category)
-      <div class="col-xxl-4 col-md-6">
-      <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-      <div class="card-title mb-0">
-      <h5 class="mb-1">{{ $category['category_name'] }}</h5>
-      <p class="card-subtitle">
-        KPA: {{ $kpa['kpa_name'] }} | Weight: {{ $kpa['kpa_weight'] }}
-      </p>
-      </div>
-      <div class="dropdown">
-      <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-        id="MonthlyCampaign" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-      </button>
-      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
-        <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-        <a class="dropdown-item" href="javascript:void(0);">Download</a>
-        <a class="dropdown-item" href="javascript:void(0);">View All</a>
-      </div>
-      </div>
-      </div>
-
-      <div class="card-body">
-      <ul class="p-0 m-0">
-      @foreach ($category['indicators'] as $indicator)
-      <li class="mb-6 d-flex justify-content-between align-items-center">
-      <div class="badge bg-label-success rounded p-1_5">
-      <i class="icon-base ti tabler-mail icon-md"></i>
-      </div>
-      <div class="d-flex justify-content-between w-100 flex-wrap">
-      <h6 class="mb-0 ms-4">{{ $indicator['indicator_name'] }}</h6>
-      <div class="d-flex">
-      <p class="ms-4 text-success mb-0">
-      {{ $indicator['indicator_score'] ?? 'N/A' }}
-      </p>
-      </div>
-      </div>
-      </li>
-      @endforeach
-      </ul>
-      </div>
-      </div>
-      </div>
-      @endforeach
-    @endforeach
-
-    <!--/ Monthly Campaign State -->
-
-    <!-- Monthly Campaign State -->
-    <!-- <div class="col-xxl-4 col-md-6">
-
-    </div> -->
-    <!--/ Monthly Campaign State -->
-
-    <!-- Source Visit -->
-    <div class="col-xxl-4 col-md-6 col-12">
-      <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-        <h5 class="mb-1">Source Visits</h5>
-        <p class="card-subtitle">38.4k Visitors</p>
+    <div class="col-12 col-md-6">
+      <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Year Performance Trend</h5>
+                <span class="text-muted small">Years</span>
+            </div>
+            <div id="performance_year"></div>
         </div>
-        <div class="dropdown">
-        <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-          id="sourceVisits" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="sourceVisits">
-          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-          <a class="dropdown-item" href="javascript:void(0);">Download</a>
-          <a class="dropdown-item" href="javascript:void(0);">View All</a>
-        </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <ul class="list-unstyled mb-0">
-        <li class="mb-6">
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-shadow icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">Direct Source</h6>
-            <small class="text-body">Direct link click</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">1.2k</p>
-            <div class="ms-4 badge bg-label-success">+4.2%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6">
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-globe icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">Social Network</h6>
-            <small class="text-body">Social Channels</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">31.5k</p>
-            <div class="ms-4 badge bg-label-success">+8.2%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6">
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-mail icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">Email Newsletter</h6>
-            <small class="text-body">Mail Campaigns</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">893</p>
-            <div class="ms-4 badge bg-label-success">+2.4%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6">
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-external-link icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">Referrals</h6>
-            <small class="text-body">Impact Radius Visits</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">342</p>
-            <div class="ms-4 badge bg-label-danger">-0.4%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6">
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-ad icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">ADVT</h6>
-            <small class="text-body">Google ADVT</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">2.15k</p>
-            <div class="ms-4 badge bg-label-success">+9.1%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        <li>
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-star icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">Other</h6>
-            <small class="text-body">Many Sources</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">12.5k</p>
-            <div class="ms-4 badge bg-label-success">+6.2%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        </ul>
-      </div>
       </div>
     </div>
-    <!--/ Source Visit -->
 
-    <!-- Projects table -->
-    <div class="col-xxl-8">
-      <div class="card">
-      <div class="table-responsive mb-4">
-        <table class="table datatable-project table-sm">
-        <thead class="border-top">
-          <tr>
-          <th></th>
-          <th></th>
-          <th>Project</th>
-          <th>Leader</th>
-          <th>Team</th>
-          <th class="w-px-200">Progress</th>
-          <th>Action</th>
-          </tr>
-        </thead>
-        </table>
-      </div>
-      </div>
-    </div>
-    <!--/ Projects table -->
     </div>
   </div>
   <!-- / Content -->
 @endsection
 @push('script')
   <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
-  <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}
-    "></script>
   <script src="{{ asset('admin/assets/js/app-logistics-dashboard.js') }}"></script>
-  <script src="{{ asset('admin/assets/vendor/libs/swiper/swiper.js') }}
-      "></script>
-  <!-- <script src="{{ asset('admin/assets/js/cards-statistics.js') }}"></script> -->
-  <script src="{{ asset('admin/assets/js/dashboards-analytics.js') }}"></script>
-  {{-- <script src="{{ asset('admin/assets/js/charts-apex.js') }}"></script> --}}
+  <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    var options = {
-      chart: {
-      height: 145,
-      type: "bar",
-      parentHeightOffset: 0,
-      toolbar: { show: false }
-      },
-      plotOptions: {
-      bar: {
-        barHeight: "100%",
-        columnWidth: "11px",
-        startingShape: "rounded",
-        endingShape: "rounded",
-        borderRadius: 5
-      }
-      },
-      colors: ["#FFB300"],
-      grid: {
-      show: false,
-      padding: { top: -30, left: -18, bottom: -13, right: -18 }
-      },
-      dataLabels: { enabled: false },
-      tooltip: { enabled: true },
-      series: [{
-      name: "Traffic",
-      data: @json($data)  // ✅ Laravel array to JS
-      }],
-      legend: { show: false },
-      xaxis: {
-      categories: @json($categories), // ✅ Laravel array to JS
-      axisBorder: { show: false },
-      axisTicks: { show: false },
-      labels: {
-        style: { fontSize: "13px", fontFamily: "Arial" },
-        show: true
-      }
-      },
-      yaxis: {
-      labels: { show: false }
-      }
-    };
-
-    var chart = new ApexCharts(document.querySelector("#averageDailyTraffic"), options);
-    chart.render();
-    });
-    document.addEventListener("DOMContentLoaded", function () {
-
-    var options = {
-        chart: {
-            height: 357.8,
-            type: "donut"
-        },
-        labels: ["Teaching and Learning", "Research, Innovation and Commercialisation", "Institional Engagement (Core)", "Institional Engagement (Operational)"],
-        series: [42, 7, 25, 25], // dynamic data can come from Laravel
-        colors: ['#008FFB', '#FEB019', '#00E396', '#FF4560'], // replace with your theme vars
-        stroke: {
-            show: false,
-            curve: "straight"
-        },
-        dataLabels: {
-            enabled: true,
-            formatter: function (val) {
-                return parseInt(val, 10) + "%"
-            }
-        },
-        legend: {
-            show: true,
-            position: "bottom",
-            offsetY: -10,
-            markers: {
-                size: 5,
-                offsetX: -3
-            },
-            itemMargin: {
-                vertical: 3,
-                horizontal: 10
-            }
-        },
-        plotOptions: {
-            pie: {
-                donut: {
-                    labels: {
-                        show: true,
-                        name: {
-                            fontSize: "1.2rem",
-                        },
-                        value: {
-                            fontSize: "1rem",
-                            formatter: function (val) {
-                                return parseInt(val, 10) + "%"
-                            }
-                        },
-                        total: {
-                            show: true,
-                            fontSize: "1rem",
-                            label: "Teaching and Learning",
-                            formatter: function () {
-                                return "42%"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        responsive: [
-            {
-                breakpoint: 992,
-                options: {
-                    chart: { height: 380 },
-                    legend: { position: "bottom" }
-                }
-            },
-            {
-                breakpoint: 576,
-                options: {
-                    chart: { height: 320 },
-                    plotOptions: {
-                        pie: {
-                            donut: {
-                                labels: {
-                                    name: { fontSize: "1rem" },
-                                    value: { fontSize: "0.9rem" },
-                                    total: { fontSize: "1rem" }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        ]
-    };
-
-    var chart = new ApexCharts(document.querySelector("#donutCharts"), options);
-    chart.render();
-});
-
 document.addEventListener("DOMContentLoaded", function () {
-    var trendScores = [10, 25, 35, 50, 65, 80, 95]; // ✅ your scores
-    var trendSemesters = ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5", "Sem 6", "Sem 7"]; // ✅ your categories
+    var trendScores = [90, 95]; // ✅ your scores
+    var trendSemesters = ["Spring 2025", "Fall 2025"]; // ✅ your categories
 
     var options = {
         chart: { 
@@ -842,8 +172,124 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    var chart = new ApexCharts(document.querySelector("#trendArea"), options);
+    var chart = new ApexCharts(document.querySelector("#performance_semester"), options);
     chart.render();
+});
+document.addEventListener("DOMContentLoaded", function () {
+    var trendScores = [80, 85, 90]; // ✅ your scores
+    var trendSemesters = ["2023", "2024", "2025"]; // ✅ your categories
+
+    var options = {
+        chart: { 
+            type: 'area', 
+            height: 290, 
+            toolbar: { show: false } 
+        },
+        series: [{ 
+            name: 'Overall %', 
+            data: trendScores 
+        }],
+        xaxis: { 
+            categories: trendSemesters
+        },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth', width: 3 },
+        colors: ['#7367f0'],
+        fill: { 
+            type: 'gradient', 
+            gradient: { 
+                shadeIntensity: 0.5, 
+                opacityFrom: 0.4, 
+                opacityTo: 0.05 
+            } 
+        }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#performance_year"), options);
+    chart.render();
+});
+document.addEventListener("DOMContentLoaded", function () {
+    // ✅ Static labels and datasets
+    var chartLabels = ["Teaching and Learning", "Research", "Institutional Engagement", "Institutional Engagement"];
+    var dataset1 = [65, 59, 90, 81]; // Inside Mirror
+    var dataset2 = [28, 48, 40, 19]; // Social Mirror
+
+    var g = document.getElementById("radarChart");
+    if (g) {
+        var ctx = g.getContext("2d");
+
+        // ✅ Gradients
+        var gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
+        gradientBlue.addColorStop(0, "rgba(85, 85, 255, 0.9)");
+        gradientBlue.addColorStop(1, "rgba(151, 135, 255, 0.8)");
+
+        var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
+        gradientPink.addColorStop(0, "rgba(255, 85, 184, 0.9)");
+        gradientPink.addColorStop(1, "rgba(255, 135, 135, 0.8)");
+
+        // ✅ Radar Chart
+        new Chart(ctx, {
+            type: "radar",
+            data: {
+                labels: chartLabels,
+                datasets: [
+                    {
+                        label: "Inside Mirror",
+                        data: dataset1,
+                        fill: true,
+                        backgroundColor: gradientPink,
+                        borderColor: "rgba(255, 85, 184, 1)",
+                        pointBorderColor: "#ff55b8",
+                        pointBackgroundColor: "#fff",
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        pointStyle: "circle"
+                    },
+                    {
+                        label: "Social Mirror",
+                        data: dataset2,
+                        fill: true,
+                        backgroundColor: gradientBlue,
+                        borderColor: "rgba(85, 85, 255, 1)",
+                        pointBorderColor: "#5555ff",
+                        pointBackgroundColor: "#fff",
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        pointStyle: "circle"
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 500 },
+                scales: {
+                    r: {
+                        ticks: { maxTicksLimit: 1, display: false, color: "#666" },
+                        grid: { color: "#ddd" },
+                        angleLines: { color: "#ddd" },
+                        pointLabels: { color: "#666" }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: "top",
+                        labels: {
+                            padding: 25,
+                            color: "#333"
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: "#fff",
+                        titleColor: "#000",
+                        bodyColor: "#333",
+                        borderWidth: 1,
+                        borderColor: "#ddd"
+                    }
+                }
+            }
+        });
+    }
 });
 </script>
 
