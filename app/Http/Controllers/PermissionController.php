@@ -77,7 +77,7 @@ class PermissionController extends Controller
 
         // Pass the user data to the view
         if ($role->name == 'Teacher') {
-            return view('admin.teacher_dashbord', compact('categories', 'data', 'grouped'));
+            return view('admin.teacher_dashbord', compact('employee'));
         } elseif ($role->name == 'Survey') {
             return view('admin.survey_dashbord', compact('employee'));
         } else {
