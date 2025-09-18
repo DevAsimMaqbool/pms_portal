@@ -83,6 +83,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/rector-dashboard', RectorDashboardController::class);
 
     Route::post('/get-role-users', [UserController::class, 'index'])->name('userRole.index');
+    Route::get('/user_report/{id}', [UserController::class, 'userReport']);
     Route::resource('users', UserController::class);
     Route::resource('/faculty', FacultyController::class);
     Route::resource('/assigndepartment', DepartmentAssignmentController::class);
@@ -110,7 +111,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
 
 
-   
+
     Route::middleware('role:Teacher|HOD|ORIC|Dean|Human Resources')->group(function () {
         Route::get('/view-forms', [IndicatorController::class, 'indicator_form_show'])->name('indicatorForm.show');
         Route::post('/achievement-of-research-publications-target/{id}/update-status', [IndicatorController::class, 'updateStatus']);

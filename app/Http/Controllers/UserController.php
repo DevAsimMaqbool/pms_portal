@@ -177,4 +177,9 @@ class UserController extends Controller
     {
         //
     }
+    public function userReport($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.report', compact('user'));
+    }
 }
