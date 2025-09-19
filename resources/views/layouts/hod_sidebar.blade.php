@@ -42,7 +42,7 @@
         <li class="menu-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
             <a href="{{ route('users.index') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-users"></i>
-                <div data-i18n="Users">Users</div>
+                <div data-i18n="My Team">My Team</div>
             </a>
         </li>
         <li class="menu-item {{ request()->routeIs('survey.report') ? 'active' : '' }}">
