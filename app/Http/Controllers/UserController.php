@@ -93,7 +93,7 @@ class UserController extends Controller
             ->sortBy('complete_name')
             ->values();
 
-        $totalUsers = User::count();
+        $totalUsers = User::where('manager_id', auth()->id())->count();
         $roles = Role::all();
         //dd($roles);
 
@@ -176,5 +176,10 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function userReport($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.report', compact('user'));
     }
 }

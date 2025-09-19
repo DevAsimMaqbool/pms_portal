@@ -112,7 +112,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
 
 
-   
+
     Route::middleware('role:Teacher|HOD|ORIC|Dean|Human Resources')->group(function () {
         Route::get('/view-forms', [IndicatorController::class, 'indicator_form_show'])->name('indicatorForm.show');
         Route::post('/achievement-of-research-publications-target/{id}/update-status', [IndicatorController::class, 'updateStatus']);
