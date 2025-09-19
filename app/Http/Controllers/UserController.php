@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Department;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -69,18 +70,33 @@ class UserController extends Controller
                     return '<span class="badge ' . $s['class'] . '">' . $s['title'] . '</span>';
                 })
                 ->addColumn('actions', function ($user) {
-                    return '
-                    <div class="d-flex align-items-center">
-                        <a href="javascript:;" class="btn btn-text-secondary rounded-pill waves-effect btn-icon" onclick="editUser(' . $user->id . ')">
-                            <i class="icon-base ti tabler-edit icon-22px"></i>
-                        </a>
-                        <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteUser(' . $user->id . ')">
-                            <i class="icon-base ti tabler-trash icon-md"></i>
-                        </a>
-                        <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/user_report/' . $user->id . '" target="_blank">
-                            <i class="icon-base ti tabler-eye icon-md"></i>
-                        </a>
-                    </div>';
+                    $actions = '
+        <div class="d-flex align-items-center">
+            <a href="javascript:;" class="btn btn-text-secondary rounded-pill waves-effect btn-icon" onclick="editUser(' . $user->id . ')">
+                <i class="icon-base ti tabler-edit icon-22px"></i>
+            </a>
+            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteUser(' . $user->id . ')">
+                <i class="icon-base ti tabler-trash icon-md"></i>
+            </a>
+            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/user_report/' . $user->id . '" target="_blank">
+                <i class="icon-base ti tabler-eye icon-md"></i>
+            </a>';
+                    if (Auth::user()->getRoleNames()->first() === "Dean") {
+                        $actions .= '
+            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/departments/' . strtolower(str_replace(' ', '_', $user->department)) . '/report" target="_blank">
+                <i class="icon-base ti tabler-file icon-md"></i>
+            </a>';
+                    }
+                    if (Auth::user()->getRoleNames()->first() === "HOD") {
+                        $actions .= '
+            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/teacher_dashboard/' . $user->id . '" target="_blank">
+                <i class="icon-base ti tabler-file icon-md"></i>
+            </a>';
+                    }
+
+                    $actions .= '</div>';
+
+                    return $actions;
                 })
                 ->rawColumns(['checkbox', 'full_name', 'role', 'status', 'actions'])
                 ->make(true);
