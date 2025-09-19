@@ -81,14 +81,14 @@
             <div class="row g-3">
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Blood Group</div>
-                  <div class="value">{{ $employee['blood_group'] }}</div>
+                  <div class="label">Service Tenure</div>
+                  <div class="value">2 years 3 months</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Gender</div>
-                  <div class="value">{{ $employee['gender'] }}</div>
+                  <div class="label">Course Load</div>
+                  <div class="value">3</div>
                 </div>
               </div>
               <div class="col-6">
@@ -147,7 +147,7 @@
 
       <!-- Total Profit -->
       <div class="col-xxl-2 col-md-3 col-6">
-        <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+        <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
               <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-message-circle-search icon-28px"></i></div>
@@ -161,7 +161,7 @@
       </div>
       <!-- Total Profit -->
       <div class="col-xxl-2 col-md-3 col-6">
-        <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+        <a href="{{ route('kpa.report', ['id' => 13]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
               <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-presentation-analytics icon-28px"></i></div>
@@ -175,7 +175,7 @@
       </div>
       <!-- Total Profit -->
       <div class="col-xxl-2 col-md-3 col-6">
-        <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+        <a href="{{ route('kpa.report', ['id' => 14]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
               <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-credit-card icon-28px"></i></div>

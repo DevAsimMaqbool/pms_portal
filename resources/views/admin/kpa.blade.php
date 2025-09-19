@@ -86,14 +86,14 @@
         @php
         // Default icons to rotate between rows
         $icons = [
-            'ti ti-building-store',
-            'ti ti-heart',
-            'ti ti-award',
-            'ti ti-book',
-            'ti ti-chart-bar',
-            'ti ti-rocket',
-            'ti ti-users',
-            'ti ti-device-laptop'
+            'ti tabler-star',
+            'ti tabler-heart',
+            'ti tabler-award',
+            'ti tabler-book',
+            'ti tabler-chart-bar',
+            'ti tabler-rocket',
+            'ti tabler-users',
+            'ti tabler-device-laptop'
         ];
         @endphp
         @foreach ($area->indicatorCategories as $key =>$category)
@@ -116,7 +116,7 @@
             <div class="tab-pane fade show active" id="store_details" role="tabpanel">
             <div class="card h-100">
         <div class="card-header d-flex align-items-center justify-content-between">
-          <h5 class="card-title m-0 me-2">Assignment Progress</h5>
+          <h5 class="card-title m-0 me-2">Progress</h5>
         </div>
         <div class="card-body">
           <ul class="p-0 m-0">
@@ -206,8 +206,11 @@ document.addEventListener("DOMContentLoaded", function () {
 });
     document.addEventListener("DOMContentLoaded", function () {
       // ✅ Static labels and datasets
-      var chartLabels = ["Teaching Delivery", "Teaching Management", "Teaching Innovation", "Teaching Output", "Teaching Outcoms"];
-      var dataset1 = [65, 59, 90, 81,70]; // Inside Mirror
+      //var chartLabels = ["Teaching Delivery", "Teaching Management", "Teaching Innovation", "Teaching Output", "Teaching Outcoms"];
+      //var dataset1 = [65, 59, 90, 81,70]; 
+
+      var chartLabels = @json($area->indicatorCategories->pluck('indicator_category'));
+       var dataset1 = @json($area->indicatorCategories->pluck('id'));
 
       var g = document.getElementById("radarChart");
       if (g) {

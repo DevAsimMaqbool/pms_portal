@@ -8,7 +8,7 @@
   </div>
 
   <div class="navbar-nav-right d-flex align-items-center justify-content-end" id="navbar-collapse">
-    <h5 class="card-title mb-0 justify-content-center">Performance Management Solution</h5>
+    <h5 class="card-title mb-0 justify-content-center">Performance Management System</h5>
     <ul class="navbar-nav flex-row align-items-center ms-md-auto">
 
       <!--/ Language -->
