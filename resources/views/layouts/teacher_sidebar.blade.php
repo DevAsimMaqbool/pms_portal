@@ -84,24 +84,23 @@
             })->values()
           ];
         })->values();
+        $icons = [
+            'ti tabler-star',
+            'ti tabler-heart',
+            'ti tabler-award',
+            'ti tabler-book',
+            'ti tabler-chart-bar',
+            'ti tabler-rocket',
+            'ti tabler-star',
+            'ti tabler-device-laptop'
+        ];
       @endphp
 
       {{-- Render Menu --}}
-      @foreach($result as $kpa)
+      @foreach($result as $kpakey=>$kpa)
         <li class="menu-item active">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <span class="menu-icon" style="
-                                              display: inline-flex;
-                                              align-items: center;
-                                              justify-content: center;
-                                              width: 24px;
-                                              height: 24px;
-                                              border-radius: 50%;
-                                              background: #eee;
-                                              font-weight: bold;
-                                              font-size: 14px;">
-              {{ $loop->iteration }}
-            </span>
+            <i class="menu-icon icon-base {{ $icons[$kpakey % count($icons)] }}"></i>
             <div data-i18n="{{ $kpa['performance_area'] }}">
               {{ $kpa['performance_area'] }}
             </div>
