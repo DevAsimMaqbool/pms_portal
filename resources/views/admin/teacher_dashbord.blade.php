@@ -149,10 +149,10 @@
         <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-chalkboard icon-28px"></i></div>
+              <div class="badge p-2 bg-label-success mb-3 rounded"><i class="icon-base ti tabler-chalkboard icon-28px"></i></div>
               <h6 class="card-title mb-1">Teaching and Learning</h6>
               <div>
-                <span class="badge bg-label-danger">80%</span>
+                <span class="badge bg-label-success">80%</span>
               </div>
             </div>
           </div>
@@ -164,10 +164,10 @@
         <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-message-circle-search icon-28px"></i></div>
+              <div class="badge p-2 bg-label-info mb-3 rounded"><i class="icon-base ti tabler-message-circle-search icon-28px"></i></div>
               <h6 class="card-title mb-1">Research, Innovation and Commercialisation</h6>
               <div>
-                <span class="badge bg-label-danger">85%</span>
+                <span class="badge bg-label-info">85%</span>
               </div>
             </div>
           </div>
@@ -178,10 +178,10 @@
         <a href="{{ route('kpa.report', ['id' => 13]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-presentation-analytics icon-28px"></i></div>
+              <div class="badge p-2 bg-label-primary mb-3 rounded"><i class="icon-base ti tabler-presentation-analytics icon-28px"></i></div>
               <h6 class="card-title mb-1">Institutional Engagement (Core only)</h6>
               <div>
-                <span class="badge bg-label-danger">90%</span>
+                <span class="badge bg-label-primary">90%</span>
               </div>
             </div>
           </div>
@@ -192,10 +192,10 @@
         <a href="{{ route('kpa.report', ['id' => 14]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-credit-card icon-28px"></i></div>
+              <div class="badge p-2 bg-label-warning mb-3 rounded"><i class="icon-base ti tabler-credit-card icon-28px"></i></div>
               <h6 class="card-title mb-1">Institutional Engagement (Operational+ Character Strengths)</h6>
               <div>
-                <span class="badge bg-label-danger">95%</span>
+                <span class="badge bg-label-warning">95%</span>
               </div>
             </div>
           </div>

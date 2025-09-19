@@ -21,23 +21,58 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row g-6">
         <div class="col-12 col-md-6">
-            <div class="card">
-                <div class="d-flex align-items-end row">
-                <div class="col-7">
-                    <div class="card-body text-nowrap">
+                {{-- <div class="card-body text-nowrap">
                     <h5 class="card-title mb-0">{{ $area->performance_area }} 🎉</h5>
-                    <p class="mb-2">Best seller of the month</p>
-                    <h4 class="text-primary mb-1">$48.9k</h4>
-                    <a href="javascript:;" class="btn btn-primary waves-effect waves-light">View Sales</a>
-                    </div>
-                </div>
-                <div class="col-5 text-center text-sm-left">
-                    <div class="card-body pb-0 px-0 px-md-4">
-                    <img src="{{ asset('admin/assets/img/illustrations/card-advance-sale.png') }}" height="140" alt="view sales">
-                    </div>
-                </div>
+                    <p class="mb-2">Overall KPA Performance</p>
+                    <h4 class="text-primary mb-1">80%</h4>
+                    <p class="card-text">Overall KPA Performance PerformancePerformancePerformancePerformancePerformancePerformancePerformancePerformancePerformance</p>
+                    
+                </div> --}}
+                <div class="card mb-6 h-100">
+                <div class="card-body">
+                <h5 class="card-title mb-0">{{ $area->performance_area }} 🎉</h5>
+                    <p class="mb-2">Overall KPA Performance</p>
+                    <h4 class="text-primary mb-1">80%</h4>
+                    @if ($area->id == 1)
+                    <p class="card-text"> Teaching performance is evaluated
+                    through student success rates,
+                    feedback, teaching compliance,
+                    and the adoption of innovative
+                    practices that engage and motivate
+                    students effectively.
+                    </p>
+                    @elseif ($area->id == 2)
+                    <p class="card-text"> Research performance is assessed
+ through a combination of publication
+ quantity and quality, funding success,
+ research impact (citations), and
+ collaboration with external
+ organizations, including industry.
+                    </p>
+                    @elseif ($area->id == 13)
+                    <p class="card-text">Institutional engagement is evaluated
+ based on contributions to academic
+ governance, curriculum design, strategic
+ decision-making, and maintaining
+ relationships with industry and academic
+ partners.
+                    </p>
+                    @elseif ($area->id == 14)
+                    <p class="card-text">  Character traits performance
+ focuses on evaluating an individual's
+ ethical conduct, emotional
+ intelligence, sense of responsibility,
+ and effective use of resources,
+ fostering a positive and productive
+ professional environment.
+                    </p>
+                    @else
+                        other text
+                    @endif
+                    
                 </div>
             </div>
+            
         </div>
     <!-- course --> 
     <!-- Vehicles overview -->
@@ -81,7 +116,7 @@
     <!-- Navigation -->
     <div class="col-12 col-lg-4">
       <div class="d-flex justify-content-between flex-column mb-4 mb-md-0">
-        <h5 class="mb-4">Getting Started</h5>
+        <h5 class="mb-4">Sub Categories</h5>
         <ul class="nav nav-align-left nav-pills flex-column">
         @php
         // Default icons to rotate between rows
@@ -210,7 +245,12 @@ document.addEventListener("DOMContentLoaded", function () {
       //var dataset1 = [65, 59, 90, 81,70]; 
 
       var chartLabels = @json($area->indicatorCategories->pluck('indicator_category'));
-       var dataset1 = @json($area->indicatorCategories->pluck('id'));
+      // var dataset1 = @json($area->indicatorCategories->pluck('id'));
+       var dataset1 = @json(
+        $area->indicatorCategories->map(function() {
+            return rand(50, 100); // any logic here
+        })
+    );
 
       var g = document.getElementById("radarChart");
       if (g) {
