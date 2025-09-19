@@ -105,7 +105,8 @@
               </div>
               <div class="col-12">
                 <div class="mini-tile">
-                  <div class="d-flex justify-content-between"><span class="label">Awards</span><i class="ti ti-award"></i>
+                  <div class="d-flex justify-content-between"><span class="label">Awards</span>
+                  <span style="font-size: large;">🏆</span>
                   </div>
                   <div class="mt-2"><span class="badge bg-label-primary me-1">Best Teacher</span><span
                       class="badge bg-label-success me-1">Research Grant</span><span
@@ -119,9 +120,9 @@
       <!-- course -->
       <!-- Vehicles overview -->
       <div class="col-12 col-md-6">
-        <div class="card">
+        <div class="card h-100">
           <div class="card-header">
-            <h5 class="card-title mb-0">Radar Chart</h5>
+            <h5 class="card-title mb-0">Overall KPA Performance</h5>
           </div>
           <div class="card-body pt-2">
             <canvas class="chartjs" id="radarChart" data-height="355"></canvas>
@@ -134,7 +135,7 @@
         <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"></div>
+              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-chalkboard icon-28px"></i></div>
               <h6 class="card-title mb-1">Teaching and Learning</h6>
               <div>
                 <span class="badge bg-label-danger">80%</span>
@@ -149,7 +150,7 @@
         <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"></div>
+              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-message-circle-search icon-28px"></i></div>
               <h6 class="card-title mb-1">Research, Innovation and Commercialisation</h6>
               <div>
                 <span class="badge bg-label-danger">85%</span>
@@ -163,7 +164,7 @@
         <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"></i></div>
+              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-presentation-analytics icon-28px"></i></div>
               <h6 class="card-title mb-1">Institutional Engagement (Core only)</h6>
               <div>
                 <span class="badge bg-label-danger">90%</span>
@@ -177,7 +178,7 @@
         <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"></i></div>
+              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-credit-card icon-28px"></i></div>
               <h6 class="card-title mb-1">Institutional Engagement (Operational+ Character Strengths)</h6>
               <div>
                 <span class="badge bg-label-danger">95%</span>
@@ -290,7 +291,6 @@
       // ✅ Static labels and datasets
       var chartLabels = ["Teaching and Learning", "Research", "Institutional Engagement", "Institutional Engagement"];
       var dataset1 = [65, 59, 90, 81]; // Inside Mirror
-      var dataset2 = [28, 48, 40, 19]; // Social Mirror
 
       var g = document.getElementById("radarChart");
       if (g) {
@@ -302,8 +302,8 @@
         gradientBlue.addColorStop(1, "rgba(151, 135, 255, 0.8)");
 
         var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientPink.addColorStop(0, "rgba(255, 85, 184, 0.9)");
-        gradientPink.addColorStop(1, "rgba(255, 135, 135, 0.8)");
+        gradientPink.addColorStop(0, "rgba(115, 103, 240, 1)");
+        gradientPink.addColorStop(1, "rgba(115, 103, 240, 1)");
 
         // ✅ Radar Chart
         new Chart(ctx, {
@@ -312,24 +312,12 @@
             labels: chartLabels,
             datasets: [
               {
-                label: "Inside Mirror",
+                label: "Achievements",
                 data: dataset1,
                 fill: true,
                 backgroundColor: gradientPink,
-                borderColor: "rgba(255, 85, 184, 1)",
+                borderColor: "rgba(112, 25, 115, 1)",
                 pointBorderColor: "#ff55b8",
-                pointBackgroundColor: "#fff",
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                pointStyle: "circle"
-              },
-              {
-                label: "Social Mirror",
-                data: dataset2,
-                fill: true,
-                backgroundColor: gradientBlue,
-                borderColor: "rgba(85, 85, 255, 1)",
-                pointBorderColor: "#5555ff",
                 pointBackgroundColor: "#fff",
                 pointRadius: 5,
                 pointHoverRadius: 7,
@@ -343,7 +331,7 @@
             animation: { duration: 500 },
             scales: {
               r: {
-                ticks: { maxTicksLimit: 1, display: false, color: "#666" },
+                ticks: { display: true, color: "#666" },
                 grid: { color: "#ddd" },
                 angleLines: { color: "#ddd" },
                 pointLabels: { color: "#666" }
@@ -370,5 +358,4 @@
       }
     });
   </script>
-
 @endpush
