@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Indicator;
 use App\Models\KeyPerformanceArea;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -110,4 +111,16 @@ class KeyPerformanceAreaController extends Controller
         $area = KeyPerformanceArea::with('indicatorCategories.indicators')->findOrFail($id);
         return view('admin.performance', compact('area'));
     }
+    public function kpa($id)
+    {
+        $area = KeyPerformanceArea::with('indicatorCategories')->findOrFail($id);
+        return view('admin.kpa', compact('area'));
+    }public function getIndicators(Request $request){
+        $indicators = Indicator::where('indicator_category_id', $request->id)->get();
+
+        return response()->json([
+            'indicators' => $indicators
+        ]);
+    }
+
 }
