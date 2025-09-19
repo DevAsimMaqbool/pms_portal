@@ -70,9 +70,11 @@
         <label for="departmentFilter">Filter by Department:</label>
         <select id="departmentFilter" class="form-select w-auto d-inline-block ms-2">
           <option value="">Select Department</option>
-          <option value="department_of_computer_sciences">Department of Computer Sciences</option>
-          <option value="department_of_information_technology	">Department of Information Technology</option>
-          <option value="department_of_software_engineering">Department of Software Engineering</option>
+          <option value="department_of_computer_sciences" {{ $department == 'department_of_computer_sciences' ? 'selected' : '' }}>Department of Computer Sciences</option>
+          <option value="department_of_information_technology" {{ $department == 'department_of_information_technology' ? 'selected' : '' }}>
+            Department of Information Technology</option>
+          <option value="department_of_software_engineering" {{ $department == 'department_of_software_engineering' ? 'selected' : '' }}>
+            Department of Software Engineering</option>
           <!-- <option value="department_of_computer_sciences_and_information_technology">Faculty of Computer Sciences and Information Technology</option> -->
         </select>
         <button id="checkReportBtn" class="btn btn-primary ms-2">Check Report</button>
@@ -83,47 +85,46 @@
         <div class="card h-100">
           <div class="card-body">
             <div class="d-flex align-items-center mb-3">
-              <img class="avatar-xl me-3" src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="avatar" />
+              <!-- <img class="avatar-xl me-3" src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="avatar" /> -->
               <div>
-                <h4 class="mb-1" id="empName">{{ $employee['name'] }}</h4>
-                <div class="text-muted">{{ $employee['job_title'] }}</div>
-                <div class="metric">{{ $employee['department'] }}</div>
-                <div class="metric">DOB: <span id="doj">{{ $employee['birthday'] }}</span></div>
-                <div class="fw-semibold text-primary" id="serviceYears">—</div>
+                <h4 class="mb-1" id="empName">{{ ucfirst(str_replace('_', ' ', $department)) }}</h4>
+                <div class="fw-semibold text-primary" id="serviceYears"></div>
               </div>
             </div>
             <div class="row g-3">
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Blood Group</div>
-                  <div class="value">{{ $employee['blood_group'] }}</div>
+                  <div class="label">Classes</div>
+                  <div class="value">30</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Gender</div>
-                  <div class="value">{{ $employee['gender'] }}</div>
+                  <div class="label">Courses</div>
+                  <div class="value">35</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Marital Status</div>
-                  <div class="value">{{ $employee['marital'] }}</div>
+                  <div class="label">Programs</div>
+                  <div class="value">4</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">CNIC</div>
-                  <div class="value">{{ $employee['cnic'] }}</div>
+                  <div class="label">Faculty</div>
+                  <div class="value">60</div>
                 </div>
               </div>
               <div class="col-12">
                 <div class="mini-tile">
-                  <div class="d-flex justify-content-between"><span class="label">Awards</span><i class="ti ti-award"></i>
+                  <div class="d-flex justify-content-between"><span class="label">Awards</span>
                   </div>
-                  <div class="mt-2"><span class="badge bg-label-primary me-1">Best Teacher</span><span
-                      class="badge bg-label-success me-1">Research Grant</span><span
-                      class="badge bg-label-info">Mentor</span></div>
+                  <div class="mt-2 d-flex justify-content-between">
+                    <span class="badge bg-label-primary">Best Teacher: 10</span>
+                    <span class="badge bg-label-success">Research Grant: 3</span>
+                    <span class="badge bg-label-info">Mentor: 5</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -300,50 +301,34 @@
       var chart = new ApexCharts(document.querySelector("#performance_year"), options);
       chart.render();
     });
+
     document.addEventListener("DOMContentLoaded", function () {
-      // ✅ Static labels and datasets
+      // :white_tick: Static labels and datasets
       var chartLabels = ["Teaching and Learning", "Research", "Institutional Engagement", "Institutional Engagement"];
       var dataset1 = [65, 59, 90, 81]; // Inside Mirror
-      var dataset2 = [28, 48, 40, 19]; // Social Mirror
-
       var g = document.getElementById("radarChart");
       if (g) {
         var ctx = g.getContext("2d");
-
-        // ✅ Gradients
+        // :white_tick: Gradients
         var gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
         gradientBlue.addColorStop(0, "rgba(85, 85, 255, 0.9)");
         gradientBlue.addColorStop(1, "rgba(151, 135, 255, 0.8)");
-
         var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientPink.addColorStop(0, "rgba(255, 85, 184, 0.9)");
-        gradientPink.addColorStop(1, "rgba(255, 135, 135, 0.8)");
-
-        // ✅ Radar Chart
+        gradientPink.addColorStop(0, "rgba(115, 103, 240, 1)");
+        gradientPink.addColorStop(1, "rgba(115, 103, 240, 1)");
+        // :white_tick: Radar Chart
         new Chart(ctx, {
           type: "radar",
           data: {
             labels: chartLabels,
             datasets: [
               {
-                label: "Inside Mirror",
+                label: "Achievements",
                 data: dataset1,
                 fill: true,
                 backgroundColor: gradientPink,
-                borderColor: "rgba(255, 85, 184, 1)",
-                pointBorderColor: "#ff55b8",
-                pointBackgroundColor: "#fff",
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                pointStyle: "circle"
-              },
-              {
-                label: "Social Mirror",
-                data: dataset2,
-                fill: true,
-                backgroundColor: gradientBlue,
-                borderColor: "rgba(85, 85, 255, 1)",
-                pointBorderColor: "#5555ff",
+                borderColor: "rgba(112, 25, 115, 1)",
+                pointBorderColor: "#FF55B8",
                 pointBackgroundColor: "#fff",
                 pointRadius: 5,
                 pointHoverRadius: 7,
@@ -357,7 +342,7 @@
             animation: { duration: 500 },
             scales: {
               r: {
-                ticks: { maxTicksLimit: 1, display: false, color: "#666" },
+                ticks: { display: true, color: "#666" },
                 grid: { color: "#ddd" },
                 angleLines: { color: "#ddd" },
                 pointLabels: { color: "#666" }

@@ -83,7 +83,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/departments', DepartmentController::class);
     Route::resource('/rector-dashboard', RectorDashboardController::class);
-    Route::get('/teacher_dashboard', [RectorDashboardController::class, 'teacherDashboard'])->name('teacher_dashboard');
+    Route::get('/teacher_dashboard/{id?}', [RectorDashboardController::class, 'teacherDashboard'])->name('teacher_dashboard');
+    Route::get('/departments/{department}/report', [RectorDashboardController::class, 'departmentDashboard'])
+        ->name('departments.report');
 
     Route::post('/get-role-users', [UserController::class, 'index'])->name('userRole.index');
     Route::get('/user_report/{id}', [UserController::class, 'userReport']);

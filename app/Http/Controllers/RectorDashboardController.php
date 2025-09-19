@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Indicator;
 use App\Models\IndicatorCategory;
 use App\Models\KeyPerformanceArea;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 class RectorDashboardController extends Controller
@@ -154,11 +155,24 @@ class RectorDashboardController extends Controller
         return response()->json($categories);
     }
 
-    public function teacherDashboard(Request $request)
+    public function teacherDashboard(Request $request, $id = null)
     {
         try {
-            $employee = Auth::user();
+            if ($id) {
+                $employee = User::findOrFail($id); // get data against given id
+            } else {
+                $employee = Auth::user(); // fallback to logged-in user
+            }
             return view('admin.teacher_dashbord', compact('employee'));
+        } catch (\Exception $e) {
+            return apiResponse('Oops! Something went wrong', [], false, 500, '');
+        }
+    }
+
+    public function departmentDashboard(Request $request, $department)
+    {
+        try {
+            return view('admin.department_dashbord', compact('department'));
         } catch (\Exception $e) {
             return apiResponse('Oops! Something went wrong', [], false, 500, '');
         }
