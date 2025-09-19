@@ -131,51 +131,60 @@
       <!--/ Sales Overview -->
       <!-- Total Profit -->
       <div class="col-xxl-2 col-md-3 col-6">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="badge p-2 bg-label-danger mb-3 rounded"></div>
-            <h6 class="card-title mb-1">Teaching and Learning</h6>
-            <div>
-              <span class="badge bg-label-danger">80%</span>
+        <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="badge p-2 bg-label-danger mb-3 rounded"></div>
+              <h6 class="card-title mb-1">Teaching and Learning</h6>
+              <div>
+                <span class="badge bg-label-danger">80%</span>
+              </div>
             </div>
           </div>
-        </div>
+        </a>
+      </div>
+
+      <!-- Total Profit -->
+      <div class="col-xxl-2 col-md-3 col-6">
+        <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="badge p-2 bg-label-danger mb-3 rounded"></div>
+              <h6 class="card-title mb-1">Research, Innovation and Commercialisation</h6>
+              <div>
+                <span class="badge bg-label-danger">85%</span>
+              </div>
+            </div>
+          </div>
+        </a>
       </div>
       <!-- Total Profit -->
       <div class="col-xxl-2 col-md-3 col-6">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="badge p-2 bg-label-danger mb-3 rounded"></div>
-            <h6 class="card-title mb-1">Research, Innovation and Commercialisation</h6>
-            <div>
-              <span class="badge bg-label-danger">85%</span>
+        <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="badge p-2 bg-label-danger mb-3 rounded"></i></div>
+              <h6 class="card-title mb-1">Institutional Engagement (Core only)</h6>
+              <div>
+                <span class="badge bg-label-danger">90%</span>
+              </div>
             </div>
           </div>
-        </div>
+        </a>
       </div>
       <!-- Total Profit -->
       <div class="col-xxl-2 col-md-3 col-6">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="badge p-2 bg-label-danger mb-3 rounded"></i></div>
-            <h6 class="card-title mb-1">Institutional Engagement (Core only)</h6>
-            <div>
-              <span class="badge bg-label-danger">90%</span>
+        <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="badge p-2 bg-label-danger mb-3 rounded"></i></div>
+              <h6 class="card-title mb-1">Institutional Engagement (Operational+ Character Strengths)</h6>
+              <div>
+                <span class="badge bg-label-danger">95%</span>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <!-- Total Profit -->
-      <div class="col-xxl-2 col-md-3 col-6">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="badge p-2 bg-label-danger mb-3 rounded"></i></div>
-            <h6 class="card-title mb-1">Institutional Engagement (Operational+ Character Strengths)</h6>
-            <div>
-              <span class="badge bg-label-danger">95%</span>
-            </div>
-          </div>
-        </div>
+        </a>
       </div>
       <!-- Support Tracker -->
       <div class="col-12 col-md-6">
