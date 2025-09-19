@@ -119,6 +119,7 @@
               <div class="col-12">
                 <div class="mini-tile">
                   <div class="d-flex justify-content-between"><span class="label">Awards</span>
+                    <span style="font-size: large;">🏆</span>
                   </div>
                   <div class="mt-2 d-flex justify-content-between">
                     <span class="badge bg-label-primary">Best Teacher: 10</span>

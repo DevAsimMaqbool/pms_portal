@@ -64,20 +64,30 @@
 @section('content')
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="card-header border-bottom">
-      {{-- Department Filter --}}
-      <div class="mb-3">
-        <label for="departmentFilter">Filter by Department:</label>
-        <select id="departmentFilter" class="form-select w-auto d-inline-block ms-2">
-          <option value="">Select Department</option>
-          <option value="department_of_computer_sciences">Department of Computer Sciences</option>
-          <option value="department_of_information_technology	">Department of Information Technology</option>
-          <option value="department_of_software_engineering">Department of Software Engineering</option>
-          <!-- <option value="department_of_computer_sciences_and_information_technology">Faculty of Computer Sciences and Information Technology</option> -->
-        </select>
-        <button id="checkReportBtn" class="btn btn-primary ms-2">Check Report</button>
+    @if(!request()->is('teacher_dashboard/*'))
+      <div class="card-header border-bottom">
+        {{-- Department Filter --}}
+        <div class="mb-3">
+          <label for="departmentFilter">Filter by Department:</label>
+          <select id="departmentFilter" class="form-select w-auto d-inline-block ms-2">
+            <option value="">Select Department</option>
+
+            @if(auth()->user()->hasRole('Dean'))
+              <option value="department_of_computer_sciences">Department of Computer Sciences</option>
+              <option value="department_of_information_technology">Department of Information Technology</option>
+              <option value="department_of_software_engineering">Department of Software Engineering</option>
+              {{-- <option value="department_of_computer_sciences_and_information_technology">Faculty of Computer Sciences and
+                Information Technology</option> --}}
+            @elseif(auth()->user()->hasRole('HOD'))
+              <option value="{{ strtolower(str_replace(' ', '_', $employee['department'])) }}">
+                {{ ucwords(str_replace('_', ' ', $employee['department'])) }}
+              </option>
+            @endif
+          </select>
+          <button id="checkReportBtn" class="btn btn-primary ms-2">Check Report</button>
+        </div>
       </div>
-    </div>
+    @endif
     <div class="row g-6">
       <div class="col-12 col-md-6">
         <div class="card h-100">
@@ -120,11 +130,13 @@
               <div class="col-12">
                 <div class="mini-tile">
                   <div class="d-flex justify-content-between"><span class="label">Awards</span>
-                  <span style="font-size: large;">🏆</span>
+                    <span style="font-size: large;">🏆</span>
                   </div>
-                  <div class="mt-2"><span class="badge bg-label-primary me-1">Best Teacher</span><span
-                      class="badge bg-label-success me-1">Research Grant</span><span
-                      class="badge bg-label-info">Mentor</span></div>
+                  <div class="mt-2 d-flex justify-content-between">
+                    <span class="badge bg-label-primary">Best Teacher: 10</span>
+                    <span class="badge bg-label-success">Research Grant: 3</span>
+                    <span class="badge bg-label-info">Mentor: 5</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -145,11 +157,12 @@
       </div>
       <!--/ Sales Overview -->
       <!-- Total Profit -->
-      <div class="col-xxl-2 col-md-3 col-6">
+      <div class="col-md-3 col-6">
         <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-chalkboard icon-28px"></i></div>
+              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-chalkboard icon-28px"></i>
+              </div>
               <h6 class="card-title mb-1">Teaching and Learning</h6>
               <div>
                 <span class="badge bg-label-danger">80%</span>
@@ -160,11 +173,12 @@
       </div>
 
       <!-- Total Profit -->
-      <div class="col-xxl-2 col-md-3 col-6">
+      <div class="col-md-3 col-6">
         <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-message-circle-search icon-28px"></i></div>
+              <div class="badge p-2 bg-label-danger mb-3 rounded"><i
+                  class="icon-base ti tabler-message-circle-search icon-28px"></i></div>
               <h6 class="card-title mb-1">Research, Innovation and Commercialisation</h6>
               <div>
                 <span class="badge bg-label-danger">85%</span>
@@ -174,11 +188,12 @@
         </a>
       </div>
       <!-- Total Profit -->
-      <div class="col-xxl-2 col-md-3 col-6">
+      <div class="col-md-3 col-6">
         <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-presentation-analytics icon-28px"></i></div>
+              <div class="badge p-2 bg-label-danger mb-3 rounded"><i
+                  class="icon-base ti tabler-presentation-analytics icon-28px"></i></div>
               <h6 class="card-title mb-1">Institutional Engagement (Core only)</h6>
               <div>
                 <span class="badge bg-label-danger">90%</span>
@@ -188,11 +203,12 @@
         </a>
       </div>
       <!-- Total Profit -->
-      <div class="col-xxl-2 col-md-3 col-6">
+      <div class="col-md-3 col-6">
         <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
           <div class="card h-100">
             <div class="card-body">
-              <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-credit-card icon-28px"></i></div>
+              <div class="badge p-2 bg-label-danger mb-3 rounded"><i
+                  class="icon-base ti tabler-credit-card icon-28px"></i></div>
               <h6 class="card-title mb-1">Institutional Engagement (Operational+ Character Strengths)</h6>
               <div>
                 <span class="badge bg-label-danger">95%</span>
@@ -202,28 +218,51 @@
         </a>
       </div>
       <!-- Support Tracker -->
-      <div class="col-12 col-md-6">
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h5 class="mb-0">Semester Performance Trend</h5>
-              <span class="text-muted small">Semesters</span>
+      @if(!auth()->user()->hasRole('Dean') && !auth()->user()->hasRole('HOD'))
+        <div class="col-12 col-md-6">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Semester Performance Trend</h5>
+                <span class="text-muted small">Semesters</span>
+              </div>
+              <div id="performance_semester"></div>
             </div>
-            <div id="performance_semester"></div>
           </div>
         </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h5 class="mb-0">Year Performance Trend</h5>
-              <span class="text-muted small">Years</span>
+        <div class="col-12 col-md-6">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Year Performance Trend</h5>
+                <span class="text-muted small">Years</span>
+              </div>
+              <div id="performance_year"></div>
             </div>
-            <div id="performance_year"></div>
           </div>
         </div>
-      </div>
+      @else
+        <div class="col-12 col-lg-8">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <h5 class="card-title m-0 me-2">Department Performance</h5>
+              <div class="dropdown">
+                <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
+                  id="performance" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="performance">
+                  <a class="dropdown-item" href="javascript:void(0);">Delivery rate</a>
+                  <a class="dropdown-item" href="javascript:void(0);">Delivery time</a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="carrierPerformance"></div>
+            </div>
+          </div>
+        </div>
+      @endif
 
     </div>
   </div>
@@ -233,6 +272,7 @@
   <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
   <script src="{{ asset('admin/assets/js/app-logistics-dashboard.js') }}"></script>
   <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
+  <script src="{{ asset('admin/assets/js/cards-analytics.js')}}"></script>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
