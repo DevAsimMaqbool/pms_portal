@@ -19,8 +19,8 @@
     <ul class="menu-inner py-1">
         <!-- Dashboards -->
 
-        <li class="menu-item {{ request()->routeIs('survey_dashboard.report') ? 'active' : '' }}">
-            <a href="{{ route('survey_dashboard.report') }}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('teacher_dashboard') ? 'active' : '' }}">
+            <a href="{{ route('teacher_dashboard') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
                 <div data-i18n="Dashboard">Dashboard</div>
             </a>

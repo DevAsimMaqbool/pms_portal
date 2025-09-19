@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Indicator;
 use App\Models\IndicatorCategory;
 use App\Models\KeyPerformanceArea;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 class RectorDashboardController extends Controller
 {
@@ -20,7 +21,7 @@ class RectorDashboardController extends Controller
             $KeyPerformanceArea = KeyPerformanceArea::select('id', 'performance_area')->get();
             return view('admin.rector_dashboard', compact('KeyPerformanceArea'));
         } catch (\Exception $e) {
-            return apiResponse( 'Oops! Something went wrong', [], false, 500, '');
+            return apiResponse('Oops! Something went wrong', [], false, 500, '');
         }
     }
 
@@ -151,6 +152,16 @@ class RectorDashboardController extends Controller
     {
         $categories = IndicatorCategory::where('key_performance_area_id', $kpaId)->get();
         return response()->json($categories);
+    }
+
+    public function teacherDashboard(Request $request)
+    {
+        try {
+            $employee = Auth::user();
+            return view('admin.teacher_dashbord', compact('employee'));
+        } catch (\Exception $e) {
+            return apiResponse('Oops! Something went wrong', [], false, 500, '');
+        }
     }
 }
 
