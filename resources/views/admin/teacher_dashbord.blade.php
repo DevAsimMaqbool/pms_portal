@@ -73,34 +73,34 @@
               <div>
                 <h4 class="mb-1" id="empName">{{ $employee['name'] }}</h4>
                 <div class="text-muted">{{ $employee['job_title'] }}</div>
-                <div class="metric">{{ $employee['level'] }}</div>
-                <div class="metric">DOJ: <span id="doj">2015-09-01</span></div>
+                <div class="metric">{{ $employee['department'] }}</div>
+                <div class="metric">DOB: <span id="doj">{{ $employee['birthday'] }}</span></div>
                 <div class="fw-semibold text-primary" id="serviceYears">—</div>
               </div>
             </div>
             <div class="row g-3">
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Grade</div>
-                  <div class="value">B+</div>
+                  <div class="label">Blood Group</div>
+                  <div class="value">{{ $employee['blood_group'] }}</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Appraisal</div>
-                  <div class="value">Exceeds</div>
+                  <div class="label">Gender</div>
+                  <div class="value">{{ $employee['gender'] }}</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Courses (AY)</div>
-                  <div class="value">10</div>
+                  <div class="label">Marital Status</div>
+                  <div class="value">{{ $employee['marital'] }}</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Papers</div>
-                  <div class="value">5</div>
+                  <div class="label">CNIC</div>
+                  <div class="value">{{ $employee['cnic'] }}</div>
                 </div>
               </div>
               <div class="col-12">
