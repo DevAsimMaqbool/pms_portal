@@ -67,7 +67,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Target of Publications</label>
-                                <input type="number" name="target_of_publications" class="form-control" required>
+                                <input type="number" name="target_of_publications" class="form-control" required disabled>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Progress on publication</label>
@@ -310,7 +310,28 @@
     @if(auth()->user()->hasRole(['HOD','Teacher']))
     <script>
     $(document).ready(function () {
-
+           $('select[name="target_category"]').on('change', function () {
+                let category = $(this).val();
+                $.ajax({
+                        url: "{{ route('indicator-form.target') }}", // route name
+                        type: "GET",
+                        data: { target_category: category }, // send selected category
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.success) {
+                                // set publications input value
+                                $('input[name="target_of_publications"]').val(data.target_of_publications);
+                            } else {
+                                $('input[name="target_of_publications"]').val(''); // clear if not found
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX Error:", error);
+    console.log("Status:", status);
+    console.log("Response Text:", xhr.responseText);
+                        }
+                    });
+                });
         // Extra fields for Form 1
         $('#progress_on_publication').on('change', function () {
             const container = $('#extraFieldContainer');

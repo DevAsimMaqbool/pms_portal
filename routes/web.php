@@ -124,6 +124,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/kpa/{area}/category/{category}/indicator/{indicator}', [IndicatorController::class, 'indicator_form'])->name('indicator.form');
         Route::resource('indicator-form', AchievementOfResearchPublicationsTargetController::class);
+        Route::get('indicator-forms/target',[AchievementOfResearchPublicationsTargetController::class, 'getPublicationTarget'])->name('indicator-form.target');
+
         Route::get('/load-forms/{form}', [IndicatorController::class, 'loadForm']);
         Route::resource('publication-of-hecRecognized', PublicationOfHecRecognizedJournalController::class);
         Route::resource('rating-onimpact-of-research', RatingOnImpactOfResearchConferencesOrganizedController::class);

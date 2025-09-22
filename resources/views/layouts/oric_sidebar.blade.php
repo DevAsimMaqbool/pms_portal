@@ -31,29 +31,12 @@
                 <i class="menu-icon icon-base ti tabler-smart-home"></i>
                 <div data-i18n="Home">Home</div>
             </a>
-            <!-- <ul class="menu-sub">
-        <li class="menu-item active">
-          <a href="" class="menu-link">
-            <div data-i18n="Analytics">Analytics</div>
-          </a>
         </li>
-      </ul> -->
-        </li>
-        <li class="menu-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
-            <a href="{{ route('users.index') }}" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-users"></i>
-                <div data-i18n="My Team">My Team</div>
-            </a>
-        </li>
-        <li class="menu-item {{ request()->routeIs('survey.report') ? 'active' : '' }}">
-            <a href="{{ route('survey.report') }}" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-contract"></i>
-                <div data-i18n="Report">Report</div>
-            </a>
-        </li>
-        @if(auth()->user()->hasRole(['HOD']))
+        
+        
+        @if(auth()->user()->hasRole(['ORIC']))
             @php
-                $teacherRoleId = auth()->user()->roles->firstWhere('name', 'HOD')->id ?? null;
+                $teacherRoleId = auth()->user()->roles->firstWhere('name', 'ORIC')->id ?? null;
 
                 $assignments = \App\Models\RoleKpaAssignment::with([
                 'kpa',
