@@ -305,4 +305,37 @@ class AchievementOfResearchPublicationsTargetController extends Controller
     {
         //
     }
+  public function getPublicationTarget(Request $request)
+{
+    try {
+        $userId = Auth::id();
+
+        $query = AchievementOfResearchPublicationsTarget::where('faculty_member_id', $userId)
+            ->where('form_status', 'HOD');
+
+        if ($request->has('target_category')) {
+            $query->where('target_category', $request->target_category);
+        }
+
+        $target = $query->first();
+
+        if ($target) {
+            return response()->json([
+                'success' => true,
+                'target_category' => $target->target_category,
+                'target_of_publications' => $target->target_of_publications,
+            ]);
+        }
+
+        return response()->json(['success' => false]);
+    } catch (\Exception $e) {
+        // if error, still return JSON
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
+    }
+}
+
+
 }
