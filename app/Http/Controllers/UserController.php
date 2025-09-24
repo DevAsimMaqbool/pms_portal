@@ -27,31 +27,50 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = User::with('roles')->select('users.*')->where('manager_id', auth()->id());
+            $authUser = auth()->user();
+            $authRole = $authUser->getRoleNames()->first(); // get once
 
-            // Apply department filter if provided
+            // Build query once
+            $query = User::query()
+                ->with('roles:id,name') // only load needed role fields
+                ->when(
+                    $authRole !== 'user',
+                    fn($q) =>
+                    $q->where('manager_id', $authUser->id)
+                );
+
+            // Apply department filter
             if ($request->filled('department')) {
                 $query->where('department', $request->department);
             }
 
             return DataTables::of($query)
-                ->addColumn('checkbox', fn($user) => '<input type="checkbox" class="dt-checkboxes form-check-input" data-user-id="' . $user->id . '">')
+                ->addColumn(
+                    'checkbox',
+                    fn($user) =>
+                    '<input type="checkbox" class="dt-checkboxes form-check-input" data-user-id="' . $user->id . '">'
+                )
                 ->addColumn('full_name', function ($user) {
                     return '
-                    <div class="d-flex align-items-center user-name">
-                        <div class="avatar-wrapper">
-                            <div class="avatar avatar-sm me-4">
-                                <span class="avatar-initial rounded-circle bg-label-primary">' . strtoupper($user->name[0]) . '</span>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column">
-                            <a href="app-user-view-account.html" class="text-heading text-truncate"><span class="fw-medium">' . $user->name . '</span></a>
-                            <small>' . $user->email . '</small>
-                        </div>
-                    </div>';
+            <div class="d-flex align-items-center user-name">
+                <div class="avatar-wrapper">
+                    <div class="avatar avatar-sm me-4">
+                        <span class="avatar-initial rounded-circle bg-label-primary">'
+                        . strtoupper($user->name[0]) .
+                        '</span>
+                    </div>
+                </div>
+                <div class="d-flex flex-column">
+                    <a href="app-user-view-account.html" class="text-heading text-truncate">
+                        <span class="fw-medium">' . $user->name . '</span>
+                    </a>
+                    <small>' . $user->email . '</small>
+                </div>
+            </div>';
                 })
                 ->addColumn('role', function ($user) {
-                    $role = $user->getRoleNames()->first() ?? 'user';
+                    // use loaded relation instead of new query
+                    $role = $user->roles->pluck('name')->first() ?? 'user';
                     $icon = match ($role) {
                         'admin' => '<i class="icon-base ti tabler-device-desktop icon-md text-danger me-2"></i>',
                         'user' => '<i class="icon-base ti tabler-user icon-md text-success me-2"></i>',
@@ -69,33 +88,34 @@ class UserController extends Controller
                     $s = $statusMap[$user->status] ?? $statusMap['inactive'];
                     return '<span class="badge ' . $s['class'] . '">' . $s['title'] . '</span>';
                 })
-                ->addColumn('actions', function ($user) {
+                ->addColumn('actions', function ($user) use ($authRole) {
                     $actions = '
-        <div class="d-flex align-items-center">
-            <a href="javascript:;" class="btn btn-text-secondary rounded-pill waves-effect btn-icon" onclick="editUser(' . $user->id . ')">
-                <i class="icon-base ti tabler-edit icon-22px"></i>
-            </a>
-            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteUser(' . $user->id . ')">
-                <i class="icon-base ti tabler-trash icon-md"></i>
-            </a>
-            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/user_report/' . $user->id . '" target="_blank">
-                <i class="icon-base ti tabler-eye icon-md"></i>
-            </a>';
-                    if (Auth::user()->getRoleNames()->first() === "Dean") {
+            <div class="d-flex align-items-center">
+                <a href="javascript:;" class="btn btn-text-secondary rounded-pill waves-effect btn-icon" onclick="editUser(' . $user->id . ')">
+                    <i class="icon-base ti tabler-edit icon-22px"></i>
+                </a>
+                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteUser(' . $user->id . ')">
+                    <i class="icon-base ti tabler-trash icon-md"></i>
+                </a>
+                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/user_report/' . $user->id . '" target="_blank">
+                    <i class="icon-base ti tabler-eye icon-md"></i>
+                </a>';
+
+                    if ($authRole === "Dean") {
                         $actions .= '
-            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/departments/' . strtolower(str_replace(' ', '_', $user->department)) . '/report" target="_blank">
-                <i class="icon-base ti tabler-file icon-md"></i>
-            </a>';
+                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/departments/' . strtolower(str_replace(' ', '_', $user->department)) . '/report" target="_blank">
+                    <i class="icon-base ti tabler-file icon-md"></i>
+                </a>';
                     }
-                    if (Auth::user()->getRoleNames()->first() === "HOD") {
+
+                    if ($authRole === "HOD") {
                         $actions .= '
-            <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/teacher_dashboard/' . $user->id . '" target="_blank">
-                <i class="icon-base ti tabler-file icon-md"></i>
-            </a>';
+                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/teacher_dashboard/' . $user->id . '" target="_blank">
+                    <i class="icon-base ti tabler-file icon-md"></i>
+                </a>';
                     }
 
                     $actions .= '</div>';
-
                     return $actions;
                 })
                 ->rawColumns(['checkbox', 'full_name', 'role', 'status', 'actions'])
@@ -103,15 +123,18 @@ class UserController extends Controller
         }
 
         // For blade dropdown
-        $departments = Department::distinct()
-            ->get(['name', 'complete_name'])
-            ->unique('name') // optional, if needed
-            ->sortBy('complete_name')
-            ->values();
+        $departments = Department::select('name', 'complete_name')
+            ->distinct()
+            ->orderBy('complete_name')
+            ->get();
 
-        $totalUsers = User::where('manager_id', auth()->id())->count();
+        $authUser = auth()->user();
+        $authRole = $authUser->getRoleNames()->first();
+        $totalUsers = $authRole === 'user'
+            ? User::count()
+            : User::where('manager_id', $authUser->id)->count();
+
         $roles = Role::all();
-        //dd($roles);
 
         return view('admin.user', compact('totalUsers', 'departments', 'roles'));
     }
