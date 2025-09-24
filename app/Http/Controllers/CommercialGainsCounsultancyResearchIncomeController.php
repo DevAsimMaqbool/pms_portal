@@ -64,10 +64,40 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                         ->get();
                 
             }if ($user->hasRole('ORIC')) {
-                
+                $status = $request->input('status');
+                    if($status=="HOD"){
+                           $forms = CommercialGainsCounsultancyResearchIncome::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                },'Projects'
+                            ])
+                            ->whereIn('status', [2, 3])
+                            ->where('form_status', $status)
+                            ->get();
+                    }
+                    if($status=="RESEARCHER"){
+                          $forms = CommercialGainsCounsultancyResearchIncome::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                },'Projects'
+                            ])
+                            ->whereIn('status', [4, 3])
+                            ->where('form_status', $status)
+                            ->get();
+                    }
 
-            }if ($user->hasRole('HR')) {
-
+            }if ($user->hasRole('Human Resources')) {
+                $status = $request->input('status');
+                     if($status=="HOD"){
+                           $forms = CommercialGainsCounsultancyResearchIncome::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                },'Projects'
+                            ])
+                            ->whereIn('status', [3, 4])
+                            ->where('form_status', $status)
+                            ->get();
+                    }
             }
 
             if ($request->ajax()) {

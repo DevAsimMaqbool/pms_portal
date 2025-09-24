@@ -48,8 +48,15 @@
                     </div>
                 </form>
                 @endif
-                  @if(auth()->user()->hasRole(['Dean']))
-                    <div>
+                  @if(auth()->user()->hasRole(['Dean','ORIC','Human Resources']))
+                    <div><div class="d-flex">
+                        <select id="bulkAction" class="form-select w-auto me-2">
+                            <option value="">-- Select Action --</option>
+                            <option value="3">Review</option>
+                            <option value="2">UnReview</option>
+                        </select>
+                        <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                    </div>
                         <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
                             <thead>
                                 <tr>
@@ -132,6 +139,8 @@
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                     form[0].reset();
+                    form.find('.invalid-feedback').remove();
+                    form.find('.is-invalid').removeClass('is-invalid');
                 },
                 error: function (xhr) {
                     Swal.close();
@@ -162,7 +171,7 @@
     });
     </script>
     @endif
-    @if(auth()->user()->hasRole(['Dean']))
+    @if(auth()->user()->hasRole(['Dean','ORIC','Human Resources']))
     <script>
 function fetchIndicatorForms() {
     $.ajax({
@@ -244,17 +253,31 @@ function fetchIndicatorForms() {
         
             $('label[for="approveCheckbox"]').text(statusLabel);
         }else if(window.currentUserRole === 'ORIC'){
+            $('#approveCheckbox').closest('.form-check-input').show();
+                $('#approveCheckbox').prop('checked', form.status == 3);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 2) {
+                        statusLabel = "Verify";
+                    } else if (form.status == 3) {
+                        statusLabel = "Verify";
+                    }
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        }else if(window.currentUserRole === 'Human Resources'){
             
-            $('#approveCheckbox').prop('checked', form.status == 3);
-            $('#approveCheckbox').data('id', form.id);
-            let statusLabel = "Pending"; 
-            if (form.status == 1) {
-                statusLabel = "Verified";
-            } else if (form.status == 2) {
-                statusLabel = "Approved"; 
-            } else if (form.status == 3) {
-                statusLabel = "Approved";
+            let statusLabel = "Verify"; 
+            if(form.form_status=='RESEARCHER'){
+                $('#approveCheckbox').closest('.form-check-input').show();
+                $('#approveCheckbox').prop('checked', form.status == 4);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 3) {
+                        statusLabel = "Verify";
+                    } else if (form.status == 4) {
+                        statusLabel = "Verify";
+                    }
             }
+        
             $('label[for="approveCheckbox"]').text(statusLabel);
         } else {
             $('#approveCheckbox').closest('.form-check-input').hide();
@@ -296,7 +319,16 @@ function fetchIndicatorForms() {
                        status = $(this).is(':checked') ? 2 : 1;
                     }
                 }
-
+                if (window.currentUserRole === "ORIC"){
+                    if(table_status=="RESEARCHER"){
+                       status = $(this).is(':checked') ? 3 : 2;
+                    }
+                }
+                if (window.currentUserRole === "Human Resources"){
+                    if(table_status=="RESEARCHER"){
+                       status = $(this).is(':checked') ? 4 : 3;
+                    }
+                }
                 $.ajax({
                     url: `/rating-onimpact-of-research/${id}`,
                     type: 'POST',

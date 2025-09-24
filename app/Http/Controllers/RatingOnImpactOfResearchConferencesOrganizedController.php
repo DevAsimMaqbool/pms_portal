@@ -48,9 +48,41 @@ class RatingOnImpactOfResearchConferencesOrganizedController extends Controller
 
             }if ($user->hasRole('ORIC')) {
                 
-
-            }if ($user->hasRole('HR')) {
-
+                   $status = $request->input('status');
+                    if($status=="RESEARCHER"){
+                        $forms = RatingOnImpactOfResearchConferencesOrganized::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])
+                        ->whereIn('status', [2, 3])
+                        ->where('form_status', $status)
+                        ->get()
+                        ->map(function ($form) {
+                                if ($form->scopus_indexed_confirmation) {
+                                    $form->scopus_indexed_confirmation_url = Storage::url($form->scopus_indexed_confirmation);
+                                }
+                                return $form;
+                            });
+                    }
+            }if ($user->hasRole('Human Resources')) {
+                   $status = $request->input('status');
+                    if($status=="RESEARCHER"){
+                           $forms = RatingOnImpactOfResearchConferencesOrganized::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])
+                            ->whereIn('status', [3, 4])
+                            ->where('form_status', $status)
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->scopus_indexed_confirmation) {
+                                    $form->scopus_indexed_confirmation_url = Storage::url($form->scopus_indexed_confirmation);
+                                }
+                                return $form;
+                            });
+                    }
             }
 
             if ($request->ajax()) {
