@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\RoleKpaAssignment;
 use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class UserKPAController extends Controller
@@ -13,16 +14,15 @@ class UserKPAController extends Controller
      */
     public function index(Request $request)
     {
-        //$roleId = $request->user()->role_id; // Assuming you get this from the login API and store in DB
-        $roleName = 'QEC';
+        $roleId = Auth::user()->getRoleNames()->first(); // Assuming you get this from the login API and store in DB
+        $roleName = 'Dean';
 
         $role = Role::where('name', $roleName)->firstOrFail();
 
         $roleId = $role->id;
-        $assignments = RoleKpaAssignment::with(['keyPerformanceArea', 'category', 'indicator'])
+        $assignments = RoleKpaAssignment::with(['kpa', 'category', 'indicator'])
             ->where('role_id', $roleId)
             ->get();
-
         return view('user.kpa', compact('assignments'));
     }
 

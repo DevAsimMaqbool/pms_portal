@@ -23,38 +23,28 @@
                             <th>#</th>
                             <th>KPA</th>
                             <th>Indicator Category</th>
-                            <th>Category</th>
+                            <th>Indicator</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php $counter = 1; @endphp
-                        @foreach($assignments->groupBy('keyPerformanceArea.performance_area') as $kpa => $items)
-                            @foreach($items->groupBy('category.category') as $category => $group)
-                                @foreach($group as $item)
-                                    <tr>
-                                        <td>{{ $counter++ }}</td>
-                                        <td>{{ $kpa }}</td>
-                                        <td>{{ $category }}</td>
-                                        <td>{{ $item->indicator->indicator }}</td>
-                                    </tr>
+                        @foreach($assignments->groupBy('kpa.performance_area') as $kpa => $items)
+                            @foreach($items->groupBy('category.indicator_category') as $indicatorCategory => $groups)
+                                @foreach($groups->groupBy('category.category') as $categoryName => $group)
+                                    @foreach($group as $item)
+                                        <tr>
+                                            <td>{{ $counter++ }}</td>
+                                            <td>{{ $kpa }}</td>
+                                            <td>{{ $indicatorCategory }}</td>
+                                            <td>{{ $item->indicator->indicator }}</td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             @endforeach
                         @endforeach
                     </tbody>
                 </table>
 
-
-                <!-- @foreach($assignments->groupBy('keyPerformanceArea.performance_area') as $kpa => $items)
-                                    <h4>{{ $kpa }}</h4>
-                                    @foreach($items->groupBy('indicatorCategory.indicator_category') as $category => $group)
-                                        <strong>{{ $category }}</strong>
-                                        <ul>
-                                            @foreach($group as $item)
-                                                <li>{{ $item->indicator->indicator }}</li>
-                                            @endforeach
-                                        </ul>
-                                    @endforeach
-                                @endforeach -->
             </div>
         </div>
     </div>
