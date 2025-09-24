@@ -18,7 +18,7 @@
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['Dean','HR','ORIC']))
+                @if(auth()->user()->hasRole(['Dean','ORIC']))
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs mb-3" role="tablist">
                     <li class="nav-item">
@@ -180,7 +180,7 @@
                                 </table>
                             </div>
                     @endif
-                    @if(auth()->user()->hasRole(['Dean','ORIC','HR']))
+                    @if(auth()->user()->hasRole(['Dean','ORIC']))
                             <div class="tab-pane fade show active" id="form1" role="tabpanel">
                                 <div class="d-flex">
                                     <select id="bulkAction" class="form-select w-auto me-2">
@@ -226,6 +226,21 @@
                                 </table>
                             </div>
                             @endif
+                             @if(auth()->user()->hasRole(['Human Resources']))
+                   <div>
+                   <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll"></th>
+                                <th>#</th>
+                                <th>Created By</th>
+                                <th>Target of consultancy projects</th>
+                                <th>Created Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table></div>
+                 @endif
                 </div> 
             </div>
         </div>
@@ -340,6 +355,8 @@ $(document).ready(function () {
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                     form[0].reset();
+                    form.find('.invalid-feedback').remove();
+                    form.find('.is-invalid').removeClass('is-invalid');
                 },
                 error: function (xhr) {
                     Swal.close();
@@ -443,6 +460,8 @@ $(document).ready(function () {
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                     form[0].reset();
+                    form.find('.invalid-feedback').remove();
+                    form.find('.is-invalid').removeClass('is-invalid');
                 },
                 error: function (xhr) {
                     Swal.close();
@@ -591,7 +610,7 @@ $(document).ready(function () {
     });
     </script>
     @endif
-    @if(auth()->user()->hasRole(['Dean']))
+    @if(auth()->user()->hasRole(['Dean','ORIC','Human Resources']))
 <script>
 function fetchIndicatorForms() {
     $.ajax({
@@ -695,8 +714,15 @@ function fetchIndicatorForms1() {
 }
     $(document).ready(function () {
 
-      fetchIndicatorForms();
-      fetchIndicatorForms1();
+      if (window.currentUserRole === 'Dean') {
+          fetchIndicatorForms();
+          fetchIndicatorForms1();
+      }if (window.currentUserRole === 'ORIC') {
+          fetchIndicatorForms();
+          fetchIndicatorForms1();
+      }if (window.currentUserRole === 'Human Resources') {
+          fetchIndicatorForms();
+      }
        // Handle click on View button
     $(document).on('click', '.view-form-btn', function() {
         const form = $(this).data('form');
@@ -732,16 +758,45 @@ function fetchIndicatorForms1() {
             $('label[for="approveCheckbox"]').text(statusLabel);
         }else if(window.currentUserRole === 'ORIC'){
             
-            $('#approveCheckbox').prop('checked', form.status == 3);
-            $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-            let statusLabel = "Pending"; 
-            if (form.status == 1) {
-                statusLabel = "Verified";
-            } else if (form.status == 2) {
-                statusLabel = "Approved"; 
-            } else if (form.status == 3) {
-                statusLabel = "Approved";
+            let statusLabel = "Verify"; 
+            if(form.form_status=='RESEARCHER'){
+                $('#approveCheckbox').closest('.form-check-input').show();
+                $('#approveCheckbox').prop('checked', form.status == 4);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 3) {
+                        statusLabel = "Verify";
+                    } else if (form.status == 4) {
+                        statusLabel = "Verify";
+                    }
+            }if(form.form_status=='HOD'){
+                $('#approveCheckbox').closest('.form-check-input').show();
+                $('#approveCheckbox').prop('checked', form.status == 3);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 2) {
+                        statusLabel = "Verify";
+                    } else if (form.status == 3) {
+                        statusLabel = "Verify";
+                    }
             }
+        
+            $('label[for="approveCheckbox"]').text(statusLabel);
+        }else if(window.currentUserRole === 'Human Resources'){
+            
+            let statusLabel = "Verify"; 
+            if(form.form_status=='HOD'){
+                $('#approveCheckbox').closest('.form-check-input').show();
+                $('#approveCheckbox').prop('checked', form.status == 4);
+                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                // Label text for HOD
+                    if (form.status == 3) {
+                        statusLabel = "Verify";
+                    } else if (form.status == 4) {
+                        statusLabel = "Verify";
+                    }
+            }
+        
             $('label[for="approveCheckbox"]').text(statusLabel);
         } else {
             $('#approveCheckbox').closest('.form-check-input').hide();
@@ -822,6 +877,18 @@ function fetchIndicatorForms1() {
                        status = $(this).is(':checked') ? 3 : 2;
                     }if(table_status=="HOD"){
                        status = $(this).is(':checked') ? 2 : 1;
+                    }
+                }
+                if (window.currentUserRole === "ORIC"){
+                    if(table_status=="RESEARCHER"){
+                       status = $(this).is(':checked') ? 4 : 3;
+                    }if(table_status=="HOD"){
+                       status = $(this).is(':checked') ? 3 : 2;
+                    }
+                }
+                 if (window.currentUserRole === "Human Resources"){
+                    if(table_status=="HOD"){
+                       status = $(this).is(':checked') ? 4 : 3;
                     }
                 }
 

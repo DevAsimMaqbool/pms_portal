@@ -322,6 +322,8 @@
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                     form[0].reset();
+                    form.find('.invalid-feedback').remove();
+                    form.find('.is-invalid').removeClass('is-invalid');
                 },
                 error: function (xhr) {
                     Swal.close();
@@ -422,6 +424,8 @@
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                     form[0].reset();
+                    form.find('.invalid-feedback').remove();
+                    form.find('.is-invalid').removeClass('is-invalid');
                 },
                 error: function (xhr) {
                     Swal.close();
@@ -741,7 +745,7 @@ function fetchIndicatorForms1() {
                 // Label text for HOD
                     if (form.status == 3) {
                         statusLabel = "Verify";
-                    } else if (form.status == 3) {
+                    } else if (form.status == 4) {
                         statusLabel = "Verify";
                     }
             }

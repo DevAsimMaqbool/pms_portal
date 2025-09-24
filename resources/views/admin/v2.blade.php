@@ -6,845 +6,290 @@
   <link rel="stylesheet"
     href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/fonts/flag-icons.css') }}" />
+  <link rel="stylesheet"  href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
 
   <!-- Page CSS -->
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
-   <style>
-        .avatar-xl{ width:72px; height:72px; border-radius:50%; object-fit:cover; }
-        .metric{ font-size:.9rem; color:#6c757d; }
-        .mini-tile{ border:1px solid var(--bs-border-color); border-radius:.75rem; padding:1rem; background:#fff; height:100%; }
-        .mini-tile .label{ color:#6e6b7b; font-size:.8rem; }
-        .mini-tile .value{ font-weight:700; font-size:1.1rem; }
-        .spark-holder{ height:120px; }
-        .kpa-card h6{ margin-bottom:.25rem; }
-        .indicator-row{ display:flex; align-items:center; justify-content:space-between; padding:.5rem 0; border-bottom:1px dashed var(--bs-border-color); }
-        .indicator-row:last-child{ border-bottom:none; }
-        .status-badge{ padding:.35rem .5rem; }
-        .filter-row .form-select{ min-width:220px; }
-    </style>
+  
 @endpush
-@php use Illuminate\Support\Str; @endphp
 @section('content')
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="row g-6">
-    <div class="col-12 col-md-4">
-                                    <div class="card h-100">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center mb-3">
-                                                <img class="avatar-xl me-3" src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="avatar"/>
-                                                <div>
-                                                    <h4 class="mb-1" id="empName">Dr. Ali Raza</h4>
-                                                    <div class="text-muted">Professor – Computer Science</div>
-                                                    <div class="metric">Department: Information Technology</div>
-                                                    <div class="metric">DOJ: <span id="doj">2015-09-01</span></div>
-                                                    <div class="fw-semibold text-primary" id="serviceYears">—</div>
-                                                </div>
-                                            </div>
-                                            <div class="row g-3">
-                                                <div class="col-6"><div class="mini-tile text-center"><div class="label">Grade</div><div class="value">B+</div></div></div>
-                                                <div class="col-6"><div class="mini-tile text-center"><div class="label">Appraisal</div><div class="value">Exceeds</div></div></div>
-                                                <div class="col-6"><div class="mini-tile text-center"><div class="label">Courses (AY)</div><div class="value">10</div></div></div>
-                                                <div class="col-6"><div class="mini-tile text-center"><div class="label">Papers</div><div class="value">5</div></div></div>
-                                                <div class="col-12">
-                                                  <div class="mini-tile">
-                                                      <div class="d-flex justify-content-between"><span class="label">Awards</span><i class="ti ti-award"></i></div>
-                                                      <div class="mt-2"><span class="badge bg-label-primary me-1">Best Teacher</span><span class="badge bg-label-success me-1">Research Grant</span><span class="badge bg-label-info">Mentor</span></div>
-                                                  </div>
-                                              </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-    <!-- course --> 
-      <!-- Vehicles overview -->
-    <div class="col-12 col-md-4">
-      <div class="card h-100">
-        <div class="card-header d-flex align-items-center justify-content-between">
-          <div class="card-title mb-0">
-            <h5 class="m-0 me-2">Course Load (Fall 2025)</h5>
-          </div>
-          <div class="dropdown">
-            <button class="btn btn-text-secondary rounded-pill p-2 border-0 me-n1" type="button" id="vehiclesOverview" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="vehiclesOverview">
-              <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="d-none d-lg-flex vehicles-progress-labels mb-6">
-            <div class="vehicles-progress-label on-the-way-text" style="width: 50%;">Course Name</div>
-            <div class="vehicles-progress-label unloading-text" style="width: 30%;">Marked</div>
-            <div class="vehicles-progress-label loading-text" style="width: 20%;">Schedule</div>
-          </div>
-          <div class="vehicles-overview-progress progress rounded-3 mb-3 bg-transparent overflow-hidden" style="height: 46px;">
-            <div class="progress-bar fw-medium text-start shadow-none bg-lighter text-heading px-4 rounded-0" role="progressbar" style="width: 50%" aria-valuenow="39.7" aria-valuemin="0" aria-valuemax="100">39.7%</div>
-            <div class="progress-bar fw-medium text-start shadow-none bg-primary px-4" role="progressbar" style="width: 30%" aria-valuenow="28.3" aria-valuemin="0" aria-valuemax="100">28.3%</div>
-            <div class="progress-bar fw-medium text-start shadow-none text-bg-info px-2 px-sm-4" role="progressbar" style="width: 20%" aria-valuenow="17.4" aria-valuemin="0" aria-valuemax="100">17.4%</div>
-          </div>
-          <div class="table-responsive">
-            <table class="table card-table table-border-top-0 table-border-bottom-0">
-            {{-- <thead>
-            <tr>
-            <th>Course Name</th>
-             <th>Marked</th>
-              <th>Schedule</th>
-            </tr>
-            </thead> --}}
-              <tbody>
-                <tr>
-                  <td class="w-50 ps-0">
-                    <div class="d-flex justify-content-start align-items-center">
-                      <h6 class="mb-0 fw-normal">Introduction to Computing</h6>
+      <!-- Accordion -->
+      <div class="row g-6">
+        <div class="col-md">
+          <div class="accordion mt-4" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionOne" aria-expanded="true" aria-controls="accordionOne">
+                <i class="icon-base ti tabler-star me-2"></i>
+                Teaching and Learning</button>
+              </h2>
+
+              <div id="accordionOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                
+                
+                 <!-- Accordion1 -->
+                    <div class="row g-6 pt-2">
+                      <!-- Card Border Shadow -->
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-primary h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethods">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-truck icon-28px"></i></span>
+                              </div>
+                              <div class="half-star-ratings raty" data-half="true" data-score="4.2" data-number="5"></div>
+                            </div>
+                            <p class="mb-1">Teaching and Learning</p>
+                            <div id="supportTracker"></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-warning h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethods1">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-alert-triangle icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">8%</h4>
+                            </div>
+                            <p class="mb-1">Research, Innovation and Commercialisation</p>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-danger h-100">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Institutional Engagement (Operational+ Character Strengths)</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-info h-100">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">13%</h4>
+                            </div>
+                            <p class="mb-1">Institutional Engagement (Core only)</p>
+                            <div id="expensesChart"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <!--/ Card Border Shadow -->
                     </div>
-                  </td>
-                  <td class="text-end pe-0 text-nowrap">
-                    <h6 class="mb-0">2</h6>
-                  </td>
-                  <td class="text-end pe-0">
-                    <span>2</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="w-50 ps-0">
-                    <div class="d-flex justify-content-start align-items-center">
-                      <h6 class="mb-0 fw-normal">Web Development</h6>
-                    </div>
-                  </td>
-                  <td class="text-end pe-0 text-nowrap">
-                    <h6 class="mb-0">3</h6>
-                  </td>
-                  <td class="text-end pe-0">
-                    <span>1</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="w-50 ps-0">
-                    <div class="d-flex justify-content-start align-items-center">
-                      <h6 class="mb-0 fw-normal">Objected Oriented Programming</h6>
-                    </div>
-                  </td>
-                  <td class="text-end pe-0 text-nowrap">
-                    <h6 class="mb-0">4</h6>
-                  </td>
-                  <td class="text-end pe-0">
-                    <span>3</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                    <!--/ Accordion1 -->
+                
+                
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item active">
+              <h2 class="accordion-header" id="headingTwo">
+                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionTwo" aria-expanded="false" aria-controls="accordionTwo">
+                <i class="icon-base ti tabler-sun me-2"></i>
+                Research, Innovation and Commercialisation</button>
+              </h2>
+              <div id="accordionTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">Dessert ice cream donut oat cake jelly-o pie sugar plum cheesecake. Bear claw dragée oat cake dragée ice cream halvah tootsie roll. Danish cake oat cake pie macaroon tart donut gummies. Jelly beans candy canes carrot cake. Fruitcake chocolate chupa chups.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionThree" aria-expanded="false" aria-controls="accordionThree">
+                <i class="icon-base ti tabler-moon me-2"></i>Institutional Engagement (Operational+ Character Strengths)</button>
+              </h2>
+              <div id="accordionThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="accordion-body">Oat cake toffee chocolate bar jujubes. Marshmallow brownie lemon drops cheesecake. Bonbon gingerbread marshmallow sweet jelly beans muffin. Sweet roll bear claw candy canes oat cake dragée caramels. Ice cream wafer danish cookie caramels muffin.</div>
+              </div>
+            </div>
+             <div class="accordion-item">
+              <h2 class="accordion-header" id="headingfour">
+                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionFour" aria-expanded="false" aria-controls="accordionTwo">
+                <i class="icon-base ti tabler-sun me-2"></i>
+                Institutional Engagement (Core only)</button>
+              </h2>
+              <div id="accordionFour" class="accordion-collapse collapse" aria-labelledby="headingfour" data-bs-parent="#accordionExample">
+                <div class="accordion-body">Dessert ice cream donut oat cake jelly-o pie sugar plum cheesecake. Bear claw dragée oat cake dragée ice cream halvah tootsie roll. Danish cake oat cake pie macaroon tart donut gummies. Jelly beans candy canes carrot cake. Fruitcake chocolate chupa chups.</div>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+      <!--/ Accordion -->
+      <!-- Payment Methods modal -->
+<div class="modal fade" id="paymentMethods" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-enable-otp modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-6">
+          <h4 class="mb-2">Select payment methods</h4>
+          <p>Supported payment methods</p>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center border-bottom py-4 mb-4">
+          <div class="d-flex gap-4 align-items-center">
+          <img src="../../assets/img/icons/payments/ae-light.png" class="img-fluid w-px-50 h-px-30" alt="american-express-card" data-app-light-img="icons/payments/ae-light.png" data-app-dark-img="icons/payments/ae-dark.png" />
+            <h6 class="m-0">Visa</h6>
+          </div>
+          <p class="m-0 d-none d-sm-block">Credit Card</p>
+        </div>
+        <div class="d-flex justify-content-sm-between align-items-center border-bottom pb-4 mb-4">
+          <div class="d-flex gap-4 align-items-center">
+            <img src="../../assets/img/icons/payments/ae-light.png" class="img-fluid w-px-50 h-px-30" alt="american-express-card" data-app-light-img="icons/payments/ae-light.png" data-app-dark-img="icons/payments/ae-dark.png" />
+
+            <h6 class="m-0">American Express</h6>
+          </div>
+          <p class="m-0 d-none d-sm-block">Credit Card</p>
+        </div>
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-4 mb-4">
+          <div class="d-flex gap-4 align-items-center">
+            <img src="../../assets/img/icons/payments/master-light.png" class="img-fluid w-px-50 h-px-30" alt="master-card" data-app-light-img="icons/payments/master-light.png" data-app-dark-img="icons/payments/master-dark.png" />
+
+            <h6 class="m-0">Mastercard</h6>
+          </div>
+          <p class="m-0 d-none d-sm-block">Credit Card</p>
+        </div>
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-4 mb-4">
+          <div class="d-flex gap-4 align-items-center">
+            <img src="../../assets/img/icons/payments/jcb-light.png" class="img-fluid w-px-50 h-px-30" alt="jcb-card" data-app-light-img="icons/payments/jcb-light.png" data-app-dark-img="icons/payments/jcb-dark.png" />
+            <h6 class="m-0">JCB</h6>
+          </div>
+          <p class="m-0 d-none d-sm-block">Credit Card</p>
+        </div>
+        <div class="d-flex justify-content-between align-items-center pb-4">
+          <div class="d-flex gap-4 align-items-center">
+            <img src="../../assets/img/icons/payments/dc-light.png" class="img-fluid w-px-50 h-px-30" alt="diners-club-card" data-app-light-img="icons/payments/dc-light.png" data-app-dark-img="icons/payments/dc-dark.png" />
+            <h6 class="m-0">Diners Club</h6>
+          </div>
+          <p class="m-0 d-none d-sm-block">Credit Card</p>
         </div>
       </div>
     </div>
-    <!--/ Vehicles overview -->
-    <!-- /course -->                         
-    <!-- Website Analytics -->
-    {{-- <div class="col-xl-6 col">
-      <div class="swiper-container swiper-container-horizontal swiper swiper-card-advance-bg"
-      id="swiper-with-pagination-cards">
-      <div class="swiper-wrapper">
-        @foreach($grouped as $kpa)
-      <div class="swiper-slide">
-      <div class="row">
-        <div class="col-12">
-        <h5 class="text-white mb-0">{{ $kpa['kpa_name'] }}</h5>
-        <small>Weight of the KPA - Core 95%</small>
+  </div>
+</div>
+<!-- / Payment Methods modal -->
+ <!-- Payment Methods modal -->
+<div class="modal fade" id="paymentMethods1" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-simple modal-enable-otp modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-6">
+          <h4 class="mb-2">KPA</h4>
+          <p>Supported payment methods</p>
         </div>
-        <div class="row">
-        <div class="col-lg-7 col-md-10 col-12 order-2 order-md-1 pt-md-9">
-        <h6 class="text-white mt-0 mt-md-3 mb-4">
-        <div class="row">
-          @foreach($kpa['categories'] as $category)
-        <div class="col-6 mb-3 d-flex align-items-center">
-        <p class="mb-0 fw-medium me-2 website-analytics-text-bg">88%</p>
-        <p class="mb-0">{{ Str::limit($category['category_name'], 15, '...') }}</p>
-        </div>
-      @endforeach
-        </div>
-        </h6>
-        </div>
-
-        <div class="col-lg-5 col-md-2 col-12 order-1 order-md-2 my-4 my-md-0 text-center">
-        <img src="{{ asset('admin/assets/img/illustrations/card-website-analytics-1.png') }}"
-        alt="Website Analytics" height="150" class="card-website-analytics-img" />
-        </div>
-        </div>
-      </div>
-      </div>
-      @endforeach
-      </div>
-      <div class="swiper-pagination"></div>
-      </div>
-    </div> --}}
-
-    <!--/ Website Analytics -->
-
-    <!-- Average Daily Sales -->
-    {{-- <div class="col-xl-3 col-sm-6">
-      <div class="card h-100">
-      <div class="card-header pb-0">
-        <h5 class="mb-3 card-title">Average Daily Sales</h5>
-        <p class="mb-0 text-body">Total Sales This Month</p>
-        <h4 class="mb-0">$28,450</h4>
-      </div>
-      <div class="card-body px-0">
-        <div id="averageDailySales"></div>
-      </div>
-      </div>
-    </div> --}}
-    <!--/ Average Daily Sales -->
-
-    <!-- Sales Overview -->
-    {{-- <div class="col-xl-3 col-sm-6">
-      <div class="card h-100">
-      <div class="card-header">
-        <div class="d-flex justify-content-between">
-        <p class="mb-0 text-body">Sales Overview</p>
-        <p class="card-text fw-medium text-success">+18.2%</p>
-        </div>
-        <h4 class="card-title mb-1">$42.5k</h4>
-      </div>
-      <div class="card-body">
-        <div class="row">
-        <div class="col-4">
-          <div class="d-flex gap-2 align-items-center mb-2">
-          <span class="badge bg-label-info p-1 rounded"><i
-            class="icon-base ti tabler-shopping-cart icon-sm"></i></span>
-          <p class="mb-0">Order</p>
+          <div style="height: 50vh; width: 100%;">
+            <canvas class="chartjs" id="radarChart" ></canvas>
           </div>
-          <h5 class="mb-0 pt-1">62.2%</h5>
-          <small class="text-body-secondary">6,440</small>
-        </div>
-        <div class="col-4">
-          <div class="divider divider-vertical">
-          <div class="divider-text">
-            <span class="badge-divider-bg bg-label-secondary">VS</span>
-          </div>
-          </div>
-        </div>
-        <div class="col-4 text-end">
-          <div class="d-flex gap-2 justify-content-end align-items-center mb-2">
-          <p class="mb-0">Visits</p>
-          <span class="badge bg-label-primary p-1 rounded"><i class="icon-base ti tabler-link icon-sm"></i></span>
-          </div>
-          <h5 class="mb-0 pt-1">25.5%</h5>
-          <small class="text-body-secondary">12,749</small>
-        </div>
-        </div>
-        <div class="d-flex align-items-center mt-6">
-        <div class="progress w-100" style="height: 10px;">
-          <div class="progress-bar bg-info" style="width: 70%" role="progressbar" aria-valuenow="70"
-          aria-valuemin="0" aria-valuemax="100"></div>
-          <div class="progress-bar bg-primary" role="progressbar" style="width: 30%" aria-valuenow="30"
-          aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        </div>
-      </div>
-      </div>
-    </div> --}}
-    <!--/ Sales Overview -->
-      <!-- Donut Chart -->
-    <div class="col-md-4 col-12">
-      <div class="card">
-        <div class="card-header d-flex align-items-center justify-content-between">
-          <div>
-            <h5 class="card-title mb-0">KPA Score card</h5>
-          </div>
-          {{-- <div class="dropdown">
-            <button type="button" class="btn dropdown-toggle px-0" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="icon-base ti tabler-calendar"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Today</a></li>
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Yesterday</a></li>
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last 7 Days</a></li>
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last 30 Days</a></li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Current Month</a></li>
-              <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">Last Month</a></li>
-            </ul>
-          </div> --}}
-        </div>
-        <div class="card-body">
-          <div id="donutCharts"></div>
-        </div>
+        
       </div>
     </div>
-    <!-- /Donut Chart -->
-    <!-- Earning Reports -->
-    <div class="col-md-6">
-      <div class="card h-100">
-      <div class="card-header pb-0 d-flex justify-content-between">
-        <div class="card-title mb-0">
-        <h5 class="mb-1">Weekly Attendance Report</h5>
-        <p class="card-subtitle">Overview</p>
-        </div>
-        <div class="dropdown">
-        Fall 2024
-        {{-- <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-          id="earningReportsId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="earningReportsId">
-          <a class="dropdown-item" href="javascript:void(0);">View More</a>
-        </div> --}}
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="row align-items-center g-md-8">
-        <div class="col-12 col-md-5 d-flex flex-column">
-          <div class="d-flex gap-2 align-items-center mb-3 flex-wrap">
-          <h2 class="mb-0">45 hrs</h2>
-          {{-- <div class="badge rounded bg-label-success">+4.2%</div> --}}
-          </div>
-          <small class="text-body">You informed of this week compared to last week</small>
-        </div>
-        <div class="col-12 col-md-7 ps-xl-8">
-          <div id="weeklyEarningReports"></div>
-        </div>
-        </div>
-        <div class="border rounded p-5 mt-5">
-        <div class="row gap-4 gap-sm-0">
-          <div class="col-12 col-sm-4">
-          <div class="d-flex gap-2 align-items-center">
-            <div class="badge rounded bg-label-primary p-1"><i
-              class="icon-base ti tabler-clock icon-18px"></i></div>
-            <h6 class="mb-0 fw-normal">Avg. Working hrs</h6>
-          </div>
-          <h4 class="my-2">09</h4>
-          <div class="progress w-75" style="height:4px">
-            <div class="progress-bar" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0"
-            aria-valuemax="100"></div>
-          </div>
-          </div>
-          <div class="col-12 col-sm-4">
-          <div class="d-flex gap-2 align-items-center">
-            <div class="badge rounded bg-label-info p-1"><i class="icon-base ti tabler-input-check icon-18px"></i>
-            </div>
-            <h6 class="mb-0 fw-normal">Avg. check-in</h6>
-          </div>
-          <h4 class="my-2">09:05</h4>
-          <div class="progress w-75" style="height:4px">
-            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50"
-            aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          </div>
-          <div class="col-12 col-sm-4">
-          <div class="d-flex gap-2 align-items-center">
-            <div class="badge rounded bg-label-danger p-1"><i
-              class="icon-base ti tabler-input-check icon-18px"></i></div>
-            <h6 class="mb-0 fw-normal">Avg. check-out</h6>
-          </div>
-          <h4 class="my-2">18:10</h4>
-          <div class="progress w-75" style="height:4px">
-            <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65"
-            aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          </div>
-        </div>
-        </div>
-      </div>
-      </div>
-    </div>
-    <!--/ Earning Reports -->
-
-    <!-- Support Tracker -->
-    <div class="col-12 col-md-6">
-      <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-        <h5 class="mb-1">KPA Chart</h5>
-        <p class="card-subtitle">Fall 2024</p>
-        </div>
-        <div class="dropdown">
-        <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-          id="supportTrackerMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="supportTrackerMenu">
-          <a class="dropdown-item" href="javascript:void(0);">View More</a>
-          <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-        </div>
-        </div>
-      </div>
-      <div class="card-body row">
-        <div class="col-12 col-sm-4">
-        <div class="mt-lg-4 mt-lg-2 mb-lg-6 mb-2">
-          <!-- <h2 class="mb-0">100</h2> <p class="mb-0">Total</p> -->
-        </div>
-        <ul class="p-0 m-0">
-          <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-          <div class="badge rounded bg-label-primary p-1_5"><i class="icon-base ti tabler-ticket icon-md"></i>
-          </div>
-          <div>
-            <h6 class="mb-0 text-nowrap">Teaching Delivery</h6>
-            <small class="text-body-secondary">25%</small>
-          </div>
-          </li>
-          <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-          <div class="badge rounded bg-label-info p-1_5"><i class="icon-base ti tabler-circle-check icon-md"></i>
-          </div>
-          <div>
-            <h6 class="mb-0 text-nowrap">Teaching Management</h6>
-            <small class="text-body-secondary">15%</small>
-          </div>
-          </li>
-          <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-          <div class="badge rounded bg-label-warning p-1_5"><i class="icon-base ti tabler-clock icon-md"></i>
-          </div>
-          <div>
-            <h6 class="mb-0 text-nowrap">Teaching Innovation</h6>
-            <small class="text-body-secondary">10%</small>
-          </div>
-          </li>
-          <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-          <div class="badge rounded bg-label-warning p-1_5"><i class="icon-base ti tabler-clock icon-md"></i>
-          </div>
-          <div>
-            <h6 class="mb-0 text-nowrap">Teaching Output</h6>
-            <small class="text-body-secondary">30%</small>
-          </div>
-          </li>
-          <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-          <div class="badge rounded bg-label-warning p-1_5"><i class="icon-base ti tabler-clock icon-md"></i>
-          </div>
-          <div>
-            <h6 class="mb-0 text-nowrap">Teaching Outcomes-student</h6>
-            <small class="text-body-secondary">20%</small>
-          </div>
-          </li>
-        </ul>
-        </div>
-        <div class="col-12 col-md-8">
-        <div id="supportTracker"></div>
-        </div>
-      </div>
-      </div>
-    </div>
-
-    <div class="col-12 col-md-12">
-      <div class="card mb-4">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="mb-0">Performance Trend</h5>
-                <span class="text-muted small">Semesters</span>
-            </div>
-            <div id="trendArea"></div>
-        </div>
-      </div>
-    </div>
-    <!--/ Support Tracker -->
-
-    <!-- Orders last week -->
-    <!-- <div class="col-xxl-4 col-md-6">
-      <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-      <div class="card-title mb-0">
-      <h4 class="mb-0">2.84k</h4>
-      <small class="text-body">Avg Daily Traffic</small>
-      </div>
-      <div class="badge bg-label-success">+15%</div>
-      </div>
-      <div class="card-body">
-      <div id="averageDailyTraffic"></div>
-      </div>
-      </div>
-    </div> -->
-    <!-- Orders last week -->
-
-    <!-- Monthly Campaign State -->
-    @foreach ($grouped as $kpa)
-      @foreach ($kpa['categories'] as $category)
-      <div class="col-xxl-4 col-md-6">
-      <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-      <div class="card-title mb-0">
-      <h5 class="mb-1">{{ $category['category_name'] }}</h5>
-      <p class="card-subtitle">
-        KPA: {{ $kpa['kpa_name'] }} | Weight: {{ $kpa['kpa_weight'] }}
-      </p>
-      </div>
-      <div class="dropdown">
-      <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-        id="MonthlyCampaign" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-      </button>
-      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="MonthlyCampaign">
-        <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-        <a class="dropdown-item" href="javascript:void(0);">Download</a>
-        <a class="dropdown-item" href="javascript:void(0);">View All</a>
-      </div>
-      </div>
-      </div>
-
-      <div class="card-body">
-      <ul class="p-0 m-0">
-      @foreach ($category['indicators'] as $indicator)
-      <li class="mb-6 d-flex justify-content-between align-items-center">
-      <div class="badge bg-label-success rounded p-1_5">
-      <i class="icon-base ti tabler-mail icon-md"></i>
-      </div>
-      <div class="d-flex justify-content-between w-100 flex-wrap">
-      <h6 class="mb-0 ms-4">{{ $indicator['indicator_name'] }}</h6>
-      <div class="d-flex">
-      <p class="ms-4 text-success mb-0">
-      {{ $indicator['indicator_score'] ?? 'N/A' }}
-      </p>
-      </div>
-      </div>
-      </li>
-      @endforeach
-      </ul>
-      </div>
-      </div>
-      </div>
-      @endforeach
-    @endforeach
-
-    <!--/ Monthly Campaign State -->
-
-    <!-- Monthly Campaign State -->
-    <!-- <div class="col-xxl-4 col-md-6">
-
-    </div> -->
-    <!--/ Monthly Campaign State -->
-
-    <!-- Source Visit -->
-    <div class="col-xxl-4 col-md-6 col-12">
-      <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-        <h5 class="mb-1">Source Visits</h5>
-        <p class="card-subtitle">38.4k Visitors</p>
-        </div>
-        <div class="dropdown">
-        <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-          id="sourceVisits" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="sourceVisits">
-          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-          <a class="dropdown-item" href="javascript:void(0);">Download</a>
-          <a class="dropdown-item" href="javascript:void(0);">View All</a>
-        </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <ul class="list-unstyled mb-0">
-        <li class="mb-6">
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-shadow icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">Direct Source</h6>
-            <small class="text-body">Direct link click</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">1.2k</p>
-            <div class="ms-4 badge bg-label-success">+4.2%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6">
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-globe icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">Social Network</h6>
-            <small class="text-body">Social Channels</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">31.5k</p>
-            <div class="ms-4 badge bg-label-success">+8.2%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6">
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-mail icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">Email Newsletter</h6>
-            <small class="text-body">Mail Campaigns</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">893</p>
-            <div class="ms-4 badge bg-label-success">+2.4%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6">
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-external-link icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">Referrals</h6>
-            <small class="text-body">Impact Radius Visits</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">342</p>
-            <div class="ms-4 badge bg-label-danger">-0.4%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        <li class="mb-6">
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-ad icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">ADVT</h6>
-            <small class="text-body">Google ADVT</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">2.15k</p>
-            <div class="ms-4 badge bg-label-success">+9.1%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        <li>
-          <div class="d-flex align-items-center">
-          <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
-            class="icon-base ti tabler-star icon-md"></i></div>
-          <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-            <div class="me-2">
-            <h6 class="mb-0">Other</h6>
-            <small class="text-body">Many Sources</small>
-            </div>
-            <div class="d-flex align-items-center">
-            <p class="mb-0">12.5k</p>
-            <div class="ms-4 badge bg-label-success">+6.2%</div>
-            </div>
-          </div>
-          </div>
-        </li>
-        </ul>
-      </div>
-      </div>
-    </div>
-    <!--/ Source Visit -->
-
-    <!-- Projects table -->
-    <div class="col-xxl-8">
-      <div class="card">
-      <div class="table-responsive mb-4">
-        <table class="table datatable-project table-sm">
-        <thead class="border-top">
-          <tr>
-          <th></th>
-          <th></th>
-          <th>Project</th>
-          <th>Leader</th>
-          <th>Team</th>
-          <th class="w-px-200">Progress</th>
-          <th>Action</th>
-          </tr>
-        </thead>
-        </table>
-      </div>
-      </div>
-    </div>
-    <!--/ Projects table -->
-    </div>
+  </div>
+</div>
+<!-- / Payment Methods modal -->
   </div>
   <!-- / Content -->
 @endsection
 @push('script')
   <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
-  <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}
-    "></script>
+
   <script src="{{ asset('admin/assets/js/app-logistics-dashboard.js') }}"></script>
-  <script src="{{ asset('admin/assets/vendor/libs/swiper/swiper.js') }}
-      "></script>
-  <!-- <script src="{{ asset('admin/assets/js/cards-statistics.js') }}"></script> -->
-  <script src="{{ asset('admin/assets/js/dashboards-analytics.js') }}"></script>
-  {{-- <script src="{{ asset('admin/assets/js/charts-apex.js') }}"></script> --}}
-
+  <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
+  <script src="{{ asset('admin/assets/js/cards-analytics.js')}}"></script>
+  <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
+  <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
+  <script src="{{ asset('admin/assets/js/app-ecommerce-dashboard.js') }}"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    var options = {
-      chart: {
-      height: 145,
-      type: "bar",
-      parentHeightOffset: 0,
-      toolbar: { show: false }
-      },
-      plotOptions: {
-      bar: {
-        barHeight: "100%",
-        columnWidth: "11px",
-        startingShape: "rounded",
-        endingShape: "rounded",
-        borderRadius: 5
-      }
-      },
-      colors: ["#FFB300"],
-      grid: {
-      show: false,
-      padding: { top: -30, left: -18, bottom: -13, right: -18 }
-      },
-      dataLabels: { enabled: false },
-      tooltip: { enabled: true },
-      series: [{
-      name: "Traffic",
-      data: @json($data)  // ✅ Laravel array to JS
-      }],
-      legend: { show: false },
-      xaxis: {
-      categories: @json($categories), // ✅ Laravel array to JS
-      axisBorder: { show: false },
-      axisTicks: { show: false },
-      labels: {
-        style: { fontSize: "13px", fontFamily: "Arial" },
-        show: true
-      }
-      },
-      yaxis: {
-      labels: { show: false }
-      }
-    };
+  document.addEventListener("DOMContentLoaded", function () {
+      // ✅ Static labels and datasets
+      var chartLabels = ["Teaching and Learning", "Research", "Institutional Engagement", "Institutional Engagement"];
+      var dataset1 = [65, 59, 90, 81]; // Inside Mirror
 
-    var chart = new ApexCharts(document.querySelector("#averageDailyTraffic"), options);
-    chart.render();
-    });
-    document.addEventListener("DOMContentLoaded", function () {
+      var g = document.getElementById("radarChart");
+      if (g) {
+        var ctx = g.getContext("2d");
 
-    var options = {
-        chart: {
-            height: 357.8,
-            type: "donut"
-        },
-        labels: ["Teaching and Learning", "Research, Innovation and Commercialisation", "Institional Engagement (Core)", "Institional Engagement (Operational)"],
-        series: [42, 7, 25, 25], // dynamic data can come from Laravel
-        colors: ['#008FFB', '#FEB019', '#00E396', '#FF4560'], // replace with your theme vars
-        stroke: {
-            show: false,
-            curve: "straight"
-        },
-        dataLabels: {
-            enabled: true,
-            formatter: function (val) {
-                return parseInt(val, 10) + "%"
-            }
-        },
-        legend: {
-            show: true,
-            position: "bottom",
-            offsetY: -10,
-            markers: {
-                size: 5,
-                offsetX: -3
+        // ✅ Gradients
+        var gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
+        gradientBlue.addColorStop(0, "rgba(85, 85, 255, 0.9)");
+        gradientBlue.addColorStop(1, "rgba(151, 135, 255, 0.8)");
+
+        var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
+        gradientPink.addColorStop(0, "rgba(115, 103, 240, 1)");
+        gradientPink.addColorStop(1, "rgba(115, 103, 240, 1)");
+
+        // ✅ Radar Chart
+        new Chart(ctx, {
+          type: "radar",
+          data: {
+            labels: chartLabels,
+            datasets: [
+              {
+                label: "Achievements",
+                data: dataset1,
+                fill: true,
+                backgroundColor: gradientPink,
+                borderColor: "rgba(112, 25, 115, 1)",
+                pointBorderColor: "#ff55b8",
+                pointBackgroundColor: "#fff",
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                pointStyle: "circle"
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 500 },
+            scales: {
+              r: {
+                ticks: { display: true, color: "#666" },
+                grid: { color: "#ddd" },
+                angleLines: { color: "#ddd" },
+                pointLabels: { color: "#666" }
+              }
             },
-            itemMargin: {
-                vertical: 3,
-                horizontal: 10
-            }
-        },
-        plotOptions: {
-            pie: {
-                donut: {
-                    labels: {
-                        show: true,
-                        name: {
-                            fontSize: "1.2rem",
-                        },
-                        value: {
-                            fontSize: "1rem",
-                            formatter: function (val) {
-                                return parseInt(val, 10) + "%"
-                            }
-                        },
-                        total: {
-                            show: true,
-                            fontSize: "1rem",
-                            label: "Teaching and Learning",
-                            formatter: function () {
-                                return "42%"
-                            }
-                        }
-                    }
+            plugins: {
+              legend: {
+                position: "top",
+                labels: {
+                  padding: 25,
+                  color: "#333"
                 }
+              },
+              tooltip: {
+                backgroundColor: "#fff",
+                titleColor: "#000",
+                bodyColor: "#333",
+                borderWidth: 1,
+                borderColor: "#ddd"
+              }
             }
-        },
-        responsive: [
-            {
-                breakpoint: 992,
-                options: {
-                    chart: { height: 380 },
-                    legend: { position: "bottom" }
-                }
-            },
-            {
-                breakpoint: 576,
-                options: {
-                    chart: { height: 320 },
-                    plotOptions: {
-                        pie: {
-                            donut: {
-                                labels: {
-                                    name: { fontSize: "1rem" },
-                                    value: { fontSize: "0.9rem" },
-                                    total: { fontSize: "1rem" }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        ]
-    };
-
-    var chart = new ApexCharts(document.querySelector("#donutCharts"), options);
-    chart.render();
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    var trendScores = [10, 25, 35, 50, 65, 80, 95]; // ✅ your scores
-    var trendSemesters = ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5", "Sem 6", "Sem 7"]; // ✅ your categories
-
-    var options = {
-        chart: { 
-            type: 'area', 
-            height: 290, 
-            toolbar: { show: false } 
-        },
-        series: [{ 
-            name: 'Overall %', 
-            data: trendScores 
-        }],
-        xaxis: { 
-            categories: trendSemesters
-        },
-        dataLabels: { enabled: false },
-        stroke: { curve: 'smooth', width: 3 },
-        colors: ['#7367f0'],
-        fill: { 
-            type: 'gradient', 
-            gradient: { 
-                shadeIntensity: 0.5, 
-                opacityFrom: 0.4, 
-                opacityTo: 0.05 
-            } 
-        }
-    };
-
-    var chart = new ApexCharts(document.querySelector("#trendArea"), options);
-    chart.render();
-});
-</script>
+          }
+        });
+      }
+    });</script>
 
 @endpush
