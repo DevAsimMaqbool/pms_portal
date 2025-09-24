@@ -40,13 +40,15 @@
     <div class="layout-container">
       <!-- Menu -->
       @if(auth()->user()->hasRole('Survey'))
-      @include('layouts.survey_sidebar')
+        @include('layouts.survey_sidebar')
       @elseif(auth()->user()->hasRole('Teacher'))
-      @include('layouts.teacher_sidebar')
+        @include('layouts.teacher_sidebar')
       @elseif(auth()->user()->hasRole('HOD'))
-      @include('layouts.hod_sidebar')
+        @include('layouts.hod_sidebar')
       @elseif(auth()->user()->hasRole('Dean'))
-      @include('layouts.dean_sidebar')
+        @include('layouts.dean_sidebar')
+      @elseif(auth()->user()->hasRole('Rector'))
+        @include('layouts.rector_sidebar')
       @else
         @include('layouts.sidebar')
       @endif

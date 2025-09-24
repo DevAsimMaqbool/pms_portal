@@ -76,6 +76,9 @@ class PermissionController extends Controller
         $data = [100, 40, 50, 60, 70, 80, 90, 85];
 
         // Pass the user data to the view
+        if ($role->name == 'Rector') {
+            return redirect()->route('rector-dashboard.index');
+        }
         if ($role->name == 'Teacher') {
             return view('admin.teacher_dashbord', compact('employee'));
         } elseif ($role->name == 'Survey') {
