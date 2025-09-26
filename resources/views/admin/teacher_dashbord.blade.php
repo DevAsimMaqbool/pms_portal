@@ -65,6 +65,7 @@
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
     @if(!request()->is('teacher_dashboard/*'))
+    @if(auth()->user()->hasRole('HOD'))
       <div class="card-header border-bottom">
         {{-- Department Filter --}}
         <div class="mb-3">
@@ -87,6 +88,7 @@
           <button id="checkReportBtn" class="btn btn-primary ms-2">Check Report</button>
         </div>
       </div>
+      @endif
     @endif
     <div class="row g-6">
       <div class="col-12 col-md-6">
@@ -98,33 +100,32 @@
                 <h4 class="mb-1" id="empName">{{ $employee['name'] }}</h4>
                 <div class="text-muted">{{ $employee['job_title'] }}</div>
                 <div class="metric">{{ $employee['department'] }}</div>
-                <div class="metric">DOB: <span id="doj">{{ $employee['birthday'] }}</span></div>
                 <div class="fw-semibold text-primary" id="serviceYears">—</div>
               </div>
             </div>
             <div class="row g-3">
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Service Tenure</div>
-                  <div class="value">2 years 3 months</div>
+                  <div class="label text-primary"">Student Satisfaction</div>
+                  <div class="value">10</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Course Load</div>
-                  <div class="value">3</div>
+                  <div class="label">Attendance Punctuality </div>
+                  <div class="value">30</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">Marital Status</div>
-                  <div class="value">{{ $employee['marital'] }}</div>
+                  <div class="label">Research Publication</div>
+                  <div class="value">20</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="mini-tile text-center">
-                  <div class="label">CNIC</div>
-                  <div class="value">{{ $employee['cnic'] }}</div>
+                  <div class="label text-primary"">Course Load</div>
+                  <div class="value">40</div>
                 </div>
               </div>
               <div class="col-12">
