@@ -67,7 +67,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Target of Publications</label>
-                                <input type="number" name="target_of_publications" class="form-control" required disabled>
+                                <input type="number" name="target_of_publications" class="form-control" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Progress on publication</label>
