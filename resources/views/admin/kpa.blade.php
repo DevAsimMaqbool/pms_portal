@@ -79,7 +79,7 @@
     <div class="col-12 col-md-6">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title mb-0">{{ $area->performance_area }} Chart</h5>
+          <h5 class="card-title mb-0">{{ $area->performance_area }} Performance</h5>
         </div>
         <div class="card-body pt-2">
           <canvas class="chartjs" id="radarChart" data-height="355"></canvas>
