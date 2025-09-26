@@ -400,9 +400,10 @@ $(document).ready(function () {
                     let colors = ["primary", "success", "danger", "warning", "info"];
                     $.each(response.indicators, function (index, indicator) {
                         let color = colors[index % colors.length];
+                        let randomValue = Math.floor(Math.random() * 100) + 1;
                         $list.append(`
                             <li class="d-flex mb-6">
-                                <div class="chart-progress me-4" data-color="${color}" data-series="${indicator.id}" data-progress_variant="true"></div>
+                                <div class="chart-progress me-4" data-color="${color}" data-series="${randomValue}" data-progress_variant="true"></div>
                                 <div class="row w-100 align-items-center">
                                     <div class="col-9">
                                         <div class="me-2">
