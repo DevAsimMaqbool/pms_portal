@@ -32,7 +32,38 @@
         <div data-i18n="Home">Home</div>
       </a>
     </li>
+
     @if(auth()->user()->hasRole(['Teacher']))
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-bulb"></i>
+          <div data-i18n="Noteable Performance">Noteable Performance</div>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-chart-line"></i>
+          <div data-i18n="Area of Improvements">Area of Improvements</div>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-target-arrow"></i>
+          <div data-i18n="Performance Improvement Plan">Performance Improvement Plan</div>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-report"></i>
+          <div data-i18n="Reports">Reports</div>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-analyze"></i>
+          <div data-i18n="Comparitive Analysis">Comparitive Analysis</div>
+        </a>
+      </li>
       @php
         $teacherRoleId = auth()->user()->roles->firstWhere('name', 'Teacher')->id ?? null;
 
@@ -85,19 +116,19 @@
           ];
         })->values();
         $icons = [
-            'ti tabler-star',
-            'ti tabler-heart',
-            'ti tabler-award',
-            'ti tabler-book',
-            'ti tabler-chart-bar',
-            'ti tabler-rocket',
-            'ti tabler-star',
-            'ti tabler-device-laptop'
+          'ti tabler-star',
+          'ti tabler-heart',
+          'ti tabler-award',
+          'ti tabler-book',
+          'ti tabler-chart-bar',
+          'ti tabler-rocket',
+          'ti tabler-star',
+          'ti tabler-device-laptop'
         ];
       @endphp
 
       {{-- Render Menu --}}
-      @foreach($result as $kpakey=>$kpa)
+      @foreach($result as $kpakey => $kpa)
         <li class="menu-item active">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon icon-base {{ $icons[$kpakey % count($icons)] }}"></i>
@@ -139,7 +170,12 @@
           </ul>
         </li>
       @endforeach
-
+      <li class="menu-item">
+        <a href="#" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-bell"></i>
+          <div data-i18n="Notifications">Notifications</div>
+        </a>
+      </li>
     @else
       <li class="menu-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
         <a href="{{ route('users.index') }}" class="menu-link">
@@ -197,11 +233,11 @@
         </a>
       </li>
       <!-- <li class="menu-item {{ request()->routeIs('assigndepartment.index') ? 'active' : '' }}">
-                    <a href="{{ route('assigndepartment.index') }}" class="menu-link">
-                    <i class="menu-icon icon-base ti tabler-message-heart"></i>
-                    <div data-i18n="Assign Department">Assign Department</div>
-                    </a>
-                  </li> -->
+                                                                                      <a href="{{ route('assigndepartment.index') }}" class="menu-link">
+                                                                                      <i class="menu-icon icon-base ti tabler-message-heart"></i>
+                                                                                      <div data-i18n="Assign Department">Assign Department</div>
+                                                                                      </a>
+                                                                                    </li> -->
       <li class="menu-item {{ request()->routeIs('students.index') ? 'active' : '' }}">
         <a href="{{ route('students.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-message-heart"></i>
