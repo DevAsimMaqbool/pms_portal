@@ -40,8 +40,8 @@
           <div data-i18n="Noteable Performance">Noteable Performance</div>
         </a>
       </li>
-      <li class="menu-item">
-        <a href="#" class="menu-link">
+      <li class="menu-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
+        <a href="{{ route('teacher.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-chart-line"></i>
           <div data-i18n="Area of Improvements">Area of Improvements</div>
         </a>
@@ -233,11 +233,11 @@
         </a>
       </li>
       <!-- <li class="menu-item {{ request()->routeIs('assigndepartment.index') ? 'active' : '' }}">
-                                                                                      <a href="{{ route('assigndepartment.index') }}" class="menu-link">
-                                                                                      <i class="menu-icon icon-base ti tabler-message-heart"></i>
-                                                                                      <div data-i18n="Assign Department">Assign Department</div>
-                                                                                      </a>
-                                                                                    </li> -->
+                                                                                                          <a href="{{ route('assigndepartment.index') }}" class="menu-link">
+                                                                                                          <i class="menu-icon icon-base ti tabler-message-heart"></i>
+                                                                                                          <div data-i18n="Assign Department">Assign Department</div>
+                                                                                                          </a>
+                                                                                                        </li> -->
       <li class="menu-item {{ request()->routeIs('students.index') ? 'active' : '' }}">
         <a href="{{ route('students.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-message-heart"></i>

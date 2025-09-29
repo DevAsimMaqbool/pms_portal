@@ -29,6 +29,7 @@ use App\Http\Controllers\PublicationOfHecRecognizedJournalController;
 use App\Http\Controllers\RatingOnImpactOfResearchConferencesOrganizedController;
 use App\Http\Controllers\SpinOffController;
 use App\Http\Controllers\TrainingsSeminarsWorkshopConductedWithImpactController;
+use App\Http\Controllers\TeacherController;
 use App\Models\RatingOnImpactOfResearchConferencesOrganized;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
@@ -124,7 +125,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/kpa/{area}/category/{category}/indicator/{indicator}', [IndicatorController::class, 'indicator_form'])->name('indicator.form');
         Route::resource('indicator-form', AchievementOfResearchPublicationsTargetController::class);
-        Route::get('indicator-forms/target',[AchievementOfResearchPublicationsTargetController::class, 'getPublicationTarget'])->name('indicator-form.target');
+        Route::get('indicator-forms/target', [AchievementOfResearchPublicationsTargetController::class, 'getPublicationTarget'])->name('indicator-form.target');
 
         Route::get('/load-forms/{form}', [IndicatorController::class, 'loadForm']);
         Route::resource('publication-of-hecRecognized', PublicationOfHecRecognizedJournalController::class);
@@ -145,6 +146,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/survey/{faculty_code}/download-pdf', [SurveyController::class, 'downloadPdf'])
         ->name('survey.downloadPdf');
     Route::get('/survey-report-dashboard', [SurveyController::class, 'surveyReportDashboard'])->name('survey_dashboard.report');
+
+    Route::resource('teacher', TeacherController::class);
 
 });
 
