@@ -67,7 +67,7 @@
                         <div class="col-3 text-end">
                           <button type="button" class="btn btn-sm btn-icon btn-label-secondary" role="button"
                           data-bs-toggle="modal"
-                          data-bs-target="#paymentMethods2">
+                          data-bs-target="#tableModel">
                             <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
                           </button>
                         </div>
@@ -126,7 +126,7 @@
                       </div>
                     </li>
                     <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="danger" data-series="15" data-progress_variant="true"></div>
+                      <div class="chart-progress me-4" data-color="danger" data-series="15" data-progress_variant="true" ></div>
                       <div class="row w-100 align-items-center">
                         <div class="col-9">
                           <div class="me-2">
@@ -1906,7 +1906,362 @@
 </div>
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
+<!--table model-->
+<!-- Payment Methods modal -->
+<div class="modal fade" id="tableModel" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-simple modal-enable-otp modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           <!-- ffffff-->
+              <div class="nav-align-top nav-tabs-shadow">
+              <div class="d-flex overflow-auto">
+                <ul class="nav nav-tabs" role="tablist">
+                  <li class="nav-item">
+                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-home" aria-controls="navs-justified-home" aria-selected="true">
+                       House Ranking
+                    </button>
+                  </li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-profile" aria-controls="navs-justified-profile" aria-selected="false">
+                      Best Department Ranking
+                    </button>
+                  </li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-messages" aria-controls="navs-justified-messages" aria-selected="false">
+                     Best Faculty Member
+                    </button>
+                  </li>
+                   <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-messages1" aria-controls="navs-justified-messages1" aria-selected="false">
+                     Virtues wise ranking
+                    </button>
+                  </li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-messages2" aria-controls="navs-justified-messages2" aria-selected="false">
+                     Suggestions and area of improvements identified by students
+                    </button>
+                  </li>
+                  
+                </ul>
+                </div>
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="navs-justified-home" role="tabpanel">
+                    <div class="table-responsive text-nowrap">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Houses</th>
+                                <th>Max. Score</th>
+                                <th>Obtained Score</th>
+                                <th>Feedback</th>
+                                <th>Response Rate</th>
+                              </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                              <tr>
+                                <td><span class="fw-medium">Bravo</span></td>
+                                <td>1931960</td>
+                                <td>1680264</td>
+                                <td><span class="badge bg-label-primary me-1">86.97%</span></td>
+                                <td><span class="badge bg-label-primary me-1">81%</span></td>
+                              </tr>
 
+                              <tr>
+                                <td><span class="fw-medium">Charlie</span></td>
+                                <td>641575</td>
+                                <td>552386</td>
+                                <td><span class="badge bg-label-primary me-1">86.10%</span></td>
+                                <td><span class="badge bg-label-primary me-1">79%</span></td>
+                              </tr>
+
+                              <tr>
+                                <td><span class="fw-medium">Alpha</span></td>
+                                <td>1313950</td>
+                                <td>1093346</td>
+                                <td><span class="badge bg-label-primary me-1">83.21%</span></td>
+                                <td><span class="badge bg-label-primary me-1">76%</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                      </div>
+
+                  </div>
+                  <div class="tab-pane fade" id="navs-justified-profile" role="tabpanel">
+                      <div class="table-responsive text-nowrap">
+                             <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Houses</th>
+                                <th>Department</th>
+                                <th>Max. Score</th>
+                                <th>Obtained Score</th>
+                                <th>Feedback</th>
+                              </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                              <tr>
+                                <td><span class="fw-medium">Alpha</span></td>
+                                <td>Department of Civil Engineering - UNI-FET</td>
+                                <td>11065</td>
+                                <td>9856</td>
+                                <td><span class="badge bg-label-primary me-1">89.07%</span></td>
+                              </tr>
+
+                              <tr>
+                                <td><span class="fw-medium">Bravo</span></td>
+                                <td>Department of Pharmacy - UNI-FPH</td>
+                                <td>158340</td>
+                                <td>143844</td>
+                                <td><span class="badge bg-label-primary me-1">90.85%</span></td>
+                              </tr>
+
+                              <tr>
+                                <td><span class="fw-medium">Charlie</span></td>
+                                <td>Department of Mass Communication - UNI-FSS</td>
+                                <td>32190</td>
+                                <td>28771</td>
+                                <td><span class="badge bg-label-primary me-1">89.38%</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                      </div>
+                  </div>
+                  <div class="tab-pane fade" id="navs-justified-messages" role="tabpanel">
+                         <div class="table-responsive text-nowrap">
+                               <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Houses</th>
+                                <th>Faculty Member</th>
+                                <th>Max. Score</th>
+                                <th>Obtained Score</th>
+                                <th>Feedback</th>
+                                <th>Ranking</th>
+                              </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                              <tr>
+                                <td><span class="fw-medium">Bravo</span></td>
+                                <td>Sheikh Manzoor Saeed</td>
+                                <td>8600</td>
+                                <td>8177</td>
+                                <td><span class="badge bg-label-primary me-1">95.08%</span></td>
+                                <td><span class="badge bg-label-primary me-1">1st</span></td>
+                              </tr>
+
+                              <tr>
+                                 <td><span class="fw-medium">Alpha</span></td>
+                                <td>Dr. Hamayun Khan</td>
+                                <td>4185</td>
+                                <td>3924</td>
+                                <td><span class="badge bg-label-primary me-1">93.76%</span></td>
+                                <td><span class="badge bg-label-primary me-1">2nd</span></td>
+                              </tr>
+
+                              <tr>
+                                 <td><span class="fw-medium">Charlie</span></td>
+                                <td>Saad Salman</td>
+                                <td>9240</td>
+                                <td>8592</td>
+                                <td><span class="badge bg-label-primary me-1">92.99%</span></td>
+                                <td><span class="badge bg-label-primary me-1">3rd</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                      </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="navs-justified-messages1" role="tabpanel">
+                      <div class="table-responsive text-nowrap">
+                             <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Houses</th>
+                                <th>Virtue</th>
+                                <th>Faculty Member</th>
+                                <th>Max.Score</th>
+                                <th>Obtained Score</th>
+                                <th>Feedback</th>
+                              </tr>
+                            </thead>
+                              <tbody>
+                              <!-- Alpha -->
+                              <tr>
+                                <td rowspan="4"><span class="fw-bold">Alpha</span></td>
+                                <td>Empathy and Compassion</td>
+                                <td>Dr. Hamayun Khan</td>
+                                <td><span class="badge bg-primary">1000</span></td>
+                                <td><span class="badge bg-success">945</span></td>
+                                <td><span class="text-success fw-semibold">94.50%</span></td>
+                              </tr>
+                              <tr>
+                                <td>Honesty and Integrity</td>
+                                <td>Dr. Hamayun Khan</td>
+                                <td><span class="badge bg-primary">455</span></td>
+                                <td><span class="badge bg-success">426</span></td>
+                                <td><span class="text-success fw-semibold">93.63%</span></td>
+                              </tr>
+                              <tr>
+                                <td>Inspirational Leadership</td>
+                                <td>Dr. Hamayun Khan</td>
+                                <td><span class="badge bg-primary">910</span></td>
+                                <td><span class="badge bg-success">852</span></td>
+                                <td><span class="text-success fw-semibold">93.63%</span></td>
+                              </tr>
+                              <tr>
+                                <td>Responsibility and Accountability</td>
+                                <td>Dr. Hamayun Khan</td>
+                                <td><span class="badge bg-primary">1820</span></td>
+                                <td><span class="badge bg-success">1701</span></td>
+                                <td><span class="text-success fw-semibold">93.46%</span></td>
+                              </tr>
+
+                              <!-- Bravo -->
+                              <tr>
+                                <td rowspan="4"><span class="fw-bold">Bravo</span></td>
+                                <td>Empathy and Compassion</td>
+                                <td>Abdul Raouf</td>
+                                <td><span class="badge bg-primary">1280</span></td>
+                                <td><span class="badge bg-success">1221</span></td>
+                                <td><span class="text-success fw-semibold">95.39%</span></td>
+                              </tr>
+                              <tr>
+                                <td>Honesty and Integrity</td>
+                                <td>Sheikh Manzoor Saeed</td>
+                                <td><span class="badge bg-primary">930</span></td>
+                                <td><span class="badge bg-success">884</span></td>
+                                <td><span class="text-success fw-semibold">95.05%</span></td>
+                              </tr>
+                              <tr>
+                                <td>Inspirational Leadership</td>
+                                <td>Sheikh Manzoor Saeed</td>
+                                <td><span class="badge bg-primary">1860</span></td>
+                                <td><span class="badge bg-success">1773</span></td>
+                                <td><span class="text-success fw-semibold">95.32%</span></td>
+                              </tr>
+                              <tr>
+                                <td>Responsibility and Accountability</td>
+                                <td>Sheikh Manzoor Saeed</td>
+                                <td><span class="badge bg-primary">3780</span></td>
+                                <td><span class="badge bg-success">3584</span></td>
+                                <td><span class="text-success fw-semibold">94.81%</span></td>
+                              </tr>
+
+                              <!-- Charlie -->
+                              <tr>
+                                <td rowspan="4"><span class="fw-bold">Charlie</span></td>
+                                <td>Empathy and Compassion</td>
+                                <td>Saad Salman</td>
+                                <td><span class="badge bg-primary">2240</span></td>
+                                <td><span class="badge bg-success">2097</span></td>
+                                <td><span class="text-success fw-semibold">93.62%</span></td>
+                              </tr>
+                              <tr>
+                                <td>Honesty and Integrity</td>
+                                <td>Junaid Arshad</td>
+                                <td><span class="badge bg-primary">510</span></td>
+                                <td><span class="badge bg-success">478</span></td>
+                                <td><span class="text-success fw-semibold">93.73%</span></td>
+                              </tr>
+                              <tr>
+                                <td>Inspirational Leadership</td>
+                                <td>Aisha Siddiqa Siddique</td>
+                                <td><span class="badge bg-primary">1000</span></td>
+                                <td><span class="badge bg-success">928</span></td>
+                                <td><span class="text-warning fw-semibold">92.80%</span></td>
+                              </tr>
+                              <tr>
+                                <td>Responsibility and Accountability</td>
+                                <td>Junaid Arshad</td>
+                                <td><span class="badge bg-primary">2040</span></td>
+                                <td><span class="badge bg-success">1904</span></td>
+                                <td><span class="text-success fw-semibold">93.33%</span></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                      </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="navs-justified-messages2" role="tabpanel">
+                      <div class="table-responsive text-nowrap">
+                             <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Theme</th>
+                                <th>Mentions</th>
+                                <th>Areas Highlighted</th>
+                                <th>Responsible Person</th>
+                                <th>Timeline</th>
+                              </tr>
+                            </thead>
+                              <tbody>
+                              <!-- Alpha -->
+                              <tr>
+                                <td>Teaching Style / Methodology </td>
+                                <td>950</td>
+                                <td>Lecture delivery, pace,clarity, teaching methods</td>
+                                <td>Dean/HOD/PL</td>
+                                <td rowspan="6"><span class="fw-bold">2 weeks</span></td>
+                              </tr>
+                              <tr>
+                                <td>Class Management / Discipline </td>
+                                <td>502</td>
+                                <td>Lecture delivery, pace,clarity, teaching methods</td>
+                                <td>Dean/HOD/PL</td>
+                              </tr>
+                              <tr>
+                                <td>Teaching Style / Methodology </td>
+                                <td>950</td>
+                                <td>Lecture delivery, pace,clarity, teaching methods</td>
+                                <td>Dean/HOD/PL</td>
+                              </tr>
+                              <tr>
+                                <td>Teaching Style / Methodology </td>
+                                <td>950</td>
+                                <td>Lecture delivery, pace,clarity, teaching methods</td>
+                                <td>Dean/HOD/PL</td>
+                              </tr><tr>
+                                <td>Teaching Style / Methodology </td>
+                                <td>950</td>
+                                <td>Lecture delivery, pace,clarity, teaching methods</td>
+                                <td>Dean/HOD/PL</td>
+                              </tr>
+                              <tr>
+                                <td>Teaching Style / Methodology </td>
+                                <td>950</td>
+                                <td>Lecture delivery, pace,clarity, teaching methods</td>
+                                <td>Dean/HOD/PL</td>
+                              </tr>
+                               <tr>
+                                <td>Infrastructures</td>
+                                <td>110</td>
+                                <td>Sitting Spaces in campus,Internet speed, Mosque space for Friday prayer,Café air-conditioning, labs lack modern facilities</td>
+                                <td>Registrar Office</td>
+                                <td>Immediately(Labs upgradation is on going)</td>
+                              </tr>
+                               <tr>
+                                <td>Support offices</td>
+                                <td>95</td>
+                                <td>Staff behavior, guards are rude, </td>
+                                <td>Registrar Office</td>
+                                <td>Immediately(Two trainings in two weeks)</td>
+                              </tr>
+                    
+                            </tbody>
+                          </table>
+                      </div>
+                  </div>
+                  
+                </div>
+              </div>
+           <!--/fffff-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- / Payment Methods modal -->
+<!-- /table model -->
 
 <!-- / Payment Methods modal -->
  <!-- Payment Methods modal -->
