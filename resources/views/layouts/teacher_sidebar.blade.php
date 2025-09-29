@@ -35,13 +35,13 @@
 
     @if(auth()->user()->hasRole(['Teacher']))
       <li class="menu-item">
-        <a href="#" class="menu-link">
+        <a href="{{ route('teacher.noteable_performance') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-bulb"></i>
           <div data-i18n="Noteable Performance">Noteable Performance</div>
         </a>
       </li>
       <li class="menu-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
-        <a href="{{ route('teacher.index') }}" class="menu-link">
+        <a href="{{ route('teacher.area_of_improvements') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-chart-line"></i>
           <div data-i18n="Area of Improvements">Area of Improvements</div>
         </a>

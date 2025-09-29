@@ -29,7 +29,7 @@
                       <div class="row w-100 align-items-center">
                         <div class="col-9">
                           <div class="me-2">
-                            <h6 class="mb-1_5">No achievement of Research Publications target (Scopus Indexed)</h6>
+                            <h6 class="mb-1_5">Employability </h6>
                           </div>
                         </div>
                         <div class="col-3 text-end">
@@ -46,7 +46,7 @@
                       <div class="row w-100 align-items-center">
                         <div class="col-9">
                           <div class="me-2">
-                            <h6 class="mb-1_5">No of Grants submitted and won</h6>
+                            <h6 class="mb-1_5">Student Satisfaction</h6>
                           </div>
                         </div>
                         <div class="col-3 text-end">
@@ -63,7 +63,7 @@
                       <div class="row w-100 align-items-center">
                         <div class="col-9">
                           <div class="me-2">
-                            <h6 class="mb-1_5">No achievement of Multidisciplinary Projects targets / Products delivered to Industry</h6>
+                            <h6 class="mb-1_5">Employer Satisfaction </h6>
                           </div>
                         </div>
                         <div class="col-3 text-end">
@@ -81,7 +81,7 @@
                       <div class="row w-100 align-items-center">
                         <div class="col-9">
                           <div class="me-2">
-                            <h6 class="mb-1_5">Intellectual Properties</h6>
+                            <h6 class="mb-1_5">Research Publications (Scopus Indexed)</h6>
                           </div>
                         </div>
                         <div class="col-3 text-end">
@@ -98,7 +98,7 @@
                       <div class="row w-100 align-items-center">
                         <div class="col-9">
                           <div class="me-2">
-                            <h6 class="mb-1_5">Spin offs</h6>
+                            <h6 class="mb-1_5">Research Grantsand funding  submitted and won </h6>
                           </div>
                         </div>
                         <div class="col-3 text-end">
@@ -115,7 +115,7 @@
                       <div class="row w-100 align-items-center">
                         <div class="col-9">
                           <div class="me-2">
-                            <h6 class="mb-1_5">Rating on Impact of Research Conferences Organized</h6>
+                            <h6 class="mb-1_5">Commercial Gains / Consultancy/Research Income</h6>
                           </div>
                         </div>
                         <div class="col-3 text-end">
@@ -132,7 +132,7 @@
                       <div class="row w-100 align-items-center">
                         <div class="col-9">
                           <div class="me-2">
-                            <h6 class="mb-1_5">Publication of HEC/Scoupus  recognized journals</h6>
+                            <h6 class="mb-1_5">Publication of HEC/Scoupus  recognized journals </h6>
                           </div>
                         </div>
                         <div class="col-3 text-end">
@@ -149,7 +149,7 @@
                       <div class="row w-100 align-items-center">
                         <div class="col-9">
                           <div class="me-2">
-                            <h6 class="mb-1_5">No Trainings, seminars & workshop conducted with Impact</h6>
+                            <h6 class="mb-1_5">% of Admission Targets Achieved</h6>
                           </div>
                         </div>
                         <div class="col-3 text-end">
@@ -449,10 +449,10 @@
                 </div>
               </div>
             </div>
-            <div class="accordion-item" id="institutional-engagement">
+            <div class="accordion-item" id="financial-sustainability">
               <h2 class="accordion-header" id="headingThree">
                 <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionThree" aria-expanded="false" aria-controls="accordionThree">
-                <i class="icon-base ti tabler-moon me-2"></i>Institutional Engagement</button>
+                <i class="icon-base ti tabler-moon me-2"></i>Financial Sustainability</button>
               </h2>
               <div id="accordionThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
@@ -583,11 +583,11 @@
                 </div>
               </div>
             </div>
-             <div class="accordion-item" id="institutional-engagement-operational">
+             <div class="accordion-item" id="internationalisation">
                 <h2 class="accordion-header" id="headingfour">
                   <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionFour" aria-expanded="false" aria-controls="accordionTwo">
                   <i class="icon-base ti tabler-library-minus me-2"></i>
-                  Institutional-Engagement-Operational</button>
+                  Internationalisation</button>
                 </h2>
                 <div id="accordionFour" class="accordion-collapse collapse" aria-labelledby="headingfour" data-bs-parent="#accordionExample">
                   <div class="accordion-body">
@@ -718,7 +718,410 @@
                 </div>
               </div>
               
-            
+              <div class="accordion-item" id="social-responsibility">
+                <h2 class="accordion-header" id="headingfive">
+                  <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionFive" aria-expanded="false" aria-controls="accordionTwo">
+                  <i class="icon-base ti tabler-social me-2"></i>
+                  Social Responsibility</button>
+                </h2>
+                <div id="accordionFive" class="accordion-collapse collapse" aria-labelledby="headingfive" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                        <!-- Accordion1 -->
+                    <div class="row g-6 pt-2">
+                      <!-- Card Border Shadow -->
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-primary h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-feather icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">8%</h4>
+                            </div>
+                            <p class="mb-1">Teaching and Learning Outcome</p>
+                            <!--<div id="supportTracker"></div>-->
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-warning h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-cherry icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">8%</h4>
+                            </div>
+                            <p class="mb-1">Teaching Quality</p>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-danger h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-brand-asana icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Teaching Management</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-info h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">13%</h4>
+                            </div>
+                            <p class="mb-1">Student Engagement</p>
+                            <!--<div id="expensesChart"></div>-->
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-secondary h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-adjustments icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Program/Department Portfolio</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-success h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-load-balancer icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Faculty</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-dark h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-dark"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Research Productivity & Quality</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <!--/ Card Border Shadow -->
+                    </div>
+                    <!--/ Accordion1 -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item" id="institutional-identity">
+                <h2 class="accordion-header" id="headingsix">
+                  <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionSix" aria-expanded="false" aria-controls="accordionTwo">
+                  <i class="icon-base ti tabler-brand-pnpm me-2"></i>
+                  Institutional Identity</button>
+                </h2>
+                <div id="accordionSix" class="accordion-collapse collapse" aria-labelledby="headingsix" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                        <!-- Accordion1 -->
+                    <div class="row g-6 pt-2">
+                      <!-- Card Border Shadow -->
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-primary h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-feather icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">8%</h4>
+                            </div>
+                            <p class="mb-1">Teaching and Learning Outcome</p>
+                            <!--<div id="supportTracker"></div>-->
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-warning h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-cherry icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">8%</h4>
+                            </div>
+                            <p class="mb-1">Teaching Quality</p>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-danger h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-brand-asana icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Teaching Management</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-info h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">13%</h4>
+                            </div>
+                            <p class="mb-1">Student Engagement</p>
+                            <!--<div id="expensesChart"></div>-->
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-secondary h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-adjustments icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Program/Department Portfolio</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-success h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-load-balancer icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Faculty</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-dark h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethods">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-dark"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Research Productivity & Quality</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <!--/ Card Border Shadow -->
+                    </div>
+                    <!--/ Accordion1 -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item" id="leadership-and-governance">
+                <h2 class="accordion-header" id="headingseven">
+                  <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionSeven" aria-expanded="false" aria-controls="accordionTwo">
+                  <i class="icon-base ti tabler-sun me-2"></i>
+                  Leadership and Governance</button>
+                </h2>
+                <div id="accordionSeven" class="accordion-collapse collapse" aria-labelledby="headingseven" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                         <!-- Accordion1 -->
+                    <div class="row g-6 pt-2">
+                      <!-- Card Border Shadow -->
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-primary h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-feather icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">8%</h4>
+                            </div>
+                            <p class="mb-1">Teaching and Learning Outcome</p>
+                            <!--<div id="supportTracker"></div>-->
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-warning h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-cherry icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">8%</h4>
+                            </div>
+                            <p class="mb-1">Teaching Quality</p>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-danger h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-brand-asana icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Teaching Management</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-info h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">13%</h4>
+                            </div>
+                            <p class="mb-1">Student Engagement</p>
+                            <!--<div id="expensesChart"></div>-->
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-secondary h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-adjustments icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Program/Department Portfolio</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-success h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-load-balancer icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Faculty</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="card card-border-shadow-dark h-100" role="button"
+                          data-bs-toggle="modal"
+                          data-bs-target="#paymentMethodsDepartment">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-dark"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
+                              </div>
+                              <h4 class="mb-0">27%</h4>
+                            </div>
+                            <p class="mb-1">Research Productivity & Quality</p>
+                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <!--/ Card Border Shadow -->
+                    </div>
+                    <!--/ Accordion1 -->
+                  </div>
+                </div>
+              </div>
 
           </div>
         </div>
@@ -2478,8 +2881,8 @@ function initAreaChart(chartId, data) {
 }
 document.addEventListener("DOMContentLoaded", function () {
       // ✅ Static labels and datasets
-      var chartLabels = ["Teaching and Learning","Research Innovation and Commercialisation","Institutional Engagement","Institutional Engagement Operational"];
-      var dataset1 = [70, 90, 85, 80]; // Inside Mirror
+      var chartLabels = ["Teaching and Learning","Research Innovation and Commercialisation","Financial Sustainability","Internationalisation","Social Responsibility","Institutional Identity", "Leadership and Governance"];
+      var dataset1 = [95, 90, 85, 80,95, 75, 80]; // Inside Mirror
 
       var g = document.getElementById("radarChart");
       if (g) {

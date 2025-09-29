@@ -86,6 +86,15 @@ class PermissionController extends Controller
         } 
         elseif ($role->name == 'Rector') {
             return view('admin.rector_dashboard', compact('employee'));
+        }
+        elseif ($role->name == 'HOD') {
+            return view('admin.hod_dashboard', compact('employee'));
+        }
+        elseif ($role->name == 'Dean') {
+            return view('admin.dean_dashboard', compact('employee'));
+        }
+        elseif ($role->name == 'ORIC') {
+            return view('admin.oric_dashboard', compact('employee'));
         }else {
             return view('admin.teacher_dashbord', compact('employee'));
         }

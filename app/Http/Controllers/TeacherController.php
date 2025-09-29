@@ -11,7 +11,14 @@ class TeacherController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function areaOfImprovements(Request $request)
+    {
+        $labels = ['a', 'b', 'c', 'd', 'e', 'f'];
+        $dataset1 = [90, 100, 85, 90, 90, 90];
+        $dataset2 = [80, 90, 75, 80, 80, 80];
+        return view('admin.area_of_improvement', compact('labels', 'dataset1', 'dataset2'));
+    }
+    public function noteablePerformance(Request $request)
     {
         $labels = ['a', 'b', 'c', 'd', 'e', 'f'];
         $dataset1 = [90, 100, 85, 90, 90, 90];
