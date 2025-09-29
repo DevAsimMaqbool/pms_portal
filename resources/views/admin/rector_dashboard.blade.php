@@ -1,17 +1,5 @@
 @extends('layouts.app')
-@push('style')
-        <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
-        <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
-        <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
-        <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
-        <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/app-logistics-dashboard.css') }}" />
-
-
-
-  <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/swiper/swiper.css') }}" />
-  <link rel="stylesheet"  href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
-         <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
-  <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+@push('style')   
    <style>
   .h-50vh { height: 50vh; }
   
@@ -2715,17 +2703,8 @@
    <!-- / Content -->
 @endsection
 @push('script')
-<script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
-<script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-
-
- <script src="{{ asset('admin/assets/js/app-logistics-dashboard.js') }}"></script>
+  <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
   <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
-  <script src="{{ asset('admin/assets/js/cards-analytics.js')}}"></script>
-  <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
-  <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
-  <script src="{{ asset('admin/assets/js/app-ecommerce-dashboard.js') }}"></script>
-  <script src="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
   <script src="{{ asset('admin/assets/js/extended-ui-perfect-scrollbar.js') }}"></script>
   <script src="{{ asset('admin/assets/js/cards-advance.js') }}"></script>
 @endpush
