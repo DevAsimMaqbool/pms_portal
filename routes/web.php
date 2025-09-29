@@ -147,7 +147,8 @@ Route::middleware('auth')->group(function () {
         ->name('survey.downloadPdf');
     Route::get('/survey-report-dashboard', [SurveyController::class, 'surveyReportDashboard'])->name('survey_dashboard.report');
 
-    Route::resource('teacher', TeacherController::class);
+    Route::get('area-of-improvements', [TeacherController::class, 'areaOfImprovements'])->name('teacher.area_of_improvements');
+    Route::get('noteable-performance', [TeacherController::class, 'noteablePerformance'])->name('teacher.noteable_performance');
 
 });
 

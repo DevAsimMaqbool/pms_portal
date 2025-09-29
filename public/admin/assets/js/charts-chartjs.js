@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function (o) {
                 data: {
                     labels: chartLabels,
                     datasets: [{
-                        label: "Inside Mirror",
+                        label: "Current Year",
                         data: dataset1,
                         fill: true,
                         backgroundColor: u,
@@ -251,18 +251,7 @@ document.addEventListener("DOMContentLoaded", function (o) {
                         pointHoverRadius: 7,
                         pointStyle: 'circle'
                     },
-                    {
-                        label: "Social Mirror",
-                        data: dataset2,
-                        fill: true,
-                        backgroundColor: x,
-                        borderColor: "rgba(85, 85, 255, 1)",
-                        pointBorderColor: "#5555ff",
-                        pointBackgroundColor: "#fff",
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        pointStyle: 'circle'
-                    }
+                    
                     ]
                 },
                 options: {
