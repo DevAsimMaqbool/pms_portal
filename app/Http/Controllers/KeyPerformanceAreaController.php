@@ -113,11 +113,13 @@ class KeyPerformanceAreaController extends Controller
     }
     public function kpa($id)
     {
-        $area = KeyPerformanceArea::with('indicatorCategories')->findOrFail($id);
+        $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+        $area = collect($result)->firstWhere('id', $id); // pick one KPA
         return view('admin.kpa', compact('area'));
-    }public function getIndicators(Request $request){
+    }
+    public function getIndicators(Request $request)
+    {
         $indicators = Indicator::where('indicator_category_id', $request->id)->get();
-
         return response()->json([
             'indicators' => $indicators
         ]);
