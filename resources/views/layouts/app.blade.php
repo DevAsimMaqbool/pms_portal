@@ -32,6 +32,7 @@
   <script src="{{ asset('admin/assets/vendor/js/helpers.js') }}"></script>
   <script src="{{ asset('admin/assets/vendor/js/template-customizer.js') }}"></script>
   <script src="{{ asset('admin/assets/js/config.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -52,6 +53,7 @@
       @else
         @include('layouts.sidebar')
       @endif
+      @include('partials.celebration')
       <!-- / Menu -->
       <!-- Layout container -->
       <div class="layout-page">

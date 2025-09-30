@@ -71,7 +71,7 @@ class AuthenticatedSessionController extends Controller
 
         try {
             $userStatus = decrypt($request->input('user_status'));
-
+            session()->flash('login_success', true);
             return match ($userStatus) {
                 'student' => redirect()->route('student.dashboard'),
                 'survey' => redirect()->route('survey_dashboard.report'),
