@@ -72,66 +72,8 @@
         </a>
       </li>
       @php
-        $teacherRoleId = auth()->user()->roles->firstWhere('name', 'Teacher')->id ?? null;
-
-        $assignments = \App\Models\RoleKpaAssignment::with([
-          'kpa',
-          'category',
-          'indicator.indicatorForm'
-        ])
-          ->where('role_id', $teacherRoleId)
-          ->get();
-
-        // Group by KPA → Category → Indicators
-        $result = $assignments->groupBy('kpa.id')->map(function ($kpaGroup) {
-          $kpa = $kpaGroup->first()->kpa;
-
-          return [
-            'id' => $kpa->id,
-            'performance_area' => $kpa->performance_area,
-            'created_by' => $kpa->created_by,
-            'updated_by' => $kpa->updated_by,
-            'created_at' => $kpa->created_at,
-            'updated_at' => $kpa->updated_at,
-            'category' => $kpaGroup->groupBy('category.id')->map(function ($catGroup) {
-              $category = $catGroup->first()->category;
-
-              return [
-                'id' => $category->id,
-                'key_performance_area_id' => $category->key_performance_area_id,
-                'indicator_category' => $category->indicator_category,
-                'created_by' => $category->created_by,
-                'updated_by' => $category->updated_by,
-                'created_at' => $category->created_at,
-                'updated_at' => $category->updated_at,
-                'indicator' => $catGroup->map(function ($item) {
-                  $indicator = $item->indicator;
-
-                  return [
-                    'id' => $indicator->id,
-                    'indicator_category_id' => $indicator->indicator_category_id,
-                    'indicator' => $indicator->indicator,
-                    'created_by' => $indicator->created_by,
-                    'updated_by' => $indicator->updated_by,
-                    'created_at' => $indicator->created_at,
-                    'updated_at' => $indicator->updated_at,
-                    'indicator_form' => $indicator->indicatorForm ?? [],
-                  ];
-                })->values()
-              ];
-            })->values()
-          ];
-        })->values();
-        $icons = [
-          'ti tabler-star',
-          'ti tabler-heart',
-          'ti tabler-award',
-          'ti tabler-book',
-          'ti tabler-chart-bar',
-          'ti tabler-rocket',
-          'ti tabler-star',
-          'ti tabler-device-laptop'
-        ];
+        $result = getRoleAssignments('Teacher');
+        $icons = icons();
       @endphp
 
       {{-- Render Menu --}}
@@ -178,6 +120,7 @@
           </ul>
         </li>
       @endforeach
+
       <li class="menu-item">
         <a href="#" class="menu-link">
           <i class="menu-icon icon-base ti tabler-bell"></i>
@@ -241,11 +184,11 @@
         </a>
       </li>
       <!-- <li class="menu-item {{ request()->routeIs('assigndepartment.index') ? 'active' : '' }}">
-                                                                                                                                                                                    <a href="{{ route('assigndepartment.index') }}" class="menu-link">
-                                                                                                                                                                                    <i class="menu-icon icon-base ti tabler-message-heart"></i>
-                                                                                                                                                                                    <div data-i18n="Assign Department">Assign Department</div>
-                                                                                                                                                                                    </a>
-                                                                                                                                                                                  </li> -->
+                                                                                                                                                                                                                                                                                                              <a href="{{ route('assigndepartment.index') }}" class="menu-link">
+                                                                                                                                                                                                                                                                                                              <i class="menu-icon icon-base ti tabler-message-heart"></i>
+                                                                                                                                                                                                                                                                                                              <div data-i18n="Assign Department">Assign Department</div>
+                                                                                                                                                                                                                                                                                                              </a>
+                                                                                                                                                                                                                                                                                                            </li> -->
       <li class="menu-item {{ request()->routeIs('students.index') ? 'active' : '' }}">
         <a href="{{ route('students.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-message-heart"></i>

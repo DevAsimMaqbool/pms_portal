@@ -4,7 +4,7 @@
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\User;
-
+use App\Models\RoleKpaAssignment;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 
@@ -362,4 +362,75 @@ function generateComment($label, $score, $type, $score2 = null, $selfRank = null
     ];
 
     return $comments[$type][$label] ?? "Score: <span class=\"data1\"><strong>{$score}%</strong></span>";
+}
+
+function getRoleAssignments(string $roleName)
+{
+    $roleId = Auth::user()->roles->firstWhere('name', $roleName)->id ?? null;
+
+    if (!$roleId) {
+        return collect(); // return empty if user doesn't have that role
+    }
+
+    $assignments = RoleKpaAssignment::with([
+        'kpa',
+        'category',
+        'indicator.indicatorForm'
+    ])
+        ->where('role_id', $roleId)
+        ->get();
+
+    return $assignments->groupBy('kpa.id')->map(function ($kpaGroup) {
+        $kpa = $kpaGroup->first()->kpa;
+
+        return [
+            'id' => $kpa->id,
+            'performance_area' => $kpa->performance_area,
+            'created_by' => $kpa->created_by,
+            'updated_by' => $kpa->updated_by,
+            'created_at' => $kpa->created_at,
+            'updated_at' => $kpa->updated_at,
+            'category' => $kpaGroup->groupBy('category.id')->map(function ($catGroup) {
+                $category = $catGroup->first()->category;
+
+                return [
+                    'id' => $category->id,
+                    'key_performance_area_id' => $category->key_performance_area_id,
+                    'indicator_category' => $category->indicator_category,
+                    'created_by' => $category->created_by,
+                    'updated_by' => $category->updated_by,
+                    'created_at' => $category->created_at,
+                    'updated_at' => $category->updated_at,
+                    'indicator' => $catGroup->map(function ($item) {
+                        $indicator = $item->indicator;
+
+                        return [
+                            'id' => $indicator->id,
+                            'indicator_category_id' => $indicator->indicator_category_id,
+                            'indicator' => $indicator->indicator,
+                            'created_by' => $indicator->created_by,
+                            'updated_by' => $indicator->updated_by,
+                            'created_at' => $indicator->created_at,
+                            'updated_at' => $indicator->updated_at,
+                            'indicator_form' => $indicator->indicatorForm ?? [],
+                        ];
+                    })->values()
+                ];
+            })->values()
+        ];
+    })->values();
+}
+
+function icons()
+{
+    return [
+        'ti tabler-star',
+        'ti tabler-heart',
+        'ti tabler-award',
+        'ti tabler-book',
+        'ti tabler-chart-bar',
+        'ti tabler-rocket',
+        'ti tabler-star',
+        'ti tabler-device-laptop'
+    ];
 }
