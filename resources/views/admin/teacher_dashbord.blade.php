@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @push('style')   
    <style>
-  .h-50vh { height: 50vh; }
+  .h-50vh { height: 100vh; }
   
   @media (min-width: 992px) {
     .h-lg-100vh { height: 400px; }
@@ -168,21 +168,27 @@
           </div>
           <!--/ Vertical Scrollbar -->
           <!-- chart overview -->
-          <div class="col-12 col-12 col-lg-8">
-            <div class="card h-50vh h-md-70vh h-lg-100vh">
-              <div class="card-header d-flex justify-content-between">
-                <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i class="icon-base ti tabler-chart-pie me-3"></i>Overall KPA Performance</h5>
-              </div>
-              <div class="card-body pt-0">
-              <div style="width: 100%;">
-                <canvas class="chartjs" id="radarChart" ></canvas>
-              </div>
-              <!-- if schrool -->
-              {{-- <div style="overflow-x: auto; overflow-y: hidden; width: 100%;">
-                <div id="carrierPerformances"></div>
-              </div> --}}
-               
-              </div>
+          <div class="col-12 col-12 col-lg-8" id="targetDivchart">
+            <div class="card h-50vh h-md-70vh h-lg-100vh" >
+                <div class="card-header d-flex justify-content-between">
+                  <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i class="icon-base ti tabler-chart-pie me-3"></i>Overall KPA Performance</h5>
+                </div>
+                <div class="card-body pt-0">
+                  <div class="row">
+                    <div class="col-md-8" >
+                      <canvas class="chartjs" id="radarChart"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                      <ul id="fullLabelsList" class="list-unstyled mt-3" style="font-size:12px"></ul>
+                    </div>
+                  </div>
+                  {{-- <div><span>Teaching and Learning</span></div> --}}
+                  <!-- if schrool -->
+                  {{-- <div style="overflow-x: auto; overflow-y: hidden; width: 100%;">
+                    <div id="carrierPerformances"></div>
+                  </div> --}}
+                
+                </div>
             </div>
           </div>
           <!--/ chart Overview -->
@@ -206,127 +212,96 @@
                  <!-- Accordion1 -->
                     <div class="row g-6 pt-2">
                       <!-- Card Border Shadow -->
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-primary h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-feather icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">8%</h4>
+                      <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                        <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+                          <div class="card card-border-shadow-primary h-100">
+                            <div class="card-header pb-2">
+                              <h5 class="card-title mb-1">82.5k</h5>
+                              <p class="card-subtitle">Expenses</p>
                             </div>
-                            <p class="mb-1">Teaching and Learning Outcome</p>
-                            <!--<div id="supportTracker"></div>-->
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-warning h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-cherry icon-28px"></i></span>
+                            <div class="card-body">
+                              <div class="expensesChart" data-color="#7367f0" data-series="20"></div>
+                              <div class="mt-3 text-center">
+                                <small class="text-body-secondary mt-3">Teaching Delivery  (PG/UG)</small>
                               </div>
-                              <h4 class="mb-0">8%</h4>
                             </div>
-                            <p class="mb-1">Teaching Quality</p>
-                            
                           </div>
-                        </div>
+                        </a>
                       </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-danger h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-brand-asana icon-28px"></i></span>
+                      <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                        <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
+                          <div class="card card-border-shadow-warning h-100">
+                            <div class="card-header pb-2">
+                              <h5 class="card-title mb-1">82.5k</h5>
+                              <p class="card-subtitle">Expenses</p>
+                            </div>
+                            <div class="card-body">
+                              <div class="expensesChart" data-color="#ff9f43" data-series="30"></div>
+                              <div class="mt-3 text-center">
+                                <small class="text-body-secondary mt-3">Teaching Management</small>
                               </div>
-                              <h4 class="mb-0">27%</h4>
                             </div>
-                            <p class="mb-1">Teaching Management</p>
-                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                            
                           </div>
-                        </div>
+                        </a>
                       </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-info h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
+                      <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                        <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
+                          <div class="card card-border-shadow-danger h-100">
+                            <div class="card-header pb-2">
+                              <h5 class="card-title mb-1">82.5k</h5>
+                              <p class="card-subtitle">Expenses</p>
+                            </div>
+                            <div class="card-body">
+                              <div class="expensesChart" data-color="#ff4c51" data-series="60"></div>
+                              <div class="mt-3 text-center">
+                                <small class="text-body-secondary mt-3">Teaching Innovation</small>
                               </div>
-                              <h4 class="mb-0">13%</h4>
                             </div>
-                            <p class="mb-1">Student Engagement</p>
-                            <!--<div id="expensesChart"></div>-->
                           </div>
-                        </div>
+                        </a>
                       </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-secondary h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-adjustments icon-28px"></i></span>
+                      <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                        <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
+                          <div class="card card-border-shadow-info h-100">
+                            <div class="card-header pb-2">
+                              <h5 class="card-title mb-1">82.5k</h5>
+                              <p class="card-subtitle">Expenses</p>
+                            </div>
+                            <div class="card-body">
+                              <div class="expensesChart" data-color="#00bad1" data-series="75"></div>
+                              <div class="mt-3 text-center">
+                                <small class="text-body-secondary mt-3">Teaching Output</small>
                               </div>
-                              <h4 class="mb-0">27%</h4>
                             </div>
-                            <p class="mb-1">Program/Department Portfolio</p>
-                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                            
                           </div>
-                        </div>
+                        </a>
                       </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-success h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-load-balancer icon-28px"></i></span>
+                      <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                        <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
+                          <div class="card card-border-shadow-info h-100">
+                            <div class="card-header pb-2">
+                              <h5 class="card-title mb-1">82.5k</h5>
+                              <p class="card-subtitle">Expenses</p>
+                            </div>
+                            <div class="card-body">
+                              <div class="expensesChart" data-color="#00bad1" data-series="75"></div>
+                              <div class="mt-3 text-center">
+                                <small class="text-body-secondary mt-3">Teaching Outcomes - Student</small>
                               </div>
-                              <h4 class="mb-0">27%</h4>
                             </div>
-                            <p class="mb-1">Faculty</p>
-                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                            
                           </div>
-                        </div>
+                        </a>
                       </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-dark h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-dark"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">27%</h4>
-                            </div>
-                            <p class="mb-1">Research Productivity & Quality</p>
-                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                            
-                          </div>
-                        </div>
-                      </div>
+                      
                       <!--/ Card Border Shadow -->
                     </div>
                     <!--/ Accordion1 -->
-                
+                    <!-- ✅ Scroll Button (right aligned) -->
+                    <div class="text-end mt-3">
+                      <button class="btn rounded-pill btn-icon btn-outline-primary waves-effect scrollBtn" title="move to top chart">
+                        <span class="icon-base ti tabler-arrow-up icon-22px"></span>
+                      </button>
+                    </div>
                 
                 </div>
               </div>
@@ -339,113 +314,99 @@
               </h2>
               <div id="accordionTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                      <!-- Accordion1 -->
-                      <div class="row g-6 pt-2">
-                        <!-- Card Border Shadow -->
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-primary h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-feather icon-28px"></i></span>
+                        <!-- Accordion1 -->
+                        <div class="row g-6 pt-2">
+                          <!-- Card Border Shadow -->
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                            <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+                              <div class="card card-border-shadow-primary h-100">
+                                <div class="card-header pb-2">
+                                  <h5 class="card-title mb-1">82.5k</h5>
+                                  <p class="card-subtitle">Expenses</p>
+                                </div>
+                                <div class="card-body">
+                                  <div class="expensesChart" data-color="#7367f0" data-series="20"></div>
+                                  <div class="mt-3 text-center">
+                                    <small class="text-body-secondary mt-3">Research Productivity & Quality</small>
+                                  </div>
                                 </div>
                               </div>
-                              <p class="mb-1">N0 of Grants submitted and won </p>
-                              <div id="expensesChart"></div>
-                              <!--<div id="supportTracker"></div>-->
-                              
-                            </div>
+                            </a>
                           </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-warning h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethods">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-cherry icon-28px"></i></span>
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                            <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
+                              <div class="card card-border-shadow-warning h-100">
+                                <div class="card-header pb-2">
+                                  <h5 class="card-title mb-1">82.5k</h5>
+                                  <p class="card-subtitle">Expenses</p>
                                 </div>
-                                <h4 class="mb-0">8%</h4>
-                              </div>
-                              <p class="mb-1">Commercial Gains / Consultancy/Research Income</p>
-                              
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-danger h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-brand-asana icon-28px"></i></span>
+                                <div class="card-body">
+                                  <div class="expensesChart" data-color="#ff9f43" data-series="30"></div>
+                                  <div class="mt-3 text-center">
+                                    <small class="text-body-secondary mt-3">Other Knowledge Products</small>
+                                  </div>
                                 </div>
-                                <h4 class="mb-0">27%</h4>
                               </div>
-                              <p class="mb-1">Intellectual Properties</p>
-                              <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                              
-                            </div>
+                            </a>
                           </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-info h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                            <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
+                              <div class="card card-border-shadow-danger h-100">
+                                <div class="card-header pb-2">
+                                  <h5 class="card-title mb-1">82.5k</h5>
+                                  <p class="card-subtitle">Expenses</p>
                                 </div>
-                                <h4 class="mb-0">13%</h4>
-                              </div>
-                              <p class="mb-1">Spin offs</p>
-                              <!--<div id="expensesChart"></div>-->
-                            </div>
-                          </div>
-                        </div>
-                       
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-success h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-load-balancer icon-28px"></i></span>
+                                <div class="card-body">
+                                  <div class="expensesChart" data-color="#ff4c51" data-series="60"></div>
+                                  <div class="mt-3 text-center">
+                                    <small class="text-body-secondary mt-3">Research Supervision at PG Level</small>
+                                  </div>
                                 </div>
-                                <h4 class="mb-0">27%</h4>
                               </div>
-                              <p class="mb-1">Faculty</p>
-                              <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                              
-                            </div>
+                            </a>
                           </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-dark h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-dark"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                            <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
+                              <div class="card card-border-shadow-info h-100">
+                                <div class="card-header pb-2">
+                                  <h5 class="card-title mb-1">82.5k</h5>
+                                  <p class="card-subtitle">Expenses</p>
                                 </div>
-                                <h4 class="mb-0">27%</h4>
+                                <div class="card-body">
+                                  <div class="expensesChart" data-color="#00bad1" data-series="75"></div>
+                                  <div class="mt-3 text-center">
+                                    <small class="text-body-secondary mt-3">Innovation & Commercialization</small>
+                                  </div>
+                                </div>
                               </div>
-                              <p class="mb-1">Research Productivity & Quality</p>
-                              <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                              
-                            </div>
+                            </a>
                           </div>
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                            <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
+                              <div class="card card-border-shadow-info h-100">
+                                <div class="card-header pb-2">
+                                  <h5 class="card-title mb-1">82.5k</h5>
+                                  <p class="card-subtitle">Expenses</p>
+                                </div>
+                                <div class="card-body">
+                                  <div class="expensesChart" data-color="#00bad1" data-series="75"></div>
+                                  <div class="mt-3 text-center">
+                                    <small class="text-body-secondary mt-3">Any task assigned by the HOD/Dean</small>
+                                  </div>
+                                </div>
+                              </div>
+                            </a>
+                          </div>
+                          
+                          <!--/ Card Border Shadow -->
                         </div>
-                        <!--/ Card Border Shadow -->
-                      </div>
-                      <!--/ Accordion1 -->
+                        <!--/ Accordion1 -->
+                        <!-- ✅ Scroll Button (right aligned) -->
+                        <div class="text-end mt-3">
+                          <button class="btn rounded-pill btn-icon btn-outline-primary waves-effect scrollBtn" title="move to top chart">
+                            <span class="icon-base ti tabler-arrow-up icon-22px"></span>
+                          </button>
+                        </div>
                 </div>
               </div>
             </div>
@@ -457,129 +418,52 @@
               <div id="accordionThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
 
-                     <!-- Accordion1 -->
-                      <div class="row g-6 pt-2">
-                        <!-- Card Border Shadow -->
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-primary h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-feather icon-28px"></i></span>
+                       <!-- Accordion1 -->
+                        <div class="row g-6 pt-2">
+                          <!-- Card Border Shadow -->
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                            <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+                              <div class="card card-border-shadow-primary h-100">
+                                <div class="card-header pb-2">
+                                  <h5 class="card-title mb-1">82.5k</h5>
+                                  <p class="card-subtitle">Expenses</p>
                                 </div>
-                                <h4 class="mb-0">8%</h4>
-                              </div>
-                              <p class="mb-1">Teaching and Learning Outcome</p>
-                              <!--<div id="supportTracker"></div>-->
-                              
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-warning h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-cherry icon-28px"></i></span>
+                                <div class="card-body">
+                                  <div class="expensesChart" data-color="#7367f0" data-series="20"></div>
+                                  <div class="mt-3 text-center">
+                                    <small class="text-body-secondary mt-3">Performance in deparmental tasks - day to day, Participation in departmental </small>
+                                  </div>
                                 </div>
-                                <h4 class="mb-0">8%</h4>
                               </div>
-                              <p class="mb-1">Teaching Quality</p>
-                              
-                            </div>
+                            </a>
                           </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-danger h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-brand-asana icon-28px"></i></span>
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                            <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
+                              <div class="card card-border-shadow-warning h-100">
+                                <div class="card-header pb-2">
+                                  <h5 class="card-title mb-1">82.5k</h5>
+                                  <p class="card-subtitle">Expenses</p>
                                 </div>
-                                <h4 class="mb-0">27%</h4>
-                              </div>
-                              <p class="mb-1">Teaching Management</p>
-                              <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                              
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-info h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
+                                <div class="card-body">
+                                  <div class="expensesChart" data-color="#ff9f43" data-series="30"></div>
+                                  <div class="mt-3 text-center">
+                                    <small class="text-body-secondary mt-3">Performance in events (if any)</small>
+                                  </div>
                                 </div>
-                                <h4 class="mb-0">13%</h4>
                               </div>
-                              <p class="mb-1">Student Engagement</p>
-                              <!--<div id="expensesChart"></div>-->
-                            </div>
+                            </a>
                           </div>
+                         
+                          
+                          <!--/ Card Border Shadow -->
                         </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-secondary h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-adjustments icon-28px"></i></span>
-                                </div>
-                                <h4 class="mb-0">27%</h4>
-                              </div>
-                              <p class="mb-1">Program/Department Portfolio</p>
-                              <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                              
-                            </div>
-                          </div>
+                        <!--/ Accordion1 -->
+                        <!-- ✅ Scroll Button (right aligned) -->
+                        <div class="text-end mt-3">
+                          <button class="btn rounded-pill btn-icon btn-outline-primary waves-effect scrollBtn" title="move to top chart">
+                            <span class="icon-base ti tabler-arrow-up icon-22px"></span>
+                          </button>
                         </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-success h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-load-balancer icon-28px"></i></span>
-                                </div>
-                                <h4 class="mb-0">27%</h4>
-                              </div>
-                              <p class="mb-1">Faculty</p>
-                              <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                              
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="card card-border-shadow-dark h-100" role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#paymentMethodsDepartment">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center mb-2">
-                                <div class="avatar me-4">
-                                  <span class="avatar-initial rounded bg-label-dark"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
-                                </div>
-                                <h4 class="mb-0">27%</h4>
-                              </div>
-                              <p class="mb-1">Research Productivity & Quality</p>
-                              <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                              
-                            </div>
-                          </div>
-                        </div>
-                        <!--/ Card Border Shadow -->
-                      </div>
-                      <!--/ Accordion1 -->
                 </div>
               </div>
             </div>
@@ -592,128 +476,68 @@
                 <div id="accordionFour" class="accordion-collapse collapse" aria-labelledby="headingfour" data-bs-parent="#accordionExample">
                   <div class="accordion-body">
                        <!-- Accordion1 -->
-                    <div class="row g-6 pt-2">
-                      <!-- Card Border Shadow -->
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-primary h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-feather icon-28px"></i></span>
+                        <div class="row g-6 pt-2">
+                          <!-- Card Border Shadow -->
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                            <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
+                              <div class="card card-border-shadow-primary h-100">
+                                <div class="card-header pb-2">
+                                  <h5 class="card-title mb-1">82.5k</h5>
+                                  <p class="card-subtitle">Expenses</p>
+                                </div>
+                                <div class="card-body">
+                                  <div class="expensesChart" data-color="#7367f0" data-series="20"></div>
+                                  <div class="mt-3 text-center">
+                                    <small class="text-body-secondary mt-3">Performance in deparmental tasks - day to day, Participation in departmental/institutional governing bodies etc </small>
+                                  </div>
+                                </div>
                               </div>
-                              <h4 class="mb-0">8%</h4>
-                            </div>
-                            <p class="mb-1">Teaching and Learning Outcome</p>
-                            <!--<div id="supportTracker"></div>-->
-                            
+                            </a>
                           </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-warning h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-cherry icon-28px"></i></span>
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                            <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
+                              <div class="card card-border-shadow-warning h-100">
+                                <div class="card-header pb-2">
+                                  <h5 class="card-title mb-1">82.5k</h5>
+                                  <p class="card-subtitle">Expenses</p>
+                                </div>
+                                <div class="card-body">
+                                  <div class="expensesChart" data-color="#ff9f43" data-series="30"></div>
+                                  <div class="mt-3 text-center">
+                                    <small class="text-body-secondary mt-3">Performance in events/tasks (other than the assigned operational role) (core)</small>
+                                  </div>
+                                </div>
                               </div>
-                              <h4 class="mb-0">8%</h4>
-                            </div>
-                            <p class="mb-1">Teaching Quality</p>
-                            
+                            </a>
                           </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-danger h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-brand-asana icon-28px"></i></span>
+                       
+                         
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                            <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
+                              <div class="card card-border-shadow-info h-100">
+                                <div class="card-header pb-2">
+                                  <h5 class="card-title mb-1">82.5k</h5>
+                                  <p class="card-subtitle">Expenses</p>
+                                </div>
+                                <div class="card-body">
+                                  <div class="expensesChart" data-color="#00bad1" data-series="75"></div>
+                                  <div class="mt-3 text-center">
+                                    <small class="text-body-secondary mt-3">Performance in assigned operational roles in the department/faculty (if any)</small>
+                                  </div>
+                                </div>
                               </div>
-                              <h4 class="mb-0">27%</h4>
-                            </div>
-                            <p class="mb-1">Teaching Management</p>
-                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                            
+                            </a>
                           </div>
+                          
+                          <!--/ Card Border Shadow -->
                         </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-info h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">13%</h4>
-                            </div>
-                            <p class="mb-1">Student Engagement</p>
-                            <!--<div id="expensesChart"></div>-->
-                          </div>
+                        <!--/ Accordion1 -->
+                        <!-- ✅ Scroll Button (right aligned) -->
+                        <div class="text-end mt-3">
+                          <button class="btn rounded-pill btn-icon btn-outline-primary waves-effect scrollBtn" title="move to top chart">
+                            <span class="icon-base ti tabler-arrow-up icon-22px"></span>
+                          </button>
                         </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-secondary h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-adjustments icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">27%</h4>
-                            </div>
-                            <p class="mb-1">Program/Department Portfolio</p>
-                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-success h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-load-balancer icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">27%</h4>
-                            </div>
-                            <p class="mb-1">Faculty</p>
-                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-dark h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethodsDepartment">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-dark"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">27%</h4>
-                            </div>
-                            <p class="mb-1">Research Productivity & Quality</p>
-                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <!--/ Card Border Shadow -->
-                    </div>
-                    <!--/ Accordion1 -->
                   </div>
                 </div>
               </div>
@@ -2479,6 +2303,7 @@ function initAreaChart(chartId, data) {
 document.addEventListener("DOMContentLoaded", function () {
       // ✅ Static labels and datasets
       var chartLabels = ["Teaching and Learning","Research Innovation and Commercialisation","Institutional Engagement","Institutional Engagement Operational"];
+      var shortLabels = ["T&L", "RIC", "IE (Core)", "IE(Character)"];
       var dataset1 = [70, 90, 85, 80]; // Inside Mirror
 
       var g = document.getElementById("radarChart");
@@ -2528,9 +2353,8 @@ document.addEventListener("DOMContentLoaded", function () {
                    font: {
                       size: 12, // label text size
                     },
-                   callback: function (label) {
-                      // Show only first 10 characters
-                      return label.length > 20 ? label.substring(0, 20) + "..." : label;
+                   callback: function (label, index) {
+                      return shortLabels[index];
                     }
                   }
               }
@@ -2548,7 +2372,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 titleColor: "#000",
                 bodyColor: "#333",
                 borderWidth: 1,
-                borderColor: "#ddd"
+                borderColor: "#ddd",
+                callbacks: {
+                  // 👇 Tooltip shows full label
+                  title: function (context) {
+                    return chartLabels[context[0].dataIndex];
+                  }
+                }
               }
             }
           },
@@ -2613,6 +2443,13 @@ document.addEventListener("DOMContentLoaded", function () {
             ]
 
         });
+
+        var listEl = document.getElementById("fullLabelsList");
+          chartLabels.forEach((label, i) => {
+            let li = document.createElement("li");
+            li.innerHTML = `<strong>${shortLabels[i]}</strong> = ${label}`;
+            listEl.appendChild(li);
+          });
       }
     });
 document.addEventListener("DOMContentLoaded", function () {
@@ -2821,6 +2658,168 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   new ApexCharts(chartEl, options).render();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+        var i = document.querySelector("#expensesChart2"),
+            l = {
+                chart: {
+                    height: 170,
+                    sparkline: {
+                        enabled: true
+                    },
+                    parentHeightOffset: 0,
+                    type: "radialBar"
+                },
+                colors: [config.colors.warning], // Make sure config is defined in your app
+                series: [77], // ✅ Laravel variable here
+                plotOptions: {
+                    radialBar: {
+                        offsetY: 0,
+                        startAngle: -90,
+                        endAngle: 90,
+                        hollow: {
+                            size: "65%"
+                        },
+                        track: {
+                            strokeWidth: "45%",
+                            background: '#f0f0f0'
+                        },
+                        dataLabels: {
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                fontSize: "24px",
+                                color: "#333",
+                                fontWeight: 500,
+                                offsetY: -5
+                            }
+                        }
+                    }
+                },
+                grid: {
+                    show: false,
+                    padding: {
+                        bottom: 5
+                    }
+                },
+                stroke: {
+                    lineCap: "round"
+                },
+                labels: ["Progress"],
+                responsive: [
+                    {
+                        breakpoint: 1442,
+                        options: {
+                            chart: { height: 120 },
+                            plotOptions: {
+                                radialBar: {
+                                    dataLabels: { value: { fontSize: "18px" } },
+                                    hollow: { size: "60%" }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 1025,
+                        options: {
+                            chart: { height: 136 },
+                            plotOptions: {
+                                radialBar: {
+                                    hollow: { size: "65%" },
+                                    dataLabels: { value: { fontSize: "18px" } }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 769,
+                        options: {
+                            chart: { height: 120 },
+                            plotOptions: {
+                                radialBar: { hollow: { size: "55%" } }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 426,
+                        options: {
+                            chart: { height: 145 },
+                            plotOptions: {
+                                radialBar: { hollow: { size: "65%" } }
+                            },
+                            dataLabels: {
+                                value: { offsetY: 0 }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 376,
+                        options: {
+                            chart: { height: 105 },
+                            plotOptions: {
+                                radialBar: { hollow: { size: "60%" } }
+                            }
+                        }
+                    }
+                ]
+            };
+
+        if (i !== null) {
+            new ApexCharts(i, l).render();
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".expensesChart").forEach(function (el) {
+        var color  = el.dataset.color || "#7367f0"; // fallback if missing
+        var series = parseInt(el.dataset.series) || 0;
+
+        var options = {
+            chart: {
+                height: 170,
+                sparkline: { enabled: true },
+                parentHeightOffset: 0,
+                type: "radialBar"
+            },
+            colors: [color],
+            series: [series],
+            plotOptions: {
+                radialBar: {
+                    offsetY: 0,
+                    startAngle: -90,
+                    endAngle: 90,
+                    hollow: { size: "65%" },
+                    track: { strokeWidth: "45%", background: "#f0f0f0" },
+                    dataLabels: {
+                        name: { show: false },
+                        value: {
+                            fontSize: "20px",
+                            color: "#333",
+                            fontWeight: 500,
+                            offsetY: -5
+                        }
+                    }
+                }
+            },
+            grid: { show: false },
+            stroke: { lineCap: "round" },
+            labels: ["Progress"]
+        };
+
+        new ApexCharts(el, options).render();
+    });
+});
+document.addEventListener("DOMContentLoaded", function () {
+  // get all buttons
+  document.querySelectorAll(".scrollBtn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.getElementById("targetDivchart").scrollIntoView({
+        behavior: "smooth"
+      });
+    });
+  });
 });
 </script>
 @endpush
