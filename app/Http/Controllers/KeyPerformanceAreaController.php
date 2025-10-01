@@ -119,7 +119,13 @@ class KeyPerformanceAreaController extends Controller
     }
     public function getIndicators(Request $request)
     {
-        $indicators = Indicator::where('indicator_category_id', $request->id)->get();
+        $indicators = Indicator::whereIn('id', function ($query) use ($request) {
+            $query->select('indicator_id')
+                ->from('role_kpa_assignments')
+                ->where('indicator_category_id', $request->id)
+                ->where('role_id', Auth::user()->roles->firstWhere('name', Auth::user()->getRoleNames()->first())->id); // optional if role-based
+        })->get();
+
         return response()->json([
             'indicators' => $indicators
         ]);
