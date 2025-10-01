@@ -34,12 +34,19 @@
             <ul class="p-0 m-0">
               @php
                 $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+                $colors = ['primary', 'success', 'danger', 'warning', 'info'];
+                $series = [20, 90, 40, 80, 30];
+                $index = 0;
               @endphp
               @foreach($result as $kpa)
                 @foreach($kpa['category'] as $category)
                   @foreach(array_slice($category['indicator']->toArray(), 0, 10) as $indicator)
+                      @php
+                         $color = $colors[$index % count($colors)];
+                         $seriesValue = $series[$index % count($series)];
+                      @endphp
                     <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="primary" data-series="28" data-progress_variant="true"></div>
+                      <div class="chart-progress me-4" data-color="{{ $color }}" data-series="{{ $seriesValue }}" data-progress_variant="true"></div>
                       <div class="row w-100 align-items-center">
                         <div class="col-9">
                           <div class="me-2">
@@ -48,12 +55,13 @@
                         </div>
                         <div class="col-3 text-end">
                           <button type="button" class="btn btn-sm btn-icon btn-label-secondary" role="button"
-                            data-bs-toggle="modal" data-bs-target="#paymentMethods1">
+                            data-bs-toggle="modal" data-bs-target="#{{ str_replace(' ', '', $indicator['indicator']) }}">
                             <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
                           </button>
                         </div>
                       </div>
                     </li>
+                    @php $index++; @endphp
                   @endforeach
                 @endforeach
               @endforeach
@@ -68,6 +76,13 @@
           <div class="card-header d-flex justify-content-between">
             <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i
                 class="icon-base ti tabler-chart-pie me-3"></i>Overall KPA Performance</h5>
+            <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio2" id="dailyRadio2" checked>
+            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio2">Fall 2025</label>
+
+            <input type="radio" class="btn-check" name="btnradio2" id="monthlyRadio2">
+            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio2">Fall 2026</label>
+          </div>
           </div>
           <div class="card-body pt-0">
             <div class="row">
@@ -96,10 +111,16 @@
         <div class="accordion mt-4" id="accordionExample">
           @php
             $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+            $colors1 = ['primary', 'success', 'danger', 'warning', 'info'];
+            $colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
+            $series1 = [20, 90, 40, 80, 30];
+            $index1 = 0;
           @endphp
-          <div class="accordion" id="accordionExample">
             @foreach($result as $kpakey => $kpa)
-              <div class="accordion-item" id="kpa-{{ $kpa['id'] }}">
+                @php
+                    $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+                @endphp
+              <div class="accordion-item" id="{{ $targetId }}">
                 <h2 class="accordion-header" id="heading-{{ $kpa['id'] }}">
                   <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
                     data-bs-target="#accordion-{{ $kpa['id'] }}" aria-expanded="false"
@@ -116,15 +137,20 @@
                     <!-- Loop through Categories -->
                     <div class="row g-6 pt-2">
                       @foreach($kpa['category'] as $category)
+                        @php
+                              $color1 = $colors1[$index1 % count($colors1)];
+                              $color2 = $colors2[$index1 % count($colors2)];
+                              $seriesValue1 = $series1[$index1 % count($series1)];
+                          @endphp
                         <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
                           <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
-                            <div class="card card-border-shadow-primary h-100">
+                            <div class="card card-border-shadow-{{ $color1 }} h-100">
                               <div class="card-header pb-2">
                                 <h5 class="card-title mb-1">82.5k</h5>
                                 <p class="card-subtitle">Expenses</p>
                               </div>
                               <div class="card-body">
-                                <div class="expensesChart" data-color="#7367f0" data-series="20"></div>
+                                <div class="expensesChart" data-color="{{ $color2 }}" data-series="{{ $seriesValue1 }}"></div>
                                 <div class="mt-3 text-center">
                                   <small class="text-body-secondary mt-3">
                                     {{ $category['indicator_category'] }} {{-- ✅ Category Name --}}
@@ -134,6 +160,7 @@
                             </div>
                           </a>
                         </div>
+                        @php $index1++; @endphp
                       @endforeach
                     </div>
 
@@ -149,7 +176,6 @@
                 </div>
               </div>
             @endforeach
-          </div>
 
 
         </div>
@@ -1784,6 +1810,9 @@
       </div>
     </div>
     <!-- / Payment Methods modal -->
+    <!-- / include indicator modal -->
+    @include('admin.modal.indicator_modal')
+    <!-- / include indicator modal -->
   </div>
   <!-- / Content -->
 @endsection
@@ -1969,7 +1998,7 @@
     }
     document.addEventListener("DOMContentLoaded", function () {
       // ✅ Static labels and datasets
-      var chartLabels = ["Teaching and Learning", "Research Innovation and Commercialisation", "Institutional Engagement", "Institutional Engagement Operational"];
+      var chartLabels = ["Teaching and Learning", "Research, Innovation and Commercialisation", "Institutional Engagement (Core only)", "Institutional Engagement (Operational+ Character Strengths)"];
       var shortLabels = ["T&L", "RIC", "IE (Core)", "IE(Character)"];
       var dataset1 = [70, 90, 85, 80]; // Inside Mirror
 
