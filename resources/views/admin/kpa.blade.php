@@ -67,7 +67,7 @@
         <div class="container-xxl flex-grow-1 container-p-y">
             <div class="row g-6">
                 <!-- Left card -->
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-4">
                     <div class="card mb-6 h-100">
                         <div class="card-body">
                             <h5 class="card-title mb-0">{{ $area['performance_area'] }} 🎉</h5>
@@ -107,13 +107,21 @@
                 </div>
 
                 <!-- Right chart -->
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-8">
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">{{ $area['performance_area'] }} Performance</h5>
                         </div>
                         <div class="card-body pt-2">
-                            <canvas class="chartjs" id="radarChart" data-height="355"></canvas>
+                            {{-- <canvas class="chartjs" id="radarChart" data-height="355"></canvas> --}}
+                            <div class="row">
+                            <div class="col-md-8">
+                                <canvas class="chartjs" id="radarChart"></canvas>
+                            </div>
+                            <div class="col-md-4">
+                                <ul id="fullLabelsList" class="list-unstyled mt-3" style="font-size:12px"></ul>
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -126,23 +134,11 @@
                     <div class="d-flex justify-content-between flex-column mb-4 mb-md-0">
                         <h5 class="mb-4">Sub Categories</h5>
                         <ul class="nav nav-align-left nav-pills flex-column">
-                            @php
-    $icons = [
-        'ti tabler-star',
-        'ti tabler-heart',
-        'ti tabler-award',
-        'ti tabler-book',
-        'ti tabler-chart-bar',
-        'ti tabler-rocket',
-        'ti tabler-users',
-        'ti tabler-device-laptop'
-    ];
-                              @endphp
 
                             @foreach ($area['category'] as $key => $category)
                                 <li class="nav-item mb-1 kpa-category" data-id="{{ $category['id'] }}" style="cursor: pointer;">
-                                    <a class="nav-link" href="javascript:void(0);">
-                                        <i class="icon-base {{ $icons[$key % count($icons)] }} icon-sm me-1_5"></i>
+                                    <a class="nav-link" href="javascript:void(0);" title="{{ $category['indicator_category'] }}">
+                                        <i class="icon-base {{ $category['cat_icon'] }} icon-sm me-1_5"></i>
                                         <span class="align-middle">{{ $category['indicator_category'] }}</span>
                                     </a>
                                 </li>
@@ -253,15 +249,17 @@
         });
         document.addEventListener("DOMContentLoaded", function () {
             // ✅ Static labels and datasets
-            //var chartLabels = ["Teaching Delivery", "Teaching Management", "Teaching Innovation", "Teaching Output", "Teaching Outcoms"];
-            //var dataset1 = [65, 59, 90, 81,70]; 
+            //var chartLabels = ["Teaching and Learning", "Research, Innovation and Commercialisation", "Institutional Engagement (Core only)", "Institutional Engagement (Operational+ Character Strengths)"];
+            //var shortLabels = ["T&L", "RIC", "IE (Core)", "IE(Character)"];
+           // var dataset1 = [70, 90, 85, 80]; // Inside Mirror 
 
             var chartLabels = @json(collect($area['category'])->pluck('indicator_category'));
+            var shortLabels = @json(collect($area['category'])->pluck('cat_short_code'));
             var dataset1 = @json(
-    collect($area['category'])->map(function () {
-        return rand(50, 100); // any logic here
-    })
-);
+                collect($area['category'])->map(function () {
+                    return rand(50, 100);
+                })
+            );
 
             var g = document.getElementById("radarChart");
             if (g) {
@@ -278,53 +276,134 @@
 
                 // ✅ Radar Chart
                 new Chart(ctx, {
-                    type: "radar",
-                    data: {
-                        labels: chartLabels,
-                        datasets: [
-                            {
-                                label: "Achievements",
-                                data: dataset1,
-                                fill: true,
-                                backgroundColor: gradientPink,
-                                borderColor: "rgba(112, 25, 115, 1)",
-                                pointBorderColor: "#ff55b8",
-                                pointBackgroundColor: "#fff",
-                                pointRadius: 5,
-                                pointHoverRadius: 7,
-                                pointStyle: "circle"
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        animation: { duration: 500 },
-                        scales: {
-                            r: {
-                                ticks: { display: true, color: "#666" },
-                                grid: { color: "#ddd" },
-                                angleLines: { color: "#ddd" },
-                                pointLabels: { color: "#666" }
-                            }
+                type: "radar",
+                data: {
+                    labels: chartLabels,
+                    datasets: [
+                    {
+                        label: "Achievements",
+                        data: dataset1,
+                        fill: true,
+                        backgroundColor: gradientPink,
+                        borderColor: "rgba(112, 25, 115, 1)",
+                        pointBorderColor: "#ff55b8",
+                        pointBackgroundColor: "#fff",
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        pointStyle: "circle"
+                    }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 500 },
+                    scales: {
+                    r: {
+                        ticks: { display: true, color: "#666" },
+                        grid: { color: "#ddd" },
+                        angleLines: { color: "#ddd" },
+                        pointLabels: {
+                        color: "#666",
+                        font: {
+                            size: 12, // label text size
                         },
-                        plugins: {
-                            legend: {
-                                position: "top",
-                                labels: {
-                                    padding: 25,
-                                    color: "#333"
-                                }
-                            },
-                            tooltip: {
-                                backgroundColor: "#fff",
-                                titleColor: "#000",
-                                bodyColor: "#333",
-                                borderWidth: 1,
-                                borderColor: "#ddd"
-                            }
+                        callback: function (label, index) {
+                            return shortLabels[index];
+                        }
                         }
                     }
+                    },
+                    plugins: {
+                    legend: {
+                        position: "top",
+                        labels: {
+                        padding: 25,
+                        color: "#333"
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: "#fff",
+                        titleColor: "#000",
+                        bodyColor: "#333",
+                        borderWidth: 1,
+                        borderColor: "#ddd",
+                        callbacks: {
+                        // 👇 Tooltip shows full label
+                        title: function (context) {
+                            return chartLabels[context[0].dataIndex];
+                        }
+                        }
+                    }
+                    }
+                },
+                plugins: [
+                    {
+                    id: "pointLabelClick",
+                    afterEvent(chart, args) {
+                        const { event } = args;
+                        if (!event) return;
+
+                        const { scales } = chart;
+                        const rScale = scales.r;
+                        let hovering = false;
+
+                        chart.data.labels.forEach((label, i) => {
+                        const angle = rScale.getIndexAngle(i);
+                        const point = rScale.getPointPositionForValue(i, rScale.max);
+
+                        const padding = 30; // clickable area around label
+                        if (
+                            event.x >= point.x - padding &&
+                            event.x <= point.x + padding &&
+                            event.y >= point.y - padding &&
+                            event.y <= point.y + padding
+                        ) {
+                            hovering = true;
+
+                            // 👉 Handle click
+                            if (event.type === "click") {
+                            const targetId = label.replace(/\s+/g, "-").toLowerCase();
+                            const targetDiv = document.getElementById(targetId);
+
+                            if (targetDiv) {
+                                // 1️⃣ Scroll into view
+                                targetDiv.scrollIntoView({
+                                behavior: "smooth",
+                                block: "center"
+                                });
+
+                                // 2️⃣ Open accordion (if collapsed)
+                                const collapseEl = targetDiv.querySelector(".accordion-collapse");
+                                if (collapseEl && !collapseEl.classList.contains("show")) {
+                                const bsCollapse = new bootstrap.Collapse(collapseEl, {
+                                    toggle: true
+                                });
+                                }
+
+                                // 3️⃣ Optionally mark as active
+                                document
+                                .querySelectorAll(".accordion-item")
+                                .forEach((item) => item.classList.remove("active"));
+                                targetDiv.classList.add("active");
+                            }
+                            }
+                        }
+                        });
+
+                        // 👉 Change cursor style on hover
+                        chart.canvas.style.cursor = hovering ? "pointer" : "default";
+                    }
+                    }
+                ]
+
+                });
+
+                var listEl = document.getElementById("fullLabelsList");
+                chartLabels.forEach((label, i) => {
+                let li = document.createElement("li");
+                li.innerHTML = `<strong>${shortLabels[i]}</strong> = ${label}`;
+                listEl.appendChild(li);
                 });
             }
         });
@@ -445,6 +524,42 @@
             }
         });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const items = document.querySelectorAll(".kpa-category .align-middle");
+
+    function adjustText() {
+        let screenWidth = window.innerWidth;
+
+        items.forEach(span => {
+            let fullText = span.getAttribute("data-full") || span.innerText;
+            span.setAttribute("data-full", fullText); // save original text
+
+            let maxLength;
+            if (screenWidth <= 610) { // mobile
+                maxLength = 25;
+            }
+             else if (screenWidth > 610 && screenWidth <= 991) { // tablet
+                maxLength = 60;
+            } else if (screenWidth > 991 && screenWidth <= 1200) { // tablet
+                maxLength = 25;
+            }
+            else if (screenWidth > 1200 && screenWidth <= 1700) { // tablet
+                maxLength = 25;
+            }
+             else if (screenWidth => 1700) { // tablet
+                maxLength = 50;
+            } else { // desktop
+                maxLength = 50;
+            }
+
+
+            span.innerText = fullText.length > maxLength ? fullText.substring(0, maxLength) + "..." : fullText;
+        });
+    }
+
+    adjustText();
+    window.addEventListener("resize", adjustText);
+});
 
     </script>
 

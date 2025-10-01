@@ -78,10 +78,10 @@
                 class="icon-base ti tabler-chart-pie me-3"></i>Overall KPA Performance</h5>
             <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
             <input type="radio" class="btn-check" name="btnradio2" id="dailyRadio2" checked>
-            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio2">Fall 2025</label>
+            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio2"> 📆 Fall 2025</label>
 
             <input type="radio" class="btn-check" name="btnradio2" id="monthlyRadio2">
-            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio2">Fall 2026</label>
+            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio2"> 📆 Fall 2026</label>
           </div>
           </div>
           <div class="card-body pt-0">
@@ -145,10 +145,10 @@
                         <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
                           <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
                             <div class="card card-border-shadow-{{ $color1 }} h-100">
-                              <div class="card-header pb-2">
+                              {{-- <div class="card-header pb-2">
                                 <h5 class="card-title mb-1">82.5k</h5>
                                 <p class="card-subtitle">Expenses</p>
-                              </div>
+                              </div> --}}
                               <div class="card-body">
                                 <div class="expensesChart" data-color="{{ $color2 }}" data-series="{{ $seriesValue1 }}"></div>
                                 <div class="mt-3 text-center">
