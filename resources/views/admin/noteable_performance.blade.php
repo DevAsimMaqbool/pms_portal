@@ -9,10 +9,9 @@
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
         <!-- Header -->
-        <div class="row">
-
+       <div class="row g-6">
             <!-- Statistics -->
-            <div class="col-xl-12 col-md-12">
+          <div class="col-md-12 col-xxl-12">
                 <div class="card h-100">
                     <div class="card-header d-flex justify-content-between">
                         <h5 class="card-title mb-0">Progress Stats</h5>
@@ -57,7 +56,7 @@
                                                 class="icon-base ti tabler-chart-infographic icon-lg"></i>
                                         </div>
                                         <div class="card-info">
-                                            <h5 class="mb-0"> 90%</h5>
+                                            <h5 class="mb-0"> 901%</h5>
                                             <small>Institutional Engagement Operational</small>
                                         </div>
                                     </div>
@@ -67,9 +66,101 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <br>
-        <div class="row mb-6 g-6">
+
+            <!-- Popular Instructors -->
+            <div class="col-md-6 col-xxl-6">
+              <div class="card h-100">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                  <div class="card-title mb-0">
+                    <h5 class="m-0 me-2">Top Indicators</h5>
+                  </div>
+                </div>
+                <div class="px-5 py-4 border border-start-0 border-end-0">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <p class="mb-0 text-uppercase">Indicator</p>
+                    <p class="mb-0 text-uppercase">AVG</p>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-6">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-4">
+                          <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-list-check icon-lg"></i></span>
+                      </div>
+                      <div>
+                        <div>
+                          <h6 class="mb-0 text-truncate">Student Teaching Satisfaction (feedback)</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <div class="badge bg-label-secondary">90%</div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-6">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-4">
+                          <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-eye icon-lg"></i></span>
+                      </div>
+                      <div>
+                        <div>
+                          <h6 class="mb-0 text-truncate">QEC - Observation / Peer review</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <div class="badge bg-label-secondary">91%</div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-6">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-4">
+                          <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-circle-check icon-lg"></i></span>
+                      </div>
+                      <div>
+                        <div>
+                          <h6 class="mb-0 text-truncate">Classes Held in Time/Commencement of Classes</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <div class="badge bg-label-secondary">92%</div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-6">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-4">
+                          <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-telescope icon-lg"></i></span>
+                      </div>
+                      <div>
+                        <div>
+                          <h6 class="mb-0 text-truncate">Student Attendance</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <div class="badge bg-label-secondary">97%</div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-4">
+                          <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-folder icon-lg"></i></span>
+                      </div>
+                      <div>
+                        <div>
+                          <h6 class="mb-0 text-truncate">Completion of Course Folder in Hard</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <div class="badge bg-label-secondary">95%</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--/ Popular Instructors -->
             <div class="col-12 col-xl-6 col-md-6">
                 <!-- Bar Charts -->
 

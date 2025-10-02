@@ -23,7 +23,7 @@ class TeacherController extends Controller
         $labels = ['a', 'b', 'c', 'd', 'e', 'f'];
         $dataset1 = [90, 100, 85, 90, 90, 90];
         $dataset2 = [80, 90, 75, 80, 80, 80];
-        return view('admin.area_of_improvement', compact('labels', 'dataset1', 'dataset2'));
+        return view('admin.noteable_performance', compact('labels', 'dataset1', 'dataset2'));
     }
 
 

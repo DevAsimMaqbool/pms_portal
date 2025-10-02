@@ -9,10 +9,9 @@
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
         <!-- Header -->
-        <div class="row">
-
+       <div class="row g-6">
             <!-- Statistics -->
-            <div class="col-xl-12 col-md-12">
+          <div class="col-md-12 col-xxl-12">
                 <div class="card h-100">
                     <div class="card-header d-flex justify-content-between">
                         <h5 class="card-title mb-0">Progress Stats</h5>
@@ -57,7 +56,7 @@
                                                 class="icon-base ti tabler-chart-infographic icon-lg"></i>
                                         </div>
                                         <div class="card-info">
-                                            <h5 class="mb-0"> 90%</h5>
+                                            <h5 class="mb-0"> 901%</h5>
                                             <small>Institutional Engagement Operational</small>
                                         </div>
                                     </div>
@@ -67,9 +66,101 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <br>
-        <div class="row mb-6 g-6">
+
+            <!-- Popular Instructors -->
+            <div class="col-md-6 col-xxl-6">
+              <div class="card h-100">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                  <div class="card-title mb-0">
+                    <h5 class="m-0 me-2">Need to Improve</h5>
+                  </div>
+                </div>
+                <div class="px-5 py-4 border border-start-0 border-end-0">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <p class="mb-0 text-uppercase">Indicator</p>
+                    <p class="mb-0 text-uppercase">AVG</p>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-6">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-4">
+                          <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-phone-done icon-lg"></i></span>
+                      </div>
+                      <div>
+                        <div>
+                          <h6 class="mb-0 text-truncate">Compliance and Usage of CMS</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <div class="badge bg-label-secondary">33%</div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-6">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-4">
+                          <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-award icon-lg"></i></span>
+                      </div>
+                      <div>
+                        <div>
+                          <h6 class="mb-0 text-truncate">Submission of Exam Results as per Timeline</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <div class="badge bg-label-secondary">22%</div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-6">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-4">
+                          <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-percentage-40 icon-lg"></i></span>
+                      </div>
+                      <div>
+                        <div>
+                          <h6 class="mb-0 text-truncate">Student Pass Percentage</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <div class="badge bg-label-secondary">30%</div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-6">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-4">
+                          <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-brand-superhuman icon-lg"></i></span>
+                      </div>
+                      <div>
+                        <div>
+                          <h6 class="mb-0 text-truncate">Research productivity of PG students/h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <div class="badge bg-label-secondary">20%</div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar flex-shrink-0 me-4">
+                          <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-chart-bar-popular icon-lg"></i></span>
+                      </div>
+                      <div>
+                        <div>
+                          <h6 class="mb-0 text-truncate">Line Manager Satisfaction Rating</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <div class="badge bg-label-secondary">60%</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--/ Popular Instructors -->
             <div class="col-12 col-xl-6 col-md-6">
                 <!-- Bar Charts -->
 
