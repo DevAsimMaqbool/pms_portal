@@ -31,6 +31,7 @@ use App\Http\Controllers\RatingOnImpactOfResearchConferencesOrganizedController;
 use App\Http\Controllers\SpinOffController;
 use App\Http\Controllers\TrainingsSeminarsWorkshopConductedWithImpactController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\SelfAssessmentWorkingController;
 use App\Models\RatingOnImpactOfResearchConferencesOrganized;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
@@ -152,7 +153,7 @@ Route::middleware('auth')->group(function () {
     Route::get('noteable-performance', [TeacherController::class, 'noteablePerformance'])->name('teacher.noteable_performance');
     Route::resource('pip', PipController::class);
     Route::post('pip/{id}/update-status', [PipController::class, 'updateStatus'])->name('pip.updateStatus');
-
+    Route::resource('/self-assessment', SelfAssessmentWorkingController::class);
 });
 
 require __DIR__ . '/auth.php';
