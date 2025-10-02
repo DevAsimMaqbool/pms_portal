@@ -13,7 +13,7 @@
 
       <!--/ Language -->
 
-
+      <li><button type="button" class="btn rounded-pill btn-label-primary waves-effect">{{ Auth::user()->name }}</button></li>
       <!-- Style Switcher -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill" id="nav-theme"

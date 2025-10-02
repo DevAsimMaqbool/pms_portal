@@ -53,8 +53,8 @@
           <div data-i18n="Area's of Improvement">Area's of Improvement</div>
         </a>
       </li>
-      <li class="menu-item">
-        <a href="#" class="menu-link">
+      <li class="menu-item" {{ request()->routeIs('pip.index') ? 'active' : '' }}>
+        <a href="{{ route('pip.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-target-arrow"></i>
           <div data-i18n="PIP">PIP</div>
         </a>
@@ -62,7 +62,7 @@
       <li class="menu-item">
         <a href="#" class="menu-link">
           <i class="menu-icon icon-base ti tabler-clipboard-check"></i>
-          <div data-i18n="Self Assesment">Self Assesment</div>
+          <div data-i18n="Self Assessment">Self Assessment</div>
         </a>
       </li>
       <li class="menu-item">
@@ -70,13 +70,22 @@
           <i class="menu-icon icon-base ti tabler-report"></i>
           <div data-i18n="Reports">Reports</div>
         </a>
+      </li><li class="menu-item">
+        <a href="{{ route('indicator.form', [
+                        'area' => 2,
+                        'category' => 5,
+                        'indicator' => 125
+                      ]) }}" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-cloud-search"></i>
+          <div data-i18n="Ric">Ric</div>
+        </a>
       </li>
-      @php
+      
+      {{-- @php
         $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
         $icons = icons();
       @endphp
 
-      {{-- Render Menu --}}
       @foreach($result as $kpakey => $kpa)
         <li class="menu-item">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -86,7 +95,7 @@
             </div>
           </a>
 
-          {{-- Level 2: Indicator Categories --}}
+          
           <ul class="menu-sub">
             @foreach($kpa['category'] as $category)
               <li class="menu-item">
@@ -96,7 +105,6 @@
                   </div>
                 </a>
 
-                {{-- Level 3: Indicators --}}
                 @if(!empty($category['indicator']))
                   <ul
                     class="menu-sub {{ request()->routeIs('indicator.form') && request()->route('category') == $category['id'] ? 'active open' : '' }}">
@@ -119,7 +127,7 @@
             @endforeach
           </ul>
         </li>
-      @endforeach
+      @endforeach --}}
 
       <li class="menu-item">
         <a href="#" class="menu-link">

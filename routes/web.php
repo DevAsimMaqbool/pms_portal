@@ -25,6 +25,7 @@ use App\Http\Controllers\EmployabilityController;
 use App\Http\Controllers\IntellectualPropertyController;
 use App\Http\Controllers\InternationalCoauthoredPaperController;
 use App\Http\Controllers\NoAchievementOfMultidisciplinaryProjectsTargetController;
+use App\Http\Controllers\PipController;
 use App\Http\Controllers\PublicationOfHecRecognizedJournalController;
 use App\Http\Controllers\RatingOnImpactOfResearchConferencesOrganizedController;
 use App\Http\Controllers\SpinOffController;
@@ -149,6 +150,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('area-of-improvements', [TeacherController::class, 'areaOfImprovements'])->name('teacher.area_of_improvements');
     Route::get('noteable-performance', [TeacherController::class, 'noteablePerformance'])->name('teacher.noteable_performance');
+    Route::resource('pip', PipController::class);
+    Route::post('pip/{id}/update-status', [PipController::class, 'updateStatus'])->name('pip.updateStatus');
 
 });
 
