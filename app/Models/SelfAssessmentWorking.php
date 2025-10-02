@@ -8,6 +8,7 @@ class SelfAssessmentWorking extends Model
 {
 
     protected $fillable = [
+        'kpa',
         'term',
         'challenge',
         'working',

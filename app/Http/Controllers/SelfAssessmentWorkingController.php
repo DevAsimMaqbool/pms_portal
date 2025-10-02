@@ -46,6 +46,7 @@ class SelfAssessmentWorkingController extends Controller
      */
     public function store(Request $request)
     {
+        $term = $request->input('term');
         $data = $request->input('data', []);
 
         $kpas = [
@@ -57,10 +58,10 @@ class SelfAssessmentWorkingController extends Controller
 
         $insertData = [];
         foreach ($data as $index => $row) {
-            if (!empty($row['term']) || !empty($row['challenge']) || !empty($row['working'])) {
+            if (!empty($row['challenge']) || !empty($row['working'])) {
                 $insertData[] = [
                     'kpa' => $kpas[$index],
-                    'term' => $row['term'] ?? null,
+                    'term' => $term, // ✅ single chosen term for all rows
                     'challenge' => $row['challenge'] ?? null,
                     'working' => $row['working'] ?? null,
                     'created_by' => Auth::id(),
@@ -74,7 +75,7 @@ class SelfAssessmentWorkingController extends Controller
         if (!empty($insertData)) {
             SelfAssessmentWorking::upsert(
                 $insertData,
-                ['kpa', 'term'], // unique key
+                ['kpa', 'term'], // unique per KPA + Term
                 ['challenge', 'working', 'updated_at']
             );
         }
