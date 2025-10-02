@@ -12,6 +12,10 @@ class Indicator extends Model
     protected $fillable = [
         'indicator_category_id',
         'indicator',
+        'icon',
+        'short_code',
+        'slug', 
+        'small_description',
         'created_by',
         'updated_by'
     ];

@@ -13,6 +13,10 @@ class IndicatorCategory extends Model
     protected $fillable = [
         'key_performance_area_id',
         'indicator_category',
+        'cat_icon',
+        'cat_short_code',
+        'cat_slug',
+        'cat_small_description',
         'created_by',
         'updated_by'
     ];
