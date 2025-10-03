@@ -491,7 +491,7 @@
                             $.each(response.indicators, function (index, indicator) {
                                 let color = colors[index % colors.length];
                                 let randomValue = Math.floor(Math.random() * 100) + 1;
-                                let formattedIndicator = indicator.indicator.replace(/\s+/g, '');
+                                let formattedIndicator = indicator.indicator.replace(/[\s#']+/g, '');
                                 $list.append(`
                                             <li class="d-flex mb-6">
                                                 <div class="chart-progress me-4" data-color="${color}" data-series="${randomValue}" data-progress_variant="true"></div>
