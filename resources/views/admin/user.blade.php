@@ -58,7 +58,7 @@
                             <th>User</th>
                             <th>Role</th>
                             <th>Department</th>
-                            <th>Level</th>
+                            <th>Job Title</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -111,19 +111,19 @@
                             <div class="invalid-feedback" id="roleError"></div>
                         </div>
                         <!-- <div class="mb-6">
-                                                <label class="form-label" for="user-level">Select Level</label>
-                                                <select id="user-level" class="form-select" name="level" required>
-                                                    <option value="Managerial">Managerial</option>
-                                                    <option value="Operational">Operational</option>
-                                                </select>
-                                                <div class="invalid-feedback" id="levelError"></div>
-                                            </div> -->
+                                                                                            <label class="form-label" for="user-level">Select Level</label>
+                                                                                            <select id="user-level" class="form-select" name="level" required>
+                                                                                                <option value="Managerial">Managerial</option>
+                                                                                                <option value="Operational">Operational</option>
+                                                                                            </select>
+                                                                                            <div class="invalid-feedback" id="levelError"></div>
+                                                                                        </div> -->
                         <!-- <div class="mb-6">
-                                                                <label class="form-label" for="user-manager">Select Manager</label>
-                                                                <select id="user-manager" class="form-select" name="manager_id">
-                                                                </select>
-                                                                <div class="invalid-feedback" id="manager_idError"></div>
-                                                            </div> -->
+                                                                                                            <label class="form-label" for="user-manager">Select Manager</label>
+                                                                                                            <select id="user-manager" class="form-select" name="manager_id">
+                                                                                                            </select>
+                                                                                                            <div class="invalid-feedback" id="manager_idError"></div>
+                                                                                                        </div> -->
                         <div class="mb-6">
                             <label class="form-label" for="user-status">Select Status</label>
                             <select id="user-status" class="form-select" name="status" required readonly>
@@ -177,7 +177,7 @@
                     { data: 'full_name', name: 'name' },
                     { data: 'role', name: 'roles.name' },
                     { data: 'department', name: 'department' },
-                    { data: 'level', name: 'level' },
+                    { data: 'job_title', name: 'job_title' },
                     { data: 'status', name: 'status' },
                     { data: 'actions', orderable: false, searchable: false }
                 ],

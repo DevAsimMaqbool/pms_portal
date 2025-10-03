@@ -42,7 +42,7 @@
       <!-- Menu -->
       @if(auth()->user()->hasRole('Survey'))
         @include('layouts.survey_sidebar')
-      @elseif(auth()->user()->hasRole('Teacher'))
+      @elseif(auth()->user()->hasAnyRole(['Teacher', 'Assistant Professor']))
         @include('layouts.teacher_sidebar')
       @elseif(auth()->user()->hasRole('HOD'))
         @include('layouts.hod_sidebar')
