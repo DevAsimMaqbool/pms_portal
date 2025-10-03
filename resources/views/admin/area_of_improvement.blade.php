@@ -271,7 +271,7 @@
                 ticks: {
                         maxTicksLimit: 1,
                         display: !1,
-                        color: "666"
+                        color: "#666"
                     },
                 grid: { color: "#ddd" },
                 angleLines: { color: "#ddd" },

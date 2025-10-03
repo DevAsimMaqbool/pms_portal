@@ -54,7 +54,7 @@
                           </div>
                         </div>
                         <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary" role="button"
+                          <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button"
                             data-bs-toggle="modal" data-bs-target="#{{ str_replace(' ', '', $indicator['indicator']) }}">
                             <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
                           </button>
@@ -77,12 +77,12 @@
             <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i
                 class="icon-base ti tabler-chart-pie me-3"></i>Overall KPA Performance</h5>
             <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-            <input type="radio" class="btn-check" name="btnradio2" id="dailyRadio2" checked>
-            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio2"> 📆 Fall 2025</label>
+              <input type="radio" class="btn-check" name="btnradio2" id="fall2025" checked>
+              <label class="btn btn-outline-primary waves-effect" for="fall2025"> 📆 Fall 2025</label>
 
-            <input type="radio" class="btn-check" name="btnradio2" id="monthlyRadio2">
-            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio2"> 📆 Fall 2026</label>
-          </div>
+              <input type="radio" class="btn-check" name="btnradio2" id="fall2026">
+              <label class="btn btn-outline-primary waves-effect" for="fall2026"> 📆 Fall 2026</label>
+            </div>
           </div>
           <div class="card-body pt-0">
             <div class="row">
@@ -152,7 +152,7 @@
                               <div class="card-body">
                                 <div class="expensesChart" data-color="{{ $color2 }}" data-series="{{ $seriesValue1 }}"></div>
                                 <div class="mt-3 text-center">
-                                  <small class="text-body-secondary mt-3">
+                                  <small class="text-body-secondary mt-3 fw-bold">
                                     {{ $category['indicator_category'] }} {{-- ✅ Category Name --}}
                                   </small>
                                 </div>
@@ -2010,11 +2010,11 @@
         var gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
         gradientBlue.addColorStop(0, "rgba(85, 85, 255, 0.9)");
         gradientBlue.addColorStop(1, "rgba(151, 135, 255, 0.8)");
+        
 
         var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientPink.addColorStop(0, "rgba(115, 103, 240, 1)");
-        gradientPink.addColorStop(1, "rgba(115, 103, 240, 1)");
-
+        gradientPink.addColorStop(0, "rgba(85, 85, 255, 0.9)");
+        gradientPink.addColorStop(1, "rgba(151, 135, 255, 0.8)");
         // ✅ Radar Chart
         new Chart(ctx, {
           type: "radar",
@@ -2026,8 +2026,8 @@
                 data: dataset1,
                 fill: true,
                 backgroundColor: gradientPink,
-                borderColor: "rgba(112, 25, 115, 1)",
-                pointBorderColor: "#ff55b8",
+                borderColor: "rgba(85, 85, 255, 1)",
+                pointBorderColor: "#5555ff",
                 pointBackgroundColor: "#fff",
                 pointRadius: 5,
                 pointHoverRadius: 7,
