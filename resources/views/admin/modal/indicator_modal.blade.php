@@ -796,3 +796,1286 @@
 </div>
 
 <!-- / Payment Methods modal -->
+<!--  Payment Methods modal -->
+
+<div class="modal fade" id="StudentPunctuality" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+            <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    🎓 Student Punctuality
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                            <input type="radio" class="btn-check" name="btnradio01" id="dailyRadio01" checked>
+                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio01"> 📅 Weekly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio01" id="monthlyRadio01">
+                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio01"> 🎓 Semesterly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio01" id="yearlyRadio">
+                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio01"> 📅 Yearly</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Class</th>
+                                        <th>%</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+<!--  Payment Methods modal -->
+<div class="modal fade" id="SubmissionofExamResultsasperTimeline" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    🎓 Submission of Exam Results as per Timeline
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#SubmissionofExamResultsasperTimeline-spring"
+                                    aria-controls="SubmissionofExamResultsasperTimeline-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#SubmissionofExamResultsasperTimeline-fall"
+                                    aria-controls="SubmissionofExamResultsasperTimeline-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="SubmissionofExamResultsasperTimeline-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="SubmissionofExamResultsasperTimeline-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!--  Payment Methods modal -->
+<div class="modal fade" id="QualityofAssessment(ExamPaper-Projects-Assignments)" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    🎓 Quality of Assessment (Exam Paper-Projects-Assignments)
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#QualityofAssessment(ExamPaper-Projects-Assignments)-spring"
+                                    aria-controls="QualityofAssessment(ExamPaper-Projects-Assignments)-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#QualityofAssessment(ExamPaper-Projects-Assignments)-fall"
+                                    aria-controls="QualityofAssessment(ExamPaper-Projects-Assignments)-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="QualityofAssessment(ExamPaper-Projects-Assignments)-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="QualityofAssessment(ExamPaper-Projects-Assignments)-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!--  Payment Methods modal -->
+<div class="modal fade" id="CourseLoad" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    🎓 Course Load
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#CourseLoad-spring"
+                                    aria-controls="CourseLoad-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#CourseLoad-fall"
+                                    aria-controls="CourseLoad-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="CourseLoad-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="CourseLoad-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!--  Payment Methods modal -->
+
+<div class="modal fade" id="StudentAttendance(class/lab)" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+            <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    🎓 Student Attendance (class/lab)
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                            <input type="radio" class="btn-check" name="btnradio02" id="dailyRadioo2" checked>
+                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadioo2"> 📅 Weekly</label>
+
+                            <input type="radio" class="btn-check" name="btnradioo2" id="monthlyRadio02">
+                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio02"> 🎓 Semesterly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio02" id="yearlyRadio02">
+                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio02"> 📅 Yearly</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Class</th>
+                                        <th>%</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="Adoptionofactivelearningtechniques(flippedclassrooms-gamification-experientiallearning)" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+            <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Adoption of active learning techniques (flipped classrooms- gamification- experiential learning)
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                            <input type="radio" class="btn-check" name="btnradioo3" id="dailyRadioo3" checked>
+                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio03"> 📅 Weekly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio03" id="monthlyRadio03">
+                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio03"> 🎓 Semesterly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio03" id="yearlyRadio03">
+                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio03"> 📅 Yearly</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Class</th>
+                                        <th>%</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="StudentPassPercentage" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+            <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    🎓 Student Pass Percentage
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                            <input type="radio" class="btn-check" name="btnradio04" id="dailyRadio04" checked>
+                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio04"> 📅 Weekly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio04" id="monthlyRadio04">
+                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio04"> 🎓 Semesterly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio04" id="yearlyRadio04">
+                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio04"> 📅 Yearly</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Class</th>
+                                        <th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+<!--  Payment Methods modal -->
+<div class="modal fade" id="Improvementinstudentperformancemetricse.g.gradesfrommidtofinal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    🎓 Improvement in student performance metrics e.g. grades from mid to final
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-spring"
+                                    aria-controls="mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-fall"
+                                    aria-controls="mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!--  Payment Methods modal -->
+<div class="modal fade" id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Testimonials/Qualitative Feedback from Students on how the teaching has influenced them academically
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
+                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
+                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="Guidanceofstudentsonprojectsresultinginimpactfulresearch" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+            <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    🎓 Guidance of students on projects resulting in impactful research
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                            <input type="radio" class="btn-check" name="btnradio05" id="dailyRadio05" checked>
+                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio05" id="monthlyRadio05">
+                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓 Semesterly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio05" id="yearlyRadio05">
+                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio05"> 📅 Yearly</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Class</th>
+                                        <th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="ofResearchPublications(ScopusIndexed)" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    of Research Publications (Scopus Indexed)
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
+                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
+                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="ResearchproductivityofPGstudents" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Research productivity of PG students
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#ResearchproductivityofPGstudents-spring"
+                                    aria-controls="ResearchproductivityofPGstudents-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#ResearchproductivityofPGstudents-fall"
+                                    aria-controls="ResearchproductivityofPGstudents-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="ResearchproductivityofPGstudents-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="ResearchproductivityofPGstudents-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="achievementontasksassignedbythedean" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Achievement on tasks assigned by the dean
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#achievementontasksassignedbythedean-spring"
+                                    aria-controls="achievementontasksassignedbythedean-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#achievementontasksassignedbythedean-fall"
+                                    aria-controls="achievementontasksassignedbythedean-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="achievementontasksassignedbythedean-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="achievementontasksassignedbythedean-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="NumberofKnowledgeProducts-PolicyAdvocacy" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Number of Knowledge Products -Policy Advocacy
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#NumberofKnowledgeProducts-PolicyAdvocacy-spring"
+                                    aria-controls="NumberofKnowledgeProducts-PolicyAdvocacy-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#NumberofKnowledgeProducts-PolicyAdvocacy-fall"
+                                    aria-controls="NumberofKnowledgeProducts-PolicyAdvocacy-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="NumberofKnowledgeProducts-PolicyAdvocacy-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="NumberofKnowledgeProducts-PolicyAdvocacy-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="LineManagerSatisfactionRating" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Line Manager Satisfaction Rating
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#LineManagerSatisfactionRating-spring"
+                                    aria-controls="LineManagerSatisfactionRating-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#LineManagerSatisfactionRating-fall"
+                                    aria-controls="LineManagerSatisfactionRating-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="LineManagerSatisfactionRating-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="LineManagerSatisfactionRating-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="AchievementoftasksStatus" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Achievement of tasks Status
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#AchievementoftasksStatus-spring"
+                                    aria-controls="AchievementoftasksStatus-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#AchievementoftasksStatus-fall"
+                                    aria-controls="AchievementoftasksStatus-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="AchievementoftasksStatus-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="AchievementoftasksStatus-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="EventPerformanceFeedback" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+            <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Event Performance Feedback
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                            <input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
+                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
+                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓 Semesterly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
+                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Class</th>
+                                        <th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="Scorecardforeachroleisdevelopedseparately" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+            <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Scorecard for each role is developed separately
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                            <input type="radio" class="btn-check" name="btnradio07" id="dailyRadio07" checked>
+                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio07"> 📅 Weekly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio07" id="yearlyRadio07">
+                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio07"> 📅 Yearly</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Class</th>
+                                        <th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="Event/TaskPerformanceFeedback" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+            <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Event/Task Performance Feedback
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                            <input type="radio" class="btn-check" name="btnradio08" id="dailyRadio08" checked>
+                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio08"> 📅 Weekly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio08" id="yearlyRadio08">
+                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio08"> 📅 Yearly</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Class</th>
+                                        <th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="ScholarsSatisfaction(inthesisstage)" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+            <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Scholar's Satisfaction (in thesis stage)
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                            <input type="radio" class="btn-check" name="btnradio09" id="dailyRadio09" checked>
+                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio09"> 📅 Weekly</label>
+
+                            <input type="radio" class="btn-check" name="btnradio09" id="yearlyRadio09">
+                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio09"> 📅 Yearly</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Class</th>
+                                        <th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
