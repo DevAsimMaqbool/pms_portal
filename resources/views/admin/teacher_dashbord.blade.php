@@ -86,7 +86,7 @@
                           </div>
                         </div>
                         <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button"
+                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary" role="button"
                             data-bs-toggle="modal" data-bs-target="#{{ str_replace(' ', '', $indicator['indicator']) }}">
                             <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
                           </button>
@@ -109,11 +109,6 @@
             <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i
                 class="icon-base ti tabler-chart-pie me-3"></i>Overall KPA Performance</h5>
             <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-              <input type="radio" class="btn-check" name="btnradio2" id="fall2025" checked>
-              <label class="btn btn-outline-primary waves-effect" for="fall2025"> 📆 Fall 2025</label>
-
-              <input type="radio" class="btn-check" name="btnradio2" id="fall2026">
-              <label class="btn btn-outline-primary waves-effect" for="fall2026"> 📆 Fall 2026</label>
               <input type="radio" class="btn-check" name="btnradio2" id="dailyRadio2" checked>
               <label class="btn btn-outline-secondary waves-effect" for="dailyRadio2"> 📆 Fall 2025</label>
 
@@ -153,46 +148,6 @@
             $series1 = [20, 90, 40, 80, 30];
             $index1 = 0;
           @endphp
-            @foreach($result as $kpakey => $kpa)
-                @php
-                    $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
-                @endphp
-              <div class="accordion-item" id="{{ $targetId }}">
-                <h2 class="accordion-header" id="heading-{{ $kpa['id'] }}">
-                  <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-                    data-bs-target="#accordion-{{ $kpa['id'] }}" aria-expanded="false"
-                    aria-controls="accordion-{{ $kpa['id'] }}">
-                    <i class="icon-base ti tabler-star me-2"></i>
-                    {{ $kpa['performance_area'] }} {{-- ✅ KPA Name --}}
-                  </button>
-                </h2>
-
-                <div id="accordion-{{ $kpa['id'] }}" class="accordion-collapse collapse"
-                  aria-labelledby="heading-{{ $kpa['id'] }}" data-bs-parent="#accordionExample">
-                  <div class="accordion-body">
-
-                    <!-- Loop through Categories -->
-                    <div class="row g-6 pt-2">
-                      @foreach($kpa['category'] as $category)
-                        @php
-                              $color1 = $colors1[$index1 % count($colors1)];
-                              $color2 = $colors2[$index1 % count($colors2)];
-                              $seriesValue1 = $series1[$index1 % count($series1)];
-                          @endphp
-                        <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
-                          <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
-                            <div class="card card-border-shadow-{{ $color1 }} h-100">
-                              {{-- <div class="card-header pb-2">
-                                <h5 class="card-title mb-1">82.5k</h5>
-                                <p class="card-subtitle">Expenses</p>
-                              </div> --}}
-                              <div class="card-body">
-                                <div class="expensesChart" data-color="{{ $color2 }}" data-series="{{ $seriesValue1 }}"></div>
-                                <div class="mt-3 text-center">
-                                  <small class="text-body-secondary mt-3 fw-bold">
-                                    {{ $category['indicator_category'] }} {{-- ✅ Category Name --}}
-                                  </small>
-                                </div>
           @foreach($result as $kpakey => $kpa)
             @php
               $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
@@ -1919,18 +1874,18 @@
             if (data.length > 0) {
               data.forEach(function (category) {
                 html += `
-                                                                                                                                                                                        <div class="col-md-4">
-                                                                                                                                                                                            <div class="card h-100">
-                                                                                                                                                                                                <div class="card-body">
-                                                                                                                                                                                                    <div class="form-check">
-                                                                                                                                                                                                        <input class="form-check-input indicatir-data" type="checkbox" value="${category.id}" id="category_${category.id}">
-                                                                                                                                                                                                        <label class="form-check-label" for="category_${category.id}">
-                                                                                                                                                                                                            ${category.indicator_category}
-                                                                                                                                                                                                        </label>
-                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                </div>
-                                                                                                                                                                                            </div>
-                                                                                                                                                                                        </div>`;
+                                                                                                                                                                                                    <div class="col-md-4">
+                                                                                                                                                                                                        <div class="card h-100">
+                                                                                                                                                                                                            <div class="card-body">
+                                                                                                                                                                                                                <div class="form-check">
+                                                                                                                                                                                                                    <input class="form-check-input indicatir-data" type="checkbox" value="${category.id}" id="category_${category.id}">
+                                                                                                                                                                                                                    <label class="form-check-label" for="category_${category.id}">
+                                                                                                                                                                                                                        ${category.indicator_category}
+                                                                                                                                                                                                                    </label>
+                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                    </div>`;
               });
             } else {
               html = `<div class="col-12"><p>No Indicator Categories found.</p></div>`;
@@ -1972,16 +1927,16 @@
                   const chartId = `deliveryExceptionsChart_${indicator.id}`;
                   const chartType = (indicator.id % 2 === 0) ? 'radialBar' : 'area';
                   output += `
-                                                    <div class="col-xl-3 col-md-4 col-6">
-                                                    <div class="card h-100">
-                                                    <div class="card-header pb-2">
-                                                    <p class="card-subtitle">${indicator.indicator}</p>
-                                                    </div>
-                                                    <div class="card-body">
-                                                    <div id="${chartId}" class="chart-container"></div>
-                                                    </div>
-                                                    </div>
-                                                    </div>`;
+                                                                <div class="col-xl-3 col-md-4 col-6">
+                                                                <div class="card h-100">
+                                                                <div class="card-header pb-2">
+                                                                <p class="card-subtitle">${indicator.indicator}</p>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                <div id="${chartId}" class="chart-container"></div>
+                                                                </div>
+                                                                </div>
+                                                                </div>`;
                   indicator.chart_id = chartId;
                   indicator.chart_type = chartType;
 
@@ -2074,88 +2029,6 @@
       new ApexCharts(document.querySelector(`#${chartId}`), options).render();
     }
     document.addEventListener("DOMContentLoaded", function () {
-      // ✅ Static labels and datasets
-      var chartLabels = ["Teaching and Learning", "Research, Innovation and Commercialisation", "Institutional Engagement (Core only)", "Institutional Engagement (Operational+ Character Strengths)"];
-      var shortLabels = ["T&L", "RIC", "IE (Core)", "IE(Character)"];
-      var dataset1 = [70, 90, 85, 80]; // Inside Mirror
-
-      var g = document.getElementById("radarChart");
-      if (g) {
-        var ctx = g.getContext("2d");
-
-        // ✅ Gradients
-        var gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientBlue.addColorStop(0, "rgba(85, 85, 255, 0.9)");
-        gradientBlue.addColorStop(1, "rgba(151, 135, 255, 0.8)");
-        
-
-        var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientPink.addColorStop(0, "rgba(85, 85, 255, 0.9)");
-        gradientPink.addColorStop(1, "rgba(151, 135, 255, 0.8)");
-        // ✅ Radar Chart
-        new Chart(ctx, {
-          type: "radar",
-          data: {
-            labels: chartLabels,
-            datasets: [
-              {
-                label: "Achievements",
-                data: dataset1,
-                fill: true,
-                backgroundColor: gradientPink,
-                borderColor: "rgba(85, 85, 255, 1)",
-                pointBorderColor: "#5555ff",
-                pointBackgroundColor: "#fff",
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                pointStyle: "circle"
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: { duration: 500 },
-            scales: {
-              r: {
-                ticks: { display: true, color: "#666" },
-                grid: { color: "#ddd" },
-                angleLines: { color: "#ddd" },
-                pointLabels: {
-                  color: "#666",
-                  font: {
-                    size: 12, // label text size
-                  },
-                  callback: function (label, index) {
-                    return shortLabels[index];
-                  }
-                }
-              }
-            },
-            plugins: {
-              legend: {
-                position: "top",
-                labels: {
-                  padding: 25,
-                  color: "#333"
-                }
-              },
-              tooltip: {
-                backgroundColor: "#fff",
-                titleColor: "#000",
-                bodyColor: "#333",
-                borderWidth: 1,
-                borderColor: "#ddd",
-                callbacks: {
-                  // 👇 Tooltip shows full label
-                  title: function (context) {
-                    return chartLabels[context[0].dataIndex];
-                  }
-                }
-              }
-            }
-          },
-          plugins: [
       var chartLabels = [
         "Teaching and Learning",
         "Research, Innovation and Commercialisation",
