@@ -32,7 +32,7 @@
 
 </style>
 <!--  Payment Methods modal -->
-<div class="modal fade" id="StudentTeachingSatisfaction(feedback)" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -41,7 +41,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 Student Teaching Satisfaction (Feedback)
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-rewind-backward-50 icon-md"></i></div> Student Satisfaction
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -179,7 +179,7 @@
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
 
-<div class="modal fade" id="QEC-Observation/Peerreview" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="QECObservation/PeerReview" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -188,7 +188,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 QEC - Observation / Peer review
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-binoculars icon-md"></i></div> QEC Observation / Peer Review
                 </h3>
                 <!-- ffffff-->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -196,14 +196,14 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#qec-observation-spring" aria-controls="qec-observation-spring"
+                                    data-bs-target="#QECObservation/PeerReview-spring" aria-controls="QECObservation/PeerReview-spring"
                                     aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#qec-observation-fall" aria-controls="qec-observation-fall"
+                                    data-bs-target="#QECObservation/PeerReview-fall" aria-controls="QECObservation/PeerReview-fall"
                                     aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
@@ -211,7 +211,7 @@
                         </ul>
                     </div>
                     <div class="tab-content">
-                        <div class="tab-pane fade show active" id="qec-observation-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="QECObservation/PeerReview-spring" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -262,7 +262,7 @@
                             </div>
 
                         </div>
-                        <div class="tab-pane fade" id="qec-observation-fall" role="tabpanel">
+                        <div class="tab-pane fade" id="QECObservation/PeerReview-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -331,20 +331,20 @@
             <div class="modal-body p-4">
             <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 Student Attendance
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-calendar-clock icon-md"></i></div> Student Attendance
                 </h3>
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
                         <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio1" id="dailyRadio1" checked>
-                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio1"> 📅 Weekly</label>
+                            <label class="btn btn-outline-primary waves-effect" for="dailyRadio1">Weekly</label>
 
                             <input type="radio" class="btn-check" name="btnradio1" id="monthlyRadio1">
-                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio1"> 🎓 Semesterly</label>
+                            <label class="btn btn-outline-primary waves-effect" for="monthlyRadio1">Semesterly</label>
 
                             <input type="radio" class="btn-check" name="btnradio1" id="yearlyRadio1">
-                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio1"> 📅 Yearly</label>
+                            <label class="btn btn-outline-primary waves-effect" for="yearlyRadio1">Yearly</label>
                         </div>
                     </div>
                     <div class="card-body">
@@ -369,9 +369,9 @@
                                         <td>42</td>
                                         <td>8</td>
                                         <td>
-                                            <div class="badge bg-label-success">84%</div>
+                                            <div class="badge bg-label-warning">84%</div>
                                         </td>
-                                        <td><span class="badge bg-label-primary me-1">ME</span></td>
+                                        <td><span class="badge bg-label-warning me-1">BE</span></td>
                                     </tr>
 
                                     <tr>
@@ -381,9 +381,9 @@
                                         <td>42</td>
                                         <td>8</td>
                                         <td>
-                                            <div class=" badge bg-label-success">70%</div>
+                                            <div class=" badge bg-label-warning">70%</div>
                                         </td>
-                                        <td><span class="badge bg-label-success me-1">OS</span></td>
+                                        <td><span class="badge bg-label-warning me-1">BE</span></td>
                                     </tr>
 
                                     <tr>
@@ -393,9 +393,9 @@
                                         <td>42</td>
                                         <td>8</td>
                                         <td>
-                                            <div class="badge bg-label-danger">0.4%</div>
+                                            <div class="badge bg-label-success">88%</div>
                                         </td>
-                                        <td><span class="badge bg-label-warning me-1">EE</span></td>
+                                        <td><span class="badge bg-label-success me-1">NI</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -409,7 +409,7 @@
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
 
-<div class="modal fade" id="ClassesHeldinTime/CommencementofClasses" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="ClassesHeldinTime" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -418,20 +418,20 @@
             <div class="modal-body p-4">
             <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 Classes Held in Time/Commencement of Classes
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> Classes Held in Time
                 </h3>
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
                         <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio" id="dailyRadio" checked>
-                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio"> 📅 Weekly</label>
+                            <label class="btn btn-outline-primary waves-effect" for="dailyRadio">Weekly</label>
 
                             <input type="radio" class="btn-check" name="btnradio" id="monthlyRadio">
-                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio"> 🎓 Semesterly</label>
+                            <label class="btn btn-outline-primary waves-effect" for="monthlyRadio">Semesterly</label>
 
                             <input type="radio" class="btn-check" name="btnradio" id="yearlyRadio">
-                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio"> 📅 Yearly</label>
+                            <label class="btn btn-outline-primary waves-effect" for="yearlyRadio">Yearly</label>
                         </div>
                     </div>
                     <div class="card-body">
@@ -456,9 +456,9 @@
                                         <td>42</td>
                                         <td>8</td>
                                         <td>
-                                            <div class="badge bg-label-success">84%</div>
+                                            <div class="badge bg-label-warning">84%</div>
                                         </td>
-                                        <td><span class="badge bg-label-primary me-1">ME</span></td>
+                                        <td><span class="badge bg-label-warning me-1">BE</span></td>
                                     </tr>
 
                                     <tr>
@@ -468,9 +468,9 @@
                                         <td>42</td>
                                         <td>8</td>
                                         <td>
-                                            <div class=" badge bg-label-success">70%</div>
+                                            <div class=" badge bg-label-success">90%</div>
                                         </td>
-                                        <td><span class="badge bg-label-success me-1">OS</span></td>
+                                        <td><span class="badge bg-label-success me-1">ME</span></td>
                                     </tr>
 
                                     <tr>
@@ -480,9 +480,9 @@
                                         <td>42</td>
                                         <td>8</td>
                                         <td>
-                                            <div class="badge bg-label-danger">0.4%</div>
+                                            <div class="badge bg-label-success">96%</div>
                                         </td>
-                                        <td><span class="badge bg-label-warning me-1">EE</span></td>
+                                        <td><span class="badge bg-label-success me-1">EE</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -505,7 +505,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 Completion of Course Folder in Hard
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-folder icon-md"></i></div> Completion of Course Folder in Hard 
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -548,12 +548,12 @@
                                             <td>1</td>
                                             <td>A</td>
                                             <td>
-                                                <div class="badge bg-label-success">Complete</div>
+                                                <div class="badge bg-label-warning">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">70%</div>
+                                                <div class=" badge bg-label-warning">70%</div>
                                             </td>
-                                            <td><span class="badge bg-label-primary me-1">ME</span></td>
+                                            <td><span class="badge bg-label-primary me-1">BE</span></td>
                                         </tr>
 
                                         <tr>
@@ -563,9 +563,9 @@
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">70%</div>
+                                                <div class=" badge bg-label-success">90%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">OS</span></td>
+                                            <td><span class="badge bg-label-success me-1">ME</span></td>
                                         </tr>
 
                                         <tr>
@@ -575,9 +575,9 @@
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-danger">30%</div>
+                                                <div class=" badge bg-label-success">100%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">EE</span></td>
+                                            <td><span class="badge bg-label-success me-1">OS</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -607,7 +607,7 @@
                                             <td>
                                                 <div class=" badge bg-label-success">90%</div>
                                             </td>
-                                            <td><span class="badge bg-label-primary me-1">ME</span></td>
+                                            <td><span class="badge bg-label-success me-1">ME</span></td>
                                         </tr>
 
                                         <tr>
@@ -617,9 +617,9 @@
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">60%</div>
+                                                <div class=" badge bg-label-warning">60%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">OS</span></td>
+                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
                                         </tr>
 
                                         <tr>
@@ -629,9 +629,9 @@
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-danger">20%</div>
+                                                <div class=" badge bg-label-warning">20%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">EE</span></td>
+                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -647,7 +647,7 @@
 <!-- / Payment Methods modal -->
 
 <!--  Payment Methods modal -->
-<div class="modal fade" id="ComplianceandUsageofCMS" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="ComplianceandUsageofLMS" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -656,7 +656,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 Compliance and Usage of CMS
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-rocket icon-md"></i></div> Compliance and Usage of LMS
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -664,15 +664,15 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#completion-spring"
-                                    aria-controls="completion-spring" aria-selected="true">
+                                    data-bs-target="#ComplianceandUsageofLMS-spring"
+                                    aria-controls="ComplianceandUsageofLMS-spring" aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#completion-fall"
-                                    aria-controls="completion-fall" aria-selected="false">
+                                    data-bs-target="#ComplianceandUsageofLMS-fall"
+                                    aria-controls="ComplianceandUsageofLMS-fall" aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -682,7 +682,7 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="completion-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="ComplianceandUsageofLMS-spring" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -702,9 +702,9 @@
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">70%</div>
+                                                <div class=" badge bg-label-warning">70%</div>
                                             </td>
-                                            <td><span class="badge bg-label-primary me-1">ME</span></td>
+                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
                                         </tr>
 
                                         <tr>
@@ -714,9 +714,9 @@
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">70%</div>
+                                                <div class=" badge bg-label-success">85%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">OS</span></td>
+                                            <td><span class="badge bg-label-success me-1">NI</span></td>
                                         </tr>
 
                                         <tr>
@@ -726,9 +726,9 @@
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-danger">30%</div>
+                                                <div class=" badge bg-label-success">91%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">EE</span></td>
+                                            <td><span class="badge bg-label-success me-1">ME</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -736,7 +736,7 @@
                         </div>
 
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="completion-fall" role="tabpanel">
+                        <div class="tab-pane fade" id="ComplianceandUsageofLMS-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -758,7 +758,7 @@
                                             <td>
                                                 <div class=" badge bg-label-success">90%</div>
                                             </td>
-                                            <td><span class="badge bg-label-primary me-1">ME</span></td>
+                                            <td><span class="badge bg-label-success me-1">ME</span></td>
                                         </tr>
 
                                         <tr>
@@ -768,9 +768,9 @@
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">60%</div>
+                                                <div class=" badge bg-label-warning">60%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">OS</span></td>
+                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
                                         </tr>
 
                                         <tr>
@@ -780,9 +780,9 @@
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-danger">20%</div>
+                                                <div class=" badge bg-label-success">96%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">EE</span></td>
+                                            <td><span class="badge bg-label-success me-1">EE</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -847,7 +847,7 @@
 </div>
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
-<div class="modal fade" id="SubmissionofExamResultsasperTimeline" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="TimelySubmissionofExamResults" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -856,7 +856,8 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 Submission of Exam Results as per Timeline
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-chart-bar-popular icon-md"></i></div> Timely Submission of Exam Results
+
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -864,15 +865,15 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#SubmissionofExamResultsasperTimeline-spring"
-                                    aria-controls="SubmissionofExamResultsasperTimeline-spring" aria-selected="true">
+                                    data-bs-target="#TimelySubmissionofExamResults-spring"
+                                    aria-controls="TimelySubmissionofExamResults-spring" aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#SubmissionofExamResultsasperTimeline-fall"
-                                    aria-controls="SubmissionofExamResultsasperTimeline-fall" aria-selected="false">
+                                    data-bs-target="#TimelySubmissionofExamResults-fall"
+                                    aria-controls="TimelySubmissionofExamResults-fall" aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -882,7 +883,7 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="SubmissionofExamResultsasperTimeline-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="TimelySubmissionofExamResults-spring" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -890,28 +891,88 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Status</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <tr>
+                                            <td>1</td>
+                                            <td>A</td>
+                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">95%</div>
+                                            </td>
+                                            <td><span class="badge bg-label-success me-1">EE</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>2</td>
+                                            <td>A</td>
+                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-primary">90%</div>
+                                            </td>
+                                            <td><span class="badge bg-label-primary me-1">ME</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>3</td>
+                                            <td>A</td>
+                                            <td><div class=" badge bg-label-warning">Not Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-warning">85%</div>
+                                            </td>
+                                            <td><span class="badge bg-label-warning me-1">NI</span></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="SubmissionofExamResultsasperTimeline-fall" role="tabpanel">
+                        <div class="tab-pane fade" id="TimelySubmissionofExamResults-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
                                         <tr>
-                                            <th>Sr#</th>
+                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Status</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+                                        <tr>
+                                            <td>1</td>
+                                            <td>A</td>
+                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">95%</div>
+                                            </td>
+                                            <td><span class="badge bg-label-success me-1">EE</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>2</td>
+                                            <td>A</td>
+                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-danger">81%</div>
+                                            </td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>3</td>
+                                            <td>A</td>
+                                            <td><div class=" badge bg-label-warning">Not Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-warning">85%</div>
+                                            </td>
+                                            <td><span class="badge bg-label-warning me-1">NI</span></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -925,7 +986,7 @@
 
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
-<div class="modal fade" id="QualityofAssessment(ExamPaper-Projects-Assignments)" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="AssessmentQualityofExamsetc." tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -934,7 +995,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 Quality of Assessment (Exam Paper-Projects-Assignments)
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-antenna-bars-4 icon-md"></i></div> Assessment Quality of Exams etc.
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -1012,7 +1073,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 Course Load
+                     <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-loader-3 icon-md"></i></div> Course Load
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -1044,12 +1105,63 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
+                                            <th>Course Name</th>
+                                            <th>Section</th>
+                                            <th>C.H</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <tr>
+                                            <td>1</td>
+                                            <td>ABC</td>
+                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">95%</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>ABC</td>
+                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">70%</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>ABC</td>
+                                            <td><div class=" badge bg-label-warning">Not Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">60%</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>ABC</td>
+                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">89%</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table m-0 table-borderless">
+                                    <tbody>
+                                    <tr>
+                                        <td class="align-top pe-6 ps-0 py-6 text-body">
+                                        </td>
+                                        <td class="px-0 w-px-100">
+                                        <p class="fw-medium mb-2">Score</p>
+                                        <p class="fw-medium mb-2">Rating</p>
+                                        </td>
+                                        <td class="px-0 w-px-100 fw-medium text-heading">
+                                        <p class="fw-medium mb-2">91%</p>
+                                        <p class="fw-medium mb-2">BE</p>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1062,15 +1174,65 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
+                                            <th>Course Name</th>
+                                            <th>Section</th>
+                                            <th>C.H</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+                                       <tr>
+                                            <td>1</td>
+                                            <td>ABC</td>
+                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">95%</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>ABC</td>
+                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">93%</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>ABC</td>
+                                            <td><div class=" badge bg-label-warning">Not Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">92%</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>ABC</td>
+                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">97%</div>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
+                                <div class="table-responsive">
+                                    <table class="table m-0 table-borderless">
+                                        <tbody>
+                                        <tr>
+                                            <td class="align-top pe-6 ps-0 py-6 text-body">
+                                            </td>
+                                            <td class="px-0 w-px-100">
+                                            <p class="fw-medium mb-2">Score</p>
+                                            <p class="fw-medium mb-2">Rating</p>
+                                            </td>
+                                            <td class="px-0 w-px-100 fw-medium text-heading">
+                                            <p class="fw-medium mb-2">97%</p>
+                                            <p class="fw-medium mb-2">NI</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -1098,13 +1260,13 @@
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
                         <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio02" id="dailyRadioo2" checked>
-                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadioo2"> 📅 Weekly</label>
+                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadioo2">Weekly</label>
 
                             <input type="radio" class="btn-check" name="btnradioo2" id="monthlyRadio02">
-                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio02"> 🎓 Semesterly</label>
+                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio02">Semesterly</label>
 
                             <input type="radio" class="btn-check" name="btnradio02" id="yearlyRadio02">
-                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio02"> 📅 Yearly</label>
+                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio02">Yearly</label>
                         </div>
                     </div>
                     <div class="card-body">
@@ -1130,7 +1292,7 @@
     </div>
 </div>
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="Adoptionofactivelearningtechniques(flippedclassrooms-gamification-experientiallearning)" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="AdoptionofActiveLearningTechniques" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -1139,7 +1301,7 @@
             <div class="modal-body p-4">
             <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    Adoption of active learning techniques (flipped classrooms- gamification- experiential learning)
+                    Adoption of Active Learning Techniques
                 </h3>
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -1186,57 +1348,9 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-            <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 Student Pass Percentage
-                </h3>
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-                            <input type="radio" class="btn-check" name="btnradio04" id="dailyRadio04" checked>
-                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio04"> 📅 Weekly</label>
-
-                            <input type="radio" class="btn-check" name="btnradio04" id="monthlyRadio04">
-                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio04"> 🎓 Semesterly</label>
-
-                            <input type="radio" class="btn-check" name="btnradio04" id="yearlyRadio04">
-                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio04"> 📅 Yearly</label>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive text-nowrap">
-                            <table class="table table-striped align-middle custom-table"">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Class</th>
-                                        <th>%</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-border-bottom-0">
-                                   
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- / Payment Methods modal -->
-<!--  Payment Methods modal -->
-<div class="modal fade" id="Improvementinstudentperformancemetricse.g.gradesfrommidtofinal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 Improvement in student performance metrics e.g. grades from mid to final
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-percentage-75 icon-md"></i></div> Student Pass Percentage
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -1244,15 +1358,15 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-spring"
-                                    aria-controls="mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-spring" aria-selected="true">
+                                    data-bs-target="#StudentPassPercentage-spring"
+                                    aria-controls="StudentPassPercentage-spring" aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-fall"
-                                    aria-controls="mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-fall" aria-selected="false">
+                                    data-bs-target="#StudentPassPercentage-fall"
+                                    aria-controls="StudentPassPercentage-fall" aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -1262,7 +1376,244 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="StudentPassPercentage-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Pass %</th>
+                                            <th>Failed %</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Ab</td>
+                                            <td><div class=" badge bg-label-success">45%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-danger">5%</div>
+                                            </td>
+                                            <td>
+                                                <div class=" badge bg-label-success">90</div>
+                                            </td>
+                                            <td><span class="badge bg-label-success me-1">EE</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Ab</td>
+                                            <td><div class=" badge bg-label-success">25%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-danger">75%</div>
+                                            </td>
+                                            <td>
+                                                <div class=" badge bg-label-warning">30</div>
+                                            </td>
+                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="StudentPassPercentage-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Pass %</th>
+                                            <th>Failed %</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <tr>
+                                            <td>1</td>
+                                            <td>AbC</td>
+                                            <td><div class=" badge bg-label-success">44%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-danger">6%</div>
+                                            </td>
+                                            <td>
+                                                <div class=" badge bg-label-success">88</div>
+                                            </td>
+                                            <td><span class="badge bg-label-success me-1">ME</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>2</td>
+                                            <td>AbC</td>
+                                            <td><div class=" badge bg-label-success">25%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-danger">75%</div>
+                                            </td>
+                                            <td>
+                                                <div class=" badge bg-label-warning">30</div>
+                                            </td>
+                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+<!--  Payment Methods modal -->
+<div class="modal fade" id="ImprovementinStudentPerformanceMetrics" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-chart-histogram icon-md"></i></div> Improvement in Student Performance Metrics
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#ImprovementinStudentPerformanceMetrics-spring"
+                                    aria-controls="ImprovementinStudentPerformanceMetrics-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#ImprovementinStudentPerformanceMetrics-fall"
+                                    aria-controls="ImprovementinStudentPerformanceMetrics-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="ImprovementinStudentPerformanceMetrics-spring" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Áverage %</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Ab</td>
+                                            <td><div class=" badge bg-label-warning">71%</div></td>
+                                            <td><span class="badge bg-label-warning me-1">NI</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Ab</td>
+                                            <td><div class=" badge bg-label-danger">45%</div></td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="ImprovementinStudentPerformanceMetrics-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Áverage %</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <tr>
+                                            <td>1</td>
+                                            <td>AbC</td>
+                                            <td><div class=" badge bg-label-success">90%</div></td>
+                                            <td><span class="badge bg-label-success me-1">EE</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>2</td>
+                                            <td>AbC</td>
+                                            <td><div class=" badge bg-label-success">85%</div></td>
+                                            <td><span class="badge bg-label-success me-1">ME</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+<!--  Payment Methods modal -->
+<div class="modal fade" id="QualitativeFeedbackfromStudents" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Qualitative Feedback from Students
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#QualitativeFeedbackfromStudents-spring"
+                                    aria-controls="QualitativeFeedbackfromStudents-spring" aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#QualitativeFeedbackfromStudents-fall"
+                                    aria-controls="QualitativeFeedbackfromStudents-fall" aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="QualitativeFeedbackfromStudents-spring" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1280,7 +1631,7 @@
                         </div>
 
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="mprovementinstudentperformancemetricse.g.gradesfrommidtofinal-fall" role="tabpanel">
+                        <div class="tab-pane fade" id="QualitativeFeedbackfromStudents-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1304,86 +1655,8 @@
 </div>
 
 <!-- / Payment Methods modal -->
-<!--  Payment Methods modal -->
-<div class="modal fade" id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    Testimonials/Qualitative Feedback from Students on how the teaching has influenced them academically
-                </h3>
-                <!-- Tabs -->
-                <div class="nav-align-top nav-tabs-shadow">
-                    <div class="d-flex justify-content-center mb-3 mt-3">
-                        <ul class="nav custom-tabs" role="tablist">
-                            <li class="nav-item">
-                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
-                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring" aria-selected="true">
-                                    🌸 Spring 2025
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
-                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall" aria-selected="false">
-                                    🍂 Fall 2025
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Tab Content -->
-                    <div class="tab-content">
-                        <!-- Spring -->
-                        <div class="tab-pane fade show active" id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring" role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Fall -->
-                        <div class="tab-pane fade" id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall" role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                     
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- / Payment Methods modal -->
-<!-- / Payment Methods modal -->
-<div class="modal fade" id="Guidanceofstudentsonprojectsresultinginimpactfulresearch" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="GuidancetoStudents" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -1392,7 +1665,7 @@
             <div class="modal-body p-4">
             <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    🎓 Guidance of students on projects resulting in impactful research
+                    🎓 Guidance to Students
                 </h3>
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">

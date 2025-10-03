@@ -109,8 +109,15 @@
                 <!-- Right chart -->
                 <div class="col-12 col-md-8">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header d-flex justify-content-between"">
                             <h5 class="card-title mb-0">{{ $area['performance_area'] }} Performance</h5>
+                            <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                                <input type="radio" class="btn-check" name="btnradio2" id="dailyRadio2" checked>
+                                <label class="btn btn-outline-primary waves-effect" for="dailyRadio2"> 📆 Fall 2025</label>
+
+                                <input type="radio" class="btn-check" name="btnradio2" id="monthlyRadio2">
+                                <label class="btn btn-outline-primary waves-effect" for="monthlyRadio2"> 📆 Fall 2026</label>
+                            </div>
                         </div>
                         <div class="card-body pt-2">
                             {{-- <canvas class="chartjs" id="radarChart" data-height="355"></canvas> --}}
@@ -271,8 +278,8 @@
                 gradientBlue.addColorStop(1, "rgba(151, 135, 255, 0.8)");
 
                 var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
-                gradientPink.addColorStop(0, "rgba(115, 103, 240, 1)");
-                gradientPink.addColorStop(1, "rgba(115, 103, 240, 1)");
+                gradientPink.addColorStop(0, "rgba(85, 85, 255, 0.9)");
+                gradientPink.addColorStop(1, "rgba(151, 135, 255, 0.8)");
 
                 // ✅ Radar Chart
                 new Chart(ctx, {
@@ -285,8 +292,8 @@
                         data: dataset1,
                         fill: true,
                         backgroundColor: gradientPink,
-                        borderColor: "rgba(112, 25, 115, 1)",
-                        pointBorderColor: "#ff55b8",
+                        borderColor: "rgba(85, 85, 255, 1)",
+                        pointBorderColor: "#5555ff",
                         pointBackgroundColor: "#fff",
                         pointRadius: 5,
                         pointHoverRadius: 7,
@@ -502,7 +509,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-3 text-end">
-                                                        <button type="button" class="btn btn-sm btn-icon btn-label-secondary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
+                                                        <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
                                                             <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
                                                         </button>
                                                     </div>
