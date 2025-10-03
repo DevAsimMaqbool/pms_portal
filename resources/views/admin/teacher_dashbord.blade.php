@@ -16,6 +16,37 @@
         height: 460px;
       }
     }
+
+    #customLegend {
+      text-align: center;
+      margin-top: 8px;
+      padding: 0;
+    }
+
+    #customLegend ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: inline-flex;
+      gap: 12px;
+      /* ✅ reduce spacing */
+    }
+
+    #customLegend li {
+      font-size: 12px;
+      /* ✅ small font */
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    #customLegend .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
   </style>
 @endpush
 @section('content')
@@ -41,12 +72,13 @@
               @foreach($result as $kpa)
                 @foreach($kpa['category'] as $category)
                   @foreach(array_slice($category['indicator']->toArray(), 0, 10) as $indicator)
-                      @php
-                         $color = $colors[$index % count($colors)];
-                         $seriesValue = $series[$index % count($series)];
-                      @endphp
+                    @php
+                      $color = $colors[$index % count($colors)];
+                      $seriesValue = $series[$index % count($series)];
+                    @endphp
                     <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="{{ $color }}" data-series="{{ $seriesValue }}" data-progress_variant="true"></div>
+                      <div class="chart-progress me-4" data-color="{{ $color }}" data-series="{{ $seriesValue }}"
+                        data-progress_variant="true"></div>
                       <div class="row w-100 align-items-center">
                         <div class="col-9">
                           <div class="me-2">
@@ -82,6 +114,11 @@
 
               <input type="radio" class="btn-check" name="btnradio2" id="fall2026">
               <label class="btn btn-outline-primary waves-effect" for="fall2026"> 📆 Fall 2026</label>
+              <input type="radio" class="btn-check" name="btnradio2" id="dailyRadio2" checked>
+              <label class="btn btn-outline-secondary waves-effect" for="dailyRadio2"> 📆 Fall 2025</label>
+
+              <input type="radio" class="btn-check" name="btnradio2" id="monthlyRadio2">
+              <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio2"> 📆 Fall 2026</label>
             </div>
           </div>
           <div class="card-body pt-0">
@@ -89,9 +126,9 @@
               <div class="col-md-8">
                 <canvas class="chartjs" id="radarChart"></canvas>
               </div>
-              <div class="col-md-4">
-                <ul id="fullLabelsList" class="list-unstyled mt-3" style="font-size:12px"></ul>
-              </div>
+              <br><br>
+              <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0" style="list-style:none;"></ul>
+
             </div>
             {{-- <div><span>Teaching and Learning</span></div> --}}
             <!-- if schrool -->
@@ -156,26 +193,66 @@
                                     {{ $category['indicator_category'] }} {{-- ✅ Category Name --}}
                                   </small>
                                 </div>
+          @foreach($result as $kpakey => $kpa)
+            @php
+              $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+            @endphp
+            <div class="accordion-item" id="{{ $targetId }}">
+              <h2 class="accordion-header" id="heading-{{ $kpa['id'] }}">
+                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                  data-bs-target="#accordion-{{ $kpa['id'] }}" aria-expanded="false"
+                  aria-controls="accordion-{{ $kpa['id'] }}">
+                  <i class="icon-base ti tabler-star me-2"></i>
+                  {{ $kpa['performance_area'] }} {{-- ✅ KPA Name --}}
+                </button>
+              </h2>
+
+              <div id="accordion-{{ $kpa['id'] }}" class="accordion-collapse collapse"
+                aria-labelledby="heading-{{ $kpa['id'] }}" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+
+                  <!-- Loop through Categories -->
+                  <div class="row g-6 pt-2">
+                    @foreach($kpa['category'] as $category)
+                      @php
+                        $color1 = $colors1[$index1 % count($colors1)];
+                        $color2 = $colors2[$index1 % count($colors2)];
+                        $seriesValue1 = $series1[$index1 % count($series1)];
+                      @endphp
+                      <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                        <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
+                          <div class="card card-border-shadow-{{ $color1 }} h-100">
+                            {{-- <div class="card-header pb-2">
+                              <h5 class="card-title mb-1">82.5k</h5>
+                              <p class="card-subtitle">Expenses</p>
+                            </div> --}}
+                            <div class="card-body">
+                              <div class="expensesChart" data-color="{{ $color2 }}" data-series="{{ $seriesValue1 }}"></div>
+                              <div class="mt-3 text-center">
+                                <small class="text-body-secondary mt-3">
+                                  {{ $category['indicator_category'] }} {{-- ✅ Category Name --}}
+                                </small>
                               </div>
                             </div>
-                          </a>
-                        </div>
-                        @php $index1++; @endphp
-                      @endforeach
-                    </div>
-
-                    <!-- ✅ Scroll Button -->
-                    <div class="text-end mt-3">
-                      <button class="btn rounded-pill btn-icon btn-outline-primary waves-effect scrollBtn"
-                        title="move to top chart">
-                        <span class="icon-base ti tabler-arrow-up icon-22px"></span>
-                      </button>
-                    </div>
-
+                          </div>
+                        </a>
+                      </div>
+                      @php $index1++; @endphp
+                    @endforeach
                   </div>
+
+                  <!-- ✅ Scroll Button -->
+                  <div class="text-end mt-3">
+                    <button class="btn rounded-pill btn-icon btn-outline-primary waves-effect scrollBtn"
+                      title="move to top chart">
+                      <span class="icon-base ti tabler-arrow-up icon-22px"></span>
+                    </button>
+                  </div>
+
                 </div>
               </div>
-            @endforeach
+            </div>
+          @endforeach
 
 
         </div>
@@ -1842,18 +1919,18 @@
             if (data.length > 0) {
               data.forEach(function (category) {
                 html += `
-                                                            <div class="col-md-4">
-                                                                <div class="card h-100">
-                                                                    <div class="card-body">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input indicatir-data" type="checkbox" value="${category.id}" id="category_${category.id}">
-                                                                            <label class="form-check-label" for="category_${category.id}">
-                                                                                ${category.indicator_category}
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>`;
+                                                                                                                                                                                        <div class="col-md-4">
+                                                                                                                                                                                            <div class="card h-100">
+                                                                                                                                                                                                <div class="card-body">
+                                                                                                                                                                                                    <div class="form-check">
+                                                                                                                                                                                                        <input class="form-check-input indicatir-data" type="checkbox" value="${category.id}" id="category_${category.id}">
+                                                                                                                                                                                                        <label class="form-check-label" for="category_${category.id}">
+                                                                                                                                                                                                            ${category.indicator_category}
+                                                                                                                                                                                                        </label>
+                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                </div>
+                                                                                                                                                                                            </div>
+                                                                                                                                                                                        </div>`;
               });
             } else {
               html = `<div class="col-12"><p>No Indicator Categories found.</p></div>`;
@@ -1895,16 +1972,16 @@
                   const chartId = `deliveryExceptionsChart_${indicator.id}`;
                   const chartType = (indicator.id % 2 === 0) ? 'radialBar' : 'area';
                   output += `
-                                                              <div class="col-xl-3 col-md-4 col-6">
-                                                              <div class="card h-100">
-                                                                <div class="card-header pb-2">
-                                                                    <p class="card-subtitle">${indicator.indicator}</p>
-                                                                </div>
-                                                                <div class="card-body">
-                                                                  <div id="${chartId}" class="chart-container"></div>
-                                                                </div>
-                                                              </div>
-                                                            </div>`;
+                                                    <div class="col-xl-3 col-md-4 col-6">
+                                                    <div class="card h-100">
+                                                    <div class="card-header pb-2">
+                                                    <p class="card-subtitle">${indicator.indicator}</p>
+                                                    </div>
+                                                    <div class="card-body">
+                                                    <div id="${chartId}" class="chart-container"></div>
+                                                    </div>
+                                                    </div>
+                                                    </div>`;
                   indicator.chart_id = chartId;
                   indicator.chart_type = chartType;
 
@@ -2079,74 +2156,80 @@
             }
           },
           plugins: [
+      var chartLabels = [
+        "Teaching and Learning",
+        "Research, Innovation and Commercialisation",
+        "Institutional Engagement (Core only)",
+        "Institutional Engagement (Operational+ Character Strengths)"
+      ];
+      var shortLabels = ["T&L", "RIC", "IE (Core)", "IE (Character)"];
+      var dataset1 = [70, 90, 85, 80];
+      var labelColors = ["#e74c3c", "#3498db", "#27ae60", "#f39c12"];
+
+      var ctx = document.getElementById("radarChart").getContext("2d");
+
+      var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
+      gradientPink.addColorStop(0, "rgba(115, 103, 240, 0.3)");
+      gradientPink.addColorStop(1, "rgba(115, 103, 240, 0.5)");
+
+      var radarChart = new Chart(ctx, {
+        type: "radar",
+        data: {
+          labels: chartLabels,
+          datasets: [
             {
-              id: "pointLabelClick",
-              afterEvent(chart, args) {
-                const { event } = args;
-                if (!event) return;
-
-                const { scales } = chart;
-                const rScale = scales.r;
-                let hovering = false;
-
-                chart.data.labels.forEach((label, i) => {
-                  const angle = rScale.getIndexAngle(i);
-                  const point = rScale.getPointPositionForValue(i, rScale.max);
-
-                  const padding = 30; // clickable area around label
-                  if (
-                    event.x >= point.x - padding &&
-                    event.x <= point.x + padding &&
-                    event.y >= point.y - padding &&
-                    event.y <= point.y + padding
-                  ) {
-                    hovering = true;
-
-                    // 👉 Handle click
-                    if (event.type === "click") {
-                      const targetId = label.replace(/\s+/g, "-").toLowerCase();
-                      const targetDiv = document.getElementById(targetId);
-
-                      if (targetDiv) {
-                        // 1️⃣ Scroll into view
-                        targetDiv.scrollIntoView({
-                          behavior: "smooth",
-                          block: "center"
-                        });
-
-                        // 2️⃣ Open accordion (if collapsed)
-                        const collapseEl = targetDiv.querySelector(".accordion-collapse");
-                        if (collapseEl && !collapseEl.classList.contains("show")) {
-                          const bsCollapse = new bootstrap.Collapse(collapseEl, {
-                            toggle: true
-                          });
-                        }
-
-                        // 3️⃣ Optionally mark as active
-                        document
-                          .querySelectorAll(".accordion-item")
-                          .forEach((item) => item.classList.remove("active"));
-                        targetDiv.classList.add("active");
-                      }
-                    }
-                  }
-                });
-
-                // 👉 Change cursor style on hover
-                chart.canvas.style.cursor = hovering ? "pointer" : "default";
-              }
+              label: "Achievements",
+              data: dataset1,
+              fill: true,
+              backgroundColor: gradientPink,
+              borderColor: "rgba(112, 25, 115, 1)",
+              pointBackgroundColor: labelColors,
+              pointBorderColor: labelColors,
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              pointStyle: "circle"
             }
           ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              ticks: { display: true, color: "#666" },
+              grid: { color: "#ddd" },
+              angleLines: { color: "#ddd" },
+              pointLabels: {
+                font: { size: 9 },
+                color: (context) => labelColors[context.index],
+                callback: (label, index) => shortLabels[index]
+              }
+            }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
 
+      // ✅ Custom Legend (horizontal)
+      var legendDiv = document.getElementById("customLegend");
+      chartLabels.forEach((label, i) => {
+        let li = document.createElement("li");
+        li.className = "mx-3"; // spacing between items
+        li.style.fontSize = "8px";
+        li.style.cursor = "pointer";
+        li.innerHTML = `<span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};border-radius:50%;margin-right:5px;font-size:10px;"></span>${label}`;
+
+        li.addEventListener("mouseenter", () => {
+          radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
+          radarChart.update();
+        });
+        li.addEventListener("mouseleave", () => {
+          radarChart.setActiveElements([]);
+          radarChart.update();
         });
 
-        var listEl = document.getElementById("fullLabelsList");
-        chartLabels.forEach((label, i) => {
-          let li = document.createElement("li");
-          li.innerHTML = `<strong>${shortLabels[i]}</strong> = ${label}`;
-          listEl.appendChild(li);
-        });
-      }
+        legendDiv.appendChild(li);
+      });
     });
     document.addEventListener("DOMContentLoaded", function () {
       var childModal = document.getElementById('paymentMethods');

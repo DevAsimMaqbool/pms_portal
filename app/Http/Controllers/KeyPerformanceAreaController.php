@@ -123,6 +123,7 @@ class KeyPerformanceAreaController extends Controller
             $query->select('indicator_id')
                 ->from('role_kpa_assignments')
                 ->where('indicator_category_id', $request->id)
+                ->where('status', 1)
                 ->where('role_id', Auth::user()->roles->firstWhere('name', Auth::user()->getRoleNames()->first())->id); // optional if role-based
         })->get();
 

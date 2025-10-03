@@ -79,23 +79,19 @@ class PermissionController extends Controller
         if ($role->name == 'Rector') {
             return redirect()->route('rector-dashboard.index');
         }
-        if ($role->name == 'Teacher') {
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor') {
             return view('admin.teacher_dashbord', compact('employee'));
         } elseif ($role->name == 'Survey') {
             return view('admin.survey_dashbord', compact('employee'));
-        } 
-        elseif ($role->name == 'Rector') {
+        } elseif ($role->name == 'Rector') {
             return view('admin.rector_dashboard', compact('employee'));
-        }
-        elseif ($role->name == 'HOD') {
+        } elseif ($role->name == 'HOD') {
             return view('admin.hod_dashboard', compact('employee'));
-        }
-        elseif ($role->name == 'Dean') {
+        } elseif ($role->name == 'Dean') {
             return view('admin.dean_dashboard', compact('employee'));
-        }
-        elseif ($role->name == 'ORIC') {
+        } elseif ($role->name == 'ORIC') {
             return view('admin.oric_dashboard', compact('employee'));
-        }else {
+        } else {
             return view('admin.teacher_dashbord', compact('employee'));
         }
 
