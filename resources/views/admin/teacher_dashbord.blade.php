@@ -54,8 +54,8 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Accordion1 -->
     <div class="row gy-6">
-      <div class="col-xxl-4 col-md-6 mb-6">
-        <div class="card h-100">
+      <div class="col-lg-4 col-sm-12">
+        <div class="card overflow-hidden h-50vh h-md-70vh h-lg-100vh">
           <div class="card-header d-flex justify-content-between">
             <div class="card-title mb-0">
               <h5 class="mb-1">Key Performance Indicators</h5>
@@ -73,7 +73,7 @@
               </div>
             </div>
           </div>
-          <div class="card-body">
+          <div class="card-body" id="vertical-example">
             <ul class="p-0 m-0">
               <li class="mb-4 d-flex">
                 <div class="d-flex w-50 align-items-center me-4">
@@ -372,7 +372,36 @@
               </div>
             </div>
           @endforeach
-
+             <div class="accordion-item" id="character-virtue">
+                <h2 class="accordion-header" id="headingseven">
+                  <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionSeven" aria-expanded="false" aria-controls="accordionTwo">
+                  <i class="icon-base ti tabler-sun me-2"></i>
+                  Character Virtue</button>
+                </h2>
+                <div id="accordionSeven" class="accordion-collapse collapse" aria-labelledby="headingseven" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                         <!-- Accordion1 -->
+                    <div class="row g-6 pt-2">
+                      
+                      <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                        <a href="{{ route('kpa.report', ['id' => 22]) }}" class="text-decoration-none">
+                          <div class="card card-border-shadow-success h-100">
+                            <div class="card-body">
+                              <div class="expensesChart" data-color="#198754" data-series="70"></div>
+                              <div class="mt-3 text-center">
+                                <small class="text-body-secondary mt-3 fw-bold">
+                                  Character Virtue
+                                </small>
+                              </div>
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                  </div>
+                        <!--/ Accordion1 -->
+                  </div>
+                </div>
+              </div>
 
         </div>
       </div>
