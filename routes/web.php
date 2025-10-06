@@ -156,7 +156,8 @@ Route::middleware('auth')->group(function () {
     Route::post('pip/{id}/update-status', [PipController::class, 'updateStatus'])->name('pip.updateStatus');
     Route::resource('/self-assessment', SelfAssessmentWorkingController::class);
     Route::get('/comparitive_analysis', [ComparitiveAnalysisController::class, 'index']);
-    Route::post('/get-indicator-categories', [ComparitiveAnalysisController::class, 'getIndicatorCategories'])->name('Category.IndicatorCategories');
+    Route::post('/get-indicator-categories-comp', [ComparitiveAnalysisController::class, 'getIndicatorCategories'])->name('Category.IndicatorCategories');
+    Route::post('/get-indicators-comp', [ComparitiveAnalysisController::class, 'getIndicators'])->name('indicator.getIndicatorsForComp');
 });
 
 require __DIR__ . '/auth.php';

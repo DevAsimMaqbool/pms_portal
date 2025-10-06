@@ -8,12 +8,13 @@
   </div>
 
   <div class="navbar-nav-right d-flex align-items-center justify-content-end" id="navbar-collapse">
-    <h5 class="card-title mb-0 justify-content-center">Performance Management System</h5>
+    <h5 class="card-title mb-0 justify-content-center">My Performance Hub</h5>
     <ul class="navbar-nav flex-row align-items-center ms-md-auto">
 
       <!--/ Language -->
 
-      <li><button type="button" class="btn rounded-pill btn-label-primary waves-effect">{{ Auth::user()->name }}</button></li>
+      <li><button type="button"
+          class="btn rounded-pill btn-label-primary waves-effect">{{ Auth::user()->name }}</button></li>
       <!-- Style Switcher -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill" id="nav-theme"

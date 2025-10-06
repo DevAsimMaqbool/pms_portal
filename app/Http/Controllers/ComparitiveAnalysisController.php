@@ -6,9 +6,8 @@ use App\Models\Indicator;
 use App\Models\IndicatorCategory;
 use App\Models\KeyPerformanceArea;
 use App\Models\User;
-use App\Models\Role;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class ComparitiveAnalysisController extends Controller
 {
     /**
@@ -101,9 +100,27 @@ class ComparitiveAnalysisController extends Controller
 
     public function getIndicators(Request $request)
     {
-        $categoryIds = $request->category_ids ?? [];
+        //$roleId = Auth::user()->roles->firstWhere('name', Auth::user()->getRoleNames()->first())->id ?? null;
 
-        $indicators = Indicator::whereIn('indicator_category_id', $categoryIds)->get();
+        // $indicators = Indicator::where('status', 1)
+        //     ->whereIn('id', function ($query) use ($request, $roleId) {
+        //         $query->select('indicator_id')
+        //             ->from('role_kpa_assignments')
+        //             ->whereIn('indicator_category_id', (array) $request->category_ids)
+        //             ->where('status', 1);
+
+        //         if ($roleId) {
+        //             $query->where('role_id', $roleId);
+        //         }
+        //     })
+        //     ->get();
+
+        $indicators = User::whereIn('id', [20233, 20249, 20253, 20268, 23154])
+            ->whereHas('roles', function ($query) {
+                $query->where('id', 21); // role_id = 21
+            })
+            ->limit(5)
+            ->get();
 
         return response()->json($indicators);
     }
