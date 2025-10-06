@@ -84,7 +84,7 @@
   </div>
   <!-- / Layout wrapper -->
   <!--chat bot-->
-  <div class="assessment_chatbot">
+  {{-- <div class="assessment_chatbot">
     <button class="chatbot-toggler">
       <span class="icon-base ti tabler-message">mode_comment</span>
       <span class="icon-base ti tabler-x">close</span>
@@ -105,7 +105,7 @@
         <span id="send-btn" class="menu-icon icon-base ti tabler-send-2">send</span>
       </div>
     </div>
-  </div>
+  </div> --}}
   <!-- / chat bot -->
   <script src="{{ asset('admin/assets/vendor/libs/jquery/jquery.js') }}"></script>
   <script src="{{ asset('admin/assets/vendor/libs/popper/popper.js') }}"></script>
