@@ -210,7 +210,36 @@
               </div>
             </div>
           @endforeach
-
+             <div class="accordion-item" id="character-virtue">
+                <h2 class="accordion-header" id="headingseven">
+                  <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionSeven" aria-expanded="false" aria-controls="accordionTwo">
+                  <i class="icon-base ti tabler-sun me-2"></i>
+                  Character Virtue</button>
+                </h2>
+                <div id="accordionSeven" class="accordion-collapse collapse" aria-labelledby="headingseven" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                         <!-- Accordion1 -->
+                    <div class="row g-6 pt-2">
+                      
+                      <div class="col-lg-2 col-md-3 col-sm-6 col-xl-3 col-xxl-2">
+                        <a href="{{ route('kpa.report', ['id' => 22]) }}" class="text-decoration-none">
+                          <div class="card card-border-shadow-success h-100">
+                            <div class="card-body">
+                              <div class="expensesChart" data-color="#198754" data-series="70"></div>
+                              <div class="mt-3 text-center">
+                                <small class="text-body-secondary mt-3 fw-bold">
+                                  Character Virtue
+                                </small>
+                              </div>
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                  </div>
+                        <!--/ Accordion1 -->
+                  </div>
+                </div>
+              </div>
 
         </div>
       </div>
