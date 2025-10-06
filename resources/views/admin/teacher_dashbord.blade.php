@@ -86,7 +86,7 @@
                           </div>
                         </div>
                         <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary" role="button"
+                          <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button"
                             data-bs-toggle="modal" data-bs-target="#{{ str_replace(' ', '', $indicator['indicator']) }}">
                             <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
                           </button>
@@ -110,20 +110,22 @@
                 class="icon-base ti tabler-chart-pie me-3"></i>Overall KPA Performance</h5>
             <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
               <input type="radio" class="btn-check" name="btnradio2" id="dailyRadio2" checked>
-              <label class="btn btn-outline-secondary waves-effect" for="dailyRadio2"> 📆 Fall 2025</label>
+              <label class="btn btn-outline-primary waves-effect" for="dailyRadio2"> 📆 Fall 2025</label>
 
               <input type="radio" class="btn-check" name="btnradio2" id="monthlyRadio2">
-              <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio2"> 📆 Fall 2026</label>
+              <label class="btn btn-outline-primary waves-effect" for="monthlyRadio2"> 📆 Fall 2026</label>
             </div>
           </div>
           <div class="card-body pt-0">
-            <div class="row">
-              <div class="col-md-8">
-                <canvas class="chartjs" id="radarChart"></canvas>
+            <div class="row justify-content-center text-center">
+              <div class="col-md-8 d-flex justify-content-center">
+                <canvas class="chartjs" id="radarChart" style="max-width: 100%; height: 350px;"></canvas>
               </div>
-              <br><br>
-              <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0" style="list-style:none;"></ul>
 
+              <div class="col-12 mt-1">
+                <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0" style="list-style:none;">
+                </ul>
+              </div>
             </div>
             {{-- <div><span>Teaching and Learning</span></div> --}}
             <!-- if schrool -->
@@ -184,7 +186,7 @@
                             <div class="card-body">
                               <div class="expensesChart" data-color="{{ $color2 }}" data-series="{{ $seriesValue1 }}"></div>
                               <div class="mt-3 text-center">
-                                <small class="text-body-secondary mt-3">
+                                <small class="text-body-secondary mt-3 fw-bold">
                                   {{ $category['indicator_category'] }} {{-- ✅ Category Name --}}
                                 </small>
                               </div>
@@ -1874,18 +1876,18 @@
             if (data.length > 0) {
               data.forEach(function (category) {
                 html += `
-                                                                                                                                                                                                    <div class="col-md-4">
-                                                                                                                                                                                                        <div class="card h-100">
-                                                                                                                                                                                                            <div class="card-body">
-                                                                                                                                                                                                                <div class="form-check">
-                                                                                                                                                                                                                    <input class="form-check-input indicatir-data" type="checkbox" value="${category.id}" id="category_${category.id}">
-                                                                                                                                                                                                                    <label class="form-check-label" for="category_${category.id}">
-                                                                                                                                                                                                                        ${category.indicator_category}
-                                                                                                                                                                                                                    </label>
-                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                    </div>`;
+                                                                                                                                                                                                                                                                  <div class="col-md-4">
+                                                                                                                                                                                                                                                                      <div class="card h-100">
+                                                                                                                                                                                                                                                                          <div class="card-body">
+                                                                                                                                                                                                                                                                              <div class="form-check">
+                                                                                                                                                                                                                                                                                  <input class="form-check-input indicatir-data" type="checkbox" value="${category.id}" id="category_${category.id}">
+                                                                                                                                                                                                                                                                                  <label class="form-check-label" for="category_${category.id}">
+                                                                                                                                                                                                                                                                                      ${category.indicator_category}
+                                                                                                                                                                                                                                                                                  </label>
+                                                                                                                                                                                                                                                                              </div>
+                                                                                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                                                                                  </div>`;
               });
             } else {
               html = `<div class="col-12"><p>No Indicator Categories found.</p></div>`;
@@ -1927,16 +1929,16 @@
                   const chartId = `deliveryExceptionsChart_${indicator.id}`;
                   const chartType = (indicator.id % 2 === 0) ? 'radialBar' : 'area';
                   output += `
-                                                                <div class="col-xl-3 col-md-4 col-6">
-                                                                <div class="card h-100">
-                                                                <div class="card-header pb-2">
-                                                                <p class="card-subtitle">${indicator.indicator}</p>
-                                                                </div>
-                                                                <div class="card-body">
-                                                                <div id="${chartId}" class="chart-container"></div>
-                                                                </div>
-                                                                </div>
-                                                                </div>`;
+                                                                                                                              <div class="col-xl-3 col-md-4 col-6">
+                                                                                                                              <div class="card h-100">
+                                                                                                                              <div class="card-header pb-2">
+                                                                                                                              <p class="card-subtitle">${indicator.indicator}</p>
+                                                                                                                              </div>
+                                                                                                                              <div class="card-body">
+                                                                                                                              <div id="${chartId}" class="chart-container"></div>
+                                                                                                                              </div>
+                                                                                                                              </div>
+                                                                                                                              </div>`;
                   indicator.chart_id = chartId;
                   indicator.chart_type = chartType;
 
@@ -2033,9 +2035,9 @@
         "Teaching and Learning",
         "Research, Innovation and Commercialisation",
         "Institutional Engagement (Core only)",
-        "Institutional Engagement (Operational+ Character Strengths)"
+        "Character Virtue"
       ];
-      var shortLabels = ["T&L", "RIC", "IE (Core)", "IE (Character)"];
+      var shortLabels = ["T&L", "RIC", "IE (Core)", "Character Virtue"];
       var dataset1 = [70, 90, 85, 80];
       var labelColors = ["#e74c3c", "#3498db", "#27ae60", "#f39c12"];
 
@@ -2088,9 +2090,9 @@
       chartLabels.forEach((label, i) => {
         let li = document.createElement("li");
         li.className = "mx-3"; // spacing between items
-        li.style.fontSize = "8px";
+        li.style.fontSize = "9px";
         li.style.cursor = "pointer";
-        li.innerHTML = `<span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};border-radius:50%;margin-right:5px;font-size:10px;"></span>${label}`;
+        li.innerHTML = `<span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};border-radius:50%;margin-right:5px;font-size:14px;"></span>${label}`;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
