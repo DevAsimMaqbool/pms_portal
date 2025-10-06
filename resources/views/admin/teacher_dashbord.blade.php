@@ -7,7 +7,7 @@
 
     @media (min-width: 992px) {
       .h-lg-100vh {
-        height: 400px;
+        height: 500px;
       }
     }
 
@@ -2082,7 +2082,66 @@
             }
           },
           plugins: { legend: { display: false } }
-        }
+        },
+        plugins: [
+              {
+                id: "pointLabelClick",
+                afterEvent(chart, args) {
+                  const { event } = args;
+                  if (!event) return;
+
+                  const { scales } = chart;
+                  const rScale = scales.r;
+                  let hovering = false;
+
+                  chart.data.labels.forEach((label, i) => {
+                    const angle = rScale.getIndexAngle(i);
+                    const point = rScale.getPointPositionForValue(i, rScale.max);
+
+                    const padding = 30; // clickable area around label
+                    if (
+                      event.x >= point.x - padding &&
+                      event.x <= point.x + padding &&
+                      event.y >= point.y - padding &&
+                      event.y <= point.y + padding
+                    ) {
+                      hovering = true;
+
+                      // 👉 Handle click
+                      if (event.type === "click") {
+                        const targetId = label.replace(/\s+/g, "-").toLowerCase();
+                        const targetDiv = document.getElementById(targetId);
+
+                        if (targetDiv) {
+                          // 1️⃣ Scroll into view
+                          targetDiv.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                          });
+
+                          // 2️⃣ Open accordion (if collapsed)
+                          const collapseEl = targetDiv.querySelector(".accordion-collapse");
+                          if (collapseEl && !collapseEl.classList.contains("show")) {
+                            const bsCollapse = new bootstrap.Collapse(collapseEl, {
+                              toggle: true
+                            });
+                          }
+
+                          // 3️⃣ Optionally mark as active
+                          document
+                            .querySelectorAll(".accordion-item")
+                            .forEach((item) => item.classList.remove("active"));
+                          targetDiv.classList.add("active");
+                        }
+                      }
+                    }
+                  });
+
+                  // 👉 Change cursor style on hover
+                  chart.canvas.style.cursor = hovering ? "pointer" : "default";
+                }
+              }
+            ]
       });
 
       // ✅ Custom Legend (horizontal)
