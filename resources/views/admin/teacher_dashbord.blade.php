@@ -54,8 +54,8 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Accordion1 -->
     <div class="row gy-6">
-      <div class="col-xxl-4 col-md-6 mb-6">
-        <div class="card h-100">
+      <div class="col-lg-4 col-sm-12">
+        <div class="card overflow-hidden h-50vh h-md-70vh h-lg-100vh">
           <div class="card-header d-flex justify-content-between">
             <div class="card-title mb-0">
               <h5 class="mb-1">Key Performance Indicators</h5>
@@ -73,7 +73,7 @@
               </div>
             </div>
           </div>
-          <div class="card-body">
+          <div class="card-body" id="vertical-example">
             <ul class="p-0 m-0">
               <li class="mb-4 d-flex">
                 <div class="d-flex w-50 align-items-center me-4">
