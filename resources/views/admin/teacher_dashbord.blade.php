@@ -77,16 +77,14 @@
             <ul class="p-0 m-0">
               <li class="mb-4 d-flex">
                 <div class="d-flex w-50 align-items-center me-4">
-                  <img src="{{ asset('admin/assets/img/icons/brands/laravel-logo.png')}}" alt="laravel-logo" class="me-4"
-                    width="32" />
+                  <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-smile icon-md"></i></div>
                   <div>
-                    <h6 class="mb-0">Student Satisfaction</h6>
-                    <small class="text-body"></small>
+                    <small class="text-dark">Student Satisfaction</small>
                   </div>
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
                   <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="54"
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65"
                       aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                   <span class="text-body-secondary">65%</span>
@@ -94,114 +92,56 @@
               </li>
               <li class="mb-4 d-flex">
                 <div class="d-flex w-50 align-items-center me-4">
-                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
-                    width="32" />
+                  <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-chalkboard icon-md"></i></div>
                   <div>
-                    <h6 class="mb-0">Classes Held</h6>
-                    <small class="text-body"></small>
+                    <small class="text-dark">Classes Held</small>
                   </div>
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
                   <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 90%" aria-valuenow="90"
                       aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
-                  <span class="text-body-secondary">86%</span>
+                  <span class="text-body-secondary">90%</span>
                 </div>
               </li>
               <li class="mb-4 d-flex">
                 <div class="d-flex w-50 align-items-center me-4">
-                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
-                    width="32" />
+                  <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-user-check icon-md"></i></div>
                   <div>
-                    <h6 class="mb-0">Student Attendance</h6>
-                    <small class="text-body"></small>
+                    <small class="text-dark">Student Attendance</small>
                   </div>
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
                   <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70"
                       aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
-                  <span class="text-body-secondary">86%</span>
+                  <span class="text-body-warning">70%</span>
                 </div>
               </li>
+           
               <li class="mb-4 d-flex">
                 <div class="d-flex w-50 align-items-center me-4">
-                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
-                    width="32" />
+                  <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i></div>
                   <div>
-                    <h6 class="mb-0">Student Punctuality</h6>
-                    <small class="text-body"></small>
+                    <small class="text-dark">Research Publications (Scopus Indexed)</small>
                   </div>
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
                   <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="50"
                       aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
-                  <span class="text-body-secondary">86%</span>
-                </div>
-              </li>
-              <li class="mb-4 d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
-                    width="32" />
-                  <div>
-                    <h6 class="mb-0">Quality of Assessment</h6>
-                    <small class="text-body"></small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">86%</span>
-                </div>
-              </li>
-              <li class="mb-4 d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
-                    width="32" />
-                  <div>
-                    <h6 class="mb-0">Adoption of Active Learning Techniques</h6>
-                    <small class="text-body"></small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">86%</span>
-                </div>
-              </li>
-              <li class="mb-4 d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
-                    width="32" />
-                  <div>
-                    <h6 class="mb-0">Research Publications (Scopus Indexed)</h6>
-                    <small class="text-body"></small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">86%</span>
+                  <span class="text-body-secondary">50%</span>
                 </div>
               </li>
 
               <li class="mb-4 d-flex">
                 <div class="d-flex w-50 align-items-center me-4">
-                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
-                    width="32" />
+                  <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i></div>
                   <div>
-                    <h6 class="mb-0">Knowledge Products</h6>
-                    <small class="text-body"></small>
+                    <small class="text-dark">Line Manager Satisfaction</small>
                   </div>
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
