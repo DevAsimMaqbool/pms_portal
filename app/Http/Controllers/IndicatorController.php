@@ -189,7 +189,7 @@ class IndicatorController extends Controller
             $indicatorForms = IndicatorForm::where('indicator_id', $indicatorId)->first();
             // if no forms exist at all
             if (!$indicatorForms) {
-                abort(404, 'Form not found');
+               return view("admin.error");
             }
             return view("admin.form." . $indicatorForms->slug, compact('facultyMembers','areaId', 'categoryId', 'indicatorId'));
 

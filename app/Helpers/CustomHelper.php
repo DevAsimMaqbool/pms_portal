@@ -100,7 +100,7 @@ function getUserLevel($UserID)
     return $user->level;
 }
 
-function getRoleAssignments(string $roleName)
+function getRoleAssignments(string $roleName, ?int $kapcid = null)
 {
     $roleId = Auth::user()->roles->firstWhere('name', $roleName)->id ?? null;
 
@@ -118,6 +118,9 @@ function getRoleAssignments(string $roleName)
         }
     ])
         ->where('role_id', $roleId)
+        ->when($kapcid !== null, function ($query) use ($kapcid) {
+            $query->where('key_performance_area_id', $kapcid);
+        })
         ->get();
 
     return $assignments->filter(fn($a) => $a->category && $a->indicator) // ✅ skip nulls

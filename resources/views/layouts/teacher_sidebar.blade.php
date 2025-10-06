@@ -72,23 +72,6 @@
             <div data-i18n="Self Assessment">Self Assessment</div>
           </a>
         </li>
-        <li class="menu-item active">
-          <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class="menu-icon icon-base ti tabler-bulb"></i>
-            <div data-i18n="RIC">RIC</div>
-          </a>
-          <ul class="menu-sub">
-            <li class="menu-item">
-              <a href="{{ route('indicator.form', [
-        'area' => 2,
-        'category' => 5,
-        'indicator' => 125
-      ]) }}" class="menu-link">
-                <div data-i18n="Research Publications">Research Publications</div>
-              </a>
-            </li>
-          </ul>
-        </li>
         <li class="menu-item {{ request()->routeIs('/user_report/' . Auth::user()->id) ? 'active' : '' }}">
           <a href="{{ url('/user_report/' . Auth::user()->id) }}" target="_blank" class="menu-link">
             <i class="menu-icon icon-base ti tabler-report"></i>
@@ -96,8 +79,8 @@
           </a>
         </li>
 
-        {{-- @php
-        $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+        @php
+        $result = getRoleAssignments(Auth::user()->getRoleNames()->first(),2);
         $icons = icons();
         @endphp
 
@@ -113,10 +96,10 @@
 
           <ul class="menu-sub">
             @foreach($kpa['category'] as $category)
-            <li class="menu-item">
+            <li class="menu-item" title="{{ $category['indicator_category'] }}">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <div data-i18n="{{ $category['indicator_category'] }}">
-                  {{ $category['indicator_category'] }}
+                <div data-i18n="{{ !empty($category['cat_short_code']) ? $category['cat_short_code'] : $category['indicator_category'] }}">
+                  {{ !empty($category['cat_short_code']) ? $category['cat_short_code'] : $category['indicator_category'] }}
                 </div>
               </a>
 
@@ -124,15 +107,15 @@
               <ul
                 class="menu-sub {{ request()->routeIs('indicator.form') && request()->route('category') == $category['id'] ? 'active open' : '' }}">
                 @foreach($category['indicator'] as $indicator)
-                <li class="menu-item">
+                <li class="menu-item" title="{{ $indicator['indicator'] }}">
                   <a href="{{ route('indicator.form', [
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     'area' => $kpa['id'],
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     'category' => $category['id'],
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     'indicator' => $indicator['id']
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ]) }}"
                     class="menu-link">
-                    <div data-i18n="{{ $indicator['indicator'] }}">
-                      {{ $indicator['indicator'] }}
+                    <div data-i18n="{{ !empty($indicator['short_code']) ? $indicator['short_code'] : $indicator['indicator'] }}">
+                      {{ !empty($indicator['short_code']) ? $indicator['short_code'] : $indicator['indicator'] }}
                     </div>
                   </a>
                 </li>
@@ -143,7 +126,7 @@
             @endforeach
           </ul>
         </li>
-        @endforeach --}}
+        @endforeach
 
         <li class="menu-item">
           <a href="#" class="menu-link">
