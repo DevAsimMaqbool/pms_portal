@@ -72,12 +72,6 @@
           <div data-i18n="Self Assessment">Self Assessment</div>
         </a>
       </li>
-      <li class="menu-item {{ request()->routeIs('/user_report/' . Auth::user()->id) ? 'active' : '' }}">
-        <a href="{{ url('/user_report/' . Auth::user()->id) }}" target="_blank" class="menu-link">
-          <i class="menu-icon icon-base ti tabler-report"></i>
-          <div data-i18n="Reports">Reports</div>
-        </a>
-      </li>
 
       @php
         $result = getRoleAssignments(Auth::user()->getRoleNames()->first(), 2);
@@ -88,8 +82,8 @@
         <li class="menu-item">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon icon-base {{ $icons[$kpakey % count($icons)] }}"></i>
-            <div data-i18n="{{ $kpa['performance_area'] }}">
-              {{ $kpa['performance_area'] }}
+            <div data-i18n="RIC">
+               RIC
             </div>
           </a>
 
@@ -128,7 +122,12 @@
           </ul>
         </li>
       @endforeach
-
+      <li class="menu-item {{ request()->routeIs('/user_report/' . Auth::user()->id) ? 'active' : '' }}">
+        <a href="{{ url('/user_report/' . Auth::user()->id) }}" target="_blank" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-report"></i>
+          <div data-i18n="Reports">Reports</div>
+        </a>
+      </li>
       <li class="menu-item">
         <a href="#" class="menu-link">
           <i class="menu-icon icon-base ti tabler-bell"></i>

@@ -1,4 +1,9 @@
 <style>
+
+    .bg-orange,.bg-label-orange {
+        background-color: #fd7e1459 !important;
+        color: #fd7e14 !important
+    }
     .custom-modal {
         background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(12px);
@@ -100,8 +105,8 @@
                                             <td>UG</td>
                                             <td>60</td>
                                             <td>55</td>
-                                            <td><span class="badge bg-success">91.67%</span></td>
-                                            <td><span class="badge bg-warning">OS</span></td>
+                                            <td><span class="badge bg-primary">91.67%</span></td>
+                                            <td><span class="badge bg-primary">OS</span></td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
@@ -110,8 +115,8 @@
                                             <td>UG</td>
                                             <td>45</td>
                                             <td>35</td>
-                                            <td><span class="badge bg-danger">75%</span></td>
-                                            <td><span class="badge bg-primary">EE</span></td>
+                                            <td><span class="badge bg-success">75%</span></td>
+                                            <td><span class="badge bg-success">EE</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -142,8 +147,8 @@
                                             <td>UG</td>
                                             <td>50</td>
                                             <td>41</td>
-                                            <td><span class="badge bg-success">85%</span></td>
-                                            <td><span class="badge bg-info">ME</span></td>
+                                            <td><span class="badge bg-warning">85%</span></td>
+                                            <td><span class="badge bg-warning">ME</span></td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
@@ -152,8 +157,8 @@
                                             <td>UG</td>
                                             <td>60</td>
                                             <td>55</td>
-                                            <td><span class="badge bg-success">91.67%</span></td>
-                                            <td><span class="badge bg-warning">OS</span></td>
+                                            <td><span class="badge bg-primary">91.67%</span></td>
+                                            <td><span class="badge bg-primary">OS</span></td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
@@ -162,8 +167,8 @@
                                             <td>UG</td>
                                             <td>45</td>
                                             <td>35</td>
-                                            <td><span class="badge bg-danger">75%</span></td>
-                                            <td><span class="badge bg-primary">EE</span></td>
+                                            <td><span class="badge bg-success">75%</span></td>
+                                            <td><span class="badge bg-success">EE</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -231,9 +236,9 @@
                                             <td>BSCS</td>
                                             <td>UG</td>
                                             <td>
-                                                <div class=" badge bg-label-success">85%</div>
+                                                <div class=" badge bg-label-warning">85%</div>
                                             </td>
-                                            <td><span class="badge bg-label-primary me-1">ME</span></td>
+                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
                                         </tr>
 
                                         <tr>
@@ -242,9 +247,9 @@
                                             <td>BSSE</td>
                                             <td>UG</td>
                                             <td>
-                                                <div class=" badge bg-label-success">91.67%</div>
+                                                <div class=" badge bg-label-primary">91.67%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">OS</span></td>
+                                            <td><span class="badge bg-label-primary me-1">OS</span></td>
                                         </tr>
 
                                         <tr>
@@ -255,7 +260,7 @@
                                             <td>
                                                 <div class=" badge bg-label-success">75%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">EE</span></td>
+                                            <td><span class="badge bg-label-success me-1">EE</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -282,9 +287,9 @@
                                             <td>BSCS</td>
                                             <td>UG</td>
                                             <td>
-                                                <div class=" badge bg-label-success">85%</div>
+                                                <div class=" badge bg-label-warning">85%</div>
                                             </td>
-                                            <td><span class="badge bg-label-primary me-1">ME</span></td>
+                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
                                         </tr>
 
                                         <tr>
@@ -293,9 +298,9 @@
                                             <td>BSSE</td>
                                             <td>UG</td>
                                             <td>
-                                                <div class=" badge bg-label-success">91%</div>
+                                                <div class=" badge bg-label-primary">91%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">OS</span></td>
+                                            <td><span class="badge bg-label-primary me-1">OS</span></td>
                                         </tr>
 
                                         <tr>
@@ -306,7 +311,7 @@
                                             <td>
                                                 <div class=" badge bg-label-success">75%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">EE</span></td>
+                                            <td><span class="badge bg-label-success me-1">EE</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -369,9 +374,9 @@
                                         <td>42</td>
                                         <td>8</td>
                                         <td>
-                                            <div class="badge bg-label-warning">84%</div>
+                                            <div class="badge bg-label-danger">84%</div>
                                         </td>
-                                        <td><span class="badge bg-label-warning me-1">BE</span></td>
+                                        <td><span class="badge bg-label-danger me-1">BE</span></td>
                                     </tr>
 
                                     <tr>
@@ -381,9 +386,9 @@
                                         <td>42</td>
                                         <td>8</td>
                                         <td>
-                                            <div class=" badge bg-label-warning">70%</div>
+                                            <div class=" badge bg-label-danger">70%</div>
                                         </td>
-                                        <td><span class="badge bg-label-warning me-1">BE</span></td>
+                                        <td><span class="badge bg-label-danger me-1">BE</span></td>
                                     </tr>
 
                                     <tr>
@@ -393,9 +398,9 @@
                                         <td>42</td>
                                         <td>8</td>
                                         <td>
-                                            <div class="badge bg-label-success">88%</div>
+                                            <div class="badge bg-label-orange">88%</div>
                                         </td>
-                                        <td><span class="badge bg-label-success me-1">NI</span></td>
+                                        <td><span class="badge bg-label-orange me-1">NI</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -456,9 +461,9 @@
                                         <td>42</td>
                                         <td>8</td>
                                         <td>
-                                            <div class="badge bg-label-warning">84%</div>
+                                            <div class="badge bg-label-danger">84%</div>
                                         </td>
-                                        <td><span class="badge bg-label-warning me-1">BE</span></td>
+                                        <td><span class="badge bg-label-danger me-1">BE</span></td>
                                     </tr>
 
                                     <tr>
@@ -468,9 +473,9 @@
                                         <td>42</td>
                                         <td>8</td>
                                         <td>
-                                            <div class=" badge bg-label-success">90%</div>
+                                            <div class=" badge bg-label-warning">90%</div>
                                         </td>
-                                        <td><span class="badge bg-label-success me-1">ME</span></td>
+                                        <td><span class="badge bg-label-warning me-1">ME</span></td>
                                     </tr>
 
                                     <tr>
@@ -551,9 +556,9 @@
                                                 <div class="badge bg-label-warning">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-warning">70%</div>
+                                                <div class=" badge bg-label-danger">70%</div>
                                             </td>
-                                            <td><span class="badge bg-label-primary me-1">BE</span></td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                         </tr>
 
                                         <tr>
@@ -563,9 +568,9 @@
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">90%</div>
+                                                <div class=" badge bg-label-warning">90%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">ME</span></td>
+                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
                                         </tr>
 
                                         <tr>
@@ -575,9 +580,9 @@
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">100%</div>
+                                                <div class=" badge bg-label-primary">100%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">OS</span></td>
+                                            <td><span class="badge bg-label-primary me-1">OS</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -605,9 +610,9 @@
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">90%</div>
+                                                <div class=" badge bg-label-warning">90%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">ME</span></td>
+                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
                                         </tr>
 
                                         <tr>
@@ -617,9 +622,9 @@
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-warning">60%</div>
+                                                <div class=" badge bg-label-danger">60%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                         </tr>
 
                                         <tr>
@@ -629,9 +634,9 @@
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-warning">20%</div>
+                                                <div class=" badge bg-label-danger">20%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -702,9 +707,9 @@
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-warning">70%</div>
+                                                <div class=" badge bg-label-danger">70%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                         </tr>
 
                                         <tr>
@@ -714,9 +719,9 @@
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">85%</div>
+                                                <div class=" badge bg-label-orange">85%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">NI</span></td>
+                                            <td><span class="badge bg-label-orange me-1">NI</span></td>
                                         </tr>
 
                                         <tr>
@@ -726,9 +731,9 @@
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">91%</div>
+                                                <div class=" badge bg-label-warning">91%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">ME</span></td>
+                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -756,9 +761,9 @@
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">90%</div>
+                                                <div class=" badge bg-label-warning">90%</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">ME</span></td>
+                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
                                         </tr>
 
                                         <tr>
@@ -768,9 +773,9 @@
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-warning">60%</div>
+                                                <div class=" badge bg-label-danger">60%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                         </tr>
 
                                         <tr>
@@ -911,9 +916,9 @@
                                             <td>A</td>
                                             <td><div class=" badge bg-label-success">Submitted</div></td>
                                             <td>
-                                                <div class=" badge bg-label-primary">90%</div>
+                                                <div class=" badge bg-label-warning">90%</div>
                                             </td>
-                                            <td><span class="badge bg-label-primary me-1">ME</span></td>
+                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
                                         </tr>
 
                                         <tr>
@@ -921,9 +926,9 @@
                                             <td>A</td>
                                             <td><div class=" badge bg-label-warning">Not Submitted</div></td>
                                             <td>
-                                                <div class=" badge bg-label-warning">85%</div>
+                                                <div class=" badge bg-label-orange">85%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">NI</span></td>
+                                            <td><span class="badge bg-label-orange me-1">NI</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -969,9 +974,9 @@
                                             <td>A</td>
                                             <td><div class=" badge bg-label-warning">Not Submitted</div></td>
                                             <td>
-                                                <div class=" badge bg-label-warning">85%</div>
+                                                <div class=" badge bg-label-orange">85%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">NI</span></td>
+                                            <td><span class="badge bg-label-orange me-1">NI</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1105,44 +1110,42 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
+                                            <th>Session</th>
+                                            <th>Semester</th>
                                             <th>Course Name</th>
-                                            <th>Section</th>
-                                            <th>C.H</th>
+                                            <th>Program</th>
+                                            <th>Underload</th>
+                                            <th>Overload</th>
                                             
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
-                                            <td>
-                                                <div class=" badge bg-label-success">95%</div>
-                                            </td>
+                                            <td>2025</td>
+                                            <td>1</td>
+                                            <td>Discrete Structures</td>
+                                            <td>BS Software Engineering</td>
+                                            <td>2</td>
+                                            <td>3</td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
-                                            <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
-                                            <td>
-                                                <div class=" badge bg-label-success">70%</div>
-                                            </td>
+                                            <td>2025</td>
+                                            <td>2</td>
+                                            <td>Digital Logic Design (Lab)</td>
+                                            <td>BS Software Engineering</td>
+                                            <td>1</td>
+                                            <td>3</td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
-                                            <td>ABC</td>
-                                            <td><div class=" badge bg-label-warning">Not Submitted</div></td>
-                                            <td>
-                                                <div class=" badge bg-label-success">60%</div>
-                                            </td>
-                                        </tr>
-                                        <tr>
+                                            <td>2025</td>
+                                            <td>2</td>
+                                            <td>Probability & Statistics</td>
+                                            <td>BS Data Science</td>
                                             <td>4</td>
-                                            <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
-                                            <td>
-                                                <div class=" badge bg-label-success">89%</div>
-                                            </td>
+                                            <td>1</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1174,43 +1177,41 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
+                                            <th>Session</th>
+                                            <th>Semester</th>
                                             <th>Course Name</th>
-                                            <th>Section</th>
-                                            <th>C.H</th>
+                                            <th>Program</th>
+                                            <th>Underload</th>
+                                            <th>Overload</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       <tr>
+                                        <tr>
                                             <td>1</td>
-                                            <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
-                                            <td>
-                                                <div class=" badge bg-label-success">95%</div>
-                                            </td>
+                                            <td>2025</td>
+                                            <td>1</td>
+                                            <td>Pre-Algebra</td>
+                                            <td>BS Software Engineering</td>
+                                            <td>2</td>
+                                            <td>3</td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
-                                            <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
-                                            <td>
-                                                <div class=" badge bg-label-success">93%</div>
-                                            </td>
+                                            <td>2025</td>
+                                            <td>2</td>
+                                            <td>Digital Logic Design (Lab)</td>
+                                            <td>BS Software Engineering</td>
+                                            <td>1</td>
+                                            <td>3</td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
-                                            <td>ABC</td>
-                                            <td><div class=" badge bg-label-warning">Not Submitted</div></td>
-                                            <td>
-                                                <div class=" badge bg-label-success">92%</div>
-                                            </td>
-                                        </tr>
-                                        <tr>
+                                            <td>2025</td>
+                                            <td>2</td>
+                                            <td>Probability & Statistics</td>
+                                            <td>BS Data Science</td>
                                             <td>4</td>
-                                            <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
-                                            <td>
-                                                <div class=" badge bg-label-success">97%</div>
-                                            </td>
+                                            <td>1</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1411,9 +1412,9 @@
                                                 <div class=" badge bg-label-danger">75%</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-warning">30</div>
+                                                <div class=" badge bg-label-danger">30</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                         </tr>
 
                                     </tbody>
@@ -1444,9 +1445,9 @@
                                                 <div class=" badge bg-label-danger">6%</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-success">88</div>
+                                                <div class=" badge bg-label-warning">88</div>
                                             </td>
-                                            <td><span class="badge bg-label-success me-1">ME</span></td>
+                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
                                         </tr>
 
                                         <tr>
@@ -1457,9 +1458,9 @@
                                                 <div class=" badge bg-label-danger">75%</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-warning">30</div>
+                                                <div class=" badge bg-label-danger">30</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">BE</span></td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1523,8 +1524,8 @@
                                         <tr>
                                             <td>1</td>
                                             <td>Ab</td>
-                                            <td><div class=" badge bg-label-warning">71%</div></td>
-                                            <td><span class="badge bg-label-warning me-1">NI</span></td>
+                                            <td><div class=" badge bg-label-orange">71%</div></td>
+                                            <td><span class="badge bg-label-orange me-1">NI</span></td>
                                         </tr>
 
                                         <tr>
@@ -1562,8 +1563,8 @@
                                         <tr>
                                             <td>2</td>
                                             <td>AbC</td>
-                                            <td><div class=" badge bg-label-success">85%</div></td>
-                                            <td><span class="badge bg-label-success me-1">ME</span></td>
+                                            <td><div class=" badge bg-label-warning">85%</div></td>
+                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1712,7 +1713,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    of Research Publications (Scopus Indexed)
+                    No of Research Publications (Scopus Indexed)
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -1744,12 +1745,39 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
+                                            <th>Target</th>
+                                            <th>Achieved</th>
+                                            <th>% Achieved</th>
+                                            <th>International</th>
+                                            <th>Q1</th>
+                                            <th>Q2</th>
+                                            <th>Q3</th>
+                                            <th>Q4</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                     <tr>
+                                     <td>1</td>
+                                            <td>1</td>
+                                            <td>3</td>
+                                            <td><div class=" badge bg-label-success">60%</div></td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                        </tr>
+                                         <tr>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td><div class=" badge bg-label-success">50%</div></td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1762,12 +1790,39 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
+                                            <th>Target</th>
+                                            <th>Achieved</th>
+                                            <th>% Achieved</th>
+                                            <th>International</th>
+                                            <th>Q1</th>
+                                            <th>Q2</th>
+                                            <th>Q3</th>
+                                            <th>Q4</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+                                         <tr>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td><div class=" badge bg-label-success">50%</div></td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                        </tr>
+                                         <tr>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>3</td>
+                                            <td><div class=" badge bg-label-success">60%</div></td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1818,16 +1873,43 @@
                         <!-- Spring -->
                         <div class="tab-pane fade show active" id="ResearchproductivityofPGstudents-spring" role="tabpanel">
                             <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
+                               <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
+                                            <th>Target</th>
+                                            <th>Achieved</th>
+                                            <th>% Achieved</th>
+                                            <th>International</th>
+                                            <th>Q1</th>
+                                            <th>Q2</th>
+                                            <th>Q3</th>
+                                            <th>Q4</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                     <tr>
+                                     <td>1</td>
+                                            <td>1</td>
+                                            <td>3</td>
+                                            <td><div class=" badge bg-label-success">60%</div></td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                        </tr>
+                                         <tr>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td><div class=" badge bg-label-success">50%</div></td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1840,12 +1922,39 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
+                                            <th>Target</th>
+                                            <th>Achieved</th>
+                                            <th>% Achieved</th>
+                                            <th>International</th>
+                                            <th>Q1</th>
+                                            <th>Q2</th>
+                                            <th>Q3</th>
+                                            <th>Q4</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+                                     <tr>
+                                     <td>1</td>
+                                            <td>1</td>
+                                            <td>3</td>
+                                            <td><div class=" badge bg-label-success">60%</div></td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                        </tr>
+                                         <tr>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td><div class=" badge bg-label-success">50%</div></td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1900,12 +2009,30 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Class</th>
+                                            <th>Task</th>
                                             <th>Status</th>
+                                            <th>Rating</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Committees Participated/Chaired</td>
+                                            <td>
+                                                <div class="badge bg-label-success">Complete</div>
+                                            </td>
+                                            <td><span class="badge bg-label-success me-1">Satisfied</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>2</td>
+                                            <td> Participated</td>
+                                            <td>
+                                                <div class="badge bg-label-danger">InComplete</div>
+                                            </td>
+                                            <td><span class="badge bg-label-danger me-1">UnSatisfied</span></td>
+                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1918,12 +2045,30 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Class</th>
+                                            <th>Task</th>
                                             <th>Status</th>
+                                            <th>Rating</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Committees Participated/Chaired</td>
+                                            <td>
+                                                <div class="badge bg-label-success">Complete</div>
+                                            </td>
+                                            <td><span class="badge bg-label-danger me-1">UnSatisfied</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>2</td>
+                                            <td> Participated</td>
+                                            <td>
+                                                <div class="badge bg-label-danger">InComplete</div>
+                                            </td>
+                                            <td><span class="badge bg-label-success me-1">Satisfied</span></td>
+                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2056,12 +2201,36 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
+                                            <th>Virtue</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Responsibility & Accountability</td>
+                                            <td><span class="badge bg-danger">59%</span></td>
+                                            <td><span class="badge bg-danger">BE</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Empathy & Compassion</td>
+                                            <td><span class="badge bg-orange">67%</span></td>
+                                            <td><span class="badge bg-orange">NI</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Humility & Service</td>
+                                            <td><span class="badge bg-warning">77%</span></td>
+                                            <td><span class="badge bg-warning">ME</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Honesty & Integrity</td>
+                                            <td><span class="badge bg-success">88%</span></td>
+                                            <td><span class="badge bg-success">EE</span></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -2070,16 +2239,41 @@
                         <!-- Fall -->
                         <div class="tab-pane fade" id="LineManagerSatisfactionRating-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
+                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
+                                            <th>Virtue</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Honesty & Integrity</td>
+                                            <td><span class="badge bg-success">88%</span></td>
+                                            <td><span class="badge bg-success">EE</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Responsibility & Accountability</td>
+                                            <td><span class="badge bg-danger">59%</span></td>
+                                            <td><span class="badge bg-danger">BE</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Empathy & Compassion</td>
+                                            <td><span class="badge bg-orange">67%</span></td>
+                                            <td><span class="badge bg-orange">NI</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Humility & Service</td>
+                                            <td><span class="badge bg-warning">77%</span></td>
+                                            <td><span class="badge bg-warning">ME</span></td>
+                                        </tr>
+                                        
                                     </tbody>
                                 </table>
                             </div>
