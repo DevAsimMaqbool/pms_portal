@@ -29,19 +29,19 @@
         text-align: center;
         vertical-align: middle;
     }
-
 </style>
 <!--  Payment Methods modal -->
 <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-rewind-backward-50 icon-md"></i></div> Student Satisfaction
+                    <div class="badge bg-label-primary rounded p-2"><i
+                            class="icon-base ti tabler-rewind-backward-50 icon-md"></i></div> Student Satisfaction
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -183,12 +183,13 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-binoculars icon-md"></i></div> QEC Observation / Peer Review
+                    <div class="badge bg-label-primary rounded p-2"><i
+                            class="icon-base ti tabler-binoculars icon-md"></i></div> QEC Observation / Peer Review
                 </h3>
                 <!-- ffffff-->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -196,15 +197,15 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#QECObservation/PeerReview-spring" aria-controls="QECObservation/PeerReview-spring"
-                                    aria-selected="true">
+                                    data-bs-target="#QECObservation/PeerReview-spring"
+                                    aria-controls="QECObservation/PeerReview-spring" aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#QECObservation/PeerReview-fall" aria-controls="QECObservation/PeerReview-fall"
-                                    aria-selected="false">
+                                    data-bs-target="#QECObservation/PeerReview-fall"
+                                    aria-controls="QECObservation/PeerReview-fall" aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -326,12 +327,13 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-            <!-- Title -->
+                <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-calendar-clock icon-md"></i></div> Student Attendance
+                    <div class="badge bg-label-primary rounded p-2"><i
+                            class="icon-base ti tabler-calendar-clock icon-md"></i></div> Student Attendance
                 </h3>
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -350,16 +352,16 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Class</th>
-                                        <th>Program</th>
-                                        <th>Present</th>
-                                        <th>Absent</th>
-                                        <th>%</th>
-                                        <th>Rating</th>
-                                    </tr>
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Class</th>
+                                    <th>Program</th>
+                                    <th>Present</th>
+                                    <th>Absent</th>
+                                    <th>%</th>
+                                    <th>Rating</th>
+                                </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
                                     <tr>
@@ -413,12 +415,13 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-            <!-- Title -->
+                <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> Classes Held in Time
+                    <div class="badge bg-label-primary rounded p-2"><i
+                            class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> Classes Held in Time
                 </h3>
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -437,16 +440,16 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Class</th>
-                                        <th>Scheduled</th>
-                                        <th>Held</th>
-                                        <th>Not Held</th>
-                                        <th>%</th>
-                                        <th>Rating</th>
-                                    </tr>
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Class</th>
+                                    <th>Scheduled</th>
+                                    <th>Held</th>
+                                    <th>Not Held</th>
+                                    <th>%</th>
+                                    <th>Rating</th>
+                                </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
                                     <tr>
@@ -500,12 +503,13 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-folder icon-md"></i></div> Completion of Course Folder in Hard 
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-folder icon-md"></i>
+                    </div> Completion of Course Folder in Hard
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -513,15 +517,15 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#completion-course-spring"
-                                    aria-controls="completion-course-spring" aria-selected="true">
+                                    data-bs-target="#completion-course-spring" aria-controls="completion-course-spring"
+                                    aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#completion-course-fall"
-                                    aria-controls="completion-course-fall" aria-selected="false">
+                                    data-bs-target="#completion-course-fall" aria-controls="completion-course-fall"
+                                    aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -651,12 +655,13 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-rocket icon-md"></i></div> Compliance and Usage of LMS
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-rocket icon-md"></i>
+                    </div> Compliance and Usage of LMS
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -749,7 +754,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                         <tr>
+                                        <tr>
                                             <td>1</td>
                                             <td>A</td>
                                             <td>
@@ -802,10 +807,10 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-            <!-- Title -->
+                <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     🎓 Student Punctuality
                 </h3>
@@ -817,7 +822,8 @@
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadio01"> 📅 Weekly</label>
 
                             <input type="radio" class="btn-check" name="btnradio01" id="monthlyRadio01">
-                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio01"> 🎓 Semesterly</label>
+                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio01"> 🎓
+                                Semesterly</label>
 
                             <input type="radio" class="btn-check" name="btnradio01" id="yearlyRadio">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio01"> 📅 Yearly</label>
@@ -826,16 +832,16 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Class</th>
-                                        <th>%</th>
-                                        <th>Rating</th>
-                                    </tr>
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Class</th>
+                                    <th>%</th>
+                                    <th>Rating</th>
+                                </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                   
+
                                 </tbody>
                             </table>
                         </div>
@@ -847,16 +853,18 @@
 </div>
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
-<div class="modal fade" id="TimelySubmissionofExamResults" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="SubmissionofExamResults" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-chart-bar-popular icon-md"></i></div> Timely Submission of Exam Results
+                    <div class="badge bg-label-primary rounded p-2"><i
+                            class="icon-base ti tabler-chart-bar-popular icon-md"></i></div>Submission of Exam
+                    Results
 
                 </h3>
                 <!-- Tabs -->
@@ -865,15 +873,15 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#TimelySubmissionofExamResults-spring"
-                                    aria-controls="TimelySubmissionofExamResults-spring" aria-selected="true">
+                                    data-bs-target="#SubmissionofExamResults-spring"
+                                    aria-controls="SubmissionofExamResults-spring" aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#TimelySubmissionofExamResults-fall"
-                                    aria-controls="TimelySubmissionofExamResults-fall" aria-selected="false">
+                                    data-bs-target="#SubmissionofExamResults-fall"
+                                    aria-controls="SubmissionofExamResults-fall" aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -883,7 +891,7 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="TimelySubmissionofExamResults-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="SubmissionofExamResults-spring" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -899,7 +907,9 @@
                                         <tr>
                                             <td>1</td>
                                             <td>A</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-success">95%</div>
                                             </td>
@@ -909,7 +919,9 @@
                                         <tr>
                                             <td>2</td>
                                             <td>A</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-primary">90%</div>
                                             </td>
@@ -919,7 +931,9 @@
                                         <tr>
                                             <td>3</td>
                                             <td>A</td>
-                                            <td><div class=" badge bg-label-warning">Not Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-warning">Not Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-warning">85%</div>
                                             </td>
@@ -931,12 +945,12 @@
                         </div>
 
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="TimelySubmissionofExamResults-fall" role="tabpanel">
+                        <div class="tab-pane fade" id="SubmissionofExamResults-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
                                         <tr>
-                                             <th>Sr#</th>
+                                            <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Status</th>
                                             <th>Score</th>
@@ -947,7 +961,9 @@
                                         <tr>
                                             <td>1</td>
                                             <td>A</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-success">95%</div>
                                             </td>
@@ -957,7 +973,9 @@
                                         <tr>
                                             <td>2</td>
                                             <td>A</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-danger">81%</div>
                                             </td>
@@ -967,7 +985,9 @@
                                         <tr>
                                             <td>3</td>
                                             <td>A</td>
-                                            <td><div class=" badge bg-label-warning">Not Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-warning">Not Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-warning">85%</div>
                                             </td>
@@ -990,12 +1010,14 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-antenna-bars-4 icon-md"></i></div> Assessment Quality of Exams etc.
+                    <div class="badge bg-label-primary rounded p-2"><i
+                            class="icon-base ti tabler-antenna-bars-4 icon-md"></i></div> Assessment Quality of Exams
+                    etc.
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -1004,14 +1026,16 @@
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#QualityofAssessment(ExamPaper-Projects-Assignments)-spring"
-                                    aria-controls="QualityofAssessment(ExamPaper-Projects-Assignments)-spring" aria-selected="true">
+                                    aria-controls="QualityofAssessment(ExamPaper-Projects-Assignments)-spring"
+                                    aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#QualityofAssessment(ExamPaper-Projects-Assignments)-fall"
-                                    aria-controls="QualityofAssessment(ExamPaper-Projects-Assignments)-fall" aria-selected="false">
+                                    aria-controls="QualityofAssessment(ExamPaper-Projects-Assignments)-fall"
+                                    aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -1021,7 +1045,8 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="QualityofAssessment(ExamPaper-Projects-Assignments)-spring" role="tabpanel">
+                        <div class="tab-pane fade show active"
+                            id="QualityofAssessment(ExamPaper-Projects-Assignments)-spring" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1032,14 +1057,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="QualityofAssessment(ExamPaper-Projects-Assignments)-fall" role="tabpanel">
+                        <div class="tab-pane fade" id="QualityofAssessment(ExamPaper-Projects-Assignments)-fall"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1050,7 +1076,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1068,12 +1094,13 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                     <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-loader-3 icon-md"></i></div> Course Load
+                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-loader-3 icon-md"></i>
+                    </div> Course Load
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -1081,15 +1108,15 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#CourseLoad-spring"
-                                    aria-controls="CourseLoad-spring" aria-selected="true">
+                                    data-bs-target="#CourseLoad-spring" aria-controls="CourseLoad-spring"
+                                    aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#CourseLoad-fall"
-                                    aria-controls="CourseLoad-fall" aria-selected="false">
+                                    data-bs-target="#CourseLoad-fall" aria-controls="CourseLoad-fall"
+                                    aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -1108,14 +1135,16 @@
                                             <th>Course Name</th>
                                             <th>Section</th>
                                             <th>C.H</th>
-                                            
+
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>1</td>
                                             <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-success">95%</div>
                                             </td>
@@ -1123,7 +1152,9 @@
                                         <tr>
                                             <td>2</td>
                                             <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-success">70%</div>
                                             </td>
@@ -1131,7 +1162,9 @@
                                         <tr>
                                             <td>3</td>
                                             <td>ABC</td>
-                                            <td><div class=" badge bg-label-warning">Not Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-warning">Not Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-success">60%</div>
                                             </td>
@@ -1139,7 +1172,9 @@
                                         <tr>
                                             <td>4</td>
                                             <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-success">89%</div>
                                             </td>
@@ -1150,18 +1185,18 @@
                             <div class="table-responsive">
                                 <table class="table m-0 table-borderless">
                                     <tbody>
-                                    <tr>
-                                        <td class="align-top pe-6 ps-0 py-6 text-body">
-                                        </td>
-                                        <td class="px-0 w-px-100">
-                                        <p class="fw-medium mb-2">Score</p>
-                                        <p class="fw-medium mb-2">Rating</p>
-                                        </td>
-                                        <td class="px-0 w-px-100 fw-medium text-heading">
-                                        <p class="fw-medium mb-2">91%</p>
-                                        <p class="fw-medium mb-2">BE</p>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td class="align-top pe-6 ps-0 py-6 text-body">
+                                            </td>
+                                            <td class="px-0 w-px-100">
+                                                <p class="fw-medium mb-2">Score</p>
+                                                <p class="fw-medium mb-2">Rating</p>
+                                            </td>
+                                            <td class="px-0 w-px-100 fw-medium text-heading">
+                                                <p class="fw-medium mb-2">91%</p>
+                                                <p class="fw-medium mb-2">BE</p>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1180,10 +1215,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       <tr>
+                                        <tr>
                                             <td>1</td>
                                             <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-success">95%</div>
                                             </td>
@@ -1191,7 +1228,9 @@
                                         <tr>
                                             <td>2</td>
                                             <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-success">93%</div>
                                             </td>
@@ -1199,7 +1238,9 @@
                                         <tr>
                                             <td>3</td>
                                             <td>ABC</td>
-                                            <td><div class=" badge bg-label-warning">Not Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-warning">Not Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-success">92%</div>
                                             </td>
@@ -1207,7 +1248,9 @@
                                         <tr>
                                             <td>4</td>
                                             <td>ABC</td>
-                                            <td><div class=" badge bg-label-success">Submitted</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">Submitted</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-success">97%</div>
                                             </td>
@@ -1215,24 +1258,24 @@
                                     </tbody>
                                 </table>
                             </div>
-                                <div class="table-responsive">
-                                    <table class="table m-0 table-borderless">
-                                        <tbody>
+                            <div class="table-responsive">
+                                <table class="table m-0 table-borderless">
+                                    <tbody>
                                         <tr>
                                             <td class="align-top pe-6 ps-0 py-6 text-body">
                                             </td>
                                             <td class="px-0 w-px-100">
-                                            <p class="fw-medium mb-2">Score</p>
-                                            <p class="fw-medium mb-2">Rating</p>
+                                                <p class="fw-medium mb-2">Score</p>
+                                                <p class="fw-medium mb-2">Rating</p>
                                             </td>
                                             <td class="px-0 w-px-100 fw-medium text-heading">
-                                            <p class="fw-medium mb-2">97%</p>
-                                            <p class="fw-medium mb-2">NI</p>
+                                                <p class="fw-medium mb-2">97%</p>
+                                                <p class="fw-medium mb-2">NI</p>
                                             </td>
                                         </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1248,10 +1291,10 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-            <!-- Title -->
+                <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     🎓 Student Attendance (class/lab)
                 </h3>
@@ -1263,7 +1306,8 @@
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadioo2">Weekly</label>
 
                             <input type="radio" class="btn-check" name="btnradioo2" id="monthlyRadio02">
-                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio02">Semesterly</label>
+                            <label class="btn btn-outline-secondary waves-effect"
+                                for="monthlyRadio02">Semesterly</label>
 
                             <input type="radio" class="btn-check" name="btnradio02" id="yearlyRadio02">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio02">Yearly</label>
@@ -1272,16 +1316,16 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Class</th>
-                                        <th>%</th>
-                                        <th>Rating</th>
-                                    </tr>
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Class</th>
+                                    <th>%</th>
+                                    <th>Rating</th>
+                                </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                   
+
                                 </tbody>
                             </table>
                         </div>
@@ -1296,10 +1340,10 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-            <!-- Title -->
+                <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     Adoption of Active Learning Techniques
                 </h3>
@@ -1311,7 +1355,8 @@
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadio03"> 📅 Weekly</label>
 
                             <input type="radio" class="btn-check" name="btnradio03" id="monthlyRadio03">
-                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio03"> 🎓 Semesterly</label>
+                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio03"> 🎓
+                                Semesterly</label>
 
                             <input type="radio" class="btn-check" name="btnradio03" id="yearlyRadio03">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio03"> 📅 Yearly</label>
@@ -1320,16 +1365,16 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Class</th>
-                                        <th>%</th>
-                                        <th>Rating</th>
-                                    </tr>
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Class</th>
+                                    <th>%</th>
+                                    <th>Rating</th>
+                                </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                   
+
                                 </tbody>
                             </table>
                         </div>
@@ -1345,12 +1390,13 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-percentage-75 icon-md"></i></div> Student Pass Percentage
+                    <div class="badge bg-label-primary rounded p-2"><i
+                            class="icon-base ti tabler-percentage-75 icon-md"></i></div> Student Pass Percentage
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -1393,7 +1439,9 @@
                                         <tr>
                                             <td>1</td>
                                             <td>Ab</td>
-                                            <td><div class=" badge bg-label-success">45%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">45%</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-danger">5%</div>
                                             </td>
@@ -1406,7 +1454,9 @@
                                         <tr>
                                             <td>2</td>
                                             <td>Ab</td>
-                                            <td><div class=" badge bg-label-success">25%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">25%</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-danger">75%</div>
                                             </td>
@@ -1436,10 +1486,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                         <tr>
+                                        <tr>
                                             <td>1</td>
                                             <td>AbC</td>
-                                            <td><div class=" badge bg-label-success">44%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">44%</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-danger">6%</div>
                                             </td>
@@ -1452,7 +1504,9 @@
                                         <tr>
                                             <td>2</td>
                                             <td>AbC</td>
-                                            <td><div class=" badge bg-label-success">25%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">25%</div>
+                                            </td>
                                             <td>
                                                 <div class=" badge bg-label-danger">75%</div>
                                             </td>
@@ -1477,12 +1531,14 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-chart-histogram icon-md"></i></div> Improvement in Student Performance Metrics
+                    <div class="badge bg-label-primary rounded p-2"><i
+                            class="icon-base ti tabler-chart-histogram icon-md"></i></div> Improvement in Student
+                    Performance Metrics
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -1508,7 +1564,8 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="ImprovementinStudentPerformanceMetrics-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="ImprovementinStudentPerformanceMetrics-spring"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1523,14 +1580,18 @@
                                         <tr>
                                             <td>1</td>
                                             <td>Ab</td>
-                                            <td><div class=" badge bg-label-warning">71%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-warning">71%</div>
+                                            </td>
                                             <td><span class="badge bg-label-warning me-1">NI</span></td>
                                         </tr>
 
                                         <tr>
                                             <td>2</td>
                                             <td>Ab</td>
-                                            <td><div class=" badge bg-label-danger">45%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-danger">45%</div>
+                                            </td>
                                             <td><span class="badge bg-label-danger me-1">BE</span></td>
                                         </tr>
 
@@ -1552,17 +1613,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                         <tr>
+                                        <tr>
                                             <td>1</td>
                                             <td>AbC</td>
-                                            <td><div class=" badge bg-label-success">90%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">90%</div>
+                                            </td>
                                             <td><span class="badge bg-label-success me-1">EE</span></td>
                                         </tr>
 
                                         <tr>
                                             <td>2</td>
                                             <td>AbC</td>
-                                            <td><div class=" badge bg-label-success">85%</div></td>
+                                            <td>
+                                                <div class=" badge bg-label-success">85%</div>
+                                            </td>
                                             <td><span class="badge bg-label-success me-1">ME</span></td>
                                         </tr>
                                     </tbody>
@@ -1582,7 +1647,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
@@ -1613,7 +1678,8 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="QualitativeFeedbackfromStudents-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="QualitativeFeedbackfromStudents-spring"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1624,7 +1690,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1642,7 +1708,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1660,10 +1726,10 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-            <!-- Title -->
+                <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     🎓 Guidance to Students
                 </h3>
@@ -1675,7 +1741,8 @@
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
 
                             <input type="radio" class="btn-check" name="btnradio05" id="monthlyRadio05">
-                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓 Semesterly</label>
+                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
+                                Semesterly</label>
 
                             <input type="radio" class="btn-check" name="btnradio05" id="yearlyRadio05">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio05"> 📅 Yearly</label>
@@ -1684,15 +1751,15 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Class</th>
-                                        <th>%</th>
-                                    </tr>
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Class</th>
+                                    <th>%</th>
+                                </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                   
+
                                 </tbody>
                             </table>
                         </div>
@@ -1707,7 +1774,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
@@ -1721,14 +1788,16 @@
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
-                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring" aria-selected="true">
+                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
+                                    aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
-                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall" aria-selected="false">
+                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
+                                    aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -1738,7 +1807,9 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring" role="tabpanel">
+                        <div class="tab-pane fade show active"
+                            id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1749,14 +1820,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall" role="tabpanel">
+                        <div class="tab-pane fade"
+                            id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1767,7 +1840,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1785,7 +1858,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
@@ -1816,7 +1889,8 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="ResearchproductivityofPGstudents-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="ResearchproductivityofPGstudents-spring"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1827,7 +1901,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1845,7 +1919,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1863,7 +1937,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
@@ -1894,7 +1968,8 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="achievementontasksassignedbythedean-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="achievementontasksassignedbythedean-spring"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1905,7 +1980,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1923,7 +1998,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1941,7 +2016,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
@@ -1955,7 +2030,8 @@
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#NumberofKnowledgeProducts-PolicyAdvocacy-spring"
-                                    aria-controls="NumberofKnowledgeProducts-PolicyAdvocacy-spring" aria-selected="true">
+                                    aria-controls="NumberofKnowledgeProducts-PolicyAdvocacy-spring"
+                                    aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
@@ -1972,7 +2048,8 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="NumberofKnowledgeProducts-PolicyAdvocacy-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="NumberofKnowledgeProducts-PolicyAdvocacy-spring"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1983,7 +2060,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2001,7 +2078,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2019,7 +2096,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
@@ -2050,7 +2127,8 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="LineManagerSatisfactionRating-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="LineManagerSatisfactionRating-spring"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -2061,7 +2139,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2079,7 +2157,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2097,7 +2175,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <!-- Title -->
@@ -2139,7 +2217,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2157,7 +2235,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2175,10 +2253,10 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-            <!-- Title -->
+                <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     Event Performance Feedback
                 </h3>
@@ -2190,7 +2268,8 @@
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
 
                             <input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
-                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓 Semesterly</label>
+                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
+                                Semesterly</label>
 
                             <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
@@ -2199,15 +2278,15 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Class</th>
-                                        <th>%</th>
-                                    </tr>
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Class</th>
+                                    <th>%</th>
+                                </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                   
+
                                 </tbody>
                             </table>
                         </div>
@@ -2223,10 +2302,10 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-            <!-- Title -->
+                <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     Scorecard for each role is developed separately
                 </h3>
@@ -2244,15 +2323,15 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Class</th>
-                                        <th>%</th>
-                                    </tr>
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Class</th>
+                                    <th>%</th>
+                                </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                   
+
                                 </tbody>
                             </table>
                         </div>
@@ -2268,10 +2347,10 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-            <!-- Title -->
+                <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     Event/Task Performance Feedback
                 </h3>
@@ -2289,15 +2368,15 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Class</th>
-                                        <th>%</th>
-                                    </tr>
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Class</th>
+                                    <th>%</th>
+                                </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                   
+
                                 </tbody>
                             </table>
                         </div>
@@ -2312,10 +2391,10 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-            <!-- Title -->
+                <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     Scholar's Satisfaction (in thesis stage)
                 </h3>
@@ -2333,15 +2412,15 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Class</th>
-                                        <th>%</th>
-                                    </tr>
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Class</th>
+                                    <th>%</th>
+                                </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                   
+
                                 </tbody>
                             </table>
                         </div>

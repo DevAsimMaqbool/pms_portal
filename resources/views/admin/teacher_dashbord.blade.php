@@ -54,53 +54,215 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Accordion1 -->
     <div class="row gy-6">
-      <!-- Vertical Scrollbar -->
-      <div class="col-lg-4 col-sm-12">
-        <div class="card overflow-hidden h-50vh h-md-70vh h-lg-100vh">
+      <div class="col-xxl-4 col-md-6 mb-6">
+        <div class="card h-100">
           <div class="card-header d-flex justify-content-between">
-            <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i
-                class="icon-base ti tabler-list-details me-3"></i>Indicator</h5>
+            <div class="card-title mb-0">
+              <h5 class="mb-1">Key Performance Indicators</h5>
+              <p class="card-subtitle"></p>
+            </div>
+            <div class="dropdown">
+              <button class="btn btn-text-secondary btn-icon rounded-pill text-body-secondary border-0 me-n1"
+                type="button" id="activeProjects" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="icon-base ti tabler-dots-vertical icon-22px text-body-secondary"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="activeProjects">
+                <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
+                <a class="dropdown-item" href="javascript:void(0);">Download</a>
+                <a class="dropdown-item" href="javascript:void(0);">View All</a>
+              </div>
+            </div>
           </div>
-          <div class="card-body" id="vertical-example">
+          <div class="card-body">
             <ul class="p-0 m-0">
-              @php
-                $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
-                $colors = ['primary', 'success', 'danger', 'warning', 'info'];
-                $series = [20, 90, 40, 80, 30];
-                $index = 0;
-              @endphp
-              @foreach($result as $kpa)
-                @foreach($kpa['category'] as $category)
-                  @foreach(array_slice($category['indicator']->toArray(), 0, 10) as $indicator)
-                    @php
-                      $color = $colors[$index % count($colors)];
-                      $seriesValue = $series[$index % count($series)];
-                    @endphp
-                    <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="{{ $color }}" data-series="{{ $seriesValue }}"
-                        data-progress_variant="true"></div>
-                      <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                          <div class="me-2">
-                            <h6 class="mb-1_5">{{ $indicator['indicator'] }}</h6>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button"
-                            data-bs-toggle="modal" data-bs-target="#{{ str_replace(' ', '', $indicator['indicator']) }}">
-                            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                    @php $index++; @endphp
-                  @endforeach
-                @endforeach
-              @endforeach
+              <li class="mb-4 d-flex">
+                <div class="d-flex w-50 align-items-center me-4">
+                  <img src="{{ asset('admin/assets/img/icons/brands/laravel-logo.png')}}" alt="laravel-logo" class="me-4"
+                    width="32" />
+                  <div>
+                    <h6 class="mb-0">Student Satisfaction</h6>
+                    <small class="text-body"></small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="54"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">65%</span>
+                </div>
+              </li>
+              <li class="mb-4 d-flex">
+                <div class="d-flex w-50 align-items-center me-4">
+                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
+                    width="32" />
+                  <div>
+                    <h6 class="mb-0">Classes Held</h6>
+                    <small class="text-body"></small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">86%</span>
+                </div>
+              </li>
+              <li class="mb-4 d-flex">
+                <div class="d-flex w-50 align-items-center me-4">
+                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
+                    width="32" />
+                  <div>
+                    <h6 class="mb-0">Student Attendance</h6>
+                    <small class="text-body"></small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">86%</span>
+                </div>
+              </li>
+              <li class="mb-4 d-flex">
+                <div class="d-flex w-50 align-items-center me-4">
+                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
+                    width="32" />
+                  <div>
+                    <h6 class="mb-0">Student Punctuality</h6>
+                    <small class="text-body"></small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">86%</span>
+                </div>
+              </li>
+              <li class="mb-4 d-flex">
+                <div class="d-flex w-50 align-items-center me-4">
+                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
+                    width="32" />
+                  <div>
+                    <h6 class="mb-0">Quality of Assessment</h6>
+                    <small class="text-body"></small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">86%</span>
+                </div>
+              </li>
+              <li class="mb-4 d-flex">
+                <div class="d-flex w-50 align-items-center me-4">
+                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
+                    width="32" />
+                  <div>
+                    <h6 class="mb-0">Adoption of Active Learning Techniques</h6>
+                    <small class="text-body"></small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">86%</span>
+                </div>
+              </li>
+              <li class="mb-4 d-flex">
+                <div class="d-flex w-50 align-items-center me-4">
+                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
+                    width="32" />
+                  <div>
+                    <h6 class="mb-0">Research Publications (Scopus Indexed)</h6>
+                    <small class="text-body"></small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">86%</span>
+                </div>
+              </li>
+
+              <li class="mb-4 d-flex">
+                <div class="d-flex w-50 align-items-center me-4">
+                  <img src="{{ asset('admin/assets/img/icons/brands/figma-logo.png')}}" alt="figma-logo" class="me-4"
+                    width="32" />
+                  <div>
+                    <h6 class="mb-0">Knowledge Products</h6>
+                    <small class="text-body"></small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">86%</span>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
       </div>
+      <!-- Vertical Scrollbar -->
+      <!-- <div class="col-lg-4 col-sm-12">
+            <div class="card overflow-hidden h-50vh h-md-70vh h-lg-100vh">
+            <div class="card-header d-flex justify-content-between">
+            <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i
+            class="icon-base ti tabler-list-details me-3"></i>Key Performance Indicator</h5>
+            </div>
+            <div class="card-body" id="vertical-example">
+            <ul class="p-0 m-0">
+            @php
+            $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+            $colors = ['primary', 'success', 'danger', 'warning', 'info'];
+            $series = [20, 90, 40, 80, 30];
+            $index = 0;
+            @endphp
+            @foreach($result as $kpa)
+            @foreach($kpa['category'] as $category)
+            @foreach(array_slice($category['indicator']->toArray(), 0, 10) as $indicator)
+            @php
+            $color = $colors[$index % count($colors)];
+            $seriesValue = $series[$index % count($series)];
+            @endphp
+            <li class="d-flex mb-6">
+            <div class="chart-progress me-4" data-color="{{ $color }}" data-series="{{ $seriesValue }}"
+            data-progress_variant="true"></div>
+            <div class="row w-100 align-items-center">
+            <div class="col-9">
+            <div class="me-2">
+            <h6 class="mb-1_5">{{ $indicator['indicator'] }}</h6>
+            </div>
+            </div>
+            <div class="col-3 text-end">
+            <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button"
+            data-bs-toggle="modal" data-bs-target="#{{ str_replace(' ', '', $indicator['indicator']) }}">
+            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
+            </button>
+            </div>
+            </div>
+            </li>
+            @php $index++; @endphp
+            @endforeach
+            @endforeach
+            @endforeach
+            </ul>
+            </div>
+            </div>
+            </div> -->
       <!--/ Vertical Scrollbar -->
       <!-- chart overview -->
       <div class="col-12 col-12 col-lg-8" id="targetDivchart">
@@ -109,11 +271,11 @@
             <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i
                 class="icon-base ti tabler-chart-pie me-3"></i>Overall KPA Performance</h5>
             <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-              <input type="radio" class="btn-check" name="btnradio2" id="dailyRadio2" checked>
-              <label class="btn btn-outline-primary waves-effect" for="dailyRadio2"> 📆 Fall 2025</label>
+              <input type="radio" class="btn-check" name="termRadio" id="spring25" checked>
+              <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
 
-              <input type="radio" class="btn-check" name="btnradio2" id="monthlyRadio2">
-              <label class="btn btn-outline-primary waves-effect" for="monthlyRadio2"> 📆 Fall 2026</label>
+              <input type="radio" class="btn-check" name="termRadio" id="fall25">
+              <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2026</label>
             </div>
           </div>
           <div class="card-body pt-0">
@@ -1876,18 +2038,18 @@
             if (data.length > 0) {
               data.forEach(function (category) {
                 html += `
-                                                                                                                                                                                                                                                                  <div class="col-md-4">
-                                                                                                                                                                                                                                                                      <div class="card h-100">
-                                                                                                                                                                                                                                                                          <div class="card-body">
-                                                                                                                                                                                                                                                                              <div class="form-check">
-                                                                                                                                                                                                                                                                                  <input class="form-check-input indicatir-data" type="checkbox" value="${category.id}" id="category_${category.id}">
-                                                                                                                                                                                                                                                                                  <label class="form-check-label" for="category_${category.id}">
-                                                                                                                                                                                                                                                                                      ${category.indicator_category}
-                                                                                                                                                                                                                                                                                  </label>
-                                                                                                                                                                                                                                                                              </div>
-                                                                                                                                                                                                                                                                          </div>
-                                                                                                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                                                  </div>`;
+                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="col-md-4">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="card h-100">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="form-check">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            <input class="form-check-input indicatir-data" type="checkbox" value="${category.id}" id="category_${category.id}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            <label class="form-check-label" for="category_${category.id}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                ${category.indicator_category}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            </label>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`;
               });
             } else {
               html = `<div class="col-12"><p>No Indicator Categories found.</p></div>`;
@@ -1929,16 +2091,16 @@
                   const chartId = `deliveryExceptionsChart_${indicator.id}`;
                   const chartType = (indicator.id % 2 === 0) ? 'radialBar' : 'area';
                   output += `
-                                                                                                                              <div class="col-xl-3 col-md-4 col-6">
-                                                                                                                              <div class="card h-100">
-                                                                                                                              <div class="card-header pb-2">
-                                                                                                                              <p class="card-subtitle">${indicator.indicator}</p>
-                                                                                                                              </div>
-                                                                                                                              <div class="card-body">
-                                                                                                                              <div id="${chartId}" class="chart-container"></div>
-                                                                                                                              </div>
-                                                                                                                              </div>
-                                                                                                                              </div>`;
+                                                                                                                                                                                                                                                                                                        <div class="col-xl-3 col-md-4 col-6">
+                                                                                                                                                                                                                                                                                                        <div class="card h-100">
+                                                                                                                                                                                                                                                                                                        <div class="card-header pb-2">
+                                                                                                                                                                                                                                                                                                        <p class="card-subtitle">${indicator.indicator}</p>
+                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                        <div class="card-body">
+                                                                                                                                                                                                                                                                                                        <div id="${chartId}" class="chart-container"></div>
+                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                        </div>`;
                   indicator.chart_id = chartId;
                   indicator.chart_type = chartType;
 
@@ -2034,11 +2196,11 @@
       var chartLabels = [
         "Teaching and Learning",
         "Research, Innovation and Commercialisation",
-        "Institutional Engagement (Core only)",
+        "Institutional Engagement",
         "Character Virtue"
       ];
-      var shortLabels = ["T&L", "RIC", "IE (Core)", "Character Virtue"];
-      var dataset1 = [70, 90, 85, 80];
+      var shortLabels = ["T&L", "RIC", "IE", "CV"];
+      var dataset1 = [90, 85, 80, 95];
       var labelColors = ["#e74c3c", "#3498db", "#27ae60", "#f39c12"];
 
       var ctx = document.getElementById("radarChart").getContext("2d");
@@ -2047,6 +2209,7 @@
       gradientPink.addColorStop(0, "rgba(115, 103, 240, 0.3)");
       gradientPink.addColorStop(1, "rgba(115, 103, 240, 0.5)");
 
+      // ✅ Create the chart first
       var radarChart = new Chart(ctx, {
         type: "radar",
         data: {
@@ -2084,74 +2247,88 @@
           plugins: { legend: { display: false } }
         },
         plugins: [
-              {
-                id: "pointLabelClick",
-                afterEvent(chart, args) {
-                  const { event } = args;
-                  if (!event) return;
+          {
+            id: "pointLabelClick",
+            afterEvent(chart, args) {
+              const { event } = args;
+              if (!event) return;
 
-                  const { scales } = chart;
-                  const rScale = scales.r;
-                  let hovering = false;
+              const rScale = chart.scales.r;
+              let hovering = false;
 
-                  chart.data.labels.forEach((label, i) => {
-                    const angle = rScale.getIndexAngle(i);
-                    const point = rScale.getPointPositionForValue(i, rScale.max);
+              chart.data.labels.forEach((label, i) => {
+                const point = rScale.getPointPositionForValue(i, rScale.max);
+                const padding = 30; // clickable area around label
 
-                    const padding = 30; // clickable area around label
-                    if (
-                      event.x >= point.x - padding &&
-                      event.x <= point.x + padding &&
-                      event.y >= point.y - padding &&
-                      event.y <= point.y + padding
-                    ) {
-                      hovering = true;
+                if (
+                  event.x >= point.x - padding &&
+                  event.x <= point.x + padding &&
+                  event.y >= point.y - padding &&
+                  event.y <= point.y + padding
+                ) {
+                  hovering = true;
 
-                      // 👉 Handle click
-                      if (event.type === "click") {
-                        const targetId = label.replace(/\s+/g, "-").toLowerCase();
-                        const targetDiv = document.getElementById(targetId);
+                  // 👉 Handle click
+                  if (event.type === "click") {
+                    const targetId = label.replace(/\s+/g, "-").toLowerCase();
+                    const targetDiv = document.getElementById(targetId);
 
-                        if (targetDiv) {
-                          // 1️⃣ Scroll into view
-                          targetDiv.scrollIntoView({
-                            behavior: "smooth",
-                            block: "center"
-                          });
+                    if (targetDiv) {
+                      // 1️⃣ Scroll into view
+                      targetDiv.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                      });
 
-                          // 2️⃣ Open accordion (if collapsed)
-                          const collapseEl = targetDiv.querySelector(".accordion-collapse");
-                          if (collapseEl && !collapseEl.classList.contains("show")) {
-                            const bsCollapse = new bootstrap.Collapse(collapseEl, {
-                              toggle: true
-                            });
-                          }
-
-                          // 3️⃣ Optionally mark as active
-                          document
-                            .querySelectorAll(".accordion-item")
-                            .forEach((item) => item.classList.remove("active"));
-                          targetDiv.classList.add("active");
-                        }
+                      // 2️⃣ Open accordion (if collapsed)
+                      const collapseEl = targetDiv.querySelector(".accordion-collapse");
+                      if (collapseEl && !collapseEl.classList.contains("show")) {
+                        new bootstrap.Collapse(collapseEl, { toggle: true });
                       }
-                    }
-                  });
 
-                  // 👉 Change cursor style on hover
-                  chart.canvas.style.cursor = hovering ? "pointer" : "default";
+                      // 3️⃣ Mark active
+                      document
+                        .querySelectorAll(".accordion-item")
+                        .forEach((item) => item.classList.remove("active"));
+                      targetDiv.classList.add("active");
+                    }
+                  }
                 }
-              }
-            ]
+              });
+
+              chart.canvas.style.cursor = hovering ? "pointer" : "default";
+            }
+          }
+        ]
       });
 
-      // ✅ Custom Legend (horizontal)
+      // ✅ Handle dataset switching *after* chart is initialized
+      document.getElementById("spring25").addEventListener("change", function () {
+        if (this.checked) {
+          radarChart.data.datasets[0].data = [90, 85, 80, 95];
+          radarChart.update();
+        }
+      });
+
+      document.getElementById("fall25").addEventListener("change", function () {
+        if (this.checked) {
+          radarChart.data.datasets[0].data = [85, 90, 70, 95];
+          radarChart.update();
+        }
+      });
+
+      // ✅ Custom Legend
       var legendDiv = document.getElementById("customLegend");
       chartLabels.forEach((label, i) => {
         let li = document.createElement("li");
-        li.className = "mx-3"; // spacing between items
+        li.className = "mx-3";
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
-        li.innerHTML = `<span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};border-radius:50%;margin-right:5px;font-size:14px;"></span>${label}`;
+        li.innerHTML = `
+                                                              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                              border-radius:50%;margin-right:5px;"></span>
+                                                              ${label} (${shortLabels[i]})
+                                                              `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -2165,6 +2342,7 @@
         legendDiv.appendChild(li);
       });
     });
+
     document.addEventListener("DOMContentLoaded", function () {
       var childModal = document.getElementById('paymentMethods');
       var parentModal = new bootstrap.Modal(document.getElementById('paymentMethods2'));
