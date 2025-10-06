@@ -115,6 +115,12 @@ class KeyPerformanceAreaController extends Controller
     {
         $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
         $area = collect($result)->firstWhere('id', $id); // pick one KPA
+        if($id==14){
+            return view('admin.kpa_virtue', compact('area'));
+        }
+         if (!$area) {
+               return view("admin.error");
+        }
         return view('admin.kpa', compact('area'));
     }
     public function getIndicators(Request $request)
