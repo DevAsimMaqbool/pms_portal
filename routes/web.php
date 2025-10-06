@@ -32,6 +32,7 @@ use App\Http\Controllers\SpinOffController;
 use App\Http\Controllers\TrainingsSeminarsWorkshopConductedWithImpactController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SelfAssessmentWorkingController;
+use App\Http\Controllers\ComparitiveAnalysisController;
 use App\Models\RatingOnImpactOfResearchConferencesOrganized;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
@@ -154,6 +155,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('pip', PipController::class);
     Route::post('pip/{id}/update-status', [PipController::class, 'updateStatus'])->name('pip.updateStatus');
     Route::resource('/self-assessment', SelfAssessmentWorkingController::class);
+    Route::get('/comparitive_analysis', [ComparitiveAnalysisController::class, 'index']);
+    Route::post('/get-indicator-categories', [ComparitiveAnalysisController::class, 'getIndicatorCategories'])->name('Category.IndicatorCategories');
 });
 
 require __DIR__ . '/auth.php';
