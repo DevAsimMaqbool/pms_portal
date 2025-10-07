@@ -91,17 +91,7 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>A</td>
-                                            <td>BSCS</td>
-                                            <td>UG</td>
-                                            <td>50</td>
-                                            <td>41</td>
-                                            <td><span class="badge bg-label-success">85%</span></td>
-                                            <td><span class="badge bg-label-success">EE</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>B</td>
+                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                             <td>BSSE</td>
                                             <td>UG</td>
                                             <td>60</td>
@@ -110,8 +100,19 @@
                                             <td><span class="badge bg-label-primary">OS</span></td>
                                         </tr>
                                         <tr>
+                                            <td>2</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
+                                            <td>BSCS</td>
+                                            <td>UG</td>
+                                            <td>50</td>
+                                            <td>41</td>
+                                            <td><span class="badge bg-label-success">85%</span></td>
+                                            <td><span class="badge bg-label-success">EE</span></td>
+                                        </tr>
+                                        
+                                        <tr>
                                             <td>3</td>
-                                            <td>A</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
                                             <td>BSIT</td>
                                             <td>UG</td>
                                             <td>45</td>
@@ -141,19 +142,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                         <tr>
                                             <td>1</td>
-                                            <td>A</td>
-                                            <td>BSCS</td>
-                                            <td>UG</td>
-                                            <td>50</td>
-                                            <td>41</td>
-                                            <td><span class="badge bg-label-warning">85%</span></td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>B</td>
+                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22   </td>
                                             <td>BSSE</td>
                                             <td>UG</td>
                                             <td>60</td>
@@ -162,8 +153,19 @@
                                             <td><span class="badge bg-label-primary">OS</span></td>
                                         </tr>
                                         <tr>
+                                            <td>2</td>
+                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL  2023-2027-BSAI-F23-5A</td>
+                                            <td>BSCS</td>
+                                            <td>UG</td>
+                                            <td>50</td>
+                                            <td>41</td>
+                                            <td><span class="badge bg-label-warning">85%</span></td>
+                                            <td><span class="badge bg-label-warning">ME</span></td>
+                                        </tr>
+                                       
+                                        <tr>
                                             <td>3</td>
-                                            <td>A</td>
+                                            <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
                                             <td>BSIT</td>
                                             <td>UG</td>
                                             <td>45</td>
@@ -234,7 +236,17 @@
                                     <tbody class="table-border-bottom-0">
                                         <tr>
                                             <td>1</td>
-                                            <td>A</td>
+                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
+                                            <td>BSSE</td>
+                                            <td>UG</td>
+                                            <td>
+                                                <div class=" badge bg-label-primary">91.67%</div>
+                                            </td>
+                                            <td><span class="badge bg-label-primary me-1">OS</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>CEE601360-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                             <td>BSCS</td>
                                             <td>UG</td>
                                             <td>
@@ -244,19 +256,8 @@
                                         </tr>
 
                                         <tr>
-                                            <td>2</td>
-                                            <td>B</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class=" badge bg-label-primary">91.67%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                        </tr>
-
-                                        <tr>
                                             <td>3</td>
-                                            <td>A</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
                                             <td>BSIT</td>
                                             <td>UG</td>
                                             <td>
@@ -285,7 +286,17 @@
                                     <tbody class="table-border-bottom-0">
                                         <tr>
                                             <td>1</td>
-                                            <td>A</td>
+                                            <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
+                                            <td>BSSE</td>
+                                            <td>UG</td>
+                                            <td>
+                                                <div class=" badge bg-label-primary">91%</div>
+                                            </td>
+                                            <td><span class="badge bg-label-primary me-1">OS</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
                                             <td>BSCS</td>
                                             <td>UG</td>
                                             <td>
@@ -294,20 +305,10 @@
                                             <td><span class="badge bg-label-warning me-1">ME</span></td>
                                         </tr>
 
-                                        <tr>
-                                            <td>2</td>
-                                            <td>B</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class=" badge bg-label-primary">91%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                        </tr>
 
                                         <tr>
                                             <td>3</td>
-                                            <td>A</td>
+                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
                                             <td>BSIT</td>
                                             <td>UG</td>
                                             <td>
@@ -372,7 +373,18 @@
                                 <tbody class="table-border-bottom-0">
                                     <tr>
                                         <td>1</td>
-                                        <td>A</td>
+                                        <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
+                                        <td>BSIT</td>
+                                        <td>42</td>
+                                        <td>8</td>
+                                        <td>
+                                            <div class="badge bg-label-orange">88%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-orange me-1">NI</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
                                         <td>BSCS</td>
                                         <td>42</td>
                                         <td>8</td>
@@ -383,8 +395,8 @@
                                     </tr>
 
                                     <tr>
-                                        <td>2</td>
-                                        <td>B</td>
+                                        <td>3</td>
+                                        <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
                                         <td>BSSE</td>
                                         <td>42</td>
                                         <td>8</td>
@@ -394,17 +406,6 @@
                                         <td><span class="badge bg-label-danger me-1">BE</span></td>
                                     </tr>
 
-                                    <tr>
-                                        <td>3</td>
-                                        <td>A</td>
-                                        <td>BSIT</td>
-                                        <td>42</td>
-                                        <td>8</td>
-                                        <td>
-                                            <div class="badge bg-label-orange">88%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-orange me-1">NI</span></td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -460,10 +461,10 @@
                                 <tbody class="table-border-bottom-0">
                                     <tr>
                                         <td>1</td>
-                                        <td>A</td>
+                                        <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                         <td>32</td>
                                         <td>42</td>
-                                        <td>8</td>
+                                        <td>10</td>
                                         <td>
                                             <div class="badge bg-label-danger">84%</div>
                                         </td>
@@ -472,10 +473,10 @@
 
                                     <tr>
                                         <td>2</td>
-                                        <td>B</td>
+                                        <td>CEE601360-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                         <td>22</td>
                                         <td>42</td>
-                                        <td>8</td>
+                                        <td>20</td>
                                         <td>
                                             <div class=" badge bg-label-warning">90%</div>
                                         </td>
@@ -484,10 +485,10 @@
 
                                     <tr>
                                         <td>3</td>
-                                        <td>A</td>
+                                        <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
                                         <td>21</td>
                                         <td>42</td>
-                                        <td>8</td>
+                                        <td>21</td>
                                         <td>
                                             <div class="badge bg-label-success">96%</div>
                                         </td>
@@ -556,7 +557,7 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>A</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
                                             <td>
                                                 <div class="badge bg-label-warning">Complete</div>
                                             </td>
@@ -568,7 +569,7 @@
 
                                         <tr>
                                             <td>2</td>
-                                            <td>B</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
                                             <td>
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
@@ -580,7 +581,7 @@
 
                                         <tr>
                                             <td>3</td>
-                                            <td>A</td>
+                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                             <td>
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
@@ -610,7 +611,7 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>A</td>
+                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
                                             <td>
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
@@ -622,7 +623,7 @@
 
                                         <tr>
                                             <td>2</td>
-                                            <td>B</td>
+                                            <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
                                             <td>
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
@@ -634,7 +635,7 @@
 
                                         <tr>
                                             <td>3</td>
-                                            <td>A</td>
+                                            <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
                                             <td>
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
@@ -708,7 +709,7 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>A</td>
+                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                             <td>
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
@@ -720,7 +721,7 @@
 
                                         <tr>
                                             <td>2</td>
-                                            <td>B</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
                                             <td>
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
@@ -732,7 +733,7 @@
 
                                         <tr>
                                             <td>3</td>
-                                            <td>A</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
                                             <td>
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
@@ -762,7 +763,7 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>A</td>
+                                            <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
                                             <td>
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
@@ -774,7 +775,7 @@
 
                                         <tr>
                                             <td>2</td>
-                                            <td>B</td>
+                                            <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
                                             <td>
                                                 <div class="badge bg-label-danger">InComplete</div>
                                             </td>
@@ -786,7 +787,7 @@
 
                                         <tr>
                                             <td>3</td>
-                                            <td>A</td>
+                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
                                             <td>
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
@@ -912,7 +913,7 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>A</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
                                             <td>
                                                 <div class=" badge bg-label-success">Submitted</div>
                                             </td>
@@ -924,7 +925,7 @@
 
                                         <tr>
                                             <td>2</td>
-                                            <td>A</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
                                             <td>
                                                 <div class=" badge bg-label-success">Submitted</div>
                                             </td>
@@ -936,7 +937,7 @@
 
                                         <tr>
                                             <td>3</td>
-                                            <td>A</td>
+                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                             <td>
                                                 <div class=" badge bg-label-warning">Not Submitted</div>
                                             </td>
@@ -966,7 +967,7 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>A</td>
+                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
                                             <td>
                                                 <div class=" badge bg-label-success">Submitted</div>
                                             </td>
@@ -978,7 +979,7 @@
 
                                         <tr>
                                             <td>2</td>
-                                            <td>A</td>
+                                            <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
                                             <td>
                                                 <div class=" badge bg-label-success">Submitted</div>
                                             </td>
@@ -990,7 +991,7 @@
 
                                         <tr>
                                             <td>3</td>
-                                            <td>A</td>
+                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
                                             <td>
                                                 <div class=" badge bg-label-warning">Not Submitted</div>
                                             </td>
@@ -1425,7 +1426,7 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>Ab</td>
+                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                             <td>
                                                 <div class=" badge bg-label-success">45%</div>
                                             </td>
@@ -1440,7 +1441,7 @@
 
                                         <tr>
                                             <td>2</td>
-                                            <td>Ab</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
                                             <td>
                                                 <div class=" badge bg-label-success">25%</div>
                                             </td>
@@ -1475,7 +1476,7 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>AbC</td>
+                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
                                             <td>
                                                 <div class=" badge bg-label-success">44%</div>
                                             </td>
@@ -1490,7 +1491,7 @@
 
                                         <tr>
                                             <td>2</td>
-                                            <td>AbC</td>
+                                            <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
                                             <td>
                                                 <div class=" badge bg-label-success">25%</div>
                                             </td>
@@ -1566,7 +1567,7 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>Ab</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
                                             <td>
                                                 <div class=" badge bg-label-orange">71%</div>
                                             </td>
@@ -1575,7 +1576,7 @@
 
                                         <tr>
                                             <td>2</td>
-                                            <td>Ab</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
                                             <td>
                                                 <div class=" badge bg-label-danger">45%</div>
                                             </td>
@@ -1602,7 +1603,7 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>AbC</td>
+                                            <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
                                             <td>
                                                 <div class=" badge bg-label-success">90%</div>
                                             </td>
@@ -1611,7 +1612,7 @@
 
                                         <tr>
                                             <td>2</td>
-                                            <td>AbC</td>
+                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
                                             <td>
                                                 <div class=" badge bg-label-warning">85%</div>
                                             </td>
