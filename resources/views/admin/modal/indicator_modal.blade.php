@@ -470,9 +470,19 @@
                                         </td>
                                         <td><span class="badge bg-label-primary me-1">OS</span></td>
                                     </tr>
-
                                     <tr>
                                         <td>2</td>
+                                        <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
+                                        <td>32</td>
+                                        <td>29</td>
+                                        <td>3</td>
+                                        <td>
+                                            <div class="badge bg-label-primary">90%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
                                         <td>CEE601360-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                         <td>32</td>
                                         <td>25</td>
@@ -483,17 +493,6 @@
                                         <td><span class="badge bg-label-warning me-1">ME</span></td>
                                     </tr>
 
-                                    <tr>
-                                        <td>3</td>
-                                        <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
-                                        <td>32</td>
-                                        <td>29</td>
-                                        <td>3</td>
-                                        <td>
-                                            <div class="badge bg-label-primary">90%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -555,32 +554,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                         <tr>
                                             <td>1</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
-                                            <td>
-                                                <div class="badge bg-label-warning">Complete</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">70%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
-                                            <td>
-                                                <div class="badge bg-label-danger">InComplete</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">90%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>3</td>
                                             <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                             <td>
                                                 <div class="badge bg-label-success">Complete</div>
@@ -590,6 +565,32 @@
                                             </td>
                                             <td><span class="badge bg-label-primary me-1">OS</span></td>
                                         </tr>
+
+                                         <tr>
+                                            <td>2</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
+                                            <td>
+                                                <div class="badge bg-label-success">Complete</div>
+                                            </td>
+                                            <td>
+                                                <div class=" badge bg-label-warning">90%</div>
+                                            </td>
+                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
+                                            <td>
+                                                <div class="badge bg-label-success">Complete</div>
+                                            </td>
+                                            <td>
+                                                <div class=" badge bg-label-danger">70%</div>
+                                            </td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
+                                        </tr>
+
+
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -709,16 +710,15 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
+                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
                                             <td>
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-danger">70%</div>
+                                                <div class=" badge bg-label-warning">91%</div>
                                             </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
+                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
                                         </tr>
-
                                         <tr>
                                             <td>2</td>
                                             <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
@@ -730,18 +730,19 @@
                                             </td>
                                             <td><span class="badge bg-label-orange me-1">NI</span></td>
                                         </tr>
-
                                         <tr>
                                             <td>3</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
+                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                             <td>
                                                 <div class="badge bg-label-success">Complete</div>
                                             </td>
                                             <td>
-                                                <div class=" badge bg-label-warning">91%</div>
+                                                <div class=" badge bg-label-danger">70%</div>
                                             </td>
-                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                         </tr>
+
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -763,6 +764,17 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
+                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
+                                            <td>
+                                                <div class="badge bg-label-success">Complete</div>
+                                            </td>
+                                            <td>
+                                                <div class=" badge bg-label-success">96%</div>
+                                            </td>
+                                            <td><span class="badge bg-label-success me-1">EE</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
                                             <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
                                             <td>
                                                 <div class="badge bg-label-success">Complete</div>
@@ -774,7 +786,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td>2</td>
+                                            <td>3</td>
                                             <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
                                             <td>
                                                 <div class="badge bg-label-danger">InComplete</div>
@@ -785,17 +797,6 @@
                                             <td><span class="badge bg-label-danger me-1">BE</span></td>
                                         </tr>
 
-                                        <tr>
-                                            <td>3</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Complete</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-success">96%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-success me-1">EE</span></td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1143,8 +1144,7 @@
                                             <th>Semester</th>
                                             <th>Course Name</th>
                                             <th>Program</th>
-                                            <th>Underload</th>
-                                            <th>Overload</th>
+                                            
 
                                         </tr>
                                     </thead>
@@ -1155,8 +1155,6 @@
                                             <td>1</td>
                                             <td>Discrete Structures</td>
                                             <td>BS Software Engineering</td>
-                                            <td>2</td>
-                                            <td>3</td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
@@ -1164,8 +1162,6 @@
                                             <td>2</td>
                                             <td>Digital Logic Design (Lab)</td>
                                             <td>BS Software Engineering</td>
-                                            <td>1</td>
-                                            <td>3</td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
@@ -1173,8 +1169,6 @@
                                             <td>2</td>
                                             <td>Probability & Statistics</td>
                                             <td>BS Data Science</td>
-                                            <td>4</td>
-                                            <td>1</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1186,12 +1180,12 @@
                                             <td class="align-top pe-6 ps-0 py-6 text-body">
                                             </td>
                                             <td class="px-0 w-px-100">
-                                                <p class="fw-medium mb-2">Score</p>
-                                                <p class="fw-medium mb-2">Rating</p>
+                                                <p class="fw-medium mb-2">Underload</p>
+                                                <p class="fw-medium mb-2">Overload</p>
                                             </td>
                                             <td class="px-0 w-px-100 fw-medium text-heading">
-                                                <p class="fw-medium mb-2">91%</p>
-                                                <p class="fw-medium mb-2">BE</p>
+                                                <p class="fw-medium mb-2">1</p>
+                                                <p class="fw-medium mb-2">0</p>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1210,8 +1204,6 @@
                                             <th>Semester</th>
                                             <th>Course Name</th>
                                             <th>Program</th>
-                                            <th>Underload</th>
-                                            <th>Overload</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1222,8 +1214,6 @@
                                             <td>1</td>
                                             <td>Pre-Algebra</td>
                                             <td>BS Software Engineering</td>
-                                            <td>2</td>
-                                            <td>3</td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
@@ -1231,17 +1221,13 @@
                                             <td>2</td>
                                             <td>Digital Logic Design (Lab)</td>
                                             <td>BS Software Engineering</td>
-                                            <td>1</td>
-                                            <td>3</td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
                                             <td>2025</td>
                                             <td>2</td>
                                             <td>Probability & Statistics</td>
-                                            <td>BS Data Science</td>
-                                            <td>4</td>
-                                            <td>1</td>
+                                            <td>BS Data Science</td>>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1253,12 +1239,12 @@
                                             <td class="align-top pe-6 ps-0 py-6 text-body">
                                             </td>
                                             <td class="px-0 w-px-100">
-                                                <p class="fw-medium mb-2">Score</p>
-                                                <p class="fw-medium mb-2">Rating</p>
+                                                <p class="fw-medium mb-2">Underload</p>
+                                                <p class="fw-medium mb-2">Overload</p>
                                             </td>
                                             <td class="px-0 w-px-100 fw-medium text-heading">
-                                                <p class="fw-medium mb-2">97%</p>
-                                                <p class="fw-medium mb-2">NI</p>
+                                                <p class="fw-medium mb-2">1</p>
+                                                <p class="fw-medium mb-2">0</p>
                                             </td>
                                         </tr>
                                     </tbody>
