@@ -56,7 +56,7 @@
     <div class="row gy-6">
       <!-- View sales -->
       <div class="col-xl-4">
-        <div class="card">
+        <div class="card h-100">
           <div class="d-flex align-items-end row">
             <div class="col-7">
               <div class="card-body text-nowrap">
@@ -313,21 +313,25 @@
         <div class="accordion mt-4" id="accordionExample">
           @php
             $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+            $icon1 = ['tabler-book ', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
             $colors1 = ['primary', 'success', 'danger', 'warning', 'info'];
             $colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
             $series1 = [20, 90, 40, 80, 30];
             $index1 = 0;
+            $index2 = 0;
           @endphp
           @foreach($result as $kpakey => $kpa)
             @php
               $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+              $iconClass = $icon1[$index2 % count($icon1)];
+              $index2++;
             @endphp
             <div class="accordion-item" id="{{ $targetId }}">
               <h2 class="accordion-header" id="heading-{{ $kpa['id'] }}">
                 <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
                   data-bs-target="#accordion-{{ $kpa['id'] }}" aria-expanded="false"
                   aria-controls="accordion-{{ $kpa['id'] }}">
-                  <i class="icon-base ti tabler-star me-2"></i>
+                  <i class="icon-base ti {{ $iconClass }} me-2"></i>
                   {{ $kpa['performance_area'] }} {{-- ✅ KPA Name --}}
                 </button>
               </h2>
