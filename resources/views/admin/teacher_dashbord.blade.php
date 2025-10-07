@@ -1,6 +1,14 @@
 @extends('layouts.app')
 @push('style')
   <style>
+  .bg-orange,
+    .bg-label-orange {
+        background-color: #fd7e1459 !important;
+        color: #fd7e14 !important
+    }
+    .card-border-shadow-orange {
+    --bs-card-border-bottom-color: #FFF200 !important
+    }
     .h-50vh {
       height: 100vh;
     }
@@ -60,7 +68,7 @@
           <div class="d-flex align-items-end row">
             <div class="col-7">
               <div class="card-body text-nowrap">
-                <h5 class="card-title mb-0">Welcome, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}</h5>
+                <h5 class="card-title mb-0">Welcome, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉</h5>
                 <p class="mb-2">Your current performance is</p>
               </div>
             </div>
@@ -138,7 +146,7 @@
             <ul class="p-0 m-0">
               <li class="mb-4 d-flex">
                 <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-danger rounded p-1_5 me-4"><i
+                  <div class="badge bg-label-orange rounded p-1_5 me-4"><i
                       class="icon-base ti tabler-mood-smile icon-md"></i></div>
                   <div>
                     <small class="text-dark">Student Satisfaction</small>
@@ -146,7 +154,7 @@
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
                   <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65"
+                    <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
                       aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                   <span class="text-body-secondary">65%</span>
@@ -154,7 +162,7 @@
               </li>
               <li class="mb-4 d-flex">
                 <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-success rounded p-1_5 me-4"><i
+                  <div class="badge bg-label-primary rounded p-1_5 me-4"><i
                       class="icon-base ti tabler-chalkboard icon-md"></i></div>
                   <div>
                     <small class="text-dark">Classes Held</small>
@@ -162,7 +170,7 @@
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
                   <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 90%" aria-valuenow="90"
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 90%" aria-valuenow="90"
                       aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                   <span class="text-body-secondary">90%</span>
@@ -204,7 +212,7 @@
 
               <li class="mb-4 d-flex">
                 <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
+                  <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
                   </div>
                   <div>
                     <small class="text-dark">Manager Satisfaction</small>
@@ -212,7 +220,7 @@
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
                   <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-primary" role="progressbar" style="width: 86%" aria-valuenow="86"
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 86%" aria-valuenow="86"
                       aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                   <span class="text-body-secondary">86%</span>
@@ -314,9 +322,10 @@
           @php
             $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
             $icon1 = ['tabler-book ', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
-            $colors1 = ['primary', 'success', 'danger', 'warning', 'info'];
-            $colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
-            $series1 = [20, 90, 40, 80, 30];
+            $colors1 = ['primary', 'success', 'warning', 'orange', 'danger'];
+            //$colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
+            $colors2 = ['#0d6efd', '#198754', '#FFA500', '#FFF200', '#dc3545'];
+            $series1 = [90, 85, 70, 65, 50];
             $index1 = 0;
             $index2 = 0;
           @endphp

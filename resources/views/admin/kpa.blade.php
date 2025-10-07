@@ -72,7 +72,7 @@
                     <div class="card-body">
                         <h5 class="card-title mb-0">{{ $area['performance_area'] }} 🎉</h5>
                         <p class="mb-2">Overall KPA Performance</p>
-                        <h4 class="text-primary mb-1">80%</h4>
+                        <h4 class="text-primary mb-1">72%</h4>
 
                         @if ($area['id'] == 1)
                             <p class="card-text">
@@ -116,10 +116,10 @@
                         </h5>
                         <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio2" id="dailyRadio2" checked>
-                            <label class="btn btn-outline-primary waves-effect" for="dailyRadio2"> 📆 Fall 2025</label>
+                            <label class="btn btn-outline-primary waves-effect" for="dailyRadio2"> 📆 Spring 2025</label>
 
                             <input type="radio" class="btn-check" name="btnradio2" id="monthlyRadio2">
-                            <label class="btn btn-outline-primary waves-effect" for="monthlyRadio2"> 📆 Fall 2026</label>
+                            <label class="btn btn-outline-primary waves-effect" for="monthlyRadio2"> 📆 Fall 2025</label>
                         </div>
                     </div>
                     <div class="card-body pt-2">
