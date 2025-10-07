@@ -2322,7 +2322,7 @@
       // ✅ Handle dataset switching *after* chart is initialized
       document.getElementById("spring25").addEventListener("change", function () {
         if (this.checked) {
-          radarChart.data.datasets[0].data = [90, 85, 80, 95];
+          radarChart.data.datasets[0].data = [90, 85, 80, 75];
           radarChart.update();
         }
       });
