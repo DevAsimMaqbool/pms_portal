@@ -96,8 +96,8 @@
                                             <td>UG</td>
                                             <td>50</td>
                                             <td>41</td>
-                                            <td><span class="badge bg-success">85%</span></td>
-                                            <td><span class="badge bg-info">ME</span></td>
+                                            <td><span class="badge bg-label-success">85%</span></td>
+                                            <td><span class="badge bg-label-success">EE</span></td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
@@ -106,8 +106,8 @@
                                             <td>UG</td>
                                             <td>60</td>
                                             <td>55</td>
-                                            <td><span class="badge bg-primary">91.67%</span></td>
-                                            <td><span class="badge bg-primary">OS</span></td>
+                                            <td><span class="badge bg-label-primary">91.67%</span></td>
+                                            <td><span class="badge bg-label-primary">OS</span></td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
@@ -116,8 +116,8 @@
                                             <td>UG</td>
                                             <td>45</td>
                                             <td>35</td>
-                                            <td><span class="badge bg-success">75%</span></td>
-                                            <td><span class="badge bg-success">EE</span></td>
+                                            <td><span class="badge bg-label-warning">75%</span></td>
+                                            <td><span class="badge bg-label-warning">ME</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -148,8 +148,8 @@
                                             <td>UG</td>
                                             <td>50</td>
                                             <td>41</td>
-                                            <td><span class="badge bg-warning">85%</span></td>
-                                            <td><span class="badge bg-warning">ME</span></td>
+                                            <td><span class="badge bg-label-warning">85%</span></td>
+                                            <td><span class="badge bg-label-warning">ME</span></td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
@@ -158,8 +158,8 @@
                                             <td>UG</td>
                                             <td>60</td>
                                             <td>55</td>
-                                            <td><span class="badge bg-primary">91.67%</span></td>
-                                            <td><span class="badge bg-primary">OS</span></td>
+                                            <td><span class="badge bg-label-primary">91.67%</span></td>
+                                            <td><span class="badge bg-label-primary">OS</span></td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
@@ -168,8 +168,8 @@
                                             <td>UG</td>
                                             <td>45</td>
                                             <td>35</td>
-                                            <td><span class="badge bg-success">75%</span></td>
-                                            <td><span class="badge bg-success">EE</span></td>
+                                            <td><span class="badge bg-label-success">75%</span></td>
+                                            <td><span class="badge bg-label-success">EE</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -2290,26 +2290,26 @@
                                         <tr>
                                             <td>1</td>
                                             <td>Responsibility & Accountability</td>
-                                            <td><span class="badge bg-danger">59%</span></td>
-                                            <td><span class="badge bg-danger">BE</span></td>
+                                            <td><span class="badge bg-label-danger">59%</span></td>
+                                            <td><span class="badge bg-label-danger">BE</span></td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
                                             <td>Empathy & Compassion</td>
-                                            <td><span class="badge bg-orange">67%</span></td>
-                                            <td><span class="badge bg-orange">NI</span></td>
+                                            <td><span class="badge bg-label-orange">67%</span></td>
+                                            <td><span class="badge bg-label-orange">NI</span></td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
                                             <td>Humility & Service</td>
-                                            <td><span class="badge bg-warning">77%</span></td>
-                                            <td><span class="badge bg-warning">ME</span></td>
+                                            <td><span class="badge bg-label-warning">77%</span></td>
+                                            <td><span class="badge bg-label-warning">ME</span></td>
                                         </tr>
                                         <tr>
                                             <td>4</td>
                                             <td>Honesty & Integrity</td>
-                                            <td><span class="badge bg-success">88%</span></td>
-                                            <td><span class="badge bg-success">EE</span></td>
+                                            <td><span class="badge bg-label-success">88%</span></td>
+                                            <td><span class="badge bg-label-success">EE</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -2332,26 +2332,26 @@
                                         <tr>
                                             <td>1</td>
                                             <td>Honesty & Integrity</td>
-                                            <td><span class="badge bg-success">88%</span></td>
-                                            <td><span class="badge bg-success">EE</span></td>
+                                            <td><span class="badge bg-label-success">88%</span></td>
+                                            <td><span class="badge bg-label-success">EE</span></td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
                                             <td>Responsibility & Accountability</td>
-                                            <td><span class="badge bg-danger">59%</span></td>
-                                            <td><span class="badge bg-danger">BE</span></td>
+                                            <td><span class="badge bg-label-danger">59%</span></td>
+                                            <td><span class="badge bg-label-danger">BE</span></td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
                                             <td>Empathy & Compassion</td>
-                                            <td><span class="badge bg-orange">67%</span></td>
-                                            <td><span class="badge bg-orange">NI</span></td>
+                                            <td><span class="badge bg-label-orange">67%</span></td>
+                                            <td><span class="badge bg-label-orange">NI</span></td>
                                         </tr>
                                         <tr>
                                             <td>4</td>
                                             <td>Humility & Service</td>
-                                            <td><span class="badge bg-warning">77%</span></td>
-                                            <td><span class="badge bg-warning">ME</span></td>
+                                            <td><span class="badge bg-label-warning">77%</span></td>
+                                            <td><span class="badge bg-label-warning">ME</span></td>
                                         </tr>
 
                                     </tbody>
