@@ -2276,28 +2276,31 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>Responsibility & Accountability</td>
-                                            <td><span class="badge bg-label-danger">59%</span></td>
-                                            <td><span class="badge bg-label-danger">BE</span></td>
+                                            <td>Honesty & Integrity</td>
+                                            <td><span class="badge bg-label-success">88%</span></td>
+                                            <td><span class="badge bg-label-success">EE</span></td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
+                                            <td>Humility & Service</td>
+                                            <td><span class="badge bg-label-warning">77%</span></td>
+                                            <td><span class="badge bg-label-warning">ME</span></td>
+                                        </tr>
+                                         <tr>
+                                            <td>3</td>
                                             <td>Empathy & Compassion</td>
                                             <td><span class="badge bg-label-orange">67%</span></td>
                                             <td><span class="badge bg-label-orange">NI</span></td>
                                         </tr>
                                         <tr>
-                                            <td>3</td>
-                                            <td>Humility & Service</td>
-                                            <td><span class="badge bg-label-warning">77%</span></td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
-                                        <tr>
                                             <td>4</td>
-                                            <td>Honesty & Integrity</td>
-                                            <td><span class="badge bg-label-success">88%</span></td>
-                                            <td><span class="badge bg-label-success">EE</span></td>
+                                            <td>Responsibility & Accountability</td>
+                                            <td><span class="badge bg-label-danger">59%</span></td>
+                                            <td><span class="badge bg-label-danger">BE</span></td>
                                         </tr>
+                                       
+                                        
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -2322,11 +2325,11 @@
                                             <td><span class="badge bg-label-success">88%</span></td>
                                             <td><span class="badge bg-label-success">EE</span></td>
                                         </tr>
-                                        <tr>
+                                         <tr>
                                             <td>2</td>
-                                            <td>Responsibility & Accountability</td>
-                                            <td><span class="badge bg-label-danger">59%</span></td>
-                                            <td><span class="badge bg-label-danger">BE</span></td>
+                                            <td>Humility & Service</td>
+                                            <td><span class="badge bg-label-warning">77%</span></td>
+                                            <td><span class="badge bg-label-warning">ME</span></td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
@@ -2336,10 +2339,12 @@
                                         </tr>
                                         <tr>
                                             <td>4</td>
-                                            <td>Humility & Service</td>
-                                            <td><span class="badge bg-label-warning">77%</span></td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
+                                            <td>Responsibility & Accountability</td>
+                                            <td><span class="badge bg-label-danger">59%</span></td>
+                                            <td><span class="badge bg-label-danger">BE</span></td>
                                         </tr>
+                                        
+                                       
 
                                     </tbody>
                                 </table>
