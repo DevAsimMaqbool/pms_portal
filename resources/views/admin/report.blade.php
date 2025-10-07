@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Performance Insight Report 2023-2024</title>
+    <title>Performance Insight Report 2024-2025</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -710,14 +710,14 @@
     <div class="page A4">
         <header class="page-header">
             <div class="identity">
-                <h5 class="name">{{ Str::before($user->name, '-') }}</h5>
+                <h5 class="name">{{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}</h5>
                 <div class="role">{{ $user->job_title }}</div>
                 <div class="dept">{{ $user->department }}</div>
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="year">2023-2024</div>
-                <div class="issued">Issued on November 02, 2024</div>
+                <div class="year">2024-2025</div>
+                <div class="issued">Issued on October 07, 2025</div>
             </div>
         </header>
 
@@ -756,87 +756,85 @@
             <table class="kpi-table">
                 <thead>
                     <tr>
-                        <th>Sub KPA</th>
-                        <th></th>
+                        <th>KPA</th>
                         <th>Target</th>
                         <th>Achieved</th>
+                        <th>Rating</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Teaching</td>
-                        <td></td>
+                        <td>Teaching and Learning</td>
                         <td>100%</td>
-                        <td class="achieved-cell yellow">75%</td>
+                        <td>90%</td>
+                        <td class="achieved-cell" style="background-color:#0D6EFD">OS</td>
                     </tr>
                     <tr>
-                        <td>Research</td>
-                        <td></td>
+                        <td>Research, Innovation and Commercialisation</td>
                         <td>100%</td>
-                        <td class="achieved-cell yellow">78%</td>
+                        <td>85%</td>
+                        <td class=" achieved-cell" style="background-color:#198754">EE</td>
                     </tr>
                     <tr>
-                        <td>Engagement</td>
-                        <td></td>
+                        <td>Institutional Engagement</td>
                         <td>100%</td>
-                        <td class="achieved-cell teal">82%</td>
+                        <td>80%</td>
+                        <td class="achieved-cell" style="background-color:#198754">EE</td>
                     </tr>
                     <tr>
-                        <td>Character Traits</td>
-                        <td></td>
+                        <td>Character Virtue</td>
                         <td>100%</td>
-                        <td class="achieved-cell yellow">77%</td>
+                        <td>75%</td>
+                        <td class="achieved-cell" style="background-color:#FFF200">ME</td>
                     </tr>
                 </tbody>
             </table>
 
-            <div class="legend">
+            <!-- <div class="legend">
                 <div class="pill pill-green">91% and Above OS</div>
                 <div class="pill pill-blue">81% - 90% EE</div>
                 <div class="pill pill-amber">71% - 80% ME</div>
                 <div class="pill pill-orange">61% - 70% NI</div>
                 <div class="pill pill-red">60% and Below BE</div>
-            </div>
+            </div> -->
         </section>
 
         <section class="achievements">
             <h3>Notable Performance Achievements</h3>
             <div class="cards">
                 <div class="card">
-                    <div class="card-title">Institutional Level</div>
                     <div class="subcard">
-                        <div class="sub-title">Institutional Engagement</div>
+                        <div class="sub-title">Teaching</div>
                         <ol>
-                            <li>Builds strong collaborations at institute level.</li>
-                            <li>Aligns efforts with institutional goals.</li>
-                            <li>Engages consistently in institution level initiatives.</li>
+                            <li>Student Satisfaction.</li>
+                            <li>Classes Held.</li>
+                            <li>Student Attendance.</li>
                         </ol>
                     </div>
                     <div class="subcard">
-                        <div class="sub-title">Knowledge Exchange</div>
+                        <div class="sub-title">Engagement</div>
                         <ol>
-                            <li>Shares insights to drive innovation.</li>
-                            <li>Builds networks to facilitate collaboration.</li>
-                            <li>Applies shared knowledge to achieve results.</li>
+                            <li>Line Manager Satisfaction.</li>
+                            <li>Achievement Of Tasks.</li>
+                            <li>Event Performance Feedback.</li>
                         </ol>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-title">Individual Level</div>
                     <div class="subcard">
-                        <div class="sub-title">Teaching Performance</div>
+                        <div class="sub-title">Research</div>
                         <ol>
-                            <li>Consistent high student feedback</li>
-                            <li>Innovative teaching practices</li>
-                            <li>Effective use of diverse teaching materials</li>
+                            <li>Research Publications.</li>
+                            <li>Scholar's Satisfaction.</li>
+                            <li>Research Productivity of PG Students.</li>
                         </ol>
                     </div>
                     <div class="subcard">
-                        <div class="sub-title">Research Supervision</div>
+                        <div class="sub-title">Character Virtue</div>
                         <ol>
-                            <li>Regular coordination with scholars</li>
-                            <li>Timely and constructive feedback to scholars</li>
-                            <li>Quality publications with scholars</li>
+                            <li>Honesty & Integrity.</li>
+                            <li>Responsibility & Accountability.</li>
+                            <li>Empathy & Compassion.</li>
                         </ol>
                     </div>
                 </div>
@@ -855,8 +853,8 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="year">2023-2024</div>
-                <div class="issued">Issued on November 02, 2024</div>
+                <div class="year">2024-2025</div>
+                <div class="issued">Issued on October 07, 2025</div>
             </div>
         </header>
 
@@ -864,8 +862,8 @@
             <div class="tp-grid">
                 <aside class="tp-left">
                     <h2 class="tp-heading">
-                        <span class="t-red">TEACHING</span>
-                        <span class="t-blue">PERFORMANCE</span>
+                        <span class="t-red">Teaching and</span>
+                        <span class="t-blue">Learning</span>
                     </h2>
                     <p>
                         Teaching performance is evaluated through student success rates, feedback, teaching compliance,
@@ -885,55 +883,51 @@
                 <thead>
                     <tr>
                         <th>Sub KPA</th>
-                        <th></th>
                         <th>Target</th>
                         <th>Achieved</th>
+                        <th>Rating</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Teaching Performance</td>
-                        <td></td>
+                        <td>Teaching Delivery</td>
                         <td>100%</td>
-                        <td class="achieved-cell green">91%</td>
+                        <td>91%</td>
+                        <td class="achieved-cell" style="background-color:#0D6EFD">OS</td>
                     </tr>
                     <tr>
-                        <td>Teaching Compliance</td>
-                        <td></td>
+                        <td>Teaching Management</td>
                         <td>100%</td>
-                        <td class="achieved-cell yellow">78%</td>
+                        <td>78%</td>
+                        <td class="achieved-cell" style="background-color:#FFF200">ME</td>
                     </tr>
                     <tr>
-                        <td>Teaching Innovation</td>
-                        <td></td>
+                        <td>Teaching Output</td>
                         <td>100%</td>
-                        <td class="achieved-cell pink">56%</td>
+                        <td>56%</td>
+                        <td class="achieved-cell " style="background-color:#DC3545">BE</td>
                     </tr>
                 </tbody>
             </table>
 
-            <div class="legend">
+            <!-- <div class="legend">
                 <div class="pill pill-green">91% and Above OS</div>
                 <div class="pill pill-blue">81% - 90% EE</div>
                 <div class="pill pill-amber">71% - 80% ME</div>
                 <div class="pill pill-orange">61% - 70% NI</div>
                 <div class="pill pill-red">60% and Below BE</div>
-            </div>
+            </div> -->
         </section>
 
         <section class="two-col-table">
             <div class="t-header">Key Strengths</div>
             <div class="t-header">Development Areas</div>
-            <div class="t-row">Consistent high student feedback</div>
-            <div class="t-row">Difficulty engaging students in larger classes</div>
-            <div class="t-row">Innovative teaching practices</div>
-            <div class="t-row">Limited adaptation of teaching methods to digital platforms</div>
-            <div class="t-row">High pass rates and academic success</div>
-            <div class="t-row">Challenges in maintaining student interest over long periods</div>
-            <div class="t-row">Effective use of diverse teaching materials</div>
-            <div class="t-row">Lack of interaction or hands-on learning activities</div>
-            <div class="t-row">Active participation in professional development</div>
-            <div class="t-row">Limited use of technology in assessments</div>
+            <div class="t-row">Student Teaching Satisfaction</div>
+            <div class="t-row">Student Attendance</div>
+            <div class="t-row">Classes Held</div>
+            <div class="t-row">Submission of Exam Results</div>
+            <div class="t-row">Student Pass Percentage</div>
+            <div class="t-row">Improvement in Student Performance</div>
         </section>
 
         <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
@@ -949,8 +943,8 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="year">2023-2024</div>
-                <div class="issued">Issued on November 02, 2024</div>
+                <div class="year">2024-2025</div>
+                <div class="issued">Issued on October 07, 2025</div>
             </div>
         </header>
 
@@ -958,8 +952,8 @@
             <div class="research-grid">
                 <aside class="research-left">
                     <h2 class="research-heading">
-                        <span class="research">RESEARCH</span>
-                        <span class="perf">PERFORMANCE</span>
+                        <span class="research">Research</span>
+                        <span class="perf"></span>
                     </h2>
                     <p>
                         Research performance is assessed through a combination of publication quantity and quality,
@@ -980,85 +974,57 @@
                 <thead>
                     <tr>
                         <th>Sub KPA</th>
-                        <th></th>
                         <th>Target</th>
                         <th>Achieved</th>
+                        <th>Rating</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Citation Impact</td>
-                        <td></td>
+                        <td>Research Productivity & Quality</td>
                         <td>100%</td>
-                        <td class="achieved-cell blue">85%</td>
+                        <td>95%</td>
+                        <td class="achieved-cell" style="background-color:#0D6EFD">OS</td>
                     </tr>
                     <tr>
-                        <td>International Collaboration</td>
-                        <td></td>
+                        <td>Knowledge Products</td>
                         <td>100%</td>
-                        <td class="achieved-cell yellow">71%</td>
-                    </tr>
-                    <tr>
-                        <td>Other Knowledge Products</td>
-                        <td></td>
-                        <td>100%</td>
-                        <td class="achieved-cell teal">85%</td>
+                        <td>85%</td>
+                        <td class="achieved-cell" style="background-color:#198754">EE</td>
                     </tr>
                     <tr>
                         <td>Research Supervision at PG Level</td>
-                        <td></td>
                         <td>100%</td>
-                        <td class="achieved-cell green">91%</td>
+                        <td>83%</td>
+                        <td class="achieved-cell" style="background-color:#198754">EE</td>
                     </tr>
                     <tr>
-                        <td>Research Projects & Grants</td>
-                        <td></td>
+                        <td>Assigned Tasks</td>
                         <td>100%</td>
-                        <td class="achieved-cell amber">72%</td>
-                    </tr>
-                    <tr>
-                        <td>Industrial Research Engagement</td>
-                        <td></td>
-                        <td>100%</td>
-                        <td class="achieved-cell orange">65%</td>
-                    </tr>
-                    <tr>
-                        <td>Knowledge Exchange Activities</td>
-                        <td></td>
-                        <td>100%</td>
-                        <td class="achieved-cell amber">85%</td>
-                    </tr>
-                    <tr>
-                        <td>IPs and Research Products</td>
-                        <td></td>
-                        <td>100%</td>
-                        <td class="achieved-cell pink">66%</td>
+                        <td>81%</td>
+                        <td class="achieved-cell" style="background-color:#198754">EE</td>
                     </tr>
                 </tbody>
             </table>
 
-            <div class="legend">
+            <!-- <div class="legend">
                 <div class="pill pill-green">91% and Above OS</div>
                 <div class="pill pill-blue">81% - 90% EE</div>
                 <div class="pill pill-amber">71% - 80% ME</div>
                 <div class="pill pill-orange">61% - 70% NI</div>
                 <div class="pill pill-red">60% and Below BE</div>
-            </div>
+            </div> -->
         </section>
 
         <section class="two-col-table">
             <div class="t-header">Key Strenghts</div>
             <div class="t-header">Development Areas</div>
-            <div class="t-row">High number of research publications</div>
-            <div class="t-row">Inconsistent research collaboration across departments</div>
-            <div class="t-row">Strong citation impact and recognition</div>
-            <div class="t-row">Limited involvement in high-impact international journals</div>
-            <div class="t-row">Successful research grants and funding</div>
-            <div class="t-row">Challenges in obtaining external industry collaborations</div>
-            <div class="t-row">Effective supervision of graduate students</div>
-            <div class="t-row">Slow research project completion times</div>
-            <div class="t-row">High involvement in academic conferences</div>
-            <div class="t-row">Low engagement with interdisciplinary research</div>
+            <div class="t-row">Research Publications</div>
+            <div class="t-row">Research Productivity of PG Students</div>
+            <div class="t-row">Knowledge Products</div>
+            <div class="t-row">Assigned Tasks</div>
+            <div class="t-row">Scholar's Satisfaction</div>
+            <div class="t-row"></div>
         </section>
 
         <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
@@ -1073,8 +1039,8 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="year">2023-2024</div>
-                <div class="issued">Issued on November 02, 2024</div>
+                <div class="year">2024-2025</div>
+                <div class="issued">Issued on October 07, 2025</div>
             </div>
         </header>
 
@@ -1082,8 +1048,8 @@
             <div class="tp-grid">
                 <aside class="tp-left">
                     <h2 class="tp-heading">
-                        <span class="t-green">INSTITUTIONAL ENGAGEMENT</span>
-                        <span class="t-blue">PERFORMANCE</span>
+                        <span class="t-green">Institutional</span>
+                        <span class="t-blue">Engagement</span>
                     </h2>
                     <p>
                         Institutional engagement is evaluated based on contributions to academic governance, curriculum
@@ -1105,55 +1071,43 @@
                 <thead>
                     <tr>
                         <th>Sub KPA</th>
-                        <th></th>
                         <th>Target</th>
                         <th>Achieved</th>
+                        <th>Rating</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Institutional Level</td>
-                        <td></td>
+                        <td>Performance in Tasks</td>
                         <td>100%</td>
-                        <td class="achieved-cell blue">88%</td>
+                        <td>95%</td>
+                        <td class="achieved-cell" style="background-color:#0D6EFD">OS</td>
                     </tr>
                     <tr>
-                        <td>Faculty Level</td>
-                        <td></td>
+                        <td>Performance in Events</td>
                         <td>100%</td>
-                        <td class="achieved-cell yellow">75%</td>
-                    </tr>
-                    <tr>
-                        <td>Department Level</td>
-                        <td></td>
-                        <td>100%</td>
-                        <td class="achieved-cell blue">83%</td>
+                        <td>70%</td>
+                        <td class="achieved-cell" style="background-color:#FFF200">ME</td>
                     </tr>
                 </tbody>
             </table>
 
-            <div class="legend">
+            <!-- <div class="legend">
                 <div class="pill pill-green">91% and Above OS</div>
                 <div class="pill pill-blue">81% - 90% EE</div>
                 <div class="pill pill-amber">71% - 80% ME</div>
                 <div class="pill pill-orange">61% - 70% NI</div>
                 <div class="pill pill-red">60% and Below BE</div>
-            </div>
+            </div> -->
         </section>
 
         <section class="two-col-table">
             <div class="t-header">Key Strenghts</div>
             <div class="t-header">Development Areas</div>
-            <div class="t-row">Active participation in institutional governance bodies</div>
-            <div class="t-row">Limited involvement in strategic planning and decision-making</div>
-            <div class="t-row">Strong connections with industry advisory boards (IABs)</div>
-            <div class="t-row">Lack of timely updates to industry stakeholders</div>
-            <div class="t-row">Leading academic programs and curriculum design</div>
-            <div class="t-row">Slow adaptation of curriculum to meet market trends</div>
-            <div class="t-row">Building partnerships with external institutions</div>
-            <div class="t-row">Insufficient representation from diverse academic departments</div>
-            <div class="t-row">Promoting cross-disciplinary projects</div>
-            <div class="t-row">Limited industry collaboration on practical initiatives</div>
+            <div class="t-row">Line Manager Satisfaction Rating</div>
+            <div class="t-row">Event Performance</div>
+            <div class="t-row">Achievement of Tasks Status</div>
+            <div class="t-row"></div>
         </section>
 
         <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
@@ -1168,8 +1122,8 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="year">2023-2024</div>
-                <div class="issued">Issued on November 02, 2024</div>
+                <div class="year">2024-2025</div>
+                <div class="issued">Issued on October 07, 2025</div>
             </div>
         </header>
 
@@ -1177,8 +1131,8 @@
             <div class="char-grid">
                 <aside class="char-left">
                     <h2 class="char-heading">
-                        <span class="char-red">CHARACTER</span>
-                        <span class="char-blue">MASTERY</span>
+                        <span class="char-red">Character</span>
+                        <span class="char-blue">Virtue</span>
                     </h2>
                     <p>
                         Character traits performance focuses on evaluating an individual's ethical conduct, emotional
@@ -1207,60 +1161,54 @@
                 <tbody>
                     <tr>
                         <td>Integrity</td>
-                        <td></td>
                         <td>100%</td>
-                        <td class="achieved-cell yellow">77%</td>
+                        <td>88%</td>
+                        <td class="achieved-cell" style="background-color:#198754">EE</td>
                     </tr>
                     <tr>
                         <td>Empathy</td>
-                        <td></td>
                         <td>100%</td>
-                        <td class="achieved-cell blue">84%</td>
+                        <td>67%</td>
+                        <td class="achieved-cell" style="background-color:#FFA500">NI</td>
                     </tr>
                     <tr>
                         <td>Responsibility</td>
-                        <td></td>
                         <td>100%</td>
-                        <td class="achieved-cell green">91%</td>
+                        <td>91%</td>
+                        <td class="achieved-cell" style="background-color:#0D6EFD">OS</td>
                     </tr>
                     <tr>
-                        <td>Stewardship</td>
-                        <td></td>
+                        <td>Humility</td>
                         <td>100%</td>
-                        <td class="achieved-cell pink">56%</td>
+                        <td>59%</td>
+                        <td class="achieved-cell" style="background-color:#DC3545">BE</td>
                     </tr>
                 </tbody>
             </table>
 
-            <div class="legend">
+            <!-- <div class="legend">
                 <div class="pill pill-green">91% and Above OS</div>
                 <div class="pill pill-blue">81% - 90% EE</div>
                 <div class="pill pill-amber">71% - 80% ME</div>
                 <div class="pill pill-orange">61% - 70% NI</div>
                 <div class="pill pill-red">60% and Below BE</div>
-            </div>
+            </div> -->
         </section>
 
         <section class="two-col-table">
             <div class="t-header">Key Strenghts</div>
             <div class="t-header">Development Areas</div>
-            <div class="t-row">Demonstrating integrity in decision-making</div>
-            <div class="t-row">Difficulty balancing ethical dilemmas in high-pressure situations</div>
-            <div class="t-row">Strong empathy in mentoring students and colleagues</div>
-            <div class="t-row">Over-involvement in others' emotional issues leading to burnout</div>
-            <div class="t-row">High sense of responsibility in tasks and commitments</div>
-            <div class="t-row">Procrastination or avoidance of difficult decisions</div>
-            <div class="t-row">Excellent stewardship in resource management</div>
-            <div class="t-row">Underutilization of available resources or tools</div>
-            <div class="t-row">Positive influence in fostering teamwork and collaboration</div>
-            <div class="t-row">Struggles with delegation and trust in others' abilities</div>
+            <div class="t-row">Responsibility</div>
+            <div class="t-row">Empathy</div>
+            <div class="t-row">Integrity</div>
+            <div class="t-row">Humility</div>
         </section>
 
         <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
     </div>
 
     <!-- Page 6: DEVELOPMENT SUGGESTIONS -->
-    <div class="page A4">
+    <!-- <div class="page A4">
         <header class="page-header">
             <div class="identity">
                 <h5 class="name">{{ Str::before($user->name, '-') }}</h5>
@@ -1325,35 +1273,278 @@
         </section>
 
         <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
-    </div>
+    </div> -->
 
     <!-- Chart.js and init -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         (function () {
-            var canvas = document.getElementById('radarChart');
-            if (canvas && window.Chart) {
-                var ctx = canvas.getContext('2d');
-                new Chart(ctx, {
+            const chartLabels = [
+                "Teaching and Learning",
+                "Research, Innovation and Commercialisation",
+                "Institutional Engagement",
+                "Character Virtue"
+            ];
+            const shortLabels = ["T&L", "RIC", "IE", "CV"];
+            const dataset1 = [90, 85, 80, 75];
+            const labelColors = ['#0D6EFD', '#198754', '#FFA500', '#FFF200', '#DC3545'];
+
+            const ctx = document.getElementById("radarChart").getContext("2d");
+            const gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
+            gradientPink.addColorStop(0, "rgba(115, 103, 240, 0.3)");
+            gradientPink.addColorStop(1, "rgba(115, 103, 240, 0.5)");
+
+            new Chart(ctx, {
+                type: "radar",
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: "Achievements",
+                        data: dataset1,
+                        fill: true,
+                        backgroundColor: gradientPink,
+                        borderColor: "rgba(112, 25, 115, 1)",
+                        pointBackgroundColor: labelColors,
+                        pointBorderColor: labelColors,
+                        pointRadius: 5,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            ticks: { display: true, color: "#666" },
+                            grid: { color: "#ddd" },
+                            angleLines: { color: "#ddd" },
+                            pointLabels: {
+                                font: { size: 9 },
+                                color: (ctx) => labelColors[ctx.index],
+                                callback: (label, index) => shortLabels[index]
+                            }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // --- Teaching Triangle ---
+            const triCanvas = document.getElementById('triangle');
+            if (triCanvas) {
+                const tctx = triCanvas.getContext('2d');
+
+                // --- Data ---
+                const labels = ['Teaching Delivery', 'Teaching Management', 'Teaching Output'];
+                const dataValues = [91, 78, 56];
+
+                // --- Function to get color based on avg ---
+                const getColor = (avg) => {
+                    if (avg < 60) return '#DC3545';      // red
+                    if (avg < 70) return '#FFA500';      // orange
+                    if (avg < 80) return '#FFF200';      // yellow
+                    if (avg < 90) return '#198754';      // green
+                    return '#0D6EFD';                    // blue
+                };
+
+                // --- Colors for each point ---
+                const pointColors = dataValues.map(getColor);
+
+                // --- Chart ---
+                new Chart(tctx, {
                     type: 'radar',
                     data: {
-                        labels: ['Teaching', 'Research', 'Institutional Engagement', 'Character Traits'],
+                        labels: labels,
+                        datasets: [{
+                            label: 'Achievements',
+                            data: dataValues,
+                            fill: true,
+                            backgroundColor: 'rgba(115, 103, 240, 0.3)',
+                            borderColor: 'rgba(112, 25, 115, 1)',
+                            pointBackgroundColor: pointColors,
+                            pointBorderColor: pointColors,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                suggestedMax: 100,
+                                ticks: { display: true, color: "#666" },
+                                grid: { color: "#ddd" },
+                                angleLines: { color: "#ddd" },
+                                pointLabels: {
+                                    color: (ctx) => pointColors[ctx.index],
+                                    font: { size: 10 }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+
+            // --- Research Radar ---
+            const researchCanvas = document.getElementById('researchRadarChart');
+            if (researchCanvas) {
+                const rctx = researchCanvas.getContext('2d');
+
+                // --- Data ---
+                const labels = ['RP&Q', 'KP', 'RS PG Level', 'Assigned Tasks'];
+                const dataValues = [95, 85, 83, 81];
+
+                // --- Function to get color based on avg ---
+                const getColor = (avg) => {
+                    if (avg < 60) return '#DC3545';      // red
+                    if (avg < 70) return '#FFA500';      // orange
+                    if (avg < 80) return '#FFF200';      // yellow
+                    if (avg < 90) return '#198754';      // green
+                    return '#0D6EFD';                    // blue
+                };
+
+                // --- Colors for each point ---
+                const pointColors = dataValues.map(getColor);
+
+                // --- Chart ---
+                new Chart(rctx, {
+                    type: 'radar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Achievements',
+                            data: dataValues,
+                            fill: true,
+                            backgroundColor: 'rgba(115, 103, 240, 0.3)',
+                            borderColor: 'rgba(112, 25, 115, 1)',
+                            pointBackgroundColor: pointColors,
+                            pointBorderColor: pointColors,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                suggestedMax: 100,
+                                ticks: { display: true, color: "#666" },
+                                grid: { color: "#ddd" },
+                                angleLines: { color: "#ddd" },
+                                pointLabels: {
+                                    color: (ctx) => pointColors[ctx.index],
+                                    font: { size: 10 }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // --- Research Triangle ---
+            const researchTriangle = document.getElementById('researchTriangle');
+            if (researchTriangle) {
+                const tctx = researchTriangle.getContext('2d');
+
+                // --- Data ---
+                const labels = ['Performance in Tasks', 'Performance in Events'];
+                const dataValues = [95, 70];
+
+                // --- Function to get color based on avg ---
+                const getColor = (avg) => {
+                    if (avg < 60) return '#DC3545';      // red
+                    if (avg < 70) return '#FFA500';      // orange
+                    if (avg < 80) return '#FFF200';      // yellow
+                    if (avg < 90) return '#198754';      // green
+                    return '#0D6EFD';                    // blue
+                };
+
+                // --- Colors for each point ---
+                const pointColors = dataValues.map(getColor);
+
+                // --- Chart ---
+                new Chart(tctx, {
+                    type: 'radar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Achievements',
+                            data: dataValues,
+                            fill: true,
+                            backgroundColor: 'rgba(115, 103, 240, 0.3)',
+                            borderColor: 'rgba(112, 25, 115, 1)',
+                            pointBackgroundColor: pointColors,
+                            pointBorderColor: pointColors,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                suggestedMax: 100,
+                                ticks: { display: true, color: "#666" },
+                                grid: { color: "#ddd" },
+                                angleLines: { color: "#ddd" },
+                                pointLabels: {
+                                    color: (ctx) => pointColors[ctx.index],
+                                    font: { size: 10 }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+
+            // --- Character Virtue Radar ---
+            const radarCharacter = document.getElementById('radarCharacter');
+            if (radarCharacter) {
+                const cctx = radarCharacter.getContext('2d');
+
+                // Function to get color based on value
+                function getColor(avg) {
+                    if (avg < 60) return '#FF4C4C';   // red
+                    if (avg < 70) return '#FFA500';   // orange
+                    if (avg < 80) return '#FFD700';   // yellow
+                    if (avg < 90) return '#6cc04a';   // green
+                    return '#32b6e6';                 // blue
+                }
+
+                const achievedData = [88, 67, 91, 59];
+                const pointColors = achievedData.map(value => getColor(value));
+
+                new Chart(cctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Integrity', 'Empathy', 'Responsibility', 'Humility'],
                         datasets: [
                             {
                                 label: 'Target',
                                 data: [100, 100, 100, 100],
                                 borderColor: '#cfd8dc',
                                 backgroundColor: 'rgba(207,216,220,0.20)',
-                                pointRadius: 0,
-                                borderWidth: 2
+                                pointRadius: 0
                             },
                             {
                                 label: 'Achieved',
-                                data: [75, 78, 82, 77],
+                                data: achievedData,
                                 borderColor: '#6cc04a',
                                 backgroundColor: 'rgba(108,192,74,0.15)',
-                                pointRadius: 3,
-                                borderWidth: 2
+                                pointRadius: 5,
+                                pointBackgroundColor: pointColors,
+                                pointBorderColor: pointColors
                             }
                         ]
                     },
@@ -1368,8 +1559,8 @@
                                 beginAtZero: true,
                                 suggestedMax: 100,
                                 ticks: { display: false },
-                                angleLines: { color: '#e7e7e7' },
                                 grid: { color: '#e7e7e7' },
+                                angleLines: { color: '#e7e7e7' },
                                 pointLabels: { color: '#666', font: { size: 10 } }
                             }
                         }
@@ -1377,189 +1568,6 @@
                 });
             }
 
-            // Triangle chart for Teaching (3 axes)
-            var triCanvas = document.getElementById('triangle');
-            if (triCanvas && window.Chart) {
-                var tctx = triCanvas.getContext('2d');
-                new Chart(tctx, {
-                    type: 'radar',
-                    data: {
-                        labels: ['Teaching Performance', 'Teaching Compliance', 'Teaching Innovation'],
-                        datasets: [
-                            {
-                                label: 'Target',
-                                data: [100, 100, 100],
-                                borderColor: '#cfd8dc',
-                                backgroundColor: 'rgba(207,216,220,0.20)',
-                                pointRadius: 0,
-                                borderWidth: 2
-                            },
-                            {
-                                label: 'Achieved',
-                                data: [91, 78, 56],
-                                borderColor: '#32b6e6',
-                                backgroundColor: 'rgba(50,182,230,0.15)',
-                                pointRadius: 3,
-                                borderWidth: 2
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: true, position: 'bottom' }
-                        },
-                        scales: {
-                            r: {
-                                beginAtZero: true,
-                                suggestedMax: 100,
-                                ticks: { display: false },
-                                angleLines: { color: '#e7e7e7' },
-                                grid: { color: '#e7e7e7' },
-                                pointLabels: { color: '#666', font: { size: 10 } }
-                            }
-                        }
-                    }
-                });
-            }
-            // option 3
-            var researchCanvas = document.getElementById('researchRadarChart');
-            if (researchCanvas && window.Chart) {
-                var ctx = researchCanvas.getContext('2d');
-                new Chart(ctx, {
-                    type: 'radar',
-                    data: {
-                        labels: ['Citation Impact', 'International', 'Other Knowledge Products', 'Supervision PG  Level', 'Research Projects', 'IRE', 'KEA', 'IPs & RP'],
-                        datasets: [
-                            {
-                                label: 'Target',
-                                data: [100, 100, 100, 100, 100, 100, 100, 100],
-                                borderColor: '#cfd8dc',
-                                backgroundColor: 'rgba(207,216,220,0.20)',
-                                pointRadius: 0,
-                                borderWidth: 2
-                            },
-                            {
-                                label: 'Achieved',
-                                data: [85, 71, 85, 91, 72, 65, 85, 66],
-                                borderColor: '#6cc04a',
-                                backgroundColor: 'rgba(108,192,74,0.15)',
-                                pointRadius: 3,
-                                borderWidth: 2
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: true, position: 'bottom' }
-                        },
-                        scales: {
-                            r: {
-                                beginAtZero: true,
-                                suggestedMax: 100,
-                                ticks: { display: false },
-                                angleLines: { color: '#e7e7e7' },
-                                grid: { color: '#e7e7e7' },
-                                pointLabels: { color: '#666', font: { size: 10 } }
-                            }
-                        }
-                    }
-                });
-            }
-            // Triangle chart for Teaching (3 axes)
-            var researchTriangle = document.getElementById('researchTriangle');
-            if (researchTriangle && window.Chart) {
-                var tctx = researchTriangle.getContext('2d');
-                new Chart(tctx, {
-                    type: 'radar',
-                    data: {
-                        labels: ['Institutional Level', 'Faculty Level', 'Department Level'],
-                        datasets: [
-                            {
-                                label: 'Target',
-                                data: [100, 100, 100],
-                                borderColor: '#cfd8dc',
-                                backgroundColor: 'rgba(207,216,220,0.20)',
-                                pointRadius: 0,
-                                borderWidth: 2
-                            },
-                            {
-                                label: 'Achieved',
-                                data: [88, 75, 83],
-                                borderColor: '#32b6e6',
-                                backgroundColor: 'rgba(50,182,230,0.15)',
-                                pointRadius: 3,
-                                borderWidth: 2
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: true, position: 'bottom' }
-                        },
-                        scales: {
-                            r: {
-                                beginAtZero: true,
-                                suggestedMax: 100,
-                                ticks: { display: false },
-                                angleLines: { color: '#e7e7e7' },
-                                grid: { color: '#e7e7e7' },
-                                pointLabels: { color: '#666', font: { size: 10 } }
-                            }
-                        }
-                    }
-                });
-            }
-            var radarCharacter = document.getElementById('radarCharacter');
-            if (radarCharacter && window.Chart) {
-                var ctx = radarCharacter.getContext('2d');
-                new Chart(ctx, {
-                    type: 'radar',
-                    data: {
-                        labels: ['Integrity', 'Empathy', 'Responsibility', 'Stewardship'],
-                        datasets: [
-                            {
-                                label: 'Target',
-                                data: [100, 100, 100, 100],
-                                borderColor: '#cfd8dc',
-                                backgroundColor: 'rgba(207,216,220,0.20)',
-                                pointRadius: 0,
-                                borderWidth: 2
-                            },
-                            {
-                                label: 'Achieved',
-                                data: [77, 84, 91, 56],
-                                borderColor: '#6cc04a',
-                                backgroundColor: 'rgba(108,192,74,0.15)',
-                                pointRadius: 3,
-                                borderWidth: 2
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: true, position: 'bottom' }
-                        },
-                        scales: {
-                            r: {
-                                beginAtZero: true,
-                                suggestedMax: 100,
-                                ticks: { display: false },
-                                angleLines: { color: '#e7e7e7' },
-                                grid: { color: '#e7e7e7' },
-                                pointLabels: { color: '#666', font: { size: 10 } }
-                            }
-                        }
-                    }
-                });
-            }
         })();
     </script>
 </body>

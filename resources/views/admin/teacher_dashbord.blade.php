@@ -1,14 +1,16 @@
 @extends('layouts.app')
 @push('style')
   <style>
-  .bg-orange,
+    .bg-orange,
     .bg-label-orange {
-        background-color: #fd7e1459 !important;
-        color: #fd7e14 !important
+      background-color: #fd7e1459 !important;
+      color: #fd7e14 !important
     }
+
     .card-border-shadow-orange {
-    --bs-card-border-bottom-color: #FFF200 !important
+      --bs-card-border-bottom-color: #FFF200 !important
     }
+
     .h-50vh {
       height: 100vh;
     }
@@ -68,7 +70,8 @@
           <div class="d-flex align-items-end row">
             <div class="col-7">
               <div class="card-body text-nowrap">
-                <h5 class="card-title mb-0">Welcome, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉</h5>
+                <h5 class="card-title mb-0">Welcome, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉
+                </h5>
                 <p class="mb-2">Your current performance is</p>
               </div>
             </div>
@@ -232,51 +235,51 @@
       </div>
       <!-- Vertical Scrollbar -->
       <!-- <div class="col-lg-4 col-sm-12">
-                                                                                                        <div class="card overflow-hidden h-50vh h-md-70vh h-lg-100vh">
-                                                                                                        <div class="card-header d-flex justify-content-between">
-                                                                                                        <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i
-                                                                                                        class="icon-base ti tabler-list-details me-3"></i>Key Performance Indicator</h5>
-                                                                                                        </div>
-                                                                                                        <div class="card-body" id="vertical-example">
-                                                                                                        <ul class="p-0 m-0">
-                                                                                                        @php
-                                                                                                        $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
-                                                                                                        $colors = ['primary', 'success', 'danger', 'warning', 'info'];
-                                                                                                        $series = [20, 90, 40, 80, 30];
-                                                                                                        $index = 0;
-                                                                                                        @endphp
-                                                                                                        @foreach($result as $kpa)
-                                                                                                        @foreach($kpa['category'] as $category)
-                                                                                                        @foreach(array_slice($category['indicator']->toArray(), 0, 10) as $indicator)
-                                                                                                        @php
-                                                                                                        $color = $colors[$index % count($colors)];
-                                                                                                        $seriesValue = $series[$index % count($series)];
-                                                                                                        @endphp
-                                                                                                        <li class="d-flex mb-6">
-                                                                                                        <div class="chart-progress me-4" data-color="{{ $color }}" data-series="{{ $seriesValue }}"
-                                                                                                        data-progress_variant="true"></div>
-                                                                                                        <div class="row w-100 align-items-center">
-                                                                                                        <div class="col-9">
-                                                                                                        <div class="me-2">
-                                                                                                        <h6 class="mb-1_5">{{ $indicator['indicator'] }}</h6>
-                                                                                                        </div>
-                                                                                                        </div>
-                                                                                                        <div class="col-3 text-end">
-                                                                                                        <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button"
-                                                                                                        data-bs-toggle="modal" data-bs-target="#{{ str_replace(' ', '', $indicator['indicator']) }}">
-                                                                                                        <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                                                                                                        </button>
-                                                                                                        </div>
-                                                                                                        </div>
-                                                                                                        </li>
-                                                                                                        @php $index++; @endphp
-                                                                                                        @endforeach
-                                                                                                        @endforeach
-                                                                                                        @endforeach
-                                                                                                        </ul>
-                                                                                                        </div>
-                                                                                                        </div>
-                                                                                                        </div> -->
+                                                                                                                        <div class="card overflow-hidden h-50vh h-md-70vh h-lg-100vh">
+                                                                                                                        <div class="card-header d-flex justify-content-between">
+                                                                                                                        <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i
+                                                                                                                        class="icon-base ti tabler-list-details me-3"></i>Key Performance Indicator</h5>
+                                                                                                                        </div>
+                                                                                                                        <div class="card-body" id="vertical-example">
+                                                                                                                        <ul class="p-0 m-0">
+                                                                                                                        @php
+                                                                                                                        $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+                                                                                                                        $colors = ['primary', 'success', 'danger', 'warning', 'info'];
+                                                                                                                        $series = [20, 90, 40, 80, 30];
+                                                                                                                        $index = 0;
+                                                                                                                        @endphp
+                                                                                                                        @foreach($result as $kpa)
+                                                                                                                        @foreach($kpa['category'] as $category)
+                                                                                                                        @foreach(array_slice($category['indicator']->toArray(), 0, 10) as $indicator)
+                                                                                                                        @php
+                                                                                                                        $color = $colors[$index % count($colors)];
+                                                                                                                        $seriesValue = $series[$index % count($series)];
+                                                                                                                        @endphp
+                                                                                                                        <li class="d-flex mb-6">
+                                                                                                                        <div class="chart-progress me-4" data-color="{{ $color }}" data-series="{{ $seriesValue }}"
+                                                                                                                        data-progress_variant="true"></div>
+                                                                                                                        <div class="row w-100 align-items-center">
+                                                                                                                        <div class="col-9">
+                                                                                                                        <div class="me-2">
+                                                                                                                        <h6 class="mb-1_5">{{ $indicator['indicator'] }}</h6>
+                                                                                                                        </div>
+                                                                                                                        </div>
+                                                                                                                        <div class="col-3 text-end">
+                                                                                                                        <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button"
+                                                                                                                        data-bs-toggle="modal" data-bs-target="#{{ str_replace(' ', '', $indicator['indicator']) }}">
+                                                                                                                        <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
+                                                                                                                        </button>
+                                                                                                                        </div>
+                                                                                                                        </div>
+                                                                                                                        </li>
+                                                                                                                        @php $index++; @endphp
+                                                                                                                        @endforeach
+                                                                                                                        @endforeach
+                                                                                                                        @endforeach
+                                                                                                                        </ul>
+                                                                                                                        </div>
+                                                                                                                        </div>
+                                                                                                                        </div> -->
       <!--/ Vertical Scrollbar -->
       <!-- chart overview -->
       <div class="col-12 col-12 col-lg-8" id="targetDivchart">
@@ -289,7 +292,7 @@
               <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
 
               <input type="radio" class="btn-check" name="termRadio" id="fall25">
-              <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2026</label>
+              <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
             </div>
           </div>
           <div class="card-body pt-0">
@@ -2055,18 +2058,18 @@
             if (data.length > 0) {
               data.forEach(function (category) {
                 html += `
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <div class="col-md-4">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <div class="card h-100">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <div class="card-body">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <div class="form-check">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <input class="form-check-input indicatir-data" type="checkbox" value="${category.id}" id="category_${category.id}">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <label class="form-check-label" for="category_${category.id}">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ${category.indicator_category}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </label>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </div>`;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <div class="col-md-4">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <div class="card h-100">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <div class="form-check">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <input class="form-check-input indicatir-data" type="checkbox" value="${category.id}" id="category_${category.id}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <label class="form-check-label" for="category_${category.id}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ${category.indicator_category}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </label>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </div>`;
               });
             } else {
               html = `<div class="col-12"><p>No Indicator Categories found.</p></div>`;
@@ -2108,16 +2111,16 @@
                   const chartId = `deliveryExceptionsChart_${indicator.id}`;
                   const chartType = (indicator.id % 2 === 0) ? 'radialBar' : 'area';
                   output += `
-                                                                                                                                                                                                                                                                                                                                                                                              <div class="col-xl-3 col-md-4 col-6">
-                                                                                                                                                                                                                                                                                                                                                                                              <div class="card h-100">
-                                                                                                                                                                                                                                                                                                                                                                                              <div class="card-header pb-2">
-                                                                                                                                                                                                                                                                                                                                                                                              <p class="card-subtitle">${indicator.indicator}</p>
-                                                                                                                                                                                                                                                                                                                                                                                              </div>
-                                                                                                                                                                                                                                                                                                                                                                                              <div class="card-body">
-                                                                                                                                                                                                                                                                                                                                                                                              <div id="${chartId}" class="chart-container"></div>
-                                                                                                                                                                                                                                                                                                                                                                                              </div>
-                                                                                                                                                                                                                                                                                                                                                                                              </div>
-                                                                                                                                                                                                                                                                                                                                                                                              </div>`;
+                                                                                                                                                                                                                                                                                                                                                                                                              <div class="col-xl-3 col-md-4 col-6">
+                                                                                                                                                                                                                                                                                                                                                                                                              <div class="card h-100">
+                                                                                                                                                                                                                                                                                                                                                                                                              <div class="card-header pb-2">
+                                                                                                                                                                                                                                                                                                                                                                                                              <p class="card-subtitle">${indicator.indicator}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                              </div>
+                                                                                                                                                                                                                                                                                                                                                                                                              <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                                                                                              <div id="${chartId}" class="chart-container"></div>
+                                                                                                                                                                                                                                                                                                                                                                                                              </div>
+                                                                                                                                                                                                                                                                                                                                                                                                              </div>
+                                                                                                                                                                                                                                                                                                                                                                                                              </div>`;
                   indicator.chart_id = chartId;
                   indicator.chart_type = chartType;
 
@@ -2342,10 +2345,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-  border-radius:50%;margin-right:5px;"></span>
-  ${label} (${shortLabels[i]})
-  `;
+                  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                  border-radius:50%;margin-right:5px;"></span>
+                  ${label} (${shortLabels[i]})
+                  `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
