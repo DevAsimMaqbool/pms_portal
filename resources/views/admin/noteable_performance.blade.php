@@ -169,7 +169,16 @@
                         <h5 class="card-title mb-0">Current Year</h5>
                     </div>
                     <div class="card-body">
-                        <canvas id="lastYear" class="chartjs" data-height="400"></canvas>
+                        <div class="row">
+                          <div class="col-md-12">
+                          <canvas id="radarChartcurrent" class="chartjs" data-height="400"></canvas>
+                          </div>
+
+                          <div class="col-12 mt-2">
+                            <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0" style="list-style:none;">
+                            </ul>
+                          </div>
+                        </div>
                     </div>
                 </div>
 
@@ -187,7 +196,16 @@
                     <!-- Radar Chart -->
 
                     <div class="card-body pt-2">
-                        <canvas class="chartjs" id="radarCharts" data-height="355"></canvas>
+                        <div class="row">
+                          <div class="col-md-12">
+                          <canvas id="radarChartlast" class="chartjs" data-height="400"></canvas>
+                          </div>
+
+                          <div class="col-12 mt-2">
+                            <ul id="customLegendlast" class="d-flex justify-content-center flex-wrap p-0 m-0" style="list-style:none;">
+                            </ul>
+                          </div>
+                        </div>
                     </div>
 
 
@@ -220,183 +238,235 @@
     <script src="{{ asset('admin/assets/js/charts-chartjs-legend.js') }}"></script>
     <script src="{{ asset('admin/assets/js/charts-chartjs.js') }}"></script>
     <script>
+  document.addEventListener("DOMContentLoaded", function () {
+            try {
 
-    document.addEventListener("DOMContentLoaded", function () {
-      // ✅ Static labels and datasets
-      var chartLabels = ["T&L","RIC","IE","CV"];
-      var dataset1 = [80, 78, 75, 70];
+                var chartLabels = [
+                  "Teaching and Learning",
+                  "Research, Innovation and Commercialisation",
+                  "Institutional Engagement",
+                  "Character Virtue"
+                ];
+                var shortLabels = ["T&L", "RIC", "IE", "CV"];
+                var dataset1 = [90, 85, 80, 75];
+                var labelColors = ["#e74c3c", "#3498db", "#27ae60", "#f39c12"];
 
 
-      var g = document.getElementById("radarCharts");
-      if (g) {
-        var ctx = g.getContext("2d");
+                const g = document.getElementById("radarChartcurrent");
+                if (!g || !chartLabels.length) return;
 
-        // ✅ Gradients
-        var gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientBlue.addColorStop(0, "rgba(255, 85, 184, 0.9)");
-        gradientBlue.addColorStop(1, "rgba(255, 135, 135, 0.8)");
+                const ctx = g.getContext("2d");
+                
 
-        var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientPink.addColorStop(0, "rgba(85, 85, 255, 0.9)");
-        gradientPink.addColorStop(1, "rgba(151, 135, 255, 0.8)");
+                const gradient = ctx.createLinearGradient(0, 0, 0, 150);
+                gradient.addColorStop(0, "rgba(115,103,240,0.9)");
+                gradient.addColorStop(1, "rgba(85,85,255,0.8)");
 
-        // ✅ Radar Chart
-        new Chart(ctx, {
-          type: "radar",
-          data: {
-            labels: chartLabels,
-            datasets: [
-              {
-                label: "Last Year",
-                data: dataset1,
-                fill: true,
-                backgroundColor: gradientPink,
-                borderColor: "rgba(85, 85, 255, 1)",
-                pointBorderColor: "#5555ff",
-                pointBackgroundColor: "#fff",
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                pointStyle: "circle"
-              }
-            ]
-          },
-          options: {
-            responsive: !0,
-            maintainAspectRatio: !1,
-            animation: {
-                duration: 500
-            },
-            scales: {
-              r: {
-                ticks: {
-                        maxTicksLimit: 1,
-                        display: !1,
-                        color: "666"
+                const radarChart = new Chart(ctx, {
+                    type: "radar",
+                    data: {
+                        labels: shortLabels,
+                        datasets: [
+                            {
+                                label: "Achievements",
+                                data: dataset1,
+                                fill: true,
+                                backgroundColor: gradient,
+                                borderColor: "rgba(85,85,255,1)",
+                                pointBorderColor: labelColors.slice(0, shortLabels.length),
+                                pointBackgroundColor: labelColors.slice(0, shortLabels.length),
+                                pointRadius: 5,
+                                pointHoverRadius: 8,
+                                pointStyle: "circle"
+                            }
+                        ]
                     },
-                grid: { color: "#ddd" },
-                angleLines: { color: "#ddd" },
-                pointLabels: {
-                   color: "#666",
-                   font: {
-                      size: 12, // label text size
-                    },
-                   callback: function (label) {
-                      // Show only first 10 characters
-                      return label.length > 20 ? label.substring(0, 20) + "..." : label;
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: { duration: 600 },
+                        scales: {
+                            r: {
+                                min: 50, // ✅ Show full scale
+                                max: 100,
+                                ticks: {
+                                    display: true, // ✅ Show 60,70,80,90,100
+                                    stepSize: 10,
+                                    color: "#666",
+                                    backdropColor: "transparent",
+                                    font: { size: 10 }
+                                },
+                                grid: { color: "#ddd" },
+                                angleLines: { color: "#ddd" },
+                                pointLabels: {
+                                    font: { size: 11 },
+                                    color: (ctx) => labelColors[ctx.index % labelColors.length],
+                                    callback: (label, i) => shortLabels[i] || label
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: "#fff",
+                                titleColor: "#000",
+                                bodyColor: "#333",
+                                borderWidth: 1,
+                                borderColor: "#ddd",
+                                callbacks: {
+                                    title: (context) => chartLabels[context[0].dataIndex]
+                                }
+                            }
+                        }
                     }
-                  }
-              }
-            },
-            plugins: {
-              legend: {
-                position: "top",
-                labels: {
-                  padding: 25,
-                  color: "#333"
+                });
+
+                // ✅ Custom Legend
+                const legendDiv = document.getElementById("customLegend");
+                if (legendDiv) {
+                    legendDiv.innerHTML = ""; // Clear old legend if any
+                    chartLabels.forEach((label, i) => {
+                        let li = document.createElement("li");
+                        li.className = "mx-3";
+                        li.style.fontSize = "9px";
+                        li.style.cursor = "pointer";
+                        li.innerHTML = `
+                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                    border-radius:50%;margin-right:5px;"></span>
+                    ${label} (${shortLabels[i]})
+                    `;
+
+                        li.addEventListener("mouseenter", () => {
+                        radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
+                        radarChart.update();
+                        });
+                        li.addEventListener("mouseleave", () => {
+                        radarChart.setActiveElements([]);
+                        radarChart.update();
+                        });
+
+                        legendDiv.appendChild(li);
+                    });
                 }
-              },
-              tooltip: {
-                backgroundColor: "#fff",
-                titleColor: "#000",
-                bodyColor: "#333",
-                borderWidth: 1,
-                borderColor: "#ddd"
-              }
+            } catch (error) {
+                console.error("Radar chart initialization error:", error);
             }
-          },
 
         });
-      }
-    });
+        document.addEventListener("DOMContentLoaded", function () {
+            try {
 
-     document.addEventListener("DOMContentLoaded", function () {
-      // ✅ Static labels and datasets
-      //var chartLabels = ["Teaching and Learning","Research Innovation and Commercialisation","Institutional Engagement","Institutional Engagement Operational"];
-     // var dataset1 = [70, 90, 85, 80];
+                var chartLabels1 = [
+                  "Teaching and Learning",
+                  "Research, Innovation and Commercialisation",
+                  "Institutional Engagement",
+                  "Character Virtue"
+                ];
+                var shortLabels = ["T&L", "RIC", "IE", "CV"];
+                var dataset1 = [90, 90, 90, 60];
+                var labelColors = ["#e74c3c", "#3498db", "#27ae60", "#f39c12"];
 
-       var chartLabels = ["T&L","RIC","IE","CV"];
-       var dataset1 = [100, 95, 90, 85]; // Inside Mirror
 
-      var g = document.getElementById("lastYear");
-      if (g) {
-        var ctx = g.getContext("2d");
+                const g = document.getElementById("radarChartlast");
+                if (!g || !chartLabels1.length) return;
 
-        // ✅ Gradients
-        var gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientBlue.addColorStop(0, "rgba(255, 85, 184, 0.9)");
-        gradientBlue.addColorStop(1, "rgba(255, 135, 135, 0.8)");
+                const ctx = g.getContext("2d");
+                
 
-        var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientPink.addColorStop(0, "rgba(85, 85, 255, 0.9)");
-        gradientPink.addColorStop(1, "rgba(151, 135, 255, 0.8)");
+                const gradient = ctx.createLinearGradient(0, 0, 0, 150);
+                gradient.addColorStop(0, "rgba(115,103,240,0.9)");
+                gradient.addColorStop(1, "rgba(85,85,255,0.8)");
 
-        // ✅ Radar Chart
-        new Chart(ctx, {
-          type: "radar",
-          data: {
-            labels: chartLabels,
-            datasets: [
-              {
-                label: "Current Year",
-                data: dataset1,
-                fill: true,
-                backgroundColor: gradientBlue,
-                borderColor: "rgba(255, 85, 184, 1)",
-                pointBorderColor: "#ff55b8",
-                pointBackgroundColor: "#fff",
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                pointStyle: "circle"
-              }
-            ]
-          },
-          options: {
-            responsive: !0,
-            maintainAspectRatio: !1,
-            animation: {
-                duration: 500
-            },
-            scales: {
-              r: {
-                ticks: {
-                        maxTicksLimit: 1,
-                        display: !1,
-                        color: "666"
+                const radarChart = new Chart(ctx, {
+                    type: "radar",
+                    data: {
+                        labels: shortLabels,
+                        datasets: [
+                            {
+                                label: "Achievements",
+                                data: dataset1,
+                                fill: true,
+                                backgroundColor: gradient,
+                                borderColor: "rgba(85,85,255,1)",
+                                pointBorderColor: labelColors.slice(0, shortLabels.length),
+                                pointBackgroundColor: labelColors.slice(0, shortLabels.length),
+                                pointRadius: 5,
+                                pointHoverRadius: 8,
+                                pointStyle: "circle"
+                            }
+                        ]
                     },
-                grid: { color: "#ddd" },
-                angleLines: { color: "#ddd" },
-                pointLabels: {
-                   color: "#666",
-                   font: {
-                      size: 12, // label text size
-                    },
-                   callback: function (label) {
-                      // Show only first 10 characters
-                      return label.length > 20 ? label.substring(0, 20) + "..." : label;
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: { duration: 600 },
+                        scales: {
+                            r: {
+                                min: 50, // ✅ Show full scale
+                                max: 100,
+                                ticks: {
+                                    display: true, // ✅ Show 60,70,80,90,100
+                                    stepSize: 10,
+                                    color: "#666",
+                                    backdropColor: "transparent",
+                                    font: { size: 10 }
+                                },
+                                grid: { color: "#ddd" },
+                                angleLines: { color: "#ddd" },
+                                pointLabels: {
+                                    font: { size: 11 },
+                                    color: (ctx) => labelColors[ctx.index % labelColors.length],
+                                    callback: (label, i) => shortLabels[i] || label
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: "#fff",
+                                titleColor: "#000",
+                                bodyColor: "#333",
+                                borderWidth: 1,
+                                borderColor: "#ddd",
+                                callbacks: {
+                                    title: (context) => chartLabels1[context[0].dataIndex]
+                                }
+                            }
+                        }
                     }
-                  }
-              }
-            },
-            plugins: {
-              legend: {
-                position: "top",
-                labels: {
-                  padding: 25,
-                  color: "#333"
+                });
+
+                // ✅ Custom Legend
+                const legendDiv = document.getElementById("customLegendlast");
+                if (legendDiv) {
+                    legendDiv.innerHTML = ""; // Clear old legend if any
+                    chartLabels1.forEach((label, i) => {
+                        let li = document.createElement("li");
+                        li.className = "mx-3";
+                        li.style.fontSize = "9px";
+                        li.style.cursor = "pointer";
+                        li.innerHTML = `
+                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                    border-radius:50%;margin-right:5px;"></span>
+                    ${label} (${shortLabels[i]})
+                    `;
+
+                        li.addEventListener("mouseenter", () => {
+                        radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
+                        radarChart.update();
+                        });
+                        li.addEventListener("mouseleave", () => {
+                        radarChart.setActiveElements([]);
+                        radarChart.update();
+                        });
+
+                        legendDiv.appendChild(li);
+                    });
                 }
-              },
-              tooltip: {
-                backgroundColor: "#fff",
-                titleColor: "#000",
-                bodyColor: "#333",
-                borderWidth: 1,
-                borderColor: "#ddd"
-              }
+            } catch (error) {
+                console.error("Radar chart initialization error:", error);
             }
-          },
 
         });
-      }
-    });
     </script>
 @endpush

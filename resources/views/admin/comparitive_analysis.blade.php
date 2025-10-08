@@ -22,8 +22,8 @@
                                     <label for="apkMultiple" class="form-label">Key Performance Area</label>
                                     <select id="apkMultiple" name="key_performance_area_id[]" class="select2 form-select">
                                         <option value="#">Select KPA</option>
-                                        @foreach($kfarea as $kfa)
-                                            <option value="{{ $kfa->id }}">{{ $kfa->performance_area }}</option>
+                                        @foreach($kfarea as $index => $kfa)
+                                            <option value="{{ $kfa->id }}" {{ $index === 0 ? 'selected' : '' }}>{{ $kfa->performance_area }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -62,12 +62,13 @@
                 </div>
 
                 <div class="col-12 col-xl-7">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-header header-elements">
                             <h5 class="card-title mb-0">Scorecard</h5>
                         </div>
                         <div class="card-body">
-                            <canvas id="barChart" class="chartjs" data-height="400"></canvas>
+                            {{-- <canvas id="barChart" class="chartjs" data-height="400"></canvas> --}}
+                            <div id="barChart"></div>
                         </div>
                     </div>
                 </div>
@@ -133,13 +134,17 @@
                             let $categorySelect = $('#indiatorCategoryMultiple');
                             $categorySelect.empty();
                             $categorySelect.append('<option value="#">Select Category</option>');
-                            data.forEach(function (item) {
+                            data.forEach(function (item, index) {
+                                // Select the first item automatically
+                                let isSelected = index === 0;
                                 $categorySelect.append(
-                                    new Option(item.indicator_category, item.id, false, false)
+                                    new Option(item.indicator_category, item.id, false, isSelected)
                                 );
                             });
+                            // ✅ Trigger Select2 refresh and fire change for first-time load
+                            $categorySelect.trigger('change.select2').trigger('change');
 
-                            // $categorySelect.trigger('change');
+                            
                         }
                     });
                 });
@@ -213,9 +218,14 @@
                         }
                     });
                 });
+                 let $apk = $('#apkMultiple');
+                let firstValue = $apk.find('option:not([value="#"])').first().val();
 
+                if (firstValue) {
+                    $apk.val(firstValue).trigger('change.select2').trigger('change');
+                }
 
-                function updateBarChart(labels, values, colors) {
+                function updateBarChart1(labels, values, colors) {
                     const ctx = document.getElementById('barChart').getContext('2d');
 
                     if (barChart) barChart.destroy();
@@ -277,6 +287,87 @@
                         }
                     });
                 }
+                function updateBarChart(labels, values, colors) {
+                    // Get chart element
+                    let chartEl = document.querySelector("#barChart");
+                    if (!chartEl) {
+                        console.error("Element #barChart not found");
+                        return;
+                    }
+
+                    // Destroy previous chart if exists
+                    if (barChart) {
+                        barChart.destroy();
+                        chartEl.innerHTML = ""; // Clear previous chart content
+                    }
+
+                    // Define ApexCharts options
+                    let options = {
+                        chart: {
+                            height: 400,
+                            type: "bar",
+                            toolbar: { show: false }
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: true,
+                                distributed: true,
+                                borderRadius: 7,
+                                barHeight: "60%",
+                                startingShape: "rounded"
+                            }
+                        },
+                        grid: {
+                            strokeDashArray: 10,
+                            borderColor: "#e9ecef",
+                            xaxis: { lines: { show: true } },
+                            yaxis: { lines: { show: false } },
+                            padding: { top: 0, bottom: 0 }
+                        },
+                        colors: colors,
+                        series: [
+                            {
+                                name: "Average (%)",
+                                data: values
+                            }
+                        ],
+                     
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                colors: ["#fff"],
+                                fontSize: "13px",
+                                fontWeight: 400,
+                                fontFamily: "Arial, sans-serif"
+                            },
+                            formatter: function (val, opts) {
+                                return labels[opts.dataPointIndex];
+                            },
+                            offsetX: 0,
+                            dropShadow: { enabled: false }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            style: { fontSize: "12px" },
+                            onDatasetHover: { highlightDataSeries: false },
+                            custom: function ({ series, seriesIndex, dataPointIndex }) {
+                                return `<div class="px-3 py-2"><span>${series[seriesIndex][dataPointIndex]}%</span></div>`;
+                            }
+                        },
+                        legend: { show: false },
+                        fill: { opacity: 1 },
+                        animation: {
+                            enabled: true,
+                            easing: "easeout",
+                            speed: 800
+                        }
+                    };
+
+                    // Render the new Apex chart
+                    barChart = new ApexCharts(chartEl, options);
+                    barChart.render();
+                }
+
 
             });
         </script>
@@ -292,5 +383,5 @@
         <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
         <script src="{{ asset('admin/assets/js/charts-chartjs-legend.js') }}"></script>
         <script src="{{ asset('admin/assets/js/charts-chartjs.js') }}"></script>
-
+       
     @endpush
