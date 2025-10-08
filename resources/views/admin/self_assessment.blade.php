@@ -154,7 +154,7 @@
                             <div class="card">
                                 <div class="card-header d-flex align-items-center justify-content-between">
                                     <h5 class="mb-0">Self Assessment</h5>
-                                    <small class="text-body-secondary float-end">of kpa's</small>
+                                    <small class="text-body-secondary float-end"></small>
                                 </div>
                                 <div class="card-body">
                                     <div class="card-datatable table-responsive">
@@ -206,7 +206,10 @@
                                                     @endforeach
                                                 </tbody>
                                             </table>
-                                            <button type="submit" class="btn btn-primary">Save</button>
+                                            <div class="mt-2">
+                                                <button type="submit" class="btn btn-primary">Save</button>
+                                            </div>
+                                            
                                         </form>
 
 

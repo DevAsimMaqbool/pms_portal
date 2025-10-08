@@ -724,7 +724,7 @@
         <section class="intro">
             <p>
                 This Performance Insight Report provides a comprehensive review of your performance as
-                <em>Associate Professor</em> for the period of 2023-2024. The report covers key areas essential to your
+                <em>Associate Professor</em> for the period of 2024-2025. The report covers key areas essential to your
                 role including: Teaching, Research and Institutional Engagement. By analyzing achievements, and
                 pinpoints areas for improvement to ensure sustained professional development and optimized
                 contributions to the university's mission.
@@ -767,25 +767,25 @@
                         <td>Teaching and Learning</td>
                         <td>100%</td>
                         <td>90%</td>
-                        <td class="achieved-cell" style="background-color:#0D6EFD">OS</td>
+                        <td class="achieved-cell" style="background-color:#6EA8FE">OS</td>
                     </tr>
                     <tr>
                         <td>Research, Innovation and Commercialisation</td>
                         <td>100%</td>
                         <td>85%</td>
-                        <td class=" achieved-cell" style="background-color:#198754">EE</td>
+                        <td class=" achieved-cell" style="background-color:#71C497">EE</td>
                     </tr>
                     <tr>
                         <td>Institutional Engagement</td>
                         <td>100%</td>
                         <td>80%</td>
-                        <td class="achieved-cell" style="background-color:#198754">EE</td>
+                        <td class="achieved-cell" style="background-color:#71C497">EE</td>
                     </tr>
                     <tr>
                         <td>Character Virtue</td>
                         <td>100%</td>
                         <td>75%</td>
-                        <td class="achieved-cell" style="background-color:#FFF200">ME</td>
+                        <td class="achieved-cell" style="background-color:#FFF799">ME</td>
                     </tr>
                 </tbody>
             </table>
@@ -893,19 +893,19 @@
                         <td>Teaching Delivery</td>
                         <td>100%</td>
                         <td>91%</td>
-                        <td class="achieved-cell" style="background-color:#0D6EFD">OS</td>
+                        <td class="achieved-cell" style="background-color:#6EA8FE">OS</td>
                     </tr>
                     <tr>
                         <td>Teaching Management</td>
                         <td>100%</td>
                         <td>78%</td>
-                        <td class="achieved-cell" style="background-color:#FFF200">ME</td>
+                        <td class="achieved-cell" style="background-color:#FFF799">ME</td>
                     </tr>
                     <tr>
                         <td>Teaching Output</td>
                         <td>100%</td>
                         <td>56%</td>
-                        <td class="achieved-cell " style="background-color:#DC3545">BE</td>
+                        <td class="achieved-cell " style="background-color:#F28B94">BE</td>
                     </tr>
                 </tbody>
             </table>
@@ -984,25 +984,25 @@
                         <td>Research Productivity & Quality</td>
                         <td>100%</td>
                         <td>95%</td>
-                        <td class="achieved-cell" style="background-color:#0D6EFD">OS</td>
+                        <td class="achieved-cell" style="background-color:#6EA8FE">OS</td>
                     </tr>
                     <tr>
                         <td>Knowledge Products</td>
                         <td>100%</td>
                         <td>85%</td>
-                        <td class="achieved-cell" style="background-color:#198754">EE</td>
+                        <td class="achieved-cell" style="background-color:#71C497">EE</td>
                     </tr>
                     <tr>
                         <td>Research Supervision at PG Level</td>
                         <td>100%</td>
                         <td>83%</td>
-                        <td class="achieved-cell" style="background-color:#198754">EE</td>
+                        <td class="achieved-cell" style="background-color:#71C497">EE</td>
                     </tr>
                     <tr>
                         <td>Assigned Tasks</td>
                         <td>100%</td>
                         <td>81%</td>
-                        <td class="achieved-cell" style="background-color:#198754">EE</td>
+                        <td class="achieved-cell" style="background-color:#71C497">EE</td>
                     </tr>
                 </tbody>
             </table>
@@ -1081,13 +1081,13 @@
                         <td>Performance in Tasks</td>
                         <td>100%</td>
                         <td>95%</td>
-                        <td class="achieved-cell" style="background-color:#0D6EFD">OS</td>
+                        <td class="achieved-cell" style="background-color:#6EA8FE">OS</td>
                     </tr>
                     <tr>
                         <td>Performance in Events</td>
                         <td>100%</td>
                         <td>70%</td>
-                        <td class="achieved-cell" style="background-color:#FFF200">ME</td>
+                        <td class="achieved-cell" style="background-color:#FFF799">ME</td>
                     </tr>
                 </tbody>
             </table>
@@ -1163,25 +1163,25 @@
                         <td>Integrity</td>
                         <td>100%</td>
                         <td>88%</td>
-                        <td class="achieved-cell" style="background-color:#198754">EE</td>
+                        <td class="achieved-cell" style="background-color:#71C497">EE</td>
                     </tr>
                     <tr>
                         <td>Empathy</td>
                         <td>100%</td>
                         <td>67%</td>
-                        <td class="achieved-cell" style="background-color:#FFA500">NI</td>
+                        <td class="achieved-cell" style="background-color:#FFD580">NI</td>
                     </tr>
                     <tr>
                         <td>Responsibility</td>
                         <td>100%</td>
                         <td>91%</td>
-                        <td class="achieved-cell" style="background-color:#0D6EFD">OS</td>
+                        <td class="achieved-cell" style="background-color:#6EA8FE">OS</td>
                     </tr>
                     <tr>
                         <td>Humility</td>
                         <td>100%</td>
                         <td>59%</td>
-                        <td class="achieved-cell" style="background-color:#DC3545">BE</td>
+                        <td class="achieved-cell" style="background-color:#F28B94">BE</td>
                     </tr>
                 </tbody>
             </table>
@@ -1287,7 +1287,7 @@
             ];
             const shortLabels = ["T&L", "RIC", "IE", "CV"];
             const dataset1 = [90, 85, 80, 75];
-            const labelColors = ['#0D6EFD', '#198754', '#FFA500', '#FFF200', '#DC3545'];
+            const labelColors = ['#6EA8FE', '#71C497', '#FFD580', '#FFF799', '#F28B94'];
 
             const ctx = document.getElementById("radarChart").getContext("2d");
             const gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
@@ -1340,11 +1340,11 @@
 
                 // --- Function to get color based on avg ---
                 const getColor = (avg) => {
-                    if (avg < 60) return '#DC3545';      // red
-                    if (avg < 70) return '#FFA500';      // orange
-                    if (avg < 80) return '#FFF200';      // yellow
-                    if (avg < 90) return '#198754';      // green
-                    return '#0D6EFD';                    // blue
+                    if (avg < 60) return '#F28B94';      // red
+                    if (avg < 70) return '#FFD580';      // orange
+                    if (avg < 80) return '#FFF799';      // yellow
+                    if (avg < 90) return '#71C497';      // green
+                    return '#6EA8FE';                    // blue
                 };
 
                 // --- Colors for each point ---
@@ -1400,11 +1400,11 @@
 
                 // --- Function to get color based on avg ---
                 const getColor = (avg) => {
-                    if (avg < 60) return '#DC3545';      // red
-                    if (avg < 70) return '#FFA500';      // orange
-                    if (avg < 80) return '#FFF200';      // yellow
-                    if (avg < 90) return '#198754';      // green
-                    return '#0D6EFD';                    // blue
+                    if (avg < 60) return '#F28B94';      // red
+                    if (avg < 70) return '#FFD580';      // orange
+                    if (avg < 80) return '#FFF799';      // yellow
+                    if (avg < 90) return '#71C497';      // green
+                    return '#6EA8FE';                    // blue
                 };
 
                 // --- Colors for each point ---
@@ -1459,11 +1459,11 @@
 
                 // --- Function to get color based on avg ---
                 const getColor = (avg) => {
-                    if (avg < 60) return '#DC3545';      // red
-                    if (avg < 70) return '#FFA500';      // orange
-                    if (avg < 80) return '#FFF200';      // yellow
-                    if (avg < 90) return '#198754';      // green
-                    return '#0D6EFD';                    // blue
+                    if (avg < 60) return '#F28B94';      // red
+                    if (avg < 70) return '#FFD580';      // orange
+                    if (avg < 80) return '#FFF799';      // yellow
+                    if (avg < 90) return '#71C497';      // green
+                    return '#6EA8FE';                    // blue
                 };
 
                 // --- Colors for each point ---
@@ -1516,7 +1516,7 @@
                 // Function to get color based on value
                 function getColor(avg) {
                     if (avg < 60) return '#FF4C4C';   // red
-                    if (avg < 70) return '#FFA500';   // orange
+                    if (avg < 70) return '#FFD580';   // orange
                     if (avg < 80) return '#FFD700';   // yellow
                     if (avg < 90) return '#6cc04a';   // green
                     return '#32b6e6';                 // blue

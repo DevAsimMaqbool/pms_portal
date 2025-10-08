@@ -11,8 +11,8 @@
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
         <!-- Header -->
-        <div class="row">
-            <div class="row mb-6 g-6">
+        <div class="">
+            <div class="row mb-3">
                 <div class="col-12 col-xl-12">
                     <div class="card">
                         <div class="card-datatable table-responsive card-body">
@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-6 g-6">
+            <div class="row">
                 <div class="col-12 col-xl-5 col-md-6">
                     <div class="card h-100">
                         <div class="card-header d-flex align-items-center justify-content-between">
@@ -52,7 +52,7 @@
                         </div>
                         <div class="px-5 py-4 border border-start-0 border-end-0">
                             <div class="d-flex justify-content-between align-items-center">
-                                <p class="mb-0 text-uppercase">Indicator</p>
+                                <p class="mb-0 text-uppercase">Employee Name</p>
                                 <p class="mb-0 text-uppercase">Avg.</p>
                             </div>
                         </div>

@@ -15,7 +15,7 @@
                 <div class="card h-100">
                     <div class="card-header d-flex justify-content-between">
                         <h5 class="card-title mb-0">Progress Stats</h5>
-                        <small class="text-body-secondary">Updated 1 month ago</small>
+                        <small class="text-body-secondary"></small>
                     </div>
                     <div class="card-body d-flex align-items-end">
                         <div class="w-100">
@@ -23,41 +23,41 @@
                                 <div class="col-md-3 col-6">
                                     <div class="d-flex align-items-center">
                                         <div class="badge rounded bg-label-primary me-4 p-2"><i
-                                                class="icon-base ti tabler-chart-infographic icon-lg"></i></div>
+                                                class="icon-base ti tabler-book icon-lg"></i></div>
                                         <div class="card-info">
                                             <h5 class="mb-0"> 100%</h5>
-                                            <small>Teaching and Learning</small>
+                                            <small>Teaching</small>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6">
                                     <div class="d-flex align-items-center">
                                         <div class="badge rounded bg-label-primary me-4 p-2"><i
-                                                class="icon-base ti tabler-chart-infographic icon-lg"></i></div>
+                                                class="icon-base ti tabler-bulb icon-lg"></i></div>
                                         <div class="card-info">
-                                            <h5 class="mb-0"> 85%</h5>
-                                            <small>Research Innovation and Commercialisation</small>
+                                            <h5 class="mb-0"> 95%</h5>
+                                            <small>Research</small>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6">
                                     <div class="d-flex align-items-center">
                                         <div class="badge rounded bg-label-primary me-4 p-2"><i
-                                                class="icon-base ti tabler-chart-infographic icon-lg"></i></div>
+                                                class="icon-base ti tabler-network icon-lg"></i></div>
                                         <div class="card-info">
                                             <h5 class="mb-0"> 90%</h5>
-                                            <small>Institutional Engagement</small>
+                                            <small>Engagement</small>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6">
                                     <div class="d-flex align-items-center">
                                         <div class="badge rounded bg-label-primary me-4 p-2"><i
-                                                class="icon-base ti tabler-chart-infographic icon-lg"></i>
+                                                class="icon-base ti tabler-shield-check icon-lg"></i>
                                         </div>
                                         <div class="card-info">
-                                            <h5 class="mb-0"> 901%</h5>
-                                            <small>Institutional Engagement Operational</small>
+                                            <h5 class="mb-0"> 85%</h5>
+                                            <small>Character Virtue</small>
                                         </div>
                                     </div>
                                 </div>
@@ -223,8 +223,8 @@
 
     document.addEventListener("DOMContentLoaded", function () {
       // ✅ Static labels and datasets
-      var chartLabels = ["Teaching and Learning","Research Innovation and Commercialisation","Institutional Engagement","Institutional Engagement Operational"];
-      var dataset1 = [70, 90, 85, 80];
+      var chartLabels = ["T&L","RIC","IE","CV"];
+      var dataset1 = [80, 78, 75, 70];
 
 
       var g = document.getElementById("radarCharts");
@@ -314,8 +314,8 @@
       //var chartLabels = ["Teaching and Learning","Research Innovation and Commercialisation","Institutional Engagement","Institutional Engagement Operational"];
      // var dataset1 = [70, 90, 85, 80];
 
-       var chartLabels = ["Teaching and Learning","Research Innovation and Commercialisation","Institutional Engagement","Institutional Engagement Operational"];
-       var dataset1 = [100, 85, 90, 90]; // Inside Mirror
+       var chartLabels = ["T&L","RIC","IE","CV"];
+       var dataset1 = [100, 95, 90, 85]; // Inside Mirror
 
       var g = document.getElementById("lastYear");
       if (g) {
