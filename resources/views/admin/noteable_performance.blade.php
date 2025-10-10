@@ -13,206 +13,197 @@
             <!-- Statistics -->
           <div class="col-md-12 col-xxl-12">
                 <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between">
-                        <h5 class="card-title mb-0">Progress Stats</h5>
-                        <small class="text-body-secondary"></small>
-                    </div>
-                    <div class="card-body d-flex align-items-end">
-                        <div class="w-100">
-                            <div class="row gy-3">
-                                <div class="col-md-3 col-6">
-                                    <div class="d-flex align-items-center">
-                                        <div class="badge rounded bg-label-primary me-4 p-2"><i
-                                                class="icon-base ti tabler-book icon-lg"></i></div>
-                                        <div class="card-info">
-                                            <h5 class="mb-0"> 100%</h5>
-                                            <small>Teaching</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="d-flex align-items-center">
-                                        <div class="badge rounded bg-label-primary me-4 p-2"><i
-                                                class="icon-base ti tabler-bulb icon-lg"></i></div>
-                                        <div class="card-info">
-                                            <h5 class="mb-0"> 95%</h5>
-                                            <small>Research</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="d-flex align-items-center">
-                                        <div class="badge rounded bg-label-primary me-4 p-2"><i
-                                                class="icon-base ti tabler-network icon-lg"></i></div>
-                                        <div class="card-info">
-                                            <h5 class="mb-0"> 90%</h5>
-                                            <small>Engagement</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="d-flex align-items-center">
-                                        <div class="badge rounded bg-label-primary me-4 p-2"><i
-                                                class="icon-base ti tabler-shield-check icon-lg"></i>
-                                        </div>
-                                        <div class="card-info">
-                                            <h5 class="mb-0"> 85%</h5>
-                                            <small>Character Virtue</small>
-                                        </div>
-                                    </div>
-                                </div>
+                  <div class="card-body d-flex align-items-end">
+                    <div class="w-100">
+
+                      <div class="row gy-3">
+
+                        <div class="col-md-3 col-6">
+                          <div class="d-flex align-items-center">
+                            <div class="badge rounded bg-label-primary me-4 p-2"><i class="icon-base ti tabler-book icon-lg"></i>
                             </div>
+                            <div class="card-info">
+                              <h5 class="mb-0">90%</h5>
+                              <small>Teaching</small>
+                            </div>
+                          </div>
                         </div>
+
+                        <div class="col-md-3 col-6">
+                          <div class="d-flex align-items-center">
+                            <div class="badge rounded bg-label-info me-4 p-2"><i class="icon-base ti tabler-bulb icon-lg"></i>
+                            </div>
+                            <div class="card-info">
+                              <h5 class="mb-0">85%</h5>
+                              <small>Research</small>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3 col-6">
+                          <div class="d-flex align-items-center">
+                            <div class="badge rounded bg-label-danger me-4 p-2"><i
+                                class="icon-base ti tabler-network icon-lg"></i></div>
+                            <div class="card-info">
+                              <h5 class="mb-0">80%</h5>
+                              <small>Engagement</small>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="col-md-3 col-6">
+                          <div class="d-flex align-items-center">
+                            <div class="badge rounded bg-label-success me-4 p-2"><i
+                                class="icon-base ti tabler-shield-check icon-lg"></i></div>
+                            <div class="card-info">
+                              <h5 class="mb-0">75%</h5>
+                              <small>Character Virtue</small>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
                     </div>
+                  </div>
                 </div>
             </div>
-
-            <!-- Popular Instructors -->
-            <div class="col-md-6 col-xxl-6">
-              <div class="card h-100">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                  <div class="card-title mb-0">
-                    <h5 class="m-0 me-2">Top Indicators</h5>
+            
+             <!-- Last Transaction -->
+              <div class="col-lg-6">
+                <div class="card h-100">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title m-0 me-2">Need to Improve</h5>
+                    <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><i class="icon-base ti tabler-calendar icon-xs me-2"></i>Fall 2025</button>
                   </div>
-                </div>
-                <div class="px-5 py-4 border border-start-0 border-end-0">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <p class="mb-0 text-uppercase">Indicator</p>
-                    <p class="mb-0 text-uppercase">AVG</p>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center mb-6">
-                    <div class="d-flex align-items-center">
-                      <div class="avatar flex-shrink-0 me-4">
-                          <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-list-check icon-lg"></i></span>
-                      </div>
-                      <div>
-                        <div>
-                          <h6 class="mb-0 text-truncate">Student Teaching Satisfaction (feedback)</h6>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="text-end">
-                      <div class="badge bg-label-secondary">90%</div>
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-between align-items-center mb-6">
-                    <div class="d-flex align-items-center">
-                      <div class="avatar flex-shrink-0 me-4">
-                          <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-eye icon-lg"></i></span>
-                      </div>
-                      <div>
-                        <div>
-                          <h6 class="mb-0 text-truncate">QEC - Observation / Peer review</h6>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="text-end">
-                      <div class="badge bg-label-secondary">91%</div>
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-between align-items-center mb-6">
-                    <div class="d-flex align-items-center">
-                      <div class="avatar flex-shrink-0 me-4">
-                          <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-circle-check icon-lg"></i></span>
-                      </div>
-                      <div>
-                        <div>
-                          <h6 class="mb-0 text-truncate">Classes Held in Time/Commencement of Classes</h6>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="text-end">
-                      <div class="badge bg-label-secondary">92%</div>
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-between align-items-center mb-6">
-                    <div class="d-flex align-items-center">
-                      <div class="avatar flex-shrink-0 me-4">
-                          <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-telescope icon-lg"></i></span>
-                      </div>
-                      <div>
-                        <div>
-                          <h6 class="mb-0 text-truncate">Student Attendance</h6>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="text-end">
-                      <div class="badge bg-label-secondary">97%</div>
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                      <div class="avatar flex-shrink-0 me-4">
-                          <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-folder icon-lg"></i></span>
-                      </div>
-                      <div>
-                        <div>
-                          <h6 class="mb-0 text-truncate">Completion of Course Folder in Hard</h6>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="text-end">
-                      <div class="badge bg-label-secondary">95%</div>
-                    </div>
+                  <div class="table-responsive">
+                    <table class="table table-borderless border-top">
+                      <thead class="border-bottom">
+                        <tr>
+                          <th>Indicator</th>
+                          <th>Rating</th>
+                          <th>TREND</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="pt-5">
+                            <div class="d-flex justify-content-start align-items-center">
+                              <div class="avatar flex-shrink-0 me-4">
+                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-package icon-26px"></i></span>
+                              </div>
+                              <div class="d-flex flex-column">
+                                <small class="text-body">Student Teaching Satisfaction (feedback)</small>
+                              </div>
+                            </div>
+                          </td>
+                          
+                          <td class="pt-5"><span class="badge bg-label-primary">OS</span></td>
+                          <td class="pt-5">
+                            <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
+                              <i class="icon-base ti tabler-chevron-up"></i>
+                              92%
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="d-flex justify-content-start align-items-center">
+                              <div class="avatar flex-shrink-0 me-4">
+                                <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-truck icon-26px"></i></span>
+                              </div>
+                              <div class="d-flex flex-column">
+                                <small class="text-body">QEC - Observation / Peer review</small>
+                              </div>
+                            </div>
+                          </td>
+                          
+                          <td><span class="badge bg-label-primary">OS</span></td>
+                          <td>
+                            <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
+                              <i class="icon-base ti tabler-chevron-up"></i>
+                              91%
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="d-flex justify-content-start align-items-center">
+                              <div class="avatar flex-shrink-0 me-4">
+                                <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-circle-check icon-26px"></i></span>
+                              </div>
+                              <div class="d-flex flex-column">
+                                <small class="text-body">Classes Held in Time/Commencement of Classes</small>
+                              </div>
+                            </div>
+                          </td>
+                         
+                          <td><span class="badge bg-label-warning">ME</span></td>
+                          <td>
+                            <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
+                              <i class="icon-base ti tabler-chevron-down"></i>
+                              90%
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="d-flex justify-content-start align-items-center">
+                              <div class="avatar flex-shrink-0 me-4">
+                                <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-percentage icon-26px"></i></span>
+                              </div>
+                              <div class="d-flex flex-column">
+                                <small class="text-body">Student Attendance</small>
+                              </div>
+                            </div>
+                          </td>
+                          
+                          <td><span class="badge bg-label-primary">OS</span></td>
+                          <td>
+                            <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
+                              <i class="icon-base ti tabler-chevron-up"></i>
+                              85%
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="d-flex justify-content-start align-items-center">
+                              <div class="avatar flex-shrink-0 me-4">
+                                <span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-clock icon-26px"></i></span>
+                              </div>
+                              <div class="d-flex flex-column">
+                                <small class="text-body">Completion of Course Folder in Hard</small>
+                              </div>
+                            </div>
+                          </td>
+                          
+                          <td><span class="badge bg-label-warning">ME</span></td>
+                          <td>
+                            <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
+                              <i class="icon-base ti tabler-chevron-down"></i>
+                              80%
+                            </p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
-            </div>
-            <!--/ Popular Instructors -->
-            <div class="col-12 col-xl-6 col-md-6">
-                <!-- Bar Charts -->
-
-                <div class="card">
-                    <div class="card-header header-elements">
-                        <h5 class="card-title mb-0">Current Year</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                          <div class="col-md-12">
-                          <canvas id="radarChartcurrent" class="chartjs" data-height="400"></canvas>
-                          </div>
-
-                          <div class="col-12 mt-2">
-                            <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0" style="list-style:none;">
-                            </ul>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- /Bar Charts -->
-            </div>
-
-            <div class="col-12 col-xl-6 col-md-6">
+              <!--/ Last Transaction -->
+              <!-- Carrier Performance -->
+              <div class="col-12 col-lg-6">
                 <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <div class="card-title mb-0">
-                            <h5 class="m-0 me-2">Last Year</h5>
-                        </div>
-                    </div>
-
-                    <!-- Radar Chart -->
-
-                    <div class="card-body pt-2">
-                        <div class="row">
-                          <div class="col-md-12">
-                          <canvas id="radarChartlast" class="chartjs" data-height="400"></canvas>
-                          </div>
-
-                          <div class="col-12 mt-2">
-                            <ul id="customLegendlast" class="d-flex justify-content-center flex-wrap p-0 m-0" style="list-style:none;">
-                            </ul>
-                          </div>
-                        </div>
-                    </div>
-
-
-                    <!-- /Radar Chart -->
+                  <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="card-title m-0 me-2">Carrier Comparison</h5>
+                    
+                  </div>
+                  <div class="card-body">
+                    <div id="carrierPerformance"></div>
+                  </div>
                 </div>
-            </div>
-
+              </div>
 
         </div>
     </div>
@@ -238,235 +229,115 @@
     <script src="{{ asset('admin/assets/js/charts-chartjs-legend.js') }}"></script>
     <script src="{{ asset('admin/assets/js/charts-chartjs.js') }}"></script>
     <script>
-  document.addEventListener("DOMContentLoaded", function () {
-            try {
-
-                var chartLabels = [
-                  "Teaching and Learning",
-                  "Research, Innovation and Commercialisation",
-                  "Institutional Engagement",
-                  "Character Virtue"
-                ];
-                var shortLabels = ["T&L", "RIC", "IE", "CV"];
-                var dataset1 = [90, 85, 80, 75];
-                var labelColors = ["#e74c3c", "#3498db", "#27ae60", "#f39c12"];
-
-
-                const g = document.getElementById("radarChartcurrent");
-                if (!g || !chartLabels.length) return;
-
-                const ctx = g.getContext("2d");
-                
-
-                const gradient = ctx.createLinearGradient(0, 0, 0, 150);
-                gradient.addColorStop(0, "rgba(115,103,240,0.9)");
-                gradient.addColorStop(1, "rgba(85,85,255,0.8)");
-
-                const radarChart = new Chart(ctx, {
-                    type: "radar",
-                    data: {
-                        labels: shortLabels,
-                        datasets: [
-                            {
-                                label: "Achievements",
-                                data: dataset1,
-                                fill: true,
-                                backgroundColor: gradient,
-                                borderColor: "rgba(85,85,255,1)",
-                                pointBorderColor: labelColors.slice(0, shortLabels.length),
-                                pointBackgroundColor: labelColors.slice(0, shortLabels.length),
-                                pointRadius: 5,
-                                pointHoverRadius: 8,
-                                pointStyle: "circle"
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        animation: { duration: 600 },
-                        scales: {
-                            r: {
-                                min: 50, // ✅ Show full scale
-                                max: 100,
-                                ticks: {
-                                    display: true, // ✅ Show 60,70,80,90,100
-                                    stepSize: 10,
-                                    color: "#666",
-                                    backdropColor: "transparent",
-                                    font: { size: 10 }
-                                },
-                                grid: { color: "#ddd" },
-                                angleLines: { color: "#ddd" },
-                                pointLabels: {
-                                    font: { size: 11 },
-                                    color: (ctx) => labelColors[ctx.index % labelColors.length],
-                                    callback: (label, i) => shortLabels[i] || label
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                backgroundColor: "#fff",
-                                titleColor: "#000",
-                                bodyColor: "#333",
-                                borderWidth: 1,
-                                borderColor: "#ddd",
-                                callbacks: {
-                                    title: (context) => chartLabels[context[0].dataIndex]
-                                }
-                            }
-                        }
-                    }
-                });
-
-                // ✅ Custom Legend
-                const legendDiv = document.getElementById("customLegend");
-                if (legendDiv) {
-                    legendDiv.innerHTML = ""; // Clear old legend if any
-                    chartLabels.forEach((label, i) => {
-                        let li = document.createElement("li");
-                        li.className = "mx-3";
-                        li.style.fontSize = "9px";
-                        li.style.cursor = "pointer";
-                        li.innerHTML = `
-                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                    border-radius:50%;margin-right:5px;"></span>
-                    ${label} (${shortLabels[i]})
-                    `;
-
-                        li.addEventListener("mouseenter", () => {
-                        radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
-                        radarChart.update();
-                        });
-                        li.addEventListener("mouseleave", () => {
-                        radarChart.setActiveElements([]);
-                        radarChart.update();
-                        });
-
-                        legendDiv.appendChild(li);
-                    });
-                }
-            } catch (error) {
-                console.error("Radar chart initialization error:", error);
+document.addEventListener("DOMContentLoaded", function () {
+    const c = document.querySelector("#carrierPerformance");
+    const a = {
+        chart: {
+            height: 330,
+            type: "bar",
+            parentHeightOffset: 0,
+            stacked: false,
+            toolbar: { show: false },
+            zoom: { enabled: false }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: "50%",
+                startingShape: "rounded",
+                endingShape: "flat",
+                borderRadius: 6
             }
-
-        });
-        document.addEventListener("DOMContentLoaded", function () {
-            try {
-
-                var chartLabels1 = [
-                  "Teaching and Learning",
-                  "Research, Innovation and Commercialisation",
-                  "Institutional Engagement",
-                  "Character Virtue"
-                ];
-                var shortLabels = ["T&L", "RIC", "IE", "CV"];
-                var dataset1 = [90, 90, 90, 60];
-                var labelColors = ["#e74c3c", "#3498db", "#27ae60", "#f39c12"];
-
-
-                const g = document.getElementById("radarChartlast");
-                if (!g || !chartLabels1.length) return;
-
-                const ctx = g.getContext("2d");
-                
-
-                const gradient = ctx.createLinearGradient(0, 0, 0, 150);
-                gradient.addColorStop(0, "rgba(115,103,240,0.9)");
-                gradient.addColorStop(1, "rgba(85,85,255,0.8)");
-
-                const radarChart = new Chart(ctx, {
-                    type: "radar",
-                    data: {
-                        labels: shortLabels,
-                        datasets: [
-                            {
-                                label: "Achievements",
-                                data: dataset1,
-                                fill: true,
-                                backgroundColor: gradient,
-                                borderColor: "rgba(85,85,255,1)",
-                                pointBorderColor: labelColors.slice(0, shortLabels.length),
-                                pointBackgroundColor: labelColors.slice(0, shortLabels.length),
-                                pointRadius: 5,
-                                pointHoverRadius: 8,
-                                pointStyle: "circle"
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        animation: { duration: 600 },
-                        scales: {
-                            r: {
-                                min: 50, // ✅ Show full scale
-                                max: 100,
-                                ticks: {
-                                    display: true, // ✅ Show 60,70,80,90,100
-                                    stepSize: 10,
-                                    color: "#666",
-                                    backdropColor: "transparent",
-                                    font: { size: 10 }
-                                },
-                                grid: { color: "#ddd" },
-                                angleLines: { color: "#ddd" },
-                                pointLabels: {
-                                    font: { size: 11 },
-                                    color: (ctx) => labelColors[ctx.index % labelColors.length],
-                                    callback: (label, i) => shortLabels[i] || label
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                backgroundColor: "#fff",
-                                titleColor: "#000",
-                                bodyColor: "#333",
-                                borderWidth: 1,
-                                borderColor: "#ddd",
-                                callbacks: {
-                                    title: (context) => chartLabels1[context[0].dataIndex]
-                                }
-                            }
-                        }
-                    }
-                });
-
-                // ✅ Custom Legend
-                const legendDiv = document.getElementById("customLegendlast");
-                if (legendDiv) {
-                    legendDiv.innerHTML = ""; // Clear old legend if any
-                    chartLabels1.forEach((label, i) => {
-                        let li = document.createElement("li");
-                        li.className = "mx-3";
-                        li.style.fontSize = "9px";
-                        li.style.cursor = "pointer";
-                        li.innerHTML = `
-                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                    border-radius:50%;margin-right:5px;"></span>
-                    ${label} (${shortLabels[i]})
-                    `;
-
-                        li.addEventListener("mouseenter", () => {
-                        radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
-                        radarChart.update();
-                        });
-                        li.addEventListener("mouseleave", () => {
-                        radarChart.setActiveElements([]);
-                        radarChart.update();
-                        });
-
-                        legendDiv.appendChild(li);
-                    });
-                }
-            } catch (error) {
-                console.error("Radar chart initialization error:", error);
+        },
+        dataLabels: { enabled: false },
+        series: [
+            {
+                name: "Fall 2025",
+                type: "column",
+                data: [5, 2.5, 4, 3]
+            },
+            {
+                name: "Fall 2026",
+                type: "column",
+                data: [6, 3.5, 3, 2.5]
             }
+        ],
+        xaxis: {
+            tickAmount: 10,
+            categories: ["C&UOL", "StS", "QEC", "CH"],
+            labels: {
+                style: {
+                    colors: "#6e6b7b",
+                    fontSize: "13px",
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: 400
+                }
+            },
+            axisBorder: { show: false },
+            axisTicks: { show: false }
+        },
+        yaxis: {
+            tickAmount: 4,
+            min: 1,
+            labels: {
+                style: {
+                    colors: "#6e6b7b",
+                    fontSize: "13px",
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: 400
+                },
+                formatter: function (o) {
+                    return o;
+                }
+            }
+        },
+        legend: {
+            show: true,
+            position: "bottom",
+            markers: { size: 5, shape: "circle" },
+            height: 40,
+            offsetY: 0,
+            itemMargin: { horizontal: 8, vertical: 0 },
+            fontSize: "13px",
+            fontFamily: "Inter, sans-serif",
+            fontWeight: 400,
+            labels: {
+                colors: "#6e6b7b",
+                useSeriesColors: false
+            },
+            offsetY: -5
+        },
+        grid: {
+            strokeDashArray: 6,
+            padding: { bottom: 5 }
+        },
+        colors: ["#655ae9", "#701f73"],
+        fill: { opacity: 1 },
+        responsive: [
+            {
+                breakpoint: 1400,
+                options: {
+                    chart: { height: 275 },
+                    legend: { fontSize: "13px", offsetY: 10 }
+                }
+            },
+            {
+                breakpoint: 576,
+                options: {
+                    chart: { height: 300 },
+                    legend: {
+                        itemMargin: { vertical: 5, horizontal: 10 },
+                        offsetY: 7
+                    }
+                }
+            }
+        ]
+    };
 
-        });
+    if (c !== null) {
+        new ApexCharts(c, a).render();
+    }
+});
+
     </script>
 @endpush

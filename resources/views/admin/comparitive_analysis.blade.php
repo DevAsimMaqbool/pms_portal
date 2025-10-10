@@ -46,8 +46,7 @@
                             <div class="card-title mb-0">
                                 <h5 class="m-0 me-2">Indicator Averages</h5>
                             </div>
-                            <div class="badge rounded me-4 p-2" style="background-color: #FFD700;"><i
-                                    class="icon-base fas fa-chart-bar fa-3x icon-lg"></i></div>
+                            <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><i class="icon-base ti tabler-buildings icon-xs me-2"></i>Org</button>
 
                         </div>
                         <div class="px-5 py-4 border border-start-0 border-end-0">
