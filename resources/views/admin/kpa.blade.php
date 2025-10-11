@@ -348,35 +348,25 @@
                 if (legendDiv) {
                     legendDiv.innerHTML = ""; // Clear old legend if any
                     chartLabels.forEach((label, i) => {
-                        const li = document.createElement("li");
+                        let li = document.createElement("li");
+                        li.className = "mx-3";
+                        li.style.fontSize = "9px";
+                        li.style.cursor = "pointer";
                         li.innerHTML = `
-                    <span style="
-                        display:inline-flex;
-                        align-items:center;
-                        font-size:10px;
-                        margin:0 5px;
-                        cursor:pointer;
-                        color:${labelColors[i % labelColors.length]};
-                    ">
-                        <span style="
-                            width:8px;
-                            height:8px;
-                            border-radius:50%;
-                            background-color:${labelColors[i % labelColors.length]};
-                            display:inline-block;
-                            margin-right:5px;
-                        "></span>
-                        ${label}
-                    </span>
-                `;
+                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                    border-radius:50%;margin-right:5px;"></span>
+                    ${label} (${shortLabels[i]})
+                    `;
+
                         li.addEventListener("mouseenter", () => {
-                            radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
-                            radarChart.update();
+                        radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
+                        radarChart.update();
                         });
                         li.addEventListener("mouseleave", () => {
-                            radarChart.setActiveElements([]);
-                            radarChart.update();
+                        radarChart.setActiveElements([]);
+                        radarChart.update();
                         });
+
                         legendDiv.appendChild(li);
                     });
                 }
@@ -466,10 +456,11 @@
                         $list.empty();
 
                         if (response.indicators && response.indicators.length > 0) {
-                            let colors = ["primary", "success", "danger", "warning", "info"];
+                            let colors = ["primary", "success", "warning", "secondary-color", "danger"];
+                            let fixedValues = [90, 85, 70, 65, 50];
                             $.each(response.indicators, function (index, indicator) {
                                 let color = colors[index % colors.length];
-                                let randomValue = Math.floor(Math.random() * 100) + 1;
+                                let randomValue = fixedValues[index % fixedValues.length];
                                 let formattedIndicator = indicator.indicator.replace(/[\s#']+/g, '');
                                 $list.append(`
                                                                                                     <li class="d-flex mb-6">
