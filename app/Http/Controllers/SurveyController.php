@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Campus;
+use App\Models\Faculty;
 use App\Models\Department;
 use App\Models\Role;
 use App\Models\Survey;
@@ -345,6 +346,88 @@ class SurveyController extends Controller
         ])->setPaper('a4', 'landscape');
 
         return $pdf->download("Survey_Report_{$faculty_code}.pdf");
+    }
+
+    public function feedbackReport(Request $request)
+    {
+        $facultyId = $request->faculty_id;
+        $departmentId = $request->department_id;
+        // When both faculty & department are selected
+        if ($facultyId && $departmentId) {
+            $report = DB::table('department_wise_surveys as d')
+                ->join('departments as dep', 'dep.id', '=', 'd.department_id')
+                ->join('faculties as f', 'f.id', '=', 'dep.faculty_id')
+                ->select(
+                    'f.name as faculty_name',
+                    'dep.name as department_name',
+                    'd.feedback as feedback_title',
+                    'd.response_rate',
+                    'd.attempts',
+                    'd.registered_students'
+                )
+                ->where('dep.id', $departmentId)
+                ->when($facultyId, fn($q) => $q->where('f.id', $facultyId))
+                ->orderByDesc(DB::raw('CAST(d.feedback AS DECIMAL(5,2))'))
+                ->get();
+
+            // ✅ Return JSON for DataTable
+            return response()->json($report);
+        } else {
+            $facultyFeedback = DB::table('section_wise_surveys as s')
+                ->join('faculties as f', 'f.id', '=', 's.faculty_id')
+                ->select(
+                    'f.id as faculty_id',
+                    'f.name as faculty_name',
+                    DB::raw('
+                AVG(CAST(NULLIF(s.feedback, "") AS DECIMAL(10,2))) as feedback_title
+            '),
+                    DB::raw('
+                AVG(CAST(NULLIF(s.response_rate, "") AS DECIMAL(10,2))) as response_rate
+            '),
+                    DB::raw('
+                SUM(CAST(NULLIF(s.attempts, "") AS UNSIGNED)) as attempts
+            '),
+                    DB::raw('
+                SUM(CAST(NULLIF(s.registered_students, "") AS UNSIGNED)) as registered_students
+            '),
+                    DB::raw('"" as department_name')
+                )
+                ->whereNotNull('s.faculty_id')
+                ->where('s.faculty_id', $facultyId)
+                ->groupBy('f.id', 'f.name')
+                ->orderByDesc('feedback_title')
+                ->get();
+
+            return response()->json($facultyFeedback);
+        }
+    }
+
+    public function loadFeedbackPage()
+    {
+        try {
+            $campuses = Campus::all();
+            return view('admin.feedback', compact('campuses'));
+        } catch (\Exception $e) {
+            return apiResponse('Oops! Something went wrong', [], false, 500, '');
+        }
+    }
+
+    public function getFaculties(Request $request)
+    {
+        $kpaIds = $request->kpa_ids ?? [];
+
+        $faculties = Faculty::where('campus_id', $kpaIds)->get();
+
+        return response()->json($faculties);
+    }
+
+    public function getDepartments(Request $request)
+    {
+        $kpaIds = $request->kpa_ids ?? [];
+
+        $departments = Department::where('faculty_id', $kpaIds)->get();
+
+        return response()->json($departments);
     }
 
 

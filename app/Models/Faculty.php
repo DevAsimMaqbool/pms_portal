@@ -20,4 +20,8 @@ class Faculty extends Model
     {
         return $this->hasMany(Department::class);
     }
+    public function surveys()
+    {
+        return $this->hasMany(SectionWiseSurvey::class);
+    }
 }

@@ -158,6 +158,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/comparitive_analysis', [ComparitiveAnalysisController::class, 'index']);
     Route::post('/get-indicator-categories-comp', [ComparitiveAnalysisController::class, 'getIndicatorCategories'])->name('Category.IndicatorCategories');
     Route::post('/get-indicators-comp', [ComparitiveAnalysisController::class, 'getIndicators'])->name('indicator.getIndicatorsForComp');
+    Route::get('/reports/feedback', [SurveyController::class, 'loadFeedbackPage'])->name('reports.feedback');
+    Route::post('/get-faculties', [SurveyController::class, 'getFaculties'])->name('reports.getFaculties');
+    Route::post('/get-departments', [SurveyController::class, 'getDepartments'])->name('reports.getDepartments');
+    Route::get('/reports/faculty-feedback', [SurveyController::class, 'feedbackReport'])->name('feedback.report');
+
 });
 
 require __DIR__ . '/auth.php';
