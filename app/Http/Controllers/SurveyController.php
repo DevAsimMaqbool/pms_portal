@@ -349,11 +349,11 @@ class SurveyController extends Controller
     }
 
     public function feedbackReport(Request $request)
-    {
+    {   
         $facultyId = $request->faculty_id;
         $departmentId = $request->department_id;
         // When both faculty & department are selected
-        if ($facultyId && $departmentId) {
+        if ($facultyId || $departmentId) {
             $report = DB::table('department_wise_surveys as d')
                 ->join('departments as dep', 'dep.id', '=', 'd.department_id')
                 ->join('faculties as f', 'f.id', '=', 'dep.faculty_id')
@@ -365,7 +365,9 @@ class SurveyController extends Controller
                     'd.attempts',
                     'd.registered_students'
                 )
-                ->where('dep.id', $departmentId)
+                // ->where('dep.id', $departmentId)
+                  ->when(!empty($departmentId) && $departmentId !== '#', function ($q) use ($departmentId) {
+        $q->where('dep.id', $departmentId);})
                 ->when($facultyId, fn($q) => $q->where('f.id', $facultyId))
                 ->orderByDesc(DB::raw('CAST(d.feedback AS DECIMAL(5,2))'))
                 ->get();
