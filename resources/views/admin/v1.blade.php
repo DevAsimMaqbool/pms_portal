@@ -131,6 +131,25 @@
     transition: transform 0.6s ease-in-out;
   }
 }
+.hover-card {
+  transition: all 0.3s ease;
+}
+
+.hover-card:hover {
+  background-color: #ffeaea; /* light red background */
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: change progress bar or badge color on hover */
+.hover-card:hover .progress-bar {
+  background-color: #ff4d4d !important;
+}
+
+.hover-card:hover .badge {
+  background-color: #ff4d4d !important;
+  color: white;
+}
   </style>
 @endpush
 @section('content')
@@ -138,7 +157,7 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Content types -->
     <div class="row mb-12 g-6 align-items-stretch">
-
+     
       <!-- Website Analytics -->
     <div class="col-xl-9 col">
       <div class="swiper-container swiper-container-horizontal swiper swiper-card-advance-bg" id="swiper-with-pagination-cards">
@@ -422,7 +441,7 @@
       </div>
 
 
-        <div class="card mb-6">
+        <div class="card mb-6 hover-card " data-bs-toggle="tooltip" data-bs-placement="right" title="Direct link click">
           <div class="card-body">                  
             <div class="d-flex align-items-center">
               <div class="badge bg-label-danger p-2 me-4 rounded"><i class="icon-base ti tabler-shadow icon-md"></i></div>
