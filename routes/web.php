@@ -53,6 +53,7 @@ Route::get('/v3', function () {
 //Route::middleware('pms.auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PermissionController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard-v1', [PermissionController::class, 'dashboardV1'])->name('dashboard_v1');
     Route::get('student/dashboard', [PermissionController::class, 'dashboard'])->name('student.dashboard');
     Route::get('teacher/dashboard', [PermissionController::class, 'dashboard'])->name('teacher.dashboard');
     Route::get('survey/dashboard', [PermissionController::class, 'dashboard'])->name('survey.dashboard');

@@ -130,6 +130,12 @@
       </li>
       <li class="menu-item">
         <a href="#" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-award"></i>
+          <div data-i18n="Awards">Awards</div>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="#" class="menu-link">
           <i class="menu-icon icon-base ti tabler-bell"></i>
           <div data-i18n="Notifications" id="swalCongrats">Notifications</div>
         </a>
