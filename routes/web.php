@@ -40,7 +40,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/tictactoe', function () {
+    return view('admin.game.tictactoe');
+});
 Route::get('/v1', function () {
     return view('admin.v1');
 });
