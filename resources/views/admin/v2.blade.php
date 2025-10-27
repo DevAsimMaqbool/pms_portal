@@ -12,6 +12,15 @@
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
   <style>
+  .bg-orange,
+    .bg-label-orange {
+      background-color: #fd7e1459 !important;
+      color: #fd7e14 !important
+    }
+
+    .card-border-shadow-orange {
+      --bs-card-border-bottom-color: #FFF200 !important
+    }
   .h-50vh { height: 50vh; }
   
   @media (min-width: 992px) {
@@ -20,129 +29,88 @@
   @media (min-width: 1401px) {
     .h-md-70vh { height: 460px; }
   }
-.scrollable-card-container {
-  max-height: 400px; /* Adjust height as needed */
-  overflow-y: auto;
-  padding-right: 8px;
-  scroll-behavior: smooth;
-}
 
-/* Optional: custom scrollbar styling */
-.scrollable-card-container::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-}
-.scrollable-card-container {
-  -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
-  scrollbar-width: none;     /* Hide scrollbar for Firefox */
-}
-.animated-card-x:hover {
-      animation: rotate3DX 5s ease-in-out infinite;
-       transform-style: preserve-3d;
-       box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
-    }
 
-    @keyframes rotate3DX {
-      0% { transform: rotateX(0deg); }
-      100% { transform: rotateX(360deg); }
-    }
-    .animated-card-y:hover {
-      animation: rotate3DY 6s linear infinite;
-    }
-
-    @keyframes rotate3DY {
-      0% { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
-    }
-    .card-wrapper-x {
-  perspective: 1200px;
-  display: inline-block;
-}
-
-/* Animate smoothly */
-.animated-card-z {
-  transition: transform 0.8s ease, box-shadow 0.8s ease;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-/* Hover effect: 3D tile rotate on X-axis */
-.animated-card-z:hover {
-  transform: rotateX(20deg) translateY(-5px);
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
-}
-
-/* Optional subtle animation while idle */
-@keyframes softTilt {
-  0% { transform: rotateX(0deg); }
-  50% { transform: rotateX(6deg); }
-  100% { transform: rotateX(0deg); }
-}
-.animated-card-zoom {
-  transition: transform 0.6s ease, box-shadow 0.6s ease;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  cursor: pointer;
-}
-
-/* Zoom-out 3D effect on hover */
-.animated-card-zoom:hover {
-  transform: scale(0.95) translateZ(-30px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-/* Optional continuous zoom-in/out animation */
-@keyframes zoomOut3D {
-  0%, 100% { transform: scale(1) translateZ(0); }
-  50% { transform: scale(0.93) translateZ(-25px); }
-}
-
-/* Optional: subtle breathing zoom effect (auto animation) */
-@keyframes zoomIn3D {
-  0%, 100% { transform: scale(1) translateZ(0); }
-  50% { transform: scale(1.08) translateZ(20px); }
-}
-
+/* Wrapper provides positioning and responsive height */
 .flip-card {
-  perspective: 1000px;
+  position: relative;        /* required for absolutely-positioned children */
   width: 100%;
-  height: 100%;
+  /* Modern browsers: maintain aspect ratio. Change to suit your card shape. */
+  aspect-ratio: 4 / 3;      /* fallback used when supported */
+  overflow: visible;
+  perspective: 1000px;
 }
 
-/* Inner wrapper for flipping */
+/* Fallback for browsers that don't support aspect-ratio */
+@supports not (aspect-ratio: 1/1) {
+  .flip-card {
+    /* 75% gives a 4:3 box. Adjust to 100% for square (padding-top:100%) or 56.25% for 16:9 */
+    padding-top: 75%;
+  }
+  /* Place inner absolutely to fill the padded container */
+  .flip-card-inner {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+  }
+}
+
+/* Inner container handles the flip transform */
 .flip-card-inner {
-  position: relative;
+  position: relative;        /* relative by default, but absolute in fallback above */
   width: 100%;
   height: 100%;
-  transition: transform 0.8s ease-in-out;
+  transition: transform 0.6s;
   transform-style: preserve-3d;
 }
 
-/* Flip on hover */
-.flip-card:hover .flip-card-inner {
+/* Hover flip — works on desktop; keep for keyboard focus if desired */
+.flip-card:hover .flip-card-inner,
+.flip-card:focus-within .flip-card-inner {
   transform: rotateY(180deg);
 }
 
-/* Card sides */
+/* FRONT & BACK faces — fill parent and stack */
 .flip-card-front,
 .flip-card-back {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;                  /* shorthand for top:0; right:0; bottom:0; left:0 */
   backface-visibility: hidden;
-  border-radius: 0.375rem; /* Bootstrap card border radius */
+  -webkit-backface-visibility: hidden;
+  border-radius: .5rem;      /* matches Bootstrap card rounding */
+  overflow: hidden;
 }
 
-/* Back side */
+/* Ensure card visuals (bootstrap h-100 won't break) */
+.flip-card-front .card,
+.flip-card-back .card {
+  height: 100%;
+  border: 0;
+}
+
+/* Back side flipped */
 .flip-card-back {
   transform: rotateY(180deg);
 }
 
-/* Make it responsive */
-@media (max-width: 767.98px) {
-  .flip-card-inner {
-    transition: transform 0.6s ease-in-out;
+/* Optional: improve mobile UX — reduce 3D motion and use a vertical flip on narrow screens */
+@media (max-width: 575.98px) {
+  .flip-card {
+    aspect-ratio: 3 / 2;      /* make card a little taller on phones if you like */
   }
+  /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
+  /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
+  /*
+  .flip-card-inner {
+    transition: none;
+  }
+  .flip-card-front,
+  .flip-card-back {
+    position: relative;
+    transform: none;
+    backface-visibility: visible;
+  }
+  .flip-card-back { display: none; } /* or display block on click via JS if needed */
+  */
 }
 </style>
 @endpush
@@ -152,131 +120,224 @@
        <!-- Accordion1 -->
       <div class="row gy-6">
 
+    
+    <!-- Sales Overview -->
+    <div class="col-xl-3 col-sm-6 d-flex flex-column">
+       <div class="row g-6 flex-fill">
 
-         <div class="col-md-6 col-lg-4">
-          <div class=" d-flex justify-content-between">
-          <h5 class="mt-2 text-body-secondary">Body</h5>
-          <h6 class="mt-2 text-body-secondary">See all</h6>
-          </div>
-          <div class="scrollable-card-container mt-3">
-                 
-                <!-- example -->
-
-        <div class="card mb-6">
-          <div class="card-body">                  
-            <div class="d-flex align-items-center">
-              <div class="badge bg-label-danger p-2 me-4 rounded"><i class="icon-base ti tabler-shadow icon-md"></i></div>
-              <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-                <div class="me-2">
-                  <h6 class="mb-0">Direct Source</h6>
-                  <small class="text-body">Direct link click</small>
-                </div>  
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="54" aria-valuemin="0" aria-valuemax="100"></div>
+        <!-- Generated Leads -->
+        <div class="col-xl-12">
+          <div class="card h-100" style="box-shadow: none;">
+              <div class="card-header text-center">
+                  <div class="card-title mb-0">
+                    <h5 class="mb-1">HI, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉</h5>
+                    <p class="card-subtitle">Your current performance is</p>
+                    
                   </div>
-                  <span class="text-body-secondary">65%</span>
                 </div>
-
-              </div>
-            </div>
           </div>
         </div>
-
-        <!-- animation -->
-        <div class="card mb-6 animated-card-y">
-          <div class="card-body">                  
-            <div class="d-flex align-items-center">
-              <div class="badge bg-label-success p-2 me-4 rounded">
-                <i class="icon-base ti tabler-shadow icon-md"></i>
-              </div>
-              <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-                <div class="me-2">
-                  <h6 class="mb-0">Direct Source</h6>
-                  <small class="text-body">Direct link click</small>
-                </div>
-                <div class="d-flex align-items-center">
-                  <p class="mb-0">1.2k</p>
-                  <div class="ms-4 badge bg-label-success">+4.2%</div>
-                </div>
+        <!--/ Generated Leads -->
+        <!-- Profit last month -->
+        <div class="col-xl-6 col-sm-6">
+            <div class="card h-100">
+              
+              <div class="card-body d-flex justify-content-center align-items-center">
+                  <h4 class="mb-1 me-2 text-center">82%</h4>
+                
+                
               </div>
             </div>
-          </div>
         </div>
-
-
-
-
-        <div class="card-wrapper-x">
-        <div class="card mb-6 animated-card-z">
-          <div class="card-body">
-            <div class="d-flex align-items-center">
-              <div class="avatar flex-shrink-0 me-4">
-                <span class="avatar-initial rounded bg-label-primary">
-                  <i class="icon-base ti tabler-video icon-lg"></i>
-                </span>
-              </div>
-              <div class="row w-100 align-items-center">
-                <div class="col-sm-8 col-lg-12 col-xxl-8 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
-                  <h6 class="mb-0">Videography Basic Design Course</h6>
-                </div>
-                <div class="col-sm-4 col-lg-12 col-xxl-4 d-flex justify-content-xxl-end">
-                  <div class="badge bg-label-secondary">1.2k Views</div>
-                </div>
+        
+        <div class="col-xl-6 col-sm-6">
+          <div class="card h-100 bg-info">
+              <div class="card-body d-flex justify-content-center align-items-center">
+                  <h4 class="mb-1 me-2 text-center text-white">ME</h4>
+                
+               
               </div>
             </div>
+        </div>
+        <!--/ Expenses -->
+      </div>
+    </div>
+    <!--/ Sales Overview -->
+
+    <!-- Website Analytics -->
+          @php
+            $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+            $icon1 = ['tabler-book ', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
+            $colors1 = ['primary', 'success', 'warning', 'orange', 'danger'];
+            //$colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
+            $colors2 = ['#0d6efd', '#198754', '#FFA500', '#FFF200', '#dc3545'];
+            $series1 = [90, 85, 70, 65, 50];
+            $index1 = 0;
+            $index2 = 0;
+          @endphp
+          @foreach($result as $kpakey => $kpa)
+            @php
+              $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+              $iconClass = $icon1[$index2 % count($icon1)];
+              $color1 = $colors1[$index2 % count($colors1)];
+              $index2++;
+            @endphp
+               {{-- <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
+                      
+                      <!-- FRONT SIDE -->
+                      <div class="card bg-{{ $color1 }} text-white h-100">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                          <div class="card-title mb-0 text-white">
+                            <p class="mb-0">{{ $kpa['performance_area'] }}</p>
+                          </div>
+                          <div class="card-icon">
+                            <span class="badge bg-label-{{ $color1 }} rounded p-2">
+                              <i class="icon-base ti {{ $iconClass }} icon-26px"></i>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      
+              </div> --}}
+               <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
+  <div class="flip-card">
+    <div class="flip-card-inner">
+
+      <!-- FRONT -->
+      <div class="flip-card-front card bg-{{ $color1 }} text-white h-100">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div class="card-title mb-0 text-white">
+            <p class="mb-0">{{ $kpa['performance_area'] }}</p>
+          </div>
+          <div class="card-icon">
+            <span class="badge bg-label-{{ $color1 }} rounded p-2">
+              <i class="icon-base ti {{ $iconClass }} icon-26px"></i>
+            </span>
           </div>
         </div>
       </div>
 
-
-      <div class="card mb-6 animated-card-zoom">
-          <div class="card-body">                  
-            <div class="d-flex align-items-center">
-              <div class="avatar flex-shrink-0 me-4">
-                <span class="avatar-initial rounded bg-label-primary">
-                  <i class="icon-base ti tabler-video icon-lg"></i>
-                </span>
-              </div>
-              <div class="row w-100 align-items-center">
-                <div class="col-sm-8 col-lg-12 col-xxl-8 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
-                  <h6 class="mb-0">example Basic Design Course</h6>
-                </div>
-                <div class="col-sm-4 col-lg-12 col-xxl-4 d-flex justify-content-xxl-end">
-                  <div class="badge bg-label-secondary">1.2k Views</div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <!-- BACK -->
+      <div class="flip-card-back card bg-info text-dark h-100">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+          <h6 class="mb-2 text-white"">Details</h6>
+          <p class="text-center mb-0 text-white"">More information about this performance area.</p>
         </div>
-        <!-- / animation -->
+      </div>
 
-        <div class="card mb-6 animated-card-x">
-          <div class="card-body">                  
-            
+    </div>
+  </div>
+</div>
 
-              <div class="d-flex align-items-center">
-              <div class="avatar flex-shrink-0 me-4">
-                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-video icon-lg"></i></span>
-              </div>
-              <div class="row w-100 align-items-center">
-                <div class="col-sm-8 col-lg-12 col-xxl-8 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
-                  <h6 class="mb-0">Videography Basic Design Course</h6>
-                </div>
-                <div class="col-sm-4 col-lg-12 col-xxl-4 d-flex justify-content-xxl-end">
-                  <div class="badge bg-label-secondary">1.2k Views</div>
-                </div>
-              </div>
+          @endforeach
+    <!--/ Website Analytics -->
+
+
+
+         <div class="col-md-6 col-lg-4" id="scrollableCol">
+            <div class=" d-flex justify-content-between">
+            <h5 class="mt-2 text-body-secondary">Body</h5>
+            <h6 class="mt-2 text-body-secondary">See all</h6>
             </div>
+           <!--/ Statistics -->
+                    
+                <div class="card mb-6">
+                    <div class="card-body d-flex">                  
+                        <div class="d-flex w-50 align-items-center me-4">
+                            <div class="badge bg-label-orange rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-mood-smile icon-md"></i></div>
+                            <div>
+                              <small class="text-dark">Student Satisfaction</small>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-grow-1 align-items-center">
+                            <div class="progress w-100 me-4" style="height:8px;">
+                              <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="text-body-secondary">65%</span>
+                          </div>
+                    </div>
+                  </div>
+
+                  <div class="card mb-6">
+                    <div class="card-body d-flex">                  
+                        <div class="d-flex w-50 align-items-center me-4">
+                            <div class="badge bg-label-primary rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-chalkboard icon-md"></i></div>
+                            <div>
+                              <small class="text-dark">Classes Held</small>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-grow-1 align-items-center">
+                            <div class="progress w-100 me-4" style="height:8px;">
+                              <div class="progress-bar bg-primary" role="progressbar" style="width: 65%" aria-valuenow="65"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="text-body-secondary">90%</span>
+                          </div>
+                    </div>
+                  </div>
+
+                  <div class="card mb-6">
+                    <div class="card-body d-flex">                  
+                        <div class="d-flex w-50 align-items-center me-4">
+                            <div class="badge bg-label-warning rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-user-check icon-md"></i></div>
+                            <div>
+                              <small class="text-dark">Student Attendance</small>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-grow-1 align-items-center">
+                            <div class="progress w-100 me-4" style="height:8px;">
+                              <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="65"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="text-body-secondary">70%</span>
+                          </div>
+                    </div>
+                  </div>
+
+                  <div class="card mb-6">
+                    <div class="card-body d-flex">                  
+                        <div class="d-flex w-50 align-items-center me-4">
+                            <div class="badge bg-label-danger rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-book-2 icon-md"></i></div>
+                            <div>
+                              <small class="text-dark">Research Publications</small>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-grow-1 align-items-center">
+                            <div class="progress w-100 me-4" style="height:8px;">
+                              <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="text-body-secondary">50%</span>
+                          </div>
+                    </div>
+                  </div>
+
+                  <div class="card mb-6">
+                    <div class="card-body d-flex">                  
+                        <div class="d-flex w-50 align-items-center me-4">
+                            <div class="badge bg-label-success rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-stars icon-md"></i></div>
+                            <div>
+                              <small class="text-dark">Manager Satisfaction</small>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-grow-1 align-items-center">
+                            <div class="progress w-100 me-4" style="height:8px;">
+                              <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="text-body-secondary">86%</span>
+                          </div>
+                    </div>
+                  </div>
 
 
-          </div>
-        </div>
-        
-                <!-- /example -->
 
-
-          </div>
         </div>
         <div class="col-md-6 col-lg-4">
         <div class=" d-flex justify-content-between">
@@ -334,66 +395,20 @@
                       <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="supportTrackerMenu">
-                      <a class="dropdown-item waves-effect" href="javascript:void(0);">View More</a>
+                      <a class="dropdown-item waves-effect"role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethodsDepartment">View More</a>
                       <a class="dropdown-item waves-effect" href="javascript:void(0);">Delete</a>
                     </div>
                   </div>
                 </div>
               <div class="card-body">
-                 <div id="monthelyPerformance"></div>
+                 <canvas class="chartjs" id="radarChart1"></canvas>
               </div>
           </div>
         </div>
         <!--/ Generated Leads -->
-        <!-- Profit last month -->
-       <div class="col-xl-6 col-sm-6">
-          <div class="flip-card">
-            <div class="flip-card-inner">
-              
-              <!-- FRONT SIDE -->
-              <div class="card bg-danger text-white flip-card-front">
-                <div class="card-header text-white">Drag me!</div>
-                <div class="card-body d-flex justify-content-between align-items-center">
-                  <div class="card-title mb-0 text-white">
-                    <h5 class="mb-1 me-2 text-white">0.2%</h5>
-                    <p class="mb-0">Downtime Ratio</p>
-                  </div>
-                  <div class="card-icon">
-                    <span class="badge bg-label-danger rounded p-2">
-                      <i class="icon-base ti tabler-chart-pie-2 icon-26px"></i>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- BACK SIDE -->
-              <div class="card bg-info text-white flip-card-back">
-                <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
-                  <h5 class="mb-2 text-white">System Info</h5>
-                  <p class="mb-0">Downtime decreased by 2% this week 🎯</p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-xl-6 col-sm-6">
-          <div class="card bg-info text-white">
-              <div class="card-header text-white">Drag me!</div>
-              <div class="card-body d-flex justify-content-between align-items-center">
-                <div class="card-title mb-0 text-white">
-                  <h5 class="mb-1 me-2 text-white">0.2%</h5>
-                  <p class="mb-0">Downtime Ratio</p>
-                </div>
-                <div class="card-icon">
-                  <span class="badge bg-label-danger rounded p-2">
-                    <i class="icon-base ti tabler-chart-pie-2 icon-26px"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-        </div>
+       
+  
         <!--/ Expenses -->
       </div>
 
@@ -499,189 +514,65 @@
         
        
       </div>
-         <!-- Vertical Scrollbar -->
-          <div class="col-lg-4 col-sm-12">
-            <div class="card overflow-hidden h-50vh h-md-70vh h-lg-100vh">
-              <div class="card-header d-flex justify-content-between">
-                <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i class="icon-base ti tabler-list-details me-3"></i>Indicator</h5>
-              </div>
-              <div class="card-body" id="vertical-example">
-                  <ul class="p-0 m-0">
-                    <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="primary" data-series="72" data-progress_variant="true"></div>
-                      <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                          <div class="me-2">
-                            <h6 class="mb-1_5">% Employability </h6>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethods2">
-                            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="success" data-series="48" data-progress_variant="true"></div>
-                      <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                          <div class="me-2">
-                            <h6 class="mb-1_5">% Employer Satisfaction </h6>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary" >
-                            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="danger" data-series="15" data-progress_variant="true"></div>
-                      <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                          <div class="me-2">
-                            <h6 class="mb-1_5">Student Satisfaction (Learning)</h6>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary">
-                            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="info" data-series="24" data-progress_variant="true"></div>
-                      <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                          <div class="me-2">
-                            <h6 class="mb-1_5">Student Teacher Ratio</h6>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary">
-                            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="info" data-series="29" data-progress_variant="true"></div>
-                      <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                          <div class="me-2">
-                            <h6 class="mb-1_5">% achievement of Research Publications target (Scopus Indexed)</h6>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary">
-                            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-
-                    <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="primary" data-series="72" data-progress_variant="true"></div>
-                      <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                          <div class="me-2">
-                            <h6 class="mb-1_5">No. of Solutions developed per PhD Students / Impact of research  (1PhD 1 Solution)</h6>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary">
-                            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="success" data-series="48" data-progress_variant="true"></div>
-                      <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                          <div class="me-2">
-                            <h6 class="mb-1_5">Research Grantsand funding  submitted and won </h6>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary">
-                            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="danger" data-series="15" data-progress_variant="true"></div>
-                      <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                          <div class="me-2">
-                            <h6 class="mb-1_5">Commercial Gains / Consultancy/Research Income</h6>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary">
-                            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="info" data-series="24" data-progress_variant="true"></div>
-                      <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                          <div class="me-2">
-                            <h6 class="mb-1_5">Publication of HEC/Scoupus  recognized journals </h6>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary">
-                            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="d-flex mb-6">
-                      <div class="chart-progress me-4" data-color="info" data-series="29" data-progress_variant="true"></div>
-                      <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                          <div class="me-2">
-                            <h6 class="mb-1_5">% of Admission Targets Achieved</h6>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <button type="button" class="btn btn-sm btn-icon btn-label-secondary">
-                            <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-              
-                  </ul>
-              </div>
-            </div>
-          </div>
-          <!--/ Vertical Scrollbar -->
-          <!-- chart overview -->
-          <div class="col-12 col-12 col-lg-8">
-            <div class="card h-50vh h-md-70vh h-lg-100vh">
-              <div class="card-header d-flex justify-content-between">
-                <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i class="icon-base ti tabler-chart-pie me-3"></i>Department Performance</h5>
-              </div>
-              <div class="card-body pt-2">
-               <div id="carrierPerformance"></div>
-              </div>
-            </div>
-          </div>
-          <!--/ chart Overview -->
+        
+         
       </div>
       <!--/ Accordion1 -->
     
- 
+ <!-- Payment Methods modal -->
+    <div class="modal fade" id="paymentMethodsDepartment" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="modalScrollableTitle"><i
+                class="icon-base ti tabler-list-details me-3"></i>Faculties</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+               <div class="row g-6 pt-2">
+                  <div class="col-12 col-12" id="targetDivchart">
+        <div class="card caed-wave-bg">
+          <div class="card-header d-flex justify-content-between">
+            <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i
+                class="icon-base ti tabler-chart-pie me-3"></i>Overall KPA Performance</h5>
+            <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+              <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
+              <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
+
+              <input type="radio" class="btn-check" name="termRadio" id="spring25">
+              <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
+
+              <input type="radio" class="btn-check" name="termRadio" id="fall25">
+              <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
+            </div>
+          </div>
+          <div class="card-body pt-0">
+            <div class="row justify-content-center text-center">
+              <div class="col-md-8 d-flex justify-content-center">
+                <canvas class="chartjs" id="radarChart"></canvas>
+              </div>
+
+              <div class="col-12 mt-2">
+                <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0" style="list-style:none;">
+                </ul>
+              </div>
+            </div>
+            {{-- <div><span>Teaching and Learning</span></div> --}}
+            <!-- if schrool -->
+            {{-- <div style="overflow-x: auto; overflow-y: hidden; width: 100%;">
+              <div id="carrierPerformances"></div>
+            </div> --}}
+
+          </div>
+        </div>
+      </div>
+      <!--/ chart Overview -->
+               </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / Payment Methods modal -->
   </div>
   <!-- / Content -->
 @endsection
@@ -698,75 +589,344 @@
   <script src="{{ asset('admin/assets/js/extended-ui-perfect-scrollbar.js') }}"></script>
   <script src="{{ asset('admin/assets/js/cards-advance.js') }}"></script>
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-      // ✅ Static labels and datasets
-      var chartLabels = ["Teaching and Learning", "Research", "Institutional Engagement", "Institutional Engagement"];
-      var dataset1 = [65, 59, 90, 81]; // Inside Mirror
+      document.addEventListener("DOMContentLoaded", function () {
+    const scrollableDiv = document.getElementById("scrollableCol");
 
-      var g = document.getElementById("radarChart");
-      if (g) {
-        var ctx = g.getContext("2d");
+    // Set scroll height dynamically based on window height
+    const maxHeight = 435;
+    scrollableDiv.style.maxHeight = `${maxHeight}px`;
 
-        // ✅ Gradients
-        var gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientBlue.addColorStop(0, "rgba(85, 85, 255, 0.9)");
-        gradientBlue.addColorStop(1, "rgba(151, 135, 255, 0.8)");
+    // Enable vertical scroll
+    scrollableDiv.style.overflowY = "auto";
+    scrollableDiv.style.scrollBehavior = "smooth";
 
-        var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientPink.addColorStop(0, "rgba(115, 103, 240, 1)");
-        gradientPink.addColorStop(1, "rgba(115, 103, 240, 1)");
+    // Optional: hide scrollbar (still scrolls)
+    scrollableDiv.style.msOverflowStyle = "none"; // IE/Edge
+    scrollableDiv.style.scrollbarWidth = "none";  // Firefox
+    scrollableDiv.style.overflowX = "hidden";
 
-        // ✅ Radar Chart
-        new Chart(ctx, {
-          type: "radar",
-          data: {
-            labels: chartLabels,
-            datasets: [
-              {
-                label: "Achievements",
-                data: dataset1,
-                fill: true,
-                backgroundColor: gradientPink,
-                borderColor: "rgba(112, 25, 115, 1)",
-                pointBorderColor: "#ff55b8",
-                pointBackgroundColor: "#fff",
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                pointStyle: "circle"
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: { duration: 500 },
-            scales: {
-              r: {
-                ticks: { display: true, color: "#666" },
-                grid: { color: "#ddd" },
-                angleLines: { color: "#ddd" },
-                pointLabels: { color: "#666" }
-              }
-            },
-            plugins: {
-              legend: {
-                position: "top",
-                labels: {
-                  padding: 25,
-                  color: "#333"
-                }
-              },
-              tooltip: {
-                backgroundColor: "#fff",
-                titleColor: "#000",
-                bodyColor: "#333",
-                borderWidth: 1,
-                borderColor: "#ddd"
+    // For Chrome/Safari — hide scrollbar visually
+    const style = document.createElement("style");
+    style.innerHTML = `
+      #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+    `;
+    document.head.appendChild(style);
+
+    // Auto adjust on window resize
+    window.addEventListener("resize", () => {
+        scrollableDiv.style.maxHeight = `${newHeight}px`;
+    });
+});
+document.addEventListener("DOMContentLoaded", function () {
+      var chartLabels = [
+        "Teaching and Learning",
+        "Research, Innovation and Commercialisation",
+        "Institutional Engagement",
+      ];
+      var shortLabels = ["T&L", "RIC", "IE"];
+      var dataset1 = [90, 85, 80];
+      var labelColors = ["#e74c3c", "#3498db", "#27ae60"];
+
+      var ctx = document.getElementById("radarChart").getContext("2d");
+
+      var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
+      gradientPink.addColorStop(0, "rgba(115, 103, 240, 0.3)");
+      gradientPink.addColorStop(1, "rgba(115, 103, 240, 0.5)");
+
+      // ✅ Create the chart first
+      var radarChart = new Chart(ctx, {
+        type: "radar",
+        data: {
+          labels: chartLabels,
+          datasets: [
+            {
+              label: "Achievements",
+              data: dataset1,
+              fill: true,
+              backgroundColor: gradientPink,
+              borderColor: "rgba(112, 25, 115, 1)",
+              pointBackgroundColor: labelColors,
+              pointBorderColor: labelColors,
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              pointStyle: "circle"
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              ticks: { display: true, color: "#666" },
+              grid: { color: "#ddd" },
+              angleLines: { color: "#ddd" },
+              pointLabels: {
+                font: { size: 9 },
+                color: (context) => labelColors[context.index],
+                callback: (label, index) => shortLabels[index]
               }
             }
+          },
+          plugins: { legend: { display: false } }
+        },
+        plugins: [
+          {
+            id: "pointLabelClick",
+            afterEvent(chart, args) {
+              const { event } = args;
+              if (!event) return;
+
+              const rScale = chart.scales.r;
+              let hovering = false;
+
+              chart.data.labels.forEach((label, i) => {
+                const point = rScale.getPointPositionForValue(i, rScale.max);
+                const padding = 30; // clickable area around label
+
+                if (
+                  event.x >= point.x - padding &&
+                  event.x <= point.x + padding &&
+                  event.y >= point.y - padding &&
+                  event.y <= point.y + padding
+                ) {
+                  hovering = true;
+
+                  // 👉 Handle click
+                  if (event.type === "click") {
+                    const targetId = label.replace(/\s+/g, "-").toLowerCase();
+                    const targetDiv = document.getElementById(targetId);
+
+                    if (targetDiv) {
+                      // 1️⃣ Scroll into view
+                      targetDiv.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                      });
+
+                      // 2️⃣ Open accordion (if collapsed)
+                      const collapseEl = targetDiv.querySelector(".accordion-collapse");
+                      if (collapseEl && !collapseEl.classList.contains("show")) {
+                        new bootstrap.Collapse(collapseEl, { toggle: true });
+                      }
+
+                      // 3️⃣ Mark active
+                      document
+                        .querySelectorAll(".accordion-item")
+                        .forEach((item) => item.classList.remove("active"));
+                      targetDiv.classList.add("active");
+                    }
+                  }
+                }
+              });
+
+              chart.canvas.style.cursor = hovering ? "pointer" : "default";
+            }
           }
+        ]
+      });
+
+      // ✅ Handle dataset switching *after* chart is initialized
+      document.getElementById("overall").addEventListener("change", function () {
+        if (this.checked) {
+          radarChart.data.datasets[0].data = [90, 85, 80];
+          radarChart.update();
+        }
+      });
+      document.getElementById("spring25").addEventListener("change", function () {
+        if (this.checked) {
+          radarChart.data.datasets[0].data = [80, 85, 90];
+          radarChart.update();
+        }
+      });
+
+      document.getElementById("fall25").addEventListener("change", function () {
+        if (this.checked) {
+          radarChart.data.datasets[0].data = [70, 90, 80];
+          radarChart.update();
+        }
+      });
+
+      // ✅ Custom Legend
+      var legendDiv = document.getElementById("customLegend");
+      chartLabels.forEach((label, i) => {
+        let li = document.createElement("li");
+        li.className = "mx-3";
+        li.style.fontSize = "9px";
+        li.style.cursor = "pointer";
+        li.innerHTML = `
+    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+    border-radius:50%;margin-right:5px;"></span>
+    ${label} (${shortLabels[i]})
+    `;
+
+        li.addEventListener("mouseenter", () => {
+          radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
+          radarChart.update();
         });
-      }
-    });</script>
+        li.addEventListener("mouseleave", () => {
+          radarChart.setActiveElements([]);
+          radarChart.update();
+        });
+
+        legendDiv.appendChild(li);
+      });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+      var chartLabels = [
+        "Teaching and Learning",
+        "Research, Innovation and Commercialisation",
+        "Institutional Engagement",
+      ];
+      var shortLabels = ["T&L", "RIC", "IE"];
+      var dataset1 = [90, 85, 80];
+      var labelColors = ["#e74c3c", "#3498db", "#27ae60"];
+
+      var ctx = document.getElementById("radarChart1").getContext("2d");
+
+      var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
+      gradientPink.addColorStop(0, "rgba(115, 103, 240, 0.3)");
+      gradientPink.addColorStop(1, "rgba(115, 103, 240, 0.5)");
+
+      // ✅ Create the chart first
+      var radarChart = new Chart(ctx, {
+        type: "radar",
+        data: {
+          labels: chartLabels,
+          datasets: [
+            {
+              label: "Achievements",
+              data: dataset1,
+              fill: true,
+              backgroundColor: gradientPink,
+              borderColor: "rgba(112, 25, 115, 1)",
+              pointBackgroundColor: labelColors,
+              pointBorderColor: labelColors,
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              pointStyle: "circle"
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              ticks: { display: true, color: "#666" },
+              grid: { color: "#ddd" },
+              angleLines: { color: "#ddd" },
+              pointLabels: {
+                font: { size: 9 },
+                color: (context) => labelColors[context.index],
+                callback: (label, index) => shortLabels[index]
+              }
+            }
+          },
+          plugins: { legend: { display: false } }
+        },
+        plugins: [
+          {
+            id: "pointLabelClick",
+            afterEvent(chart, args) {
+              const { event } = args;
+              if (!event) return;
+
+              const rScale = chart.scales.r;
+              let hovering = false;
+
+              chart.data.labels.forEach((label, i) => {
+                const point = rScale.getPointPositionForValue(i, rScale.max);
+                const padding = 30; // clickable area around label
+
+                if (
+                  event.x >= point.x - padding &&
+                  event.x <= point.x + padding &&
+                  event.y >= point.y - padding &&
+                  event.y <= point.y + padding
+                ) {
+                  hovering = true;
+
+                  // 👉 Handle click
+                  if (event.type === "click") {
+                    const targetId = label.replace(/\s+/g, "-").toLowerCase();
+                    const targetDiv = document.getElementById(targetId);
+
+                    if (targetDiv) {
+                      // 1️⃣ Scroll into view
+                      targetDiv.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                      });
+
+                      // 2️⃣ Open accordion (if collapsed)
+                      const collapseEl = targetDiv.querySelector(".accordion-collapse");
+                      if (collapseEl && !collapseEl.classList.contains("show")) {
+                        new bootstrap.Collapse(collapseEl, { toggle: true });
+                      }
+
+                      // 3️⃣ Mark active
+                      document
+                        .querySelectorAll(".accordion-item")
+                        .forEach((item) => item.classList.remove("active"));
+                      targetDiv.classList.add("active");
+                    }
+                  }
+                }
+              });
+
+              chart.canvas.style.cursor = hovering ? "pointer" : "default";
+            }
+          }
+        ]
+      });
+
+      // ✅ Handle dataset switching *after* chart is initialized
+      document.getElementById("overall").addEventListener("change", function () {
+        if (this.checked) {
+          radarChart.data.datasets[0].data = [90, 85, 80];
+          radarChart.update();
+        }
+      });
+      document.getElementById("spring25").addEventListener("change", function () {
+        if (this.checked) {
+          radarChart.data.datasets[0].data = [80, 85, 90];
+          radarChart.update();
+        }
+      });
+
+      document.getElementById("fall25").addEventListener("change", function () {
+        if (this.checked) {
+          radarChart.data.datasets[0].data = [70, 90, 80];
+          radarChart.update();
+        }
+      });
+
+      // ✅ Custom Legend
+      var legendDiv = document.getElementById("customLegend");
+      chartLabels.forEach((label, i) => {
+        let li = document.createElement("li");
+        li.className = "mx-3";
+        li.style.fontSize = "9px";
+        li.style.cursor = "pointer";
+        li.innerHTML = `
+    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+    border-radius:50%;margin-right:5px;"></span>
+    ${label} (${shortLabels[i]})
+    `;
+
+        li.addEventListener("mouseenter", () => {
+          radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
+          radarChart.update();
+        });
+        li.addEventListener("mouseleave", () => {
+          radarChart.setActiveElements([]);
+          radarChart.update();
+        });
+
+        legendDiv.appendChild(li);
+      });
+    });
+</script>
 
 @endpush

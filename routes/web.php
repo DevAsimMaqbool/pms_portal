@@ -46,9 +46,7 @@ Route::get('/tictactoe', function () {
 Route::get('/v1', function () {
     return view('admin.v1');
 });
-Route::get('/v2', function () {
-    return view('admin.v2');
-});
+
 Route::get('/v3', function () {
     return view('admin.v3');
 });
@@ -56,6 +54,7 @@ Route::get('/v3', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PermissionController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard-v1', [PermissionController::class, 'dashboardV1'])->name('dashboard_v1');
+    Route::get('/v2', [PermissionController::class, 'V2'])->name('v2');
     Route::get('student/dashboard', [PermissionController::class, 'dashboard'])->name('student.dashboard');
     Route::get('teacher/dashboard', [PermissionController::class, 'dashboard'])->name('teacher.dashboard');
     Route::get('survey/dashboard', [PermissionController::class, 'dashboard'])->name('survey.dashboard');
