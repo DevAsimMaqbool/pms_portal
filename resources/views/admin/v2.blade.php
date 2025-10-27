@@ -20,6 +20,130 @@
   @media (min-width: 1401px) {
     .h-md-70vh { height: 460px; }
   }
+.scrollable-card-container {
+  max-height: 400px; /* Adjust height as needed */
+  overflow-y: auto;
+  padding-right: 8px;
+  scroll-behavior: smooth;
+}
+
+/* Optional: custom scrollbar styling */
+.scrollable-card-container::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+.scrollable-card-container {
+  -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+  scrollbar-width: none;     /* Hide scrollbar for Firefox */
+}
+.animated-card-x:hover {
+      animation: rotate3DX 5s ease-in-out infinite;
+       transform-style: preserve-3d;
+       box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    @keyframes rotate3DX {
+      0% { transform: rotateX(0deg); }
+      100% { transform: rotateX(360deg); }
+    }
+    .animated-card-y:hover {
+      animation: rotate3DY 6s linear infinite;
+    }
+
+    @keyframes rotate3DY {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+    .card-wrapper-x {
+  perspective: 1200px;
+  display: inline-block;
+}
+
+/* Animate smoothly */
+.animated-card-z {
+  transition: transform 0.8s ease, box-shadow 0.8s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Hover effect: 3D tile rotate on X-axis */
+.animated-card-z:hover {
+  transform: rotateX(20deg) translateY(-5px);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Optional subtle animation while idle */
+@keyframes softTilt {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(6deg); }
+  100% { transform: rotateX(0deg); }
+}
+.animated-card-zoom {
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+/* Zoom-out 3D effect on hover */
+.animated-card-zoom:hover {
+  transform: scale(0.95) translateZ(-30px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional continuous zoom-in/out animation */
+@keyframes zoomOut3D {
+  0%, 100% { transform: scale(1) translateZ(0); }
+  50% { transform: scale(0.93) translateZ(-25px); }
+}
+
+/* Optional: subtle breathing zoom effect (auto animation) */
+@keyframes zoomIn3D {
+  0%, 100% { transform: scale(1) translateZ(0); }
+  50% { transform: scale(1.08) translateZ(20px); }
+}
+
+.flip-card {
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+}
+
+/* Inner wrapper for flipping */
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s ease-in-out;
+  transform-style: preserve-3d;
+}
+
+/* Flip on hover */
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Card sides */
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 0.375rem; /* Bootstrap card border radius */
+}
+
+/* Back side */
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* Make it responsive */
+@media (max-width: 767.98px) {
+  .flip-card-inner {
+    transition: transform 0.6s ease-in-out;
+  }
+}
 </style>
 @endpush
 @section('content')
@@ -27,6 +151,354 @@
   <div class="container-xxl flex-grow-1 container-p-y">
        <!-- Accordion1 -->
       <div class="row gy-6">
+
+
+         <div class="col-md-6 col-lg-4">
+          <div class=" d-flex justify-content-between">
+          <h5 class="mt-2 text-body-secondary">Body</h5>
+          <h6 class="mt-2 text-body-secondary">See all</h6>
+          </div>
+          <div class="scrollable-card-container mt-3">
+                 
+                <!-- example -->
+
+        <div class="card mb-6">
+          <div class="card-body">                  
+            <div class="d-flex align-items-center">
+              <div class="badge bg-label-danger p-2 me-4 rounded"><i class="icon-base ti tabler-shadow icon-md"></i></div>
+              <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
+                <div class="me-2">
+                  <h6 class="mb-0">Direct Source</h6>
+                  <small class="text-body">Direct link click</small>
+                </div>  
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="54" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">65%</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- animation -->
+        <div class="card mb-6 animated-card-y">
+          <div class="card-body">                  
+            <div class="d-flex align-items-center">
+              <div class="badge bg-label-success p-2 me-4 rounded">
+                <i class="icon-base ti tabler-shadow icon-md"></i>
+              </div>
+              <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
+                <div class="me-2">
+                  <h6 class="mb-0">Direct Source</h6>
+                  <small class="text-body">Direct link click</small>
+                </div>
+                <div class="d-flex align-items-center">
+                  <p class="mb-0">1.2k</p>
+                  <div class="ms-4 badge bg-label-success">+4.2%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <div class="card-wrapper-x">
+        <div class="card mb-6 animated-card-z">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="avatar flex-shrink-0 me-4">
+                <span class="avatar-initial rounded bg-label-primary">
+                  <i class="icon-base ti tabler-video icon-lg"></i>
+                </span>
+              </div>
+              <div class="row w-100 align-items-center">
+                <div class="col-sm-8 col-lg-12 col-xxl-8 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
+                  <h6 class="mb-0">Videography Basic Design Course</h6>
+                </div>
+                <div class="col-sm-4 col-lg-12 col-xxl-4 d-flex justify-content-xxl-end">
+                  <div class="badge bg-label-secondary">1.2k Views</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card mb-6 animated-card-zoom">
+          <div class="card-body">                  
+            <div class="d-flex align-items-center">
+              <div class="avatar flex-shrink-0 me-4">
+                <span class="avatar-initial rounded bg-label-primary">
+                  <i class="icon-base ti tabler-video icon-lg"></i>
+                </span>
+              </div>
+              <div class="row w-100 align-items-center">
+                <div class="col-sm-8 col-lg-12 col-xxl-8 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
+                  <h6 class="mb-0">example Basic Design Course</h6>
+                </div>
+                <div class="col-sm-4 col-lg-12 col-xxl-4 d-flex justify-content-xxl-end">
+                  <div class="badge bg-label-secondary">1.2k Views</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- / animation -->
+
+        <div class="card mb-6 animated-card-x">
+          <div class="card-body">                  
+            
+
+              <div class="d-flex align-items-center">
+              <div class="avatar flex-shrink-0 me-4">
+                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-video icon-lg"></i></span>
+              </div>
+              <div class="row w-100 align-items-center">
+                <div class="col-sm-8 col-lg-12 col-xxl-8 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
+                  <h6 class="mb-0">Videography Basic Design Course</h6>
+                </div>
+                <div class="col-sm-4 col-lg-12 col-xxl-4 d-flex justify-content-xxl-end">
+                  <div class="badge bg-label-secondary">1.2k Views</div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+        
+                <!-- /example -->
+
+
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+        <div class=" d-flex justify-content-between">
+        <h5 class="mt-2 text-body-secondary">Department Performance</h5>
+        </div>
+        
+
+      <div class="row g-6">
+        <!-- Profit last month -->
+        {{-- <div class="col-xl-6 col-sm-6">
+          <div class="card h-100">
+            
+
+            <div class="card-body">
+          <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-credit-card icon-28px"></i></div>
+          <h5 class="card-title mb-1">Total Profit</h5>
+          <p class="card-subtitle ">Last week</p>
+          <p class="text-heading mb-3 mt-1">1.28k</p>
+          <div>
+            <span class="badge bg-label-danger">-12.2%</span>
+          </div>
+        </div>
+            
+          </div>
+        </div>
+        
+        <div class="col-xl-6 col-sm-6">
+          <div class="card h-100">
+            
+            <div class="card-body">
+          <div class="badge p-2 bg-label-success mb-3 rounded"><i class="icon-base ti tabler-credit-card icon-28px"></i></div>
+          <h5 class="card-title mb-1">Total Sales</h5>
+          <p class="card-subtitle ">Last week</p>
+          <p class="text-heading mb-3 mt-1">$4,673</p>
+          <div>
+            <span class="badge bg-label-success">+25.2%</span>
+          </div>
+        </div>
+
+
+          </div>
+        </div> --}}
+        <!--/ Expenses -->
+
+        <!-- Generated Leads -->
+        <div class="col-xl-12">
+          <div class="card">
+              <div class="card-header d-flex justify-content-between">
+                  <div class="card-title mb-0">
+                    <h5 class="mb-1">Support Tracker</h5>
+                    <p class="card-subtitle">Last 7 Days</p>
+                  </div>
+                  <div class="dropdown">
+                    <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button" id="supportTrackerMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="supportTrackerMenu">
+                      <a class="dropdown-item waves-effect" href="javascript:void(0);">View More</a>
+                      <a class="dropdown-item waves-effect" href="javascript:void(0);">Delete</a>
+                    </div>
+                  </div>
+                </div>
+              <div class="card-body">
+                 <div id="monthelyPerformance"></div>
+              </div>
+          </div>
+        </div>
+        <!--/ Generated Leads -->
+        <!-- Profit last month -->
+       <div class="col-xl-6 col-sm-6">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              
+              <!-- FRONT SIDE -->
+              <div class="card bg-danger text-white flip-card-front">
+                <div class="card-header text-white">Drag me!</div>
+                <div class="card-body d-flex justify-content-between align-items-center">
+                  <div class="card-title mb-0 text-white">
+                    <h5 class="mb-1 me-2 text-white">0.2%</h5>
+                    <p class="mb-0">Downtime Ratio</p>
+                  </div>
+                  <div class="card-icon">
+                    <span class="badge bg-label-danger rounded p-2">
+                      <i class="icon-base ti tabler-chart-pie-2 icon-26px"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- BACK SIDE -->
+              <div class="card bg-info text-white flip-card-back">
+                <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                  <h5 class="mb-2 text-white">System Info</h5>
+                  <p class="mb-0">Downtime decreased by 2% this week 🎯</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-xl-6 col-sm-6">
+          <div class="card bg-info text-white">
+              <div class="card-header text-white">Drag me!</div>
+              <div class="card-body d-flex justify-content-between align-items-center">
+                <div class="card-title mb-0 text-white">
+                  <h5 class="mb-1 me-2 text-white">0.2%</h5>
+                  <p class="mb-0">Downtime Ratio</p>
+                </div>
+                <div class="card-icon">
+                  <span class="badge bg-label-danger rounded p-2">
+                    <i class="icon-base ti tabler-chart-pie-2 icon-26px"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!--/ Expenses -->
+      </div>
+
+
+
+
+
+      </div>
+      <div class="col-md-6 col-lg-4">
+        
+
+        <div class=" d-flex justify-content-between">
+        <h5 class="mt-2 text-body-secondary">Body</h5>
+        <h6 class="mt-2 text-body-secondary">See all</h6>
+        </div>
+
+        <div class="card mb-6">
+          <div class="card-body">                  
+            <div class="d-flex align-items-center">
+              <div class="avatar flex-shrink-0 me-4">
+                <i class="fis fi fi-us rounded-circle fs-2"></i>
+              </div>
+              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                <div class="me-2">
+                  <div class="d-flex align-items-center">
+                    <h6 class="mb-0 me-1">$8,567k</h6>
+                  </div>
+                  <small class="text-body">United states</small>
+                </div>
+                <div class="user-progress">
+                   <div class="badge bg-label-secondary">1.2k Views</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-6">
+          <div class="card-body">                  
+            <div class="d-flex align-items-center">
+              <div class="avatar flex-shrink-0 me-4">
+                <i class="fis fi fi-br rounded-circle fs-2"></i>
+              </div>
+              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                <div class="me-2">
+                  <div class="d-flex align-items-center">
+                    <h6 class="mb-0 me-1">$8,567k</h6>
+                  </div>
+                  <small class="text-body">Brazil</small>
+                </div>
+                <div class="user-progress">
+                   <div class="badge bg-label-secondary">1.2k Views</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+         <div class="card mb-6">
+          <div class="card-body">                  
+            <div class="d-flex align-items-center">
+              <div class="avatar flex-shrink-0 me-4">
+                <i class="fis fi fi-au rounded-circle fs-2"></i>
+              </div>
+              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                <div class="me-2">
+                  <div class="d-flex align-items-center">
+                    <h6 class="mb-0 me-1">$8,567k</h6>
+                  </div>
+                  <small class="text-body">Australia</small>
+                </div>
+                <div class="user-progress">
+                   <div class="badge bg-label-secondary">1.2k Views</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">                  
+            <div class="d-flex align-items-center">
+              <div class="avatar flex-shrink-0 me-4">
+                <i class="fis fi fi-cn rounded-circle fs-2"></i>
+              </div>
+              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                <div class="me-2">
+                  <div class="d-flex align-items-center">
+                    <h6 class="mb-0 me-1">$8,567k</h6>
+                  </div>
+                  <small class="text-body">China</small>
+                </div>
+                <div class="user-progress">
+                   <div class="badge bg-label-secondary">1.2k Views</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        
+       
+      </div>
          <!-- Vertical Scrollbar -->
           <div class="col-lg-4 col-sm-12">
             <div class="card overflow-hidden h-50vh h-md-70vh h-lg-100vh">
@@ -208,423 +680,8 @@
           <!--/ chart Overview -->
       </div>
       <!--/ Accordion1 -->
-      <!-- Accordion -->
-      <div class="row g-6">
-        <div class="col-md">
-          <div class="accordion mt-4" id="accordionExample">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionOne" aria-expanded="true" aria-controls="accordionOne">
-                <i class="icon-base ti tabler-star me-2"></i>
-                Teaching and Learning</button>
-              </h2>
-
-              <div id="accordionOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                
-                
-                 <!-- Accordion1 -->
-                    <div class="row g-6 pt-2">
-                      <!-- Card Border Shadow -->
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-primary h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethods">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-truck icon-28px"></i></span>
-                              </div>
-                              <div class="half-star-ratings raty" data-half="true" data-score="4.2" data-number="5"></div>
-                            </div>
-                            <p class="mb-1">Teaching and Learning</p>
-                            <div id="supportTracker"></div>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-warning h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethods1">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-alert-triangle icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">8%</h4>
-                            </div>
-                            <p class="mb-1">Research, Innovation and Commercialisation</p>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-danger h-100">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">27%</h4>
-                            </div>
-                            <p class="mb-1">Institutional Engagement (Operational+ Character Strengths)</p>
-                            <div class="rating-stars"><i class="bi bi-star-fill text-warning"></i></div>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-info h-100">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">13%</h4>
-                            </div>
-                            <p class="mb-1">Institutional Engagement (Core only)</p>
-                            <div id="expensesChart"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <!--/ Card Border Shadow -->
-                    </div>
-                    <!--/ Accordion1 -->
-                
-                
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item active">
-              <h2 class="accordion-header" id="headingTwo">
-                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionTwo" aria-expanded="false" aria-controls="accordionTwo">
-                <i class="icon-base ti tabler-sun me-2"></i>
-                Research, Innovation and Commercialisation</button>
-              </h2>
-              <div id="accordionTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                <div class="accordion-body">Dessert ice cream donut oat cake jelly-o pie sugar plum cheesecake. Bear claw dragée oat cake dragée ice cream halvah tootsie roll. Danish cake oat cake pie macaroon tart donut gummies. Jelly beans candy canes carrot cake. Fruitcake chocolate chupa chups.</div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingThree">
-                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionThree" aria-expanded="false" aria-controls="accordionThree">
-                <i class="icon-base ti tabler-moon me-2"></i>Institutional Engagement (Operational+ Character Strengths)</button>
-              </h2>
-              <div id="accordionThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                <div class="accordion-body">Oat cake toffee chocolate bar jujubes. Marshmallow brownie lemon drops cheesecake. Bonbon gingerbread marshmallow sweet jelly beans muffin. Sweet roll bear claw candy canes oat cake dragée caramels. Ice cream wafer danish cookie caramels muffin.</div>
-              </div>
-            </div>
-             <div class="accordion-item">
-              <h2 class="accordion-header" id="headingfour">
-                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionFour" aria-expanded="false" aria-controls="accordionTwo">
-                <i class="icon-base ti tabler-sun me-2"></i>
-                Institutional Engagement (Core only)</button>
-              </h2>
-              <div id="accordionFour" class="accordion-collapse collapse" aria-labelledby="headingfour" data-bs-parent="#accordionExample">
-                <div class="accordion-body">Dessert ice cream donut oat cake jelly-o pie sugar plum cheesecake. Bear claw dragée oat cake dragée ice cream halvah tootsie roll. Danish cake oat cake pie macaroon tart donut gummies. Jelly beans candy canes carrot cake. Fruitcake chocolate chupa chups.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--/ Accordion -->
-     
-      <!-- Payment Methods modal -->
-<div class="modal fade" id="paymentMethods" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-simple modal-enable-otp modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        <div class="text-center mb-6">
-          <h4 class="mb-2">Select payment methods</h4>
-          <p>Supported payment methods</p>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center border-bottom py-4 mb-4">
-          <div class="d-flex gap-4 align-items-center">
-          <img src="../../assets/img/icons/payments/ae-light.png" class="img-fluid w-px-50 h-px-30" alt="american-express-card" data-app-light-img="icons/payments/ae-light.png" data-app-dark-img="icons/payments/ae-dark.png" />
-            <h6 class="m-0">Visa</h6>
-          </div>
-          <p class="m-0 d-none d-sm-block">Credit Card</p>
-        </div>
-        <div class="d-flex justify-content-sm-between align-items-center border-bottom pb-4 mb-4">
-          <div class="d-flex gap-4 align-items-center">
-            <img src="../../assets/img/icons/payments/ae-light.png" class="img-fluid w-px-50 h-px-30" alt="american-express-card" data-app-light-img="icons/payments/ae-light.png" data-app-dark-img="icons/payments/ae-dark.png" />
-
-            <h6 class="m-0">American Express</h6>
-          </div>
-          <p class="m-0 d-none d-sm-block">Credit Card</p>
-        </div>
-        <div class="d-flex justify-content-between align-items-center border-bottom pb-4 mb-4">
-          <div class="d-flex gap-4 align-items-center">
-            <img src="../../assets/img/icons/payments/master-light.png" class="img-fluid w-px-50 h-px-30" alt="master-card" data-app-light-img="icons/payments/master-light.png" data-app-dark-img="icons/payments/master-dark.png" />
-
-            <h6 class="m-0">Mastercard</h6>
-          </div>
-          <p class="m-0 d-none d-sm-block">Credit Card</p>
-        </div>
-        <div class="d-flex justify-content-between align-items-center border-bottom pb-4 mb-4">
-          <div class="d-flex gap-4 align-items-center">
-            <img src="../../assets/img/icons/payments/jcb-light.png" class="img-fluid w-px-50 h-px-30" alt="jcb-card" data-app-light-img="icons/payments/jcb-light.png" data-app-dark-img="icons/payments/jcb-dark.png" />
-            <h6 class="m-0">JCB</h6>
-          </div>
-          <p class="m-0 d-none d-sm-block">Credit Card</p>
-        </div>
-        <div class="d-flex justify-content-between align-items-center pb-4">
-          <div class="d-flex gap-4 align-items-center">
-            <img src="../../assets/img/icons/payments/dc-light.png" class="img-fluid w-px-50 h-px-30" alt="diners-club-card" data-app-light-img="icons/payments/dc-light.png" data-app-dark-img="icons/payments/dc-dark.png" />
-            <h6 class="m-0">Diners Club</h6>
-          </div>
-          <p class="m-0 d-none d-sm-block">Credit Card</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- / Payment Methods modal -->
- <!-- Payment Methods modal -->
-<div class="modal fade" id="paymentMethods1" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-simple modal-enable-otp modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        <div class="text-center mb-6">
-          <h4 class="mb-2">KPA</h4>
-          <p>Supported payment methods</p>
-        </div>
-          <div style="height: 50vh; width: 100%;">
-            <canvas class="chartjs" id="radarChart" ></canvas>
-          </div>
-        
-      </div>
-    </div>
-  </div>
-</div>
-<!-- / Payment Methods modal -->
- <!-- Payment Methods modal -->
-<div class="modal fade" id="paymentMethods2" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalScrollableTitle"><i class="icon-base ti tabler-list-details me-3"></i>Faculties</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          <!-- Accordion1 -->
-                    <div class="row g-6 pt-2">
-                      <!-- Card Border Shadow -->
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-primary h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethods">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-truck icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">8%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Business and Management Sciences</p>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-warning h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethods1">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-alert-triangle icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">8%</h4>
-                            </div>
-                            <p class="mb-1">Faculty Of Economics and Commerce</p>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-danger h-100">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">27%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Computer Science and Information Technology</p>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-info h-100">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">13%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Social Sciences</p>
-                          </div>
-                        </div>
-                      </div>
-                      <!--/ Card Border Shadow -->
-                      <!-- Card Border Shadow -->
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-primary h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethods">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-truck icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">8%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Allied Health Sciences</p>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-warning h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethods1">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-alert-triangle icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">8%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Art and Design</p>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-danger h-100">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">27%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Pharmacy</p>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-info h-100">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">13%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Medical Sciences</p>
-                          </div>
-                        </div>
-                      </div>
-                      <!--/ Card Border Shadow -->
-                      <!-- Card Border Shadow -->
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-primary h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethods">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-truck icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">8%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Engineering and Technology</p>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-warning h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethods1">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-alert-triangle icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">8%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Sciences</p>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-danger h-100">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-danger"><i class="icon-base ti tabler-git-fork icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">27%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Arts and Humanities</p>
-                            
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-info h-100">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-clock icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">13%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Law</p>
-                          </div>
-                        </div>
-                      </div>
-                      <!--/ Card Border Shadow -->
-                      <!-- Card Border Shadow -->
-                      <div class="col-lg-3 col-sm-6">
-                        <div class="card card-border-shadow-primary h-100" role="button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#paymentMethods">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                              <div class="avatar me-4">
-                                <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-truck icon-28px"></i></span>
-                              </div>
-                              <h4 class="mb-0">8%</h4>
-                            </div>
-                            <p class="mb-1">Faculty of Agriculture and Veterinary Sciences</p>
-                            
-                          </div>
-                        </div>
-                      </div>
-                
-                      <!--/ Card Border Shadow -->
-                     
-                      
-                    </div>
-                    <!--/ Accordion1 -->
-        
-      </div>
-    </div>
-  </div>
-</div>
-<!-- / Payment Methods modal -->
+    
+ 
   </div>
   <!-- / Content -->
 @endsection

@@ -9,6 +9,129 @@
 
   <!-- Page CSS -->
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
+  {{-- <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/ui-carousel.css') }}" /> --}}
+  <style>
+  .animated-card-x:hover {
+      animation: rotate3DX 5s ease-in-out infinite;
+       transform-style: preserve-3d;
+       box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    @keyframes rotate3DX {
+      0% { transform: rotateX(0deg); }
+      100% { transform: rotateX(360deg); }
+    }
+    .animated-card-y:hover {
+      animation: rotate3DY 6s linear infinite;
+    }
+
+    @keyframes rotate3DY {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+    .card-wrapper-x {
+  perspective: 1200px;
+  display: inline-block;
+}
+
+/* Animate smoothly */
+.animated-card-z {
+  transition: transform 0.8s ease, box-shadow 0.8s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Hover effect: 3D tile rotate on X-axis */
+.animated-card-z:hover {
+  transform: rotateX(20deg) translateY(-5px);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Optional subtle animation while idle */
+@keyframes softTilt {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(6deg); }
+  100% { transform: rotateX(0deg); }
+}
+.animated-card-zoom {
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+/* Zoom-out 3D effect on hover */
+.animated-card-zoom:hover {
+  transform: scale(0.95) translateZ(-30px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional continuous zoom-in/out animation */
+@keyframes zoomOut3D {
+  0%, 100% { transform: scale(1) translateZ(0); }
+  50% { transform: scale(0.93) translateZ(-25px); }
+}
+.animated-card-zoom-in {
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+/* Zoom-in 3D effect on hover */
+.animated-card-zoom-in:hover {
+  transform: scale(1.08) translateZ(20px);
+  box-shadow: 0 25px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Optional: subtle breathing zoom effect (auto animation) */
+@keyframes zoomIn3D {
+  0%, 100% { transform: scale(1) translateZ(0); }
+  50% { transform: scale(1.08) translateZ(20px); }
+}
+
+.flip-card {
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+}
+
+/* Inner wrapper for flipping */
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s ease-in-out;
+  transform-style: preserve-3d;
+}
+
+/* Flip on hover */
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Card sides */
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 0.375rem; /* Bootstrap card border radius */
+}
+
+/* Back side */
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* Make it responsive */
+@media (max-width: 767.98px) {
+  .flip-card-inner {
+    transition: transform 0.6s ease-in-out;
+  }
+}
+  </style>
 @endpush
 @section('content')
   <!-- Content -->
@@ -278,23 +401,25 @@
         <h6 class="mt-2 text-body-secondary">See all</h6>
         </div>
 
-        <div class="card mb-6">
-          <div class="card-body">                  
-            <div class="d-flex align-items-center">
-              <div class="badge bg-label-success p-2 me-4 rounded"><i class="icon-base ti tabler-shadow icon-md"></i></div>
-              <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
-                <div class="me-2">
-                  <h6 class="mb-0">Direct Source</h6>
-                  <small class="text-body">Direct link click</small>
-                </div>
-                <div class="d-flex align-items-center">
-                  <p class="mb-0">1.2k</p>
-                  <div class="ms-4 badge bg-label-success">+4.2%</div>
-                </div>
+        <div class="card mb-6 animated-card-zoom-in">
+        <div class="card-body">                  
+          <div class="d-flex align-items-center">
+            <div class="avatar flex-shrink-0 me-4">
+              <span class="avatar-initial rounded bg-label-primary">
+                <i class="icon-base ti tabler-video icon-lg"></i>
+              </span>
+            </div>
+            <div class="row w-100 align-items-center">
+              <div class="col-sm-8 col-lg-12 col-xxl-8 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
+                <h6 class="mb-0">example two Basic Design Course</h6>
+              </div>
+              <div class="col-sm-4 col-lg-12 col-xxl-4 d-flex justify-content-xxl-end">
+                <div class="badge bg-label-secondary">1.2k Views</div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
 
         <div class="card mb-6">
@@ -318,8 +443,75 @@
           </div>
         </div>
 
+        <!-- animation -->
+        <div class="card mb-6 animated-card-y">
+          <div class="card-body">                  
+            <div class="d-flex align-items-center">
+              <div class="badge bg-label-success p-2 me-4 rounded">
+                <i class="icon-base ti tabler-shadow icon-md"></i>
+              </div>
+              <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
+                <div class="me-2">
+                  <h6 class="mb-0">Direct Source</h6>
+                  <small class="text-body">Direct link click</small>
+                </div>
+                <div class="d-flex align-items-center">
+                  <p class="mb-0">1.2k</p>
+                  <div class="ms-4 badge bg-label-success">+4.2%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <div class="card mb-6">
+
+
+
+        <div class="card-wrapper-x">
+        <div class="card mb-6 animated-card-z">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="avatar flex-shrink-0 me-4">
+                <span class="avatar-initial rounded bg-label-primary">
+                  <i class="icon-base ti tabler-video icon-lg"></i>
+                </span>
+              </div>
+              <div class="row w-100 align-items-center">
+                <div class="col-sm-8 col-lg-12 col-xxl-8 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
+                  <h6 class="mb-0">Videography Basic Design Course</h6>
+                </div>
+                <div class="col-sm-4 col-lg-12 col-xxl-4 d-flex justify-content-xxl-end">
+                  <div class="badge bg-label-secondary">1.2k Views</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card mb-6 animated-card-zoom">
+          <div class="card-body">                  
+            <div class="d-flex align-items-center">
+              <div class="avatar flex-shrink-0 me-4">
+                <span class="avatar-initial rounded bg-label-primary">
+                  <i class="icon-base ti tabler-video icon-lg"></i>
+                </span>
+              </div>
+              <div class="row w-100 align-items-center">
+                <div class="col-sm-8 col-lg-12 col-xxl-8 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
+                  <h6 class="mb-0">example Basic Design Course</h6>
+                </div>
+                <div class="col-sm-4 col-lg-12 col-xxl-4 d-flex justify-content-xxl-end">
+                  <div class="badge bg-label-secondary">1.2k Views</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- / animation -->
+
+        <div class="card mb-6 animated-card-x">
           <div class="card-body">                  
             
 
@@ -342,26 +534,7 @@
         </div>
         
        
-        <div class="card">
-          <div class="card-body">                  
-            <div class="d-flex align-items-center">
-              <div class="avatar flex-shrink-0 me-4">
-                <i class="fis fi fi-us rounded-circle fs-2"></i>
-              </div>
-              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                <div class="me-2">
-                  <div class="d-flex align-items-center">
-                    <h6 class="mb-0 me-1">$8,567k</h6>
-                  </div>
-                  <small class="text-body">United states</small>
-                </div>
-                <div class="user-progress">
-                   <div class="badge bg-label-secondary">1.2k Views</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+       
 
       
 
@@ -435,21 +608,36 @@
         </div>
         <!--/ Generated Leads -->
         <!-- Profit last month -->
-        <div class="col-xl-6 col-sm-6">
-            <div class="card bg-danger text-white">
-              <div class="card-header text-white">Drag me!</div>
-              <div class="card-body d-flex justify-content-between align-items-center">
-                <div class="card-title mb-0 text-white">
-                  <h5 class="mb-1 me-2 text-white">0.2%</h5>
-                  <p class="mb-0 ">Downtime Ratio</p>
-                </div>
-                <div class="card-icon">
-                  <span class="badge bg-label-danger rounded p-2">
-                    <i class="icon-base ti tabler-chart-pie-2 icon-26px"></i>
-                  </span>
+       <div class="col-xl-6 col-sm-6">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              
+              <!-- FRONT SIDE -->
+              <div class="card bg-danger text-white flip-card-front">
+                <div class="card-header text-white">Drag me!</div>
+                <div class="card-body d-flex justify-content-between align-items-center">
+                  <div class="card-title mb-0 text-white">
+                    <h5 class="mb-1 me-2 text-white">0.2%</h5>
+                    <p class="mb-0">Downtime Ratio</p>
+                  </div>
+                  <div class="card-icon">
+                    <span class="badge bg-label-danger rounded p-2">
+                      <i class="icon-base ti tabler-chart-pie-2 icon-26px"></i>
+                    </span>
+                  </div>
                 </div>
               </div>
+              
+              <!-- BACK SIDE -->
+              <div class="card bg-info text-white flip-card-back">
+                <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                  <h5 class="mb-2 text-white">System Info</h5>
+                  <p class="mb-0">Downtime decreased by 2% this week 🎯</p>
+                </div>
+              </div>
+
             </div>
+          </div>
         </div>
         
         <div class="col-xl-6 col-sm-6">
@@ -613,6 +801,19 @@
                 </div>
     </div>
     <!--/ Website Analytics -->
+    <!-- 3D cube effect -->
+    {{-- <div class="col-md-6">
+      <h6 class="text-body-secondary mt-4">3D cube effect</h6>
+      <div class="swiper" id="swiper-3d-cube-effect">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" style="background-image:url(https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/elements/47.png">Teaching and Learning (T&L)</div>
+          <div class="swiper-slide" style="background-image:url(https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/elements/47.png)">Research, Innovation and Commercialisation (RIC)</div>
+          <div class="swiper-slide" style="background-image:url(https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/elements/48.png)">Institutional Engagement (IE)</div>
+          <div class="swiper-slide" style="background-color:red">Character Virtue (CV)</div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div> --}}
 
 
 
@@ -634,6 +835,7 @@
   <script src="{{ asset('admin/assets/js/dashboards-analytics.js') }}"></script>
 
   <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
+  {{-- <script src="{{ asset('admin/assets/js/ui-carousel.js') }}"></script> --}}
     <script>
 document.addEventListener("DOMContentLoaded", function () {
     const c = document.querySelector("#carrierPerformance");

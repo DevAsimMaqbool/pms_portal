@@ -1,427 +1,2164 @@
 @extends('layouts.app')
 @push('style')
   <style>
-    .avatar-xl {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      object-fit: cover;
+    .bg-orange,
+    .bg-label-orange {
+      background-color: #fd7e1459 !important;
+      color: #fd7e14 !important
     }
 
-    .metric {
-      font-size: .9rem;
-      color: #6c757d;
+    .card-border-shadow-orange {
+      --bs-card-border-bottom-color: #FFF200 !important
     }
 
-    .mini-tile {
-      border: 1px solid var(--bs-border-color);
-      border-radius: .75rem;
-      padding: 1rem;
-      background: #fff;
-      height: 100%;
+    .h-50vh {
+      height: 100vh;
     }
 
-    .mini-tile .label {
-      color: #6e6b7b;
-      font-size: .8rem;
+    @media (min-width: 992px) {
+      .h-lg-100vh {
+        height: 500px;
+      }
     }
 
-    .mini-tile .value {
-      font-weight: 700;
-      font-size: 1.1rem;
+    @media (min-width: 1401px) {
+      .h-md-70vh {
+        height: 500px;
+      }
     }
 
-    .spark-holder {
-      height: 120px;
+    #customLegend {
+      text-align: center;
+      margin-top: 8px;
+      padding: 0;
     }
 
-    .kpa-card h6 {
-      margin-bottom: .25rem;
+    #customLegend ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: inline-flex;
+      gap: 12px;
+      /* ✅ reduce spacing */
     }
 
-    .indicator-row {
+    #customLegend li {
+      font-size: 12px;
+      /* ✅ small font */
+      cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: .5rem 0;
-      border-bottom: 1px dashed var(--bs-border-color);
+      gap: 4px;
     }
 
-    .indicator-row:last-child {
-      border-bottom: none;
+    #customLegend .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
     }
+    .scrollable-card-container {
+  max-height: 400px; /* Adjust height as needed */
+  overflow-y: auto;
+  padding-right: 8px;
+  scroll-behavior: smooth;
+}
 
-    .status-badge {
-      padding: .35rem .5rem;
-    }
+/* Optional: custom scrollbar styling */
+.scrollable-card-container::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+.scrollable-card-container {
+  -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+  scrollbar-width: none;     /* Hide scrollbar for Firefox */
+}
+.caed-wave-bg {
+  background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
+  background-size: 200% 200%; /* make it larger to allow smooth movement */
+  animation: waveMove 5s ease-in-out infinite alternate;
+}
 
-    .filter-row .form-select {
-      min-width: 220px;
-    }
+@keyframes waveMove {
+  0% {
+    background-position: left bottom;
+  }
+  50% {
+    background-position: right top;
+  }
+  100% {
+    background-position: left top;
+  }
+}
   </style>
 @endpush
-@php use Illuminate\Support\Str; @endphp
 @section('content')
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
-    @if(!request()->is('teacher_dashboard/*'))
-    @if(auth()->user()->hasRole('HOD'))
-      <div class="card-header border-bottom">
-        {{-- Department Filter --}}
-        <div class="mb-3">
-          <label for="departmentFilter">Filter by Department:</label>
-          <select id="departmentFilter" class="form-select w-auto d-inline-block ms-2">
-            <option value="">Select Department</option>
-
-            @if(auth()->user()->hasRole('Dean'))
-              <option value="department_of_computer_sciences">Department of Computer Sciences</option>
-              <option value="department_of_information_technology">Department of Information Technology</option>
-              <option value="department_of_software_engineering">Department of Software Engineering</option>
-              {{-- <option value="department_of_computer_sciences_and_information_technology">Faculty of Computer Sciences and
-                Information Technology</option> --}}
-            @elseif(auth()->user()->hasRole('HOD'))
-              <option value="{{ strtolower(str_replace(' ', '_', $employee['department'])) }}">
-                {{ ucwords(str_replace('_', ' ', $employee['department'])) }}
-              </option>
-            @endif
-          </select>
-          <button id="checkReportBtn" class="btn btn-primary ms-2">Check Report</button>
-        </div>
-      </div>
-      @endif
-    @endif
-    <div class="row g-6">
-      <div class="col-12 col-md-6">
+    <!-- Accordion1 -->
+    <div class="row gy-6">
+      <!-- View sales -->
+      <div class="col-xl-4 col-md-4 col-sm-12">
         <div class="card h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center mb-3">
-              <img class="avatar-xl me-3" src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="avatar" />
-              <div>
-                <h4 class="mb-1" id="empName">{{ $employee['name'] }}</h4>
-                <div class="text-muted">{{ $employee['job_title'] }}</div>
-                <div class="metric">{{ $employee['department'] }}</div>
-                <div class="fw-semibold text-primary" id="serviceYears">—</div>
+          <div class="d-flex align-items-end row">
+            <div class="col-7">
+              <div class="card-body text-nowrap">
+                <h5 class="card-title mb-0">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉
+                </h5>
+                <p class="mb-2">Your current performance is</p>
               </div>
             </div>
-            <div class="row g-3">
-              <div class="col-6">
-                <div class="mini-tile text-center">
-                  <div class="label text-primary"">Student Satisfaction</div>
-                  <div class="value">10</div>
-                </div>
+            <div class="col-5 text-center text-sm-right">
+              <div class="card-body pb-0 px-0 px-md-4">
+                <h4 class="text-primary mb-1">83%<span class="badge bg-label-primary rounded p-2 fs-6">ME
+            </span></h4>
               </div>
-              <div class="col-6">
-                <div class="mini-tile text-center">
-                  <div class="label">Attendance Punctuality </div>
-                  <div class="value">30</div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mini-tile text-center">
-                  <div class="label">Research Publication</div>
-                  <div class="value">20</div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="mini-tile text-center">
-                  <div class="label text-primary"">Course Load</div>
-                  <div class="value">40</div>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="mini-tile">
-                  <div class="d-flex justify-content-between"><span class="label">Awards</span>
-                    <span style="font-size: large;">🏆</span>
-                  </div>
-                  <div class="mt-2 d-flex justify-content-between">
-                    <span class="badge bg-label-primary">Best Teacher: 10</span>
-                    <span class="badge bg-label-success">Research Grant: 3</span>
-                    <span class="badge bg-label-info">Mentor: 5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- View sales -->
+
+      <!-- Statistics -->
+      <div class="col-xl-8 col-md-8 col-sm-12">
+        <div class="card h-100">
+          <div class="card-body d-flex align-items-end">
+            <div class="w-100">
+              <div class="row gy-3">
+                <div class="col-md-4 col-6">
+                  <div class="d-flex align-items-center">
+                    <div class="badge rounded bg-label-primary me-4 p-2"><i class="icon-base ti tabler-book icon-lg"></i>
+                    </div>
+                    <div class="card-info">
+                      <h5 class="mb-0">90%</h5>
+                      <small>Teaching</small>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- course -->
-      <!-- Vehicles overview -->
-      <div class="col-12 col-md-6">
-        <div class="card h-100">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Overall KPA Performance</h5>
-          </div>
-          <div class="card-body pt-2">
-            <canvas class="chartjs" id="radarChart" data-height="355"></canvas>
-          </div>
-        </div>
-      </div>
-      <!--/ Sales Overview -->
-      <!-- Total Profit -->
-      <div class="col-md-3 col-6">
-        <a href="{{ route('kpa.report', ['id' => 1]) }}" class="text-decoration-none">
-          <div class="card h-100">
-            <div class="card-body">
-              <div class="badge p-2 bg-label-success mb-3 rounded"><i
-                  class="icon-base ti tabler-chalkboard icon-28px"></i>
-              </div>
-              <h6 class="card-title mb-1">Teaching and Learning</h6>
-              <div>
-                <span class="badge bg-label-success">80%</span>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <!-- Total Profit -->
-      <div class="col-md-3 col-6">
-        <a href="{{ route('kpa.report', ['id' => 2]) }}" class="text-decoration-none">
-          <div class="card h-100">
-            <div class="card-body">
-              <div class="badge p-2 bg-label-info mb-3 rounded"><i
-                  class="icon-base ti tabler-message-circle-search icon-28px"></i></div>
-              <h6 class="card-title mb-1">Research, Innovation and Commercialisation</h6>
-              <div>
-                <span class="badge bg-label-info">85%</span>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-      <!-- Total Profit -->
-      <div class="col-md-3 col-6">
-        <a href="{{ route('kpa.report', ['id' => 13]) }}" class="text-decoration-none">
-          <div class="card h-100">
-            <div class="card-body">
-              <div class="badge p-2 bg-label-primary mb-3 rounded"><i
-                  class="icon-base ti tabler-presentation-analytics icon-28px"></i></div>
-              <h6 class="card-title mb-1">Institutional Engagement (Core only)</h6>
-              <div>
-                <span class="badge bg-label-primary">90%</span>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-      <!-- Total Profit -->
-      <div class="col-md-3 col-6">
-        <a href="{{ route('kpa.report', ['id' => 14]) }}" class="text-decoration-none">
-          <div class="card h-100">
-            <div class="card-body">
-              <div class="badge p-2 bg-label-warning mb-3 rounded"><i
-                  class="icon-base ti tabler-credit-card icon-28px"></i></div>
-              <h6 class="card-title mb-1">Institutional Engagement (Operational+ Character Strengths)</h6>
-              <div>
-                <span class="badge bg-label-warning">95%</span>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-      <!-- Support Tracker -->
-      @if(!auth()->user()->hasRole('Dean') && !auth()->user()->hasRole('HOD'))
-        <div class="col-12 col-md-6">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="mb-0">Semester Performance Trend</h5>
-                <span class="text-muted small">Semesters</span>
-              </div>
-              <div id="performance_semester"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="mb-0">Year Performance Trend</h5>
-                <span class="text-muted small">Years</span>
-              </div>
-              <div id="performance_year"></div>
-            </div>
-          </div>
-        </div>
-      @else
-        <div class="col-12 col-lg-8">
-          <div class="card h-100">
-            <div class="card-header d-flex align-items-center justify-content-between">
-              <h5 class="card-title m-0 me-2">Department Performance</h5>
-              <div class="dropdown">
-                <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button"
-                  id="performance" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="performance">
-                  <a class="dropdown-item" href="javascript:void(0);">Delivery rate</a>
-                  <a class="dropdown-item" href="javascript:void(0);">Delivery time</a>
+                <div class="col-md-4 col-6">
+                  <div class="d-flex align-items-center">
+                    <div class="badge rounded bg-label-info me-4 p-2"><i class="icon-base ti tabler-bulb icon-lg"></i>
+                    </div>
+                    <div class="card-info">
+                      <h5 class="mb-0">85%</h5>
+                      <small>Research</small>
+                    </div>
+                  </div>
                 </div>
+                <div class="col-md-4 col-6">
+                  <div class="d-flex align-items-center">
+                    <div class="badge rounded bg-label-danger me-4 p-2"><i
+                        class="icon-base ti tabler-network icon-lg"></i></div>
+                    <div class="card-info">
+                      <h5 class="mb-0">80%</h5>
+                      <small>Engagement</small>
+                    </div>
+                  </div>
+                </div>
+                
               </div>
-            </div>
-            <div class="card-body">
-              <div id="carrierPerformance"></div>
             </div>
           </div>
         </div>
-      @endif
+      </div>
+      <!--/ Statistics -->
+      <div class="col-lg-4 col-sm-12" id="scrollableCol">
+              
+           <div class="card mb-6">
+              <div class="card-body d-flex">                  
+                  <div class="d-flex w-50 align-items-center me-4">
+                      <div class="badge bg-label-orange rounded p-1_5 me-4"><i
+                          class="icon-base ti tabler-mood-smile icon-md"></i></div>
+                      <div>
+                        <small class="text-dark">Student Satisfaction</small>
+                      </div>
+                    </div>
+                    <div class="d-flex flex-grow-1 align-items-center">
+                      <div class="progress w-100 me-4" style="height:8px;">
+                        <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <span class="text-body-secondary">65%</span>
+                    </div>
+              </div>
+            </div>
 
+            <div class="card mb-6">
+              <div class="card-body d-flex">                  
+                  <div class="d-flex w-50 align-items-center me-4">
+                      <div class="badge bg-label-primary rounded p-1_5 me-4"><i
+                          class="icon-base ti tabler-chalkboard icon-md"></i></div>
+                      <div>
+                        <small class="text-dark">Classes Held</small>
+                      </div>
+                    </div>
+                    <div class="d-flex flex-grow-1 align-items-center">
+                      <div class="progress w-100 me-4" style="height:8px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 65%" aria-valuenow="65"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <span class="text-body-secondary">90%</span>
+                    </div>
+              </div>
+            </div>
+
+            <div class="card mb-6">
+              <div class="card-body d-flex">                  
+                  <div class="d-flex w-50 align-items-center me-4">
+                      <div class="badge bg-label-warning rounded p-1_5 me-4"><i
+                          class="icon-base ti tabler-user-check icon-md"></i></div>
+                      <div>
+                        <small class="text-dark">Student Attendance</small>
+                      </div>
+                    </div>
+                    <div class="d-flex flex-grow-1 align-items-center">
+                      <div class="progress w-100 me-4" style="height:8px;">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="65"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <span class="text-body-secondary">70%</span>
+                    </div>
+              </div>
+            </div>
+
+            <div class="card mb-6">
+              <div class="card-body d-flex">                  
+                  <div class="d-flex w-50 align-items-center me-4">
+                      <div class="badge bg-label-danger rounded p-1_5 me-4"><i
+                          class="icon-base ti tabler-book-2 icon-md"></i></div>
+                      <div>
+                        <small class="text-dark">Research Publications</small>
+                      </div>
+                    </div>
+                    <div class="d-flex flex-grow-1 align-items-center">
+                      <div class="progress w-100 me-4" style="height:8px;">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <span class="text-body-secondary">50%</span>
+                    </div>
+              </div>
+            </div>
+
+            <div class="card mb-6">
+              <div class="card-body d-flex">                  
+                  <div class="d-flex w-50 align-items-center me-4">
+                      <div class="badge bg-label-success rounded p-1_5 me-4"><i
+                          class="icon-base ti tabler-stars icon-md"></i></div>
+                      <div>
+                        <small class="text-dark">Manager Satisfaction</small>
+                      </div>
+                    </div>
+                    <div class="d-flex flex-grow-1 align-items-center">
+                      <div class="progress w-100 me-4" style="height:8px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <span class="text-body-secondary">86%</span>
+                    </div>
+              </div>
+            </div>
+
+            
+      </div>
+
+      <div class="col-12 col-12 col-lg-8" id="targetDivchart">
+        <div class="card caed-wave-bg">
+          <div class="card-header d-flex justify-content-between">
+            <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i
+                class="icon-base ti tabler-chart-pie me-3"></i>Overall KPA Performance</h5>
+            <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+              <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
+              <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
+
+              <input type="radio" class="btn-check" name="termRadio" id="spring25">
+              <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
+
+              <input type="radio" class="btn-check" name="termRadio" id="fall25">
+              <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
+            </div>
+          </div>
+          <div class="card-body pt-0">
+            <div class="row justify-content-center text-center">
+              <div class="col-md-8 d-flex justify-content-center">
+                <canvas class="chartjs" id="radarChart"></canvas>
+              </div>
+
+              <div class="col-12 mt-2">
+                <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0" style="list-style:none;">
+                </ul>
+              </div>
+            </div>
+            {{-- <div><span>Teaching and Learning</span></div> --}}
+            <!-- if schrool -->
+            {{-- <div style="overflow-x: auto; overflow-y: hidden; width: 100%;">
+              <div id="carrierPerformances"></div>
+            </div> --}}
+
+          </div>
+        </div>
+      </div>
+      <!--/ chart Overview -->
+      
+          @php
+            $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+            $icon1 = ['tabler-book ', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
+            $colors1 = ['primary', 'success', 'warning', 'orange', 'danger'];
+            //$colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
+            $colors2 = ['#0d6efd', '#198754', '#FFA500', '#FFF200', '#dc3545'];
+            $series1 = [90, 85, 70, 65, 50];
+            $index1 = 0;
+            $index2 = 0;
+          @endphp
+          @foreach($result as $kpakey => $kpa)
+            @php
+              $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+              $iconClass = $icon1[$index2 % count($icon1)];
+              $color1 = $colors1[$index2 % count($colors1)];
+              $index2++;
+            @endphp
+              <div class="col-md-6 col-xl-4" id="{{ $targetId }}">
+                <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
+                <div class="card h-100 bg-{{ $color1 }} text-white">
+                  <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="card-title mb-0">
+                      <p class="mb-0 text-white">{{ $kpa['performance_area'] }}</p>
+                    </div>
+                    <div class="card-icon">
+                      <span class="badge bg-label-{{ $color1 }} rounded p-2">
+                        <i class="icon-base ti {{ $iconClass }} icon-26px"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                </a>
+              </div>
+          @endforeach
     </div>
+    <!--/ Accordion1 -->
+    <!-- Accordion -->
+
+        
+        
+   
+
+
+    <!-- Payment Methods modal -->
+    <div class="modal fade" id="paymentMethods" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-simple modal-enable-otp modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="text-center mb-6">
+              <h4 class="mb-2">Departments</h4>
+            </div>
+
+
+            <!-- Source Visit -->
+
+            <ul class="list-unstyled mb-0">
+              <li class="mb-4">
+                <div class="d-flex align-items-center">
+                  <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
+                      class="icon-base ti tabler-shadow icon-md"></i></div>
+                  <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
+                    <div class="me-2">
+                      <h6 class="mb-0">Computer Science</h6>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="ms-4 badge bg-label-success">4%</div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="mb-4">
+                <div class="d-flex align-items-center">
+                  <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
+                      class="icon-base ti tabler-globe icon-md"></i></div>
+                  <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
+                    <div class="me-2">
+                      <h6 class="mb-0">Information Technology</h6>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="ms-4 badge bg-label-success">3%</div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="mb-4">
+                <div class="d-flex align-items-center">
+                  <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
+                      class="icon-base ti tabler-mail icon-md"></i></div>
+                  <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
+                    <div class="me-2">
+                      <h6 class="mb-0">Software Engineering</h6>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="ms-4 badge bg-label-success">3%</div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+
+            </ul>
+
+            <!--/ Source Visit -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / Payment Methods modal -->
+    <!-- Payment Methods modal -->
+    <div class="modal fade" id="paymentMethodsFD" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-simple modal-enable-otp modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="text-center mb-6">
+              <h4 class="mb-2">Departments Wise Performance</h4>
+            </div>
+
+
+            <!-- Source Visit -->
+
+            <ul class="list-unstyled mb-0">
+
+              <li class="mb-4 d-flex">
+                <div class="d-flex w-50 align-items-center me-4">
+                  <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
+                      class="icon-base ti tabler-list-check icon-md"></i></div>
+                  <div>
+                    <h6 class="mb-0">Computer Science</h6>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 4%" aria-valuenow="4"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">4%</span>
+                </div>
+              </li>
+              <li class="mb-4 d-flex">
+                <div class="d-flex w-50 align-items-center me-4">
+                  <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
+                      class="icon-base ti tabler-list-check icon-md"></i></div>
+                  <div>
+                    <h6 class="mb-0">Information Technology</h6>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 3%" aria-valuenow="86"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">3%</span>
+                </div>
+              </li>
+              <li class="mb-4 d-flex">
+                <div class="d-flex w-50 align-items-center me-4">
+                  <div class="badge bg-label-secondary text-body p-2 me-4 rounded"><i
+                      class="icon-base ti tabler-list-check icon-md"></i></div>
+                  <div>
+                    <h6 class="mb-0">Software Engineering</h6>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <div class="progress w-100 me-4" style="height:8px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 3%" aria-valuenow="3"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="text-body-secondary">3%</span>
+                </div>
+              </li>
+
+
+            </ul>
+
+            <!--/ Source Visit -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / Payment Methods modal -->
+    <!-- Payment Methods modal -->
+    <div class="modal fade" id="paymentMethods1" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-simple modal-enable-otp modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="text-center mb-6">
+              <h4 class="mb-2">Faculty-Wise Employability</h4>
+            </div>
+            <!-- ffffff-->
+            <div class="card h-100">
+
+              <div class="card-body row g-3">
+                <div class="col-md-8">
+                  <div id="horizontalBarCharts"></div>
+                </div>
+                <div class="col-md-4 d-flex justify-content-around align-items-center">
+                  <div>
+                    <div class="d-flex align-items-baseline">
+                      <span class="text-primary me-2"><i class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                      <div>
+                        <p class="mb-0" role="button" data-bs-toggle="modal" data-bs-target="#paymentMethodsFD">FASH</p>
+                        <h5>45%</h5>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline my-6">
+                      <span class="text-info me-2"><i class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                      <div>
+                        <p class="mb-0" role="button" data-bs-toggle="modal" data-bs-target="#paymentMethodsFD">FAD</p>
+                        <h5>40%</h5>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <span class="text-success me-2"><i class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                      <div>
+                        <p class="mb-0" role="button" data-bs-toggle="modal" data-bs-target="#paymentMethodsFD">FBMS</p>
+                        <h5>35%</h5>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline my-6">
+                      <span class="text-primary me-2"><i class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                      <div>
+                        <p class="mb-0" role="button" data-bs-toggle="modal" data-bs-target="#paymentMethodsFD">FPH</p>
+                        <h5>15%</h5>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="d-flex align-items-baseline">
+                      <span class="text-secondary me-2"><i class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                      <div>
+                        <p class="mb-0" role="button" data-bs-toggle="modal" data-bs-target="#paymentMethodsFD">FET</p>
+                        <h5>30%</h5>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline my-6">
+                      <span class="text-danger me-2"><i class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                      <div>
+                        <p class="mb-0" role="button" data-bs-toggle="modal" data-bs-target="#paymentMethodsFD">FSS</p>
+                        <h5>25%</h5>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <span class="text-warning me-2"><i class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                      <div>
+                        <p class="mb-0" role="button" data-bs-toggle="modal" data-bs-target="#paymentMethodsFD">FEC</p>
+                        <h5>20%</h5>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline my-6">
+                      <span class="text-info me-2"><i class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                      <div>
+                        <p class="mb-0" role="button" data-bs-toggle="modal" data-bs-target="#paymentMethodsFD">FCSIT</p>
+                        <h5>10%</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--/fffff-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / Payment Methods modal -->
+    <!-- Payment Methods modal -->
+    <div class="modal fade" id="paymentMethodsDepartment" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-simple modal-enable-otp modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="text-center mb-6">
+              <h4 class="mb-2">Departments</h4>
+            </div>
+
+            <div style="overflow-x: auto; overflow-y: hidden; width: 100%;">
+              <div id="carrierPerformances"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / Payment Methods modal -->
+    <!--  Payment Methods modal -->
+    <!--table model-->
+    <!-- Payment Methods modal -->
+    <div class="modal fade" id="tableModel" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-simple modal-enable-otp modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- ffffff-->
+            <div class="nav-align-top nav-tabs-shadow">
+              <div class="d-flex overflow-auto">
+                <ul class="nav nav-tabs" role="tablist">
+                  <li class="nav-item">
+                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-justified-home" aria-controls="navs-justified-home" aria-selected="true">
+                      House Ranking
+                    </button>
+                  </li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-justified-profile" aria-controls="navs-justified-profile"
+                      aria-selected="false">
+                      Best Department Ranking
+                    </button>
+                  </li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-justified-messages" aria-controls="navs-justified-messages"
+                      aria-selected="false">
+                      Best Faculty Member
+                    </button>
+                  </li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-justified-messages1" aria-controls="navs-justified-messages1"
+                      aria-selected="false">
+                      Virtues wise ranking
+                    </button>
+                  </li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-justified-messages2" aria-controls="navs-justified-messages2"
+                      aria-selected="false">
+                      Suggestions and area of improvements identified by students
+                    </button>
+                  </li>
+
+                </ul>
+              </div>
+              <div class="tab-content">
+                <div class="tab-pane fade show active" id="navs-justified-home" role="tabpanel">
+                  <div class="table-responsive text-nowrap">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Houses</th>
+                          <th>Max. Score</th>
+                          <th>Obtained Score</th>
+                          <th>Feedback</th>
+                          <th>Response Rate</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-border-bottom-0">
+                        <tr>
+                          <td><span class="fw-medium">Bravo</span></td>
+                          <td>1931960</td>
+                          <td>1680264</td>
+                          <td><span class="badge bg-label-primary me-1">86.97%</span></td>
+                          <td><span class="badge bg-label-primary me-1">81%</span></td>
+                        </tr>
+
+                        <tr>
+                          <td><span class="fw-medium">Charlie</span></td>
+                          <td>641575</td>
+                          <td>552386</td>
+                          <td><span class="badge bg-label-primary me-1">86.10%</span></td>
+                          <td><span class="badge bg-label-primary me-1">79%</span></td>
+                        </tr>
+
+                        <tr>
+                          <td><span class="fw-medium">Alpha</span></td>
+                          <td>1313950</td>
+                          <td>1093346</td>
+                          <td><span class="badge bg-label-primary me-1">83.21%</span></td>
+                          <td><span class="badge bg-label-primary me-1">76%</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+                <div class="tab-pane fade" id="navs-justified-profile" role="tabpanel">
+                  <div class="table-responsive text-nowrap">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Houses</th>
+                          <th>Department</th>
+                          <th>Max. Score</th>
+                          <th>Obtained Score</th>
+                          <th>Feedback</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-border-bottom-0">
+                        <tr>
+                          <td><span class="fw-medium">Alpha</span></td>
+                          <td>Department of Civil Engineering - UNI-FET</td>
+                          <td>11065</td>
+                          <td>9856</td>
+                          <td><span class="badge bg-label-primary me-1">89.07%</span></td>
+                        </tr>
+
+                        <tr>
+                          <td><span class="fw-medium">Bravo</span></td>
+                          <td>Department of Pharmacy - UNI-FPH</td>
+                          <td>158340</td>
+                          <td>143844</td>
+                          <td><span class="badge bg-label-primary me-1">90.85%</span></td>
+                        </tr>
+
+                        <tr>
+                          <td><span class="fw-medium">Charlie</span></td>
+                          <td>Department of Mass Communication - UNI-FSS</td>
+                          <td>32190</td>
+                          <td>28771</td>
+                          <td><span class="badge bg-label-primary me-1">89.38%</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="navs-justified-messages" role="tabpanel">
+                  <div class="table-responsive text-nowrap">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Houses</th>
+                          <th>Faculty Member</th>
+                          <th>Max. Score</th>
+                          <th>Obtained Score</th>
+                          <th>Feedback</th>
+                          <th>Ranking</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-border-bottom-0">
+                        <tr>
+                          <td><span class="fw-medium">Bravo</span></td>
+                          <td>Sheikh Manzoor Saeed</td>
+                          <td>8600</td>
+                          <td>8177</td>
+                          <td><span class="badge bg-label-primary me-1">95.08%</span></td>
+                          <td><span class="badge bg-label-primary me-1">1st</span></td>
+                        </tr>
+
+                        <tr>
+                          <td><span class="fw-medium">Alpha</span></td>
+                          <td>Dr. Hamayun Khan</td>
+                          <td>4185</td>
+                          <td>3924</td>
+                          <td><span class="badge bg-label-primary me-1">93.76%</span></td>
+                          <td><span class="badge bg-label-primary me-1">2nd</span></td>
+                        </tr>
+
+                        <tr>
+                          <td><span class="fw-medium">Charlie</span></td>
+                          <td>Saad Salman</td>
+                          <td>9240</td>
+                          <td>8592</td>
+                          <td><span class="badge bg-label-primary me-1">92.99%</span></td>
+                          <td><span class="badge bg-label-primary me-1">3rd</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="navs-justified-messages1" role="tabpanel">
+                  <div class="table-responsive text-nowrap">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Houses</th>
+                          <th>Virtue</th>
+                          <th>Faculty Member</th>
+                          <th>Max.Score</th>
+                          <th>Obtained Score</th>
+                          <th>Feedback</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Alpha -->
+                        <tr>
+                          <td rowspan="4"><span class="fw-bold">Alpha</span></td>
+                          <td>Empathy and Compassion</td>
+                          <td>Dr. Hamayun Khan</td>
+                          <td><span class="badge bg-primary">1000</span></td>
+                          <td><span class="badge bg-success">945</span></td>
+                          <td><span class="text-success fw-semibold">94.50%</span></td>
+                        </tr>
+                        <tr>
+                          <td>Honesty and Integrity</td>
+                          <td>Dr. Hamayun Khan</td>
+                          <td><span class="badge bg-primary">455</span></td>
+                          <td><span class="badge bg-success">426</span></td>
+                          <td><span class="text-success fw-semibold">93.63%</span></td>
+                        </tr>
+                        <tr>
+                          <td>Inspirational Leadership</td>
+                          <td>Dr. Hamayun Khan</td>
+                          <td><span class="badge bg-primary">910</span></td>
+                          <td><span class="badge bg-success">852</span></td>
+                          <td><span class="text-success fw-semibold">93.63%</span></td>
+                        </tr>
+                        <tr>
+                          <td>Responsibility and Accountability</td>
+                          <td>Dr. Hamayun Khan</td>
+                          <td><span class="badge bg-primary">1820</span></td>
+                          <td><span class="badge bg-success">1701</span></td>
+                          <td><span class="text-success fw-semibold">93.46%</span></td>
+                        </tr>
+
+                        <!-- Bravo -->
+                        <tr>
+                          <td rowspan="4"><span class="fw-bold">Bravo</span></td>
+                          <td>Empathy and Compassion</td>
+                          <td>Abdul Raouf</td>
+                          <td><span class="badge bg-primary">1280</span></td>
+                          <td><span class="badge bg-success">1221</span></td>
+                          <td><span class="text-success fw-semibold">95.39%</span></td>
+                        </tr>
+                        <tr>
+                          <td>Honesty and Integrity</td>
+                          <td>Sheikh Manzoor Saeed</td>
+                          <td><span class="badge bg-primary">930</span></td>
+                          <td><span class="badge bg-success">884</span></td>
+                          <td><span class="text-success fw-semibold">95.05%</span></td>
+                        </tr>
+                        <tr>
+                          <td>Inspirational Leadership</td>
+                          <td>Sheikh Manzoor Saeed</td>
+                          <td><span class="badge bg-primary">1860</span></td>
+                          <td><span class="badge bg-success">1773</span></td>
+                          <td><span class="text-success fw-semibold">95.32%</span></td>
+                        </tr>
+                        <tr>
+                          <td>Responsibility and Accountability</td>
+                          <td>Sheikh Manzoor Saeed</td>
+                          <td><span class="badge bg-primary">3780</span></td>
+                          <td><span class="badge bg-success">3584</span></td>
+                          <td><span class="text-success fw-semibold">94.81%</span></td>
+                        </tr>
+
+                        <!-- Charlie -->
+                        <tr>
+                          <td rowspan="4"><span class="fw-bold">Charlie</span></td>
+                          <td>Empathy and Compassion</td>
+                          <td>Saad Salman</td>
+                          <td><span class="badge bg-primary">2240</span></td>
+                          <td><span class="badge bg-success">2097</span></td>
+                          <td><span class="text-success fw-semibold">93.62%</span></td>
+                        </tr>
+                        <tr>
+                          <td>Honesty and Integrity</td>
+                          <td>Junaid Arshad</td>
+                          <td><span class="badge bg-primary">510</span></td>
+                          <td><span class="badge bg-success">478</span></td>
+                          <td><span class="text-success fw-semibold">93.73%</span></td>
+                        </tr>
+                        <tr>
+                          <td>Inspirational Leadership</td>
+                          <td>Aisha Siddiqa Siddique</td>
+                          <td><span class="badge bg-primary">1000</span></td>
+                          <td><span class="badge bg-success">928</span></td>
+                          <td><span class="text-warning fw-semibold">92.80%</span></td>
+                        </tr>
+                        <tr>
+                          <td>Responsibility and Accountability</td>
+                          <td>Junaid Arshad</td>
+                          <td><span class="badge bg-primary">2040</span></td>
+                          <td><span class="badge bg-success">1904</span></td>
+                          <td><span class="text-success fw-semibold">93.33%</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="navs-justified-messages2" role="tabpanel">
+                  <div class="table-responsive text-nowrap">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Theme</th>
+                          <th>Mentions</th>
+                          <th>Areas Highlighted</th>
+                          <th>Responsible Person</th>
+                          <th>Timeline</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Alpha -->
+                        <tr>
+                          <td>Teaching Style / Methodology </td>
+                          <td>950</td>
+                          <td>Lecture delivery, pace,clarity, teaching methods</td>
+                          <td>Dean/HOD/PL</td>
+                          <td rowspan="6"><span class="fw-bold">2 weeks</span></td>
+                        </tr>
+                        <tr>
+                          <td>Class Management / Discipline </td>
+                          <td>502</td>
+                          <td>Lecture delivery, pace,clarity, teaching methods</td>
+                          <td>Dean/HOD/PL</td>
+                        </tr>
+                        <tr>
+                          <td>Teaching Style / Methodology </td>
+                          <td>950</td>
+                          <td>Lecture delivery, pace,clarity, teaching methods</td>
+                          <td>Dean/HOD/PL</td>
+                        </tr>
+                        <tr>
+                          <td>Teaching Style / Methodology </td>
+                          <td>950</td>
+                          <td>Lecture delivery, pace,clarity, teaching methods</td>
+                          <td>Dean/HOD/PL</td>
+                        </tr>
+                        <tr>
+                          <td>Teaching Style / Methodology </td>
+                          <td>950</td>
+                          <td>Lecture delivery, pace,clarity, teaching methods</td>
+                          <td>Dean/HOD/PL</td>
+                        </tr>
+                        <tr>
+                          <td>Teaching Style / Methodology </td>
+                          <td>950</td>
+                          <td>Lecture delivery, pace,clarity, teaching methods</td>
+                          <td>Dean/HOD/PL</td>
+                        </tr>
+                        <tr>
+                          <td>Infrastructures</td>
+                          <td>110</td>
+                          <td>Sitting Spaces in campus,Internet speed, Mosque space for Friday prayer,Café
+                            air-conditioning, labs lack modern facilities</td>
+                          <td>Registrar Office</td>
+                          <td>Immediately(Labs upgradation is on going)</td>
+                        </tr>
+                        <tr>
+                          <td>Support offices</td>
+                          <td>95</td>
+                          <td>Staff behavior, guards are rude, </td>
+                          <td>Registrar Office</td>
+                          <td>Immediately(Two trainings in two weeks)</td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <!--/fffff-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / Payment Methods modal -->
+    <!-- /table model -->
+
+    <!-- / Payment Methods modal -->
+    <!-- Payment Methods modal -->
+    <div class="modal fade" id="paymentMethods2" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalScrollableTitle"><i
+                class="icon-base ti tabler-list-details me-3"></i>Faculties</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Accordion1 -->
+            <div class="row g-6 pt-2">
+              <!-- Card Border Shadow -->
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-primary h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-primary"><i
+                            class="icon-base ti tabler-git-fork icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Business and Management Sciences</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-warning h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods1">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-warning"><i
+                            class="icon-base ti tabler-load-balancer icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty Of Economics and Commerce</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-danger h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-danger"><i
+                            class="icon-base ti tabler-adjustments icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">27%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Computer Science and Information Technology</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-info h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-info"><i
+                            class="icon-base ti tabler-clock icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">13%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Social Sciences</p>
+                  </div>
+                </div>
+              </div>
+              <!--/ Card Border Shadow -->
+              <!-- Card Border Shadow -->
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-primary h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-primary"><i
+                            class="icon-base ti tabler-brand-asana icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Allied Health Sciences</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-warning h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods1">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-warning"><i
+                            class="icon-base ti tabler-cherry icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Art and Design</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-danger h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-danger"><i
+                            class="icon-base ti tabler-feather icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">27%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Pharmacy</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-info h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-info"><i
+                            class="icon-base ti tabler-clock icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">13%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Medical Sciences</p>
+                  </div>
+                </div>
+              </div>
+              <!--/ Card Border Shadow -->
+              <!-- Card Border Shadow -->
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-primary h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-primary"><i
+                            class="icon-base ti tabler-truck icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Engineering and Technology</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-warning h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods1">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-warning"><i
+                            class="icon-base ti tabler-alert-triangle icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Sciences</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-danger h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-danger"><i
+                            class="icon-base ti tabler-git-fork icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">27%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Arts and Humanities</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-info h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-info"><i
+                            class="icon-base ti tabler-clock icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">13%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Law</p>
+                  </div>
+                </div>
+              </div>
+              <!--/ Card Border Shadow -->
+              <!-- Card Border Shadow -->
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-primary h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-primary"><i
+                            class="icon-base ti tabler-truck icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Agriculture and Veterinary Sciences</p>
+
+                  </div>
+                </div>
+              </div>
+
+              <!--/ Card Border Shadow -->
+
+
+            </div>
+            <!--/ Accordion1 -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / Payment Methods modal -->
+
+    <!-- Payment Methods modal -->
+    <div class="modal fade" id="categoryModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalScrollableTitle"><i
+                class="icon-base ti tabler-list-details me-3"></i>Faculties</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="categoryModalBody">
+            <!-- Accordion1 -->
+            <div class="row g-6 pt-2">
+              <!-- Card Border Shadow -->
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-primary h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-primary"><i
+                            class="icon-base ti tabler-truck icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Business and Management Sciences</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-warning h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods1">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-warning"><i
+                            class="icon-base ti tabler-alert-triangle icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty Of Economics and Commerce</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-danger h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-danger"><i
+                            class="icon-base ti tabler-git-fork icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">27%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Computer Science and Information Technology</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-info h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-info"><i
+                            class="icon-base ti tabler-clock icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">13%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Social Sciences</p>
+                  </div>
+                </div>
+              </div>
+              <!--/ Card Border Shadow -->
+              <!-- Card Border Shadow -->
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-primary h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-primary"><i
+                            class="icon-base ti tabler-truck icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Allied Health Sciences</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-warning h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods1">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-warning"><i
+                            class="icon-base ti tabler-alert-triangle icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Art and Design</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-danger h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-danger"><i
+                            class="icon-base ti tabler-git-fork icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">27%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Pharmacy</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-info h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-info"><i
+                            class="icon-base ti tabler-clock icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">13%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Medical Sciences</p>
+                  </div>
+                </div>
+              </div>
+              <!--/ Card Border Shadow -->
+              <!-- Card Border Shadow -->
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-primary h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-primary"><i
+                            class="icon-base ti tabler-truck icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Engineering and Technology</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-warning h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods1">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-warning"><i
+                            class="icon-base ti tabler-alert-triangle icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Sciences</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-danger h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-danger"><i
+                            class="icon-base ti tabler-git-fork icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">27%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Arts and Humanities</p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-info h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-info"><i
+                            class="icon-base ti tabler-clock icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">13%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Law</p>
+                  </div>
+                </div>
+              </div>
+              <!--/ Card Border Shadow -->
+              <!-- Card Border Shadow -->
+              <div class="col-lg-3 col-sm-6">
+                <div class="card card-border-shadow-primary h-100" role="button" data-bs-toggle="modal"
+                  data-bs-target="#paymentMethods">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="avatar me-4">
+                        <span class="avatar-initial rounded bg-label-primary"><i
+                            class="icon-base ti tabler-truck icon-28px"></i></span>
+                      </div>
+                      <h4 class="mb-0">8%</h4>
+                    </div>
+                    <p class="mb-1">Faculty of Agriculture and Veterinary Sciences</p>
+
+                  </div>
+                </div>
+              </div>
+
+              <!--/ Card Border Shadow -->
+
+
+            </div>
+            <!--/ Accordion1 -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / Payment Methods modal -->
+    <!-- / include indicator modal -->
+    @include('admin.modal.indicator_modal')
+    <!-- / include indicator modal -->
   </div>
   <!-- / Content -->
 @endsection
 @push('script')
   <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
-  <script src="{{ asset('admin/assets/js/app-logistics-dashboard.js') }}"></script>
   <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
-  <script src="{{ asset('admin/assets/js/cards-analytics.js')}}"></script>
-
+  <script src="{{ asset('admin/assets/js/extended-ui-perfect-scrollbar.js') }}"></script>
+  <script src="{{ asset('admin/assets/js/cards-advance.js') }}"></script>
+@endpush
+@push('script')
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var trendScores = [90, 95]; // ✅ your scores
-      var trendSemesters = ["Spring 2025", "Fall 2025"]; // ✅ your categories
+    $(document).ready(function () {
 
-      var options = {
-        chart: {
-          type: 'area',
-          height: 290,
-          toolbar: { show: false }
-        },
-        series: [{
-          name: 'Overall %',
-          data: trendScores
-        }],
-        xaxis: {
-          categories: trendSemesters
-        },
-        dataLabels: { enabled: false },
-        stroke: { curve: 'smooth', width: 3 },
-        colors: ['#7367f0'],
-        fill: {
-          type: 'gradient',
-          gradient: {
-            shadeIntensity: 0.5,
-            opacityFrom: 0.4,
-            opacityTo: 0.05
-          }
-        }
-      };
+      // On KPA card click, fetch related indicator categories
+      $('.kfa-card').on('click', function () {
+        var kfaId = $(this).data('id');
 
-      var chart = new ApexCharts(document.querySelector("#performance_semester"), options);
-      chart.render();
-    });
-    document.addEventListener("DOMContentLoaded", function () {
-      var trendScores = [80, 85, 90]; // ✅ your scores
-      var trendSemesters = ["2023", "2024", "2025"]; // ✅ your categories
-
-      var options = {
-        chart: {
-          type: 'area',
-          height: 290,
-          toolbar: { show: false }
-        },
-        series: [{
-          name: 'Overall %',
-          data: trendScores
-        }],
-        xaxis: {
-          categories: trendSemesters
-        },
-        dataLabels: { enabled: false },
-        stroke: { curve: 'smooth', width: 3 },
-        colors: ['#7367f0'],
-        fill: {
-          type: 'gradient',
-          gradient: {
-            shadeIntensity: 0.5,
-            opacityFrom: 0.4,
-            opacityTo: 0.05
-          }
-        }
-      };
-
-      var chart = new ApexCharts(document.querySelector("#performance_year"), options);
-      chart.render();
-    });
-    document.addEventListener("DOMContentLoaded", function () {
-      // ✅ Static labels and datasets
-      var chartLabels = ["Teaching and Learning", "Research", "Institutional Engagement", "Institutional Engagement"];
-      var dataset1 = [65, 59, 90, 81]; // Inside Mirror
-
-      var g = document.getElementById("radarChart");
-      if (g) {
-        var ctx = g.getContext("2d");
-
-        // ✅ Gradients
-        var gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientBlue.addColorStop(0, "rgba(85, 85, 255, 0.9)");
-        gradientBlue.addColorStop(1, "rgba(151, 135, 255, 0.8)");
-
-        var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
-        gradientPink.addColorStop(0, "rgba(115, 103, 240, 1)");
-        gradientPink.addColorStop(1, "rgba(115, 103, 240, 1)");
-
-        // ✅ Radar Chart
-        new Chart(ctx, {
-          type: "radar",
+        $.ajax({
+          url: '{{ route("indicatorCategory.getIndicatorCategories") }}',
+          method: 'POST',
           data: {
-            labels: chartLabels,
-            datasets: [
-              {
-                label: "Achievements",
-                data: dataset1,
-                fill: true,
-                backgroundColor: gradientPink,
-                borderColor: "rgba(112, 25, 115, 1)",
-                pointBorderColor: "#ff55b8",
-                pointBackgroundColor: "#fff",
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                pointStyle: "circle"
-              }
-            ]
+            _token: '{{ csrf_token() }}',
+            kpa_ids: [kfaId]
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: { duration: 500 },
-            scales: {
-              r: {
-                ticks: { display: true, color: "#666" },
-                grid: { color: "#ddd" },
-                angleLines: { color: "#ddd" },
-                pointLabels: { color: "#666" }
-              }
+          success: function (data) {
+            let html = '';
+            if (data.length > 0) {
+              data.forEach(function (category) {
+                html += `
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="col-md-4">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="card h-100">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="form-check">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <input class="form-check-input indicatir-data" type="checkbox" value="${category.id}" id="category_${category.id}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <label class="form-check-label" for="category_${category.id}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ${category.indicator_category}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </label>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`;
+              });
+            } else {
+              html = `<div class="col-12"><p>No Indicator Categories found.</p></div>`;
+            }
+            $('#indicator-category-cards-title').html('Indicator Category');
+            $('#indicator-category-cards').html(html);
+
+            // Clear indicators when new KPA is selected
+            $('#indicator-cards-title').html('');
+            $('#indicator-results').html('');
+          },
+          error: function (xhr) {
+            console.error(xhr.responseText);
+            alert('Something went wrong!');
+          }
+        });
+      });
+
+      // On change of category checkbox, fetch related indicators
+      $(document).on('change', '.indicatir-data', function () {
+        let selectedCategoryIds = [];
+
+        $('.indicatir-data:checked').each(function () {
+          selectedCategoryIds.push($(this).val());
+        });
+
+        if (selectedCategoryIds.length > 0) {
+          $.ajax({
+            url: '{{ route("indicator.getIndicators") }}',
+            method: 'POST',
+            data: {
+              _token: '{{ csrf_token() }}',
+              category_ids: selectedCategoryIds
             },
-            plugins: {
-              legend: {
-                position: "top",
-                labels: {
-                  padding: 25,
-                  color: "#333"
+            success: function (indicators) {
+              let output = '';
+              if (indicators.length > 0) {
+                indicators.forEach(function (indicator) {
+                  const chartId = `deliveryExceptionsChart_${indicator.id}`;
+                  const chartType = (indicator.id % 2 === 0) ? 'radialBar' : 'area';
+                  output += `
+                                                                                                                                                                                                                                                                                                                                                                                                <div class="col-xl-3 col-md-4 col-6">
+                                                                                                                                                                                                                                                                                                                                                                                                <div class="card h-100">
+                                                                                                                                                                                                                                                                                                                                                                                                <div class="card-header pb-2">
+                                                                                                                                                                                                                                                                                                                                                                                                <p class="card-subtitle">${indicator.indicator}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                <div class="card-body">
+                                                                                                                                                                                                                                                                                                                                                                                                <div id="${chartId}" class="chart-container"></div>
+                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                </div>`;
+                  indicator.chart_id = chartId;
+                  indicator.chart_type = chartType;
+
+                  // Add random data if not provided remove
+                  if (chartType === 'radialBar') {
+                    indicator.value = Math.floor(Math.random() * 100); // 0 to 100
+                  } else {
+                    indicator.data = Array.from({ length: 7 }, () => Math.floor(Math.random() * 100));
+                  }
+                  // Add random data if not provided remove
+                });
+              } else {
+                output = `<div class="col-12"><p>No Indicators found.</p></div>`;
+              }
+              $('#indicator-cards-title').html('Indicator');
+              $('#indicator-results').html(output);
+
+              // Render charts based on type remove
+              indicators.forEach(function (indicator) {
+                if (indicator.chart_type === 'radialBar') {
+                  initRadialChart(indicator.chart_id, indicator.value);
+                } else if (indicator.chart_type === 'area') {
+                  initAreaChart(indicator.chart_id, indicator.data);
                 }
+              });
+              // Render charts based on type remove
+            },
+            error: function (xhr) {
+              console.error(xhr.responseText);
+              alert('Error loading indicators.');
+            }
+          });
+        } else {
+          $('#indicator-results').html('');
+        }
+      });
+
+    });
+    function initRadialChart(chartId) {
+      const options = {
+        chart: {
+          height: 150,
+          sparkline: {
+            enabled: !0
+          },
+          parentHeightOffset: 0,
+          type: 'radialBar'
+        },
+        series: [Math.floor(Math.random() * 100)], // Replace with dynamic value if needed
+        labels: ['indicator'], // You can customize this
+        plotOptions: {
+          radialBar: {
+            hollow: {
+              size: '60%'
+            },
+            dataLabels: {
+              name: {
+                show: true
               },
-              tooltip: {
-                backgroundColor: "#fff",
-                titleColor: "#000",
-                bodyColor: "#333",
-                borderWidth: 1,
-                borderColor: "#ddd"
+              value: {
+                show: true
               }
             }
           }
+        },
+        colors: ['#ff9f43'] // Optional: Theme color
+      };
+
+      const chart = new ApexCharts(document.querySelector(`#${chartId}`), options);
+      chart.render();
+    }
+    function initAreaChart(chartId, data) {
+      const options = {
+        chart: {
+          height: 150,
+          type: 'area'
+        },
+        series: [{
+          name: 'Performance',
+          data: data
+        }],
+        xaxis: {
+          categories: data.map((_, i) => `Day ${i + 1}`)
+        },
+        colors: ['#7367F0'],
+        stroke: { curve: 'smooth' },
+        dataLabels: { enabled: false }
+      };
+
+      new ApexCharts(document.querySelector(`#${chartId}`), options).render();
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      var chartLabels = [
+        "Teaching and Learning",
+        "Research, Innovation and Commercialisation",
+        "Institutional Engagement",
+      ];
+      var shortLabels = ["T&L", "RIC", "IE"];
+      var dataset1 = [90, 85, 80];
+      var labelColors = ["#e74c3c", "#3498db", "#27ae60"];
+
+      var ctx = document.getElementById("radarChart").getContext("2d");
+
+      var gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
+      gradientPink.addColorStop(0, "rgba(115, 103, 240, 0.3)");
+      gradientPink.addColorStop(1, "rgba(115, 103, 240, 0.5)");
+
+      // ✅ Create the chart first
+      var radarChart = new Chart(ctx, {
+        type: "radar",
+        data: {
+          labels: chartLabels,
+          datasets: [
+            {
+              label: "Achievements",
+              data: dataset1,
+              fill: true,
+              backgroundColor: gradientPink,
+              borderColor: "rgba(112, 25, 115, 1)",
+              pointBackgroundColor: labelColors,
+              pointBorderColor: labelColors,
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              pointStyle: "circle"
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              ticks: { display: true, color: "#666" },
+              grid: { color: "#ddd" },
+              angleLines: { color: "#ddd" },
+              pointLabels: {
+                font: { size: 9 },
+                color: (context) => labelColors[context.index],
+                callback: (label, index) => shortLabels[index]
+              }
+            }
+          },
+          plugins: { legend: { display: false } }
+        },
+        plugins: [
+          {
+            id: "pointLabelClick",
+            afterEvent(chart, args) {
+              const { event } = args;
+              if (!event) return;
+
+              const rScale = chart.scales.r;
+              let hovering = false;
+
+              chart.data.labels.forEach((label, i) => {
+                const point = rScale.getPointPositionForValue(i, rScale.max);
+                const padding = 30; // clickable area around label
+
+                if (
+                  event.x >= point.x - padding &&
+                  event.x <= point.x + padding &&
+                  event.y >= point.y - padding &&
+                  event.y <= point.y + padding
+                ) {
+                  hovering = true;
+
+                  // 👉 Handle click
+                  if (event.type === "click") {
+                    const targetId = label.replace(/\s+/g, "-").toLowerCase();
+                    const targetDiv = document.getElementById(targetId);
+
+                    if (targetDiv) {
+                      // 1️⃣ Scroll into view
+                      targetDiv.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                      });
+
+                      // 2️⃣ Open accordion (if collapsed)
+                      const collapseEl = targetDiv.querySelector(".accordion-collapse");
+                      if (collapseEl && !collapseEl.classList.contains("show")) {
+                        new bootstrap.Collapse(collapseEl, { toggle: true });
+                      }
+
+                      // 3️⃣ Mark active
+                      document
+                        .querySelectorAll(".accordion-item")
+                        .forEach((item) => item.classList.remove("active"));
+                      targetDiv.classList.add("active");
+                    }
+                  }
+                }
+              });
+
+              chart.canvas.style.cursor = hovering ? "pointer" : "default";
+            }
+          }
+        ]
+      });
+
+      // ✅ Handle dataset switching *after* chart is initialized
+      document.getElementById("overall").addEventListener("change", function () {
+        if (this.checked) {
+          radarChart.data.datasets[0].data = [90, 85, 80];
+          radarChart.update();
+        }
+      });
+      document.getElementById("spring25").addEventListener("change", function () {
+        if (this.checked) {
+          radarChart.data.datasets[0].data = [80, 85, 90];
+          radarChart.update();
+        }
+      });
+
+      document.getElementById("fall25").addEventListener("change", function () {
+        if (this.checked) {
+          radarChart.data.datasets[0].data = [70, 90, 80];
+          radarChart.update();
+        }
+      });
+
+      // ✅ Custom Legend
+      var legendDiv = document.getElementById("customLegend");
+      chartLabels.forEach((label, i) => {
+        let li = document.createElement("li");
+        li.className = "mx-3";
+        li.style.fontSize = "9px";
+        li.style.cursor = "pointer";
+        li.innerHTML = `
+    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+    border-radius:50%;margin-right:5px;"></span>
+    ${label} (${shortLabels[i]})
+    `;
+
+        li.addEventListener("mouseenter", () => {
+          radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
+          radarChart.update();
         });
+        li.addEventListener("mouseleave", () => {
+          radarChart.setActiveElements([]);
+          radarChart.update();
+        });
+
+        legendDiv.appendChild(li);
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var childModal = document.getElementById('paymentMethods');
+      var parentModal = new bootstrap.Modal(document.getElementById('paymentMethods2'));
+
+      childModal.addEventListener('hidden.bs.modal', function () {
+        parentModal.show(); // reopen parent after child closed
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var childModal = document.getElementById('paymentMethodsFD');
+      var parentModal = new bootstrap.Modal(document.getElementById('paymentMethods1'));
+
+      childModal.addEventListener('hidden.bs.modal', function () {
+        parentModal.show(); // reopen parent after child closed
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // element check
+      var c = document.getElementById("carrierPerformances");
+      if (!c) {
+        console.error("Element #carrierPerformances not found");
+        return;
+      }
+
+
+      var n = "#6c757d";                              // label color
+      var l = "Arial, sans-serif";                    // font-family
+      var s = "#6c757d";                              // legend label color
+      var r = { bar: { series1: "#4e73df", series2: "#f6c23e" } };
+
+
+      var categories = ["Business and Management Sciences", "Economics and Commerce", "Computer Science and Information Technology", "Social Sciences ", "Allied Health Sciences", "Art and Design", "Pharmacy", "Medical Sciences", "Engineering and Technology", "Sciences", "Arts and Humanities", "Law", "Agriculture and Veterinary Sciences"];
+      var deliveryRates = [60, 80, 90, 70, 50, 60, 70, 60, 80, 90, 70, 50, 60];
+      var deliveryExceptions = [70, 60, 80, 70, 60, 50, 900, 70, 60, 70, 40, 80, 90];
+
+
+      var options = {
+        chart: {
+          height: 330,
+          type: "bar",
+          events: {
+            mounted: function () {
+              // after chart renders, attach click events to x-axis labels
+              document.querySelectorAll("#carrierPerformances .apexcharts-xaxis text").forEach((el, index) => {
+                el.style.cursor = "pointer"; // make it look clickable
+                el.addEventListener("click", function () {
+                  var myModal = new bootstrap.Modal(document.getElementById("categoryModal"));
+                  myModal.show();
+                });
+              });
+            }
+          },
+          parentHeightOffset: 0,
+          stacked: false,
+          toolbar: { show: false },
+          zoom: { enabled: false }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: "50%",
+            startingShape: "rounded",
+            endingShape: "flat",
+            borderRadius: 6
+          }
+        },
+        dataLabels: { enabled: false },
+        series: [
+          { name: "Delivery rate", data: deliveryRates },
+          { name: "Delivery exceptions", data: deliveryExceptions }
+        ],
+        xaxis: {
+          categories: categories,
+          tickAmount: 10,
+          labels: {
+            formatter: function (value) {
+              return value.length > 6 ? value.substring(0, 6) + "..." : value;
+            },
+            style: { colors: n, fontSize: "13px", fontFamily: l, fontWeight: 400 }
+          },
+          axisBorder: { show: false },
+          axisTicks: { show: false }
+        },
+        yaxis: {
+          tickAmount: 9,
+          min: 1,
+          max: 100,
+          labels: {
+            style: { colors: n, fontSize: "13px", fontFamily: l, fontWeight: 400 },
+            formatter: function (val) { return val; }
+          }
+        },
+        tooltip: {
+          x: {
+            formatter: function (val, opts) {
+              // Always return the full category name here
+              return categories[opts.dataPointIndex];
+            }
+          }
+        },
+        legend: {
+          show: true,
+          position: "bottom",
+          markers: { size: 5, shape: "circle" },
+          height: 40,
+          itemMargin: { horizontal: 8, vertical: 0 },
+          fontSize: "13px",
+          fontFamily: l,
+          fontWeight: 400,
+          labels: { colors: s, useSeriesColors: false },
+          offsetY: -5
+        },
+        grid: { strokeDashArray: 6, padding: { bottom: 5 } },
+        colors: [r.bar.series1, r.bar.series2],
+        fill: { opacity: 1 },
+        responsive: [
+          { breakpoint: 1400, options: { chart: { height: 275 }, legend: { fontSize: "13px", offsetY: 10 } } },
+          { breakpoint: 576, options: { chart: { height: 300 }, legend: { itemMargin: { vertical: 5, horizontal: 10 }, offsetY: 7 } } }
+        ]
+      };
+
+      new ApexCharts(c, options).render();
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+      var chartEl = document.querySelector("#horizontalBarCharts");
+      if (!chartEl) {
+        console.error("Element #horizontalBarChart not found");
+        return;
+      }
+
+
+      var chartLabels = ["FASH", "FAD", "FBMS", "FET", "FSS", "FEC", "FPH", "FCSIT"];
+      var chartData = [45, 40, 35, 30, 25, 20, 15, 10];
+      var categories = ["8", "7", "6", "5", "4", "3", "2", "1"];
+
+      var options = {
+        chart: {
+          height: 300,
+          type: "bar",
+          toolbar: { show: false }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            barHeight: "60%",
+            distributed: true,
+            startingShape: "rounded",
+            borderRadiusApplication: "end",
+            borderRadius: 7
+          }
+        },
+        grid: {
+          strokeDashArray: 10,
+          borderColor: "#e9ecef",
+          xaxis: { lines: { show: true } },
+          yaxis: { lines: { show: false } },
+          padding: { top: -35, bottom: -12 }
+        },
+        colors: ["#696cff", "#03c3ec", "#71dd37", "#8592a3", "#ff3e1d", "#ffab00"],
+        fill: { opacity: [1, 1, 1, 1, 1, 1] },
+        dataLabels: {
+          enabled: true,
+          style: {
+            colors: ["#fff"],
+            fontWeight: 400,
+            fontSize: "13px",
+            fontFamily: "Arial, sans-serif"
+          },
+          formatter: function (val, opts) {
+            // show label text inside the bar
+            return chartLabels[opts.dataPointIndex];
+          },
+          offsetX: 0,
+          dropShadow: { enabled: false }
+        },
+        labels: chartLabels,
+        series: [{ data: chartData }],
+        xaxis: {
+          categories: categories,
+          axisBorder: { show: false },
+          axisTicks: { show: false },
+          labels: {
+            style: { colors: "#666", fontFamily: "Arial, sans-serif", fontSize: "13px" },
+            formatter: function (val) { return val + "%"; }
+          }
+        },
+        yaxis: {
+          max: 35,
+          labels: {
+            style: { colors: "#666", fontFamily: "Arial, sans-serif", fontSize: "13px" }
+          }
+        },
+        tooltip: {
+          enabled: true,
+          style: { fontSize: "12px" },
+          onDatasetHover: { highlightDataSeries: false },
+          custom: function ({ series, seriesIndex, dataPointIndex }) {
+            return '<div class="px-3 py-2"><span>' + series[seriesIndex][dataPointIndex] + "%</span></div>";
+          }
+        },
+        legend: { show: false }
+      };
+
+      new ApexCharts(chartEl, options).render();
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var i = document.querySelector("#expensesChart2"),
+        l = {
+          chart: {
+            height: 170,
+            sparkline: {
+              enabled: true
+            },
+            parentHeightOffset: 0,
+            type: "radialBar"
+          },
+          colors: [config.colors.warning], // Make sure config is defined in your app
+          series: [77], // ✅ Laravel variable here
+          plotOptions: {
+            radialBar: {
+              offsetY: 0,
+              startAngle: -90,
+              endAngle: 90,
+              hollow: {
+                size: "65%"
+              },
+              track: {
+                strokeWidth: "45%",
+                background: '#f0f0f0'
+              },
+              dataLabels: {
+                name: {
+                  show: false
+                },
+                value: {
+                  fontSize: "24px",
+                  color: "#333",
+                  fontWeight: 500,
+                  offsetY: -5
+                }
+              }
+            }
+          },
+          grid: {
+            show: false,
+            padding: {
+              bottom: 5
+            }
+          },
+          stroke: {
+            lineCap: "round"
+          },
+          labels: ["Progress"],
+          responsive: [
+            {
+              breakpoint: 1442,
+              options: {
+                chart: { height: 120 },
+                plotOptions: {
+                  radialBar: {
+                    dataLabels: { value: { fontSize: "18px" } },
+                    hollow: { size: "60%" }
+                  }
+                }
+              }
+            },
+            {
+              breakpoint: 1025,
+              options: {
+                chart: { height: 136 },
+                plotOptions: {
+                  radialBar: {
+                    hollow: { size: "65%" },
+                    dataLabels: { value: { fontSize: "18px" } }
+                  }
+                }
+              }
+            },
+            {
+              breakpoint: 769,
+              options: {
+                chart: { height: 120 },
+                plotOptions: {
+                  radialBar: { hollow: { size: "55%" } }
+                }
+              }
+            },
+            {
+              breakpoint: 426,
+              options: {
+                chart: { height: 145 },
+                plotOptions: {
+                  radialBar: { hollow: { size: "65%" } }
+                },
+                dataLabels: {
+                  value: { offsetY: 0 }
+                }
+              }
+            },
+            {
+              breakpoint: 376,
+              options: {
+                chart: { height: 105 },
+                plotOptions: {
+                  radialBar: { hollow: { size: "60%" } }
+                }
+              }
+            }
+          ]
+        };
+
+      if (i !== null) {
+        new ApexCharts(i, l).render();
       }
     });
 
-    document.getElementById('checkReportBtn').addEventListener('click', function () {
-      const selectedValue = document.getElementById('departmentFilter').value;
-      if (selectedValue) {
-        // Redirect to department report page
-        window.location.href = `/departments/${selectedValue}/report`;
-      } else {
-        alert('Please select a department first.');
-      }
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".expensesChart").forEach(function (el) {
+        var color = el.dataset.color || "#7367f0"; // fallback if missing
+        var series = parseInt(el.dataset.series) || 0;
+
+        var options = {
+          chart: {
+            height: 170,
+            sparkline: { enabled: true },
+            parentHeightOffset: 0,
+            type: "radialBar"
+          },
+          colors: [color],
+          series: [series],
+          plotOptions: {
+            radialBar: {
+              offsetY: 0,
+              startAngle: -90,
+              endAngle: 90,
+              hollow: { size: "65%" },
+              track: { strokeWidth: "45%", background: "#f0f0f0" },
+              dataLabels: {
+                name: { show: false },
+                value: {
+                  fontSize: "20px",
+                  color: "#333",
+                  fontWeight: 500,
+                  offsetY: -5
+                }
+              }
+            }
+          },
+          grid: { show: false },
+          stroke: { lineCap: "round" },
+          labels: ["Progress"]
+        };
+
+        new ApexCharts(el, options).render();
+      });
     });
+    document.addEventListener("DOMContentLoaded", function () {
+      // get all buttons
+      document.querySelectorAll(".scrollBtn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.getElementById("targetDivchart").scrollIntoView({
+            behavior: "smooth"
+          });
+        });
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const scrollableDiv = document.getElementById("scrollableCol");
+
+    // Set scroll height dynamically based on window height
+    const maxHeight = 435;
+    scrollableDiv.style.maxHeight = `${maxHeight}px`;
+
+    // Enable vertical scroll
+    scrollableDiv.style.overflowY = "auto";
+    scrollableDiv.style.scrollBehavior = "smooth";
+
+    // Optional: hide scrollbar (still scrolls)
+    scrollableDiv.style.msOverflowStyle = "none"; // IE/Edge
+    scrollableDiv.style.scrollbarWidth = "none";  // Firefox
+    scrollableDiv.style.overflowX = "hidden";
+
+    // For Chrome/Safari — hide scrollbar visually
+    const style = document.createElement("style");
+    style.innerHTML = `
+      #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+    `;
+    document.head.appendChild(style);
+
+    // Auto adjust on window resize
+    window.addEventListener("resize", () => {
+        scrollableDiv.style.maxHeight = `${newHeight}px`;
+    });
+});
   </script>
 @endpush
