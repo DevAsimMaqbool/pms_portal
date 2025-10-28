@@ -258,32 +258,35 @@ background-image:
       <!-- FRONT -->
       <div class="flip-card-front card bg-{{ $color1 }} text-white">
        
-         <div class="card-body">
-                          <div class="d-flex align-items-center mb-1">
-                            <div class="avatar me-4">
-                              <span class="avatar-initial rounded bg-label-{{ $color1 }}"><i class="icon-base ti {{ $iconClass }} icon-28px"></i></span>
-                            </div>
-                          </div>
-                          <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
-                          <div class="card-metricsmt-2 text-end">
-                            @if ($kpa['id'] == 1)
-                            <span class="metric-badge bg-label-{{ $color1 }}  fw-bold"> 90%</span>
-                            <span class="metric-badge bg-label-{{ $color1 }}  fw-bold">OS</span>
-                             @elseif ($kpa['id'] == 2)
-                             <span class="metric-badge bg-label-{{ $color1 }} fw-bold"> 80%</span>
-                            <span class="metric-badge bg-label-{{ $color1 }}  fw-bold">EE</span>
-                            @elseif ($kpa['id'] == 13)
-                             <span class="metric-badge bg-label-{{ $color1 }} fw-bold "> 70%</span>
-                            <span class="metric-badge bg-label-{{ $color1 }}  fw-bold">ME</span>
-                            @elseif ($kpa['id'] == 14)
-                             <span class="metric-badge bg-label-{{ $color1 }}  fw-bold"> 60%</span>
-                            <span class="metric-badge bg-label-{{ $color1 }}   fw-bold">N1</span>
-                            @else
-                            
-                            @endif
+         <div class="card-body position-relative d-flex flex-column justify-content-between">
+  <div>
+    <div class="d-flex align-items-center mb-1">
+      <div class="avatar me-4">
+        <span class="avatar-initial rounded bg-label-{{ $color1 }}">
+          <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
+        </span>
+      </div>
+    </div>
+    <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
+  </div>
+  <!-- Metrics bottom right -->
+  <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
+    @if ($kpa['id'] == 1)
+      <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
+      <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
+    @elseif ($kpa['id'] == 2)
+      <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
+      <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
+    @elseif ($kpa['id'] == 13)
+      <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
+      <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
+    @elseif ($kpa['id'] == 14)
+      <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
+      <span class="metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
+    @endif
+  </div>
+</div>
 
-                          </div>
-                        </div>
       </div>
 
       <!-- BACK -->
@@ -330,7 +333,7 @@ background-image:
             </div>
            <!--/ Statistics -->
                     
-                <div class="card mb-6">
+                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re going beyond what’s asked of you.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-orange rounded p-1_5 me-4"><i
@@ -349,7 +352,7 @@ background-image:
                     </div>
                   </div>
 
-                  <div class="card mb-6">
+                  <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-primary" data-bs-original-title="You’re going beyond what’s asked of you.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-primary rounded p-1_5 me-4"><i
@@ -368,7 +371,7 @@ background-image:
                     </div>
                   </div>
 
-                  <div class="card mb-6">
+                  <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re going beyond what’s asked of you.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-warning rounded p-1_5 me-4"><i
@@ -390,7 +393,7 @@ background-image:
                     
 
                    
-                  <div class="card mb-6">
+                  <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-danger" data-bs-original-title="You’re going beyond what’s asked of you.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-danger rounded p-1_5 me-4"><i
@@ -409,7 +412,7 @@ background-image:
                     </div>
                   </div>
 
-                  <div class="card mb-6">
+                  <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-success rounded p-1_5 me-4"><i
