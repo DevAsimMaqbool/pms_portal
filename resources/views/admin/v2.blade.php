@@ -325,11 +325,11 @@ background-image:
     <!--/ Website Analytics -->
 
 </div>
-       <div class="row gy-6">
+       <div class="row gy-6 mt-2">
 
          <div class="col-md-6 col-lg-4" id="scrollableCol">
             <div class=" d-flex justify-content-between">
-            <h5 class="mt-2 text-body-secondary">Hot Indicator</h5>
+            <h5 class="text-body-secondary">Hot Indicator</h5>
             </div>
            <!--/ Statistics -->
                     
@@ -439,7 +439,7 @@ background-image:
         
 
         <div class=" d-flex justify-content-between">
-        <h5 class="mt-2 text-body-secondary">Top Performance</h5>
+        <h5 class="text-body-secondary">Top Performance</h5>
         </div>
 
         <div class="card mb-6">
@@ -552,7 +552,7 @@ background-image:
       
 <div class="col-md-6 col-lg-4">
         <div class=" d-flex justify-content-between">
-        <h5 class="mt-2 text-body-secondary">Overall KPA Performance</h5>
+        <h5 class="text-body-secondary">Overall KPA Performance</h5>
         </div>
         
 
@@ -566,6 +566,7 @@ background-image:
                       <div class="card-header d-flex justify-content-between">
                           <div class="card-title mb-0">
                             <i class="icon-base ti tabler-chart-pie"></i>
+                            <h5 class="mb-1">Overall</h5>
                           </div>
                           <div class="dropdown">
                             <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button" data-bs-toggle="modal" data-bs-target="#fullscreenModal">
@@ -580,22 +581,6 @@ background-image:
               
                 </div>
 
-
-
-                <div class="col-xl-12">
-                  <div class="card bg-warning text-white">
-                                <div class="card-body d-flex justify-content-between align-items-center">
-                                  <div class="card-title mb-0 text-white">
-                                    <p class="mb-0">performance area</p>
-                                  </div>
-                                  <div class="card-icon">
-                                    <span class="badge bg-label-warning rounded p-2">
-                                      <i class="icon-base ti tabler-stars icon-26px"></i>
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                </div>
         <!--/ Generated Leads -->
        
   
@@ -775,7 +760,7 @@ background-image:
     const windowHeight = window.innerHeight;
     
     // Set scroll height dynamically based on window height
-    const maxHeight = 574;
+    const maxHeight = 470;
     scrollableDiv.style.maxHeight = `${maxHeight}px`;
 
     // Enable vertical scroll
@@ -804,7 +789,7 @@ background-image:
     const windowHeight = window.innerHeight;
     
     // Set scroll height dynamically based on window height
-    const maxHeight = 574;
+    const maxHeight = 470;
     scrollableDiv.style.maxHeight = `${maxHeight}px`;
 
     // Enable vertical scroll
