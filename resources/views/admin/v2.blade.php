@@ -112,6 +112,22 @@
   .flip-card-back { display: none; } /* or display block on click via JS if needed */
   */
 }
+.caed-wave-bg {
+  background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
+  background-size: 200% 200%; /* make it larger to allow smooth movement */
+  animation: waveMove 5s ease-in-out infinite alternate;
+}
+@keyframes waveMove {
+  0% {
+    background-position: left bottom;
+  }
+  50% {
+    background-position: right top;
+  }
+  100% {
+    background-position: left top;
+  }
+}
 </style>
 @endpush
 @section('content')
@@ -122,11 +138,11 @@
 
     
     <!-- Sales Overview -->
-    <div class="col-xl-3 col-sm-6 d-flex flex-column">
+    <div class="col-lg-3 col-md-12 d-flex flex-column">
        <div class="row g-6 flex-fill">
 
         <!-- Generated Leads -->
-        <div class="col-xl-12">
+        <div class="col-lg-12 col-md-6 col-sm-12">
           <div class="card h-100" style="box-shadow: none;">
               <div class="card-header text-center">
                   <div class="card-title mb-0">
@@ -139,7 +155,7 @@
         </div>
         <!--/ Generated Leads -->
         <!-- Profit last month -->
-        <div class="col-xl-6 col-sm-6">
+        <div class="col-lg-6 col-md-3 col-sm-6">
             <div class="card h-100">
               
               <div class="card-body d-flex justify-content-center align-items-center">
@@ -150,7 +166,7 @@
             </div>
         </div>
         
-        <div class="col-xl-6 col-sm-6">
+        <div class="col-lg-6 col-md-3 col-sm-6">
           <div class="card h-100 bg-info">
               <div class="card-body d-flex justify-content-center align-items-center">
                   <h4 class="mb-1 me-2 text-center text-white">ME</h4>
@@ -199,7 +215,7 @@
                       </div>
                       
               </div> --}}
-               <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
+               <div class="col-lg-3 col-md-4" id="{{ $targetId }}">
   <div class="flip-card">
     <div class="flip-card-inner">
 
@@ -232,12 +248,12 @@
           @endforeach
     <!--/ Website Analytics -->
 
+</div>
+       <div class="row gy-6">
 
-
-         <div class="col-md-6 col-lg-4" id="scrollableCol">
+         <div class="col-md-6 col-lg-4" id="scrollableCol1">
             <div class=" d-flex justify-content-between">
-            <h5 class="mt-2 text-body-secondary">Body</h5>
-            <h6 class="mt-2 text-body-secondary">See all</h6>
+            <h5 class="mt-2 text-body-secondary">Hot Indicator</h5>
             </div>
            <!--/ Statistics -->
                     
@@ -341,70 +357,52 @@
         </div>
         <div class="col-md-6 col-lg-4">
         <div class=" d-flex justify-content-between">
-        <h5 class="mt-2 text-body-secondary">Department Performance</h5>
+        <h5 class="mt-2 text-body-secondary">Overall KPA Performance</h5>
         </div>
         
 
       <div class="row g-6">
         <!-- Profit last month -->
-        {{-- <div class="col-xl-6 col-sm-6">
-          <div class="card h-100">
-            
-
-            <div class="card-body">
-          <div class="badge p-2 bg-label-danger mb-3 rounded"><i class="icon-base ti tabler-credit-card icon-28px"></i></div>
-          <h5 class="card-title mb-1">Total Profit</h5>
-          <p class="card-subtitle ">Last week</p>
-          <p class="text-heading mb-3 mt-1">1.28k</p>
-          <div>
-            <span class="badge bg-label-danger">-12.2%</span>
-          </div>
-        </div>
-            
-          </div>
-        </div>
-        
-        <div class="col-xl-6 col-sm-6">
-          <div class="card h-100">
-            
-            <div class="card-body">
-          <div class="badge p-2 bg-label-success mb-3 rounded"><i class="icon-base ti tabler-credit-card icon-28px"></i></div>
-          <h5 class="card-title mb-1">Total Sales</h5>
-          <p class="card-subtitle ">Last week</p>
-          <p class="text-heading mb-3 mt-1">$4,673</p>
-          <div>
-            <span class="badge bg-label-success">+25.2%</span>
-          </div>
-        </div>
-
-
-          </div>
-        </div> --}}
-        <!--/ Expenses -->
+       
 
         <!-- Generated Leads -->
         <div class="col-xl-12">
-          <div class="card">
+          <div class="card caed-wave-bg ">
               <div class="card-header d-flex justify-content-between">
                   <div class="card-title mb-0">
-                    <h5 class="mb-1">Support Tracker</h5>
-                    <p class="card-subtitle">Last 7 Days</p>
+                     <i class="icon-base ti tabler-chart-pie"></i>
                   </div>
                   <div class="dropdown">
-                    <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button" id="supportTrackerMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
+                    <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button" data-bs-toggle="modal" data-bs-target="#fullscreenModal">
+                      <i class="icon-base ti tabler-arrows-maximize"></i>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="supportTrackerMenu">
-                      <a class="dropdown-item waves-effect"role="button" data-bs-toggle="modal"
-                  data-bs-target="#paymentMethodsDepartment">View More</a>
-                      <a class="dropdown-item waves-effect" href="javascript:void(0);">Delete</a>
-                    </div>
                   </div>
                 </div>
               <div class="card-body">
                  <canvas class="chartjs" id="radarChart1"></canvas>
               </div>
           </div>
+           
+           <div class="card mt-6">
+          <div class="card-body">                  
+            <div class="d-flex align-items-center">
+              <div class="avatar flex-shrink-0 me-4">
+                <i class="fis fi fi-us rounded-circle fs-2"></i>
+              </div>
+              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                <div class="me-2">
+                  <div class="d-flex align-items-center">
+                    <h6 class="mb-0 me-1">$8,567k</h6>
+                  </div>
+                  <small class="text-body">United states</small>
+                </div>
+                <div class="user-progress">
+                   <div class="badge bg-label-secondary">1.2k Views</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         </div>
         <!--/ Generated Leads -->
        
@@ -446,6 +444,26 @@
           </div>
         </div>
 
+        <div class="card mb-6">
+          <div class="card-body">                  
+            <div class="d-flex align-items-center">
+              <div class="avatar flex-shrink-0 me-4">
+                <i class="fis fi fi-br rounded-circle fs-2"></i>
+              </div>
+              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                <div class="me-2">
+                  <div class="d-flex align-items-center">
+                    <h6 class="mb-0 me-1">$8,567k</h6>
+                  </div>
+                  <small class="text-body">Brazil</small>
+                </div>
+                <div class="user-progress">
+                   <div class="badge bg-label-secondary">1.2k Views</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="card mb-6">
           <div class="card-body">                  
             <div class="d-flex align-items-center">
@@ -519,60 +537,71 @@
       </div>
       <!--/ Accordion1 -->
     
- <!-- Payment Methods modal -->
-    <div class="modal fade" id="paymentMethodsDepartment" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-xl modal-dialog-scrollable">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="modalScrollableTitle"><i
-                class="icon-base ti tabler-list-details me-3"></i>Faculties</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-               <div class="row g-6 pt-2">
-                  <div class="col-12 col-12" id="targetDivchart">
-        <div class="card caed-wave-bg">
-          <div class="card-header d-flex justify-content-between">
-            <h5 class="card-title m-0 me-2 pt-1 mb-2 d-flex align-items-center"><i
-                class="icon-base ti tabler-chart-pie me-3"></i>Overall KPA Performance</h5>
-            <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-              <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
-              <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
 
-              <input type="radio" class="btn-check" name="termRadio" id="spring25">
-              <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
 
-              <input type="radio" class="btn-check" name="termRadio" id="fall25">
-              <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
-            </div>
-          </div>
-          <div class="card-body pt-0">
-            <div class="row justify-content-center text-center">
-              <div class="col-md-8 d-flex justify-content-center">
-                <canvas class="chartjs" id="radarChart"></canvas>
-              </div>
 
-              <div class="col-12 mt-2">
-                <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0" style="list-style:none;">
-                </ul>
-              </div>
-            </div>
-            {{-- <div><span>Teaching and Learning</span></div> --}}
-            <!-- if schrool -->
-            {{-- <div style="overflow-x: auto; overflow-y: hidden; width: 100%;">
-              <div id="carrierPerformances"></div>
-            </div> --}}
 
-          </div>
-        </div>
-      </div>
-      <!--/ chart Overview -->
-               </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- / Payment Methods modal -->
+ <!-- Modal -->
+                <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-fullscreen" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="modalFullTitle">Overall KPA Performance</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+
+                          
+
+                      <div class="row g-6 pt-2">
+                        <div class="col-12 col-12" id="targetDivchart">
+                          <div class="card caed-wave-bg">
+
+                            <div class="card-header d-flex justify-content-between">
+                              <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                                <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
+                                <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
+
+                                <input type="radio" class="btn-check" name="termRadio" id="spring25">
+                                <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
+
+                                <input type="radio" class="btn-check" name="termRadio" id="fall25">
+                                <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
+                              </div>
+                            </div>
+
+                            <div class="card-body pt-0">
+                              <div class="row justify-content-center text-center">
+                                <div class="col-md-8 d-flex justify-content-center">
+                                  <canvas class="chartjs" id="radarChart"></canvas>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                  <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0" style="list-style:none;">
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+
+
+                          </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>   
+ 
   </div>
   <!-- / Content -->
 @endsection
@@ -593,7 +622,7 @@
     const scrollableDiv = document.getElementById("scrollableCol");
 
     // Set scroll height dynamically based on window height
-    const maxHeight = 435;
+    const maxHeight = 535;
     scrollableDiv.style.maxHeight = `${maxHeight}px`;
 
     // Enable vertical scroll
