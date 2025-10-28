@@ -76,28 +76,20 @@
 
                         @if ($area['id'] == 1)
                             <p class="card-text">
-                                Teaching performance is evaluated through student success rates,
-                                feedback, teaching compliance, and the adoption of innovative
-                                practices that engage and motivate students effectively.
+                                This KPA focuses on effective teaching delivery at undergraduate and postgraduate levels, efficient course and classroom management, and continuous enhancement of teaching outputs to ensure quality education. Excellence in teaching and learning is the foundation of student success. It shapes competent graduates, strengthens institutional reputation, and promotes lifelong learning.
                             </p>
                         @elseif ($area['id'] == 2)
                             <p class="card-text">
-                                Research performance is assessed through a combination of publication
-                                quantity and quality, funding success, research impact (citations),
-                                and collaboration with external organizations, including industry.
+                                This KPA measures research productivity, quality, and supervision at the postgraduate level. It also covers the development of knowledge products and the translation of research into practical innovations and commercial outcomes. Advancing research and innovation builds intellectual capital, drives societal progress, and connects academic insights with industry applications for sustainable growth.
                             </p>
                         @elseif ($area['id'] == 13)
                             <p class="card-text">
-                                Institutional engagement is evaluated based on contributions to academic
-                                governance, curriculum design, strategic decision-making, and maintaining
-                                relationships with industry and academic partners.
+                                This KPA emphasizes proactive participation in departmental tasks, institutional initiatives, and events that enhance collaboration, visibility, and collective achievement. Institutional engagement fosters teamwork, ownership, and a shared sense of purpose, strengthening the institution’s culture and external partnerships.
                             </p>
                         @elseif ($area['id'] == 14)
                             <p class="card-text">
-                                Character traits performance focuses on evaluating an individual's
-                                ethical conduct, emotional intelligence, sense of responsibility,
-                                and effective use of resources, fostering a positive and productive
-                                professional environment.
+                                This KPA embodies responsibility, accountability, empathy, humility, honesty, and inspirational leadership as guiding principles for personal and professional conduct.
+Character virtues create the moral compass for excellence. They nurture ethical leaders who act with integrity, compassion, and service to others.
                             </p>
                         @else
                             <p class="card-text">Other text</p>
