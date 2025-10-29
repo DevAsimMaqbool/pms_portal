@@ -658,7 +658,7 @@ Keep shining — your impact inspires others.">
     <div class="col-xl-4 col">
        <div class="card h-100">
                   <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="card-title m-0 me-2">Semester-wise overall performance</h5>
+                    <h5 class="card-title m-0 me-2">Semester-wise Overall Performance</h5>
                     
                   </div>
                   <div class="card-body">
