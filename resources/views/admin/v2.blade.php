@@ -629,7 +629,7 @@ Keep shining — your impact inspires others.">
        
        <div class="card h-100">
                   <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="card-title m-0 me-2">RIC</h5>
+                    <h5 class="card-title m-0 me-2">Research Innovation & Commercialization</h5>
                     
                   </div>
                   <div class="card-body">
