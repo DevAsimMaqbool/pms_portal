@@ -1230,11 +1230,11 @@ document.addEventListener("DOMContentLoaded", function () {
     series: [
       {
         name: 'Performance',
-        data: [10, 15, 20, 25, 30, 35, 40]
+        data: [10, 15, 20, 25, 30, 35]
       }
     ],
     xaxis: {
-      categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      categories: ['Fall 22','Spring 23','Fall 23','Spring 24','Fall 24','Spring 25']
     },
     dataLabels: {
       enabled: false
