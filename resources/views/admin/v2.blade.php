@@ -343,11 +343,11 @@ background-image:
 
          <div class="col-md-6 col-lg-4" id="scrollableCol">
             <div class=" d-flex justify-content-between">
-            <h5 class="text-body-secondary">Hot Indicators</h5>
+            <h5 class="fw-bold">Hot Indicators</h5>
             </div>
            <!--/ Statistics -->
                     
-                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re on your way — just refine and push forward.
+                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re on your way — just refine and push forward.
 Every effort moves you closer to success.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
@@ -363,11 +363,12 @@ Every effort moves you closer to success.">
                                 aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <span class="text-body-secondary">65%</span>
+                            <span class="badge bg-label-orange ms-1">NI</span>
                           </div>
                     </div>
                   </div>
 
-                  <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-primary" data-bs-original-title="You’re achieving excellence with distinction.
+                  <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-primary" data-bs-original-title="You’re achieving excellence with distinction.
 You set the pace for others to follow.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
@@ -383,11 +384,12 @@ You set the pace for others to follow.">
                                 aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <span class="text-body-secondary">90%</span>
+                            <span class="badge bg-label-primary ms-1">OS</span>
                           </div>
                     </div>
                   </div>
 
-                  <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re doing well and meeting your goals.
+                  <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re doing well and meeting your goals.
 Keep your consistency — it’s your strength.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
@@ -403,6 +405,7 @@ Keep your consistency — it’s your strength.">
                                 aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <span class="text-body-secondary">70%</span>
+                            <span class="badge bg-label-warning ms-1">ME</span>
                           </div>
                     </div>
                   </div>
@@ -410,7 +413,7 @@ Keep your consistency — it’s your strength.">
                     
 
                    
-                  <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-danger" data-bs-original-title="Not quite there yet — but growth starts here.
+                  <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-danger" data-bs-original-title="Not quite there yet — but growth starts here.
 Reflect. Refocus. Rise higher.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
@@ -426,11 +429,12 @@ Reflect. Refocus. Rise higher.">
                                 aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <span class="text-body-secondary">50%</span>
+                            <span class="badge bg-label-danger ms-1">BE</span>
                           </div>
                     </div>
                   </div>
 
-                  <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.
+                  <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.
 Keep shining — your impact inspires others.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
@@ -446,6 +450,7 @@ Keep shining — your impact inspires others.">
                                 aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <span class="text-body-secondary">86%</span>
+                            <span class="badge bg-label-success ms-1">EE</span>
                           </div>
                     </div>
                   </div>
@@ -458,7 +463,7 @@ Keep shining — your impact inspires others.">
         
 
         <div class=" d-flex justify-content-between">
-        <h5 class="text-body-secondary">Top Performer</h5>
+        <h5 class="fw-bold">Top Performer</h5>
         </div>
 
         <div class="card mb-6">
@@ -571,7 +576,7 @@ Keep shining — your impact inspires others.">
       
 <div class="col-md-6 col-lg-4">
         <div class=" d-flex justify-content-between">
-        <h5 class="text-body-secondary">Overall KPA Performance</h5>
+        <h5 class="fw-bold">Overall KPA Performance</h5>
         </div>
         
 
@@ -587,7 +592,7 @@ Keep shining — your impact inspires others.">
                             <i class="icon-base ti tabler-chart-pie"></i>
                             <h5 class="mb-1">Overall</h5>
                           </div>
-                          <div class="dropdown">
+                          <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="View large" >
                             <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button" data-bs-toggle="modal" data-bs-target="#fullscreenModal">
                               <i class="icon-base ti tabler-arrows-maximize"></i>
                             </button>
@@ -618,6 +623,7 @@ Keep shining — your impact inspires others.">
 
       <!-- Website Analytics -->
     <div class="col-xl-4 col">
+       
        <div class="card h-100">
                   <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="card-title m-0 me-2">RIC</h5>
@@ -625,6 +631,7 @@ Keep shining — your impact inspires others.">
                   </div>
                   <div class="card-body">
                     <div id="carrierPerformance"></div>
+                    <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
                   </div>
                 </div>
     </div>
@@ -648,7 +655,7 @@ Keep shining — your impact inspires others.">
     <div class="col-xl-4 col">
        <div class="card h-100">
                   <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="card-title m-0 me-2">Semester W-per</h5>
+                    <h5 class="card-title m-0 me-2">Semester-wise overall performance</h5>
                     
                   </div>
                   <div class="card-body">
@@ -1111,114 +1118,128 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
     document.addEventListener("DOMContentLoaded", function () {
-    const c = document.querySelector("#carrierPerformance");
-    const a = {
+      const c = document.querySelector("#carrierPerformance");
+      const categories = [
+        "Publications",
+        "Multidisciplinary Projects",
+        "Commercial Gains",
+        "Intellectual Properties",
+        "Spin Off"
+      ];
+      // Distinct color for each category
+      const colors = [
+        "#1F77B4", // Publication
+        "#FF7F0E", // Projects
+        "#2CA02C", // Commercial Gains
+        "#9467BD", // Intellectual Properties
+        "#D62728"  // Spin Off
+      ];
+      // Lighter versions for "Achieved"
+      const lightColors = [
+        "#6BAED6", // lighter blue
+        "#FFBB78", // lighter orange
+        "#98DF8A", // lighter green
+        "#C5B0D5", // lighter purple
+        "#FF9896"  // lighter red
+      ];
+      const a = {
         chart: {
-            height: 330,
-            type: "bar",
-            parentHeightOffset: 0,
-            stacked: false,
-            toolbar: { show: false },
-            zoom: { enabled: false }
+          height: 330,
+          type: "bar",
+          parentHeightOffset: 0,
+          stacked: false,
+          toolbar: { show: false },
+          zoom: { enabled: false }
         },
         plotOptions: {
-            bar: {
-                horizontal: false,
-                columnWidth: "50%",
-                startingShape: "rounded",
-                endingShape: "flat",
-                borderRadius: 6
-            }
+          bar: {
+            horizontal: false,
+            columnWidth: "50%",
+            borderRadius: 6
+          }
         },
         dataLabels: { enabled: false },
+        // Two series: Target & Achieved
         series: [
-            {
-                name: "Fall 2025",
-                type: "column",
-                data: [5, 2.5, 4, 3]
-            },
-            {
-                name: "Fall 2026",
-                type: "column",
-                data: [6, 3.5, 3, 2.5]
-            }
+          {
+            name: "Target",
+            data: [
+              { x: "Pub", y: 5, fillColor: colors[0] },
+              { x: "Pr", y: 5, fillColor: colors[1] },
+              { x: "CG", y: 5, fillColor: colors[2] },
+              { x: "IP", y: 5, fillColor: colors[3] },
+              { x: "SO", y: 5, fillColor: colors[4] }
+            ]
+          },
+          {
+            name: "Achieved",
+            data: [
+              { x: "Pub", y: 3, fillColor: lightColors[0] },
+              { x: "Pr", y: 3.5, fillColor: lightColors[1] },
+              { x: "CG", y: 3, fillColor: lightColors[2] },
+              { x: "IP", y: 2.5, fillColor: lightColors[3] },
+              { x: "SO", y: 3, fillColor: lightColors[4] }
+            ]
+          }
         ],
         xaxis: {
-            tickAmount: 10,
-            categories: ["C&UOL", "StS", "QEC", "CH"],
-            labels: {
-                style: {
-                    colors: "#6e6b7b",
-                    fontSize: "13px",
-                    fontFamily: "Inter, sans-serif",
-                    fontWeight: 400
-                }
-            },
-            axisBorder: { show: false },
-            axisTicks: { show: false }
+          categories: ["Pub", "Pr", "CG", "IP", "SO"],
+          labels: {
+            style: {
+              colors: "#6E6B7B",
+              fontSize: "13px",
+              fontFamily: "Inter, sans-serif",
+              fontWeight: 400
+            }
+          },
+          axisBorder: { show: false },
+          axisTicks: { show: false }
         },
         yaxis: {
-            tickAmount: 4,
-            min: 1,
-            labels: {
-                style: {
-                    colors: "#6e6b7b",
-                    fontSize: "13px",
-                    fontFamily: "Inter, sans-serif",
-                    fontWeight: 400
-                },
-                formatter: function (o) {
-                    return o;
-                }
+          tickAmount: 4,
+          min: 0,
+          labels: {
+            style: {
+              colors: "#6E6B7B",
+              fontSize: "13px",
+              fontFamily: "Inter, sans-serif",
+              fontWeight: 400
             }
-        },
-        legend: {
-            show: true,
-            position: "bottom",
-            markers: { size: 5, shape: "circle" },
-            height: 40,
-            offsetY: 0,
-            itemMargin: { horizontal: 8, vertical: 0 },
-            fontSize: "13px",
-            fontFamily: "Inter, sans-serif",
-            fontWeight: 400,
-            labels: {
-                colors: "#6e6b7b",
-                useSeriesColors: false
-            },
-            offsetY: -5
+          }
         },
         grid: {
-            strokeDashArray: 6,
-            padding: { bottom: 5 }
+          strokeDashArray: 6,
+          padding: { bottom: 5 }
         },
-        colors: ["#655ae9", "#701f73"],
+        legend: { show: false }, // We'll make a custom legend below
         fill: { opacity: 1 },
         responsive: [
-            {
-                breakpoint: 1400,
-                options: {
-                    chart: { height: 275 },
-                    legend: { fontSize: "13px", offsetY: 10 }
-                }
-            },
-            {
-                breakpoint: 576,
-                options: {
-                    chart: { height: 300 },
-                    legend: {
-                        itemMargin: { vertical: 5, horizontal: 10 },
-                        offsetY: 7
-                    }
-                }
-            }
+          {
+            breakpoint: 1400,
+            options: { chart: { height: 275 } }
+          },
+          {
+            breakpoint: 576,
+            options: { chart: { height: 300 } }
+          }
         ]
-    };
-
-    if (c !== null) {
-        new ApexCharts(c, a).render();
-    }
-});
+      };
+      if (c) {
+        const chart = new ApexCharts(c, a);
+        chart.render();
+        // Custom category legends
+        const legendContainer = document.getElementById("carrierCustomLegend");
+        categories.forEach((label, i) => {
+          const item = document.createElement("div");
+          item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
+          item.innerHTML = `
+                  <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                  <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                `;
+          legendContainer.appendChild(item);
+        });
+      }
+    });
  document.addEventListener("DOMContentLoaded", function () {
   const c = document.querySelector("#carrierPerformance1");
 
