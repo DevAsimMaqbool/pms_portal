@@ -119,34 +119,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-    .flip-card-inner {
-      transition: none;
-    }
-    .flip-card-front,
-    .flip-card-back {
-      position: relative;
-      transform: none;
-      backface-visibility: visible;
-    }
-    .flip-card-back { display: none; } /* or display block on click via JS if needed */
+              .flip-card-inner {
+                transition: none;
+              }
+              .flip-card-front,
+              .flip-card-back {
+                position: relative;
+                transform: none;
+                backface-visibility: visible;
+              }
+              .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-   background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-   background-image:
-    radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-    radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+             background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+             background-image:
+              radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+              radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-  background-image:
-    radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-    radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-    radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+            background-image:
+              radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+              radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+              radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-    background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+              background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-   */
+             */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -340,31 +340,32 @@
                 <!-- BACK -->
                 <div class="flip-card-back card bg-info text-dark h-100">
                   <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                    <div class="badge rounded p-2 bg-label-info mb-2"><i class="icon-base ti {{ $iconClass }} icon-lg"></i></div>
+                    <div class="badge rounded p-2 bg-label-info mb-2"><i class="icon-base ti {{ $iconClass }} icon-lg"></i>
+                    </div>
                     <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] }}</h6>
-                @if ($kpa['id'] == 1)
-                            <p class=" text-center mb-0 text-white">
-                  Focuses on teaching quality, classroom management, and continuous improvement to enhance student
-                  learning outcomes.
-                  </p>
-                @elseif ($kpa['id'] == 2)
-                        <p class="text-center mb-0 text-white">
-                          Measures research output, quality, and supervision, emphasizing innovation and practical application
-                          of research for societal and industry impact.
-                        </p>
-                      @elseif ($kpa['id'] == 13)
-                        <p class="text-center mb-0 text-white">
-                          Focuses on active involvement in departmental and institutional activities to promote collaboration,
-                          visibility, and shared success.
-                        </p>
-                      @elseif ($kpa['id'] == 14)
-                        <p class="text-center mb-0 text-white">
-                          Represents ethical conduct and leadership grounded in integrity, empathy, humility, and
-                          accountability.
-                        </p>
-                      @else
-                        <p class="text-center mb-0 text-white">Other text</p>
-                      @endif
+                    @if ($kpa['id'] == 1)
+                      <p class=" text-center mb-0 text-white">
+                        Focuses on teaching quality, classroom management, and continuous improvement to enhance student
+                        learning outcomes.
+                      </p>
+                    @elseif ($kpa['id'] == 2)
+                      <p class="text-center mb-0 text-white">
+                        Measures research output, quality, and supervision, emphasizing innovation and practical application
+                        of research for societal and industry impact.
+                      </p>
+                    @elseif ($kpa['id'] == 13)
+                      <p class="text-center mb-0 text-white">
+                        Focuses on active involvement in departmental and institutional activities to promote collaboration,
+                        visibility, and shared success.
+                      </p>
+                    @elseif ($kpa['id'] == 14)
+                      <p class="text-center mb-0 text-white">
+                        Represents ethical conduct and leadership grounded in integrity, empathy, humility, and
+                        accountability.
+                      </p>
+                    @else
+                      <p class="text-center mb-0 text-white">Other text</p>
+                    @endif
                   </div>
                 </div>
 
@@ -388,7 +389,7 @@
 
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re on your way — just refine and push forward.
-  Every effort moves you closer to success.">
+            Every effort moves you closer to success.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-orange rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-smile icon-md"></i>
@@ -410,7 +411,7 @@
 
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-primary" data-bs-original-title="You’re achieving excellence with distinction.
-  You set the pace for others to follow.">
+            You set the pace for others to follow.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-primary rounded p-1_5 me-4"><i
@@ -432,7 +433,7 @@
 
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re doing well and meeting your goals.
-  Keep your consistency — it’s your strength.">
+            Keep your consistency — it’s your strength.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i
@@ -457,7 +458,7 @@
 
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-danger" data-bs-original-title="Not quite there yet — but growth starts here.
-  Reflect. Refocus. Rise higher.">
+            Reflect. Refocus. Rise higher.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
@@ -479,7 +480,7 @@
 
         <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.
-  Keep shining — your impact inspires others.">
+            Keep shining — your impact inspires others.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
@@ -821,8 +822,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-        #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-      `;
+                  #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -850,8 +851,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-        #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-      `;
+                  #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -997,10 +998,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-      <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-      border-radius:50%;margin-right:5px;"></span>
-      ${label} (${shortLabels[i]})
-      `;
+                <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                border-radius:50%;margin-right:5px;"></span>
+                ${label} (${shortLabels[i]})
+                `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1152,10 +1153,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-      <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-      border-radius:50%;margin-right:5px;"></span>
-      ${label} (${shortLabels[i]})
-      `;
+                <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                border-radius:50%;margin-right:5px;"></span>
+                ${label} (${shortLabels[i]})
+                `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1285,9 +1286,9 @@
           const item = document.createElement("div");
           item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
           item.innerHTML = `
-                    <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                    <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                  `;
+                              <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                              <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                            `;
           legendContainer.appendChild(item);
         });
       }
@@ -1349,6 +1350,7 @@
       chart.render();
     });
     document.addEventListener("DOMContentLoaded", function () {
+
       const chartLabels = [
         "Responsibility and Accountability",
         "Honesty and Integrity",
@@ -1378,11 +1380,11 @@
               label: "Inside Mirror",
               data: dataset1,
               fill: true,
-              backgroundColor: gradientPink,
+              //backgroundColor: gradientPink,
               borderColor: "rgba(255, 85, 184, 1)",
               borderWidth: 2,
               pointBorderColor: "#FF55B8",
-              pointBackgroundColor: "#fff",
+              pointBackgroundColor: "rgba(255, 85, 184, 1)",
               pointRadius: 5,
               pointHoverRadius: 7,
               pointStyle: 'circle'
@@ -1391,11 +1393,11 @@
               label: "Social Mirror",
               data: dataset2,
               fill: true,
-              backgroundColor: gradientBlue,
+              //backgroundColor: gradientBlue,
               borderColor: "rgba(85, 85, 255, 1)",
               borderWidth: 2,
               pointBorderColor: "#5555FF",
-              pointBackgroundColor: "#fff",
+              pointBackgroundColor: "rgba(85, 85, 255, 1)",
               pointRadius: 5,
               pointHoverRadius: 7,
               pointStyle: 'circle'
