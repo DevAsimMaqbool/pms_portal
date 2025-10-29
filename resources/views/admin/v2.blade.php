@@ -165,6 +165,18 @@ background-image:
 .scgrool-card-h{
   min-height: 91px;
 }
+.hover-card {
+  transition: all 0.3s ease;
+}
+
+.hover-card:hover {
+  background-color: #ffeaea; /* light red background */
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: change progress bar or badge color on hover */
+
 </style>
 @endpush
 @section('content')
@@ -196,7 +208,7 @@ background-image:
             <div class="card h-100">
               
               <div class="card-body d-flex justify-content-center align-items-center">
-                  <h4 class="mb-1 me-2 text-center">82%</h4>
+                  <h4 class="mb-0 text-center">82%</h4>
                 
                 
               </div>
@@ -206,7 +218,7 @@ background-image:
         <div class="col-lg-6 col-md-3 col-sm-6">
           <div class="card bg-success h-100"   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you." >
               <div class="card-body d-flex justify-content-center align-items-center">
-                  <h4 class="mb-1 me-2 text-center text-white">EE</h4>
+                  <h4 class="mb-0 text-center text-white">EE</h4>
                 
                
               </div>
@@ -335,7 +347,7 @@ background-image:
             </div>
            <!--/ Statistics -->
                     
-                <div class="card mb-6 scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re on your way — just refine and push forward.
+                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re on your way — just refine and push forward.
 Every effort moves you closer to success.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
@@ -355,7 +367,7 @@ Every effort moves you closer to success.">
                     </div>
                   </div>
 
-                  <div class="card mb-6 scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-primary" data-bs-original-title="You’re achieving excellence with distinction.
+                  <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-primary" data-bs-original-title="You’re achieving excellence with distinction.
 You set the pace for others to follow.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
@@ -375,7 +387,7 @@ You set the pace for others to follow.">
                     </div>
                   </div>
 
-                  <div class="card mb-6 scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re doing well and meeting your goals.
+                  <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re doing well and meeting your goals.
 Keep your consistency — it’s your strength.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
@@ -398,7 +410,7 @@ Keep your consistency — it’s your strength.">
                     
 
                    
-                  <div class="card mb-6 scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-danger" data-bs-original-title="Not quite there yet — but growth starts here.
+                  <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-danger" data-bs-original-title="Not quite there yet — but growth starts here.
 Reflect. Refocus. Rise higher.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
@@ -418,7 +430,7 @@ Reflect. Refocus. Rise higher.">
                     </div>
                   </div>
 
-                  <div class="card scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.
+                  <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.
 Keep shining — your impact inspires others.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
@@ -621,47 +633,15 @@ Keep shining — your impact inspires others.">
     <!-- Average Daily Sales -->
     <div class="col-xl-4 col-sm-6">
        <div class="card h-100">
-        <div class="card-header">
-          <div class="d-flex justify-content-between">
-            <p class="mb-0 text-body">Sales Overview</p>
-            <p class="card-text fw-medium text-success">+18.2%</p>
-          </div>
-          <h4 class="card-title mb-1">$42.5k</h4>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-4">
-              <div class="d-flex gap-2 align-items-center mb-2">
-                <span class="badge bg-label-info p-1 rounded"><i class="icon-base ti tabler-shopping-cart icon-sm"></i></span>
-                <p class="mb-0">Order</p>
-              </div>
-              <h5 class="mb-0 pt-1">62.2%</h5>
-              <small class="text-body-secondary">6,440</small>
-            </div>
-            <div class="col-4">
-              <div class="divider divider-vertical">
-                <div class="divider-text">
-                  <span class="badge-divider-bg bg-label-secondary">VS</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-4 text-end">
-              <div class="d-flex gap-2 justify-content-end align-items-center mb-2">
-                <p class="mb-0">Visits</p>
-                <span class="badge bg-label-primary p-1 rounded"><i class="icon-base ti tabler-link icon-sm"></i></span>
-              </div>
-              <h5 class="mb-0 pt-1">25.5%</h5>
-              <small class="text-body-secondary">12,749</small>
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <div class="card-title mb-0">
+              <h5 class="m-0 me-2">Virtue Mirror</h5>
             </div>
           </div>
-          <div class="d-flex align-items-center mt-6">
-            <div class="progress w-100" style="height: 10px;">
-              <div class="progress-bar bg-info" style="width: 70%" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-              <div class="progress-bar bg-primary" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+          <div class="card-body pt-2">
+            <canvas class="chartjs" id="virtueChart" data-height="355"></canvas>
           </div>
         </div>
-      </div>
     </div>
     <!--/ Average Daily Sales -->
     <!-- Website Analytics -->
@@ -1294,6 +1274,99 @@ document.addEventListener("DOMContentLoaded", function () {
   const chart = new ApexCharts(c, options);
   chart.render();
 });
+document.addEventListener("DOMContentLoaded", function () {
+      const chartLabels = [
+        "Responsibility and Accountability",
+        "Honesty and Integrity",
+        "Empathy and Compassion",
+        "Humility and Service",
+        "Patience and Gratitude",
+        "Courage and Drive"
+      ];
+      const dataset1 = [85, 90, 95, 85, 95, 100];
+      const dataset2 = [80, 90, 75, 80, 80, 80];
+      const canvas = document.getElementById("virtueChart");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      // Create gradients for fills
+      const gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
+      gradientBlue.addColorStop(0, "rgba(85, 85, 255, 0.9)");
+      gradientBlue.addColorStop(1, "rgba(151, 135, 255, 0.8)");
+      const gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
+      gradientPink.addColorStop(0, "rgba(255, 85, 184, 0.9)");
+      gradientPink.addColorStop(1, "rgba(255, 135, 135, 0.8)");
+      new Chart(ctx, {
+        type: "radar",
+        data: {
+          labels: chartLabels,
+          datasets: [
+            {
+              label: "Inside Mirror",
+              data: dataset1,
+              fill: true,
+              backgroundColor: gradientPink,
+              borderColor: "rgba(255, 85, 184, 1)",
+              borderWidth: 2,
+              pointBorderColor: "#FF55B8",
+              pointBackgroundColor: "#fff",
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              pointStyle: 'circle'
+            },
+            {
+              label: "Social Mirror",
+              data: dataset2,
+              fill: true,
+              backgroundColor: gradientBlue,
+              borderColor: "rgba(85, 85, 255, 1)",
+              borderWidth: 2,
+              pointBorderColor: "#5555FF",
+              pointBackgroundColor: "#fff",
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              pointStyle: 'circle'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 500 },
+          scales: {
+            r: {
+              beginAtZero: true,
+              suggestedMax: 100,
+              ticks: { display: false },
+              grid: { color: "rgba(0, 0, 0, 0.2)" },
+              angleLines: { color: "rgba(200, 200, 200, 0.2)" },
+              pointLabels: { color: "#9CA3AF", font: { size: 13 } }
+            }
+          },
+          plugins: {
+            legend: {
+              position: "top",
+              labels: {
+                padding: 25,
+                color: "#4B5563",
+                font: { size: 13, weight: "500" },
+                usePointStyle: true,
+                pointStyle: 'rectRounded'
+              }
+            },
+            tooltip: {
+              backgroundColor: "#fff",
+              titleColor: "#111827",
+              bodyColor: "#111827",
+              borderWidth: 1,
+              borderColor: "#ddd",
+              titleFont: { weight: "bold" },
+              bodyFont: { size: 13 },
+              padding: 10
+            }
+          }
+        }
+      });
+    });
 </script>
 
 @endpush
