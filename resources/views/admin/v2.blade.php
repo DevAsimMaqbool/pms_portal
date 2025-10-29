@@ -467,7 +467,7 @@ Keep shining — your impact inspires others.">
         
 
         <div class=" d-flex justify-content-between">
-        <h5 class="fw-bold">Top Performer</h5>
+        <h5 class="fw-bold">Top Performers</h5>
         </div>
 
         <div class="card mb-6">
@@ -1123,7 +1123,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("DOMContentLoaded", function () {
       const c = document.querySelector("#carrierPerformance");
       const categories = [
-        "Publications",
+        "Journal Publication",
         "Multidisciplinary Projects",
         "Commercial Gains",
         "Intellectual Properties",
@@ -1167,26 +1167,26 @@ document.addEventListener("DOMContentLoaded", function () {
           {
             name: "Target",
             data: [
-              { x: "Pub", y: 5, fillColor: colors[0] },
-              { x: "Pr", y: 5, fillColor: colors[1] },
-              { x: "CG", y: 5, fillColor: colors[2] },
-              { x: "IP", y: 5, fillColor: colors[3] },
+              { x: "JP", y: 5, fillColor: colors[0] },
+              { x: "MP", y: 7, fillColor: colors[1] },
+              { x: "CG", y: 3, fillColor: colors[2] },
+              { x: "IP", y: 6, fillColor: colors[3] },
               { x: "SO", y: 5, fillColor: colors[4] }
             ]
           },
           {
             name: "Achieved",
             data: [
-              { x: "Pub", y: 3, fillColor: lightColors[0] },
-              { x: "Pr", y: 3.5, fillColor: lightColors[1] },
-              { x: "CG", y: 3, fillColor: lightColors[2] },
-              { x: "IP", y: 2.5, fillColor: lightColors[3] },
-              { x: "SO", y: 3, fillColor: lightColors[4] }
+              { x: "JP", y: 4, fillColor: lightColors[0] },
+              { x: "MP", y: 3.5, fillColor: lightColors[1] },
+              { x: "CG", y: 2, fillColor: lightColors[2] },
+              { x: "IP", y: 4, fillColor: lightColors[3] },
+              { x: "SO", y: 2, fillColor: lightColors[4] }
             ]
           }
         ],
         xaxis: {
-          categories: ["Pub", "Pr", "CG", "IP", "SO"],
+          categories: ["JP", "MP", "CG", "IP", "SO"],
           labels: {
             style: {
               colors: "#6E6B7B",
