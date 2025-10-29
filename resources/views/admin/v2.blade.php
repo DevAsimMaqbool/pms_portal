@@ -162,7 +162,9 @@ background-image:
   border-radius: 12px; /* square with slightly rounded corners */
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
 }
-
+.scgrool-card-h{
+  min-height: 91px;
+}
 </style>
 @endpush
 @section('content')
@@ -329,11 +331,12 @@ background-image:
 
          <div class="col-md-6 col-lg-4" id="scrollableCol">
             <div class=" d-flex justify-content-between">
-            <h5 class="text-body-secondary">Hot Indicator</h5>
+            <h5 class="text-body-secondary">Hot Indicators</h5>
             </div>
            <!--/ Statistics -->
                     
-                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re going beyond what’s asked of you.">
+                <div class="card mb-6 scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re on your way — just refine and push forward.
+Every effort moves you closer to success.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-orange rounded p-1_5 me-4"><i
@@ -352,7 +355,8 @@ background-image:
                     </div>
                   </div>
 
-                  <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-primary" data-bs-original-title="You’re going beyond what’s asked of you.">
+                  <div class="card mb-6 scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-primary" data-bs-original-title="You’re achieving excellence with distinction.
+You set the pace for others to follow.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-primary rounded p-1_5 me-4"><i
@@ -371,7 +375,8 @@ background-image:
                     </div>
                   </div>
 
-                  <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re going beyond what’s asked of you.">
+                  <div class="card mb-6 scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re doing well and meeting your goals.
+Keep your consistency — it’s your strength.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-warning rounded p-1_5 me-4"><i
@@ -393,7 +398,8 @@ background-image:
                     
 
                    
-                  <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-danger" data-bs-original-title="You’re going beyond what’s asked of you.">
+                  <div class="card mb-6 scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-danger" data-bs-original-title="Not quite there yet — but growth starts here.
+Reflect. Refocus. Rise higher.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-danger rounded p-1_5 me-4"><i
@@ -412,7 +418,8 @@ background-image:
                     </div>
                   </div>
 
-                  <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.">
+                  <div class="card scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.
+Keep shining — your impact inspires others.">
                     <div class="card-body d-flex">                  
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-success rounded p-1_5 me-4"><i
@@ -439,7 +446,7 @@ background-image:
         
 
         <div class=" d-flex justify-content-between">
-        <h5 class="text-body-secondary">Top Performance</h5>
+        <h5 class="text-body-secondary">Top Performer</h5>
         </div>
 
         <div class="card mb-6">
@@ -1099,7 +1106,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       // ✅ Custom Legend
-      var legendDiv = document.getElementById("customLegend");
+      var legendDiv = document.getElementById("customLegend1");
       chartLabels.forEach((label, i) => {
         let li = document.createElement("li");
         li.className = "mx-3";
