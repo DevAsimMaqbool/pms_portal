@@ -340,7 +340,8 @@
                 <!-- BACK -->
                 <div class="flip-card-back card bg-info text-dark h-100">
                   <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                    <h6 class="mb-2 text-white"">What it's about</h6>
+                    <div class="badge rounded p-2 bg-label-info mb-2"><i class="icon-base ti {{ $iconClass }} icon-lg"></i></div>
+                    <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] }}</h6>
                 @if ($kpa['id'] == 1)
                             <p class=" text-center mb-0 text-white">
                   Focuses on teaching quality, classroom management, and continuous improvement to enhance student
@@ -517,9 +518,9 @@
               <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div class="me-2">
                   <div class="d-flex align-items-center">
-                    <h6 class="mb-0 me-1">Haider Ali</h6>
+                    <h6 class="mb-0 me-1">Haider Ali / Lecturer</h6>
                   </div>
-                  <small class="text-body">Lecturer</small>
+                  <small class="text-body">Department of Software Engineering</small>
                 </div>
                 <div class="user-progress">
                   <div class="badge bg-label-success">82</div>
@@ -538,9 +539,9 @@
               <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div class="me-2">
                   <div class="d-flex align-items-center">
-                    <h6 class="mb-0 me-1">Sadia Ashraf</h6>
+                    <h6 class="mb-0 me-1">Sadia Ashraf / Lecturer</h6>
                   </div>
-                  <small class="text-body">Lecturer</small>
+                  <small class="text-body">Superior University Franchise</small>
                 </div>
                 <div class="user-progress">
                   <div class="badge bg-label-primary">91</div>
@@ -560,9 +561,9 @@
               <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div class="me-2">
                   <div class="d-flex align-items-center">
-                    <h6 class="mb-0 me-1">Amna Ilyas</h6>
+                    <h6 class="mb-0 me-1">Amna Ilyas / Lecturer</h6>
                   </div>
-                  <small class="text-body">Lecturer</small>
+                  <small class="text-body">Superior University Franchise</small>
                 </div>
                 <div class="user-progress">
                   <div class="badge bg-label-warning">70</div>
@@ -581,9 +582,9 @@
               <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div class="me-2">
                   <div class="d-flex align-items-center">
-                    <h6 class="mb-0 me-1">Muhammad Ashraf</h6>
+                    <h6 class="mb-0 me-1">Muhammad Ashraf / Lecturer</h6>
                   </div>
-                  <small class="text-body">Lecturer</small>
+                  <small class="text-body">Teaching</small>
                 </div>
                 <div class="user-progress">
                   <div class="badge bg-label-danger">50</div>
@@ -603,9 +604,9 @@
               <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div class="me-2">
                   <div class="d-flex align-items-center">
-                    <h6 class="mb-0 me-1">Rashid Hussain</h6>
+                    <h6 class="mb-0 me-1">Rashid Hussain / Lecturer</h6>
                   </div>
-                  <small class="text-body">Lecturer</small>
+                  <small class="text-body">Faisalabad - Uni Campus</small>
                 </div>
                 <div class="user-progress">
                   <div class="badge bg-label-warning">70</div>
@@ -1297,6 +1298,7 @@
       const options = {
         chart: {
           type: 'area',
+          height: 400,
           toolbar: { show: false },
         },
         series: [
