@@ -340,7 +340,8 @@
                 <!-- BACK -->
                 <div class="flip-card-back card bg-info text-dark h-100">
                   <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                    <h6 class="mb-2 text-white"">What it's about</h6>
+                    <div class="badge rounded p-2 bg-label-info mb-2"><i class="icon-base ti {{ $iconClass }} icon-lg"></i></div>
+                    <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] }}</h6>
                 @if ($kpa['id'] == 1)
                             <p class=" text-center mb-0 text-white">
                   Focuses on teaching quality, classroom management, and continuous improvement to enhance student
@@ -1297,6 +1298,7 @@
       const options = {
         chart: {
           type: 'area',
+          height: 400,
           toolbar: { show: false },
         },
         series: [
