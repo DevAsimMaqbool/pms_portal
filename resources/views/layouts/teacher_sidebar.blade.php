@@ -140,6 +140,18 @@
           <div data-i18n="Notifications" id="swalCongrats">Notifications</div>
         </a>
       </li>
+      <li class="menu-item">
+        <a href="{{ route('dashboard_v1') }}"" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
+          <div data-i18n="v1">v1</div>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="{{ route('v2') }}"" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
+          <div data-i18n="v2">v2</div>
+        </a>
+      </li>
     @else
       <li class="menu-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
         <a href="{{ route('users.index') }}" class="menu-link">
