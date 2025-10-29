@@ -195,7 +195,11 @@ background-image:
           <div class="card" style="box-shadow: none;background: none;">
               <div class="card-header text-center">
                   <div class="card-title mb-0">
-                    <h5 class="mb-1">HI, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉</h5>
+                    <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉</h5>
+                    <span class="mb-2 badge rounded bg-label-success"
+                    style="display: inline-block; vertical-align: middle; margin-right: 134px;">
+                    {{ Auth::user()->job_title }}
+                  </span>
                     <p class="card-subtitle">Welcome to your Performance Hub</p>
                     
                   </div>
@@ -589,8 +593,7 @@ Keep shining — your impact inspires others.">
                   <div class="card caed-wave-bg ">
                       <div class="card-header d-flex justify-content-between">
                           <div class="card-title mb-0">
-                            <i class="icon-base ti tabler-chart-pie"></i>
-                            <h5 class="mb-1">Overall</h5>
+                            <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><span class="icon-xs icon-base ti tabler-star me-2"></span>Primary</button>
                           </div>
                           <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="View large" >
                             <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button" data-bs-toggle="modal" data-bs-target="#fullscreenModal">
@@ -754,7 +757,7 @@ Keep shining — your impact inspires others.">
     const windowHeight = window.innerHeight;
     
     // Set scroll height dynamically based on window height
-    const maxHeight = 470;
+    const maxHeight = 454;
     scrollableDiv.style.maxHeight = `${maxHeight}px`;
 
     // Enable vertical scroll
@@ -783,7 +786,7 @@ Keep shining — your impact inspires others.">
     const windowHeight = window.innerHeight;
     
     // Set scroll height dynamically based on window height
-    const maxHeight = 470;
+    const maxHeight = 454;
     scrollableDiv.style.maxHeight = `${maxHeight}px`;
 
     // Enable vertical scroll
