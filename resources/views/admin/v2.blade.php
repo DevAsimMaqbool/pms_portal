@@ -593,7 +593,7 @@ Keep shining — your impact inspires others.">
                   <div class="card caed-wave-bg ">
                       <div class="card-header d-flex justify-content-between">
                           <div class="card-title mb-0">
-                            <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><span class="icon-xs icon-base ti tabler-star me-2"></span>Primary</button>
+                            <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><span class="icon-xs icon-base ti tabler-chart-pie me-2"></span>Overall </button>
                           </div>
                           <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="View large" >
                             <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button" data-bs-toggle="modal" data-bs-target="#fullscreenModal">
