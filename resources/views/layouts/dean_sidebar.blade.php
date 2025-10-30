@@ -152,6 +152,12 @@
                 </li>
             @endforeach
       @endif
+      <li class="menu-item">
+        <a href="{{ route('v2') }}"" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
+          <div data-i18n="v2">v2</div>
+        </a>
+      </li>
     </ul>
 
 </aside>
