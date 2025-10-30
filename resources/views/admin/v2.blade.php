@@ -12,9 +12,10 @@
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
   <style>
-  .fs-10 {
-    font-size: 10px !important;
-  }
+    .fs-10 {
+      font-size: 10px !important;
+    }
+
     .bg-orange,
     .bg-label-orange {
       background-color: #fd7e1459 !important;
@@ -122,34 +123,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-              .flip-card-inner {
-                transition: none;
-              }
-              .flip-card-front,
-              .flip-card-back {
-                position: relative;
-                transform: none;
-                backface-visibility: visible;
-              }
-              .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                .flip-card-inner {
+                                                  transition: none;
+                                                }
+                                                .flip-card-front,
+                                                .flip-card-back {
+                                                  position: relative;
+                                                  transform: none;
+                                                  backface-visibility: visible;
+                                                }
+                                                .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-             background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-             background-image:
-              radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-              radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                               background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                               background-image:
+                                                radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-            background-image:
-              radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-              radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-              radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                              background-image:
+                                                radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-              background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-             */
+                                               */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -392,7 +393,7 @@
 
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re on your way — just refine and push forward.
-            Every effort moves you closer to success.">
+                                                              Every effort moves you closer to success.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-orange rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-smile icon-md"></i>
@@ -414,7 +415,7 @@
 
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-primary" data-bs-original-title="You’re achieving excellence with distinction.
-            You set the pace for others to follow.">
+                                                              You set the pace for others to follow.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-primary rounded p-1_5 me-4"><i
@@ -436,7 +437,7 @@
 
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re doing well and meeting your goals.
-            Keep your consistency — it’s your strength.">
+                                                              Keep your consistency — it’s your strength.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i
@@ -461,7 +462,7 @@
 
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-danger" data-bs-original-title="Not quite there yet — but growth starts here.
-            Reflect. Refocus. Rise higher.">
+                                                              Reflect. Refocus. Rise higher.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
@@ -483,7 +484,7 @@
 
         <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.
-            Keep shining — your impact inspires others.">
+                                                              Keep shining — your impact inspires others.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
@@ -513,19 +514,20 @@
         <div class=" d-flex justify-content-between">
           <h5 class="fw-bold">Top Performers</h5>
         </div>
-        
-        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success" data-bs-original-title="(Lecturer) Department of Software Engineering">
+
+        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success"
+          data-bs-original-title="(Lecturer) Department of Software Engineering">
           <div class="card-body d-flex">
             <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
               </div>
               <div>
                 <h6 class="mb-0 text-cut">Haider Ali / Lecturer</h6>
-                   <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
+                <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-              
+
               <span class="badge bg-label-success ms-1">82</span>
               <span class="badge bg-label-success ms-1">EE</span>
             </div>
@@ -534,36 +536,38 @@
 
 
 
-        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-primary" data-bs-original-title="(Lecturer) Superior University Franchise.">
+        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-primary"
+          data-bs-original-title="(Lecturer) Superior University Franchise.">
           <div class="card-body d-flex">
             <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-primary rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
               </div>
               <div>
                 <h6 class="mb-0 text-cut">Sadia Ashraf / Lecturer</h6>
-                   <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
+                <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-              
+
               <span class="badge bg-label-primary ms-1">91</span>
               <span class="badge bg-label-primary ms-1">OS</span>
             </div>
           </div>
         </div>
 
-        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="(Lecturer) Superior University Franchise">
+        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning"
+          data-bs-original-title="(Lecturer) Superior University Franchise">
           <div class="card-body d-flex">
             <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
               </div>
               <div>
                 <h6 class="mb-0 text-cut">Amna Ilyas / Lecturer</h6>
-                   <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
+                <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-              
+
               <span class="badge bg-label-warning ms-1">70</span>
               <span class="badge bg-label-warning ms-1">ME</span>
             </div>
@@ -571,46 +575,48 @@
         </div>
 
 
-       <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-danger" data-bs-original-title="(Lecturer) Teaching">
+        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-danger"
+          data-bs-original-title="(Lecturer) Teaching">
           <div class="card-body d-flex">
             <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy-off icon-md"></i>
               </div>
               <div>
-              <h6 class="mb-0 text-cut">Muhammad Ashraf / Lecturer</h6>
-                
-                   <small class="text-dark fs-10 text-cut">Teaching</small>
+                <h6 class="mb-0 text-cut">Muhammad Ashraf / Lecturer</h6>
+
+                <small class="text-dark fs-10 text-cut">Teaching</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-              
+
               <span class="badge bg-label-danger ms-1">50</span>
               <span class="badge bg-label-danger ms-1">BE</span>
             </div>
           </div>
         </div>
 
-        
 
-       <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="(Lecturer) Faisalabad - Uni Campus">
+
+        <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning"
+          data-bs-original-title="(Lecturer) Faisalabad - Uni Campus">
           <div class="card-body d-flex">
             <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
               </div>
               <div>
                 <h6 class="mb-0">Rashid Hussain / Lecturer</h6>
-                   <small class="text-dark fs-10">Faisalabad - Uni Campus</small>
+                <small class="text-dark fs-10">Faisalabad - Uni Campus</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-              
+
               <span class="badge bg-label-warning ms-1">70</span>
               <span class="badge bg-label-warning ms-1">ME</span>
             </div>
           </div>
         </div>
 
-      
+
 
 
 
@@ -691,9 +697,11 @@
               <h5 class="m-0 me-2">Virtue Mirror</h5>
             </div>
           </div>
+          <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
           <div class="card-body pt-2">
             <canvas class="chartjs" id="virtueChart" data-height="355"></canvas>
           </div>
+
         </div>
       </div>
       <!--/ Average Daily Sales -->
@@ -796,61 +804,61 @@
   <script src="{{ asset('admin/assets/js/extended-ui-perfect-scrollbar.js') }}"></script>
   <script src="{{ asset('admin/assets/js/cards-advance.js') }}"></script>
   <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const elements = document.querySelectorAll('.text-cut');
+    document.addEventListener("DOMContentLoaded", function () {
+      const elements = document.querySelectorAll('.text-cut');
 
-  function fitToOneLine(el) {
-    const originalText = el.dataset.originalText || el.textContent.trim();
-    el.dataset.originalText = originalText;
+      function fitToOneLine(el) {
+        const originalText = el.dataset.originalText || el.textContent.trim();
+        el.dataset.originalText = originalText;
 
-    // Create hidden clone to measure one-line height
-    const clone = el.cloneNode(true);
-    clone.style.whiteSpace = "nowrap";
-    clone.style.visibility = "hidden";
-    clone.style.position = "absolute";
-    clone.style.width = el.offsetWidth + "px";
-    document.body.appendChild(clone);
-    const singleLineHeight = clone.scrollHeight;
-    document.body.removeChild(clone);
+        // Create hidden clone to measure one-line height
+        const clone = el.cloneNode(true);
+        clone.style.whiteSpace = "nowrap";
+        clone.style.visibility = "hidden";
+        clone.style.position = "absolute";
+        clone.style.width = el.offsetWidth + "px";
+        document.body.appendChild(clone);
+        const singleLineHeight = clone.scrollHeight;
+        document.body.removeChild(clone);
 
-    const actualHeight = el.scrollHeight;
+        const actualHeight = el.scrollHeight;
 
-    // ✅ If text has wrapped
-    if (actualHeight > singleLineHeight) {
-      let text = originalText;
-      let low = 0;
-      let high = text.length;
-      let fitText = text;
+        // ✅ If text has wrapped
+        if (actualHeight > singleLineHeight) {
+          let text = originalText;
+          let low = 0;
+          let high = text.length;
+          let fitText = text;
 
-      // Binary search for the perfect cutoff point
-      while (low <= high) {
-        const mid = Math.floor((low + high) / 2);
-        el.textContent = text.slice(0, mid) + '...';
+          // Binary search for the perfect cutoff point
+          while (low <= high) {
+            const mid = Math.floor((low + high) / 2);
+            el.textContent = text.slice(0, mid) + '...';
 
-        if (el.scrollHeight > singleLineHeight) {
-          high = mid - 1;
+            if (el.scrollHeight > singleLineHeight) {
+              high = mid - 1;
+            } else {
+              fitText = text.slice(0, mid);
+              low = mid + 1;
+            }
+          }
+
+          el.textContent = fitText.trim() + '...';
         } else {
-          fitText = text.slice(0, mid);
-          low = mid + 1;
+          el.textContent = originalText;
         }
       }
 
-      el.textContent = fitText.trim() + '...';
-    } else {
-      el.textContent = originalText;
-    }
-  }
+      // ✅ Wait for fonts and layout to finish loading
+      window.addEventListener('load', function () {
+        elements.forEach(el => fitToOneLine(el));
+      });
 
-  // ✅ Wait for fonts and layout to finish loading
-  window.addEventListener('load', function () {
-    elements.forEach(el => fitToOneLine(el));
-  });
-
-  // ✅ Handle window resize dynamically
-  window.addEventListener('resize', function () {
-    elements.forEach(el => fitToOneLine(el));
-  });
-});
+      // ✅ Handle window resize dynamically
+      window.addEventListener('resize', function () {
+        elements.forEach(el => fitToOneLine(el));
+      });
+    });
     document.addEventListener("DOMContentLoaded", function () {
       const scrollableDiv = document.getElementById("scrollableCol");
       const windowHeight = window.innerHeight;
@@ -871,8 +879,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                  #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                `;
+                                                    #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                  `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -900,8 +908,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                  #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                `;
+                                                    #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                  `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1047,10 +1055,10 @@ document.addEventListener("DOMContentLoaded", function () {
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                border-radius:50%;margin-right:5px;"></span>
-                ${label} (${shortLabels[i]})
-                `;
+                                                  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                  border-radius:50%;margin-right:5px;"></span>
+                                                  ${label} (${shortLabels[i]})
+                                                  `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1202,10 +1210,10 @@ document.addEventListener("DOMContentLoaded", function () {
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                border-radius:50%;margin-right:5px;"></span>
-                ${label} (${shortLabels[i]})
-                `;
+                                                  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                  border-radius:50%;margin-right:5px;"></span>
+                                                  ${label} (${shortLabels[i]})
+                                                  `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1335,9 +1343,9 @@ document.addEventListener("DOMContentLoaded", function () {
           const item = document.createElement("div");
           item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
           item.innerHTML = `
-                              <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                              <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                            `;
+                                                                <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                              `;
           legendContainer.appendChild(item);
         });
       }
@@ -1399,7 +1407,6 @@ document.addEventListener("DOMContentLoaded", function () {
       chart.render();
     });
     document.addEventListener("DOMContentLoaded", function () {
-
       const chartLabels = [
         "Responsibility and Accountability",
         "Honesty and Integrity",
@@ -1413,6 +1420,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const canvas = document.getElementById("virtueChart");
       if (!canvas) return;
       const ctx = canvas.getContext("2d");
+
       // Create gradients for fills
       const gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
       gradientBlue.addColorStop(0, "rgba(85, 85, 255, 0.9)");
@@ -1420,7 +1428,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
       gradientPink.addColorStop(0, "rgba(255, 85, 184, 0.9)");
       gradientPink.addColorStop(1, "rgba(255, 135, 135, 0.8)");
-      new Chart(ctx, {
+
+      // Chart configuration
+      const config = {
         type: "radar",
         data: {
           labels: chartLabels,
@@ -1429,7 +1439,6 @@ document.addEventListener("DOMContentLoaded", function () {
               label: "Inside Mirror",
               data: dataset1,
               fill: true,
-              //backgroundColor: gradientPink,
               borderColor: "rgba(255, 85, 184, 1)",
               borderWidth: 2,
               pointBorderColor: "#FF55B8",
@@ -1442,7 +1451,6 @@ document.addEventListener("DOMContentLoaded", function () {
               label: "Social Mirror",
               data: dataset2,
               fill: true,
-              //backgroundColor: gradientBlue,
               borderColor: "rgba(85, 85, 255, 1)",
               borderWidth: 2,
               pointBorderColor: "#5555FF",
@@ -1468,16 +1476,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
           },
           plugins: {
-            legend: {
-              position: "top",
-              labels: {
-                padding: 25,
-                color: "#4B5563",
-                font: { size: 13, weight: "500" },
-                usePointStyle: true,
-                pointStyle: 'rectRounded'
-              }
-            },
+            legend: { display: false }, // Disable default legend
             tooltip: {
               backgroundColor: "#fff",
               titleColor: "#111827",
@@ -1490,6 +1489,46 @@ document.addEventListener("DOMContentLoaded", function () {
             }
           }
         }
+      };
+
+      const myChart = new Chart(ctx, config);
+
+      // === Custom Legend with Checkboxes ===
+      const legendContainer = document.getElementById("chart-legend");
+      const checkboxColors = ["#FF55B8", "#5555FF"]; // Inside Mirror, Social Mirror
+
+      myChart.data.datasets.forEach((dataset, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.style.display = "inline-flex";
+        wrapper.style.alignItems = "center";
+        wrapper.style.marginRight = "20px";
+        wrapper.style.cursor = "pointer";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `dataset-${index}`;
+        checkbox.checked = true;
+        checkbox.style.marginRight = "6px";
+
+        const label = document.createElement("label");
+        label.setAttribute("for", `dataset-${index}`);
+        label.style.color = checkboxColors[index];
+        label.style.fontWeight = "500";
+        label.style.fontSize = "14px";
+        label.textContent = dataset.label;
+
+        wrapper.appendChild(checkbox);
+        wrapper.appendChild(label);
+        legendContainer.appendChild(wrapper);
+
+        checkbox.addEventListener("change", (e) => {
+          const datasetIndex = index;
+          if (e.target.checked) {
+            myChart.show(datasetIndex);
+          } else {
+            myChart.hide(datasetIndex);
+          }
+        });
       });
     });
   </script>
