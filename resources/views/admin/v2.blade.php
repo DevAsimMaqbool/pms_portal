@@ -12,6 +12,9 @@
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
   <style>
+  .fs-10 {
+    font-size: 10px !important;
+  }
     .bg-orange,
     .bg-label-orange {
       background-color: #fd7e1459 !important;
@@ -511,14 +514,14 @@
           <h5 class="fw-bold">Top Performers</h5>
         </div>
         
-        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success" data-bs-original-title="Department of Software Engineering">
+        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success" data-bs-original-title="(Lecturer) Department of Software Engineering">
           <div class="card-body d-flex">
             <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
               </div>
               <div>
                 <h6 class="mb-0">Haider Ali / Lecturer</h6>
-                   <small class="text-dark">Department of Software Engineering</small>
+                   <small class="text-dark fs-10">Department of Software Engineering</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
@@ -531,14 +534,14 @@
 
 
 
-        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-primary" data-bs-original-title="Superior University Franchise.">
+        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-primary" data-bs-original-title="(Lecturer) Superior University Franchise.">
           <div class="card-body d-flex">
             <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-primary rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
               </div>
               <div>
                 <h6 class="mb-0">Sadia Ashraf / Lecturer</h6>
-                   <small class="text-dark">Superior University Franchise</small>
+                   <small class="text-dark fs-10">Superior University Franchise</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
@@ -549,14 +552,14 @@
           </div>
         </div>
 
-        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="Superior University Franchise">
+        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="(Lecturer) Superior University Franchise">
           <div class="card-body d-flex">
             <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
               </div>
               <div>
                 <h6 class="mb-0">Amna Ilyas / Lecturer</h6>
-                   <small class="text-dark">Superior University Franchise</small>
+                   <small class="text-dark fs-10">Superior University Franchise</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
@@ -568,14 +571,14 @@
         </div>
 
 
-       <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-danger" data-bs-original-title="Teaching">
+       <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-danger" data-bs-original-title="(Lecturer) Teaching">
           <div class="card-body d-flex">
             <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy-off icon-md"></i>
               </div>
               <div>
                 <h6 class="mb-0">Muhammad Ashraf / Lecturer</h6>
-                   <small class="text-dark">Teaching</small>
+                   <small class="text-dark fs-10">Teaching</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
@@ -588,14 +591,14 @@
 
         
 
-       <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="Faisalabad - Uni Campus">
+       <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="(Lecturer) Faisalabad - Uni Campus">
           <div class="card-body d-flex">
             <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
               </div>
               <div>
                 <h6 class="mb-0">Rashid Hussain / Lecturer</h6>
-                   <small class="text-dark">Faisalabad - Uni Campus</small>
+                   <small class="text-dark fs-10">Faisalabad - Uni Campus</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
