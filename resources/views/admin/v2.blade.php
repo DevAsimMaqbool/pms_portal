@@ -15,6 +15,9 @@
     .fs-10 {
       font-size: 10px !important;
     }
+    .fs-13 {
+      font-size: 13px !important;
+    }
 
     .bg-orange,
     .bg-label-orange {
@@ -346,29 +349,29 @@
                   <div class="card-body d-flex flex-column justify-content-center align-items-center">
                     <div class="badge rounded p-2 bg-label-info mb-2"><i class="icon-base ti {{ $iconClass }} icon-lg"></i>
                     </div>
-                    <h6 class="mb-2 text-white text-center fw-bold">{{ $kpa['performance_area'] }}</h6>
+                    <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
                     @if ($kpa['id'] == 1)
-                      <p class=" text-center mb-0 text-white">
+                      <p class=" text-center mb-0 text-white fs-13">
                         Focuses on teaching quality, classroom management, and continuous improvement to enhance student
                         learning outcomes.
                       </p>
                     @elseif ($kpa['id'] == 2)
-                      <p class="text-center mb-0 text-white">
+                      <p class="text-center mb-0 text-white fs-13">
                         Measures research output, quality, and supervision, emphasizing innovation and practical application
                         of research for societal and industry impact.
                       </p>
                     @elseif ($kpa['id'] == 13)
-                      <p class="text-center mb-0 text-white">
+                      <p class="text-center mb-0 text-white fs-13">
                         Focuses on active involvement in departmental and institutional activities to promote collaboration,
                         visibility, and shared success.
                       </p>
                     @elseif ($kpa['id'] == 14)
-                      <p class="text-center mb-0 text-white">
+                      <p class="text-center mb-0 text-white fs-13">
                         Represents ethical conduct and leadership grounded in integrity, empathy, humility, and
                         accountability.
                       </p>
                     @else
-                      <p class="text-center mb-0 text-white">Other text</p>
+                      <p class="text-center mb-0 text-white fs-13">Other text</p>
                     @endif
                   </div>
                 </div>
