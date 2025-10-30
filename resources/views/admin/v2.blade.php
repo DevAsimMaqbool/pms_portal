@@ -592,7 +592,7 @@
 
         
 
-       <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="(Lecturer) Faisalabad - Uni Campus">
+       <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="(Lecturer) Faisalabad - Uni Campus">
           <div class="card-body d-flex">
             <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
