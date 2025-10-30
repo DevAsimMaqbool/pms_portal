@@ -577,7 +577,7 @@
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy-off icon-md"></i>
               </div>
               <div>
-              <h6 class="mb-0 text-cut">Muhammad Ashraf / Lecturer aaap </h6>
+              <h6 class="mb-0 text-cut">Muhammad Ashraf / Lecturer</h6>
                 
                    <small class="text-dark fs-10 text-cut">Teaching</small>
               </div>
