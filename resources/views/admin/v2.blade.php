@@ -521,7 +521,7 @@
                    <small class="text-dark">Department of Software Engineering</small>
               </div>
             </div>
-            <div class="d-flex flex-grow-1 align-items-center">
+            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
               
               <span class="badge bg-label-success ms-1">82</span>
               <span class="badge bg-label-success ms-1">EE</span>
@@ -541,7 +541,7 @@
                    <small class="text-dark">Superior University Franchise</small>
               </div>
             </div>
-            <div class="d-flex flex-grow-1 align-items-center">
+            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
               
               <span class="badge bg-label-primary ms-1">91</span>
               <span class="badge bg-label-primary ms-1">OS</span>
@@ -559,7 +559,7 @@
                    <small class="text-dark">Superior University Franchise</small>
               </div>
             </div>
-            <div class="d-flex flex-grow-1 align-items-center">
+            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
               
               <span class="badge bg-label-warning ms-1">70</span>
               <span class="badge bg-label-warning ms-1">ME</span>
@@ -578,7 +578,7 @@
                    <small class="text-dark">Teaching</small>
               </div>
             </div>
-            <div class="d-flex flex-grow-1 align-items-center">
+            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
               
               <span class="badge bg-label-danger ms-1">50</span>
               <span class="badge bg-label-danger ms-1">BE</span>
@@ -598,7 +598,7 @@
                    <small class="text-dark">Faisalabad - Uni Campus</small>
               </div>
             </div>
-            <div class="d-flex flex-grow-1 align-items-center">
+            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
               
               <span class="badge bg-label-warning ms-1">70</span>
               <span class="badge bg-label-warning ms-1">ME</span>
