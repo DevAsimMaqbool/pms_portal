@@ -227,7 +227,7 @@
                   <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉</h5>
                   <span class="mb-2 badge rounded bg-label-success"
                     style="display: inline-block; vertical-align: middle; margin-right: 134px;">
-                    {{ Auth::user()->job_title }}
+                    {{ Auth::user()->department }}
                   </span>
                   <p class="card-subtitle">Welcome to your Performance Hub</p>
 
@@ -510,113 +510,103 @@
         <div class=" d-flex justify-content-between">
           <h5 class="fw-bold">Top Performers</h5>
         </div>
-
-        <div class="card mb-6">
-          <div class="card-body">
-            <div class="d-flex align-items-center">
+        
+        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success" data-bs-original-title="Department of Software Engineering">
+          <div class="card-body d-flex">
+            <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
               </div>
-              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                <div class="me-2">
-                  <div class="d-flex align-items-center">
-                    <h6 class="mb-0 me-1">Haider Ali / Lecturer</h6>
-                  </div>
-                  <small class="text-body">Department of Software Engineering</small>
-                </div>
-                <div class="user-progress">
-                  <div class="badge bg-label-success">82</div>
-                  <div class="badge bg-label-success">EE</div>
-                </div>
+              <div>
+                <h6 class="mb-0">Haider Ali / Lecturer</h6>
+                   <small class="text-dark">Department of Software Engineering</small>
               </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+              
+              <span class="badge bg-label-success ms-1">82</span>
+              <span class="badge bg-label-success ms-1">EE</span>
             </div>
           </div>
         </div>
 
-        <div class="card mb-6">
-          <div class="card-body">
-            <div class="d-flex align-items-center">
+
+
+        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-primary" data-bs-original-title="Superior University Franchise.">
+          <div class="card-body d-flex">
+            <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-primary rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
               </div>
-              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                <div class="me-2">
-                  <div class="d-flex align-items-center">
-                    <h6 class="mb-0 me-1">Sadia Ashraf / Lecturer</h6>
-                  </div>
-                  <small class="text-body">Superior University Franchise</small>
-                </div>
-                <div class="user-progress">
-                  <div class="badge bg-label-primary">91</div>
-                  <div class="badge bg-label-primary">OS</div>
-                </div>
+              <div>
+                <h6 class="mb-0">Sadia Ashraf / Lecturer</h6>
+                   <small class="text-dark">Superior University Franchise</small>
               </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+              
+              <span class="badge bg-label-primary ms-1">91</span>
+              <span class="badge bg-label-primary ms-1">OS</span>
             </div>
           </div>
         </div>
 
-
-        <div class="card mb-6">
-          <div class="card-body">
-            <div class="d-flex align-items-center">
+        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="Superior University Franchise">
+          <div class="card-body d-flex">
+            <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
               </div>
-              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                <div class="me-2">
-                  <div class="d-flex align-items-center">
-                    <h6 class="mb-0 me-1">Amna Ilyas / Lecturer</h6>
-                  </div>
-                  <small class="text-body">Superior University Franchise</small>
-                </div>
-                <div class="user-progress">
-                  <div class="badge bg-label-warning">70</div>
-                  <div class="badge bg-label-warning">ME</div>
-                </div>
+              <div>
+                <h6 class="mb-0">Amna Ilyas / Lecturer</h6>
+                   <small class="text-dark">Superior University Franchise</small>
               </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+              
+              <span class="badge bg-label-warning ms-1">70</span>
+              <span class="badge bg-label-warning ms-1">ME</span>
             </div>
           </div>
         </div>
 
-        <div class="card mb-6">
-          <div class="card-body">
-            <div class="d-flex align-items-center">
+
+       <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-danger" data-bs-original-title="Teaching">
+          <div class="card-body d-flex">
+            <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy-off icon-md"></i>
               </div>
-              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                <div class="me-2">
-                  <div class="d-flex align-items-center">
-                    <h6 class="mb-0 me-1">Muhammad Ashraf / Lecturer</h6>
-                  </div>
-                  <small class="text-body">Teaching</small>
-                </div>
-                <div class="user-progress">
-                  <div class="badge bg-label-danger">50</div>
-                  <div class="badge bg-label-danger">BE</div>
-                </div>
+              <div>
+                <h6 class="mb-0">Muhammad Ashraf / Lecturer</h6>
+                   <small class="text-dark">Teaching</small>
               </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+              
+              <span class="badge bg-label-danger ms-1">50</span>
+              <span class="badge bg-label-danger ms-1">BE</span>
             </div>
           </div>
         </div>
 
+        
 
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex align-items-center">
+       <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning" data-bs-original-title="Faisalabad - Uni Campus">
+          <div class="card-body d-flex">
+            <div class="d-flex w-70 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
               </div>
-              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                <div class="me-2">
-                  <div class="d-flex align-items-center">
-                    <h6 class="mb-0 me-1">Rashid Hussain / Lecturer</h6>
-                  </div>
-                  <small class="text-body">Faisalabad - Uni Campus</small>
-                </div>
-                <div class="user-progress">
-                  <div class="badge bg-label-warning">70</div>
-                  <div class="badge bg-label-warning">ME</div>
-                </div>
+              <div>
+                <h6 class="mb-0">Rashid Hussain / Lecturer</h6>
+                   <small class="text-dark">Faisalabad - Uni Campus</small>
               </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+              
+              <span class="badge bg-label-warning ms-1">70</span>
+              <span class="badge bg-label-warning ms-1">ME</span>
             </div>
           </div>
         </div>
+
+      
 
 
 
@@ -1305,7 +1295,7 @@
         series: [
           {
             name: 'Performance',
-            data: [10, 15, 20, 25, 30, 35]
+            data: [20, 40, 60, 70, 80, 90]
           }
         ],
         xaxis: {
