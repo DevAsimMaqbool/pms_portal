@@ -345,7 +345,7 @@
                   <div class="card-body d-flex flex-column justify-content-center align-items-center">
                     <div class="badge rounded p-2 bg-label-info mb-2"><i class="icon-base ti {{ $iconClass }} icon-lg"></i>
                     </div>
-                    <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] }}</h6>
+                    <h6 class="mb-2 text-white text-center fw-bold">{{ $kpa['performance_area'] }}</h6>
                     @if ($kpa['id'] == 1)
                       <p class=" text-center mb-0 text-white">
                         Focuses on teaching quality, classroom management, and continuous improvement to enhance student
@@ -520,8 +520,8 @@
               <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
               </div>
               <div>
-                <h6 class="mb-0">Haider Ali / Lecturer</h6>
-                   <small class="text-dark fs-10">Department of Software Engineering</small>
+                <h6 class="mb-0 text-cut">Haider Ali / Lecturer</h6>
+                   <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
@@ -540,8 +540,8 @@
               <div class="badge bg-label-primary rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
               </div>
               <div>
-                <h6 class="mb-0">Sadia Ashraf / Lecturer</h6>
-                   <small class="text-dark fs-10">Superior University Franchise</small>
+                <h6 class="mb-0 text-cut">Sadia Ashraf / Lecturer</h6>
+                   <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
@@ -558,8 +558,8 @@
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
               </div>
               <div>
-                <h6 class="mb-0">Amna Ilyas / Lecturer</h6>
-                   <small class="text-dark fs-10">Superior University Franchise</small>
+                <h6 class="mb-0 text-cut">Amna Ilyas / Lecturer</h6>
+                   <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
@@ -577,8 +577,9 @@
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy-off icon-md"></i>
               </div>
               <div>
-                <h6 class="mb-0">Muhammad Ashraf / Lecturer</h6>
-                   <small class="text-dark fs-10">Teaching</small>
+              <h6 class="mb-0 text-cut">Muhammad Ashraf / Lecturer aaap </h6>
+                
+                   <small class="text-dark fs-10 text-cut">Teaching</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
@@ -795,6 +796,61 @@
   <script src="{{ asset('admin/assets/js/extended-ui-perfect-scrollbar.js') }}"></script>
   <script src="{{ asset('admin/assets/js/cards-advance.js') }}"></script>
   <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const elements = document.querySelectorAll('.text-cut');
+
+  function fitToOneLine(el) {
+    const originalText = el.dataset.originalText || el.textContent.trim();
+    el.dataset.originalText = originalText;
+
+    // Create hidden clone to measure one-line height
+    const clone = el.cloneNode(true);
+    clone.style.whiteSpace = "nowrap";
+    clone.style.visibility = "hidden";
+    clone.style.position = "absolute";
+    clone.style.width = el.offsetWidth + "px";
+    document.body.appendChild(clone);
+    const singleLineHeight = clone.scrollHeight;
+    document.body.removeChild(clone);
+
+    const actualHeight = el.scrollHeight;
+
+    // ✅ If text has wrapped
+    if (actualHeight > singleLineHeight) {
+      let text = originalText;
+      let low = 0;
+      let high = text.length;
+      let fitText = text;
+
+      // Binary search for the perfect cutoff point
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        el.textContent = text.slice(0, mid) + '...';
+
+        if (el.scrollHeight > singleLineHeight) {
+          high = mid - 1;
+        } else {
+          fitText = text.slice(0, mid);
+          low = mid + 1;
+        }
+      }
+
+      el.textContent = fitText.trim() + '...';
+    } else {
+      el.textContent = originalText;
+    }
+  }
+
+  // ✅ Wait for fonts and layout to finish loading
+  window.addEventListener('load', function () {
+    elements.forEach(el => fitToOneLine(el));
+  });
+
+  // ✅ Handle window resize dynamically
+  window.addEventListener('resize', function () {
+    elements.forEach(el => fitToOneLine(el));
+  });
+});
     document.addEventListener("DOMContentLoaded", function () {
       const scrollableDiv = document.getElementById("scrollableCol");
       const windowHeight = window.innerHeight;
