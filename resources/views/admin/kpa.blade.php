@@ -101,19 +101,33 @@ Character virtues create the moral compass for excellence. They nurture ethical 
             <!-- Right chart -->
             <div class="col-12 col-md-8">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between"">
-                                                                                    <h5 class=" card-title mb-0">
-                        {{ $area['performance_area'] }}
-                        Performance
-                        </h5>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-                            <input type="radio" class="btn-check" name="btnradio2" id="dailyRadio2" checked>
-                            <label class="btn btn-outline-primary waves-effect" for="dailyRadio2"> 📆 Spring 2025</label>
+                    <div class="card-header">
+  <div class="row w-100 align-items-center">
+    
+    <!-- Left side -->
+    <div class="col-md-5">
+      <h5 class="card-title mb-0">
+        {{ $area['performance_area'] }} Performance
+      </h5>
+    </div>
 
-                            <input type="radio" class="btn-check" name="btnradio2" id="monthlyRadio2">
-                            <label class="btn btn-outline-primary waves-effect" for="monthlyRadio2"> 📆 Fall 2025</label>
-                        </div>
-                    </div>
+    <!-- Right side -->
+    <div class="col-md-7 text-md-end text-start p-0">
+      <div class="btn-group" role="group" aria-label="radio toggle button group">
+        <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
+        <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
+
+        <input type="radio" class="btn-check" name="termRadio" id="spring25">
+        <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
+
+        <input type="radio" class="btn-check" name="termRadio" id="fall25">
+        <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
+      </div>
+    </div>
+
+  </div>
+</div>
+
                     <div class="card-body pt-2">
                         {{-- <canvas class="chartjs" id="radarChart" data-height="355"></canvas> --}}
                         <div class="row justify-content-center text-center">
@@ -334,6 +348,29 @@ Character virtues create the moral compass for excellence. They nurture ethical 
                         }
                     }
                 });
+                 
+                 document.getElementById("overall").addEventListener("change", function () {
+        if (this.checked) {
+                 const staticValues=[70, 90, 85, 80];
+          radarChart.data.datasets[0].data = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
+          radarChart.update();
+        }
+      });
+      document.getElementById("spring25").addEventListener("change", function () {
+        if (this.checked) {
+          const staticValues=[60, 70, 80, 90];
+          radarChart.data.datasets[0].data = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
+          radarChart.update();
+        }
+      });
+
+      document.getElementById("fall25").addEventListener("change", function () {
+        if (this.checked) {
+          const staticValues=[90, 80, 70, 60];
+          radarChart.data.datasets[0].data = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
+          radarChart.update();
+        }
+      });
 
                 // ✅ Custom Legend
                 const legendDiv = document.getElementById("customLegend");

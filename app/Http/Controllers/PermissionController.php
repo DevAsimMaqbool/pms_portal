@@ -225,6 +225,12 @@ class PermissionController extends Controller
 
         if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor') {
             return view('admin.v2', compact('employee'));
+        }else
+        if ($role->name == 'HOD') {
+            return view('admin.hod-v2', compact('employee'));
+        }else
+        if ($role->name == 'Dean') {
+            return view('admin.dean-v2', compact('employee'));
         } else {
             return view('admin.teacher_dashbord', compact('employee'));
         }
