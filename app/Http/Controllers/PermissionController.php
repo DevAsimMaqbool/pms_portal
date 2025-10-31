@@ -79,7 +79,7 @@ class PermissionController extends Controller
         if ($role->name == 'Rector') {
             return redirect()->route('rector-dashboard.index');
         }
-        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor') {
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor') {
             return view('admin.teacher_dashbord', compact('employee'));
         } elseif ($role->name == 'Survey') {
             return view('admin.survey_dashbord', compact('employee'));
@@ -155,15 +155,15 @@ class PermissionController extends Controller
         $categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
         $data = [100, 40, 50, 60, 70, 80, 90, 85];
 
-       
-        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor') {
+
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor') {
             return view('admin.teacher_dashbord_bk', compact('employee'));
         } else {
             return view('admin.teacher_dashbord', compact('employee'));
         }
 
     }
-     public function V2(Request $request)
+    public function V2(Request $request)
     {
         // $token = session('access_token');
         // $userId = session('user_id');
@@ -222,8 +222,8 @@ class PermissionController extends Controller
         $categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
         $data = [100, 40, 50, 60, 70, 80, 90, 85];
 
-       
-        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor') {
+
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor') {
             return view('admin.v2', compact('employee'));
         } else {
             return view('admin.teacher_dashbord', compact('employee'));
