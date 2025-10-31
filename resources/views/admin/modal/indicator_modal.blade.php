@@ -109,7 +109,7 @@
                                             <td><span class="badge bg-label-success">85%</span></td>
                                             <td><span class="badge bg-label-success">EE</span></td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <td>3</td>
                                             <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
@@ -142,9 +142,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                         <tr>
+                                        <tr>
                                             <td>1</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22   </td>
+                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22 </td>
                                             <td>BSSE</td>
                                             <td>UG</td>
                                             <td>60</td>
@@ -154,7 +154,7 @@
                                         </tr>
                                         <tr>
                                             <td>2</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL  2023-2027-BSAI-F23-5A</td>
+                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5A</td>
                                             <td>BSCS</td>
                                             <td>UG</td>
                                             <td>50</td>
@@ -162,7 +162,7 @@
                                             <td><span class="badge bg-label-warning">85%</span></td>
                                             <td><span class="badge bg-label-warning">ME</span></td>
                                         </tr>
-                                       
+
                                         <tr>
                                             <td>3</td>
                                             <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
@@ -366,7 +366,7 @@
                                     <th>Program</th>
                                     <th>Present</th>
                                     <th>Absent</th>
-                                    <th>%</th>
+                                    <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
                                 </thead>
@@ -454,7 +454,7 @@
                                     <th>Scheduled</th>
                                     <th>Held</th>
                                     <th>Not Held</th>
-                                    <th>%</th>
+                                    <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
                                 </thead>
@@ -515,20 +515,20 @@
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     <div class="badge bg-label-primary rounded p-2"><i
-                            class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> Number of Knowledge Products
+                            class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Other Knowledge Products
                 </h3>
                 <div class="card">
-                   
+
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
                                 <thead class=" table-primary">
                                 <tr>
                                     <th>Sr#</th>
-                                    <th>KPA</th>
+                                    <th>Product</th>
                                     <th>Target</th>
                                     <th>Achieved</th>
-                                    <th>%</th>
+                                    <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
                                 </thead>
@@ -563,7 +563,7 @@
                                         </td>
                                         <td><span class="badge bg-label-danger me-1">BE</span></td>
                                     </tr>
-                                     <tr>
+                                    <tr>
                                         <td>4</td>
                                         <td>White Papers</td>
                                         <td>20</td>
@@ -573,7 +573,7 @@
                                         </td>
                                         <td><span class="badge bg-label-warning me-1">ME</span></td>
                                     </tr>
-                                     <tr>
+                                    <tr>
                                         <td>5</td>
                                         <td>Case Studies</td>
                                         <td>10</td>
@@ -644,7 +644,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                         <tr>
+                                        <tr>
                                             <td>1</td>
                                             <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
                                             <td>
@@ -656,7 +656,7 @@
                                             <td><span class="badge bg-label-primary me-1">OS</span></td>
                                         </tr>
 
-                                         <tr>
+                                        <tr>
                                             <td>2</td>
                                             <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
                                             <td>
@@ -680,7 +680,7 @@
                                         </tr>
 
 
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -832,7 +832,7 @@
                                             <td><span class="badge bg-label-danger me-1">BE</span></td>
                                         </tr>
 
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -934,7 +934,7 @@
                                 <tr>
                                     <th>Sr#</th>
                                     <th>Class</th>
-                                    <th>%</th>
+                                    <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
                                 </thead>
@@ -1234,7 +1234,7 @@
                                             <th>Semester</th>
                                             <th>Course Name</th>
                                             <th>Program</th>
-                                            
+
 
                                         </tr>
                                     </thead>
@@ -1384,7 +1384,7 @@
                                 <tr>
                                     <th>Sr#</th>
                                     <th>Class</th>
-                                    <th>%</th>
+                                    <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
                                 </thead>
@@ -1433,7 +1433,7 @@
                                 <tr>
                                     <th>Sr#</th>
                                     <th>Class</th>
-                                    <th>%</th>
+                                    <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
                                 </thead>
@@ -1636,7 +1636,7 @@
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
-                                            <th>Áverage %</th>
+                                            <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
                                     </thead>
@@ -1672,7 +1672,7 @@
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
-                                            <th>Áverage %</th>
+                                            <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
                                     </thead>
@@ -1881,7 +1881,8 @@
                                             <th>Sr#</th>
                                             <th>Target</th>
                                             <th>Achieved</th>
-                                            <th>% Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
                                             <th>International</th>
                                             <th>Q1</th>
                                             <th>Q2</th>
@@ -1895,8 +1896,9 @@
                                             <td>1</td>
                                             <td>3</td>
                                             <td>
-                                                <div class=" badge bg-label-success">60%</div>
+                                                <div class=" badge bg-label-orange">60%</div>
                                             </td>
+                                            <td><span class="badge bg-label-orange">NI</span></td>
                                             <td>1</td>
                                             <td>1</td>
                                             <td>0</td>
@@ -1908,8 +1910,9 @@
                                             <td>1</td>
                                             <td>2</td>
                                             <td>
-                                                <div class=" badge bg-label-success">50%</div>
+                                                <div class=" badge bg-label-danger">50%</div>
                                             </td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                             <td>1</td>
                                             <td>1</td>
                                             <td>0</td>
@@ -1932,7 +1935,8 @@
                                             <th>Sr#</th>
                                             <th>Target</th>
                                             <th>Achieved</th>
-                                            <th>% Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
                                             <th>International</th>
                                             <th>Q1</th>
                                             <th>Q2</th>
@@ -1946,8 +1950,9 @@
                                             <td>1</td>
                                             <td>2</td>
                                             <td>
-                                                <div class=" badge bg-label-success">50%</div>
+                                                <div class=" badge bg-label-danger">50%</div>
                                             </td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                             <td>1</td>
                                             <td>1</td>
                                             <td>0</td>
@@ -1959,8 +1964,9 @@
                                             <td>1</td>
                                             <td>3</td>
                                             <td>
-                                                <div class=" badge bg-label-success">60%</div>
+                                                <div class=" badge bg-label-orange">60%</div>
                                             </td>
+                                            <td><span class="badge bg-label-orange">NI</span></td>
                                             <td>1</td>
                                             <td>1</td>
                                             <td>0</td>
@@ -2024,7 +2030,8 @@
                                             <th>Sr#</th>
                                             <th>Target</th>
                                             <th>Achieved</th>
-                                            <th>% Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
                                             <th>International</th>
                                             <th>Q1</th>
                                             <th>Q2</th>
@@ -2038,8 +2045,9 @@
                                             <td>1</td>
                                             <td>3</td>
                                             <td>
-                                                <div class=" badge bg-label-success">60%</div>
+                                                <div class=" badge bg-label-orange">60%</div>
                                             </td>
+                                            <td><span class="badge bg-label-orange">NI</span></td>
                                             <td>1</td>
                                             <td>1</td>
                                             <td>0</td>
@@ -2051,8 +2059,9 @@
                                             <td>1</td>
                                             <td>2</td>
                                             <td>
-                                                <div class=" badge bg-label-success">50%</div>
+                                                <div class=" badge bg-label-danger">50%</div>
                                             </td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                             <td>1</td>
                                             <td>1</td>
                                             <td>0</td>
@@ -2073,7 +2082,8 @@
                                             <th>Sr#</th>
                                             <th>Target</th>
                                             <th>Achieved</th>
-                                            <th>% Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
                                             <th>International</th>
                                             <th>Q1</th>
                                             <th>Q2</th>
@@ -2087,8 +2097,9 @@
                                             <td>1</td>
                                             <td>3</td>
                                             <td>
-                                                <div class=" badge bg-label-success">60%</div>
+                                                <div class=" badge bg-label-danger">50%</div>
                                             </td>
+                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
                                             <td>1</td>
                                             <td>1</td>
                                             <td>0</td>
@@ -2100,8 +2111,9 @@
                                             <td>1</td>
                                             <td>2</td>
                                             <td>
-                                                <div class=" badge bg-label-success">50%</div>
+                                                <div class=" badge bg-label-orange">60%</div>
                                             </td>
+                                            <td><span class="badge bg-label-orange">NI</span></td>
                                             <td>1</td>
                                             <td>1</td>
                                             <td>0</td>
@@ -2376,7 +2388,7 @@
                                             <td><span class="badge bg-label-warning">77%</span></td>
                                             <td><span class="badge bg-label-warning">ME</span></td>
                                         </tr>
-                                         <tr>
+                                        <tr>
                                             <td>3</td>
                                             <td>Empathy & Compassion</td>
                                             <td><span class="badge bg-label-orange">67%</span></td>
@@ -2388,9 +2400,9 @@
                                             <td><span class="badge bg-label-danger">59%</span></td>
                                             <td><span class="badge bg-label-danger">BE</span></td>
                                         </tr>
-                                       
-                                        
-                                        
+
+
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2412,29 +2424,29 @@
                                         <tr>
                                             <td>1</td>
                                             <td>Honesty & Integrity</td>
-                                            <td><span class="badge bg-label-success">88%</span></td>
+                                            <td><span class="badge bg-label-success">85%</span></td>
                                             <td><span class="badge bg-label-success">EE</span></td>
                                         </tr>
-                                         <tr>
+                                        <tr>
                                             <td>2</td>
                                             <td>Humility & Service</td>
-                                            <td><span class="badge bg-label-warning">77%</span></td>
+                                            <td><span class="badge bg-label-warning">75%</span></td>
                                             <td><span class="badge bg-label-warning">ME</span></td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
                                             <td>Empathy & Compassion</td>
-                                            <td><span class="badge bg-label-orange">67%</span></td>
+                                            <td><span class="badge bg-label-orange">63%</span></td>
                                             <td><span class="badge bg-label-orange">NI</span></td>
                                         </tr>
                                         <tr>
                                             <td>4</td>
                                             <td>Responsibility & Accountability</td>
-                                            <td><span class="badge bg-label-danger">59%</span></td>
+                                            <td><span class="badge bg-label-danger">65%</span></td>
                                             <td><span class="badge bg-label-danger">BE</span></td>
                                         </tr>
-                                        
-                                       
+
+
 
                                     </tbody>
                                 </table>
@@ -2541,7 +2553,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                        <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
 
@@ -2551,7 +2563,7 @@
 
                             <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
@@ -2559,11 +2571,64 @@
                                 <thead class=" table-primary">
                                 <tr>
                                     <th>Sr#</th>
-                                    <th>Class</th>
-                                    <th>%</th>
+                                    <th>Event</th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
                                 </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Societies Fair</td>
+                                        <td>30</td>
+                                        <td>25</td>
+                                        <td>
+                                            <div class="badge bg-label-success">83%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-success me-1">EE</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Mega Alumni Night</td>
+                                        <td>32</td>
+                                        <td>30</td>
+                                        <td>
+                                            <div class="badge bg-label-primary">93%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Thesis Show</td>
+                                        <td>33</td>
+                                        <td>10</td>
+                                        <td>
+                                            <div class=" badge bg-label-danger">30%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-danger me-1">BE</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Indus Conclave</td>
+                                        <td>20</td>
+                                        <td>15</td>
+                                        <td>
+                                            <div class=" badge bg-label-warning">75%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-warning me-1">ME</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>ICMR Pakistan Chapter</td>
+                                        <td>10</td>
+                                        <td>9</td>
+                                        <td>
+                                            <div class=" badge bg-label-primary">90%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
+                                    </tr>
 
                                 </tbody>
                             </table>
@@ -2677,7 +2742,7 @@
                     Scholar's Satisfaction (in thesis stage)
                 </h3>
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                    <!-- <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
                         <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio09" id="dailyRadio09" checked>
@@ -2686,19 +2751,502 @@
                             <input type="radio" class="btn-check" name="btnradio09" id="yearlyRadio09">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio09"> 📅 Yearly</label>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
                                 <thead class=" table-primary">
                                 <tr>
                                     <th>Sr#</th>
-                                    <th>Class</th>
-                                    <th>%</th>
+                                    <th>Scholar Name</th>
+                                    <th>Program</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
                                 </tr>
                                 </thead>
-                                <tbody class="table-border-bottom-0">
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Dr. Bilal Ahmad</td>
+                                        <td>PG</td>
+                                        <td><span class="badge bg-label-primary">91.67%</span></td>
+                                        <td><span class="badge bg-label-primary">OS</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Dr. Arfan Jaffar</td>
+                                        <td>PG</td>
+                                        <td><span class="badge bg-label-success">85%</span></td>
+                                        <td><span class="badge bg-label-success">EE</span></td>
+                                    </tr>
 
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Dr. Tehreem Masood</td>
+                                        <td>PG</td>
+                                        <td><span class="badge bg-label-warning">75%</span></td>
+                                        <td><span class="badge bg-label-warning">ME</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="ofGrantsWon" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    # of Grants Won
+                </h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Submitted</th>
+                                    <th>Won</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>6</td>
+                                        <td>5</td>
+                                        <td>
+                                            <div class="badge bg-label-success">83%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-success me-1">EE</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="No.MultidisciplinaryProjects" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    No. Multidisciplinary Projects
+                </h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>projects proposed</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>3</td>
+                                        <td>
+                                            <div class="badge bg-label-primary">93%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="CommercialGains/Consultancy/ResearchIncome" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Commercial Gains / Consultancy/Research Income
+                </h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Targeted Income</th>
+                                    <th>Achieved Income</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>30,00,000</td>
+                                        <td>17,00,000</td>
+                                        <td>
+                                            <div class="badge bg-label-danger">56%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-danger me-1">BE</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="IntellectualProperties" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Intellectual Properties
+                </h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>IP Submitted</th>
+                                    <th>Awarded</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>4</td>
+                                        <td>3</td>
+                                        <td><span class="badge bg-label-warning">75%</span></td>
+                                        <td><span class="badge bg-label-warning">ME</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="ofGrantProposalsSubmitted" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    # of Grant Proposals Submitted
+                </h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Target</th>
+                                    <th>Achived</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>3</td>
+                                        <td>3</td>
+                                        <td>
+                                            <div class="badge bg-label-primary">100%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="Spinoffs" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Spin offs
+                </h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Registered</th>
+                                    <th>Verified</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>5</td>
+                                        <td>3</td>
+                                        <td>
+                                            <div class=" badge bg-label-orange">60%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-orange">NI</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="IndustrialVisits" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Industrial Visits
+                </h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Total Reports</th>
+                                    <th>Correct Reports</th>
+                                    <th>InCorrect Reports</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>7</td>
+                                        <td>5</td>
+                                        <td>2</td>
+                                        <td><span class="badge bg-label-warning">75%</span></td>
+                                        <td><span class="badge bg-label-warning">ME</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="IndustrialProjects" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Industrial Projects
+                </h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Total Award Letters</th>
+                                    <th>Verified</th>
+                                    <th>Un Verified</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>4</td>
+                                        <td>3</td>
+                                        <td>1</td>
+                                        <td><span class="badge bg-label-warning">75%</span></td>
+                                        <td><span class="badge bg-label-warning">ME</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="ProductsDeliveredtoIndustry" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Products Delivered to Industry
+                </h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Total Products</th>
+                                    <th>Verified</th>
+                                    <th>Un Verified</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>
+                                            <div class=" badge bg-label-danger">50%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-danger me-1">BE</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
+
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="ResearchProducts" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Research Products
+                </h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Total Products</th>
+                                    <th>Verified</th>
+                                    <th>Un Verified</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>8</td>
+                                        <td>7</td>
+                                        <td>1</td>
+                                        <td>
+                                            <div class=" badge bg-label-success">87%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-success me-1">EE</span></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
