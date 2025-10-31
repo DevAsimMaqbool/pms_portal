@@ -39,8 +39,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12 col-xl-5 col-md-6">
+            <div class="row g-6">
+                <div class="col-12 col-xl-5">
                     <div class="card h-100">
                         <div class="card-header d-flex align-items-center justify-content-between">
                             <div class="card-title mb-0">
@@ -68,6 +68,50 @@
                         <div class="card-body">
                             {{-- <canvas id="barChart" class="chartjs" data-height="400"></canvas> --}}
                             <div id="barChart"></div>
+                        </div>
+                    </div>
+                </div>
+
+               <!-- Average Daily Sales -->
+      <div class="col-xl-4 col-sm-6">
+        <div class="card h-100">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <div class="card-title mb-0">
+              <h5 class="m-0 me-2">Self vs Self</h5>
+            </div>
+          </div>
+          <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
+          <div class="card-body pt-2">
+            <canvas class="chartjs" id="virtueChart" data-height="355"></canvas>
+          </div>
+
+        </div>
+      </div>
+      <!--/ Average Daily Sales -->
+
+             <!-- Website Analytics -->
+      <div class="col-xl-4 col">
+
+        <div class="card h-100">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="card-title m-0 me-2">Self vs Other</h5>
+
+          </div>
+          <div class="card-body">
+            <div id="carrierPerformance"></div>
+            <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
+          </div>
+        </div>
+      </div>
+      <!--/ Website Analytics -->
+
+                <div class="col-4">
+                    <div class="card h-100">
+                        <div class="card-header header-elements">
+                            <h5 class="card-title mb-0">Highest</h5>
+                        </div>
+                        <div class="card-body">
+                            <h1>h1</h1>
                         </div>
                     </div>
                 </div>
@@ -382,5 +426,256 @@
         <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
         <script src="{{ asset('admin/assets/js/charts-chartjs-legend.js') }}"></script>
         <script src="{{ asset('admin/assets/js/charts-chartjs.js') }}"></script>
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+      const chartLabels = [
+        "Responsibility and Accountability",
+        "Honesty and Integrity",
+        "Empathy and Compassion",
+        "Humility and Service",
+        "Patience and Gratitude",
+        "Courage and Drive"
+      ];
+      const dataset1 = [85, 90, 95, 85, 95, 100];
+      const dataset2 = [80, 90, 75, 80, 80, 80];
+      const canvas = document.getElementById("virtueChart");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+
+      // Create gradients for fills
+      const gradientBlue = ctx.createLinearGradient(0, 0, 0, 150);
+      gradientBlue.addColorStop(0, "rgba(85, 85, 255, 0.9)");
+      gradientBlue.addColorStop(1, "rgba(151, 135, 255, 0.8)");
+      const gradientPink = ctx.createLinearGradient(0, 0, 0, 150);
+      gradientPink.addColorStop(0, "rgba(255, 85, 184, 0.9)");
+      gradientPink.addColorStop(1, "rgba(255, 135, 135, 0.8)");
+
+      // Chart configuration
+      const config = {
+        type: "radar",
+        data: {
+          labels: chartLabels,
+          datasets: [
+            {
+              label: "Inside Mirror",
+              data: dataset1,
+              fill: true,
+              borderColor: "rgba(255, 85, 184, 1)",
+              borderWidth: 2,
+              pointBorderColor: "#FF55B8",
+              pointBackgroundColor: "rgba(255, 85, 184, 1)",
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              pointStyle: 'circle'
+            },
+            {
+              label: "Social Mirror",
+              data: dataset2,
+              fill: true,
+              borderColor: "rgba(85, 85, 255, 1)",
+              borderWidth: 2,
+              pointBorderColor: "#5555FF",
+              pointBackgroundColor: "rgba(85, 85, 255, 1)",
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              pointStyle: 'circle'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 500 },
+          scales: {
+            r: {
+              beginAtZero: true,
+              suggestedMax: 100,
+              ticks: { display: false },
+              grid: { color: "rgba(0, 0, 0, 0.2)" },
+              angleLines: { color: "rgba(200, 200, 200, 0.2)" },
+              pointLabels: { color: "#9CA3AF", font: { size: 10 } }
+            }
+          },
+          plugins: {
+            legend: { display: false }, // Disable default legend
+            tooltip: {
+              backgroundColor: "#fff",
+              titleColor: "#111827",
+              bodyColor: "#111827",
+              borderWidth: 1,
+              borderColor: "#ddd",
+              titleFont: { weight: "bold" },
+              bodyFont: { size: 13 },
+              padding: 10
+            }
+          }
+        }
+      };
+
+      const myChart = new Chart(ctx, config);
+
+      // === Custom Legend with Checkboxes ===
+      const legendContainer = document.getElementById("chart-legend");
+      const checkboxColors = ["#FF55B8", "#5555FF"]; // Inside Mirror, Social Mirror
+
+      myChart.data.datasets.forEach((dataset, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.style.display = "inline-flex";
+        wrapper.style.alignItems = "center";
+        wrapper.style.marginRight = "20px";
+        wrapper.style.cursor = "pointer";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `dataset-${index}`;
+        checkbox.checked = true;
+        checkbox.style.marginRight = "6px";
+
+        const label = document.createElement("label");
+        label.setAttribute("for", `dataset-${index}`);
+        label.style.color = checkboxColors[index];
+        label.style.fontWeight = "500";
+        label.style.fontSize = "14px";
+        label.textContent = dataset.label;
+
+        wrapper.appendChild(checkbox);
+        wrapper.appendChild(label);
+        legendContainer.appendChild(wrapper);
+
+        checkbox.addEventListener("change", (e) => {
+          const datasetIndex = index;
+          if (e.target.checked) {
+            myChart.show(datasetIndex);
+          } else {
+            myChart.hide(datasetIndex);
+          }
+        });
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const c = document.querySelector("#carrierPerformance");
+      const categories = [
+        "Journal Publication",
+        "Multidisciplinary Projects",
+        "Commercial Gains",
+        "Intellectual Properties",
+        "Spin Off"
+      ];
+      // Distinct color for each category
+      const colors = [
+        "#1F77B4", // Publication
+        "#FF7F0E", // Projects
+        "#2CA02C", // Commercial Gains
+        "#9467BD", // Intellectual Properties
+        "#D62728"  // Spin Off
+      ];
+      // Lighter versions for "Achieved"
+      const lightColors = [
+        "#6BAED6", // lighter blue
+        "#FFBB78", // lighter orange
+        "#98DF8A", // lighter green
+        "#C5B0D5", // lighter purple
+        "#FF9896"  // lighter red
+      ];
+      const a = {
+        chart: {
+          height: 330,
+          type: "bar",
+          parentHeightOffset: 0,
+          stacked: false,
+          toolbar: { show: false },
+          zoom: { enabled: false }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: "50%",
+            borderRadius: 6
+          }
+        },
+        dataLabels: { enabled: false },
+        // Two series: Target & Achieved
+        series: [
+          {
+            name: "Target",
+            data: [
+              { x: "JP", y: 5, fillColor: colors[0] },
+              { x: "MP", y: 7, fillColor: colors[1] },
+              { x: "CG", y: 3, fillColor: colors[2] },
+              { x: "IP", y: 6, fillColor: colors[3] },
+              { x: "SO", y: 5, fillColor: colors[4] }
+            ]
+          },
+          {
+            name: "Achieved",
+            data: [
+              { x: "JP", y: 4, fillColor: lightColors[0] },
+              { x: "MP", y: 3.5, fillColor: lightColors[1] },
+              { x: "CG", y: 2, fillColor: lightColors[2] },
+              { x: "IP", y: 4, fillColor: lightColors[3] },
+              { x: "SO", y: 2, fillColor: lightColors[4] }
+            ]
+          }
+        ],
+        xaxis: {
+          categories: ["JP", "MP", "CG", "IP", "SO"],
+          labels: {
+            style: {
+              colors: "#6E6B7B",
+              fontSize: "13px",
+              fontFamily: "Inter, sans-serif",
+              fontWeight: 400
+            }
+          },
+          axisBorder: { show: false },
+          axisTicks: { show: false }
+        },
+        yaxis: {
+          tickAmount: 4,
+          min: 0,
+          labels: {
+            style: {
+              colors: "#6E6B7B",
+              fontSize: "13px",
+              fontFamily: "Inter, sans-serif",
+              fontWeight: 400
+            }
+          }
+        },
+        grid: {
+          strokeDashArray: 6,
+          padding: { bottom: 5 }
+        },
+        legend: { show: false }, // We'll make a custom legend below
+        fill: { opacity: 1 },
+        responsive: [
+          {
+            breakpoint: 1400,
+            options: { chart: { height: 275 } }
+          },
+          {
+            breakpoint: 576,
+            options: { chart: { height: 300 } }
+          }
+        ]
+      };
+      if (c) {
+        const chart = new ApexCharts(c, a);
+        chart.render();
+        // Custom category legends
+        const legendContainer = document.getElementById("carrierCustomLegend");
+        categories.forEach((label, i) => {
+          const item = document.createElement("div");
+          item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
+          item.innerHTML = `
+                                                                <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                              `;
+          legendContainer.appendChild(item);
+        });
+      }
+    });
+        </script>
        
     @endpush
