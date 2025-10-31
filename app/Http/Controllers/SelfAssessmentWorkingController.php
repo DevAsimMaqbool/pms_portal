@@ -16,7 +16,9 @@ class SelfAssessmentWorkingController extends Controller
     public function index(Request $request)
     {
         try {
+            $authUser = auth()->user();
             $records = SelfAssessmentWorking::orderBy('created_at', 'asc')
+                ->where('created_by', $authUser->id)
                 ->get()
                 ->keyBy(function ($item) {
                     return $item->kpa;
