@@ -503,7 +503,97 @@
     </div>
 </div>
 <!-- / Payment Methods modal -->
+<!--  Payment Methods modal -->
 
+<div class="modal fade" id="NumberofKnowledgeProducts" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    <div class="badge bg-label-primary rounded p-2"><i
+                            class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> Number of Knowledge Products
+                </h3>
+                <div class="card">
+                   
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table"">
+                                <thead class=" table-primary">
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>KPA</th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
+                                    <th>%</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Policy Advocacy</td>
+                                        <td>30</td>
+                                        <td>25</td>
+                                        <td>
+                                            <div class="badge bg-label-success">83%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-success me-1">EE</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Policy Briefs</td>
+                                        <td>32</td>
+                                        <td>30</td>
+                                        <td>
+                                            <div class="badge bg-label-primary">93%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Popular Articles</td>
+                                        <td>33</td>
+                                        <td>10</td>
+                                        <td>
+                                            <div class=" badge bg-label-danger">30%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-danger me-1">BE</span></td>
+                                    </tr>
+                                     <tr>
+                                        <td>4</td>
+                                        <td>White Papers</td>
+                                        <td>20</td>
+                                        <td>15</td>
+                                        <td>
+                                            <div class=" badge bg-label-warning">75%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-warning me-1">ME</span></td>
+                                    </tr>
+                                     <tr>
+                                        <td>5</td>
+                                        <td>Case Studies</td>
+                                        <td>10</td>
+                                        <td>9</td>
+                                        <td>
+                                            <div class=" badge bg-label-primary">90%</div>
+                                        </td>
+                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
 <div class="modal fade" id="CompletionofCourseFolderinHard" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
