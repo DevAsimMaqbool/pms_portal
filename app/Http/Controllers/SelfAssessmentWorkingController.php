@@ -62,7 +62,9 @@ class SelfAssessmentWorkingController extends Controller
                 $insertData[] = [
                     'kpa' => $kpas[$index],
                     'term' => $term, // ✅ single chosen term for all rows
+                    'general_comments' => $row['general_comments'] ?? null,
                     'challenge' => $row['challenge'] ?? null,
+                    'strength' => $row['strength'] ?? null,
                     'working' => $row['working'] ?? null,
                     'created_by' => Auth::id(),
                     'updated_by' => Auth::id(),
@@ -76,7 +78,7 @@ class SelfAssessmentWorkingController extends Controller
             SelfAssessmentWorking::upsert(
                 $insertData,
                 ['kpa', 'term'], // unique per KPA + Term
-                ['challenge', 'working', 'updated_at']
+                ['general_comments', 'challenge', 'strength', 'working', 'updated_at']
             );
         }
 
@@ -108,13 +110,17 @@ class SelfAssessmentWorkingController extends Controller
     {
         $request->validate([
             'term' => 'required',
+            'general_comments' => '',
             'challenge' => 'required',
+            'strength' => '',
             'working' => 'required',
         ]);
         $userId = Auth::id();
         $data = SelfAssessmentWorking::findOrFail($id);
         $data->term = $request->term;
+        $data->general_comments = $request->general_comments;
         $data->challenge = $request->challenge;
+        $data->strength = $request->strength;
         $data->working = $request->working;
         $data->updated_by = $userId;
         $data->save();
