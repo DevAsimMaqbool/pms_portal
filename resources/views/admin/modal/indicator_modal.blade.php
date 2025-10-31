@@ -2817,8 +2817,8 @@
                                 <thead class=" table-primary">
                                 <tr>
                                     <th>Sr#</th>
-                                    <th>Submitted</th>
-                                    <th>Won</th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
                                     <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
@@ -2863,7 +2863,8 @@
                                 <thead class=" table-primary">
                                 <tr>
                                     <th>Sr#</th>
-                                    <th>projects proposed</th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
                                     <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
@@ -2871,9 +2872,10 @@
                                 <tbody>
                                     <tr>
                                         <td>1</td>
-                                        <td>3</td>
+                                        <td>10</td>
+                                        <td>9</td>
                                         <td>
-                                            <div class="badge bg-label-primary">93%</div>
+                                            <div class="badge bg-label-primary">90%</div>
                                         </td>
                                         <td><span class="badge bg-label-primary me-1">OS</span></td>
                                     </tr>
@@ -2953,8 +2955,8 @@
                                 <thead class=" table-primary">
                                 <tr>
                                     <th>Sr#</th>
-                                    <th>IP Submitted</th>
-                                    <th>Awarded</th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
                                     <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
@@ -3043,8 +3045,8 @@
                                 <thead class=" table-primary">
                                 <tr>
                                     <th>Sr#</th>
-                                    <th>Registered</th>
-                                    <th>Verified</th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
                                     <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
@@ -3089,9 +3091,8 @@
                                 <thead class=" table-primary">
                                 <tr>
                                     <th>Sr#</th>
-                                    <th>Total Reports</th>
-                                    <th>Correct Reports</th>
-                                    <th>InCorrect Reports</th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
                                     <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
@@ -3101,7 +3102,6 @@
                                         <td>1</td>
                                         <td>7</td>
                                         <td>5</td>
-                                        <td>2</td>
                                         <td><span class="badge bg-label-warning">75%</span></td>
                                         <td><span class="badge bg-label-warning">ME</span></td>
                                     </tr>
@@ -3135,9 +3135,8 @@
                                 <thead class=" table-primary">
                                 <tr>
                                     <th>Sr#</th>
-                                    <th>Total Award Letters</th>
-                                    <th>Verified</th>
-                                    <th>Un Verified</th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
                                     <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
@@ -3147,7 +3146,6 @@
                                         <td>1</td>
                                         <td>4</td>
                                         <td>3</td>
-                                        <td>1</td>
                                         <td><span class="badge bg-label-warning">75%</span></td>
                                         <td><span class="badge bg-label-warning">ME</span></td>
                                     </tr>
@@ -3181,9 +3179,8 @@
                                 <thead class=" table-primary">
                                 <tr>
                                     <th>Sr#</th>
-                                    <th>Total Products</th>
-                                    <th>Verified</th>
-                                    <th>Un Verified</th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
                                     <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
@@ -3192,7 +3189,6 @@
                                     <tr>
                                         <td>1</td>
                                         <td>2</td>
-                                        <td>1</td>
                                         <td>1</td>
                                         <td>
                                             <div class=" badge bg-label-danger">50%</div>
@@ -3229,9 +3225,8 @@
                                 <thead class=" table-primary">
                                 <tr>
                                     <th>Sr#</th>
-                                    <th>Total Products</th>
-                                    <th>Verified</th>
-                                    <th>Un Verified</th>
+                                    <th>Target</th>
+                                    <th>Achieved</th>
                                     <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
@@ -3241,7 +3236,6 @@
                                         <td>1</td>
                                         <td>8</td>
                                         <td>7</td>
-                                        <td>1</td>
                                         <td>
                                             <div class=" badge bg-label-success">87%</div>
                                         </td>
