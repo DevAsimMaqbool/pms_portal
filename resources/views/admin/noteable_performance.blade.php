@@ -5,6 +5,20 @@
   <link rel="stylesheet"
     href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-profile.css') }}" />
+  <style>
+    .custom-tabs .nav-link {
+        border-radius: 25px;
+        margin: 0 5px;
+        font-weight: 600;
+        transition: 0.3s;
+        background: #e1dcdc85;
+    }
+
+    .custom-tabs .nav-link.active {
+        background: linear-gradient(45deg, #007bff, #00c6ff);
+        color: white !important;
+        box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.4);
+    }</style>
 @endpush
 @section('content')
   <!-- Content -->
@@ -44,7 +58,7 @@
                 <p class="card-text text-white">Outstanding (OS) — You Inspire</p>
               </div>
               <span class="col-md-12 col-lg-5 col-xl-12 col-xxl-5 text-center mx-auto mx-md-0 mb-2"><img
-                  src="{{ asset('admin/assets/img/avatars/award1.png') }}" class="w-px-75 m-2" alt="3dRocket"></span>
+                  src="{{ asset('admin/assets/img/avatars/award2.png') }}" class="w-px-75 m-2" alt="3dRocket"></span>
             </div>
             <button class="btn btn-white text-primary w-100 fw-medium shadow-xs waves-effect waves-light"
               data-bs-target="#upgradePlanModal" data-bs-toggle="modal">OS</button>
@@ -61,7 +75,7 @@
                 <p class="card-text text-white">Meet Expectation (ME) — You Deliver</p>
               </div>
               <span class="col-md-12 col-lg-5 col-xl-12 col-xxl-5 text-center mx-auto mx-md-0 mb-2"><img
-                  src="{{ asset('admin/assets/img/avatars/award2.png') }}" class="w-px-75 m-2" alt="3dRocket"></span>
+                  src="{{ asset('admin/assets/img/avatars/award1.png') }}" class="w-px-75 m-2" alt="3dRocket"></span>
             </div>
             <button class="btn btn-white text-warning w-100 fw-medium shadow-xs waves-effect waves-light"
               data-bs-target="#upgradePlanModal" data-bs-toggle="modal">ME</button>
@@ -97,166 +111,333 @@
               <h5 class="mb-0">Acheivements</h5>
               <p class="mb-0">Total 5 Acheivements</p>
             </div>
+            <div class="d-flex justify-content-md-end align-items-center column-gap-6 flex-sm-row flex-column row-gap-4">
+               
+
+               <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#spring"  aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#fall"  aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+         
+            </div>
           </div>
           <div class="card-body">
-            <div class="row gy-6 mb-6">
-              <div class="col-sm-6 col-lg-4">
-                <div class="card p-2 h-100 shadow-none border">
-                  <div class="bg-label-primary rounded-3 text-center mb-4 pt-6">
-                    <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award1.png') }}" alt="Card girl image"
-                      width="140">
-                  </div>
-                  <div class="card-body p-4 pt-2">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                      <span class="badge bg-label-primary">OS</span>
-                      <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
-                        92 <span class="text-primary"><i
-                            class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
-                      </p>
+
+            <div class="tab-content p-0">
+              <div class="tab-pane fade show active" id="spring" role="tabpanel">
+              <div class="row gy-6 mb-6">
+
+
+                <div class="col-sm-6 col-lg-4">
+                  <div class="card p-2 h-100 shadow-none border">
+                    <div class="bg-label-primary rounded-3 text-center mb-4 pt-6">
+                      <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award1.png') }}" alt="Card girl image"
+                        width="140">
                     </div>
-                    <a href="" class="h5">Teaching and Learning</a>
-                    <p class="mt-1">Student Teaching Satisfaction (feedback)</p>
-                    <p class="d-flex align-items-center mb-1"><i class="icon-base ti tabler-percentage me-1"></i>92</p>
-                    <div class="progress mb-4" style="height: 8px">
-                      <div class="progress-bar bg-primary" style="width: 89%" role="progressbar" aria-valuenow="25"
-                        aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="card-body p-4 pt-2">
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="badge bg-label-primary">OS</span>
+                        <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
+                          92 <span class="text-primary"><i
+                              class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
+                        </p>
+                      </div>
+                      <a href="" class="h5">Teaching and Learning</a>
+                      <p class="mt-1">Student Teaching Satisfaction (feedback)</p>
+                      <p class="d-flex align-items-center mb-1">92<i class="icon-base ti tabler-percentage me-1"></i></p>
+                      <div class="progress mb-4" style="height: 8px">
+                        <div class="progress-bar bg-primary" style="width: 89%" role="progressbar" aria-valuenow="25"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+
+                      </div>
+                      <small class="text-break">
+                        You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
+                      </small>
 
                     </div>
-                    <small class="text-break">
-                      You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
-                    </small>
-
                   </div>
                 </div>
+
+
+
+
+                <div class="col-sm-6 col-lg-4">
+                  <div class="card p-2 h-100 shadow-none border">
+                    <div class="bg-label-warning rounded-3 text-center mb-4 pt-6">
+                      <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award2.png') }}" alt="Card girl image"
+                        width="140">
+                    </div>
+                    <div class="card-body p-4 pt-2">
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="badge bg-label-warning">ME</span>
+                        <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
+                          70 <span class="text-warning"><i
+                              class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
+                        </p>
+                      </div>
+                      <a href="" class="h5">Teaching and Learning</a>
+                      <p class="mt-1">QEC - Observation / Peer review</p>
+                      <p class="d-flex align-items-center mb-1">70<i class="icon-base ti tabler-percentage me-1"></i></p>
+                      <div class="progress mb-4" style="height: 8px">
+                        <div class="progress-bar bg-warning" style="width: 70%" role="progressbar" aria-valuenow="70"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+
+                      </div>
+                      <small class="text-break">
+                        You’re doing well and meeting your goals.Keep your consistency — it’s your strength.
+                      </small>
+
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-sm-6 col-lg-4">
+                  <div class="card p-2 h-100 shadow-none border">
+                    <div class="bg-label-success rounded-3 text-center mb-4 pt-6">
+                      <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award3.png') }}" alt="Card girl image"
+                        width="140">
+                    </div>
+                    <div class="card-body p-4 pt-2">
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="badge bg-label-success">EE</span>
+                        <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
+                          82 <span class="text-success"><i
+                              class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
+                        </p>
+                      </div>
+                      <a href="" class="h5">Teaching and Learning</a>
+                      <p class="mt-1">Completion of Course Folder in Hard</p>
+                      <p class="d-flex align-items-center mb-1">82<i class="icon-base ti tabler-percentage me-1"></i></p>
+                      <div class="progress mb-4" style="height: 8px">
+                        <div class="progress-bar bg-success" style="width: 82%" role="progressbar" aria-valuenow="82"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+
+                      </div>
+                      <small class="text-break">
+                        You’re going beyond what’s asked of you. Keep shining — your impact inspires others.
+                      </small>
+
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <div class="col-sm-6 col-lg-4">
+                  <div class="card p-2 h-100 shadow-none border">
+                    <div class="bg-label-primary rounded-3 text-center mb-4 pt-6">
+                      <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award1.png') }}" alt="Card girl image"
+                        width="140">
+                    </div>
+                    <div class="card-body p-4 pt-2">
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="badge bg-label-primary">OS</span>
+                        <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
+                          90 <span class="text-primary"><i
+                              class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
+                        </p>
+                      </div>
+                      <a href="" class="h5">Teaching and Learning</a>
+                      <p class="mt-1">Classes Held</p>
+                      <p class="d-flex align-items-center mb-1">90<i class="icon-base ti tabler-percentage me-1"></i></p>
+                      <div class="progress mb-4" style="height: 8px">
+                        <div class="progress-bar bg-primary" style="width: 90%" role="progressbar" aria-valuenow="90"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+
+                      </div>
+                      <small class="text-break">
+                        You’re achieving excellence with distinction.You set the pace for others to follow.
+                      </small>
+
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-sm-6 col-lg-4">
+                  <div class="card p-2 h-100 shadow-none border">
+                    <div class="bg-label-success rounded-3 text-center mb-4 pt-6">
+                      <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award3.png') }}" alt="Card girl image"
+                        width="140">
+                    </div>
+                    <div class="card-body p-4 pt-2">
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="badge bg-label-success">EE</span>
+                        <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
+                          81 <span class="text-success"><i
+                              class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
+                        </p>
+                      </div>
+                      <a href="app-academy-course-details.html" class="h5">Research, Innovation and Commercialisation</a>
+                      <p class="mt-1">Research productivity of PG students</p>
+                      <p class="d-flex align-items-center mb-1">81<i class="icon-base ti tabler-percentage me-1"></i></p>
+                      <div class="progress mb-4" style="height: 8px">
+                        <div class="progress-bar bg-success" style="width: 81%" role="progressbar" aria-valuenow="81"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+
+                      </div>
+                      <small class="text-break">
+                        You’re going beyond what’s asked of you. Keep shining — your impact inspires others.
+                      </small>
+
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
               </div>
 
 
 
 
-              <div class="col-sm-6 col-lg-4">
-                <div class="card p-2 h-100 shadow-none border">
-                  <div class="bg-label-warning rounded-3 text-center mb-4 pt-6">
-                    <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award2.png') }}" alt="Card girl image"
-                      width="140">
-                  </div>
-                  <div class="card-body p-4 pt-2">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                      <span class="badge bg-label-warning">ME</span>
-                      <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
-                        70 <span class="text-warning"><i
-                            class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
-                      </p>
+
+              <div class="tab-pane fade" id="fall" role="tabpanel">
+              <div class="row gy-6 mb-6">
+
+
+                <div class="col-sm-6 col-lg-4">
+                  <div class="card p-2 h-100 shadow-none border">
+                    <div class="bg-label-primary rounded-3 text-center mb-4 pt-6">
+                      <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award1.png') }}" alt="Card girl image"
+                        width="140">
                     </div>
-                    <a href="" class="h5">Teaching and Learning</a>
-                    <p class="mt-1">QEC - Observation / Peer review</p>
-                    <p class="d-flex align-items-center mb-1"><i class="icon-base ti tabler-percentage me-1"></i>70</p>
-                    <div class="progress mb-4" style="height: 8px">
-                      <div class="progress-bar bg-warning" style="width: 70%" role="progressbar" aria-valuenow="70"
-                        aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="card-body p-4 pt-2">
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="badge bg-label-primary">OS</span>
+                        <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
+                          92 <span class="text-primary"><i
+                              class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
+                        </p>
+                      </div>
+                      <a href="" class="h5">Teaching and Learning</a>
+                      <p class="mt-1">Student Teaching Satisfaction (feedback)</p>
+                      <p class="d-flex align-items-center mb-1">92<i class="icon-base ti tabler-percentage me-1"></i></p>
+                      <div class="progress mb-4" style="height: 8px">
+                        <div class="progress-bar bg-primary" style="width: 89%" role="progressbar" aria-valuenow="25"
+                          aria-valuemin="0" aria-valuemax="100"></div>
 
-                    </div>
-                    <small class="text-break">
-                      You’re doing well and meeting your goals.Keep your consistency — it’s your strength.
-                    </small>
-
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="col-sm-6 col-lg-4">
-                <div class="card p-2 h-100 shadow-none border">
-                  <div class="bg-label-success rounded-3 text-center mb-4 pt-6">
-                    <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award3.png') }}" alt="Card girl image"
-                      width="140">
-                  </div>
-                  <div class="card-body p-4 pt-2">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                      <span class="badge bg-label-success">EE</span>
-                      <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
-                        82 <span class="text-success"><i
-                            class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
-                      </p>
-                    </div>
-                    <a href="" class="h5">Teaching and Learning</a>
-                    <p class="mt-1">Completion of Course Folder in Hard</p>
-                    <p class="d-flex align-items-center mb-1"><i class="icon-base ti tabler-percentage me-1"></i>82</p>
-                    <div class="progress mb-4" style="height: 8px">
-                      <div class="progress-bar bg-success" style="width: 82%" role="progressbar" aria-valuenow="82"
-                        aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="text-break">
+                        You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
+                      </small>
 
                     </div>
-                    <small class="text-break">
-                      You’re going beyond what’s asked of you. Keep shining — your impact inspires others.
-                    </small>
-
                   </div>
                 </div>
-              </div>
 
 
 
-              <div class="col-sm-6 col-lg-4">
-                <div class="card p-2 h-100 shadow-none border">
-                  <div class="bg-label-primary rounded-3 text-center mb-4 pt-6">
-                    <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award1.png') }}" alt="Card girl image"
-                      width="140">
-                  </div>
-                  <div class="card-body p-4 pt-2">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                      <span class="badge bg-label-primary">OS</span>
-                      <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
-                        90 <span class="text-primary"><i
-                            class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
-                      </p>
+
+                <div class="col-sm-6 col-lg-4">
+                  <div class="card p-2 h-100 shadow-none border">
+                    <div class="bg-label-warning rounded-3 text-center mb-4 pt-6">
+                      <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award2.png') }}" alt="Card girl image"
+                        width="140">
                     </div>
-                    <a href="" class="h5">Teaching and Learning</a>
-                    <p class="mt-1">Classes Held</p>
-                    <p class="d-flex align-items-center mb-1"><i class="icon-base ti tabler-percentage me-1"></i>90</p>
-                    <div class="progress mb-4" style="height: 8px">
-                      <div class="progress-bar bg-primary" style="width: 90%" role="progressbar" aria-valuenow="90"
-                        aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="card-body p-4 pt-2">
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="badge bg-label-warning">ME</span>
+                        <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
+                          70 <span class="text-warning"><i
+                              class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
+                        </p>
+                      </div>
+                      <a href="" class="h5">Teaching and Learning</a>
+                      <p class="mt-1">QEC - Observation / Peer review</p>
+                      <p class="d-flex align-items-center mb-1">70<i class="icon-base ti tabler-percentage me-1"></i></p>
+                      <div class="progress mb-4" style="height: 8px">
+                        <div class="progress-bar bg-warning" style="width: 70%" role="progressbar" aria-valuenow="70"
+                          aria-valuemin="0" aria-valuemax="100"></div>
 
-                    </div>
-                    <small class="text-break">
-                      You’re achieving excellence with distinction.You set the pace for others to follow.
-                    </small>
-
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="col-sm-6 col-lg-4">
-                <div class="card p-2 h-100 shadow-none border">
-                  <div class="bg-label-success rounded-3 text-center mb-4 pt-6">
-                    <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award3.png') }}" alt="Card girl image"
-                      width="140">
-                  </div>
-                  <div class="card-body p-4 pt-2">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                      <span class="badge bg-label-success">EE</span>
-                      <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
-                        81 <span class="text-success"><i
-                            class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
-                      </p>
-                    </div>
-                    <a href="app-academy-course-details.html" class="h5">Research, Innovation and Commercialisation</a>
-                    <p class="mt-1">Research productivity of PG students</p>
-                    <p class="d-flex align-items-center mb-1"><i class="icon-base ti tabler-percentage me-1"></i>81</p>
-                    <div class="progress mb-4" style="height: 8px">
-                      <div class="progress-bar bg-success" style="width: 81%" role="progressbar" aria-valuenow="81"
-                        aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="text-break">
+                        You’re doing well and meeting your goals.Keep your consistency — it’s your strength.
+                      </small>
 
                     </div>
-                    <small class="text-break">
-                      You’re going beyond what’s asked of you. Keep shining — your impact inspires others.
-                    </small>
-
                   </div>
                 </div>
-              </div>
 
+
+                <div class="col-sm-6 col-lg-4">
+                  <div class="card p-2 h-100 shadow-none border">
+                    <div class="bg-label-success rounded-3 text-center mb-4 pt-6">
+                      <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award3.png') }}" alt="Card girl image"
+                        width="140">
+                    </div>
+                    <div class="card-body p-4 pt-2">
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="badge bg-label-success">EE</span>
+                        <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
+                          82 <span class="text-success"><i
+                              class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
+                        </p>
+                      </div>
+                      <a href="" class="h5">Teaching and Learning</a>
+                      <p class="mt-1">Completion of Course Folder in Hard</p>
+                      <p class="d-flex align-items-center mb-1">82<i class="icon-base ti tabler-percentage me-1"></i></p>
+                      <div class="progress mb-4" style="height: 8px">
+                        <div class="progress-bar bg-success" style="width: 82%" role="progressbar" aria-valuenow="82"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+
+                      </div>
+                      <small class="text-break">
+                        You’re going beyond what’s asked of you. Keep shining — your impact inspires others.
+                      </small>
+
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+
+                <div class="col-sm-6 col-lg-4">
+                  <div class="card p-2 h-100 shadow-none border">
+                    <div class="bg-label-success rounded-3 text-center mb-4 pt-6">
+                      <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/award3.png') }}" alt="Card girl image"
+                        width="140">
+                    </div>
+                    <div class="card-body p-4 pt-2">
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="badge bg-label-success">EE</span>
+                        <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
+                          81 <span class="text-success"><i
+                              class="icon-base ti tabler-star-filled icon-lg me-1 mb-1_5"></i></span>
+                        </p>
+                      </div>
+                      <a href="app-academy-course-details.html" class="h5">Research, Innovation and Commercialisation</a>
+                      <p class="mt-1">Research productivity of PG students</p>
+                      <p class="d-flex align-items-center mb-1">81<i class="icon-base ti tabler-percentage me-1"></i></p>
+                      <div class="progress mb-4" style="height: 8px">
+                        <div class="progress-bar bg-success" style="width: 81%" role="progressbar" aria-valuenow="81"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+
+                      </div>
+                      <small class="text-break">
+                        You’re going beyond what’s asked of you. Keep shining — your impact inspires others.
+                      </small>
+
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
+              </div>
 
 
             </div>
@@ -279,16 +460,17 @@
 
         <!-- Basic Bootstrap Table -->
         <div class="card">
-          <h5 class="card-header">Acheivements</h5>
-          <div class="table-responsive">
-            <table class="table">
+          <h5 class="card-header border-bottom">Acheivements History</h5>
+          <div class="card-datatable table-responsive pt-0">
+            <table class="table table-bordered" id="example">
               <thead>
                 <tr>
-                  <th>IN</th>
+                  <th>category</th>
+                   <th>Score</th>
                   <th>Rating</th>
-                  <th>%</th>
                   <th>Badges</th>
                   <th>Comment</th>
+                  <th>Date</th>
                 </tr>
               </thead>
               <tbody class="table-border-bottom-0">
@@ -305,21 +487,23 @@
                       </div>
                     </div>
                   </td>
-                  <td><span class="badge bg-label-primary me-1">OS</span></td>
+                  
                   <td>
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      <i class="icon-base ti tabler-chevron-up"></i>92%
+                    <p class="text-primary fw-medium mb-0 d-flex align-items-center gap-1">
+                      92%
                     </p>
                   </td>
+                  <td><span class="badge bg-label-primary me-1">OS</span></td>
                   <td>
                     <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/award1.png') }}" alt="Avatar" class="rounded-circle">
+                      <img src="{{ asset('admin/assets/img/avatars/award2.png') }}" alt="Avatar" class="rounded-circle">
                     </div>
                   </td>
                   <td> <small class="text-break">
                       You’re achieving excellence with distinction.You set the pace for others to follow.
                     </small>
                   </td>
+                  <td>08/07/2021</td>
                 </tr>
 
                 <tr>
@@ -335,21 +519,23 @@
                       </div>
                     </div>
                   </td>
-                  <td><span class="badge bg-label-warning me-1">ME</span></td>
+                  
                   <td>
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      <i class="icon-base ti tabler-chevron-up"></i>70%
+                    <p class="text-warning fw-medium mb-0 d-flex align-items-center gap-1">
+                      70%
                     </p>
                   </td>
+                  <td><span class="badge bg-label-warning me-1">ME</span></td>
                   <td>
                     <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/award2.png') }}" alt="Avatar" class="rounded-circle">
+                      <img src="{{ asset('admin/assets/img/avatars/award1.png') }}" alt="Avatar" class="rounded-circle">
                     </div>
                   </td>
                   <td> <small class="text-break">
                       You’re doing well and meeting your goals.Keep your consistency — it’s your strength.
                     </small>
                   </td>
+                  <td>08/07/2021</td>
                 </tr>
 
 
@@ -366,12 +552,13 @@
                       </div>
                     </div>
                   </td>
-                  <td><span class="badge bg-label-success me-1">EE</span></td>
+                  
                   <td>
                     <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      <i class="icon-base ti tabler-chevron-up"></i>82%
+                      82%
                     </p>
                   </td>
+                  <td><span class="badge bg-label-success me-1">EE</span></td>
                   <td>
                     <div class="avatar avatar-xl">
                       <img src="{{ asset('admin/assets/img/avatars/award3.png') }}" alt="Avatar" class="rounded-circle">
@@ -382,6 +569,7 @@
                       Keep shining — your impact inspires others.
                     </small>
                   </td>
+                  <td>08/07/2021</td>
                 </tr>
 
 
@@ -398,21 +586,23 @@
                       </div>
                     </div>
                   </td>
-                  <td><span class="badge bg-label-primary me-1">OS</span></td>
+                  
                   <td>
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      <i class="icon-base ti tabler-chevron-up"></i>90%
+                    <p class="text-primary fw-medium mb-0 d-flex align-items-center gap-1">
+                      90%
                     </p>
                   </td>
+                  <td><span class="badge bg-label-primary me-1">OS</span></td>
                   <td>
                     <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/award1.png') }}" alt="Avatar" class="rounded-circle">
+                      <img src="{{ asset('admin/assets/img/avatars/award2.png') }}" alt="Avatar" class="rounded-circle">
                     </div>
                   </td>
                   <td> <small class="text-break">
                       You’re achieving excellence with distinction.You set the pace for others to follow.
                     </small>
                   </td>
+                  <td>08/07/2021</td>
                 </tr>
 
                 <tr>
@@ -428,12 +618,13 @@
                       </div>
                     </div>
                   </td>
-                  <td><span class="badge bg-label-success me-1">EE</span></td>
+                  
                   <td>
                     <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      <i class="icon-base ti tabler-chevron-up"></i>81%
+                      81%
                     </p>
                   </td>
+                  <td><span class="badge bg-label-success me-1">EE</span></td>
                   <td>
                     <div class="avatar avatar-xl">
                       <img src="{{ asset('admin/assets/img/avatars/award3.png') }}" alt="Avatar" class="rounded-circle">
@@ -445,6 +636,7 @@
 
                     </small>
                   </td>
+                  <td>08/07/2021</td>
                 </tr>
 
 
@@ -590,4 +782,7 @@
     });
 
   </script>
+  <script>
+new DataTable('#example');
+</script>
 @endpush
