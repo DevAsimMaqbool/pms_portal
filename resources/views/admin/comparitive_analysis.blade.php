@@ -38,8 +38,8 @@
                             <div class="row g-6">
                                 <div class="col-md-6">
                                     <label for="apkMultiple" class="form-label">Key Performance Area</label>
-                                    <select id="apkMultiple" name="key_performance_area_id[]" class="select2 form-select">
-                                        <option value="#">Select KPA</option>
+                                    <select id="apkMultiple1" name="key_performance_area_id[]" class="select2 form-select">
+                                        <option value="0">Over ALL</option>
                                         @foreach($kfarea as $index => $kfa)
                                             <option value="{{ $kfa->id }}" {{ $index === 0 ? 'selected' : '' }}>{{ $kfa->performance_area }}</option>
                                         @endforeach
@@ -109,14 +109,14 @@
               <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-arrow-up-to-arc icon-md"></i>
               </div>
               <div>
-                <h6 class="mb-0 text-cut">Highest Score</h6>
-                <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
+                <h6 class="mb-0">Highest Score</h6>
+                <small class="text-dark fs-10 highest-score">Department of Software Engineering</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
 
-              <span class="badge bg-label-success ms-1">82</span>
-              <span class="badge bg-label-success ms-1">EE</span>
+              <span class="badge bg-label-success ms-1 highest-value">82</span>
+              <span class="badge bg-label-success ms-1 highest-rating">EE</span>
             </div>
           </div>
          </div>
@@ -130,14 +130,14 @@
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-arrow-up-from-arc icon-md"></i>
               </div>
               <div>
-                <h6 class="mb-0 text-cut">Low Score</h6>
-                <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
+                <h6 class="mb-0">Low Score</h6>
+                <small class="text-dark fs-10 text-cut low-score">Superior University Franchise</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center justify-content-end">
 
-              <span class="badge bg-label-danger ms-1">50</span>
-              <span class="badge bg-label-danger ms-1">BE</span>
+              <span class="badge bg-label-danger ms-1 low-value">50</span>
+              <span class="badge bg-label-danger ms-1 low-rating" >BE</span>
             </div>
           </div>
          </div>
@@ -153,7 +153,7 @@
           </div>
           <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
           <div class="card-body pt-2">
-            <div id="carrierPerformance1"></div>
+            <div id="carrierPerformance11"></div>
           </div>
 
         </div>
@@ -186,8 +186,8 @@
             <h5 class="m-0 me-2">Top Performers</h5>
           </div>
         </div>
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-6">
+        <div class="card-body top-performers-list">
+          <div class="d-flex justify-content-between align-items-center mb-6 performer-item">
             <div class="d-flex align-items-center">
               <div class="avatar avatar me-4">
                 <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="Avatar" class="rounded-circle" />
@@ -203,7 +203,7 @@
               <h6 class="mb-0">83%</h6>
             </div>
           </div>
-          <div class="d-flex justify-content-between align-items-center mb-6">
+          <div class="d-flex justify-content-between align-items-center mb-6 performer-item">
             <div class="d-flex align-items-center">
               <div class="avatar avatar me-4">
                 <img src="{{ asset('admin//assets/img/avatars/2.png') }}" alt="Avatar" class="rounded-circle" />
@@ -219,7 +219,7 @@
               <h6 class="mb-0">91%</h6>
             </div>
           </div>
-          <div class="d-flex justify-content-between align-items-center mb-6">
+          <div class="d-flex justify-content-between align-items-center mb-6 performer-item">
             <div class="d-flex align-items-center">
               <div class="avatar avatar me-4">
                 <img src="{{ asset('admin/assets/img/avatars/3.png') }}" alt="Avatar" class="rounded-circle" />
@@ -235,7 +235,7 @@
               <h6 class="mb-0">70%</h6>
             </div>
           </div>
-          <div class="d-flex justify-content-between align-items-center mb-6">
+          <div class="d-flex justify-content-between align-items-center mb-6 performer-item">
             <div class="d-flex align-items-center">
               <div class="avatar avatar me-4">
                 <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="Avatar" class="rounded-circle" />
@@ -251,7 +251,7 @@
               <h6 class="mb-0">50%</h6>
             </div>
           </div>
-          <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex justify-content-between align-items-center mb-6 performer-item">
             <div class="d-flex align-items-center">
               <div class="avatar avatar me-4">
                 <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="Avatar" class="rounded-circle" />
@@ -279,9 +279,9 @@
             <h5 class="m-0 me-2">Top Departments</h5>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body top-department-list">
           <ul class="p-0 m-0">
-            <li class="d-flex mb-6">
+            <li class="d-flex mb-6 performer-item">
               <div class="chart-progress me-3" data-color="success" data-series="82" data-progress_variant="true"></div>
               <div class="row w-100 align-items-center">
                 <div class="col-8">
@@ -294,7 +294,7 @@
                 </div>
               </div>
             </li>
-            <li class="d-flex mb-6">
+            <li class="d-flex mb-6 performer-item">
               <div class="chart-progress me-3" data-color="primary" data-series="91" data-progress_variant="true"></div>
               <div class="row w-100 align-items-center">
                 <div class="col-8">
@@ -307,7 +307,7 @@
                 </div>
               </div>
             </li>
-            <li class="d-flex mb-6">
+            <li class="d-flex mb-6 performer-item">
               <div class="chart-progress me-3" data-color="warning" data-series="70" data-progress_variant="true"></div>
               <div class="row w-100 align-items-center">
                 <div class="col-8">
@@ -320,7 +320,7 @@
                 </div>
               </div>
             </li>
-            <li class="d-flex mb-6">
+            <li class="d-flex mb-6 performer-item">
               <div class="chart-progress me-3" data-color="danger" data-series="50" data-progress_variant="true"></div>
               <div class="row w-100 align-items-center">
                 <div class="col-8">
@@ -333,7 +333,7 @@
                 </div>
               </div>
             </li>
-            <li class="d-flex">
+            <li class="d-flex mb-6 performer-item">
               <div class="chart-progress me-4" data-color="warning" data-series="70" data-progress_variant="true"></div>
               <div class="row w-100 align-items-center">
                 <div class="col-8">
@@ -359,14 +359,14 @@
             <h5 class="mb-1">Top Faculties</h5>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body top-faculties-list">
           <ul class="p-0 m-0">
-            <li class="mb-4 d-flex">
+            <li class="mb-4 d-flex performer-item">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
                  </div>
                 <div>
-                  <small class="text-body">Faculty of Business and Management Sciences</small>
+                  <small class="text-body text-cut">Faculty of Business and Management Sciences</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -376,12 +376,12 @@
                 <span class="text-body-secondary">82%</span>
               </div>
             </li>
-            <li class="mb-4 d-flex">
+            <li class="mb-4 d-flex performer-item">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-primary rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
               </div>
                 <div>
-                  <small class="text-body">Faculty Of Economics and Commerce</small>
+                  <small class="text-body text-cut">Faculty Of Economics and Commerce</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -391,12 +391,12 @@
                 <span class="text-body-secondary">91%</span>
               </div>
             </li>
-            <li class="mb-4 d-flex">
+            <li class="mb-4 d-flex performer-item">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award  icon-md"></i>
               </div>
                 <div>
-                  <small class="text-body">Faculty of Computer Science and Information Technology</small>
+                  <small class="text-body text-cut">Faculty of Computer Science and Information Technology</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -406,12 +406,12 @@
                 <span class="text-body-secondary">70%</span>
               </div>
             </li>
-            <li class="mb-4 d-flex">
+            <li class="mb-4 d-flex performer-item">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy-off icon-md"></i>
               </div>
                 <div>
-                  <small class="text-body">Faculty of Social Sciences
+                  <small class="text-body text-cut">Faculty of Social Sciences
 </small>
                 </div>
               </div>
@@ -422,12 +422,12 @@
                 <span class="text-body-secondary">50%</span>
               </div>
             </li>
-            <li class="d-flex">
+            <li class="mb-4 d-flex performer-item">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
               </div>
                 <div>
-                  <small class="text-body">Faculty of Allied Health Sciences</small>
+                  <small class="text-body text-cut">Faculty of Allied Health Sciences</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -925,7 +925,7 @@
       chart.render();
     });
     document.addEventListener("DOMContentLoaded", function () {
-  const c = document.querySelector("#carrierPerformance");
+  const c = document.querySelector("#carrierPerformance111");
 
   // Names (X-axis)
   const categories = [
@@ -949,7 +949,7 @@
   const selfPerformance = categories.map((name, index) => {
     return {
       x: name,
-      y: [5, 7, 3, 6, 5][index],
+      y: [50, 70, 30, 60, 50][index],
       fillColor: name === "Abdullah Tanveer" ? "#FF5733" : colors[index]
     };
   });
@@ -1064,7 +1064,7 @@
     chart.render();
 
     // Custom legend
-    const legendContainer = document.getElementById("carrierCustomLegend");
+    const legendContainer = document.getElementById("carrierCustomLegend111");
     categories.forEach((label, i) => {
       const item = document.createElement("div");
       item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
@@ -1076,6 +1076,436 @@
     });
   }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  // ✅ Function to initialize or update chart
+  function renderCarrierPerformanceChart(elementId, seriesData, categories) {
+    const el = document.querySelector(`#${elementId}`);
+
+    // Destroy existing chart instance (if any)
+    if (el.chartInstance) {
+      el.chartInstance.destroy();
+    }
+
+    const options = {
+      chart: {
+        type: 'area',
+        height: 400,
+        toolbar: { show: false },
+      },
+      series: [
+        {
+          name: 'Performance',
+          data: seriesData
+        }
+      ],
+      xaxis: {
+        categories: categories
+      },
+      dataLabels: { enabled: false },
+      stroke: { curve: 'smooth', width: 2, dashArray: 0 },
+      colors: ['#008FFB'],
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.4,
+          opacityTo: 0.1,
+          stops: [0, 90, 100]
+        }
+      },
+      tooltip: { theme: 'dark' },
+      markers: {
+        size: 5,
+        colors: ['#008FFB'],
+        strokeColors: '#fff',
+        strokeWidth: 2,
+        shape: 'circle',
+        hover: { size: 7, sizeOffset: 2 }
+      }
+    };
+
+    const chart = new ApexCharts(el, options);
+    chart.render();
+
+    // Save instance for later destruction
+    el.chartInstance = chart;
+  }
+
+  // ✅ Initial render
+  renderCarrierPerformanceChart("carrierPerformance11", [60, 90], ['Spring 25', 'Fall 25']);
+
+
+
+
+ function renderCarrierChart(categories, values, highlightName = "Abdullah Tanveer") {
+      const c = document.querySelector("#carrierPerformance");
+      const legendContainer = document.getElementById("carrierCustomLegend");
+
+      if (!c) return;
+
+      // If previous instance exists, destroy it and clear legend
+    if (c.chartInstance) {
+      try { c.chartInstance.destroy(); } catch (e) { /* ignore */ }
+      c.chartInstance = null;
+      if (legendContainer) legendContainer.innerHTML = "";
+    }
+
+      const colors = ["#FF5733", "#1F77B4", "#2CA02C", "#9467BD", "#D62728"];
+
+      // Self performance data
+      const selfPerformance = categories.map((name, index) => ({
+        x: name,
+        y: values[index],
+        fillColor: name === highlightName ? "#FF5733" : colors[index % colors.length],
+      }));
+
+      const options = {
+        chart: {
+          height: 350,
+          type: "line",
+          toolbar: { show: false },
+          zoom: { enabled: false },
+        },
+        stroke: {
+          width: [0, 3],
+          curve: "smooth",
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: "50%",
+            borderRadius: 6,
+          },
+        },
+        dataLabels: {
+          enabled: true,
+          enabledOnSeries: [1],
+          formatter: function (val, opts) {
+            const name = opts.w.config.series[0].data[opts.dataPointIndex].x;
+            return name === highlightName ? `🧑🏻` : ``;
+          },
+          offsetY: -8,
+          style: { fontSize: "18px", colors: ["#111"] },
+        },
+        series: [
+          { name: "Self Performance", type: "bar", data: selfPerformance },
+          { name: "Trend Line", type: "line", data: selfPerformance },
+        ],
+        xaxis: {
+          categories: categories,
+          labels: {
+            rotate: -15,
+            style: {
+              colors: "#6E6B7B",
+              fontSize: "13px",
+              fontFamily: "Inter, sans-serif",
+              fontWeight: 400,
+            },
+          },
+          axisBorder: { show: false },
+          axisTicks: { show: false },
+        },
+        yaxis: {
+          tickAmount: 4,
+          min: 0,
+          labels: {
+            style: {
+              colors: "#6E6B7B",
+              fontSize: "13px",
+              fontFamily: "Inter, sans-serif",
+              fontWeight: 400,
+            },
+          },
+        },
+        grid: { strokeDashArray: 6, padding: { bottom: 5 } },
+        fill: { opacity: 1 },
+        legend: { show: false },
+        annotations: {
+          points: [
+            {
+              x: highlightName,
+              y: values[categories.indexOf(highlightName)] || 5,
+              marker: {
+                size: 0,
+                customSVG: {
+                  SVG: `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                      <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
+                      <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
+                    </svg>
+                  `,
+                  offsetX: -10,
+                  offsetY: -28,
+                },
+              },
+            },
+          ],
+        },
+        responsive: [{ breakpoint: 576, options: { chart: { height: 300 } } }],
+      };
+
+      // Render chart
+      const chart = new ApexCharts(c, options);
+      chart.render().then(() => {
+      // store the instance so future calls can destroy it
+      c.chartInstance = chart;
+        });
+
+
+
+      if (legendContainer) {
+      categories.forEach((label, i) => {
+        const item = document.createElement("div");
+        item.className = "d-flex align-items-center mx-2 my-1";
+        item.innerHTML = `
+          <span style="width:14px;height:14px;background:${colors[i % colors.length]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+          <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+        `;
+        legendContainer.appendChild(item);
+      });
+      }
+    }
+
+    // ✅ Initial Chart Render (default data)
+    renderCarrierChart(
+      ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+      [50, 70, 30, 60, 50]
+    );
+    function shuffleElements(container) {
+    const items = Array.from(container.querySelectorAll(".performer-item"));
+    // Fisher–Yates shuffle
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [items[i], items[j]] = [items[j], items[i]];
+    }
+    // Clear and append shuffled items
+    container.innerHTML = "";
+    items.forEach(item => container.appendChild(item));
+  }
+  // ✅ Handle select change
+  const select = document.querySelector("#apkMultiple1");
+  select.addEventListener("change", function () {
+    const selectedValue = this.value;
+     const listContainer = document.querySelector(".top-performers-list");
+     const departmentContainer = document.querySelector(".top-department-list");
+     const facultiesContainer = document.querySelector(".top-faculties-list");
+     shuffleElements(listContainer);
+     shuffleElements(departmentContainer);
+     shuffleElements(facultiesContainer);
+    // Example dynamic data
+    let scoreText = "";
+    let scoreValue = "";
+    let ratingText = "";
+    let lowscoreText = "";
+    let lowscoreValue = "";
+    let lowratingText = "";
+    let newData = [];
+    let newCategories = [];
+
+    switch (selectedValue) {
+      case "1":
+       scoreText = "Department of Computer Science";
+        scoreValue = 90;
+        ratingText = "OS";
+
+         lowscoreText = "Faisalabad - Uni Campus";
+        lowscoreValue = 40;
+        lowratingText = "BE";
+       renderCarrierChart(  ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+       [30, 60, 20, 40, 70] );
+        newData = [80, 90];
+        newCategories = ['Spring 25', 'Fall 25'];
+        break;
+      case "2":
+      lowscoreText = "Department of Computer Science";
+        lowscoreValue = 40;
+        lowratingText = "BE";
+      scoreText = "Superior University Franchise";
+        scoreValue = 80;
+        ratingText = "EE";
+      renderCarrierChart(  ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+       [50, 60, 30, 40, 30] );
+        newData = [60, 85];
+        newCategories = ['Spring 25', 'Fall 25'];
+        break;
+      case "3":
+      lowscoreText = "Teaching";
+        lowscoreValue = 42;
+        lowratingText = "BE";
+      scoreText = "Department of Computer Science";
+        scoreValue = 94;
+        ratingText = "OS";
+       renderCarrierChart(  ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+       [90, 80, 60, 50, 40] );
+        newData = [70, 75];
+        newCategories = ['Spring 25', 'Fall 25'];
+        break;
+      case "4":
+      lowscoreText = "Superior University Franchise";
+        lowscoreValue = 42;
+        lowratingText = "BE";
+      scoreText = "Teaching";
+        scoreValue = 94;
+        ratingText = "OS";
+       renderCarrierChart(  ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+       [25, 44, 90, 99, 70] );
+        newData = [50, 06];
+        newCategories = ['Spring 25', 'Fall 25'];
+        break; 
+      case "5":
+      lowscoreText = "Superior University Franchise";
+        lowscoreValue = 39;
+        lowratingText = "BE";
+      scoreText = "Teaching";
+        scoreValue = 93;
+        ratingText = "OS";
+      renderCarrierChart(  ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+       [25, 33, 90, 66, 70] );
+        newData = [90, 40];
+        newCategories = ['Spring 25', 'Fall 25'];
+        break;
+      case "6":
+      lowscoreText = "Superior University Franchise";
+        lowscoreValue = 44;
+        lowratingText = "BE";
+      scoreText = "Teaching";
+        scoreValue = 95;
+        ratingText = "OS";
+      renderCarrierChart(  ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+       [25, 22, 77, 99, 70] );
+        newData = [70, 75];
+        newCategories = ['Spring 25', 'Fall 25'];
+        break;  
+      case "7":
+      lowscoreText = "Superior University Franchise";
+        lowscoreValue = 44;
+        lowratingText = "BE";
+      scoreText = "Department of Computer Science";
+        scoreValue = 81;
+        ratingText = "EE";
+      renderCarrierChart(  ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+       [25, 40, 90, 40, 70] );
+        newData = [70, 55];
+        newCategories = ['Spring 25', 'Fall 25'];
+        break;
+       case "13":
+       lowscoreText = "Teaching";
+        lowscoreValue = 42;
+        lowratingText = "BE";
+       scoreText = "Department of Computer Science";
+        scoreValue = 82;
+        ratingText = "EE";
+       renderCarrierChart(  ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+       [25, 20, 90, 30, 70] );
+        newData = [40, 55];
+        newCategories = ['Spring 25', 'Fall 25'];
+        break; 
+       case "14":
+       lowscoreText = "Teaching";
+        lowscoreValue = 49;
+        lowratingText = "BE";
+       scoreText = "Department of Computer Science";
+        scoreValue = 85;
+        ratingText = "EE";
+       renderCarrierChart(  ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+       [60, 70, 90, 85, 70] );
+        newData = [50, 65];
+        newCategories = ['Spring 25', 'Fall 25'];
+        break;    
+      case "0":
+      lowscoreText = "Teaching";
+        lowscoreValue = 39;
+        lowratingText = "BE";
+      scoreText = "Department of Computer Science";
+        scoreValue = 87;
+        ratingText = "EE";
+      renderCarrierChart(  ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+       [80, 90, 90, 90, 80] );
+        newData = [55, 75];
+        newCategories = ['Spring 25', 'Fall 25'];
+        break;       
+      default:
+      lowscoreText = "Teaching";
+        lowscoreValue = 39;
+        lowratingText = "BE";
+      scoreText = "Department of Computer Science";
+        scoreValue = 88;
+        ratingText = "EE";
+      renderCarrierChart(  ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
+       [90, 90, 90, 80, 70] );
+        newData = [85, 65];
+        newCategories = ['Spring 25', 'Fall 25'];
+        break;
+    }
+
+    // ✅ Re-render chart with new data
+    
+    renderCarrierPerformanceChart("carrierPerformance11", newData, newCategories);
+    document.querySelector(".highest-score").textContent = scoreText;
+    document.querySelector(".highest-value").textContent = scoreValue;
+    document.querySelector(".highest-rating").textContent = ratingText;
+    document.querySelector(".low-score").textContent = lowscoreText;
+    document.querySelector(".low-value").textContent = lowscoreValue;
+    document.querySelector(".low-rating").textContent = lowratingText;
+  });
+});
+  document.addEventListener("DOMContentLoaded", function () {
+      const elements = document.querySelectorAll('.text-cut');
+
+      function fitToOneLine(el) {
+        const originalText = el.dataset.originalText || el.textContent.trim();
+        el.dataset.originalText = originalText;
+
+        // Create hidden clone to measure one-line height
+        const clone = el.cloneNode(true);
+        clone.style.whiteSpace = "nowrap";
+        clone.style.visibility = "hidden";
+        clone.style.position = "absolute";
+        clone.style.width = el.offsetWidth + "px";
+        document.body.appendChild(clone);
+        const singleLineHeight = clone.scrollHeight;
+        document.body.removeChild(clone);
+
+        const actualHeight = el.scrollHeight;
+
+        // ✅ If text has wrapped
+        if (actualHeight > singleLineHeight) {
+          let text = originalText;
+          let low = 0;
+          let high = text.length;
+          let fitText = text;
+
+          // Binary search for the perfect cutoff point
+          while (low <= high) {
+            const mid = Math.floor((low + high) / 2);
+            el.textContent = text.slice(0, mid) + '...';
+
+            if (el.scrollHeight > singleLineHeight) {
+              high = mid - 1;
+            } else {
+              fitText = text.slice(0, mid);
+              low = mid + 1;
+            }
+          }
+
+          el.textContent = fitText.trim() + '...';
+        } else {
+          el.textContent = originalText;
+        }
+      }
+
+      // ✅ Wait for fonts and layout to finish loading
+      window.addEventListener('load', function () {
+        elements.forEach(el => fitToOneLine(el));
+      });
+
+      // ✅ Handle window resize dynamically
+      window.addEventListener('resize', function () {
+        elements.forEach(el => fitToOneLine(el));
+      });
+    });
         </script>
        
     @endpush
