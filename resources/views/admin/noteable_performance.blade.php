@@ -56,7 +56,7 @@
               <div
                 class="col-md-12 col-lg-7 col-xl-12 col-xxl-7 text-center text-lg-start text-xl-center text-xxl-start order-1  order-lg-0 order-xl-1 order-xxl-0">
                 <h5 class="card-title text-white text-nowrap mb-4">Meet Expectation (ME)</h5>
-                <p class="card-text text-white" style="font-size: 14px;">You’re doing well and meeting your goals.
+                <p class="card-text text-white" style="font-size: 14.5px;">You’re doing well and meeting your goals.
                   Keep your consistency — it’s your strength.</p>
               </div>
               <span class="col-md-12 col-lg-5 col-xl-12 col-xxl-5 text-center mx-auto mx-md-0 mb-2"><img
