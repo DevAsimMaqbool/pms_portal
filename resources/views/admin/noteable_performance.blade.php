@@ -194,7 +194,7 @@
 
                         </div>
                         <small class="text-break">
-                          You’re going beyond what’s asked of you. Keep shining — your impact inspires others.
+                          You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
                         </small>
 
                       </div>
@@ -257,7 +257,7 @@
 
                         </div>
                         <small class="text-break">
-                          You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
+                          You’re achieving excellence with distinction.You set the pace for others to follow.
                         </small>
 
                       </div>
@@ -364,7 +364,7 @@
 
                         </div>
                         <small class="text-break">
-                          You’re going beyond what’s asked of you. Keep shining — your impact inspires others.
+                          You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
                         </small>
 
                       </div>
@@ -427,12 +427,14 @@
 
                         </div>
                         <small class="text-break">
-                          You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
+                          You’re achieving excellence with distinction.You set the pace for others to follow.
                         </small>
 
                       </div>
                     </div>
                   </div>
+
+
 
                   <div class="col-sm-6 col-lg-4">
                     <div class="card p-2 h-100 shadow-none border">
@@ -562,8 +564,7 @@
                     </div>
                   </td>
                   <td> <small class="text-break">
-                      You’re going beyond what’s asked of you.
-                      Keep shining — your impact inspires others.
+                      You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
                     </small>
                   </td>
                   <td>08/07/2021</td>
@@ -593,11 +594,8 @@
                       <img src="{{ asset('admin/assets/img/avatars/award3.png') }}" alt="Avatar" class="rounded-circle">
                     </div>
                   </td>
-                  <td> <small class="text-break">
-                      You’re going beyond what’s asked of you.
-                      Keep shining — your impact inspires others.
-
-                    </small>
+                  <td> <small class="text-break">You’re going beyond what’s asked of you.Keep shining — your impact
+                      inspires others.</small>
                   </td>
                   <td>08/07/2021</td>
                 </tr>
