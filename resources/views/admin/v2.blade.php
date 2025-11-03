@@ -127,34 +127,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-                                                                                                        .flip-card-inner {
-                                                                                                          transition: none;
-                                                                                                        }
-                                                                                                        .flip-card-front,
-                                                                                                        .flip-card-back {
-                                                                                                          position: relative;
-                                                                                                          transform: none;
-                                                                                                          backface-visibility: visible;
-                                                                                                        }
-                                                                                                        .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                                                                          .flip-card-inner {
+                                                                                                            transition: none;
+                                                                                                          }
+                                                                                                          .flip-card-front,
+                                                                                                          .flip-card-back {
+                                                                                                            position: relative;
+                                                                                                            transform: none;
+                                                                                                            backface-visibility: visible;
+                                                                                                          }
+                                                                                                          .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                       background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                       background-image:
-                                                                                                        radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                        radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                                                                                         background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                                                                                         background-image:
+                                                                                                          radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                                                                          radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                      background-image:
-                                                                                                        radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                        radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                        radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                                                                                        background-image:
+                                                                                                          radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                                                                          radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                                                                          radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                        background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                                                                          background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                       */
+                                                                                                         */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -214,22 +214,6 @@
     }
 
     /* Optional: change progress bar or badge color on hover */
-
-    #scrollableCol,
-    #scrollableCol1 {
-      max-height: 500px;
-      overflow-y: auto;
-      position: relative;
-    }
-
-    #scrollableCol>.d-flex.justify-content-between,
-    #scrollableCol1>.d-flex.justify-content-between {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      padding-top: 8px;
-      padding-bottom: 8px;
-    }
   </style>
 @endpush
 @section('content')
@@ -436,7 +420,7 @@
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-primary"
           data-bs-original-title="You’re achieving excellence with distinction.
-                                                                                                                    You set the pace for others to follow.">
+                                                                                                                      You set the pace for others to follow.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-primary rounded p-1_5 me-4"><i
@@ -459,7 +443,7 @@
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-warning"
           data-bs-original-title="You’re doing well and meeting your goals.
-                                                                                                                    Keep your consistency — it’s your strength.">
+                                                                                                                        Keep your consistency — it’s your strength.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i
@@ -485,7 +469,7 @@
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-danger"
           data-bs-original-title="Not quite there yet — but growth starts here.
-                                                                                                                    Reflect. Refocus. Rise higher.">
+                                                                                                                        Reflect. Refocus. Rise higher.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
@@ -508,7 +492,7 @@
         <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-success"
           data-bs-original-title="You’re going beyond what’s asked of you.
-                                                                                                                    Keep shining — your impact inspires others.">
+                                                                                                                        Keep shining — your impact inspires others.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
@@ -902,8 +886,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                        #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                      `;
+                                                                                                            #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                          `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -931,8 +915,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                        #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                      `;
+                                                                                                            #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                          `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1078,10 +1062,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                      <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                      border-radius:50%;margin-right:5px;"></span>
-                                                                                                      ${label} (${shortLabels[i]})
-                                                                                                      `;
+                                                                                                          <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                          border-radius:50%;margin-right:5px;"></span>
+                                                                                                          ${label} (${shortLabels[i]})
+                                                                                                          `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1233,10 +1217,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                      <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                      border-radius:50%;margin-right:5px;"></span>
-                                                                                                      ${label} (${shortLabels[i]})
-                                                                                                      `;
+                                                                                                          <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                          border-radius:50%;margin-right:5px;"></span>
+                                                                                                          ${label} (${shortLabels[i]})
+                                                                                                          `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1366,9 +1350,9 @@
           const item = document.createElement("div");
           item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
           item.innerHTML = `
-                                                                                                                    <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                                    <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                                  `;
+                                                                                                                        <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                                                        <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                                                      `;
           legendContainer.appendChild(item);
         });
       }
