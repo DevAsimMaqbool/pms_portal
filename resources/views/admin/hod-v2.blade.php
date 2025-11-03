@@ -11,6 +11,8 @@
   <!-- Page CSS -->
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+  <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/swiper/swiper.css') }}" />
+<link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/front-page-landing.css') }}" />
   <style>
     .fs-10 {
       font-size: 10px !important;
@@ -280,6 +282,10 @@
       <!--/ Sales Overview -->
 
       <!-- Website Analytics -->
+      <div class="col-lg-9 col-md-12">
+        <div class="swiper-reviews-carousel overflow-hidden">
+              <div class="swiper" id="swiper-reviews">
+                <div class="swiper-wrapper">
       @php
         $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
         $icon1 = ['tabler-book ', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
@@ -314,7 +320,7 @@
           </div>
 
         </div> --}}
-        <div class="col-lg-3 col-md-4" id="{{ $targetId }}">
+        <div class="swiper-slide" id="{{ $targetId }}">
           <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
             <div class="flip-card h-100">
               <div class="flip-card-inner">
@@ -463,6 +469,13 @@
         </div>
 
       @endforeach
+      
+      </div>
+      <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+          </div>
+      </div>
 
       <!--/ Website Analytics -->
 
@@ -947,6 +960,9 @@
   <script src="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
   <script src="{{ asset('admin/assets/js/extended-ui-perfect-scrollbar.js') }}"></script>
   <script src="{{ asset('admin/assets/js/cards-advance.js') }}"></script>
+  <script src="{{ asset('admin/assets/vendor/libs/swiper/swiper.js') }}"></script>
+  <script src="{{ asset('admin/assets/vendor/libs/nouislider/nouislider.js') }}"></script>
+  <script src="{{ asset('admin/assets/js/front-page-landing.js') }}"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const elements = document.querySelectorAll('.text-cut');
