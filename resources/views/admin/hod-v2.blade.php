@@ -15,13 +15,14 @@
     .fs-10 {
       font-size: 10px !important;
     }
+
     .fs-13 {
       font-size: 13px !important;
     }
 
     .bg-orange,
     .bg-label-orange {
-      
+
       background-color: color-mix(in sRGB, var(--bs-paper-bg) var(--bs-bg-label-tint-amount), var(--bs-orange)) !important;
       color: #fd7e14 !important
     }
@@ -127,34 +128,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-                                                .flip-card-inner {
-                                                  transition: none;
-                                                }
-                                                .flip-card-front,
-                                                .flip-card-back {
-                                                  position: relative;
-                                                  transform: none;
-                                                  backface-visibility: visible;
-                                                }
-                                                .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                              .flip-card-inner {
+                                                              transition: none;
+                                                              }
+                                                              .flip-card-front,
+                                                              .flip-card-back {
+                                                              position: relative;
+                                                              transform: none;
+                                                              backface-visibility: visible;
+                                                              }
+                                                              .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                               background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                               background-image:
-                                                radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                                              background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                                              background-image:
+                                                              radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                              radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                              background-image:
-                                                radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                                              background-image:
+                                                              radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                              radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                              radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                              background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                               */
+                                                              */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -214,6 +215,13 @@
     }
 
     /* Optional: change progress bar or badge color on hover */
+    .fs-637 {
+      font-size: 0.6500rem !important;
+    }
+
+    .fs-6000 {
+      font-size: 0.6000rem !important;
+    }
   </style>
 @endpush
 @section('content')
@@ -347,7 +355,7 @@
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
                       @elseif ($kpa['id'] == 7)
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
-                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>  
+                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
                       @endif
                     </div>
                   </div>
@@ -361,27 +369,90 @@
                     </div>
                     <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
                     @if ($kpa['id'] == 1)
-                      <p class=" text-center mb-0 text-white fs-13">
-                        Focuses on teaching quality, classroom management, and continuous improvement to enhance student
-                        learning outcomes.
+                      <p class=" text-center mb-0 text-white fs-637">
+                        This KPA focuses on effective teaching delivery at undergraduate and postgraduate levels, efficient
+                        course and classroom
+                        management, and continuous enhancement of teaching outputs to ensure quality education. Excellence in
+                        teaching and
+                        learning is the foundation of student success. It shapes competent graduates, strengthens
+                        institutional reputation, and
+                        promotes lifelong learning.
                       </p>
                     @elseif ($kpa['id'] == 2)
-                      <p class="text-center mb-0 text-white fs-13">
-                        Measures research output, quality, and supervision, emphasizing innovation and practical application
-                        of research for societal and industry impact.
+                      <p class="text-center mb-0 text-white fs-6000">
+                        This KPA measures research productivity, quality, and supervision at the postgraduate level. It also
+                        covers the
+                        development of knowledge products and the translation of research into practical innovations and
+                        commercial outcomes.
+                        Advancing research and innovation builds intellectual capital, drives societal progress, and connects
+                        academic insights
+                        with industry applications for sustainable growth.
                       </p>
                     @elseif ($kpa['id'] == 3)
-                      <p class="text-center mb-0 text-white fs-13">
-                        Focuses on active involvement in departmental and institutional activities to promote collaboration,
-                        visibility, and shared success.
+                      <p class="text-center mb-0 text-white fs-6000">
+                        This KPA focuses on ensuring the institution’s long-term financial health and operational viability
+                        through diversified
+                        revenue streams, effective resource utilization, and profitable growth. It emphasizes achieving
+                        enrollment and revenue
+                        targets, maintaining profitability across programs and centers, and strengthening financial resilience
+                        through prudent
+                        recovery and cost management. A sustainable financial model supports institutional excellence,
+                        strategic expansion, and
+                        the ability to reinvest in quality improvement.
                       </p>
                     @elseif ($kpa['id'] == 4)
-                      <p class="text-center mb-0 text-white fs-13">
-                        Represents ethical conduct and leadership grounded in integrity, empathy, humility, and
-                        accountability.
+                      <p class="text-center mb-0 text-white fs-637">
+
+                      </p>
+                    @elseif ($kpa['id'] == 5)
+                      <p class="text-center mb-0 text-white fs-6000">
+                        This KPA emphasizes the institution’s commitment to creating a positive social and environmental
+                        impact through
+                        collective engagement of faculty, staff, and students. It focuses on fostering a culture of service,
+                        sustainability, and
+                        civic responsibility both within and beyond the campus. By actively contributing to community
+                        development and
+                        sustainability initiatives, the institution demonstrates its role as a socially conscious and
+                        ethically driven
+                        organization dedicated to the betterment of society.
+                        Rating Descriptions.
+                      </p>
+                    @elseif ($kpa['id'] == 6)
+                      <p class="text-center mb-0 text-white fs-6000">
+                        This KPA represents the institution’s collective reputation, credibility, and distinctiveness in the
+                        academic and
+                        professional landscape. It emphasizes building a strong, trusted, and recognizable brand through
+                        excellence in
+                        accreditation, affiliations, stakeholder satisfaction, and global partnerships. A strong brand
+                        identity reflects
+                        consistent quality, meaningful industry linkages, and positive perceptions among students, faculty,
+                        alumni, and
+                        employers — ultimately reinforcing the institution’s prestige and competitive advantage.
+                      </p>
+                    @elseif ($kpa['id'] == 7)
+                      <p class="text-center mb-0 text-white" style="font-size: 0.59000rem !important;">
+                        This KPA reflects the effectiveness, integrity, and inclusiveness of leadership practices that guide
+                        academic and
+                        operational excellence. It emphasizes transparent decision-making, stakeholder satisfaction, and a
+                        culture of
+                        accountability. Through proactive planning, team development, and compliance with institutional
+                        policies, this area
+                        ensures that leadership at all levels is participative, future-oriented, and aligned with the
+                        university’s mission.
+                        Effective governance fosters engagement, builds trust, and strengthens institutional coherence across
+                        departments and
+                        campuses.
+                      </p>
+                    @elseif ($kpa['id'] == 13)
+                      <p class="text-center mb-0 text-white fs-637">
+
+                      </p>
+                    @elseif ($kpa['id'] == 14)
+                      <p class="text-center mb-0 text-white fs-637">
+
                       </p>
                     @else
-                      <p class="text-center mb-0 text-white fs-13">Other text</p>
+                      <p class="text-center mb-0 text-white fs-637">Other text</p>
                     @endif
                   </div>
                 </div>
@@ -405,14 +476,14 @@
         <!--/ Statistics -->
 
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re on your way — just refine and push forward.
-                                                              Every effort moves you closer to success.">
+          data-bs-custom-class="tooltip-warning"
+          data-bs-original-title="You’re on your way — just refine and push forward.Every effort moves you closer to success.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-orange rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-smile icon-md"></i>
               </div>
               <div>
-                <small class="text-dark">Student Satisfaction</small>
+                <small class="text-dark">% Employability</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center">
@@ -427,14 +498,14 @@
         </div>
 
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-primary" data-bs-original-title="You’re achieving excellence with distinction.
-                                                              You set the pace for others to follow.">
+          data-bs-custom-class="tooltip-primary"
+          data-bs-original-title="You’re achieving excellence with distinction.You set the pace for others to follow.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-primary rounded p-1_5 me-4"><i
                   class="icon-base ti tabler-chalkboard icon-md"></i></div>
               <div>
-                <small class="text-dark">Classes Held</small>
+                <small class="text-dark">% Achievement of Research Publications</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center">
@@ -449,14 +520,14 @@
         </div>
 
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-warning" data-bs-original-title="You’re doing well and meeting your goals.
-                                                              Keep your consistency — it’s your strength.">
+          data-bs-custom-class="tooltip-warning"
+          data-bs-original-title="You’re doing well and meeting your goals.Keep your consistency — it’s your strength.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i
                   class="icon-base ti tabler-user-check icon-md"></i></div>
               <div>
-                <small class="text-dark">Student Attendance</small>
+                <small class="text-dark">% of Admission Targets Achieved</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center">
@@ -470,18 +541,15 @@
           </div>
         </div>
 
-
-
-
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-danger" data-bs-original-title="Not quite there yet — but growth starts here.
-                                                              Reflect. Refocus. Rise higher.">
+          data-bs-custom-class="tooltip-danger"
+          data-bs-original-title="Not quite there yet — but growth starts here.Reflect. Refocus. Rise higher.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
               </div>
               <div>
-                <small class="text-dark">Research Publications</small>
+                <small class="text-dark">% of Recovery</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center">
@@ -495,15 +563,15 @@
           </div>
         </div>
 
-        <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.
-                                                              Keep shining — your impact inspires others.">
+        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-success"
+          data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
               </div>
               <div>
-                <small class="text-dark">Manager Satisfaction</small>
+                <small class="text-dark">Profitability of the Programs</small>
               </div>
             </div>
             <div class="d-flex flex-grow-1 align-items-center">
@@ -517,8 +585,71 @@
           </div>
         </div>
 
+        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-success"
+          data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+          <div class="card-body d-flex">
+            <div class="d-flex w-50 align-items-center me-4">
+              <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
+              </div>
+              <div>
+                <small class="text-dark">Faculty Satisfaction Score</small>
+              </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+              <div class="progress w-100 me-4" style="height:8px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65"
+                  aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <span class="text-body-secondary">86%</span>
+              <span class="badge bg-label-success ms-1">EE</span>
+            </div>
+          </div>
+        </div>
 
+        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-success"
+          data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+          <div class="card-body d-flex">
+            <div class="d-flex w-50 align-items-center me-4">
+              <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
+              </div>
+              <div>
+                <small class="text-dark">Student Feedback Score</small>
+              </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+              <div class="progress w-100 me-4" style="height:8px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65"
+                  aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <span class="text-body-secondary">86%</span>
+              <span class="badge bg-label-success ms-1">EE</span>
+            </div>
+          </div>
+        </div>
 
+        <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-success"
+          data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+          <div class="card-body d-flex">
+            <div class="d-flex w-50 align-items-center me-4">
+              <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
+              </div>
+              <div>
+                <small class="text-dark">Faculty Discipline / Punctuality</small>
+              </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+              <div class="progress w-100 me-4" style="height:8px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65"
+                  aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <span class="text-body-secondary">86%</span>
+              <span class="badge bg-label-success ms-1">EE</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="col-md-6 col-lg-4" id="scrollableCol1">
@@ -892,8 +1023,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                    #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                  `;
+                                                                                                                                                                                                                                          #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                        `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -921,8 +1052,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                    #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                  `;
+                                                                                                                                                                                                                                          #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                        `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -931,14 +1062,30 @@
       });
     });
     document.addEventListener("DOMContentLoaded", function () {
+      // ✅ Updated full labels and short labels
       var chartLabels = [
         "Teaching and Learning",
         "Research, Innovation and Commercialisation",
-        "Institutional Engagement",
+        "Financial Sustainability",
+        "Internationalization",
+        "Social Responsibility",
+        "Brand Identity",
+        "Leadership and Governance",
       ];
-      var shortLabels = ["T&L", "RIC", "IE"];
-      var dataset1 = [90, 85, 80];
-      var labelColors = ["#e74c3c", "#3498db", "#27ae60"];
+
+      var shortLabels = ["T&L", "RIC", "FS", "INT", "SR", "BI", "L&G"];
+
+      // ✅ Example dataset (7 values)
+      var dataset1 = [90, 85, 80, 70, 75, 65, 70];
+      var labelColors = [
+        "#e74c3c",
+        "#3498db",
+        "#27ae60",
+        "#f39c12",
+        "#9b59b6",
+        "#1abc9c",
+        "#2c3e50",
+      ];
 
       var ctx = document.getElementById("radarChart").getContext("2d");
 
@@ -946,7 +1093,7 @@
       gradientPink.addColorStop(0, "rgba(115, 103, 240, 0.3)");
       gradientPink.addColorStop(1, "rgba(115, 103, 240, 0.5)");
 
-      // ✅ Create the chart first
+      // ✅ Create radar chart
       var radarChart = new Chart(ctx, {
         type: "radar",
         data: {
@@ -962,9 +1109,9 @@
               pointBorderColor: labelColors,
               pointRadius: 5,
               pointHoverRadius: 8,
-              pointStyle: "circle"
-            }
-          ]
+              pointStyle: "circle",
+            },
+          ],
         },
         options: {
           responsive: true,
@@ -977,11 +1124,11 @@
               pointLabels: {
                 font: { size: 9 },
                 color: (context) => labelColors[context.index],
-                callback: (label, index) => shortLabels[index]
-              }
-            }
+                callback: (label, index) => shortLabels[index], // ✅ show short labels around chart
+              },
+            },
           },
-          plugins: { legend: { display: false } }
+          plugins: { legend: { display: false } },
         },
         plugins: [
           {
@@ -1011,22 +1158,19 @@
                     const targetDiv = document.getElementById(targetId);
 
                     if (targetDiv) {
-                      // 1️⃣ Scroll into view
-                      targetDiv.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center"
-                      });
+                      // Scroll into view
+                      targetDiv.scrollIntoView({ behavior: "smooth", block: "center" });
 
-                      // 2️⃣ Open accordion (if collapsed)
+                      // Expand accordion if collapsed
                       const collapseEl = targetDiv.querySelector(".accordion-collapse");
                       if (collapseEl && !collapseEl.classList.contains("show")) {
                         new bootstrap.Collapse(collapseEl, { toggle: true });
                       }
 
-                      // 3️⃣ Mark active
-                      document
-                        .querySelectorAll(".accordion-item")
-                        .forEach((item) => item.classList.remove("active"));
+                      // Highlight active section
+                      document.querySelectorAll(".accordion-item").forEach((item) =>
+                        item.classList.remove("active")
+                      );
                       targetDiv.classList.add("active");
                     }
                   }
@@ -1034,28 +1178,29 @@
               });
 
               chart.canvas.style.cursor = hovering ? "pointer" : "default";
-            }
-          }
-        ]
+            },
+          },
+        ],
       });
 
-      // ✅ Handle dataset switching *after* chart is initialized
+      // ✅ Dataset switching (for Overall / Spring / Fall)
       document.getElementById("overall").addEventListener("change", function () {
         if (this.checked) {
-          radarChart.data.datasets[0].data = [90, 85, 80];
+          radarChart.data.datasets[0].data = [90, 85, 80, 70, 75, 65, 70];
           radarChart.update();
         }
       });
+
       document.getElementById("spring25").addEventListener("change", function () {
         if (this.checked) {
-          radarChart.data.datasets[0].data = [80, 85, 90];
+          radarChart.data.datasets[0].data = [88, 80, 85, 72, 70, 68, 73];
           radarChart.update();
         }
       });
 
       document.getElementById("fall25").addEventListener("change", function () {
         if (this.checked) {
-          radarChart.data.datasets[0].data = [70, 90, 80];
+          radarChart.data.datasets[0].data = [70, 90, 85, 75, 80, 60, 78];
           radarChart.update();
         }
       });
@@ -1068,10 +1213,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                  border-radius:50%;margin-right:5px;"></span>
-                                                  ${label} (${shortLabels[i]})
-                                                  `;
+        <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+        border-radius:50%;margin-right:5px;"></span>
+        ${label} (${shortLabels[i]})
+      `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1085,15 +1230,25 @@
         legendDiv.appendChild(li);
       });
     });
+
     document.addEventListener("DOMContentLoaded", function () {
+      // ✅ Full labels
       var chartLabels = [
         "Teaching and Learning",
         "Research, Innovation and Commercialisation",
-        "Institutional Engagement",
+        "Financial Sustainability",
+        "Internationalization",
+        "Social Responsibility",
+        "Brand Identity",
+        "Leadership and Governance",
       ];
-      var shortLabels = ["T&L", "RIC", "IE"];
-      var dataset1 = [90, 85, 80];
-      var labelColors = ["#e74c3c", "#3498db", "#27ae60"];
+
+      // ✅ Matching short labels (7 total)
+      var shortLabels = ["T&L", "RIC", "FS", "INT", "SR", "BI", "L&G"];
+
+      // ✅ Sample dataset
+      var dataset1 = [90, 85, 80, 70, 75, 65, 70];
+      var labelColors = ["#e74c3c", "#3498db", "#27ae60", "#f39c12", "#9b59b6", "#1abc9c", "#2c3e50"];
 
       var ctx = document.getElementById("radarChart1").getContext("2d");
 
@@ -1101,7 +1256,7 @@
       gradientPink.addColorStop(0, "rgba(115, 103, 240, 0.3)");
       gradientPink.addColorStop(1, "rgba(115, 103, 240, 0.5)");
 
-      // ✅ Create the chart first
+      // ✅ Create the radar chart
       var radarChart = new Chart(ctx, {
         type: "radar",
         data: {
@@ -1117,9 +1272,9 @@
               pointBorderColor: labelColors,
               pointRadius: 5,
               pointHoverRadius: 8,
-              pointStyle: "circle"
-            }
-          ]
+              pointStyle: "circle",
+            },
+          ],
         },
         options: {
           responsive: true,
@@ -1132,11 +1287,11 @@
               pointLabels: {
                 font: { size: 9 },
                 color: (context) => labelColors[context.index],
-                callback: (label, index) => shortLabels[index]
-              }
-            }
+                callback: (label, index) => shortLabels[index],
+              },
+            },
           },
-          plugins: { legend: { display: false } }
+          plugins: { legend: { display: false } },
         },
         plugins: [
           {
@@ -1150,7 +1305,7 @@
 
               chart.data.labels.forEach((label, i) => {
                 const point = rScale.getPointPositionForValue(i, rScale.max);
-                const padding = 30; // clickable area around label
+                const padding = 30;
 
                 if (
                   event.x >= point.x - padding &&
@@ -1160,28 +1315,18 @@
                 ) {
                   hovering = true;
 
-                  // 👉 Handle click
                   if (event.type === "click") {
                     const targetId = label.replace(/\s+/g, "-").toLowerCase();
                     const targetDiv = document.getElementById(targetId);
 
                     if (targetDiv) {
-                      // 1️⃣ Scroll into view
-                      targetDiv.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center"
-                      });
-
-                      // 2️⃣ Open accordion (if collapsed)
+                      targetDiv.scrollIntoView({ behavior: "smooth", block: "center" });
                       const collapseEl = targetDiv.querySelector(".accordion-collapse");
                       if (collapseEl && !collapseEl.classList.contains("show")) {
                         new bootstrap.Collapse(collapseEl, { toggle: true });
                       }
 
-                      // 3️⃣ Mark active
-                      document
-                        .querySelectorAll(".accordion-item")
-                        .forEach((item) => item.classList.remove("active"));
+                      document.querySelectorAll(".accordion-item").forEach((item) => item.classList.remove("active"));
                       targetDiv.classList.add("active");
                     }
                   }
@@ -1189,33 +1334,32 @@
               });
 
               chart.canvas.style.cursor = hovering ? "pointer" : "default";
-            }
-          }
-        ]
+            },
+          },
+        ],
       });
 
-      // ✅ Handle dataset switching *after* chart is initialized
+      // ✅ Dataset switching
       document.getElementById("overall").addEventListener("change", function () {
         if (this.checked) {
-          radarChart.data.datasets[0].data = [90, 85, 80];
+          radarChart.data.datasets[0].data = [90, 85, 80, 70, 75, 65, 70];
           radarChart.update();
         }
       });
       document.getElementById("spring25").addEventListener("change", function () {
         if (this.checked) {
-          radarChart.data.datasets[0].data = [80, 85, 90];
+          radarChart.data.datasets[0].data = [80, 88, 84, 75, 70, 60, 65];
           radarChart.update();
         }
       });
-
       document.getElementById("fall25").addEventListener("change", function () {
         if (this.checked) {
-          radarChart.data.datasets[0].data = [70, 90, 80];
+          radarChart.data.datasets[0].data = [70, 90, 85, 80, 78, 66, 72];
           radarChart.update();
         }
       });
 
-      // ✅ Custom Legend
+      // ✅ Custom legend
       var legendDiv = document.getElementById("customLegend1");
       chartLabels.forEach((label, i) => {
         let li = document.createElement("li");
@@ -1223,10 +1367,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                  border-radius:50%;margin-right:5px;"></span>
-                                                  ${label} (${shortLabels[i]})
-                                                  `;
+            <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+            border-radius:50%;margin-right:5px;"></span>
+            ${label} (${shortLabels[i]})
+          `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1240,6 +1384,7 @@
         legendDiv.appendChild(li);
       });
     });
+
     document.addEventListener("DOMContentLoaded", function () {
       const c = document.querySelector("#carrierPerformance");
       const categories = [
@@ -1356,9 +1501,9 @@
           const item = document.createElement("div");
           item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
           item.innerHTML = `
-                                                                <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                              `;
+                                                                                                                                                                                                                                                      <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                                                                                                                                                                                      <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                                                                                                                                                                                    `;
           legendContainer.appendChild(item);
         });
       }
