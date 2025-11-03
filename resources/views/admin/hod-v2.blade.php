@@ -21,7 +21,8 @@
 
     .bg-orange,
     .bg-label-orange {
-      background-color: #fd7e1459 !important;
+      
+      background-color: color-mix(in sRGB, var(--bs-paper-bg) var(--bs-bg-label-tint-amount), var(--bs-orange)) !important;
       color: #fd7e14 !important
     }
 
@@ -332,12 +333,21 @@
                       @elseif ($kpa['id'] == 2)
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
-                      @elseif ($kpa['id'] == 13)
+                      @elseif ($kpa['id'] == 3)
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
-                      @elseif ($kpa['id'] == 14)
+                      @elseif ($kpa['id'] == 4)
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
+                      @elseif ($kpa['id'] == 5)
+                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
+                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
+                      @elseif ($kpa['id'] == 6)
+                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
+                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
+                      @elseif ($kpa['id'] == 7)
+                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
+                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>  
                       @endif
                     </div>
                   </div>
@@ -360,12 +370,12 @@
                         Measures research output, quality, and supervision, emphasizing innovation and practical application
                         of research for societal and industry impact.
                       </p>
-                    @elseif ($kpa['id'] == 13)
+                    @elseif ($kpa['id'] == 3)
                       <p class="text-center mb-0 text-white fs-13">
                         Focuses on active involvement in departmental and institutional activities to promote collaboration,
                         visibility, and shared success.
                       </p>
-                    @elseif ($kpa['id'] == 14)
+                    @elseif ($kpa['id'] == 4)
                       <p class="text-center mb-0 text-white fs-13">
                         Represents ethical conduct and leadership grounded in integrity, empathy, humility, and
                         accountability.
