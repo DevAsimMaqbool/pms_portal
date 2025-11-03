@@ -123,9 +123,9 @@ class UserController extends Controller
         }
 
         // For blade dropdown
-        $departments = Department::select('name', 'complete_name')
+        $departments = Department::select('name')
             ->distinct()
-            ->orderBy('complete_name')
+            ->orderBy('name')
             ->get();
 
         $authUser = auth()->user();

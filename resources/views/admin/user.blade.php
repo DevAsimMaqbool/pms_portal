@@ -43,7 +43,7 @@
                     <select id="departmentFilter" class="form-select w-auto d-inline-block ms-2">
                         <option value="">All</option>
                         @foreach($departments as $dept)
-                            <option value="{{ $dept->name }}">{{ $dept->complete_name }}</option>
+                            <option value="{{ $dept->name }}">{{ $dept->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -111,19 +111,19 @@
                             <div class="invalid-feedback" id="roleError"></div>
                         </div>
                         <!-- <div class="mb-6">
-                                                                                            <label class="form-label" for="user-level">Select Level</label>
-                                                                                            <select id="user-level" class="form-select" name="level" required>
-                                                                                                <option value="Managerial">Managerial</option>
-                                                                                                <option value="Operational">Operational</option>
-                                                                                            </select>
-                                                                                            <div class="invalid-feedback" id="levelError"></div>
-                                                                                        </div> -->
+                                                                                                        <label class="form-label" for="user-level">Select Level</label>
+                                                                                                        <select id="user-level" class="form-select" name="level" required>
+                                                                                                            <option value="Managerial">Managerial</option>
+                                                                                                            <option value="Operational">Operational</option>
+                                                                                                        </select>
+                                                                                                        <div class="invalid-feedback" id="levelError"></div>
+                                                                                                    </div> -->
                         <!-- <div class="mb-6">
-                                                                                                            <label class="form-label" for="user-manager">Select Manager</label>
-                                                                                                            <select id="user-manager" class="form-select" name="manager_id">
-                                                                                                            </select>
-                                                                                                            <div class="invalid-feedback" id="manager_idError"></div>
-                                                                                                        </div> -->
+                                                                                                                        <label class="form-label" for="user-manager">Select Manager</label>
+                                                                                                                        <select id="user-manager" class="form-select" name="manager_id">
+                                                                                                                        </select>
+                                                                                                                        <div class="invalid-feedback" id="manager_idError"></div>
+                                                                                                                    </div> -->
                         <div class="mb-6">
                             <label class="form-label" for="user-status">Select Status</label>
                             <select id="user-status" class="form-select" name="status" required readonly>
