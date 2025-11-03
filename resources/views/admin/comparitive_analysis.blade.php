@@ -10,6 +10,19 @@
     .card-h{
       min-height: 90px;
      }
+      .custom-tabs .nav-link {
+        border-radius: 25px;
+        margin: 0 5px;
+        font-weight: 600;
+        transition: 0.3s;
+        background: #e1dcdc85;
+    }
+
+    .custom-tabs .nav-link.active {
+        background: linear-gradient(45deg, #007bff, #00c6ff);
+        color: white !important;
+        box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.4);
+    }
      </style>
 @endpush
 @section('content')
@@ -33,11 +46,23 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="indiatorCategoryMultiple" class="form-label">Indicator Category </label>
-                                    <select id="indiatorCategoryMultiple" name="indicator_category_id[]"
-                                        class="select2 form-select">
-                                        <option value="#">Select Category</option>
-                                    </select>
+                                       <div class="d-flex justify-content-md-end align-items-center column-gap-6 flex-sm-row flex-column row-gap-4">
+               
+
+               <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#spring"  aria-selected="true">
+                                    🌸 Spring 2025
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#fall"  aria-selected="false">
+                                    🍂 Fall 2025
+                                </button>
+                            </li>
+                        </ul>
+         
+            </div>
                                 </div>
                             </div>
                         </div>
@@ -161,12 +186,6 @@
             <h5 class="m-0 me-2">Top Performers</h5>
           </div>
         </div>
-        <div class="px-5 py-4 border border-start-0 border-end-0">
-          <div class="d-flex justify-content-between align-items-center">
-            <p class="mb-0 text-uppercase">Instructors</p>
-            <p class="mb-0 text-uppercase">Rating</p>
-          </div>
-        </div>
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-6">
             <div class="d-flex align-items-center">
@@ -181,7 +200,7 @@
               </div>
             </div>
             <div class="text-end">
-              <h6 class="mb-0">83</h6>
+              <h6 class="mb-0">83%</h6>
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-center mb-6">
@@ -197,7 +216,7 @@
               </div>
             </div>
             <div class="text-end">
-              <h6 class="mb-0">91</h6>
+              <h6 class="mb-0">91%</h6>
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-center mb-6">
@@ -213,7 +232,7 @@
               </div>
             </div>
             <div class="text-end">
-              <h6 class="mb-0">70</h6>
+              <h6 class="mb-0">70%</h6>
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-center mb-6">
@@ -229,7 +248,7 @@
               </div>
             </div>
             <div class="text-end">
-              <h6 class="mb-0">50</h6>
+              <h6 class="mb-0">50%</h6>
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-center">
@@ -245,7 +264,7 @@
               </div>
             </div>
             <div class="text-end">
-              <h6 class="mb-0">70</h6>
+              <h6 class="mb-0">70%</h6>
             </div>
           </div>
         </div>
