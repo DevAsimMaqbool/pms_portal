@@ -130,34 +130,34 @@
             /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
             /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
             /*
-                                                                                                                            .flip-card-inner {
-                                                                                                                            transition: none;
-                                                                                                                            }
-                                                                                                                            .flip-card-front,
-                                                                                                                            .flip-card-back {
-                                                                                                                            position: relative;
-                                                                                                                            transform: none;
-                                                                                                                            backface-visibility: visible;
-                                                                                                                            }
-                                                                                                                            .flip-card-back { display: none; } /* or display block on click via JS if needed */
+    .flip-card-inner {
+    transition: none;
+    }
+    .flip-card-front,
+    .flip-card-back {
+    position: relative;
+    transform: none;
+    backface-visibility: visible;
+    }
+    .flip-card-back { display: none; } /* or display block on click via JS if needed */
             */
         }
 
         .caed-wave-bg1 {
             /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                                            background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                                            background-image:
-                                                                                                                            radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                                            radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+    background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+    background-image:
+    radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+    radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                                            background-image:
-                                                                                                                            radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                                            radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                                            radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+    background-image:
+    radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+    radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+    radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                                            background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+    background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                                            */
+    */
 
             background-image:
                 radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -236,13 +236,26 @@
                 box-shadow: 0 0 25px rgba(255, 255, 255, 1);
             }
         }
+
+        .fade-section {
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .fade-section.show {
+            opacity: 1;
+        }
+
+        .swiper-wrapper {
+            height: 269px;
+        }
     </style>
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
         <!-- Accordion1 -->
-        <div class="row gy-6">
+        <div class="row gy-6 fade-section">
 
 
             <!-- Sales Overview -->
@@ -270,10 +283,10 @@
                     <!-- Profit last month -->
                     <div class="col-lg-4 col-md-3 col-sm-6">
                         <div class="card h-100" style="background-color: #ac7cad;">
-                                <div class="card-body d-flex justify-content-center align-items-center ">
-                                    <h6 class="mb-0 text-center text-white">As {{$employee->roles->first()->name}}</h6>
-                                </div>
+                            <div class="card-body d-flex justify-content-center align-items-center ">
+                                <h6 class="mb-0 text-center text-white">As {{$employee->roles->first()->name}}</h6>
                             </div>
+                        </div>
                     </div>
                     <div class="col-lg-4 col-md-3 col-sm-6">
                         <div class="card h-100">
@@ -316,7 +329,7 @@
                                 $series1 = [90, 85, 70, 65, 50];
                                 $index1 = 0;
                                 $index2 = 0;
-                              @endphp
+                            @endphp
                             @foreach($result as $kpakey => $kpa)
                                 @php
                                     $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
@@ -803,22 +816,18 @@
             </div>
             <!--/ Website Analytics -->
 
-            <!-- Average Daily Sales -->
-            <div class="col-xl-4 col-sm-6">
-                <div class="card h-100">
+            <!-- Radial bar Chart -->
+            <div class="col-md-4 col-12">
+                <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <div class="card-title mb-0">
-                            <h5 class="m-0 me-2">Virtue Mirror</h5>
-                        </div>
+                        <h5 class="card-title mb-0">Departments Overview</h5>
                     </div>
-                    <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
-                    <div class="card-body pt-2">
-                        <canvas class="chartjs" id="virtueChart" data-height="355"></canvas>
+                    <div class="card-body">
+                        <div id="radialBarChart"></div>
                     </div>
-
                 </div>
             </div>
-            <!--/ Average Daily Sales -->
+            <!-- /Radial bar Chart -->
             <!-- Website Analytics -->
             <div class="col-xl-4 col">
                 <div class="card h-100">
@@ -913,7 +922,6 @@
 @endsection
 @push('script')
     <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
-
     <script src="{{ asset('admin/assets/js/app-logistics-dashboard.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
@@ -925,6 +933,7 @@
     <script src="{{ asset('admin/assets/vendor/libs/swiper/swiper.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/nouislider/nouislider.js') }}"></script>
     <script src="{{ asset('admin/assets/js/front-page-landing.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/charts-apex.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const elements = document.querySelectorAll('.text-cut');
@@ -1001,8 +1010,8 @@
             // For Chrome/Safari — hide scrollbar visually
             const style = document.createElement("style");
             style.innerHTML = `
-                                                                                                                                                                                                                                                                                                    #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                  `;
+                                                                    #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                    `;
             document.head.appendChild(style);
 
             // Auto adjust on window resize
@@ -1030,8 +1039,8 @@
             // For Chrome/Safari — hide scrollbar visually
             const style = document.createElement("style");
             style.innerHTML = `
-                                                                                                                                                                                                                                                                                                    #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                  `;
+                                                                    #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                    `;
             document.head.appendChild(style);
 
             // Auto adjust on window resize
@@ -1191,10 +1200,10 @@
                 li.style.fontSize = "9px";
                 li.style.cursor = "pointer";
                 li.innerHTML = `
-                                                                  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                  border-radius:50%;margin-right:5px;"></span>
-                                                                  ${label} (${shortLabels[i]})
-                                                                `;
+    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+    border-radius:50%;margin-right:5px;"></span>
+    ${label} (${shortLabels[i]})
+    `;
 
                 li.addEventListener("mouseenter", () => {
                     radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1345,10 +1354,10 @@
                 li.style.fontSize = "9px";
                 li.style.cursor = "pointer";
                 li.innerHTML = `
-                                                                      <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                      border-radius:50%;margin-right:5px;"></span>
-                                                                      ${label} (${shortLabels[i]})
-                                                                    `;
+    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+    border-radius:50%;margin-right:5px;"></span>
+    ${label} (${shortLabels[i]})
+    `;
 
                 li.addEventListener("mouseenter", () => {
                     radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1479,9 +1488,9 @@
                     const item = document.createElement("div");
                     item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
                     item.innerHTML = `
-                                                                                                                                                                                                                                                                                                                <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                                                                                                                                                                                                                                <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                                                                                                                                                                                                                              `;
+                                                                                <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                `;
                     legendContainer.appendChild(item);
                 });
             }
@@ -1666,6 +1675,9 @@
                     }
                 });
             });
+        });
+        window.addEventListener("load", function () {
+            document.querySelector(".fade-section").classList.add("show");
         });
     </script>
 
