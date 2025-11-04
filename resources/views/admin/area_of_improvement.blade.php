@@ -96,30 +96,6 @@
               </thead>
               <tbody>
                 <tr>
-                  <td class="pt-5">
-                    <div class="d-flex justify-content-start align-items-center">
-                      <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-orange"><i
-                            class="icon-base ti tabler-package icon-26px"></i></span>
-                      </div>
-                      <div class="d-flex flex-column me-4">
-                        <small class="text-body">Student Satisfaction</small>
-                      </div>
-                      <div class="progress w-50 me-4" style="height:8px;">
-                        <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
-                          aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td class="pt-5"><span class="badge bg-label-orange">NI</span></td>
-                  <td class="pt-5">
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      65%
-                    </p>
-                  </td>
-                </tr>
-                <tr>
                   <td>
                     <div class="d-flex justify-content-start align-items-center">
                       <div class="avatar flex-shrink-0 me-4">
@@ -130,7 +106,7 @@
                         <small class="text-body">Research Publications</small>
                       </div>
                       <div class="progress w-50 me-4" style="height:8px;">
-                         <div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="50"
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="50"
                           aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                     </div>
@@ -140,6 +116,31 @@
                   <td>
                     <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
                       50%
+                    </p>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="d-flex justify-content-start align-items-center">
+                      <div class="avatar flex-shrink-0 me-4">
+                        <span class="avatar-initial rounded bg-label-info"><i
+                            class="icon-base ti tabler-truck icon-26px"></i></span>
+                      </div>
+                      <div class="d-flex flex-column me-4">
+                        <small class="text-body">Line Manager Satisfaction Rating</small>
+                      </div>
+                      <div class="progress w-50 me-4" style="height:8px;">
+                        <div class="progress-bar bg-orange" role="progressbar" style="width: 35%" aria-valuenow="53"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td><span class="badge bg-label-danger">BE</span></td>
+                  <td>
+                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
+                      53%
                     </p>
                   </td>
                 </tr>
@@ -194,31 +195,32 @@
                     </p>
                   </td>
                 </tr>
-
                 <tr>
-                  <td>
+                  <td class="pt-5">
                     <div class="d-flex justify-content-start align-items-center">
                       <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-info"><i
-                            class="icon-base ti tabler-truck icon-26px"></i></span>
+                        <span class="avatar-initial rounded bg-label-orange"><i
+                            class="icon-base ti tabler-package icon-26px"></i></span>
                       </div>
                       <div class="d-flex flex-column me-4">
-                        <small class="text-body">Line Manager Satisfaction Rating</small>
+                        <small class="text-body">Student Satisfaction</small>
                       </div>
                       <div class="progress w-50 me-4" style="height:8px;">
-                        <div class="progress-bar bg-orange" role="progressbar" style="width: 35%" aria-valuenow="53"
+                        <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
                           aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                     </div>
                   </td>
 
-                  <td><span class="badge bg-label-danger">BE</span></td>
-                  <td>
+                  <td class="pt-5"><span class="badge bg-label-orange">NI</span></td>
+                  <td class="pt-5">
                     <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      53%
+                      65%
                     </p>
                   </td>
                 </tr>
+
+
 
 
               </tbody>
