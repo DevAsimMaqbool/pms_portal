@@ -11,8 +11,6 @@
     <!-- Page CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
-    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/swiper/swiper.css') }}" />
-    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/front-page-landing.css') }}" />
     <style>
         .fs-10 {
             font-size: 10px !important;
@@ -24,8 +22,7 @@
 
         .bg-orange,
         .bg-label-orange {
-
-            background-color: color-mix(in sRGB, var(--bs-paper-bg) var(--bs-bg-label-tint-amount), var(--bs-orange)) !important;
+            background-color: #fd7e1459 !important;
             color: #fd7e14 !important
         }
 
@@ -130,34 +127,34 @@
             /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
             /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
             /*
-                                                                                                                            .flip-card-inner {
-                                                                                                                            transition: none;
-                                                                                                                            }
-                                                                                                                            .flip-card-front,
-                                                                                                                            .flip-card-back {
-                                                                                                                            position: relative;
-                                                                                                                            transform: none;
-                                                                                                                            backface-visibility: visible;
-                                                                                                                            }
-                                                                                                                            .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                                                                                                                                                                            .flip-card-inner {
+                                                                                                                                                                                                              transition: none;
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                            .flip-card-front,
+                                                                                                                                                                                                            .flip-card-back {
+                                                                                                                                                                                                              position: relative;
+                                                                                                                                                                                                              transform: none;
+                                                                                                                                                                                                              backface-visibility: visible;
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                            .flip-card-back { display: none; } /* or display block on click via JS if needed */
             */
         }
 
         .caed-wave-bg1 {
             /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                                            background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                                            background-image:
-                                                                                                                            radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                                            radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                                                                                                                                                                                            background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                                                                                                                                                                                            background-image:
+                                                                                                                                                                                                            radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                                                                                                                                                                            radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                                            background-image:
-                                                                                                                            radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                                            radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                                            radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                                                                                                                                                                                          background-image:
+                                                                                                                                                                                                            radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                                                                                                                                                                            radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                                                                                                                                                                            radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                                            background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                                                                                                                                                                            background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                                            */
+                                                                                                                                                                                                            */
 
             background-image:
                 radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -254,7 +251,8 @@
                         <div class="card" style="box-shadow: none;background: none;">
                             <div class="card-header text-center">
                                 <div class="card-title mb-0">
-                                    <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉
+                                    <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}
+                                        🎉
                                     </h5>
                                     <span class="mb-2 badge rounded bg-label-success"
                                         style="display: inline-block; vertical-align: middle; margin-right: 134px;">
@@ -270,18 +268,15 @@
                     <!-- Profit last month -->
                     <div class="col-lg-4 col-md-3 col-sm-6">
                         <div class="card h-100" style="background-color: #ac7cad;">
-                                <div class="card-body d-flex justify-content-center align-items-center ">
-                                    <h6 class="mb-0 text-center text-white">As {{$employee->roles->first()->name}}</h6>
-                                </div>
+                            <div class="card-body d-flex justify-content-center align-items-center ">
+                                <h6 class="mb-0 text-center text-white">As {{$employee->roles->first()->name}}</h6>
                             </div>
+                        </div>
                     </div>
                     <div class="col-lg-4 col-md-3 col-sm-6">
                         <div class="card h-100">
-
                             <div class="card-body d-flex justify-content-center align-items-center">
                                 <h4 class="mb-0 text-center">82%</h4>
-
-
                             </div>
                         </div>
                     </div>
@@ -292,8 +287,6 @@
                             data-bs-original-title="You’re going beyond what’s asked of you.">
                             <div class="card-body d-flex justify-content-center align-items-center">
                                 <h4 class="mb-0 text-center text-white">EE</h4>
-
-
                             </div>
                         </div>
                     </div>
@@ -303,177 +296,122 @@
             <!--/ Sales Overview -->
 
             <!-- Website Analytics -->
-            <div class="col-lg-9 col-md-12">
-                <div class="swiper-reviews-carousel overflow-hidden">
-                    <div class="swiper" id="swiper-reviews">
-                        <div class="swiper-wrapper">
-                            @php
-                                $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
-                                $icon1 = ['tabler-book ', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
-                                $colors1 = ['primary', 'success', 'warning', 'orange', 'danger'];
-                                //$colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
-                                $colors2 = ['#0d6efd', '#198754', '#FFA500', '#FFF200', '#dc3545'];
-                                $series1 = [90, 85, 70, 65, 50];
-                                $index1 = 0;
-                                $index2 = 0;
-                              @endphp
-                            @foreach($result as $kpakey => $kpa)
-                                @php
-                                    $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
-                                    $iconClass = $icon1[$index2 % count($icon1)];
-                                    $color1 = $colors1[$index2 % count($colors1)];
-                                    $index2++;
-                                @endphp
-                                {{-- <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
+            @php
+                $result = getRoleAssignments($employee->roles->first()->name);
+                $icon1 = ['tabler-book ', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
+                $colors1 = ['primary', 'success', 'warning', 'orange', 'danger'];
+                //$colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
+                $colors2 = ['#0d6efd', '#198754', '#FFA500', '#FFF200', '#dc3545'];
+                $series1 = [90, 85, 70, 65, 50];
+                $index1 = 0;
+                $index2 = 0;
+            @endphp
+            @foreach($result as $kpakey => $kpa)
+                @php
+                    $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+                    $iconClass = $icon1[$index2 % count($icon1)];
+                    $color1 = $colors1[$index2 % count($colors1)];
+                    $index2++;
+                  @endphp
+                {{-- <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
 
-                                    <!-- FRONT SIDE -->
-                                    <div class="card bg-{{ $color1 }} text-white h-100">
-                                        <div class="card-body d-flex justify-content-between align-items-center">
-                                            <div class="card-title mb-0 text-white">
-                                                <p class="mb-0">{{ $kpa['performance_area'] }}</p>
+                    <!-- FRONT SIDE -->
+                    <div class="card bg-{{ $color1 }} text-white h-100">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div class="card-title mb-0 text-white">
+                                <p class="mb-0">{{ $kpa['performance_area'] }}</p>
+                            </div>
+                            <div class="card-icon">
+                                <span class="badge bg-label-{{ $color1 }} rounded p-2">
+                                    <i class="icon-base ti {{ $iconClass }} icon-26px"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div> --}}
+                <div class="col-lg-3 col-md-4" id="{{ $targetId }}">
+                    <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
+                        <div class="flip-card h-100">
+                            <div class="flip-card-inner">
+
+                                <!-- FRONT -->
+                                <div class="flip-card-front card bg-{{ $color1 }} text-white">
+
+                                    <div class="card-body position-relative d-flex flex-column justify-content-between">
+                                        <div>
+                                            <div class="d-flex align-items-center mb-1">
+                                                <div class="avatar me-4">
+                                                    <span class="avatar-initial rounded bg-label-{{ $color1 }}">
+                                                        <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <div class="card-icon">
-                                                <span class="badge bg-label-{{ $color1 }} rounded p-2">
-                                                    <i class="icon-base ti {{ $iconClass }} icon-26px"></i>
-                                                </span>
-                                            </div>
+                                            <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
+                                        </div>
+                                        <!-- Metrics bottom right -->
+                                        <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
+                                            @if ($kpa['id'] == 1)
+                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
+                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
+                                            @elseif ($kpa['id'] == 2)
+                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
+                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
+                                            @elseif ($kpa['id'] == 13)
+                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
+                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
+                                            @elseif ($kpa['id'] == 14)
+                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
+                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
+                                            @endif
                                         </div>
                                     </div>
 
-                                </div> --}}
-                                <div class="swiper-slide" id="{{ $targetId }}">
-                                    <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
-                                        <div class="flip-card h-100">
-                                            <div class="flip-card-inner">
-
-                                                <!-- FRONT -->
-                                                <div class="flip-card-front card bg-{{ $color1 }} text-white">
-
-                                                    <div
-                                                        class="card-body position-relative d-flex flex-column justify-content-between">
-                                                        <div>
-                                                            <div class="d-flex align-items-center mb-1">
-                                                                <div class="avatar me-4">
-                                                                    <span class="avatar-initial rounded bg-label-{{ $color1 }}">
-                                                                        <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}
-                                                            </p>
-                                                        </div>
-                                                        <!-- Metrics bottom right -->
-                                                        <div
-                                                            class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
-                                                            @if ($kpa['id'] == 1)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
-                                                            @elseif ($kpa['id'] == 2)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
-                                                            @elseif ($kpa['id'] == 3)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
-                                                            @elseif ($kpa['id'] == 4)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
-                                                            @elseif ($kpa['id'] == 5)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
-                                                            @elseif ($kpa['id'] == 6)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
-                                                            @elseif ($kpa['id'] == 7)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <!-- BACK -->
-                                                <div class="flip-card-back card bg-info text-dark h-100">
-                                                    <div
-                                                        class="card-body d-flex flex-column justify-content-center align-items-center">
-                                                        <div class="badge rounded p-2 bg-label-info mb-2"><i
-                                                                class="icon-base ti {{ $iconClass }} icon-lg"></i>
-                                                        </div>
-                                                        <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}
-                                                        </h6>
-                                                        @if ($kpa['id'] == 1)
-                                                            <p class=" text-center mb-0 text-white fs-13">
-                                                                Focuses on teaching quality, classroom management, and continuous
-                                                                improvement to enhance
-                                                                student learning outcomes.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 2)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Measures research output, quality, and supervision, emphasizing
-                                                                innovation and practical
-                                                                application of research for societal and industry impact.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 3)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Ensures financial health through diversified revenue, cost
-                                                                efficiency, strategic growth, and
-                                                                reinvestment in institutional excellence.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 4)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Tracks institutional success in achieving global engagement targets
-                                                                and providing students
-                                                                with international exposure opportunities.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 5)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Advances social and environmental impact through service,
-                                                                sustainability, civic engagement,
-                                                                and community development initiatives.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 6)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Builds institutional reputation and distinctiveness through
-                                                                excellence, stakeholder trust,
-                                                                global linkages, and consistent quality.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 7)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Promotes transparent, accountable, participative leadership ensuring
-                                                                alignment, trust,
-                                                                compliance, and mission-driven institutional effectiveness.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 13)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Focuses on active involvement in departmental and institutional
-                                                                activities to promote
-                                                                collaboration, visibility, and shared success.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 14)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Represents ethical conduct and leadership grounded in integrity,
-                                                                empathy, humility, and
-                                                                accountability.
-                                                            </p>
-                                                        @else
-                                                            <p class="text-center mb-0 text-white fs-13">Other text</p>
-                                                        @endif
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </a>
                                 </div>
 
-                            @endforeach
+                                <!-- BACK -->
+                                <div class="flip-card-back card bg-info text-dark h-100">
+                                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                        <div class="badge rounded p-2 bg-label-info mb-2"><i
+                                                class="icon-base ti {{ $iconClass }} icon-lg"></i>
+                                        </div>
+                                        <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
+                                        @if ($kpa['id'] == 1)
+                                            <p class=" text-center mb-0 text-white fs-13">
+                                                Focuses on teaching quality, classroom management, and continuous improvement to
+                                                enhance student
+                                                learning outcomes.
+                                            </p>
+                                        @elseif ($kpa['id'] == 2)
+                                            <p class="text-center mb-0 text-white fs-13">
+                                                Measures research output, quality, and supervision, emphasizing innovation and
+                                                practical application
+                                                of research for societal and industry impact.
+                                            </p>
+                                        @elseif ($kpa['id'] == 13)
+                                            <p class="text-center mb-0 text-white fs-13">
+                                                Focuses on active involvement in departmental and institutional activities to
+                                                promote collaboration,
+                                                visibility, and shared success.
+                                            </p>
+                                        @elseif ($kpa['id'] == 14)
+                                            <p class="text-center mb-0 text-white fs-13">
+                                                Represents ethical conduct and leadership grounded in integrity, empathy, humility,
+                                                and
+                                                accountability.
+                                            </p>
+                                        @else
+                                            <p class="text-center mb-0 text-white fs-13">Other text</p>
+                                        @endif
+                                    </div>
+                                </div>
 
+                            </div>
                         </div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
-                    </div>
+                    </a>
                 </div>
-            </div>
+
+            @endforeach
 
             <!--/ Website Analytics -->
 
@@ -481,7 +419,7 @@
         <div class="row gy-6 mt-2">
 
             <div class="col-md-6 col-lg-4" id="scrollableCol">
-                <div class=" d-flex justify-content-between">
+                <div class="d-flex justify-content-between">
                     <h5 class="fw-bold">Hot Indicators</h5>
                 </div>
                 <!--/ Statistics -->
@@ -495,7 +433,7 @@
                                     class="icon-base ti tabler-mood-smile icon-md"></i>
                             </div>
                             <div>
-                                <small class="text-dark">% Employability</small>
+                                <small class="text-dark">Student Satisfaction</small>
                             </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
@@ -511,13 +449,14 @@
 
                 <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
                     data-bs-custom-class="tooltip-primary"
-                    data-bs-original-title="You’re achieving excellence with distinction.You set the pace for others to follow.">
+                    data-bs-original-title="You’re achieving excellence with distinction.
+                                                                                                                                                                                                                                  You set the pace for others to follow.">
                     <div class="card-body d-flex">
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-primary rounded p-1_5 me-4"><i
                                     class="icon-base ti tabler-chalkboard icon-md"></i></div>
                             <div>
-                                <small class="text-dark">% Achievement of Research Publications</small>
+                                <small class="text-dark">Classes Held</small>
                             </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
@@ -533,13 +472,14 @@
 
                 <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
                     data-bs-custom-class="tooltip-warning"
-                    data-bs-original-title="You’re doing well and meeting your goals.Keep your consistency — it’s your strength.">
+                    data-bs-original-title="You’re doing well and meeting your goals.
+                                                                                                                                                                                                                                    Keep your consistency — it’s your strength.">
                     <div class="card-body d-flex">
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-warning rounded p-1_5 me-4"><i
                                     class="icon-base ti tabler-user-check icon-md"></i></div>
                             <div>
-                                <small class="text-dark">% of Admission Targets Achieved</small>
+                                <small class="text-dark">Student Attendance</small>
                             </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
@@ -553,16 +493,20 @@
                     </div>
                 </div>
 
+
+
+
                 <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
                     data-bs-custom-class="tooltip-danger"
-                    data-bs-original-title="Not quite there yet — but growth starts here.Reflect. Refocus. Rise higher.">
+                    data-bs-original-title="Not quite there yet — but growth starts here.
+                                                                                                                                                                                                                                    Reflect. Refocus. Rise higher.">
                     <div class="card-body d-flex">
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-danger rounded p-1_5 me-4"><i
                                     class="icon-base ti tabler-book-2 icon-md"></i>
                             </div>
                             <div>
-                                <small class="text-dark">% of Recovery</small>
+                                <small class="text-dark">Research Publications</small>
                             </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
@@ -576,85 +520,17 @@
                     </div>
                 </div>
 
-                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-success"
-                    data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                            <div class="badge bg-label-success rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-stars icon-md"></i>
-                            </div>
-                            <div>
-                                <small class="text-dark">Profitability of the Programs</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                            <div class="progress w-100 me-4" style="height:8px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
-                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="text-body-secondary">86%</span>
-                            <span class="badge bg-label-success ms-1">EE</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-success"
-                    data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                            <div class="badge bg-label-success rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-stars icon-md"></i>
-                            </div>
-                            <div>
-                                <small class="text-dark">Faculty Satisfaction Score</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                            <div class="progress w-100 me-4" style="height:8px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
-                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="text-body-secondary">86%</span>
-                            <span class="badge bg-label-success ms-1">EE</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-success"
-                    data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                            <div class="badge bg-label-success rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-stars icon-md"></i>
-                            </div>
-                            <div>
-                                <small class="text-dark">Student Feedback Score</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                            <div class="progress w-100 me-4" style="height:8px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
-                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="text-body-secondary">86%</span>
-                            <span class="badge bg-label-success ms-1">EE</span>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
                     data-bs-custom-class="tooltip-success"
-                    data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+                    data-bs-original-title="You’re going beyond what’s asked of you.
+                                                                                                                                                                                                                                    Keep shining — your impact inspires others.">
                     <div class="card-body d-flex">
                         <div class="d-flex w-50 align-items-center me-4">
                             <div class="badge bg-label-success rounded p-1_5 me-4"><i
                                     class="icon-base ti tabler-stars icon-md"></i>
                             </div>
                             <div>
-                                <small class="text-dark">Faculty Discipline / Punctuality</small>
+                                <small class="text-dark">Manager Satisfaction</small>
                             </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
@@ -667,44 +543,27 @@
                         </div>
                     </div>
                 </div>
+
+
+
             </div>
 
             <div class="col-md-6 col-lg-4" id="scrollableCol1">
 
-
                 <div class=" d-flex justify-content-between">
                     <h5 class="fw-bold">Top Performers</h5>
                 </div>
-                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-primary"
-                    data-bs-original-title="Assistant Professor / Gold Campus: 05 KM, Main Raiwind Road, Lahore.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-70 align-items-center me-4">
-                            <div class="badge bg-label-primary rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-trophy icon-md"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 text-cut">Dr. Syed Asad Ali</h6>
-                                <small class="text-dark fs-10 text-cut">Department of Information Technology</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
 
-                            <span class="badge bg-label-primary ms-1">91</span>
-                            <span class="badge bg-label-primary ms-1">OS</span>
-                        </div>
-                    </div>
-                </div>
                 <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
                     data-bs-custom-class="tooltip-success"
-                    data-bs-original-title="HOD / Gold Campus: 05 KM, Main Raiwind Road, Lahore.">
+                    data-bs-original-title="(Lecturer) Department of Software Engineering">
                     <div class="card-body d-flex">
                         <div class="d-flex w-70 align-items-center me-4">
                             <div class="badge bg-label-success rounded p-1_5 me-4"><i
                                     class="icon-base ti tabler-trophy icon-md"></i>
                             </div>
                             <div>
-                                <h6 class="mb-0 text-cut">Dr. Tehreem Masood</h6>
+                                <h6 class="mb-0 text-cut">Haider Ali / Lecturer</h6>
                                 <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
                             </div>
                         </div>
@@ -716,17 +575,40 @@
                     </div>
                 </div>
 
+
+
+                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+                    data-bs-custom-class="tooltip-primary"
+                    data-bs-original-title="(Lecturer) Superior University Franchise.">
+                    <div class="card-body d-flex">
+                        <div class="d-flex w-70 align-items-center me-4">
+                            <div class="badge bg-label-primary rounded p-1_5 me-4"><i
+                                    class="icon-base ti tabler-trophy icon-md"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 text-cut">Sadia Ashraf / Lecturer</h6>
+                                <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                            <span class="badge bg-label-primary ms-1">91</span>
+                            <span class="badge bg-label-primary ms-1">OS</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
                     data-bs-custom-class="tooltip-warning"
-                    data-bs-original-title="Assistant Professor / Gold Campus: 05 KM, Main Raiwind Road, Lahore.">
+                    data-bs-original-title="(Lecturer) Superior University Franchise">
                     <div class="card-body d-flex">
                         <div class="d-flex w-70 align-items-center me-4">
                             <div class="badge bg-label-warning rounded p-1_5 me-4"><i
                                     class="icon-base ti tabler-award icon-md"></i>
                             </div>
                             <div>
-                                <h6 class="mb-0 text-cut">Dr. Muhammad Azam</h6>
-                                <small class="text-dark fs-10 text-cut">Department of Computer Sciences</small>
+                                <h6 class="mb-0 text-cut">Amna Ilyas / Lecturer</h6>
+                                <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
                             </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center justify-content-end">
@@ -736,6 +618,57 @@
                         </div>
                     </div>
                 </div>
+
+
+                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+                    data-bs-custom-class="tooltip-danger" data-bs-original-title="(Lecturer) Teaching">
+                    <div class="card-body d-flex">
+                        <div class="d-flex w-70 align-items-center me-4">
+                            <div class="badge bg-label-danger rounded p-1_5 me-4"><i
+                                    class="icon-base ti tabler-trophy-off icon-md"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 text-cut">Muhammad Ashraf / Lecturer</h6>
+
+                                <small class="text-dark fs-10 text-cut">Teaching</small>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                            <span class="badge bg-label-danger ms-1">50</span>
+                            <span class="badge bg-label-danger ms-1">BE</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning"
+                    data-bs-original-title="(Lecturer) Faisalabad - Uni Campus">
+                    <div class="card-body d-flex">
+                        <div class="d-flex w-70 align-items-center me-4">
+                            <div class="badge bg-label-warning rounded p-1_5 me-4"><i
+                                    class="icon-base ti tabler-award icon-md"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Rashid Hussain / Lecturer</h6>
+                                <small class="text-dark fs-10">Faisalabad - Uni Campus</small>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                            <span class="badge bg-label-warning ms-1">70</span>
+                            <span class="badge bg-label-warning ms-1">ME</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
             </div>
 
             <div class="col-md-6 col-lg-4">
@@ -922,9 +855,6 @@
     <script src="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('admin/assets/js/extended-ui-perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('admin/assets/js/cards-advance.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/libs/swiper/swiper.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/libs/nouislider/nouislider.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/front-page-landing.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const elements = document.querySelectorAll('.text-cut');
@@ -1001,8 +931,8 @@
             // For Chrome/Safari — hide scrollbar visually
             const style = document.createElement("style");
             style.innerHTML = `
-                                                                                                                                                                                                                                                                                                    #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                  `;
+                                                                                                                                                                                                              #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                            `;
             document.head.appendChild(style);
 
             // Auto adjust on window resize
@@ -1030,8 +960,8 @@
             // For Chrome/Safari — hide scrollbar visually
             const style = document.createElement("style");
             style.innerHTML = `
-                                                                                                                                                                                                                                                                                                    #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                  `;
+                                                                                                                                                                                                              #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                            `;
             document.head.appendChild(style);
 
             // Auto adjust on window resize
@@ -1040,30 +970,14 @@
             });
         });
         document.addEventListener("DOMContentLoaded", function () {
-            // ✅ Updated full labels and short labels
             var chartLabels = [
                 "Teaching and Learning",
                 "Research, Innovation and Commercialisation",
-                "Financial Sustainability",
-                "Internationalization",
-                "Social Responsibility",
-                "Brand Identity",
-                "Leadership and Governance",
+                "Institutional Engagement",
             ];
-
-            var shortLabels = ["T&L", "RIC", "FS", "INT", "SR", "BI", "L&G"];
-
-            // ✅ Example dataset (7 values)
-            var dataset1 = [90, 85, 80, 70, 75, 65, 70];
-            var labelColors = [
-                "#e74c3c",
-                "#3498db",
-                "#27ae60",
-                "#f39c12",
-                "#9b59b6",
-                "#1abc9c",
-                "#2c3e50",
-            ];
+            var shortLabels = ["T&L", "RIC", "IE"];
+            var dataset1 = [90, 85, 80];
+            var labelColors = ["#e74c3c", "#3498db", "#27ae60"];
 
             var ctx = document.getElementById("radarChart").getContext("2d");
 
@@ -1071,7 +985,7 @@
             gradientPink.addColorStop(0, "rgba(115, 103, 240, 0.3)");
             gradientPink.addColorStop(1, "rgba(115, 103, 240, 0.5)");
 
-            // ✅ Create radar chart
+            // ✅ Create the chart first
             var radarChart = new Chart(ctx, {
                 type: "radar",
                 data: {
@@ -1087,9 +1001,9 @@
                             pointBorderColor: labelColors,
                             pointRadius: 5,
                             pointHoverRadius: 8,
-                            pointStyle: "circle",
-                        },
-                    ],
+                            pointStyle: "circle"
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
@@ -1102,11 +1016,11 @@
                             pointLabels: {
                                 font: { size: 9 },
                                 color: (context) => labelColors[context.index],
-                                callback: (label, index) => shortLabels[index], // ✅ show short labels around chart
-                            },
-                        },
+                                callback: (label, index) => shortLabels[index]
+                            }
+                        }
                     },
-                    plugins: { legend: { display: false } },
+                    plugins: { legend: { display: false } }
                 },
                 plugins: [
                     {
@@ -1136,19 +1050,22 @@
                                         const targetDiv = document.getElementById(targetId);
 
                                         if (targetDiv) {
-                                            // Scroll into view
-                                            targetDiv.scrollIntoView({ behavior: "smooth", block: "center" });
+                                            // 1️⃣ Scroll into view
+                                            targetDiv.scrollIntoView({
+                                                behavior: "smooth",
+                                                block: "center"
+                                            });
 
-                                            // Expand accordion if collapsed
+                                            // 2️⃣ Open accordion (if collapsed)
                                             const collapseEl = targetDiv.querySelector(".accordion-collapse");
                                             if (collapseEl && !collapseEl.classList.contains("show")) {
                                                 new bootstrap.Collapse(collapseEl, { toggle: true });
                                             }
 
-                                            // Highlight active section
-                                            document.querySelectorAll(".accordion-item").forEach((item) =>
-                                                item.classList.remove("active")
-                                            );
+                                            // 3️⃣ Mark active
+                                            document
+                                                .querySelectorAll(".accordion-item")
+                                                .forEach((item) => item.classList.remove("active"));
                                             targetDiv.classList.add("active");
                                         }
                                     }
@@ -1156,29 +1073,28 @@
                             });
 
                             chart.canvas.style.cursor = hovering ? "pointer" : "default";
-                        },
-                    },
-                ],
+                        }
+                    }
+                ]
             });
 
-            // ✅ Dataset switching (for Overall / Spring / Fall)
+            // ✅ Handle dataset switching *after* chart is initialized
             document.getElementById("overall").addEventListener("change", function () {
                 if (this.checked) {
-                    radarChart.data.datasets[0].data = [90, 85, 80, 70, 75, 65, 70];
+                    radarChart.data.datasets[0].data = [90, 85, 80];
                     radarChart.update();
                 }
             });
-
             document.getElementById("spring25").addEventListener("change", function () {
                 if (this.checked) {
-                    radarChart.data.datasets[0].data = [88, 80, 85, 72, 70, 68, 73];
+                    radarChart.data.datasets[0].data = [80, 85, 90];
                     radarChart.update();
                 }
             });
 
             document.getElementById("fall25").addEventListener("change", function () {
                 if (this.checked) {
-                    radarChart.data.datasets[0].data = [70, 90, 85, 75, 80, 60, 78];
+                    radarChart.data.datasets[0].data = [70, 90, 80];
                     radarChart.update();
                 }
             });
@@ -1191,10 +1107,10 @@
                 li.style.fontSize = "9px";
                 li.style.cursor = "pointer";
                 li.innerHTML = `
-                                                                  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                  border-radius:50%;margin-right:5px;"></span>
-                                                                  ${label} (${shortLabels[i]})
-                                                                `;
+                                                                                                                                                                                                            <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                                                                            border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                                                                            ${label} (${shortLabels[i]})
+                                                                                                                                                                                                            `;
 
                 li.addEventListener("mouseenter", () => {
                     radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1208,25 +1124,15 @@
                 legendDiv.appendChild(li);
             });
         });
-
         document.addEventListener("DOMContentLoaded", function () {
-            // ✅ Full labels
             var chartLabels = [
                 "Teaching and Learning",
                 "Research, Innovation and Commercialisation",
-                "Financial Sustainability",
-                "Internationalization",
-                "Social Responsibility",
-                "Brand Identity",
-                "Leadership and Governance",
+                "Institutional Engagement",
             ];
-
-            // ✅ Matching short labels (7 total)
-            var shortLabels = ["T&L", "RIC", "FS", "INT", "SR", "BI", "L&G"];
-
-            // ✅ Sample dataset
-            var dataset1 = [90, 85, 80, 70, 75, 65, 70];
-            var labelColors = ["#e74c3c", "#3498db", "#27ae60", "#f39c12", "#9b59b6", "#1abc9c", "#2c3e50"];
+            var shortLabels = ["T&L", "RIC", "IE"];
+            var dataset1 = [90, 85, 80];
+            var labelColors = ["#e74c3c", "#3498db", "#27ae60"];
 
             var ctx = document.getElementById("radarChart1").getContext("2d");
 
@@ -1234,7 +1140,7 @@
             gradientPink.addColorStop(0, "rgba(115, 103, 240, 0.3)");
             gradientPink.addColorStop(1, "rgba(115, 103, 240, 0.5)");
 
-            // ✅ Create the radar chart
+            // ✅ Create the chart first
             var radarChart = new Chart(ctx, {
                 type: "radar",
                 data: {
@@ -1250,9 +1156,9 @@
                             pointBorderColor: labelColors,
                             pointRadius: 5,
                             pointHoverRadius: 8,
-                            pointStyle: "circle",
-                        },
-                    ],
+                            pointStyle: "circle"
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
@@ -1265,11 +1171,11 @@
                             pointLabels: {
                                 font: { size: 9 },
                                 color: (context) => labelColors[context.index],
-                                callback: (label, index) => shortLabels[index],
-                            },
-                        },
+                                callback: (label, index) => shortLabels[index]
+                            }
+                        }
                     },
-                    plugins: { legend: { display: false } },
+                    plugins: { legend: { display: false } }
                 },
                 plugins: [
                     {
@@ -1283,7 +1189,7 @@
 
                             chart.data.labels.forEach((label, i) => {
                                 const point = rScale.getPointPositionForValue(i, rScale.max);
-                                const padding = 30;
+                                const padding = 30; // clickable area around label
 
                                 if (
                                     event.x >= point.x - padding &&
@@ -1293,18 +1199,28 @@
                                 ) {
                                     hovering = true;
 
+                                    // 👉 Handle click
                                     if (event.type === "click") {
                                         const targetId = label.replace(/\s+/g, "-").toLowerCase();
                                         const targetDiv = document.getElementById(targetId);
 
                                         if (targetDiv) {
-                                            targetDiv.scrollIntoView({ behavior: "smooth", block: "center" });
+                                            // 1️⃣ Scroll into view
+                                            targetDiv.scrollIntoView({
+                                                behavior: "smooth",
+                                                block: "center"
+                                            });
+
+                                            // 2️⃣ Open accordion (if collapsed)
                                             const collapseEl = targetDiv.querySelector(".accordion-collapse");
                                             if (collapseEl && !collapseEl.classList.contains("show")) {
                                                 new bootstrap.Collapse(collapseEl, { toggle: true });
                                             }
 
-                                            document.querySelectorAll(".accordion-item").forEach((item) => item.classList.remove("active"));
+                                            // 3️⃣ Mark active
+                                            document
+                                                .querySelectorAll(".accordion-item")
+                                                .forEach((item) => item.classList.remove("active"));
                                             targetDiv.classList.add("active");
                                         }
                                     }
@@ -1312,32 +1228,33 @@
                             });
 
                             chart.canvas.style.cursor = hovering ? "pointer" : "default";
-                        },
-                    },
-                ],
+                        }
+                    }
+                ]
             });
 
-            // ✅ Dataset switching
+            // ✅ Handle dataset switching *after* chart is initialized
             document.getElementById("overall").addEventListener("change", function () {
                 if (this.checked) {
-                    radarChart.data.datasets[0].data = [90, 85, 80, 70, 75, 65, 70];
+                    radarChart.data.datasets[0].data = [90, 85, 80];
                     radarChart.update();
                 }
             });
             document.getElementById("spring25").addEventListener("change", function () {
                 if (this.checked) {
-                    radarChart.data.datasets[0].data = [80, 88, 84, 75, 70, 60, 65];
-                    radarChart.update();
-                }
-            });
-            document.getElementById("fall25").addEventListener("change", function () {
-                if (this.checked) {
-                    radarChart.data.datasets[0].data = [70, 90, 85, 80, 78, 66, 72];
+                    radarChart.data.datasets[0].data = [80, 85, 90];
                     radarChart.update();
                 }
             });
 
-            // ✅ Custom legend
+            document.getElementById("fall25").addEventListener("change", function () {
+                if (this.checked) {
+                    radarChart.data.datasets[0].data = [70, 90, 80];
+                    radarChart.update();
+                }
+            });
+
+            // ✅ Custom Legend
             var legendDiv = document.getElementById("customLegend1");
             chartLabels.forEach((label, i) => {
                 let li = document.createElement("li");
@@ -1345,10 +1262,10 @@
                 li.style.fontSize = "9px";
                 li.style.cursor = "pointer";
                 li.innerHTML = `
-                                                                      <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                      border-radius:50%;margin-right:5px;"></span>
-                                                                      ${label} (${shortLabels[i]})
-                                                                    `;
+                                                                                                                                                                                                            <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                                                                            border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                                                                            ${label} (${shortLabels[i]})
+                                                                                                                                                                                                            `;
 
                 li.addEventListener("mouseenter", () => {
                     radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1362,7 +1279,6 @@
                 legendDiv.appendChild(li);
             });
         });
-
         document.addEventListener("DOMContentLoaded", function () {
             const c = document.querySelector("#carrierPerformance");
             const categories = [
@@ -1479,9 +1395,9 @@
                     const item = document.createElement("div");
                     item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
                     item.innerHTML = `
-                                                                                                                                                                                                                                                                                                                <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                                                                                                                                                                                                                                <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                                                                                                                                                                                                                              `;
+                                                                                                                                                                                                                          <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                                                                                                                                                          <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                                                                                                                                                        `;
                     legendContainer.appendChild(item);
                 });
             }

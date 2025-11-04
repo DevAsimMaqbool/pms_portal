@@ -243,4 +243,60 @@ class PermissionController extends Controller
                 }
 
     }
+
+    public function myPerformance(Request $request, $id = null)
+    {
+        if ($id) {
+
+            $user = User::findOrFail($id); // get data against given id
+
+        } else {
+            $user = Auth::user(); // fallback to logged-in user
+        }
+
+        $role = $user->roles->first();
+
+
+        $assignments = RoleKpaAssignment::with(['kpa', 'category', 'indicator'])
+            ->where('role_id', $role->id)
+            ->get();
+        // Group data
+        $grouped = $assignments->filter(fn($a) => $a->kpa && $a->category && $a->indicator)
+            ->groupBy(fn($a) => $a->kpa->id)
+            ->map(function ($kpaGroup) {
+                $kpa = $kpaGroup->first()->kpa;
+
+                return [
+                    'kpa_id' => $kpa->id,
+                    'kpa_name' => $kpa->performance_area,
+                    'kpa_weight' => $kpa->weight ?? 'N/A', // assuming weight column exists
+                    'categories' => $kpaGroup->groupBy(fn($a) => $a->category->id)
+                        ->map(function ($catGroup) {
+                            $category = $catGroup->first()->category;
+
+                            return [
+                                'category_id' => $category->id,
+                                'category_name' => $category->indicator_category,
+                                'indicators' => $catGroup->map(function ($item) {
+                                    return [
+                                        'indicator_id' => $item->indicator->id,
+                                        'indicator_name' => $item->indicator->indicator,
+                                        'indicator_score' => $item->indicator->score ?? null, // optional
+                                    ];
+                                })->values()
+                            ];
+                        })->values()
+                ];
+            })->values();
+
+        // Fetch the user from the database
+        $employee = User::find($user->id);
+        if (!$employee) {
+            abort(404, 'User not found');
+        }
+        $categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
+        $data = [100, 40, 50, 60, 70, 80, 90, 85];
+
+        return view('admin.my_performance', compact('employee'));
+    }
 }

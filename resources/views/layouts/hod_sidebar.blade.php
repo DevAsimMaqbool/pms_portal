@@ -19,13 +19,13 @@
     <ul class="menu-inner py-1">
         <!-- Dashboards -->
 
-        <li class="menu-item {{ request()->routeIs('v2') ? 'active' : '' }}">
-            <a href="{{ route('v2') }}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('my_performance') ? 'active' : '' }}">
+            <a href="{{ route('my_performance') . '/' . '45433' }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
-                <div data-i18n="My Performance">My Performance</div>
+                <div data-i18n="My Performances">My Performances</div>
             </a>
         </li>
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('v2') ? 'active' : '' }}">
             <a href="{{ route('v2') }}"" class=" menu-link">
                 <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
                 <div data-i18n="Department Performance">Department Performance</div>

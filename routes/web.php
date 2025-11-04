@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PermissionController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard-v1', [PermissionController::class, 'dashboardV1'])->name('dashboard_v1');
     Route::get('/v2/{id?}', [PermissionController::class, 'V2'])->name('v2');
+    Route::get('/my_performance/{id?}', [PermissionController::class, 'myPerformance'])->name('my_performance');
     // Route::get('/teacher_dashboard/{id?}', [RectorDashboardController::class, 'teacherDashboard'])->name('teacher_dashboard');
     Route::get('student/dashboard', [PermissionController::class, 'dashboard'])->name('student.dashboard');
     Route::get('teacher/dashboard', [PermissionController::class, 'dashboard'])->name('teacher.dashboard');
