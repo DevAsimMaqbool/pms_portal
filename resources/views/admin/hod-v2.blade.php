@@ -376,86 +376,39 @@
                     <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
                     @if ($kpa['id'] == 1)
                       <p class=" text-center mb-0 text-white fs-637">
-                        This KPA focuses on effective teaching delivery at undergraduate and postgraduate levels, efficient
-                        course and classroom
-                        management, and continuous enhancement of teaching outputs to ensure quality education. Excellence in
-                        teaching and
-                        learning is the foundation of student success. It shapes competent graduates, strengthens
-                        institutional reputation, and
-                        promotes lifelong learning.
+                        Focuses on teaching quality, classroom management, and continuous improvement to enhance student learning outcomes.
                       </p>
                     @elseif ($kpa['id'] == 2)
                       <p class="text-center mb-0 text-white fs-6000">
-                        This KPA measures research productivity, quality, and supervision at the postgraduate level. It also
-                        covers the
-                        development of knowledge products and the translation of research into practical innovations and
-                        commercial outcomes.
-                        Advancing research and innovation builds intellectual capital, drives societal progress, and connects
-                        academic insights
-                        with industry applications for sustainable growth.
+                        Measures research output, quality, and supervision, emphasizing innovation and practical application of research for societal and industry impact.
                       </p>
                     @elseif ($kpa['id'] == 3)
                       <p class="text-center mb-0 text-white fs-6000">
-                        This KPA focuses on ensuring the institution’s long-term financial health and operational viability
-                        through diversified
-                        revenue streams, effective resource utilization, and profitable growth. It emphasizes achieving
-                        enrollment and revenue
-                        targets, maintaining profitability across programs and centers, and strengthening financial resilience
-                        through prudent
-                        recovery and cost management. A sustainable financial model supports institutional excellence,
-                        strategic expansion, and
-                        the ability to reinvest in quality improvement.
+                        Ensures financial health through diversified revenue, cost efficiency, strategic growth, and reinvestment in institutional excellence.
                       </p>
                     @elseif ($kpa['id'] == 4)
                       <p class="text-center mb-0 text-white fs-637">
-
+                          Tracks institutional success in achieving global engagement targets and providing students with international exposure opportunities.
                       </p>
                     @elseif ($kpa['id'] == 5)
                       <p class="text-center mb-0 text-white fs-6000">
-                        This KPA emphasizes the institution’s commitment to creating a positive social and environmental
-                        impact through
-                        collective engagement of faculty, staff, and students. It focuses on fostering a culture of service,
-                        sustainability, and
-                        civic responsibility both within and beyond the campus. By actively contributing to community
-                        development and
-                        sustainability initiatives, the institution demonstrates its role as a socially conscious and
-                        ethically driven
-                        organization dedicated to the betterment of society.
-                        Rating Descriptions.
+                        Advances social and environmental impact through service, sustainability, civic engagement, and community development initiatives.
                       </p>
                     @elseif ($kpa['id'] == 6)
                       <p class="text-center mb-0 text-white fs-6000">
-                        This KPA represents the institution’s collective reputation, credibility, and distinctiveness in the
-                        academic and
-                        professional landscape. It emphasizes building a strong, trusted, and recognizable brand through
-                        excellence in
-                        accreditation, affiliations, stakeholder satisfaction, and global partnerships. A strong brand
-                        identity reflects
-                        consistent quality, meaningful industry linkages, and positive perceptions among students, faculty,
-                        alumni, and
-                        employers — ultimately reinforcing the institution’s prestige and competitive advantage.
+                        Builds institutional reputation and distinctiveness through excellence, stakeholder trust, global linkages, and consistent quality.
                       </p>
                     @elseif ($kpa['id'] == 7)
                       <p class="text-center mb-0 text-white" style="font-size: 0.59000rem !important;">
-                        This KPA reflects the effectiveness, integrity, and inclusiveness of leadership practices that guide
-                        academic and
-                        operational excellence. It emphasizes transparent decision-making, stakeholder satisfaction, and a
-                        culture of
-                        accountability. Through proactive planning, team development, and compliance with institutional
-                        policies, this area
-                        ensures that leadership at all levels is participative, future-oriented, and aligned with the
-                        university’s mission.
-                        Effective governance fosters engagement, builds trust, and strengthens institutional coherence across
-                        departments and
-                        campuses.
+                        Promotes transparent, accountable, participative leadership ensuring alignment, trust, compliance, and mission-driven institutional effectiveness.
                       </p>
                     @elseif ($kpa['id'] == 13)
                       <p class="text-center mb-0 text-white fs-637">
-
+                        Focuses on active involvement in departmental and institutional activities to promote collaboration, visibility, and shared success.
                       </p>
                     @elseif ($kpa['id'] == 14)
                       <p class="text-center mb-0 text-white fs-637">
-
+                         Represents ethical conduct and leadership grounded in integrity, empathy, humility, and accountability.
                       </p>
                     @else
                       <p class="text-center mb-0 text-white fs-637">Other text</p>
