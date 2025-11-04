@@ -163,8 +163,9 @@ class PermissionController extends Controller
         }
 
     }
-    public function V2(Request $request)
+    public function V2(Request $request, $id = null)
     {
+
         // $token = session('access_token');
         // $userId = session('user_id');
         // $baseUrl = config('services.pms.base_url');
@@ -177,13 +178,20 @@ class PermissionController extends Controller
         //     // ✅ Pass employee data to a Blade view
         //     return view('admin.dashbord', compact('employee'));
         // }
-        $user = Auth::user();
+        if ($id) {
+
+            $user = User::findOrFail($id); // get data against given id
+
+        } else {
+            $user = Auth::user(); // fallback to logged-in user
+        }
+
         $role = $user->roles->first();
+
 
         $assignments = RoleKpaAssignment::with(['kpa', 'category', 'indicator'])
             ->where('role_id', $role->id)
             ->get();
-
         // Group data
         $grouped = $assignments->filter(fn($a) => $a->kpa && $a->category && $a->indicator)
             ->groupBy(fn($a) => $a->kpa->id)
@@ -215,7 +223,6 @@ class PermissionController extends Controller
         // dd($grouped);
         // Fetch the user from the database
         $employee = User::find($user->id);
-
         if (!$employee) {
             abort(404, 'User not found');
         }
@@ -225,15 +232,15 @@ class PermissionController extends Controller
 
         if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor') {
             return view('admin.v2', compact('employee'));
-        }else
-        if ($role->name == 'HOD') {
-            return view('admin.hod-v2', compact('employee'));
-        }else
-        if ($role->name == 'Dean') {
-            return view('admin.dean-v2', compact('employee'));
-        } else {
-            return view('admin.teacher_dashbord', compact('employee'));
-        }
+        } else
+            if ($role->name == 'HOD') {
+                return view('admin.hod-v2', compact('employee'));
+            } else
+                if ($role->name == 'Dean') {
+                    return view('admin.dean-v2', compact('employee'));
+                } else {
+                    return view('admin.teacher_dashbord', compact('employee'));
+                }
 
     }
 }

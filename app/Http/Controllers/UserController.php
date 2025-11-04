@@ -110,7 +110,7 @@ class UserController extends Controller
 
                     if ($authRole === "HOD") {
                         $actions .= '
-                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/teacher_dashboard/' . $user->id . '" target="_blank">
+                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/v2/' . $user->id . '" target="_blank">
                     <i class="icon-base ti tabler-file icon-md"></i>
                 </a>';
                     }
