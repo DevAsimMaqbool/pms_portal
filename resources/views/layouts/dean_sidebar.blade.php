@@ -27,7 +27,7 @@
         </li>
         <li class="menu-item {{ request()->routeIs('v2') ? 'active' : '' }}">
             <a href="{{ route('v2') }}"" class=" menu-link">
-                <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
+                <i class="menu-icon icon-base ti tabler-users-group"></i>
                 <div data-i18n="Faculty Performance">Faculty Performance</div>
             </a>
         </li>
