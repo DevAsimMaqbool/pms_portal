@@ -488,8 +488,8 @@
                 @endforeach
 
               </div>
-              <div class="swiper-button-next"></div>
-              <div class="swiper-button-prev"></div>
+              <div class="swiper-button-next text-white"></div>
+              <div class="swiper-button-prev text-white"></div>
             </div>
           </div>
         </div>
