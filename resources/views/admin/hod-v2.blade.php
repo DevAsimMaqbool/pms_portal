@@ -249,6 +249,25 @@
     .swiper-wrapper {
       height: 269px;
     }
+    .text-cut-hot {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* ✅ Limit to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.2;
+}
+ .text-cut-department {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* ✅ Limit to 1 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.2;
+  font-size: 0.8667em;
+}
   </style>
 @endpush
 @section('content')
@@ -268,10 +287,12 @@
                 <div class="card-header text-center">
                   <div class="card-title mb-0">
                     <h5 class="mb-1">Hii, {{ trim(preg_replace('/[-\s]*\d+$/', '', $employee->name)) }} 🎉</h5>
-                    <span class="mb-2 badge rounded bg-label-success"
-                      style="display: inline-block; vertical-align: middle; margin-right: 134px;">
-                      {{ $employee->department }}
-                    </span>
+                    <div class="mb-2 rounded bg-label-success p-1" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->department }}">
+                                        <span class="bg-label-success text-cut-department">
+                                            {{ Auth::user()->department }}
+                                        </span>
+                                        </div>
                     <p class="card-subtitle">Welcome to your Performance Hub</p>
 
                   </div>
@@ -492,7 +513,7 @@
                 <div class="badge bg-label-orange rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-smile icon-md"></i>
                 </div>
                 <div>
-                  <small class="text-dark">% Employability</small>
+                  <small class="text-dark text-cut-hot">% Employability</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -514,7 +535,7 @@
                 <div class="badge bg-label-primary rounded p-1_5 me-4"><i
                     class="icon-base ti tabler-chalkboard icon-md"></i></div>
                 <div>
-                  <small class="text-dark">% Achievement of Research Publications</small>
+                  <small class="text-dark text-cut text-cut-hot">% Achievement of Research Publications</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -536,7 +557,7 @@
                 <div class="badge bg-label-warning rounded p-1_5 me-4"><i
                     class="icon-base ti tabler-user-check icon-md"></i></div>
                 <div>
-                  <small class="text-dark">% of Admission Targets Achieved</small>
+                  <small class="text-dark text-cut-hot">% of Admission Targets Achieved</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -558,7 +579,7 @@
                 <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
                 </div>
                 <div>
-                  <small class="text-dark">% of Recovery</small>
+                  <small class="text-dark text-cut-hot">% of Recovery</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -580,7 +601,7 @@
                 <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
                 </div>
                 <div>
-                  <small class="text-dark">Profitability of the Programs</small>
+                  <small class="text-dark text-cut-hot">Profitability of the Programs</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -602,7 +623,7 @@
                 <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
                 </div>
                 <div>
-                  <small class="text-dark">Faculty Satisfaction Score</small>
+                  <small class="text-dark text-cut-hot">Faculty Satisfaction Score</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -624,7 +645,7 @@
                 <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
                 </div>
                 <div>
-                  <small class="text-dark">Student Feedback Score</small>
+                  <small class="text-dark text-cut-hot">Student Feedback Score</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -646,7 +667,7 @@
                 <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
                 </div>
                 <div>
-                  <small class="text-dark">Faculty Discipline / Punctuality</small>
+                  <small class="text-dark text-cut-hot">Faculty Discipline / Punctuality</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">

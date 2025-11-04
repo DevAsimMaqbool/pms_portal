@@ -233,6 +233,25 @@
                 box-shadow: 0 0 25px rgba(255, 255, 255, 1);
             }
         }
+         .text-cut-hot {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* ✅ Limit to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.2;
+}
+ .text-cut-department {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* ✅ Limit to 1 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.2;
+  font-size: 0.8667em;
+}
     </style>
 @endpush
 @section('content')
@@ -254,10 +273,12 @@
                                     <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}
                                         🎉
                                     </h5>
-                                    <span class="mb-2 badge rounded bg-label-success"
-                                        style="display: inline-block; vertical-align: middle; margin-right: 134px;">
-                                        {{ Auth::user()->department }}
-                                    </span>
+                                    <div class="mb-2 rounded bg-label-success p-1" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->department }}">
+                                        <span class="bg-label-success text-cut-department">
+                                            {{ Auth::user()->department }}
+                                        </span>
+                                        </div>
                                     <p class="card-subtitle">Welcome to your Performance Hub</p>
 
                                 </div>
@@ -433,7 +454,7 @@
                                     class="icon-base ti tabler-mood-smile icon-md"></i>
                             </div>
                             <div>
-                                <small class="text-dark">Student Satisfaction</small>
+                                <small class="text-dark text-cut-hot">Student Satisfaction</small>
                             </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
@@ -456,7 +477,7 @@
                             <div class="badge bg-label-primary rounded p-1_5 me-4"><i
                                     class="icon-base ti tabler-chalkboard icon-md"></i></div>
                             <div>
-                                <small class="text-dark">Classes Held</small>
+                                <small class="text-dark text-cut-hot">Classes Held</small>
                             </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
@@ -479,7 +500,7 @@
                             <div class="badge bg-label-warning rounded p-1_5 me-4"><i
                                     class="icon-base ti tabler-user-check icon-md"></i></div>
                             <div>
-                                <small class="text-dark">Student Attendance</small>
+                                <small class="text-dark text-cut-hot">Student Attendance</small>
                             </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
@@ -506,7 +527,7 @@
                                     class="icon-base ti tabler-book-2 icon-md"></i>
                             </div>
                             <div>
-                                <small class="text-dark">Research Publications</small>
+                                <small class="text-dark text-cut-hot">Research Publications</small>
                             </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
@@ -530,7 +551,7 @@
                                     class="icon-base ti tabler-stars icon-md"></i>
                             </div>
                             <div>
-                                <small class="text-dark">Manager Satisfaction</small>
+                                <small class="text-dark text-cut-hot">Manager Satisfaction</small>
                             </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
