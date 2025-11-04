@@ -242,10 +242,10 @@
                 <div class="card" style="box-shadow: none;background: none;">
                   <div class="card-header text-center">
                     <div class="card-title mb-0">
-                      <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉</h5>
+                      <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', $employee->name)) }} 🎉</h5>
                       <span class="mb-2 badge rounded bg-label-success"
                         style="display: inline-block; vertical-align: middle; margin-right: 134px;">
-                        {{ Auth::user()->department }}
+                        {{ $employee->department }}
                       </span>
                       <p class="card-subtitle">Welcome to your Performance Hub</p>
 

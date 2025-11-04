@@ -103,7 +103,7 @@ class UserController extends Controller
 
                     if ($authRole === "Dean") {
                         $actions .= '
-                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/departments/' . strtolower(str_replace(' ', '_', $user->department)) . '/report" target="_blank">
+                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/v2/' . $user->id . '" target="_blank">
                     <i class="icon-base ti tabler-file icon-md"></i>
                 </a>';
                     }
