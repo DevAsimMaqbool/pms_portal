@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\RoleKpaAssignment;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Spatie\Permission\Models\Role;
 
 if (!function_exists('getResponse')) {
     function getResponse($data, $token, $message, $status): array
@@ -102,8 +103,8 @@ function getUserLevel($UserID)
 
 function getRoleAssignments(string $roleName, ?int $kapcid = null)
 {
-    $roleId = Auth::user()->roles->firstWhere('name', $roleName)->id ?? null;
-
+    $roleId = Role::where('name', $roleName)->value('id');
+    ;
     if (!$roleId) {
         return collect(); // return empty if user doesn't have that role
     }
