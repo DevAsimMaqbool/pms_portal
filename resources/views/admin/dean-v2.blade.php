@@ -130,34 +130,34 @@
             /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
             /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
             /*
-    .flip-card-inner {
-    transition: none;
-    }
-    .flip-card-front,
-    .flip-card-back {
-    position: relative;
-    transform: none;
-    backface-visibility: visible;
-    }
-    .flip-card-back { display: none; } /* or display block on click via JS if needed */
+        .flip-card-inner {
+        transition: none;
+        }
+        .flip-card-front,
+        .flip-card-back {
+        position: relative;
+        transform: none;
+        backface-visibility: visible;
+        }
+        .flip-card-back { display: none; } /* or display block on click via JS if needed */
             */
         }
 
         .caed-wave-bg1 {
             /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-    background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-    background-image:
-    radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-    radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+        background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+        background-image:
+        radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+        radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-    background-image:
-    radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-    radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-    radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+        background-image:
+        radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+        radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+        radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-    background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+        background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-    */
+        */
 
             background-image:
                 radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -252,673 +252,673 @@
     </style>
 @endpush
 @section('content')
-    <!-- Content -->
-    <div class="container-xxl flex-grow-1 container-p-y">
-        <!-- Accordion1 -->
-        <div class="row gy-6 fade-section">
+        <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <!-- Accordion1 -->
+            <div class="row gy-6 fade-section">
 
 
-            <!-- Sales Overview -->
-            <div class="col-lg-3 col-md-12 d-flex flex-column">
-                <div class="row flex-fill">
+                <!-- Sales Overview -->
+                <div class="col-lg-3 col-md-12 d-flex flex-column">
+                    <div class="row flex-fill">
 
-                    <!-- Generated Leads -->
-                    <div class="col-lg-12 col-md-6 col-sm-12">
-                        <div class="card" style="box-shadow: none;background: none;">
-                            <div class="card-header text-center">
-                                <div class="card-title mb-0">
-                                    <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉
-                                    </h5>
-                                    <span class="mb-2 badge rounded bg-label-success"
-                                        style="display: inline-block; vertical-align: middle; margin-right: 134px;">
-                                        {{ Auth::user()->department }}
-                                    </span>
-                                    <p class="card-subtitle">Welcome to your Performance Hub</p>
+                        <!-- Generated Leads -->
+                        <div class="col-lg-12 col-md-6 col-sm-12">
+                            <div class="card" style="box-shadow: none;background: none;">
+                                <div class="card-header text-center">
+                                    <div class="card-title mb-0">
+                                        <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }} 🎉
+                                        </h5>
+                                        <span class="mb-2 badge rounded bg-label-success"
+                                            style="display: inline-block; vertical-align: middle; margin-right: 134px;">
+                                            {{ Auth::user()->department }}
+                                        </span>
+                                        <p class="card-subtitle">Welcome to your Performance Hub</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ Generated Leads -->
+                        <!-- Profit last month -->
+                        <div class="col-lg-4 col-md-3 col-sm-6">
+                            <div class="card h-100" style="background-color: #ac7cad;">
+                                <div class="card-body d-flex justify-content-center align-items-center ">
+                                    <h6 class="mb-0 text-center text-white">As {{$employee->roles->first()->name}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-3 col-sm-6">
+                            <div class="card h-100">
+
+                                <div class="card-body d-flex justify-content-center align-items-center">
+                                    <h4 class="mb-0 text-center">82%</h4>
+
 
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!--/ Generated Leads -->
-                    <!-- Profit last month -->
-                    <div class="col-lg-4 col-md-3 col-sm-6">
-                        <div class="card h-100" style="background-color: #ac7cad;">
-                            <div class="card-body d-flex justify-content-center align-items-center ">
-                                <h6 class="mb-0 text-center text-white">As {{$employee->roles->first()->name}}</h6>
+
+                        <div class="col-lg-4 col-md-3 col-sm-6">
+                            <div class="card bg-success h-100" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="tooltip-success"
+                                data-bs-original-title="You’re going beyond what’s asked of you.">
+                                <div class="card-body d-flex justify-content-center align-items-center">
+                                    <h4 class="mb-0 text-center text-white">EE</h4>
+
+
+                                </div>
                             </div>
                         </div>
+                        <!--/ Expenses -->
                     </div>
-                    <div class="col-lg-4 col-md-3 col-sm-6">
-                        <div class="card h-100">
-
-                            <div class="card-body d-flex justify-content-center align-items-center">
-                                <h4 class="mb-0 text-center">82%</h4>
-
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-3 col-sm-6">
-                        <div class="card bg-success h-100" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-custom-class="tooltip-success"
-                            data-bs-original-title="You’re going beyond what’s asked of you.">
-                            <div class="card-body d-flex justify-content-center align-items-center">
-                                <h4 class="mb-0 text-center text-white">EE</h4>
-
-
-                            </div>
-                        </div>
-                    </div>
-                    <!--/ Expenses -->
                 </div>
-            </div>
-            <!--/ Sales Overview -->
+                <!--/ Sales Overview -->
 
-            <!-- Website Analytics -->
-            <div class="col-lg-9 col-md-12">
-                <div class="swiper-reviews-carousel overflow-hidden">
-                    <div class="swiper" id="swiper-reviews">
-                        <div class="swiper-wrapper">
-                            @php
-                                $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
-                                $icon1 = ['tabler-book ', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
-                                $colors1 = ['primary', 'success', 'warning', 'orange', 'danger'];
-                                //$colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
-                                $colors2 = ['#0d6efd', '#198754', '#FFA500', '#FFF200', '#dc3545'];
-                                $series1 = [90, 85, 70, 65, 50];
-                                $index1 = 0;
-                                $index2 = 0;
-                            @endphp
-                            @foreach($result as $kpakey => $kpa)
+                <!-- Website Analytics -->
+                <div class="col-lg-9 col-md-12">
+                    <div class="swiper-reviews-carousel overflow-hidden">
+                        <div class="swiper" id="swiper-reviews">
+                            <div class="swiper-wrapper">
                                 @php
-                                    $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
-                                    $iconClass = $icon1[$index2 % count($icon1)];
-                                    $color1 = $colors1[$index2 % count($colors1)];
-                                    $index2++;
+    $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+    $icon1 = ['tabler-book ', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
+    $colors1 = ['primary', 'success', 'warning', 'orange', 'danger'];
+    //$colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
+    $colors2 = ['#0d6efd', '#198754', '#FFA500', '#FFF200', '#dc3545'];
+    $series1 = [90, 85, 70, 65, 50];
+    $index1 = 0;
+    $index2 = 0;
                                 @endphp
-                                {{-- <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
+                                @foreach($result as $kpakey => $kpa)
+                                    @php
+        $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+        $iconClass = $icon1[$index2 % count($icon1)];
+        $color1 = $colors1[$index2 % count($colors1)];
+        $index2++;
+                                    @endphp
+                                    {{-- <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
 
-                                    <!-- FRONT SIDE -->
-                                    <div class="card bg-{{ $color1 }} text-white h-100">
-                                        <div class="card-body d-flex justify-content-between align-items-center">
-                                            <div class="card-title mb-0 text-white">
-                                                <p class="mb-0">{{ $kpa['performance_area'] }}</p>
-                                            </div>
-                                            <div class="card-icon">
-                                                <span class="badge bg-label-{{ $color1 }} rounded p-2">
-                                                    <i class="icon-base ti {{ $iconClass }} icon-26px"></i>
-                                                </span>
+                                        <!-- FRONT SIDE -->
+                                        <div class="card bg-{{ $color1 }} text-white h-100">
+                                            <div class="card-body d-flex justify-content-between align-items-center">
+                                                <div class="card-title mb-0 text-white">
+                                                    <p class="mb-0">{{ $kpa['performance_area'] }}</p>
+                                                </div>
+                                                <div class="card-icon">
+                                                    <span class="badge bg-label-{{ $color1 }} rounded p-2">
+                                                        <i class="icon-base ti {{ $iconClass }} icon-26px"></i>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                </div> --}}
-                                <div class="swiper-slide" id="{{ $targetId }}">
-                                    <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
-                                        <div class="flip-card h-100">
-                                            <div class="flip-card-inner">
+                                    </div> --}}
+                                    <div class="swiper-slide" id="{{ $targetId }}">
+                                        <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
+                                            <div class="flip-card h-100">
+                                                <div class="flip-card-inner">
 
-                                                <!-- FRONT -->
-                                                <div class="flip-card-front card bg-{{ $color1 }} text-white">
+                                                    <!-- FRONT -->
+                                                    <div class="flip-card-front card bg-{{ $color1 }} text-white">
 
-                                                    <div
-                                                        class="card-body position-relative d-flex flex-column justify-content-between">
-                                                        <div>
-                                                            <div class="d-flex align-items-center mb-1">
-                                                                <div class="avatar me-4">
-                                                                    <span class="avatar-initial rounded bg-label-{{ $color1 }}">
-                                                                        <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                            <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}
-                                                            </p>
-                                                        </div>
-                                                        <!-- Metrics bottom right -->
                                                         <div
-                                                            class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
+                                                            class="card-body position-relative d-flex flex-column justify-content-between">
+                                                            <div>
+                                                                <div class="d-flex align-items-center mb-1">
+                                                                    <div class="avatar me-4">
+                                                                        <span class="avatar-initial rounded bg-label-{{ $color1 }}">
+                                                                            <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}
+                                                                </p>
+                                                            </div>
+                                                            <!-- Metrics bottom right -->
+                                                            <div
+                                                                class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
+                                                                @if ($kpa['id'] == 1)
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
+                                                                @elseif ($kpa['id'] == 2)
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
+                                                                @elseif ($kpa['id'] == 3)
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
+                                                                @elseif ($kpa['id'] == 4)
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
+                                                                @elseif ($kpa['id'] == 5)
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
+                                                                @elseif ($kpa['id'] == 6)
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
+                                                                @elseif ($kpa['id'] == 7)
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
+                                                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!-- BACK -->
+                                                    <div class="flip-card-back card bg-info text-dark h-100">
+                                                        <div
+                                                            class="card-body d-flex flex-column justify-content-center align-items-center">
+                                                            <div class="badge rounded p-2 bg-label-info mb-2"><i
+                                                                    class="icon-base ti {{ $iconClass }} icon-lg"></i>
+                                                            </div>
+                                                            <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}
+                                                            </h6>
                                                             @if ($kpa['id'] == 1)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
+                                                                <p class=" text-center mb-0 text-white fs-13">
+                                                                    Focuses on teaching quality, classroom management, and continuous
+                                                                    improvement to enhance
+                                                                    student learning outcomes.
+                                                                </p>
                                                             @elseif ($kpa['id'] == 2)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
+                                                                <p class="text-center mb-0 text-white fs-13">
+                                                                    Measures research output, quality, and supervision, emphasizing
+                                                                    innovation and practical
+                                                                    application of research for societal and industry impact.
+                                                                </p>
                                                             @elseif ($kpa['id'] == 3)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
+                                                                <p class="text-center mb-0 text-white fs-13">
+                                                                    Ensures financial health through diversified revenue, cost
+                                                                    efficiency, strategic growth, and
+                                                                    reinvestment in institutional excellence.
+                                                                </p>
                                                             @elseif ($kpa['id'] == 4)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
+                                                                <p class="text-center mb-0 text-white fs-13">
+                                                                    Tracks institutional success in achieving global engagement targets
+                                                                    and providing students
+                                                                    with international exposure opportunities.
+                                                                </p>
                                                             @elseif ($kpa['id'] == 5)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
+                                                                <p class="text-center mb-0 text-white fs-13">
+                                                                    Advances social and environmental impact through service,
+                                                                    sustainability, civic engagement,
+                                                                    and community development initiatives.
+                                                                </p>
                                                             @elseif ($kpa['id'] == 6)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
+                                                                <p class="text-center mb-0 text-white fs-13">
+                                                                    Builds institutional reputation and distinctiveness through
+                                                                    excellence, stakeholder trust,
+                                                                    global linkages, and consistent quality.
+                                                                </p>
                                                             @elseif ($kpa['id'] == 7)
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
-                                                                <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
+                                                                <p class="text-center mb-0 text-white fs-13">
+                                                                    Promotes transparent, accountable, participative leadership ensuring
+                                                                    alignment, trust,
+                                                                    compliance, and mission-driven institutional effectiveness.
+                                                                </p>
+                                                            @elseif ($kpa['id'] == 13)
+                                                                <p class="text-center mb-0 text-white fs-13">
+                                                                    Focuses on active involvement in departmental and institutional
+                                                                    activities to promote
+                                                                    collaboration, visibility, and shared success.
+                                                                </p>
+                                                            @elseif ($kpa['id'] == 14)
+                                                                <p class="text-center mb-0 text-white fs-13">
+                                                                    Represents ethical conduct and leadership grounded in integrity,
+                                                                    empathy, humility, and
+                                                                    accountability.
+                                                                </p>
+                                                            @else
+                                                                <p class="text-center mb-0 text-white fs-13">Other text</p>
                                                             @endif
                                                         </div>
                                                     </div>
 
                                                 </div>
+                                            </div>
+                                        </a>
+                                    </div>
 
-                                                <!-- BACK -->
-                                                <div class="flip-card-back card bg-info text-dark h-100">
-                                                    <div
-                                                        class="card-body d-flex flex-column justify-content-center align-items-center">
-                                                        <div class="badge rounded p-2 bg-label-info mb-2"><i
-                                                                class="icon-base ti {{ $iconClass }} icon-lg"></i>
-                                                        </div>
-                                                        <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}
-                                                        </h6>
-                                                        @if ($kpa['id'] == 1)
-                                                            <p class=" text-center mb-0 text-white fs-13">
-                                                                Focuses on teaching quality, classroom management, and continuous
-                                                                improvement to enhance
-                                                                student learning outcomes.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 2)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Measures research output, quality, and supervision, emphasizing
-                                                                innovation and practical
-                                                                application of research for societal and industry impact.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 3)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Ensures financial health through diversified revenue, cost
-                                                                efficiency, strategic growth, and
-                                                                reinvestment in institutional excellence.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 4)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Tracks institutional success in achieving global engagement targets
-                                                                and providing students
-                                                                with international exposure opportunities.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 5)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Advances social and environmental impact through service,
-                                                                sustainability, civic engagement,
-                                                                and community development initiatives.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 6)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Builds institutional reputation and distinctiveness through
-                                                                excellence, stakeholder trust,
-                                                                global linkages, and consistent quality.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 7)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Promotes transparent, accountable, participative leadership ensuring
-                                                                alignment, trust,
-                                                                compliance, and mission-driven institutional effectiveness.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 13)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Focuses on active involvement in departmental and institutional
-                                                                activities to promote
-                                                                collaboration, visibility, and shared success.
-                                                            </p>
-                                                        @elseif ($kpa['id'] == 14)
-                                                            <p class="text-center mb-0 text-white fs-13">
-                                                                Represents ethical conduct and leadership grounded in integrity,
-                                                                empathy, humility, and
-                                                                accountability.
-                                                            </p>
-                                                        @else
-                                                            <p class="text-center mb-0 text-white fs-13">Other text</p>
-                                                        @endif
-                                                    </div>
+                                @endforeach
+
+                            </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--/ Website Analytics -->
+
+            </div>
+            <div class="row gy-6 mt-2">
+
+                <div class="col-md-6 col-lg-4" id="scrollableCol">
+                    <div class=" d-flex justify-content-between">
+                        <h5 class="fw-bold">Hot Indicators</h5>
+                    </div>
+                    <!--/ Statistics -->
+
+                    <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-warning"
+                        data-bs-original-title="You’re on your way — just refine and push forward.Every effort moves you closer to success.">
+                        <div class="card-body d-flex">
+                            <div class="d-flex w-50 align-items-center me-4">
+                                <div class="badge bg-label-orange rounded p-1_5 me-4"><i
+                                        class="icon-base ti tabler-mood-smile icon-md"></i>
+                                </div>
+                                <div>
+                                    <small class="text-dark">% Employability</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-grow-1 align-items-center">
+                                <div class="progress w-100 me-4" style="height:8px;">
+                                    <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <span class="text-body-secondary">65%</span>
+                                <span class="badge bg-label-orange ms-1">NI</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-primary"
+                        data-bs-original-title="You’re achieving excellence with distinction.You set the pace for others to follow.">
+                        <div class="card-body d-flex">
+                            <div class="d-flex w-50 align-items-center me-4">
+                                <div class="badge bg-label-primary rounded p-1_5 me-4"><i
+                                        class="icon-base ti tabler-chalkboard icon-md"></i></div>
+                                <div>
+                                    <small class="text-dark">% Achievement of Research Publications</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-grow-1 align-items-center">
+                                <div class="progress w-100 me-4" style="height:8px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 65%"
+                                        aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <span class="text-body-secondary">90%</span>
+                                <span class="badge bg-label-primary ms-1">OS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-warning"
+                        data-bs-original-title="You’re doing well and meeting your goals.Keep your consistency — it’s your strength.">
+                        <div class="card-body d-flex">
+                            <div class="d-flex w-50 align-items-center me-4">
+                                <div class="badge bg-label-warning rounded p-1_5 me-4"><i
+                                        class="icon-base ti tabler-user-check icon-md"></i></div>
+                                <div>
+                                    <small class="text-dark">% of Admission Targets Achieved</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-grow-1 align-items-center">
+                                <div class="progress w-100 me-4" style="height:8px;">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 65%"
+                                        aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <span class="text-body-secondary">70%</span>
+                                <span class="badge bg-label-warning ms-1">ME</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-danger"
+                        data-bs-original-title="Not quite there yet — but growth starts here.Reflect. Refocus. Rise higher.">
+                        <div class="card-body d-flex">
+                            <div class="d-flex w-50 align-items-center me-4">
+                                <div class="badge bg-label-danger rounded p-1_5 me-4"><i
+                                        class="icon-base ti tabler-book-2 icon-md"></i>
+                                </div>
+                                <div>
+                                    <small class="text-dark">% of Recovery</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-grow-1 align-items-center">
+                                <div class="progress w-100 me-4" style="height:8px;">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <span class="text-body-secondary">50%</span>
+                                <span class="badge bg-label-danger ms-1">BE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-success"
+                        data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+                        <div class="card-body d-flex">
+                            <div class="d-flex w-50 align-items-center me-4">
+                                <div class="badge bg-label-success rounded p-1_5 me-4"><i
+                                        class="icon-base ti tabler-stars icon-md"></i>
+                                </div>
+                                <div>
+                                    <small class="text-dark">Profitability of the Programs</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-grow-1 align-items-center">
+                                <div class="progress w-100 me-4" style="height:8px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
+                                        aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <span class="text-body-secondary">86%</span>
+                                <span class="badge bg-label-success ms-1">EE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-success"
+                        data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+                        <div class="card-body d-flex">
+                            <div class="d-flex w-50 align-items-center me-4">
+                                <div class="badge bg-label-success rounded p-1_5 me-4"><i
+                                        class="icon-base ti tabler-stars icon-md"></i>
+                                </div>
+                                <div>
+                                    <small class="text-dark">Faculty Satisfaction Score</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-grow-1 align-items-center">
+                                <div class="progress w-100 me-4" style="height:8px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
+                                        aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <span class="text-body-secondary">86%</span>
+                                <span class="badge bg-label-success ms-1">EE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-success"
+                        data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+                        <div class="card-body d-flex">
+                            <div class="d-flex w-50 align-items-center me-4">
+                                <div class="badge bg-label-success rounded p-1_5 me-4"><i
+                                        class="icon-base ti tabler-stars icon-md"></i>
+                                </div>
+                                <div>
+                                    <small class="text-dark">Student Feedback Score</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-grow-1 align-items-center">
+                                <div class="progress w-100 me-4" style="height:8px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
+                                        aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <span class="text-body-secondary">86%</span>
+                                <span class="badge bg-label-success ms-1">EE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-success"
+                        data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+                        <div class="card-body d-flex">
+                            <div class="d-flex w-50 align-items-center me-4">
+                                <div class="badge bg-label-success rounded p-1_5 me-4"><i
+                                        class="icon-base ti tabler-stars icon-md"></i>
+                                </div>
+                                <div>
+                                    <small class="text-dark">Faculty Discipline / Punctuality</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-grow-1 align-items-center">
+                                <div class="progress w-100 me-4" style="height:8px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
+                                        aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <span class="text-body-secondary">86%</span>
+                                <span class="badge bg-label-success ms-1">EE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4" id="scrollableCol1">
+
+
+                    <div class=" d-flex justify-content-between">
+                        <h5 class="fw-bold">Top Performers</h5>
+                    </div>
+                    <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-primary"
+                        data-bs-original-title="Assistant Professor / Gold Campus: 05 KM, Main Raiwind Road, Lahore.">
+                        <div class="card-body d-flex">
+                            <div class="d-flex w-70 align-items-center me-4">
+                                <div class="badge bg-label-primary rounded p-1_5 me-4"><i
+                                        class="icon-base ti tabler-trophy icon-md"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 text-cut">Dr. Syed Asad Ali</h6>
+                                    <small class="text-dark fs-10 text-cut">Department of Information Technology</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                                <span class="badge bg-label-primary ms-1">91</span>
+                                <span class="badge bg-label-primary ms-1">OS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-success"
+                        data-bs-original-title="HOD / Gold Campus: 05 KM, Main Raiwind Road, Lahore.">
+                        <div class="card-body d-flex">
+                            <div class="d-flex w-70 align-items-center me-4">
+                                <div class="badge bg-label-success rounded p-1_5 me-4"><i
+                                        class="icon-base ti tabler-trophy icon-md"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 text-cut">Dr. Tehreem Masood</h6>
+                                    <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                                <span class="badge bg-label-success ms-1">82</span>
+                                <span class="badge bg-label-success ms-1">EE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-warning"
+                        data-bs-original-title="Assistant Professor / Gold Campus: 05 KM, Main Raiwind Road, Lahore.">
+                        <div class="card-body d-flex">
+                            <div class="d-flex w-70 align-items-center me-4">
+                                <div class="badge bg-label-warning rounded p-1_5 me-4"><i
+                                        class="icon-base ti tabler-award icon-md"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 text-cut">Dr. Muhammad Azam</h6>
+                                    <small class="text-dark fs-10 text-cut">Department of Computer Sciences</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                                <span class="badge bg-label-warning ms-1">70</span>
+                                <span class="badge bg-label-warning ms-1">ME</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class=" d-flex justify-content-between">
+                        <h5 class="fw-bold">Overall KPA Performance</h5>
+                    </div>
+
+
+                    <div class="row g-6">
+                        <!-- Profit last month -->
+
+
+                        <!-- Generated Leads -->
+                        <div class="col-xl-12">
+                            <div class="card caed-wave-bg ">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="card-title mb-0">
+                                        <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><span
+                                                class="icon-xs icon-base ti tabler-chart-pie me-2"></span>Overall </button>
+                                    </div>
+                                    <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-original-title="View large">
+                                        <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect"
+                                            type="button" data-bs-toggle="modal" data-bs-target="#fullscreenModal">
+                                            <i class="icon-base ti tabler-arrows-maximize"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <canvas class="chartjs" id="radarChart1"></canvas>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--/ Generated Leads -->
+
+
+                        <!--/ Expenses -->
+                    </div>
+
+
+
+
+
+                </div>
+
+
+
+
+
+                <!-- Website Analytics -->
+                <div class="col-xl-4 col">
+
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Research Innovation & Commercialization</h5>
+
+                        </div>
+                        <div class="card-body">
+                            <div id="carrierPerformance"></div>
+                            <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ Website Analytics -->
+
+                <!-- Radial bar Chart -->
+                <div class="col-md-4 col-12">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title mb-0">Departments Overview</h5>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div id="radialBarChart"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Radial bar Chart -->
+                <!-- Website Analytics -->
+                <div class="col-xl-4 col">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Semester-wise Overall Performance</h5>
+
+                        </div>
+                        <div class="card-body">
+                            <div id="carrierPerformance1"></div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ Website Analytics -->
+
+
+            </div>
+            <!--/ Accordion1 -->
+
+
+
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalFullTitle">Overall KPA Performance</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+
+
+                            <div class="row g-6 pt-2">
+                                <div class="col-12 col-12" id="targetDivchart">
+                                    <div class="card caed-wave-bg">
+
+                                        <div class="card-header d-flex justify-content-between">
+                                            <div class="btn-group d-none d-sm-flex" role="group"
+                                                aria-label="radio toggle button group">
+                                                <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
+                                                <label class="btn btn-outline-primary waves-effect" for="overall">📆
+                                                    Overall</label>
+
+                                                <input type="radio" class="btn-check" name="termRadio" id="spring25">
+                                                <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring
+                                                    2025</label>
+
+                                                <input type="radio" class="btn-check" name="termRadio" id="fall25">
+                                                <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall
+                                                    2025</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-body pt-0">
+                                            <div class="row justify-content-center text-center">
+                                                <div class="col-md-8 d-flex justify-content-center">
+                                                    <canvas class="chartjs" id="radarChart"></canvas>
                                                 </div>
 
+                                                <div class="col-12 mt-2">
+                                                    <ul id="customLegend"
+                                                        class="d-flex justify-content-center flex-wrap p-0 m-0"
+                                                        style="list-style:none;">
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                    </a>
-                                </div>
-
-                            @endforeach
-
-                        </div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!--/ Website Analytics -->
-
-        </div>
-        <div class="row gy-6 mt-2">
-
-            <div class="col-md-6 col-lg-4" id="scrollableCol">
-                <div class=" d-flex justify-content-between">
-                    <h5 class="fw-bold">Hot Indicators</h5>
-                </div>
-                <!--/ Statistics -->
-
-                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-warning"
-                    data-bs-original-title="You’re on your way — just refine and push forward.Every effort moves you closer to success.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                            <div class="badge bg-label-orange rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-mood-smile icon-md"></i>
-                            </div>
-                            <div>
-                                <small class="text-dark">% Employability</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                            <div class="progress w-100 me-4" style="height:8px;">
-                                <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
-                                    aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="text-body-secondary">65%</span>
-                            <span class="badge bg-label-orange ms-1">NI</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-primary"
-                    data-bs-original-title="You’re achieving excellence with distinction.You set the pace for others to follow.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                            <div class="badge bg-label-primary rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-chalkboard icon-md"></i></div>
-                            <div>
-                                <small class="text-dark">% Achievement of Research Publications</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                            <div class="progress w-100 me-4" style="height:8px;">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 65%"
-                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="text-body-secondary">90%</span>
-                            <span class="badge bg-label-primary ms-1">OS</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-warning"
-                    data-bs-original-title="You’re doing well and meeting your goals.Keep your consistency — it’s your strength.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                            <div class="badge bg-label-warning rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-user-check icon-md"></i></div>
-                            <div>
-                                <small class="text-dark">% of Admission Targets Achieved</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                            <div class="progress w-100 me-4" style="height:8px;">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 65%"
-                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="text-body-secondary">70%</span>
-                            <span class="badge bg-label-warning ms-1">ME</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-danger"
-                    data-bs-original-title="Not quite there yet — but growth starts here.Reflect. Refocus. Rise higher.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                            <div class="badge bg-label-danger rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-book-2 icon-md"></i>
-                            </div>
-                            <div>
-                                <small class="text-dark">% of Recovery</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                            <div class="progress w-100 me-4" style="height:8px;">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65"
-                                    aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="text-body-secondary">50%</span>
-                            <span class="badge bg-label-danger ms-1">BE</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-success"
-                    data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                            <div class="badge bg-label-success rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-stars icon-md"></i>
-                            </div>
-                            <div>
-                                <small class="text-dark">Profitability of the Programs</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                            <div class="progress w-100 me-4" style="height:8px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
-                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="text-body-secondary">86%</span>
-                            <span class="badge bg-label-success ms-1">EE</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-success"
-                    data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                            <div class="badge bg-label-success rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-stars icon-md"></i>
-                            </div>
-                            <div>
-                                <small class="text-dark">Faculty Satisfaction Score</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                            <div class="progress w-100 me-4" style="height:8px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
-                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="text-body-secondary">86%</span>
-                            <span class="badge bg-label-success ms-1">EE</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-success"
-                    data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                            <div class="badge bg-label-success rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-stars icon-md"></i>
-                            </div>
-                            <div>
-                                <small class="text-dark">Student Feedback Score</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                            <div class="progress w-100 me-4" style="height:8px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
-                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="text-body-secondary">86%</span>
-                            <span class="badge bg-label-success ms-1">EE</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-success"
-                    data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                            <div class="badge bg-label-success rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-stars icon-md"></i>
-                            </div>
-                            <div>
-                                <small class="text-dark">Faculty Discipline / Punctuality</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                            <div class="progress w-100 me-4" style="height:8px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
-                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="text-body-secondary">86%</span>
-                            <span class="badge bg-label-success ms-1">EE</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4" id="scrollableCol1">
 
 
-                <div class=" d-flex justify-content-between">
-                    <h5 class="fw-bold">Top Performers</h5>
-                </div>
-                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-primary"
-                    data-bs-original-title="Assistant Professor / Gold Campus: 05 KM, Main Raiwind Road, Lahore.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-70 align-items-center me-4">
-                            <div class="badge bg-label-primary rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-trophy icon-md"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 text-cut">Dr. Syed Asad Ali</h6>
-                                <small class="text-dark fs-10 text-cut">Department of Information Technology</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                            <span class="badge bg-label-primary ms-1">91</span>
-                            <span class="badge bg-label-primary ms-1">OS</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-success"
-                    data-bs-original-title="HOD / Gold Campus: 05 KM, Main Raiwind Road, Lahore.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-70 align-items-center me-4">
-                            <div class="badge bg-label-success rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-trophy icon-md"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 text-cut">Dr. Tehreem Masood</h6>
-                                <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                            <span class="badge bg-label-success ms-1">82</span>
-                            <span class="badge bg-label-success ms-1">EE</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-custom-class="tooltip-warning"
-                    data-bs-original-title="Assistant Professor / Gold Campus: 05 KM, Main Raiwind Road, Lahore.">
-                    <div class="card-body d-flex">
-                        <div class="d-flex w-70 align-items-center me-4">
-                            <div class="badge bg-label-warning rounded p-1_5 me-4"><i
-                                    class="icon-base ti tabler-award icon-md"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 text-cut">Dr. Muhammad Azam</h6>
-                                <small class="text-dark fs-10 text-cut">Department of Computer Sciences</small>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                            <span class="badge bg-label-warning ms-1">70</span>
-                            <span class="badge bg-label-warning ms-1">ME</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class=" d-flex justify-content-between">
-                    <h5 class="fw-bold">Overall KPA Performance</h5>
-                </div>
-
-
-                <div class="row g-6">
-                    <!-- Profit last month -->
-
-
-                    <!-- Generated Leads -->
-                    <div class="col-xl-12">
-                        <div class="card caed-wave-bg ">
-                            <div class="card-header d-flex justify-content-between">
-                                <div class="card-title mb-0">
-                                    <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><span
-                                            class="icon-xs icon-base ti tabler-chart-pie me-2"></span>Overall </button>
-                                </div>
-                                <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="top"
-                                    data-bs-original-title="View large">
-                                    <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect"
-                                        type="button" data-bs-toggle="modal" data-bs-target="#fullscreenModal">
-                                        <i class="icon-base ti tabler-arrows-maximize"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <canvas class="chartjs" id="radarChart1"></canvas>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!--/ Generated Leads -->
-
-
-                    <!--/ Expenses -->
-                </div>
-
-
-
-
-
-            </div>
-
-
-
-
-
-            <!-- Website Analytics -->
-            <div class="col-xl-4 col">
-
-                <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5 class="card-title m-0 me-2">Research Innovation & Commercialization</h5>
-
-                    </div>
-                    <div class="card-body">
-                        <div id="carrierPerformance"></div>
-                        <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
-                    </div>
-                </div>
-            </div>
-            <!--/ Website Analytics -->
-
-            <!-- Radial bar Chart -->
-            <div class="col-md-4 col-12">
-                <div class="card">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5 class="card-title mb-0">Departments Overview</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="radialBarChart"></div>
-                    </div>
-                </div>
-            </div>
-            <!-- /Radial bar Chart -->
-            <!-- Website Analytics -->
-            <div class="col-xl-4 col">
-                <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5 class="card-title m-0 me-2">Semester-wise Overall Performance</h5>
-
-                    </div>
-                    <div class="card-body">
-                        <div id="carrierPerformance1"></div>
-                    </div>
-                </div>
-            </div>
-            <!--/ Website Analytics -->
-
-
-        </div>
-        <!--/ Accordion1 -->
-
-
-
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalFullTitle">Overall KPA Performance</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-
-
-
-                        <div class="row g-6 pt-2">
-                            <div class="col-12 col-12" id="targetDivchart">
-                                <div class="card caed-wave-bg">
-
-                                    <div class="card-header d-flex justify-content-between">
-                                        <div class="btn-group d-none d-sm-flex" role="group"
-                                            aria-label="radio toggle button group">
-                                            <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
-                                            <label class="btn btn-outline-primary waves-effect" for="overall">📆
-                                                Overall</label>
-
-                                            <input type="radio" class="btn-check" name="termRadio" id="spring25">
-                                            <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring
-                                                2025</label>
-
-                                            <input type="radio" class="btn-check" name="termRadio" id="fall25">
-                                            <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall
-                                                2025</label>
-                                        </div>
                                     </div>
-
-                                    <div class="card-body pt-0">
-                                        <div class="row justify-content-center text-center">
-                                            <div class="col-md-8 d-flex justify-content-center">
-                                                <canvas class="chartjs" id="radarChart"></canvas>
-                                            </div>
-
-                                            <div class="col-12 mt-2">
-                                                <ul id="customLegend"
-                                                    class="d-flex justify-content-center flex-wrap p-0 m-0"
-                                                    style="list-style:none;">
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
                                 </div>
                             </div>
+
+
+
+
+
+
+
                         </div>
-
-
-
-
-
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </div>
-    <!-- / Content -->
+        </div>
+        <!-- / Content -->
 @endsection
 @push('script')
     <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
@@ -1010,8 +1010,8 @@
             // For Chrome/Safari — hide scrollbar visually
             const style = document.createElement("style");
             style.innerHTML = `
-                                                                    #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                    `;
+                                                                        #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                        `;
             document.head.appendChild(style);
 
             // Auto adjust on window resize
@@ -1039,8 +1039,8 @@
             // For Chrome/Safari — hide scrollbar visually
             const style = document.createElement("style");
             style.innerHTML = `
-                                                                    #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                    `;
+                                                                        #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                        `;
             document.head.appendChild(style);
 
             // Auto adjust on window resize
@@ -1200,10 +1200,10 @@
                 li.style.fontSize = "9px";
                 li.style.cursor = "pointer";
                 li.innerHTML = `
-    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-    border-radius:50%;margin-right:5px;"></span>
-    ${label} (${shortLabels[i]})
-    `;
+        <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+        border-radius:50%;margin-right:5px;"></span>
+        ${label} (${shortLabels[i]})
+        `;
 
                 li.addEventListener("mouseenter", () => {
                     radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1354,10 +1354,10 @@
                 li.style.fontSize = "9px";
                 li.style.cursor = "pointer";
                 li.innerHTML = `
-    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-    border-radius:50%;margin-right:5px;"></span>
-    ${label} (${shortLabels[i]})
-    `;
+        <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+        border-radius:50%;margin-right:5px;"></span>
+        ${label} (${shortLabels[i]})
+        `;
 
                 li.addEventListener("mouseenter", () => {
                     radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1488,9 +1488,9 @@
                     const item = document.createElement("div");
                     item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
                     item.innerHTML = `
-                                                                                <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                `;
+                                                                                    <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                    <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                    `;
                     legendContainer.appendChild(item);
                 });
             }
