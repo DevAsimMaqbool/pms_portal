@@ -127,34 +127,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-                                                                                                                                              .flip-card-inner {
-                                                                                                                                                transition: none;
-                                                                                                                                              }
-                                                                                                                                              .flip-card-front,
-                                                                                                                                              .flip-card-back {
-                                                                                                                                                position: relative;
-                                                                                                                                                transform: none;
-                                                                                                                                                backface-visibility: visible;
-                                                                                                                                              }
-                                                                                                                                              .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                                                                                                                              .flip-card-inner {
+                                                                                                                                                                transition: none;
+                                                                                                                                                              }
+                                                                                                                                                              .flip-card-front,
+                                                                                                                                                              .flip-card-back {
+                                                                                                                                                                position: relative;
+                                                                                                                                                                transform: none;
+                                                                                                                                                                backface-visibility: visible;
+                                                                                                                                                              }
+                                                                                                                                                              .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                                                              background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                                                              background-image:
-                                                                                                                                              radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                                                              radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                                                                                                                                              background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                                                                                                                                              background-image:
+                                                                                                                                                              radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                                                                                                                              radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                                                            background-image:
-                                                                                                                                              radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                                                              radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                                                              radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                                                                                                                                            background-image:
+                                                                                                                                                              radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                                                                                                                              radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                                                                                                                              radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                                                              background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                                                                                                                              background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                                                              */
+                                                                                                                                                              */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -433,240 +433,239 @@
     </div>
     <div class="row gy-6 mt-2">
 
-      <div class="col-md-6 col-lg-4" id="scrollableCol">
+      <div class="col-md-6 col-lg-4">
         <div class="d-flex justify-content-between">
           <h5 class="fw-bold">Key Indicators</h5>
         </div>
         <!--/ Statistics -->
-
-        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-warning"
-          data-bs-original-title="You’re on your way — just refine and push forward.Every effort moves you closer to success.">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-orange rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-smile icon-md"></i>
+        <div id="scrollableCol">
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-warning"
+            data-bs-original-title="You’re on your way — just refine and push forward.Every effort moves you closer to success.">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-orange rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-mood-smile icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">Student Satisfaction</small>
+                </div>
               </div>
-              <div>
-                <small class="text-dark text-cut-hot">Student Satisfaction</small>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">65%</span>
+                <span class="badge bg-label-orange ms-1">NI</span>
               </div>
             </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
-                  aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-primary"
+            data-bs-original-title="You’re achieving excellence with distinction.
+                                                                                                                                                                                                                You set the pace for others to follow.">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-primary rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-chalkboard icon-md"></i></div>
+                <div>
+                  <small class="text-dark text-cut-hot">Classes Held</small>
+                </div>
               </div>
-              <span class="text-body-secondary">65%</span>
-              <span class="badge bg-label-orange ms-1">NI</span>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-primary" role="progressbar" style="width: 65%" aria-valuenow="65"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">90%</span>
+                <span class="badge bg-label-primary ms-1">OS</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-warning"
+            data-bs-original-title="You’re doing well and meeting your goals.
+                                                                                                                                                                                                                  Keep your consistency — it’s your strength.">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-warning rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-user-check icon-md"></i></div>
+                <div>
+                  <small class="text-dark text-cut-hot">Student Attendance</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="65"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">70%</span>
+                <span class="badge bg-label-warning ms-1">ME</span>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-danger"
+            data-bs-original-title="Not quite there yet — but growth starts here.
+                                                                                                                                                                                                                  Reflect. Refocus. Rise higher.">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">Research Publications</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">50%</span>
+                <span class="badge bg-label-danger ms-1">BE</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-success"
+            data-bs-original-title="You’re going beyond what’s asked of you.
+                                                                                                                                                                                                                  Keep shining — your impact inspires others.">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">Manager Satisfaction</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">86%</span>
+                <span class="badge bg-label-success ms-1">EE</span>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-primary"
-          data-bs-original-title="You’re achieving excellence with distinction.
-                                                                                                                                                                                          You set the pace for others to follow.">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-primary rounded p-1_5 me-4"><i
-                  class="icon-base ti tabler-chalkboard icon-md"></i></div>
-              <div>
-                <small class="text-dark text-cut-hot">Classes Held</small>
-              </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 65%" aria-valuenow="65"
-                  aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">90%</span>
-              <span class="badge bg-label-primary ms-1">OS</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-warning"
-          data-bs-original-title="You’re doing well and meeting your goals.
-                                                                                                                                                                                            Keep your consistency — it’s your strength.">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-warning rounded p-1_5 me-4"><i
-                  class="icon-base ti tabler-user-check icon-md"></i></div>
-              <div>
-                <small class="text-dark text-cut-hot">Student Attendance</small>
-              </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="65"
-                  aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">70%</span>
-              <span class="badge bg-label-warning ms-1">ME</span>
-            </div>
-          </div>
-        </div>
-
-
-
-
-        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-danger"
-          data-bs-original-title="Not quite there yet — but growth starts here.
-                                                                                                                                                                                            Reflect. Refocus. Rise higher.">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
-              </div>
-              <div>
-                <small class="text-dark text-cut-hot">Research Publications</small>
-              </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65"
-                  aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">50%</span>
-              <span class="badge bg-label-danger ms-1">BE</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-success"
-          data-bs-original-title="You’re going beyond what’s asked of you.
-                                                                                                                                                                                            Keep shining — your impact inspires others.">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
-              </div>
-              <div>
-                <small class="text-dark text-cut-hot">Manager Satisfaction</small>
-              </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65"
-                  aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">86%</span>
-              <span class="badge bg-label-success ms-1">EE</span>
-            </div>
-          </div>
-        </div>
-
-
-
       </div>
 
-      <div class="col-md-6 col-lg-4" id="scrollableCol1">
+      <div class="col-md-6 col-lg-4">
 
         <div class=" d-flex justify-content-between">
           <h5 class="fw-bold">Top Performers</h5>
         </div>
-
-        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success"
-          data-bs-original-title="(Lecturer) Department of Software Engineering">
-          <div class="card-body d-flex">
-            <div class="d-flex w-70 align-items-center me-4">
-              <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
+        <div id="scrollableCol1">
+          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success"
+            data-bs-original-title="(Lecturer) Department of Software Engineering">
+            <div class="card-body d-flex">
+              <div class="d-flex w-70 align-items-center me-4">
+                <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-cut">Haider Ali</h6>
+                  <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
+                </div>
               </div>
-              <div>
-                <h6 class="mb-0 text-cut">Haider Ali</h6>
-                <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
+              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                <span class="badge bg-label-success ms-1">82</span>
+                <span class="badge bg-label-success ms-1">EE</span>
               </div>
             </div>
-            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+          </div>
 
-              <span class="badge bg-label-success ms-1">82</span>
-              <span class="badge bg-label-success ms-1">EE</span>
+
+
+          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-primary"
+            data-bs-original-title="(Lecturer) Superior University Franchise.">
+            <div class="card-body d-flex">
+              <div class="d-flex w-70 align-items-center me-4">
+                <div class="badge bg-label-primary rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-cut">Sadia Ashraf</h6>
+                  <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                <span class="badge bg-label-primary ms-1">91</span>
+                <span class="badge bg-label-primary ms-1">OS</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning"
+            data-bs-original-title="(Lecturer) Superior University Franchise">
+            <div class="card-body d-flex">
+              <div class="d-flex w-70 align-items-center me-4">
+                <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-cut">Amna Ilyas</h6>
+                  <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                <span class="badge bg-label-warning ms-1">70</span>
+                <span class="badge bg-label-warning ms-1">ME</span>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-danger"
+            data-bs-original-title="(Lecturer) Teaching">
+            <div class="card-body d-flex">
+              <div class="d-flex w-70 align-items-center me-4">
+                <div class="badge bg-label-danger rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-trophy-off icon-md"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-cut">Muhammad Ashraf</h6>
+
+                  <small class="text-dark fs-10 text-cut">Teaching</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                <span class="badge bg-label-danger ms-1">50</span>
+                <span class="badge bg-label-danger ms-1">BE</span>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning"
+            data-bs-original-title="(Lecturer) Faisalabad - Uni Campus">
+            <div class="card-body d-flex">
+              <div class="d-flex w-70 align-items-center me-4">
+                <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0">Rashid Hussain</h6>
+                  <small class="text-dark fs-10">Faisalabad - Uni Campus</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                <span class="badge bg-label-warning ms-1">70</span>
+                <span class="badge bg-label-warning ms-1">ME</span>
+              </div>
             </div>
           </div>
         </div>
 
-
-
-        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-primary"
-          data-bs-original-title="(Lecturer) Superior University Franchise.">
-          <div class="card-body d-flex">
-            <div class="d-flex w-70 align-items-center me-4">
-              <div class="badge bg-label-primary rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
-              </div>
-              <div>
-                <h6 class="mb-0 text-cut">Sadia Ashraf</h6>
-                <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
-              </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-              <span class="badge bg-label-primary ms-1">91</span>
-              <span class="badge bg-label-primary ms-1">OS</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning"
-          data-bs-original-title="(Lecturer) Superior University Franchise">
-          <div class="card-body d-flex">
-            <div class="d-flex w-70 align-items-center me-4">
-              <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
-              </div>
-              <div>
-                <h6 class="mb-0 text-cut">Amna Ilyas</h6>
-                <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
-              </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-              <span class="badge bg-label-warning ms-1">70</span>
-              <span class="badge bg-label-warning ms-1">ME</span>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-danger"
-          data-bs-original-title="(Lecturer) Teaching">
-          <div class="card-body d-flex">
-            <div class="d-flex w-70 align-items-center me-4">
-              <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy-off icon-md"></i>
-              </div>
-              <div>
-                <h6 class="mb-0 text-cut">Muhammad Ashraf</h6>
-
-                <small class="text-dark fs-10 text-cut">Teaching</small>
-              </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-              <span class="badge bg-label-danger ms-1">50</span>
-              <span class="badge bg-label-danger ms-1">BE</span>
-            </div>
-          </div>
-        </div>
-
-
-
-        <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning"
-          data-bs-original-title="(Lecturer) Faisalabad - Uni Campus">
-          <div class="card-body d-flex">
-            <div class="d-flex w-70 align-items-center me-4">
-              <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
-              </div>
-              <div>
-                <h6 class="mb-0">Rashid Hussain</h6>
-                <small class="text-dark fs-10">Faisalabad - Uni Campus</small>
-              </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-              <span class="badge bg-label-warning ms-1">70</span>
-              <span class="badge bg-label-warning ms-1">ME</span>
-            </div>
-          </div>
-        </div>
       </div>
+
       <div class="col-md-6 col-lg-4">
         <div class=" d-flex justify-content-between">
           <h5 class="fw-bold">Overall KPA Performance</h5>
@@ -972,8 +971,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                              `;
+                                                                                                                                                                #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                              `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1001,8 +1000,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                              `;
+                                                                                                                                                                #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                              `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1148,10 +1147,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                                              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                                              border-radius:50%;margin-right:5px;"></span>
-                                                                                                                                              ${label} (${shortLabels[i]})
-                                                                                                                                              `;
+                                                                                                                                                              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                              border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                              ${label} (${shortLabels[i]})
+                                                                                                                                                              `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1303,10 +1302,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                                              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                                              border-radius:50%;margin-right:5px;"></span>
-                                                                                                                                              ${label} (${shortLabels[i]})
-                                                                                                                                              `;
+                                                                                                                                                              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                              border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                              ${label} (${shortLabels[i]})
+                                                                                                                                                              `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
