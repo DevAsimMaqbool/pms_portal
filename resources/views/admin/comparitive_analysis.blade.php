@@ -113,7 +113,7 @@
             <div class="card-header d-flex align-items-center justify-content-between">
               <div class="card-title mb-0">
                 <h5 class="m-0 me-2">Self vs Self</h5>
-                <p class="mb-0">Your performance against the selected KPA is <span class="inde-status">growing</span></p>
+                <p class="mb-0">Your performance against the selected KPA is <span class=" badge inde-status">growing</span></p>
               </div>
             </div>
             <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
@@ -1152,13 +1152,13 @@
           if (seriesData.length >= 2 && statusEl) {
             if (seriesData[0] > seriesData[1]) {
               statusEl.textContent = 'declining';
-              statusEl.style.color = 'red'; // optional visual cue
+              statusEl.style.background = 'red'; // optional visual cue
             } else if (seriesData[0] < seriesData[1]) {
               statusEl.textContent = 'growing';
-              statusEl.style.color = 'green'; // optional visual cue
+              statusEl.style.background = 'green'; // optional visual cue
             } else {
               statusEl.textContent = 'stable';
-              statusEl.style.color = 'gray';
+              statusEl.style.background = 'gray';
             }
           }
         }
