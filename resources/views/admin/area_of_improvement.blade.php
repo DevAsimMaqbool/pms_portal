@@ -18,72 +18,11 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Header -->
     <div class="row g-6">
-      <!-- Statistics -->
-      <div class="col-md-12 col-xxl-12">
-        <div class="card h-100">
-          <div class="card-body d-flex align-items-end">
-            <div class="w-100">
-
-              <div class="row gy-3">
-
-                <div class="col-md-3 col-6">
-                  <div class="d-flex align-items-center">
-                    <div class="badge rounded bg-label-primary me-4 p-2"><i class="icon-base ti tabler-book icon-lg"></i>
-                    </div>
-                    <div class="card-info">
-                      <h5 class="mb-0">90%</h5>
-                      <small>Teaching</small>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-3 col-6">
-                  <div class="d-flex align-items-center">
-                    <div class="badge rounded bg-label-info me-4 p-2"><i class="icon-base ti tabler-bulb icon-lg"></i>
-                    </div>
-                    <div class="card-info">
-                      <h5 class="mb-0">85%</h5>
-                      <small>Research</small>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-3 col-6">
-                  <div class="d-flex align-items-center">
-                    <div class="badge rounded bg-label-danger me-4 p-2"><i
-                        class="icon-base ti tabler-network icon-lg"></i></div>
-                    <div class="card-info">
-                      <h5 class="mb-0">80%</h5>
-                      <small>Engagement</small>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-3 col-6">
-                  <div class="d-flex align-items-center">
-                    <div class="badge rounded bg-label-success me-4 p-2"><i
-                        class="icon-base ti tabler-shield-check icon-lg"></i></div>
-                    <div class="card-info">
-                      <h5 class="mb-0">75%</h5>
-                      <small>Character Virtue</small>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Last Transaction -->
       <div class="col-lg-12">
         <div class="card h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title m-0 me-2">Need to Improve</h5>
-            <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><i
-                class="icon-base ti tabler-calendar icon-xs me-2"></i>Fall 2025</button>
           </div>
           <div class="card-datatable table-responsive">
             <table class="table border-top" id="areaOfImprovment">

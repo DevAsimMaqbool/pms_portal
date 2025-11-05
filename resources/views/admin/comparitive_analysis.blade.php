@@ -24,24 +24,28 @@
       color: white !important;
       box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.4);
     }
-      .text-cut-hot {
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* ✅ Limit to 3 lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-  line-height: 1.2;
-}
-  .text-cut-one {
-  display: -webkit-box;
-  -webkit-line-clamp: 1; /* ✅ Limit to 3 lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-  line-height: 1.2;
-}
+
+    .text-cut-hot {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      /* ✅ Limit to 3 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      line-height: 1.2;
+    }
+
+    .text-cut-one {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      /* ✅ Limit to 3 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      line-height: 1.2;
+    }
   </style>
 @endpush
 @section('content')
@@ -66,7 +70,7 @@
                   </select>
                 </div>
                 <div class="col-md-6">
-                  
+
                 </div>
               </div>
             </div>
@@ -106,7 +110,7 @@
             </div>
           </div>
         </div> --}}
-        
+
         <!-- Average Daily Sales -->
         <div class="col-xl-6">
           <div class="card h-100">
@@ -140,116 +144,6 @@
           </div>
         </div>
         <!--/ Website Analytics -->
-
-
-
-        <!-- Popular Instructors -->
-        <div class="col-md-6 col-xxl-4 mb-6">
-          <div class="card h-100">
-
-            <div class="card-header d-flex align-items-center justify-content-between">
-              <div class="card-title mb-0">
-                <h5 class="m-0 me-2">Institutional Level Toppers</h5>
-              </div>
-            </div>
-
-            <div class="card-body top-performers-list">
-              
-
-
-              <ul class="p-0 m-0">
-                    <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-secondary" data-bs-original-title="(Sadia Ashraf) Faculty Of Economics and Commerce">
-                  <div class="avatar avatar me-4">
-                    <img src="{{ asset('admin/assets/img/avatars/2.png') }}" alt="Avatar" class="rounded-circle" />
-                  </div>
-                  <div class="row w-100 align-items-center">
-                    <div class="col-10">
-                      <div class="me-2">
-                         <h6 class="mb-1_5 text-cut-one">Sadia Ashraf</h6>
-                        <small class="text-cut-hot">Faculty Of Economics and Commerce</small>
-                      </div>
-                    </div>
-                    <div class="col-2 d-flex justify-content-end">
-                      <h6 class="mb-0">91%</h6>
-                    </div>
-                  </div>
-                </li>
-                  <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-secondary" data-bs-original-title="(Haider Ali) Faculty of Business and Management Sciences">
-                  <div class="avatar avatar me-4">
-                    <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="Avatar" class="rounded-circle" />
-                  </div>
-                  <div class="row w-100 align-items-center">
-                    <div class="col-10">
-                      <div class="me-2">
-                         <h6 class="mb-1_5 text-cut-one">Haider Ali</h6>
-                        <small class="text-cut-hot">Faculty of Business and Management Sciences</small>
-                      </div>
-                    </div>
-                    <div class="col-2 d-flex justify-content-end">
-                      <h6 class="mb-0">83%</h6>
-                    </div>
-                  </div>
-                </li>
-                  <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-secondary" data-bs-original-title="(Amna Ilyas) Faculty of Social Sciences">
-                  <div class="avatar avatar me-4">
-                    <img src="{{ asset('admin/assets/img/avatars/3.png') }}" alt="Avatar" class="rounded-circle" />
-                  </div>
-                  <div class="row w-100 align-items-center">
-                    <div class="col-10">
-                      <div class="me-2">
-                         <h6 class="mb-1_5 text-cut-one">Amna Ilyas</h6>
-                        <small class="text-cut-hot">Faculty of Social Sciences</small>
-                      </div>
-                    </div>
-                    <div class="col-2 d-flex justify-content-end">
-                      <h6 class="mb-0">70%</h6>
-                    </div>
-                  </div>
-                </li>
-                  <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-secondary" data-bs-original-title="(Rashid Hussain) Faculty of Art and Design">
-                  <div class="avatar avatar me-4">
-                    <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="Avatar" class="rounded-circle" />
-                  </div>
-                  <div class="row w-100 align-items-center">
-                    <div class="col-10">
-                      <div class="me-2">
-                         <h6 class="mb-1_5 text-cut-one">Rashid Hussain</h6>
-                        <small class="text-cut-hot">Faculty of Art and Design</small>
-                      </div>
-                    </div>
-                    <div class="col-2 d-flex justify-content-end">
-                      <h6 class="mb-0">70%</h6>
-                    </div>
-                  </div>
-                </li>
-                  <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-secondary" data-bs-original-title="(Muhammad Ashraf) Faculty of Engineering and Technology">
-                  <div class="avatar avatar me-4">
-                    <img src="{{ asset('admin/assets/img/avatars/3.png') }}" alt="Avatar" class="rounded-circle" />
-                  </div>
-                  <div class="row w-100 align-items-center">
-                    <div class="col-10">
-                      <div class="me-2">
-                         <h6 class="mb-1_5 text-cut-one">Muhammad Ashraf</h6>
-                        <small class="text-cut-hot">Faculty of Engineering and Technology</small>
-                      </div>
-                    </div>
-                    <div class="col-2 d-flex justify-content-end">
-                      <h6 class="mb-0">50%</h6>
-                    </div>
-                  </div>
-                </li>
-                
-
-              </ul>
-            </div>
-          </div>
-        </div>
-        <!--/ Popular Instructors -->
         <!-- Vehicles Condition -->
         <div class="col-md-6 col-xxl-4 mb-6">
           <div class="card h-100">
@@ -260,8 +154,9 @@
             </div>
             <div class="card-body top-department-list">
               <ul class="p-0 m-0">
-                  <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-primary" data-bs-original-title="(Rashid Hussain) Department of Business and Management Sciences">
+                <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-primary"
+                  data-bs-original-title="(Rashid Hussain) Department of Business and Management Sciences">
                   <div class="chart-progress me-3" data-color="primary" data-series="91" data-progress_variant="true">
                   </div>
                   <div class="row w-100 align-items-center">
@@ -277,7 +172,8 @@
                   </div>
                 </li>
                 <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-success" data-bs-original-title="(Haider Ali) Department of Software Engineering">
+                  data-bs-custom-class="tooltip-success"
+                  data-bs-original-title="(Haider Ali) Department of Software Engineering">
                   <div class="chart-progress me-3" data-color="success" data-series="82" data-progress_variant="true">
                   </div>
                   <div class="row w-100 align-items-center">
@@ -293,7 +189,8 @@
                   </div>
                 </li>
                 <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-warning" data-bs-original-title="(Muhammad Ashraf) Chaudhry Abdul Rehman Business School">
+                  data-bs-custom-class="tooltip-warning"
+                  data-bs-original-title="(Muhammad Ashraf) Chaudhry Abdul Rehman Business School">
                   <div class="chart-progress me-3" data-color="warning" data-series="70" data-progress_variant="true">
                   </div>
                   <div class="row w-100 align-items-center">
@@ -308,9 +205,10 @@
                     </div>
                   </div>
                 </li>
-                
+
                 <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-warning" data-bs-original-title="(Sadia Ashraf) Department of Social Sciences">
+                  data-bs-custom-class="tooltip-warning"
+                  data-bs-original-title="(Sadia Ashraf) Department of Social Sciences">
                   <div class="chart-progress me-3" data-color="warning" data-series="70" data-progress_variant="true">
                   </div>
                   <div class="row w-100 align-items-center">
@@ -326,7 +224,8 @@
                   </div>
                 </li>
                 <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-danger" data-bs-original-title="(Amna Ilyas) Department of Computer Sciences">
+                  data-bs-custom-class="tooltip-danger"
+                  data-bs-original-title="(Amna Ilyas) Department of Computer Sciences">
                   <div class="chart-progress me-3" data-color="danger" data-series="50" data-progress_variant="true">
                   </div>
                   <div class="row w-100 align-items-center">
@@ -356,8 +255,9 @@
             </div>
             <div class="card-body top-faculties-list">
               <ul class="p-0 m-0">
-                  <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-primary" data-bs-original-title="(Sadia Ashraf) Faculty Of Economics and Commerce">
+                <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-primary"
+                  data-bs-original-title="(Sadia Ashraf) Faculty Of Economics and Commerce">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-primary rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-trophy icon-md"></i>
@@ -376,7 +276,8 @@
                   </div>
                 </li>
                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-success" data-bs-original-title="(Amna Ilyas) Faculty of Business and Management Sciences">
+                  data-bs-custom-class="tooltip-success"
+                  data-bs-original-title="(Amna Ilyas) Faculty of Business and Management Sciences">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-success rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-trophy icon-md"></i>
@@ -396,7 +297,8 @@
                 </li>
 
                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-warning" data-bs-original-title="(Muhammad Ashraf) Faculty of Computer Science and Information Technology">
+                  data-bs-custom-class="tooltip-warning"
+                  data-bs-original-title="(Muhammad Ashraf) Faculty of Computer Science and Information Technology">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-warning rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-award  icon-md"></i>
@@ -414,9 +316,10 @@
                     <span class="text-body-secondary">70%</span>
                   </div>
                 </li>
-               
+
                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-warning" data-bs-original-title="(Rashid Hussain) Faculty of Allied Health Sciences">
+                  data-bs-custom-class="tooltip-warning"
+                  data-bs-original-title="(Rashid Hussain) Faculty of Allied Health Sciences">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-warning rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-award icon-md"></i>
@@ -434,8 +337,8 @@
                     <span class="text-body-secondary">70%</span>
                   </div>
                 </li>
-                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-danger" data-bs-original-title="(Haider Ali) Faculty of Social Sciences">
+                <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-danger" data-bs-original-title="(Haider Ali) Faculty of Social Sciences">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-danger rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-trophy-off icon-md"></i>
@@ -458,7 +361,118 @@
           </div>
         </div>
         <!--/ Active Projects -->
+        <!-- Popular Instructors -->
+        <div class="col-md-6 col-xxl-4 mb-6">
+          <div class="card h-100">
 
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <div class="card-title mb-0">
+                <h5 class="m-0 me-2">Institutional Level Toppers</h5>
+              </div>
+            </div>
+
+            <div class="card-body top-performers-list">
+
+
+
+              <ul class="p-0 m-0">
+                <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="(Sadia Ashraf) Faculty Of Economics and Commerce">
+                  <div class="avatar avatar me-4">
+                    <img src="{{ asset('admin/assets/img/avatars/2.png') }}" alt="Avatar" class="rounded-circle" />
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-10">
+                      <div class="me-2">
+                        <h6 class="mb-1_5 text-cut-one">Sadia Ashraf</h6>
+                        <small class="text-cut-hot">Faculty Of Economics and Commerce</small>
+                      </div>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end">
+                      <h6 class="mb-0">91%</h6>
+                    </div>
+                  </div>
+                </li>
+                <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="(Haider Ali) Faculty of Business and Management Sciences">
+                  <div class="avatar avatar me-4">
+                    <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="Avatar" class="rounded-circle" />
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-10">
+                      <div class="me-2">
+                        <h6 class="mb-1_5 text-cut-one">Haider Ali</h6>
+                        <small class="text-cut-hot">Faculty of Business and Management Sciences</small>
+                      </div>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end">
+                      <h6 class="mb-0">83%</h6>
+                    </div>
+                  </div>
+                </li>
+                <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="(Amna Ilyas) Faculty of Social Sciences">
+                  <div class="avatar avatar me-4">
+                    <img src="{{ asset('admin/assets/img/avatars/2.png') }}" alt="Avatar" class="rounded-circle" />
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-10">
+                      <div class="me-2">
+                        <h6 class="mb-1_5 text-cut-one">Amna Ilyas</h6>
+                        <small class="text-cut-hot">Faculty of Social Sciences</small>
+                      </div>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end">
+                      <h6 class="mb-0">70%</h6>
+                    </div>
+                  </div>
+                </li>
+                <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="(Rashid Hussain) Faculty of Art and Design">
+                  <div class="avatar avatar me-4">
+                    <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="Avatar" class="rounded-circle" />
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-10">
+                      <div class="me-2">
+                        <h6 class="mb-1_5 text-cut-one">Rashid Hussain</h6>
+                        <small class="text-cut-hot">Faculty of Art and Design</small>
+                      </div>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end">
+                      <h6 class="mb-0">70%</h6>
+                    </div>
+                  </div>
+                </li>
+                <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="(Muhammad Ashraf) Faculty of Engineering and Technology">
+                  <div class="avatar avatar me-4">
+                    <img src="{{ asset('admin/assets/img/avatars/3.png') }}" alt="Avatar" class="rounded-circle" />
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-10">
+                      <div class="me-2">
+                        <h6 class="mb-1_5 text-cut-one">Muhammad Ashraf</h6>
+                        <small class="text-cut-hot">Faculty of Engineering and Technology</small>
+                      </div>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end">
+                      <h6 class="mb-0">50%</h6>
+                    </div>
+                  </div>
+                </li>
+
+
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!--/ Popular Instructors -->
 
       </div>
     </div>
@@ -581,23 +595,23 @@
 
                 // Build Indicator Average list
                 $indicatorList.append(`
-                                                                    <div class="d-flex justify-content-between align-items-center mb-6">
-                                                                        <div class="d-flex align-items-center">
-                                                                            <div class="avatar avatar me-4">
-                                                                                <img src="{{ asset('admin/assets/img/avatars/1.png')}}" alt="Avatar"
-                                                                                    class="rounded-circle" />
-                                                                            </div>
-                                                                            <div>
-                                                                                <div>
-                                                                                    <h6 class="mb-0 text-truncate">${indicator.name}</h6>
-                                                                                    <small class="text-truncate text-body">${indicator.job_title}</small>
+                                                                            <div class="d-flex justify-content-between align-items-center mb-6">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="avatar avatar me-4">
+                                                                                        <img src="{{ asset('admin/assets/img/avatars/1.png')}}" alt="Avatar"
+                                                                                            class="rounded-circle" />
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <div>
+                                                                                            <h6 class="mb-0 text-truncate">${indicator.name}</h6>
+                                                                                            <small class="text-truncate text-body">${indicator.job_title}</small>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="text-end">
-                                                                            <h6 class="mb-0" style="color:${indicator.color}">${indicator.avg}%</h6>
-                                                                        </div>
-                                                                    </div>`);
+                                                                                <div class="text-end">
+                                                                                    <h6 class="mb-0" style="color:${indicator.color}">${indicator.avg}%</h6>
+                                                                                </div>
+                                                                            </div>`);
               });
 
               updateBarChart(indicatorNames, avgValues, colors);
@@ -877,9 +891,9 @@
             const item = document.createElement("div");
             item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
             item.innerHTML = `
-                                                                                                                    <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                                    <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                                  `;
+                                                                                                                            <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                                                            <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                                                          `;
             legendContainer.appendChild(item);
           });
         }
@@ -1054,11 +1068,11 @@
                   size: 0,
                   customSVG: {
                     SVG: `
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-                                                                      <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
-                                                                      <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
-                                                                    </svg>
-                                                                  `,
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                                                                              <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
+                                                                              <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
+                                                                            </svg>
+                                                                          `,
                     offsetX: -10,
                     offsetY: -28
                   }
@@ -1085,9 +1099,9 @@
             const item = document.createElement("div");
             item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
             item.innerHTML = `
-                                                            <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                            <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                          `;
+                                                                    <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                    <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                  `;
             legendContainer.appendChild(item);
           });
         }
@@ -1168,115 +1182,115 @@
 
 
 
-       function renderCarrierChart(categories, values, highlightName = "Abdullah Tanveer") {
-  const c = document.querySelector("#carrierPerformance");
-  const legendContainer = document.getElementById("carrierCustomLegend");
+        function renderCarrierChart(categories, values, highlightName = "Abdullah Tanveer") {
+          const c = document.querySelector("#carrierPerformance");
+          const legendContainer = document.getElementById("carrierCustomLegend");
 
-  if (!c) return;
+          if (!c) return;
 
-  // Destroy existing chart if any
-  if (c.chartInstance) {
-    try { c.chartInstance.destroy(); } catch (e) {}
-    c.chartInstance = null;
-    if (legendContainer) legendContainer.innerHTML = "";
-  }
+          // Destroy existing chart if any
+          if (c.chartInstance) {
+            try { c.chartInstance.destroy(); } catch (e) { }
+            c.chartInstance = null;
+            if (legendContainer) legendContainer.innerHTML = "";
+          }
 
-  const colors = ["#FF5733", "#1F77B4", "#2CA02C", "#9467BD", "#D62728"];
+          const colors = ["#FF5733", "#1F77B4", "#2CA02C", "#9467BD", "#D62728"];
 
-  // Self performance data
-  const selfPerformance = categories.map((name, index) => ({
-    x: name,
-    y: values[index],
-    fillColor: name === highlightName ? "#FF5733" : colors[index % colors.length],
-  }));
+          // Self performance data
+          const selfPerformance = categories.map((name, index) => ({
+            x: name,
+            y: values[index],
+            fillColor: name === highlightName ? "#FF5733" : colors[index % colors.length],
+          }));
 
-  const options = {
-    chart: {
-      height: 300,
-      type: "bar",
-      toolbar: { show: false },
-    },
-    plotOptions: {
-      bar: {
-        horizontal: true,
-        barHeight: "60%",
-        borderRadius: 7,
-        startingShape: "rounded",
-        borderRadiusApplication: "end",
-      },
-    },
-    // ✅ Remove bar border completely
-    stroke: {
-      show: false, // <-- disables any border/stroke around bars
-    },
-    dataLabels: {
-      enabled: true,
-      enabledOnSeries: [0],
-      formatter: function (val, opts) {
-        const name = opts.w.config.series[0].data[opts.dataPointIndex].x;
-        return name === highlightName ? `🙋🏻‍♂️` : ``;
-      },
-      style: {
-        fontSize: "20px",
-        colors: ["#111"],
-      },
-      background: { enabled: false },
-    },
-    series: [
-      { name: "Self Performance", type: "bar", data: selfPerformance },
-    ],
-    xaxis: {
-      categories: categories,
-      labels: {
-        style: {
-          colors: "#6E6B7B",
-          fontSize: "13px",
-          fontFamily: "Inter, sans-serif",
-          fontWeight: 400,
-        },
-      },
-      axisBorder: { show: false },
-      axisTicks: { show: false },
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: "#6E6B7B",
-          fontSize: "13px",
-          fontFamily: "Inter, sans-serif",
-          fontWeight: 400,
-        },
-      },
-    },
-    grid: {
-      strokeDashArray: 10,
-      xaxis: { lines: { show: true } },
-      yaxis: { lines: { show: false } },
-      padding: { top: -35, bottom: -12 },
-    },
-    fill: { opacity: 1 },
-    legend: { show: false },
-    responsive: [{ breakpoint: 576, options: { chart: { height: 300 } } }],
-  };
+          const options = {
+            chart: {
+              height: 300,
+              type: "bar",
+              toolbar: { show: false },
+            },
+            plotOptions: {
+              bar: {
+                horizontal: true,
+                barHeight: "60%",
+                borderRadius: 7,
+                startingShape: "rounded",
+                borderRadiusApplication: "end",
+              },
+            },
+            // ✅ Remove bar border completely
+            stroke: {
+              show: false, // <-- disables any border/stroke around bars
+            },
+            dataLabels: {
+              enabled: true,
+              enabledOnSeries: [0],
+              formatter: function (val, opts) {
+                const name = opts.w.config.series[0].data[opts.dataPointIndex].x;
+                return name === highlightName ? `🙋🏻‍♂️` : ``;
+              },
+              style: {
+                fontSize: "20px",
+                colors: ["#111"],
+              },
+              background: { enabled: false },
+            },
+            series: [
+              { name: "Self Performance", type: "bar", data: selfPerformance },
+            ],
+            xaxis: {
+              categories: categories,
+              labels: {
+                style: {
+                  colors: "#6E6B7B",
+                  fontSize: "13px",
+                  fontFamily: "Inter, sans-serif",
+                  fontWeight: 400,
+                },
+              },
+              axisBorder: { show: false },
+              axisTicks: { show: false },
+            },
+            yaxis: {
+              labels: {
+                style: {
+                  colors: "#6E6B7B",
+                  fontSize: "13px",
+                  fontFamily: "Inter, sans-serif",
+                  fontWeight: 400,
+                },
+              },
+            },
+            grid: {
+              strokeDashArray: 10,
+              xaxis: { lines: { show: true } },
+              yaxis: { lines: { show: false } },
+              padding: { top: -35, bottom: -12 },
+            },
+            fill: { opacity: 1 },
+            legend: { show: false },
+            responsive: [{ breakpoint: 576, options: { chart: { height: 300 } } }],
+          };
 
-  const chart = new ApexCharts(c, options);
-  chart.render().then(() => {
-    c.chartInstance = chart;
-  });
+          const chart = new ApexCharts(c, options);
+          chart.render().then(() => {
+            c.chartInstance = chart;
+          });
 
-  if (legendContainer) {
-    categories.forEach((label, i) => {
-      const item = document.createElement("div");
-      item.className = "d-flex align-items-center mx-2 my-1";
-      item.innerHTML = `
-        <span style="width:14px;height:14px;background:${colors[i % colors.length]};
-        border-radius:50%;display:inline-block;margin-right:6px;"></span>
-        <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-      `;
-      legendContainer.appendChild(item);
-    });
-  }
-}
+          if (legendContainer) {
+            categories.forEach((label, i) => {
+              const item = document.createElement("div");
+              item.className = "d-flex align-items-center mx-2 my-1";
+              item.innerHTML = `
+                <span style="width:14px;height:14px;background:${colors[i % colors.length]};
+                border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+              `;
+              legendContainer.appendChild(item);
+            });
+          }
+        }
 
         //  here is asim's cloneNode
         function renderCarrierChart11(categories, values, highlightName = "Abdullah Tanveer") {
@@ -1384,11 +1398,11 @@
                     size: 0,
                     customSVG: {
                       SVG: `
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-                        <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
-                        <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
-                        </svg>
-                        `,
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                                <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
+                                <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
+                                </svg>
+                                `,
                       offsetX: -10,
                       offsetY: -28,
                     },
@@ -1410,9 +1424,9 @@
               const item = document.createElement("div");
               item.className = "d-flex align-items-center mx-2 my-1";
               item.innerHTML = `
-                                                            <span style="width:14px;height:14px;background:${colors[i % colors.length]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                            <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                          `;
+                                                                    <span style="width:14px;height:14px;background:${colors[i % colors.length]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                    <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                  `;
               legendContainer.appendChild(item);
             });
           }
@@ -1456,77 +1470,77 @@
 
           switch (selectedValue) {
             case "1":
-             
+
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
                 [30, 20, 40, 60, 70]);
               newData = [80, 90];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "2":
-             
+
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
                 [20, 40, 65, 70, 80]);
               newData = [60, 85];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "3":
-              
+
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
                 [70, 75, 80, 85, 90]);
               newData = [70, 75];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "4":
-              
+
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
                 [80, 80, 85, 85, 90]);
               newData = [50, 06];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "5":
-              
+
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
                 [65, 70, 75, 80, 85]);
               newData = [90, 40];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "6":
-             
+
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
                 [30, 44, 55, 77, 99]);
               newData = [70, 75];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "7":
-             
+
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
                 [20, 20, 35, 40, 70]);
               newData = [70, 55];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "13":
-             
+
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
                 [40, 50, 55, 66, 77]);
               newData = [40, 55];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "14":
-             
+
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
                 [65, 66, 67, 68, 69]);
               newData = [50, 65];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "0":
-              
+
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
                 [55, 66, 77, 88, 90]);
               newData = [55, 75];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             default:
-              
+
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
                 [50, 50, 60, 60, 60]);
               newData = [85, 65];
