@@ -24,6 +24,24 @@
       color: white !important;
       box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.4);
     }
+      .text-cut-hot {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* ✅ Limit to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.2;
+}
+  .text-cut-one {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* ✅ Limit to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.2;
+}
   </style>
 @endpush
 @section('content')
@@ -48,26 +66,7 @@
                   </select>
                 </div>
                 <div class="col-md-6">
-                  <div
-                    class="d-flex justify-content-md-end align-items-center column-gap-6 flex-sm-row flex-column row-gap-4">
-
-
-                    <ul class="nav custom-tabs" role="tablist">
-                      <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                          data-bs-target="#spring" aria-selected="true">
-                          🌸 Spring 2025
-                        </button>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#fall"
-                          aria-selected="false">
-                          🍂 Fall 2025
-                        </button>
-                      </li>
-                    </ul>
-
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -107,56 +106,14 @@
             </div>
           </div>
         </div> --}}
-        <!-- Website Analytics -->
-        <div class="col-xl-6">
-          <div class="card card-border-shadow-success h-100">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-success rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-arrow-up-to-arc icon-md"></i>
-                </div>
-                <div>
-                  <h6 class="mb-0">Highest Score</h6>
-                  <small class="text-dark fs-10 highest-score">Department of Software Engineering</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                <span class="badge bg-label-success ms-1 highest-value">82</span>
-                <span class="badge bg-label-success ms-1 highest-rating">EE</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--/ Website Analytics -->
-        <!-- Website Analytics -->
-        <div class="col-xl-6">
-          <div class="card card-border-shadow-danger h-100">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-danger rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-arrow-up-from-arc icon-md"></i>
-                </div>
-                <div>
-                  <h6 class="mb-0">Low Score</h6>
-                  <small class="text-dark fs-10 text-cut low-score">Superior University Franchise</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                <span class="badge bg-label-danger ms-1 low-value">50</span>
-                <span class="badge bg-label-danger ms-1 low-rating">BE</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--/ Website Analytics -->
+        
         <!-- Average Daily Sales -->
         <div class="col-xl-6">
           <div class="card h-100">
             <div class="card-header d-flex align-items-center justify-content-between">
               <div class="card-title mb-0">
                 <h5 class="m-0 me-2">Self vs Self</h5>
+                <p class="mb-0">Your performance against the selected KPA is <span class="inde-status">growing</span></p>
               </div>
             </div>
             <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
@@ -173,7 +130,7 @@
 
           <div class="card h-100">
             <div class="card-header d-flex align-items-center justify-content-between">
-              <h5 class="card-title m-0 me-2">Self vs Other</h5>
+              <h5 class="card-title m-0 me-2">Self vs Peers</h5>
 
             </div>
             <div class="card-body">
@@ -189,92 +146,106 @@
         <!-- Popular Instructors -->
         <div class="col-md-6 col-xxl-4 mb-6">
           <div class="card h-100">
+
             <div class="card-header d-flex align-items-center justify-content-between">
               <div class="card-title mb-0">
-                <h5 class="m-0 me-2">Top Performers</h5>
+                <h5 class="m-0 me-2">Institutional Level Toppers</h5>
               </div>
             </div>
+
             <div class="card-body top-performers-list">
-              <div class="d-flex justify-content-between align-items-center mb-6 performer-item">
-                <div class="d-flex align-items-center">
+              
+
+
+              <ul class="p-0 m-0">
+                    <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-secondary" data-bs-original-title="(Sadia Ashraf) Faculty Of Economics and Commerce">
+                  <div class="avatar avatar me-4">
+                    <img src="{{ asset('admin/assets/img/avatars/2.png') }}" alt="Avatar" class="rounded-circle" />
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-10">
+                      <div class="me-2">
+                         <h6 class="mb-1_5 text-cut-one">Sadia Ashraf</h6>
+                        <small class="text-cut-hot">Faculty Of Economics and Commerce</small>
+                      </div>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end">
+                      <h6 class="mb-0">91%</h6>
+                    </div>
+                  </div>
+                </li>
+                  <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-secondary" data-bs-original-title="(Haider Ali) Faculty of Business and Management Sciences">
                   <div class="avatar avatar me-4">
                     <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="Avatar" class="rounded-circle" />
                   </div>
-                  <div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Haider Ali</h6>
-                      <small class="text-truncate text-body">Department of Software Engineering</small>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-10">
+                      <div class="me-2">
+                         <h6 class="mb-1_5 text-cut-one">Haider Ali</h6>
+                        <small class="text-cut-hot">Faculty of Business and Management Sciences</small>
+                      </div>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end">
+                      <h6 class="mb-0">83%</h6>
                     </div>
                   </div>
-                </div>
-                <div class="text-end">
-                  <h6 class="mb-0">83%</h6>
-                </div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center mb-6 performer-item">
-                <div class="d-flex align-items-center">
-                  <div class="avatar avatar me-4">
-                    <img src="{{ asset('admin//assets/img/avatars/2.png') }}" alt="Avatar" class="rounded-circle" />
-                  </div>
-                  <div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Sadia Ashraf</h6>
-                      <small class="text-truncate text-body">Superior University Franchise</small>
-                    </div>
-                  </div>
-                </div>
-                <div class="text-end">
-                  <h6 class="mb-0">91%</h6>
-                </div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center mb-6 performer-item">
-                <div class="d-flex align-items-center">
+                </li>
+                  <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-secondary" data-bs-original-title="(Amna Ilyas) Faculty of Social Sciences">
                   <div class="avatar avatar me-4">
                     <img src="{{ asset('admin/assets/img/avatars/3.png') }}" alt="Avatar" class="rounded-circle" />
                   </div>
-                  <div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Amna Ilyas</h6>
-                      <small class="text-truncate text-body">Superior University Franchise</small>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-10">
+                      <div class="me-2">
+                         <h6 class="mb-1_5 text-cut-one">Amna Ilyas</h6>
+                        <small class="text-cut-hot">Faculty of Social Sciences</small>
+                      </div>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end">
+                      <h6 class="mb-0">70%</h6>
                     </div>
                   </div>
-                </div>
-                <div class="text-end">
-                  <h6 class="mb-0">70%</h6>
-                </div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center mb-6 performer-item">
-                <div class="d-flex align-items-center">
+                </li>
+                  <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-secondary" data-bs-original-title="(Rashid Hussain) Faculty of Art and Design">
                   <div class="avatar avatar me-4">
                     <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="Avatar" class="rounded-circle" />
                   </div>
-                  <div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Muhammad Ashraf</h6>
-                      <small class="text-truncate text-body">Teaching</small>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-10">
+                      <div class="me-2">
+                         <h6 class="mb-1_5 text-cut-one">Rashid Hussain</h6>
+                        <small class="text-cut-hot">Faculty of Art and Design</small>
+                      </div>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end">
+                      <h6 class="mb-0">70%</h6>
                     </div>
                   </div>
-                </div>
-                <div class="text-end">
-                  <h6 class="mb-0">50%</h6>
-                </div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center mb-6 performer-item">
-                <div class="d-flex align-items-center">
+                </li>
+                  <li class="d-flex mb-6 performer-item align-items-center" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-secondary" data-bs-original-title="(Muhammad Ashraf) Faculty of Engineering and Technology">
                   <div class="avatar avatar me-4">
-                    <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="Avatar" class="rounded-circle" />
+                    <img src="{{ asset('admin/assets/img/avatars/3.png') }}" alt="Avatar" class="rounded-circle" />
                   </div>
-                  <div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Rashid Hussain</h6>
-                      <small class="text-truncate text-body">Faisalabad - Uni Campus</small>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-10">
+                      <div class="me-2">
+                         <h6 class="mb-1_5 text-cut-one">Muhammad Ashraf</h6>
+                        <small class="text-cut-hot">Faculty of Engineering and Technology</small>
+                      </div>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end">
+                      <h6 class="mb-0">50%</h6>
                     </div>
                   </div>
-                </div>
-                <div class="text-end">
-                  <h6 class="mb-0">70%</h6>
-                </div>
-              </div>
+                </li>
+                
+
+              </ul>
             </div>
           </div>
         </div>
@@ -289,27 +260,15 @@
             </div>
             <div class="card-body top-department-list">
               <ul class="p-0 m-0">
-                <li class="d-flex mb-6 performer-item">
-                  <div class="chart-progress me-3" data-color="success" data-series="82" data-progress_variant="true">
-                  </div>
-                  <div class="row w-100 align-items-center">
-                    <div class="col-8">
-                      <div class="me-2">
-                        <small>Department of Software Engineering</small>
-                      </div>
-                    </div>
-                    <div class="col-4 d-flex justify-content-end">
-                      <div class="badge bg-label-success">EE</div>
-                    </div>
-                  </div>
-                </li>
-                <li class="d-flex mb-6 performer-item">
+                  <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-primary" data-bs-original-title="(Rashid Hussain) Department of Business and Management Sciences">
                   <div class="chart-progress me-3" data-color="primary" data-series="91" data-progress_variant="true">
                   </div>
                   <div class="row w-100 align-items-center">
                     <div class="col-8">
                       <div class="me-2">
-                        <small>Department of Business and Management Sciences</small>
+                        <small class="text-cut-hot">Department of Business and Management Sciences</small>
+                        <h6 class="mb-0 text-cut-one">Rashid Hussain</h6>
                       </div>
                     </div>
                     <div class="col-4 d-flex justify-content-end">
@@ -317,13 +276,31 @@
                     </div>
                   </div>
                 </li>
-                <li class="d-flex mb-6 performer-item">
+                <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-success" data-bs-original-title="(Haider Ali) Department of Software Engineering">
+                  <div class="chart-progress me-3" data-color="success" data-series="82" data-progress_variant="true">
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-8">
+                      <div class="me-2">
+                        <small class="text-cut-hot">Department of Software Engineering</small>
+                        <h6 class="mb-0 text-cut-one">Haider Ali</h6>
+                      </div>
+                    </div>
+                    <div class="col-4 d-flex justify-content-end">
+                      <div class="badge bg-label-success">EE</div>
+                    </div>
+                  </div>
+                </li>
+                <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-warning" data-bs-original-title="(Muhammad Ashraf) Chaudhry Abdul Rehman Business School">
                   <div class="chart-progress me-3" data-color="warning" data-series="70" data-progress_variant="true">
                   </div>
                   <div class="row w-100 align-items-center">
                     <div class="col-8">
                       <div class="me-2">
-                        <small class="14 Vehicles">Chaudhry Abdul Rehman Business School</small>
+                        <small class="text-cut-hot">Chaudhry Abdul Rehman Business School</small>
+                        <h6 class="mb-0 text-cut-one">Muhammad Ashraf</h6>
                       </div>
                     </div>
                     <div class="col-4 d-flex justify-content-end">
@@ -331,31 +308,36 @@
                     </div>
                   </div>
                 </li>
-                <li class="d-flex mb-6 performer-item">
+                
+                <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-warning" data-bs-original-title="(Sadia Ashraf) Department of Social Sciences">
+                  <div class="chart-progress me-3" data-color="warning" data-series="70" data-progress_variant="true">
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-8">
+                      <div class="me-2">
+                        <small class="text-cut-hot">Department of Social Sciences</small>
+                        <h6 class="mb-0 text-cut-one">Sadia Ashraf</h6>
+                      </div>
+                    </div>
+                    <div class="col-4 d-flex justify-content-end">
+                      <div class="badge bg-label-warning">ME</div>
+                    </div>
+                  </div>
+                </li>
+                <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-danger" data-bs-original-title="(Amna Ilyas) Department of Computer Sciences">
                   <div class="chart-progress me-3" data-color="danger" data-series="50" data-progress_variant="true">
                   </div>
                   <div class="row w-100 align-items-center">
                     <div class="col-8">
                       <div class="me-2">
-                        <small>Department of Computer Sciences</small>
+                        <small class="text-cut-hot">Department of Computer Sciences</small>
+                        <h6 class="mb-0 text-cut-one">Amna Ilyas</h6>
                       </div>
                     </div>
                     <div class="col-4 d-flex justify-content-end">
                       <div class="badge bg-label-danger">BE</div>
-                    </div>
-                  </div>
-                </li>
-                <li class="d-flex mb-6 performer-item">
-                  <div class="chart-progress me-4" data-color="warning" data-series="70" data-progress_variant="true">
-                  </div>
-                  <div class="row w-100 align-items-center">
-                    <div class="col-8">
-                      <div class="me-2">
-                        <small>Department of Social Sciences</small>
-                      </div>
-                    </div>
-                    <div class="col-4 d-flex justify-content-end">
-                      <div class="badge bg-label-warning">ME</div>
                     </div>
                   </div>
                 </li>
@@ -374,30 +356,15 @@
             </div>
             <div class="card-body top-faculties-list">
               <ul class="p-0 m-0">
-                <li class="mb-4 d-flex performer-item">
-                  <div class="d-flex w-50 align-items-center me-4">
-                    <div class="badge bg-label-success rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-trophy icon-md"></i>
-                    </div>
-                    <div>
-                      <small class="text-body text-cut">Faculty of Business and Management..</small>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-grow-1 align-items-center">
-                    <div class="progress w-100 me-4" style="height:8px;">
-                      <div class="progress-bar bg-success" role="progressbar" style="width: 82%" aria-valuenow="82"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <span class="text-body-secondary">82%</span>
-                  </div>
-                </li>
-                <li class="mb-4 d-flex performer-item">
+                  <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-primary" data-bs-original-title="(Sadia Ashraf) Faculty Of Economics and Commerce">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-primary rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-trophy icon-md"></i>
                     </div>
                     <div>
-                      <small class="text-body text-cut">Faculty Of Economics and..</small>
+                      <small class="text-cut-hot">Faculty Of Economics and Commerce</small>
+                      <h6 class="mb-0 text-cut-one">Sadia Ashraf</h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -408,13 +375,35 @@
                     <span class="text-body-secondary">91%</span>
                   </div>
                 </li>
-                <li class="mb-4 d-flex performer-item">
+                <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-success" data-bs-original-title="(Amna Ilyas) Faculty of Business and Management Sciences">
+                  <div class="d-flex w-50 align-items-center me-4">
+                    <div class="badge bg-label-success rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-trophy icon-md"></i>
+                    </div>
+                    <div>
+                      <small class="text-cut-hot">Faculty of Business and Management Sciences</small>
+                      <h6 class="mb-0 text-cut-one">Amna Ilyas</h6>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center">
+                    <div class="progress w-100 me-4" style="height:8px;">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 82%" aria-valuenow="82"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">82%</span>
+                  </div>
+                </li>
+
+                <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-warning" data-bs-original-title="(Muhammad Ashraf) Faculty of Computer Science and Information Technology">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-warning rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-award  icon-md"></i>
                     </div>
                     <div>
-                      <small class="text-body text-cut">Faculty of Computer Science..</small>
+                      <small class="text-cut-hot">Faculty of Computer Science and Information Technology</small>
+                      <h6 class="mb-0 text-cut-one">Muhammad Ashraf</h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -425,14 +414,35 @@
                     <span class="text-body-secondary">70%</span>
                   </div>
                 </li>
-                <li class="mb-4 d-flex performer-item">
+               
+                <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-warning" data-bs-original-title="(Rashid Hussain) Faculty of Allied Health Sciences">
+                  <div class="d-flex w-50 align-items-center me-4">
+                    <div class="badge bg-label-warning rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-award icon-md"></i>
+                    </div>
+                    <div>
+                      <small class="text-cut-hot">Faculty of Allied Health Sciences</small>
+                      <h6 class="mb-0 text-cut-one">Rashid Hussain</h6>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center">
+                    <div class="progress w-100 me-4" style="height:8px;">
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">70%</span>
+                  </div>
+                </li>
+                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-danger" data-bs-original-title="(Haider Ali) Faculty of Social Sciences">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-danger rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-trophy-off icon-md"></i>
                     </div>
                     <div>
-                      <small class="text-body text-cut">Faculty of Social Sciences
-                      </small>
+                      <small class="text-cut-hot">Faculty of Social Sciences</small>
+                      <h6 class="mb-0 text-cut-one">Haider Ali</h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -441,23 +451,6 @@
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <span class="text-body-secondary">50%</span>
-                  </div>
-                </li>
-                <li class="mb-4 d-flex performer-item">
-                  <div class="d-flex w-50 align-items-center me-4">
-                    <div class="badge bg-label-warning rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-award icon-md"></i>
-                    </div>
-                    <div>
-                      <small class="text-body text-cut">Faculty of Allied Health Sciences</small>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-grow-1 align-items-center">
-                    <div class="progress w-100 me-4" style="height:8px;">
-                      <div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <span class="text-body-secondary">70%</span>
                   </div>
                 </li>
               </ul>
@@ -1105,6 +1098,7 @@
         // ✅ Function to initialize or update chart
         function renderCarrierPerformanceChart(elementId, seriesData, categories) {
           const el = document.querySelector(`#${elementId}`);
+          const statusEl = document.querySelector('.inde-status'); // target your span
 
           // Destroy existing chart instance (if any)
           if (el.chartInstance) {
@@ -1154,6 +1148,19 @@
 
           // Save instance for later destruction
           el.chartInstance = chart;
+          // ✅ Compare values and update text
+          if (seriesData.length >= 2 && statusEl) {
+            if (seriesData[0] > seriesData[1]) {
+              statusEl.textContent = 'declining';
+              statusEl.style.color = 'red'; // optional visual cue
+            } else if (seriesData[0] < seriesData[1]) {
+              statusEl.textContent = 'growing';
+              statusEl.style.color = 'green'; // optional visual cue
+            } else {
+              statusEl.textContent = 'stable';
+              statusEl.style.color = 'gray';
+            }
+          }
         }
 
         // ✅ Initial render
@@ -1161,9 +1168,118 @@
 
 
 
+       function renderCarrierChart(categories, values, highlightName = "Abdullah Tanveer") {
+  const c = document.querySelector("#carrierPerformance");
+  const legendContainer = document.getElementById("carrierCustomLegend");
+
+  if (!c) return;
+
+  // Destroy existing chart if any
+  if (c.chartInstance) {
+    try { c.chartInstance.destroy(); } catch (e) {}
+    c.chartInstance = null;
+    if (legendContainer) legendContainer.innerHTML = "";
+  }
+
+  const colors = ["#FF5733", "#1F77B4", "#2CA02C", "#9467BD", "#D62728"];
+
+  // Self performance data
+  const selfPerformance = categories.map((name, index) => ({
+    x: name,
+    y: values[index],
+    fillColor: name === highlightName ? "#FF5733" : colors[index % colors.length],
+  }));
+
+  const options = {
+    chart: {
+      height: 300,
+      type: "bar",
+      toolbar: { show: false },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        barHeight: "60%",
+        borderRadius: 7,
+        startingShape: "rounded",
+        borderRadiusApplication: "end",
+      },
+    },
+    // ✅ Remove bar border completely
+    stroke: {
+      show: false, // <-- disables any border/stroke around bars
+    },
+    dataLabels: {
+      enabled: true,
+      enabledOnSeries: [0],
+      formatter: function (val, opts) {
+        const name = opts.w.config.series[0].data[opts.dataPointIndex].x;
+        return name === highlightName ? `🙋🏻‍♂️` : ``;
+      },
+      style: {
+        fontSize: "20px",
+        colors: ["#111"],
+      },
+      background: { enabled: false },
+    },
+    series: [
+      { name: "Self Performance", type: "bar", data: selfPerformance },
+    ],
+    xaxis: {
+      categories: categories,
+      labels: {
+        style: {
+          colors: "#6E6B7B",
+          fontSize: "13px",
+          fontFamily: "Inter, sans-serif",
+          fontWeight: 400,
+        },
+      },
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: "#6E6B7B",
+          fontSize: "13px",
+          fontFamily: "Inter, sans-serif",
+          fontWeight: 400,
+        },
+      },
+    },
+    grid: {
+      strokeDashArray: 10,
+      xaxis: { lines: { show: true } },
+      yaxis: { lines: { show: false } },
+      padding: { top: -35, bottom: -12 },
+    },
+    fill: { opacity: 1 },
+    legend: { show: false },
+    responsive: [{ breakpoint: 576, options: { chart: { height: 300 } } }],
+  };
+
+  const chart = new ApexCharts(c, options);
+  chart.render().then(() => {
+    c.chartInstance = chart;
+  });
+
+  if (legendContainer) {
+    categories.forEach((label, i) => {
+      const item = document.createElement("div");
+      item.className = "d-flex align-items-center mx-2 my-1";
+      item.innerHTML = `
+        <span style="width:14px;height:14px;background:${colors[i % colors.length]};
+        border-radius:50%;display:inline-block;margin-right:6px;"></span>
+        <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+      `;
+      legendContainer.appendChild(item);
+    });
+  }
+}
 
         //  here is asim's cloneNode
-        function renderCarrierChart(categories, values, highlightName = "Abdullah Tanveer") {
+        function renderCarrierChart11(categories, values, highlightName = "Abdullah Tanveer") {
           const c = document.querySelector("#carrierPerformance");
           const legendContainer = document.getElementById("carrierCustomLegend");
 
@@ -1305,7 +1421,7 @@
         // ✅ Initial Chart Render (default data)
         renderCarrierChart(
           ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-          [50, 70, 30, 60, 50]
+          [50, 70, 75, 80, 85]
         );
 
         function shuffleElements(container) {
@@ -1340,135 +1456,79 @@
 
           switch (selectedValue) {
             case "1":
-              scoreText = "Department of Computer Science";
-              scoreValue = 90;
-              ratingText = "OS";
-
-              lowscoreText = "Faisalabad - Uni Campus";
-              lowscoreValue = 40;
-              lowratingText = "BE";
+             
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [30, 60, 20, 40, 70]);
+                [30, 20, 40, 60, 70]);
               newData = [80, 90];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "2":
-              lowscoreText = "Department of Computer Science";
-              lowscoreValue = 40;
-              lowratingText = "BE";
-              scoreText = "Superior University Franchise";
-              scoreValue = 80;
-              ratingText = "EE";
+             
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [50, 60, 30, 40, 30]);
+                [20, 40, 65, 70, 80]);
               newData = [60, 85];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "3":
-              lowscoreText = "Teaching";
-              lowscoreValue = 42;
-              lowratingText = "BE";
-              scoreText = "Department of Computer Science";
-              scoreValue = 94;
-              ratingText = "OS";
+              
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [90, 80, 60, 50, 40]);
+                [70, 75, 80, 85, 90]);
               newData = [70, 75];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "4":
-              lowscoreText = "Superior University Franchise";
-              lowscoreValue = 42;
-              lowratingText = "BE";
-              scoreText = "Teaching";
-              scoreValue = 94;
-              ratingText = "OS";
+              
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [25, 44, 90, 99, 70]);
+                [80, 80, 85, 85, 90]);
               newData = [50, 06];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "5":
-              lowscoreText = "Superior University Franchise";
-              lowscoreValue = 39;
-              lowratingText = "BE";
-              scoreText = "Teaching";
-              scoreValue = 93;
-              ratingText = "OS";
+              
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [25, 33, 90, 66, 70]);
+                [65, 70, 75, 80, 85]);
               newData = [90, 40];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "6":
-              lowscoreText = "Superior University Franchise";
-              lowscoreValue = 44;
-              lowratingText = "BE";
-              scoreText = "Teaching";
-              scoreValue = 95;
-              ratingText = "OS";
+             
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [25, 22, 77, 99, 70]);
+                [30, 44, 55, 77, 99]);
               newData = [70, 75];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "7":
-              lowscoreText = "Superior University Franchise";
-              lowscoreValue = 44;
-              lowratingText = "BE";
-              scoreText = "Department of Computer Science";
-              scoreValue = 81;
-              ratingText = "EE";
+             
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [25, 40, 90, 40, 70]);
+                [20, 20, 35, 40, 70]);
               newData = [70, 55];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "13":
-              lowscoreText = "Teaching";
-              lowscoreValue = 42;
-              lowratingText = "BE";
-              scoreText = "Department of Computer Science";
-              scoreValue = 82;
-              ratingText = "EE";
+             
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [25, 20, 90, 30, 70]);
+                [40, 50, 55, 66, 77]);
               newData = [40, 55];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "14":
-              lowscoreText = "Teaching";
-              lowscoreValue = 49;
-              lowratingText = "BE";
-              scoreText = "Department of Computer Science";
-              scoreValue = 85;
-              ratingText = "EE";
+             
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [60, 70, 90, 85, 70]);
+                [65, 66, 67, 68, 69]);
               newData = [50, 65];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             case "0":
-              lowscoreText = "Teaching";
-              lowscoreValue = 39;
-              lowratingText = "BE";
-              scoreText = "Department of Computer Science";
-              scoreValue = 87;
-              ratingText = "EE";
+              
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [80, 90, 90, 90, 80]);
+                [55, 66, 77, 88, 90]);
               newData = [55, 75];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
             default:
-              lowscoreText = "Teaching";
-              lowscoreValue = 39;
-              lowratingText = "BE";
-              scoreText = "Department of Computer Science";
-              scoreValue = 88;
-              ratingText = "EE";
+              
               renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [90, 90, 90, 80, 70]);
+                [50, 50, 60, 60, 60]);
               newData = [85, 65];
               newCategories = ['Spring 25', 'Fall 25'];
               break;
@@ -1477,67 +1537,6 @@
           // ✅ Re-render chart with new data
 
           renderCarrierPerformanceChart("carrierPerformance11", newData, newCategories);
-          document.querySelector(".highest-score").textContent = scoreText;
-          document.querySelector(".highest-value").textContent = scoreValue;
-          document.querySelector(".highest-rating").textContent = ratingText;
-          document.querySelector(".low-score").textContent = lowscoreText;
-          document.querySelector(".low-value").textContent = lowscoreValue;
-          document.querySelector(".low-rating").textContent = lowratingText;
-        });
-      });
-      document.addEventListener("DOMContentLoaded", function () {
-        const elements = document.querySelectorAll('.text-cut');
-
-        function fitToOneLine(el) {
-          const originalText = el.dataset.originalText || el.textContent.trim();
-          el.dataset.originalText = originalText;
-
-          // Create hidden clone to measure one-line height
-          const clone = el.cloneNode(true);
-          clone.style.whiteSpace = "nowrap";
-          clone.style.visibility = "hidden";
-          clone.style.position = "absolute";
-          clone.style.width = el.offsetWidth + "px";
-          document.body.appendChild(clone);
-          const singleLineHeight = clone.scrollHeight;
-          document.body.removeChild(clone);
-
-          const actualHeight = el.scrollHeight;
-
-          // ✅ If text has wrapped
-          if (actualHeight > singleLineHeight) {
-            let text = originalText;
-            let low = 0;
-            let high = text.length;
-            let fitText = text;
-
-            // Binary search for the perfect cutoff point
-            while (low <= high) {
-              const mid = Math.floor((low + high) / 2);
-              el.textContent = text.slice(0, mid) + '...';
-
-              if (el.scrollHeight > singleLineHeight) {
-                high = mid - 1;
-              } else {
-                fitText = text.slice(0, mid);
-                low = mid + 1;
-              }
-            }
-
-            el.textContent = fitText.trim() + '...';
-          } else {
-            el.textContent = originalText;
-          }
-        }
-
-        // ✅ Wait for fonts and layout to finish loading
-        window.addEventListener('load', function () {
-          elements.forEach(el => fitToOneLine(el));
-        });
-
-        // ✅ Handle window resize dynamically
-        window.addEventListener('resize', function () {
-          elements.forEach(el => fitToOneLine(el));
         });
       });
     </script>
