@@ -89,7 +89,6 @@
                   <td><span class="badge bg-label-warning me-1">ME</span></td>
                   <td>
                     <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/award1.png') }}" alt="Avatar" class="rounded-circle">
                     </div>
                   </td>
                   <td> <small class="text-break">
@@ -120,9 +119,7 @@
                   </td>
                   <td><span class="badge bg-label-success me-1">EE</span></td>
                   <td>
-                    <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/award3.png') }}" alt="Avatar" class="rounded-circle">
-                    </div>
+                    <div class="avatar avatar-xl"></div>
                   </td>
                   <td> <small class="text-break">
                       You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
@@ -151,9 +148,7 @@
                   </td>
                   <td><span class="badge bg-label-success me-1">EE</span></td>
                   <td>
-                    <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/award3.png') }}" alt="Avatar" class="rounded-circle">
-                    </div>
+                    <div class="avatar avatar-xl"></div>
                   </td>
                   <td> <small class="text-break">You’re going beyond what’s asked of you.Keep shining — your impact
                       inspires others.</small>
@@ -183,7 +178,8 @@
                   <td><span class="badge bg-label-primary me-1">OS</span></td>
                   <td>
                     <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/award2.png') }}" alt="Avatar" class="rounded-circle">
+                      <img src="{{ asset('admin/assets/img/avatars/gold-performer.jpeg') }}" alt="Avatar"
+                        class="rounded-circle">
                     </div>
                   </td>
                   <td> <small class="text-break">
@@ -215,7 +211,8 @@
                   <td><span class="badge bg-label-primary me-1">OS</span></td>
                   <td>
                     <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/award2.png') }}" alt="Avatar" class="rounded-circle">
+                      <img src="{{ asset('admin/assets/img/avatars/silver-performer.jpeg') }}" alt="Avatar"
+                        class="rounded-circle">
                     </div>
                   </td>
                   <td> <small class="text-break">

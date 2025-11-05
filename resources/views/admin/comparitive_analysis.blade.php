@@ -117,7 +117,8 @@
             <div class="card-header d-flex align-items-center justify-content-between">
               <div class="card-title mb-0">
                 <h5 class="m-0 me-2">Self vs Self</h5>
-                <p class="mb-0">Your performance against the selected KPA is <span class=" badge inde-status">growing</span></p>
+                <p class="mb-0">Your performance against the selected KPA is <span
+                    class=" badge inde-status">growing</span></p>
               </div>
             </div>
             <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
@@ -595,23 +596,23 @@
 
                 // Build Indicator Average list
                 $indicatorList.append(`
-                                                                            <div class="d-flex justify-content-between align-items-center mb-6">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="avatar avatar me-4">
-                                                                                        <img src="{{ asset('admin/assets/img/avatars/1.png')}}" alt="Avatar"
-                                                                                            class="rounded-circle" />
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <div>
-                                                                                            <h6 class="mb-0 text-truncate">${indicator.name}</h6>
-                                                                                            <small class="text-truncate text-body">${indicator.job_title}</small>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="text-end">
-                                                                                    <h6 class="mb-0" style="color:${indicator.color}">${indicator.avg}%</h6>
-                                                                                </div>
-                                                                            </div>`);
+                                                                              <div class="d-flex justify-content-between align-items-center mb-6">
+                                                                                  <div class="d-flex align-items-center">
+                                                                                      <div class="avatar avatar me-4">
+                                                                                          <img src="{{ asset('admin/assets/img/avatars/1.png')}}" alt="Avatar"
+                                                                                              class="rounded-circle" />
+                                                                                      </div>
+                                                                                      <div>
+                                                                                          <div>
+                                                                                              <h6 class="mb-0 text-truncate">${indicator.name}</h6>
+                                                                                              <small class="text-truncate text-body">${indicator.job_title}</small>
+                                                                                          </div>
+                                                                                      </div>
+                                                                                  </div>
+                                                                                  <div class="text-end">
+                                                                                      <h6 class="mb-0" style="color:${indicator.color}">${indicator.avg}%</h6>
+                                                                                  </div>
+                                                                              </div>`);
               });
 
               updateBarChart(indicatorNames, avgValues, colors);
@@ -891,9 +892,9 @@
             const item = document.createElement("div");
             item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
             item.innerHTML = `
-                                                                                                                            <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                                            <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                                          `;
+                                                                                                                              <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                                                              <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                                                            `;
             legendContainer.appendChild(item);
           });
         }
@@ -1068,11 +1069,11 @@
                   size: 0,
                   customSVG: {
                     SVG: `
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-                                                                              <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
-                                                                              <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
-                                                                            </svg>
-                                                                          `,
+                                                                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                                                                                <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
+                                                                                <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
+                                                                              </svg>
+                                                                            `,
                     offsetX: -10,
                     offsetY: -28
                   }
@@ -1099,9 +1100,9 @@
             const item = document.createElement("div");
             item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
             item.innerHTML = `
-                                                                    <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                    <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                  `;
+                                                                      <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                      <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                    `;
             legendContainer.appendChild(item);
           });
         }
@@ -1283,10 +1284,10 @@
               const item = document.createElement("div");
               item.className = "d-flex align-items-center mx-2 my-1";
               item.innerHTML = `
-                <span style="width:14px;height:14px;background:${colors[i % colors.length]};
-                border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-              `;
+                  <span style="width:14px;height:14px;background:${colors[i % colors.length]};
+                  border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                  <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                `;
               legendContainer.appendChild(item);
             });
           }
@@ -1398,11 +1399,11 @@
                     size: 0,
                     customSVG: {
                       SVG: `
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-                                <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
-                                <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
-                                </svg>
-                                `,
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                                  <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
+                                  <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
+                                  </svg>
+                                  `,
                       offsetX: -10,
                       offsetY: -28,
                     },
@@ -1424,9 +1425,9 @@
               const item = document.createElement("div");
               item.className = "d-flex align-items-center mx-2 my-1";
               item.innerHTML = `
-                                                                    <span style="width:14px;height:14px;background:${colors[i % colors.length]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                    <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                  `;
+                                                                      <span style="width:14px;height:14px;background:${colors[i % colors.length]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                      <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                    `;
               legendContainer.appendChild(item);
             });
           }
