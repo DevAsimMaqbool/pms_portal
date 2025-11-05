@@ -127,34 +127,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-                                                                                                                      .flip-card-inner {
-                                                                                                                        transition: none;
-                                                                                                                      }
-                                                                                                                      .flip-card-front,
-                                                                                                                      .flip-card-back {
-                                                                                                                        position: relative;
-                                                                                                                        transform: none;
-                                                                                                                        backface-visibility: visible;
-                                                                                                                      }
-                                                                                                                      .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                                                                                                              .flip-card-inner {
+                                                                                                                                                transition: none;
+                                                                                                                                              }
+                                                                                                                                              .flip-card-front,
+                                                                                                                                              .flip-card-back {
+                                                                                                                                                position: relative;
+                                                                                                                                                transform: none;
+                                                                                                                                                backface-visibility: visible;
+                                                                                                                                              }
+                                                                                                                                              .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                                      background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                                      background-image:
-                                                                                                                      radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                                      radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                                                                                                                              background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                                                                                                                              background-image:
+                                                                                                                                              radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                                                                                                              radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                                    background-image:
-                                                                                                                      radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                                      radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                                      radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                                                                                                                            background-image:
+                                                                                                                                              radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                                                                                                              radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                                                                                                              radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                                      background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                                                                                                              background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                                      */
+                                                                                                                                              */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -233,25 +233,29 @@
         box-shadow: 0 0 25px rgba(255, 255, 255, 1);
       }
     }
+
     .text-cut-hot {
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* ✅ Limit to 3 lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-  line-height: 1.2;
-}
- .text-cut-department {
-  display: -webkit-box;
-  -webkit-line-clamp: 1; /* ✅ Limit to 1 lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-  line-height: 1.2;
-  font-size: 0.8667em;
-}
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      /* ✅ Limit to 3 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      line-height: 1.2;
+    }
+
+    .text-cut-department {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      /* ✅ Limit to 1 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      line-height: 1.2;
+      font-size: 0.8667em;
+    }
   </style>
 @endpush
 @section('content')
@@ -272,11 +276,11 @@
                 <div class="card-title mb-0">
                   <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', $employee->name)) }} 🎉</h5>
                   <div class="mb-2 rounded bg-label-success p-1" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->department }}">
-                                        <span class="bg-label-success text-cut-department">
-                                            {{ Auth::user()->department }}
-                                        </span>
-                                        </div>
+                    data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->department }}">
+                    <span class=" bg-label-success text-cut-department">
+                      {{ Auth::user()->department }}
+                    </span>
+                  </div>
                   <p class="card-subtitle">Welcome to your Performance Hub</p>
 
                 </div>
@@ -288,7 +292,7 @@
           <div class="col-lg-4 col-md-3 col-sm-6">
             <div class="card h-100" style="background-color: #ac7cad;">
               <div class="card-body d-flex justify-content-center align-items-center ">
-                <h6 class="mb-0 text-center text-white">As {{$employee->roles->first()->name}}</h6>
+                <h6 class="mb-0 text-center text-white">As {{$employee->job_title}}</h6>
               </div>
             </div>
           </div>
@@ -349,7 +353,7 @@
 
         </div> --}}
         <div class="col-lg-3 col-md-4" id="{{ $targetId }}">
-          <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
+          <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class=" text-decoration-none">
             <div class="flip-card h-100">
               <div class="flip-card-inner">
 
@@ -365,22 +369,22 @@
                           </span>
                         </div>
                       </div>
-                      <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
+                      <p class=" mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
                     </div>
                     <!-- Metrics bottom right -->
                     <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
                       @if ($kpa['id'] == 1)
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
-                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
+                        <span class=" metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
                       @elseif ($kpa['id'] == 2)
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
-                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
+                        <span class=" metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
                       @elseif ($kpa['id'] == 13)
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
-                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
+                        <span class=" metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
                       @elseif ($kpa['id'] == 14)
                         <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
-                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
+                        <span class=" metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
                       @endif
                     </div>
                   </div>
@@ -388,25 +392,23 @@
                 </div>
 
                 <!-- BACK -->
-                <div class="flip-card-back card bg-info text-dark h-100">
+                <div class="flip-card-back card bg-{{ $color1 }} text-dark h-100">
                   <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                    <div class="badge rounded p-2 bg-label-info mb-2"><i class="icon-base ti {{ $iconClass }} icon-lg"></i>
+                    <div class="badge rounded p-2 mb-2 bg-label-{{ $color1 }}"><i
+                        class="icon-base ti {{ $iconClass }} icon-lg"></i>
                     </div>
-                    <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
+                    <h6 class=" mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
                     @if ($kpa['id'] == 1)
                       <p class=" text-center mb-0 text-white fs-13">
-                        Focuses on teaching quality, classroom management, and continuous improvement to enhance student
-                        learning outcomes.
+                        You’re achieving excellence with distinction.You set the pace for others to follow.
                       </p>
                     @elseif ($kpa['id'] == 2)
                       <p class="text-center mb-0 text-white fs-13">
-                        Measures research output, quality, and supervision, emphasizing innovation and practical application
-                        of research for societal and industry impact.
+                        You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
                       </p>
                     @elseif ($kpa['id'] == 13)
                       <p class="text-center mb-0 text-white fs-13">
-                        Focuses on active involvement in departmental and institutional activities to promote collaboration,
-                        visibility, and shared success.
+                        You’re doing well and meeting your goals.Keep your consistency — it’s your strength.
                       </p>
                     @elseif ($kpa['id'] == 14)
                       <p class="text-center mb-0 text-white fs-13">
@@ -433,7 +435,7 @@
 
       <div class="col-md-6 col-lg-4" id="scrollableCol">
         <div class="d-flex justify-content-between">
-          <h5 class="fw-bold">Hot Indicators</h5>
+          <h5 class="fw-bold">Key Indicators</h5>
         </div>
         <!--/ Statistics -->
 
@@ -462,7 +464,7 @@
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-primary"
           data-bs-original-title="You’re achieving excellence with distinction.
-                                                                                                                                      You set the pace for others to follow.">
+                                                                                                                                                                                          You set the pace for others to follow.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-primary rounded p-1_5 me-4"><i
@@ -485,7 +487,7 @@
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-warning"
           data-bs-original-title="You’re doing well and meeting your goals.
-                                                                                                                                        Keep your consistency — it’s your strength.">
+                                                                                                                                                                                            Keep your consistency — it’s your strength.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i
@@ -511,7 +513,7 @@
         <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-danger"
           data-bs-original-title="Not quite there yet — but growth starts here.
-                                                                                                                                        Reflect. Refocus. Rise higher.">
+                                                                                                                                                                                            Reflect. Refocus. Rise higher.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
@@ -534,7 +536,7 @@
         <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
           data-bs-custom-class="tooltip-success"
           data-bs-original-title="You’re going beyond what’s asked of you.
-                                                                                                                                        Keep shining — your impact inspires others.">
+                                                                                                                                                                                            Keep shining — your impact inspires others.">
           <div class="card-body d-flex">
             <div class="d-flex w-50 align-items-center me-4">
               <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
@@ -571,7 +573,7 @@
               <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
               </div>
               <div>
-                <h6 class="mb-0 text-cut">Haider Ali / Lecturer</h6>
+                <h6 class="mb-0 text-cut">Haider Ali</h6>
                 <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
               </div>
             </div>
@@ -592,7 +594,7 @@
               <div class="badge bg-label-primary rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
               </div>
               <div>
-                <h6 class="mb-0 text-cut">Sadia Ashraf / Lecturer</h6>
+                <h6 class="mb-0 text-cut">Sadia Ashraf</h6>
                 <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
               </div>
             </div>
@@ -611,7 +613,7 @@
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
               </div>
               <div>
-                <h6 class="mb-0 text-cut">Amna Ilyas / Lecturer</h6>
+                <h6 class="mb-0 text-cut">Amna Ilyas</h6>
                 <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
               </div>
             </div>
@@ -631,7 +633,7 @@
               <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy-off icon-md"></i>
               </div>
               <div>
-                <h6 class="mb-0 text-cut">Muhammad Ashraf / Lecturer</h6>
+                <h6 class="mb-0 text-cut">Muhammad Ashraf</h6>
 
                 <small class="text-dark fs-10 text-cut">Teaching</small>
               </div>
@@ -653,7 +655,7 @@
               <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
               </div>
               <div>
-                <h6 class="mb-0">Rashid Hussain / Lecturer</h6>
+                <h6 class="mb-0">Rashid Hussain</h6>
                 <small class="text-dark fs-10">Faisalabad - Uni Campus</small>
               </div>
             </div>
@@ -664,25 +666,13 @@
             </div>
           </div>
         </div>
-
-
-
-
-
-
-
       </div>
-
       <div class="col-md-6 col-lg-4">
         <div class=" d-flex justify-content-between">
           <h5 class="fw-bold">Overall KPA Performance</h5>
         </div>
-
-
         <div class="row g-6">
           <!-- Profit last month -->
-
-
           <!-- Generated Leads -->
           <div class="col-xl-12">
             <div class="card caed-wave-bg ">
@@ -758,11 +748,65 @@
       <div class="col-xl-4 col">
         <div class="card h-100">
           <div class="card-header d-flex align-items-center justify-content-between">
-            <h5 class="card-title m-0 me-2">Semester-wise Overall Performance</h5>
-
+            <h5 class="card-title m-0 me-2">My Badges</h5>
           </div>
           <div class="card-body">
-            <div id="carrierPerformance1"></div>
+            <ul class="p-0 m-0">
+              <li class="d-flex align-items-center mb-4">
+                <div class="avatar flex-shrink-0 me-4">
+                  <i class="fa-solid fa-medal rounded-circle fs-2" style="color: gold;"></i>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <div class="d-flex align-items-center">
+                      <h6 class="mb-0 me-1">Classes Held</h6>
+                    </div>
+                    <small class="text-body">2025</small>
+                  </div>
+                  <div class="user-progress">
+                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
+                      95%
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li class="d-flex align-items-center mb-4">
+                <div class="avatar flex-shrink-0 me-4">
+                  <i class="fa-solid fa-medal rounded-circle fs-2" style="color: silver;"></i>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <div class="d-flex align-items-center">
+                      <h6 class="mb-0 me-1">Student Pass Percentage</h6>
+                    </div>
+                    <small class="text-body">2025</small>
+                  </div>
+                  <div class="user-progress">
+                    <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
+                      93%
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li class="d-flex align-items-center mb-4">
+                <div class="avatar flex-shrink-0 me-4">
+                  <i class="fa-solid fa-medal rounded-circle fs-2" style="color: #cd7f32;"></i>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <div class="d-flex align-items-center">
+                      <h6 class="mb-0 me-1">Research Publications</h6>
+                    </div>
+                    <small class="text-body">2025</small>
+                  </div>
+                  <div class="user-progress">
+                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
+                      90%
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -928,8 +972,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                        #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                      `;
+                                                                                                                                                #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                              `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -957,8 +1001,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                        #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                      `;
+                                                                                                                                                #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                              `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1104,10 +1148,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                      <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                      border-radius:50%;margin-right:5px;"></span>
-                                                                                                                      ${label} (${shortLabels[i]})
-                                                                                                                      `;
+                                                                                                                                              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                              border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                              ${label} (${shortLabels[i]})
+                                                                                                                                              `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1259,10 +1303,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                      <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                      border-radius:50%;margin-right:5px;"></span>
-                                                                                                                      ${label} (${shortLabels[i]})
-                                                                                                                      `;
+                                                                                                                                              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                              border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                              ${label} (${shortLabels[i]})
+                                                                                                                                              `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1391,70 +1435,12 @@
         categories.forEach((label, i) => {
           const item = document.createElement("div");
           item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
-          item.innerHTML = `
-                                                                                                                                    <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                                                    <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                                                  `;
+          item.innerHTML = `<span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span><span style="font-size:13px;color:#6e6b7b;">${label}</span>`;
           legendContainer.appendChild(item);
         });
       }
     });
-    document.addEventListener("DOMContentLoaded", function () {
-      const c = document.querySelector("#carrierPerformance1");
 
-      const options = {
-        chart: {
-          type: 'area',
-          height: 400,
-          toolbar: { show: false },
-        },
-        series: [
-          {
-            name: 'Performance',
-            data: [20, 40, 60, 70, 80, 90]
-          }
-        ],
-        xaxis: {
-          categories: ['Fall 22', 'Spring 23', 'Fall 23', 'Spring 24', 'Fall 24', 'Spring 25']
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth',
-          width: 2,
-          dashArray: 0 // keep solid line, dotted markers only
-        },
-        colors: ['#008FFB'],
-        fill: {
-          type: 'gradient',
-          gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.4,
-            opacityTo: 0.1,
-            stops: [0, 90, 100]
-          }
-        },
-        tooltip: {
-          theme: 'dark'
-        },
-        markers: {
-          size: 5,                 // size of the point
-          colors: ['#008FFB'],     // fill color
-          strokeColors: '#fff',    // border color
-          strokeWidth: 2,          // thickness of border
-          shape: 'circle',
-          hover: {
-            size: 7,
-            sizeOffset: 2
-          },
-          discrete: [] // allows customization if needed later
-        }
-      };
-
-      const chart = new ApexCharts(c, options);
-      chart.render();
-    });
     document.addEventListener("DOMContentLoaded", function () {
       const chartLabels = [
         "Responsibility and Accountability",
