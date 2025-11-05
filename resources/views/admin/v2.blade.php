@@ -12,6 +12,11 @@
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
   <style>
+     .avatar-xxl {
+    --bs-avatar-size: 6rem;
+    --bs-avatar-initial: 1.875rem;
+    --bs-avatar-initial-inline: 5px;
+    }
     .fs-10 {
       font-size: 10px !important;
     }
@@ -749,7 +754,7 @@
             <h5 class="card-title m-0 me-2">My Badges</h5>
           </div>
           <div class="card-body">
-            <ul class="p-0 m-0">
+            {{-- <ul class="p-0 m-0">
               <li class="d-flex align-items-center mb-4">
                 <div class="avatar flex-shrink-0 me-4" data-bs-toggle="tooltip" data-bs-placement="right"
                   data-bs-html="true" data-bs-custom-class="tooltip-primary"
@@ -790,7 +795,22 @@
                   </div>
                 </div>
               </li>
-            </ul>
+            </ul> --}}
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <div class="avatar avatar-xxl" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-html="true" data-bs-custom-class="tooltip-secondary"
+                  title="Score: 90% <br>Year: 2025<br>Indicator: Classes Held">
+                      <img src="{{ asset('admin/assets/img/avatars/gold-performer.jpeg') }}" class="rounded-circle">
+                </div>
+                <div class="avatar avatar-xxl">
+                      <img src="{{ asset('admin/assets/img/avatars/silver-performer.jpeg') }}" class="rounded-circle">
+                </div>
+                <div class="avatar avatar-xxl">
+                      <img src="{{ asset('admin/assets/img/avatars/bronze-performer.jpeg') }}" class="rounded-circle">
+                </div>
+                </div>
+
+          </div>
           </div>
         </div>
       </div>
