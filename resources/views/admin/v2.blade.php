@@ -127,34 +127,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-                                                                                                                                                              .flip-card-inner {
-                                                                                                                                                                transition: none;
-                                                                                                                                                              }
-                                                                                                                                                              .flip-card-front,
-                                                                                                                                                              .flip-card-back {
-                                                                                                                                                                position: relative;
-                                                                                                                                                                transform: none;
-                                                                                                                                                                backface-visibility: visible;
-                                                                                                                                                              }
-                                                                                                                                                              .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                                                                                                                                                                                                    .flip-card-inner {
+                                                                                                                                                                                                                                      transition: none;
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                    .flip-card-front,
+                                                                                                                                                                                                                                    .flip-card-back {
+                                                                                                                                                                                                                                      position: relative;
+                                                                                                                                                                                                                                      transform: none;
+                                                                                                                                                                                                                                      backface-visibility: visible;
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                    .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                                                                              background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                                                                              background-image:
-                                                                                                                                                              radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                                                                              radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                                                                                                                                                                                                                    background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                                                                                                                                                                                                                    background-image:
+                                                                                                                                                                                                                                    radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                                                                                                                                                                                                    radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                                                                            background-image:
-                                                                                                                                                              radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                                                                              radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                                                                              radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                                                                                                                                                                                                                  background-image:
+                                                                                                                                                                                                                                    radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                                                                                                                                                                                                    radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                                                                                                                                                                                                    radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                                                                              background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                                                                                                                                                                                                    background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                                                                              */
+                                                                                                                                                                                                                                    */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -464,8 +464,7 @@
 
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
             data-bs-custom-class="tooltip-primary"
-            data-bs-original-title="You’re achieving excellence with distinction.
-                                                                                                                                                                                                                You set the pace for others to follow.">
+            data-bs-original-title="You’re achieving excellence with distinction.You set the pace for others to follow.">
             <div class="card-body d-flex">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-primary rounded p-1_5 me-4"><i
@@ -488,7 +487,7 @@
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
             data-bs-custom-class="tooltip-warning"
             data-bs-original-title="You’re doing well and meeting your goals.
-                                                                                                                                                                                                                  Keep your consistency — it’s your strength.">
+                                                                                                                                                                                                                                                                                                        Keep your consistency — it’s your strength.">
             <div class="card-body d-flex">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-warning rounded p-1_5 me-4"><i
@@ -510,7 +509,7 @@
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
             data-bs-custom-class="tooltip-danger"
             data-bs-original-title="Not quite there yet — but growth starts here.
-                                                                                                                                                                                                                  Reflect. Refocus. Rise higher.">
+                                                                                                                                                                                                                                                                                                        Reflect. Refocus. Rise higher.">
             <div class="card-body d-flex">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
@@ -533,7 +532,7 @@
           <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
             data-bs-custom-class="tooltip-success"
             data-bs-original-title="You’re going beyond what’s asked of you.
-                                                                                                                                                                                                                  Keep shining — your impact inspires others.">
+                                                                                                                                                                                                                                                                                                        Keep shining — your impact inspires others.">
             <div class="card-body d-flex">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
@@ -752,55 +751,41 @@
           <div class="card-body">
             <ul class="p-0 m-0">
               <li class="d-flex align-items-center mb-4">
-                <div class="avatar flex-shrink-0 me-4">
-                  <i class="fa-solid fa-medal rounded-circle fs-2" style="color: gold;"></i>
+                <div class="avatar flex-shrink-0 me-4" data-bs-toggle="tooltip" data-bs-placement="right"
+                  data-bs-html="true" data-bs-custom-class="tooltip-primary"
+                  title="Score: 90% <br>Year: 2025<br>Indicator: Classes Held">
+                  <img src="{{ asset('admin/assets/img/avatars/gold-performer.jpeg') }}" class="rounded-circle"
+                    alt="Gold">
                 </div>
                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                   <div class="me-2">
                     <div class="d-flex align-items-center">
-                      <h6 class="mb-0 me-1">Classes Held</h6>
+
                     </div>
-                    <small class="text-body">2025</small>
+                    <small class="text-body"></small>
                   </div>
                   <div class="user-progress">
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      95%
-                    </p>
+                    <div class="avatar flex-shrink-0">
+                      <img src="{{ asset('admin/assets/img/avatars/silver-performer.jpeg') }}" alt="Silver Performer"
+                        class="rounded-circle" width="60" height="60">
+                    </div>
                   </div>
                 </div>
               </li>
               <li class="d-flex align-items-center mb-4">
                 <div class="avatar flex-shrink-0 me-4">
-                  <i class="fa-solid fa-medal rounded-circle fs-2" style="color: silver;"></i>
+                  <img src="{{ asset('admin/assets/img/avatars/bronze-performer.jpeg') }}" alt="Silver Performer"
+                    class="rounded-circle" width="60" height="60">
                 </div>
                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                   <div class="me-2">
                     <div class="d-flex align-items-center">
-                      <h6 class="mb-0 me-1">Student Pass Percentage</h6>
+                      <h6 class="mb-0 me-1"></h6>
                     </div>
-                    <small class="text-body">2025</small>
+                    <small class="text-body"></small>
                   </div>
                   <div class="user-progress">
                     <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
-                      93%
-                    </p>
-                  </div>
-                </div>
-              </li>
-              <li class="d-flex align-items-center mb-4">
-                <div class="avatar flex-shrink-0 me-4">
-                  <i class="fa-solid fa-medal rounded-circle fs-2" style="color: #cd7f32;"></i>
-                </div>
-                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                  <div class="me-2">
-                    <div class="d-flex align-items-center">
-                      <h6 class="mb-0 me-1">Research Publications</h6>
-                    </div>
-                    <small class="text-body">2025</small>
-                  </div>
-                  <div class="user-progress">
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      90%
                     </p>
                   </div>
                 </div>
@@ -971,8 +956,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                                #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                              `;
+                                                                                                                                                                                                                                      #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                    `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1000,8 +985,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                                #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                              `;
+                                                                                                                                                                                                                                      #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                    `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1147,10 +1132,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                                                              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                                                              border-radius:50%;margin-right:5px;"></span>
-                                                                                                                                                              ${label} (${shortLabels[i]})
-                                                                                                                                                              `;
+                                                                                                                                                                                                                                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                                                                                                    border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                                                                                                    ${label} (${shortLabels[i]})
+                                                                                                                                                                                                                                    `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1302,10 +1287,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                                                              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                                                              border-radius:50%;margin-right:5px;"></span>
-                                                                                                                                                              ${label} (${shortLabels[i]})
-                                                                                                                                                              `;
+                                                                                                                                                                                                                                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                                                                                                    border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                                                                                                    ${label} (${shortLabels[i]})
+                                                                                                                                                                                                                                    `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1564,6 +1549,11 @@
           }
         });
       });
+    });
+
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
     });
   </script>
 
