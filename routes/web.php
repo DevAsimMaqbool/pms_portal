@@ -35,6 +35,7 @@ use App\Http\Controllers\SelfAssessmentWorkingController;
 use App\Http\Controllers\ComparitiveAnalysisController;
 use App\Models\RatingOnImpactOfResearchConferencesOrganized;
 use App\Http\Controllers\SurveyController;
+use App\Http\Controllers\DownloadsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -166,7 +167,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/get-faculties', [SurveyController::class, 'getFaculties'])->name('reports.getFaculties');
     Route::post('/get-departments', [SurveyController::class, 'getDepartments'])->name('reports.getDepartments');
     Route::get('/reports/faculty-feedback', [SurveyController::class, 'feedbackReport'])->name('feedback.report');
-
+    Route::get('downloads', [DownloadsController::class, 'index'])->name('pms.downloads');
 });
 
 require __DIR__ . '/auth.php';
