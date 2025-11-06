@@ -78,7 +78,7 @@
                         <i class="ti tabler-download icon-base"></i>
                       </span>
                     </div>
-                    <h5 class="fw-bold mb-0 text-white">Downloads</h5>
+                    <h5 class="fw-bold mb-0 text-white">Sop's</h5>
                   </div>
                 </div>
               </div>
@@ -91,7 +91,45 @@
                       <i class="ti tabler-download icon-base"></i>
                     </div>
                     <h6 class="text-center mb-2 text-white">Click to Download</h6>
-                    <p class="text-center fs-13 mb-0">PMS Sop's And Privacy Policy.
+                    <p class="text-center fs-13 mb-0">PMS Sop's.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-lg-2 col-md-4">
+        <a href="#" class="text-decoration-none">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+
+              <!-- FRONT -->
+              <div class="flip-card-front">
+                <div class="card bg-primary text-white">
+                  <div class="card-body">
+                    <div class="avatar mb-3">
+                      <span class="avatar-initial rounded bg-white text-primary">
+                        <i class="ti tabler-download icon-base"></i>
+                      </span>
+                    </div>
+                    <h5 class="fw-bold mb-0 text-white">Privacy Policy</h5>
+                  </div>
+                </div>
+              </div>
+
+              <!-- BACK -->
+              <div class="flip-card-back">
+                <div class="card bg-primary text-white">
+                  <div class="card-body">
+                    <div class="badge rounded p-2 mb-2 bg-white text-primary">
+                      <i class="ti tabler-download icon-base"></i>
+                    </div>
+                    <h6 class="text-center mb-2 text-white">Click to Download</h6>
+                    <p class="text-center fs-13 mb-0">PMS Privacy Policy.
                     </p>
                   </div>
                 </div>
