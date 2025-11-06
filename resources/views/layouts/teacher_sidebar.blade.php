@@ -61,19 +61,19 @@
         </a>
       </li>
       <!-- <li class="menu-item" {{ request()->routeIs('pip.index') ? 'active' : '' }}>
-                                    <a href="{{ route('pip.index') }}" class="menu-link">
-                                      <i class="menu-icon icon-base ti tabler-report-analytics"></i>
-                                      <div data-i18n="PIP">PIP</div>
-                                    </a>
-                                  </li> -->
+                                                  <a href="{{ route('pip.index') }}" class="menu-link">
+                                                    <i class="menu-icon icon-base ti tabler-report-analytics"></i>
+                                                    <div data-i18n="PIP">PIP</div>
+                                                  </a>
+                                                </li> -->
       <li class="menu-item {{ request()->routeIs('self-assessment.index') ? 'active' : '' }}">
         <a href="{{ route('self-assessment.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-clipboard-check"></i>
           <div data-i18n="Self Assessment">Self Assessment</div>
         </a>
       </li>
-      <li class="menu-item">
-        <a href="#" class="menu-link">
+      <li class="menu-item {{ request()->routeIs('pms.awards') ? 'active' : '' }}">
+        <a href="{{ route('pms.awards') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-award"></i>
           <div data-i18n="Awards">Awards</div>
         </a>
@@ -215,11 +215,11 @@
         </a>
       </li>
       <!-- <li class="menu-item {{ request()->routeIs('assigndepartment.index') ? 'active' : '' }}">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <a href="{{ route('assigndepartment.index') }}" class="menu-link">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="menu-icon icon-base ti tabler-message-heart"></i>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div data-i18n="Assign Department">Assign Department</div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </li> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <a href="{{ route('assigndepartment.index') }}" class="menu-link">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <i class="menu-icon icon-base ti tabler-message-heart"></i>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <div data-i18n="Assign Department">Assign Department</div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li> -->
       <li class="menu-item {{ request()->routeIs('students.index') ? 'active' : '' }}">
         <a href="{{ route('students.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-message-heart"></i>
