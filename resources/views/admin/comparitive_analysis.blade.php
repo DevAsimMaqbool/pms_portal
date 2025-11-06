@@ -118,7 +118,8 @@
               <div class="card-title mb-0">
                 <h5 class="m-0 me-2">Self vs Self</h5>
                 <p class="mb-0">Your performance against the selected KPA is <span
-                    class=" badge inde-status">growing</span></p>
+                    class=" badge inde-status me-1">growing</span><span
+                    class=" badge inde-precentage">90</span></p>
               </div>
             </div>
             <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
@@ -157,13 +158,13 @@
               <ul class="p-0 m-0">
                 <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-primary"
-                  data-bs-original-title="(Rashid Hussain) Department of Business and Management Sciences">
+                  data-bs-original-title="(Rashid Hussain) Department of Computer Science">
                   <div class="chart-progress me-3" data-color="primary" data-series="91" data-progress_variant="true">
                   </div>
                   <div class="row w-100 align-items-center">
                     <div class="col-8">
                       <div class="me-2">
-                        <small class="text-cut-hot">Department of Business and Management Sciences</small>
+                        <small class="text-cut-hot">Department of Computer Science</small>
                         <h6 class="mb-0 text-cut-one">Rashid Hussain</h6>
                       </div>
                     </div>
@@ -191,13 +192,13 @@
                 </li>
                 <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-warning"
-                  data-bs-original-title="(Muhammad Ashraf) Chaudhry Abdul Rehman Business School">
+                  data-bs-original-title="(Muhammad Ashraf) Department of Information Technology">
                   <div class="chart-progress me-3" data-color="warning" data-series="70" data-progress_variant="true">
                   </div>
                   <div class="row w-100 align-items-center">
                     <div class="col-8">
                       <div class="me-2">
-                        <small class="text-cut-hot">Chaudhry Abdul Rehman Business School</small>
+                        <small class="text-cut-hot">Department of Information Technology</small>
                         <h6 class="mb-0 text-cut-one">Muhammad Ashraf</h6>
                       </div>
                     </div>
@@ -215,7 +216,7 @@
                   <div class="row w-100 align-items-center">
                     <div class="col-8">
                       <div class="me-2">
-                        <small class="text-cut-hot">Department of Social Sciences</small>
+                        <small class="text-cut-hot">Department of Software Engineering</small>
                         <h6 class="mb-0 text-cut-one">Sadia Ashraf</h6>
                       </div>
                     </div>
@@ -1114,6 +1115,7 @@
         function renderCarrierPerformanceChart(elementId, seriesData, categories) {
           const el = document.querySelector(`#${elementId}`);
           const statusEl = document.querySelector('.inde-status'); // target your span
+          const statusPer = document.querySelector('.inde-precentage');
 
           // Destroy existing chart instance (if any)
           if (el.chartInstance) {
@@ -1166,9 +1168,13 @@
           // ✅ Compare values and update text
           if (seriesData.length >= 2 && statusEl) {
             if (seriesData[0] > seriesData[1]) {
+              statusPer.textContent = seriesData[1]+ '%';
+              statusPer.style.background = 'red';
               statusEl.textContent = 'declining';
               statusEl.style.background = 'red'; // optional visual cue
             } else if (seriesData[0] < seriesData[1]) {
+              statusPer.textContent = seriesData[1]+ '%';
+              statusPer.style.background = 'green';
               statusEl.textContent = 'growing';
               statusEl.style.background = 'green'; // optional visual cue
             } else {
@@ -1226,6 +1232,7 @@
             },
             dataLabels: {
               enabled: true,
+              textAnchor: "end",
               enabledOnSeries: [0],
               formatter: function (val, opts) {
                 const name = opts.w.config.series[0].data[opts.dataPointIndex].x;
