@@ -11,6 +11,11 @@
       background-color: #fd7e1459 !important;
       color: #fd7e14 !important
     }
+
+    .text-orange {
+      color: #f6c8ab !important;
+      /* or your preferred shade */
+    }
   </style>
 @endpush
 @section('content')
@@ -58,7 +63,7 @@
 
                   <td><span class="badge bg-label-danger">BE</span></td>
                   <td>
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
+                    <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
                       50%
                     </p>
                   </td>
@@ -79,7 +84,7 @@
                   <td class="dt-type-numeric">
                     <div class="d-flex align-items-center">
                       <div class="progress w-100 me-3" style="height: 6px;">
-                        <div class="progress-bar bg-orange" role="progressbar" style="width: 35%" aria-valuenow="53"
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 35%" aria-valuenow="53"
                           aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                     </div>
@@ -87,7 +92,7 @@
 
                   <td><span class="badge bg-label-danger">BE</span></td>
                   <td>
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
+                    <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
                       53%
                     </p>
                   </td>
@@ -117,7 +122,7 @@
 
                   <td><span class="badge bg-label-danger">BE</span></td>
                   <td>
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
+                    <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
                       59%
                     </p>
                   </td>
@@ -147,7 +152,7 @@
 
                   <td class="pt-5"><span class="badge bg-label-orange">NI</span></td>
                   <td class="pt-5">
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
+                    <p class="text-orange fw-medium mb-0 d-flex align-items-center gap-1">
                       63%
                     </p>
                   </td>
@@ -175,7 +180,7 @@
 
                   <td class="pt-5"><span class="badge bg-label-orange">NI</span></td>
                   <td class="pt-5">
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
+                    <p class="text-orange fw-medium mb-0 d-flex align-items-center gap-1">
                       65%
                     </p>
                   </td>
