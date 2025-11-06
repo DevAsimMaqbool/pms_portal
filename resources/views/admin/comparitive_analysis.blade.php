@@ -1568,10 +1568,10 @@
         const select = document.querySelector("#apkMultiple1");
         select.addEventListener("change", function () {
           const selectedValue = this.value;
-          const listContainer = document.querySelector(".top-performers-list");
+          //const listContainer = document.querySelector(".top-performers-list");
           const departmentContainer = document.querySelector(".top-department-list");
           const facultiesContainer = document.querySelector(".top-faculties-list");
-          shuffleElements(listContainer);
+          //shuffleElements(listContainer);
           shuffleElements(departmentContainer);
           shuffleElements(facultiesContainer);
           // Example dynamic data
