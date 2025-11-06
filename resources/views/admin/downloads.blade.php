@@ -116,7 +116,7 @@
                         <i class="ti tabler-download icon-base"></i>
                       </span>
                     </div>
-                    <h5 class="fw-bold mb-0 text-white">Privacy Policy</h5>
+                    <h5 class="fw-bold mb-0 text-white">PMS Policy</h5>
                   </div>
                 </div>
               </div>
@@ -129,7 +129,7 @@
                       <i class="ti tabler-download icon-base"></i>
                     </div>
                     <h6 class="text-center mb-2 text-white">Click to Download</h6>
-                    <p class="text-center fs-13 mb-0">PMS Privacy Policy.
+                    <p class="text-center fs-13 mb-0">PMS Policy.
                     </p>
                   </div>
                 </div>

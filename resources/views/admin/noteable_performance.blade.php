@@ -178,7 +178,7 @@
                   <td><span class="badge bg-label-primary me-1">OS</span></td>
                   <td>
                     <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/gold-performer.jpeg') }}" alt="Avatar"
+                      <img src="{{ asset('admin/assets/img/avatars/gold-badge.png') }}" alt="Avatar"
                         class="rounded-circle">
                     </div>
                   </td>
@@ -211,7 +211,7 @@
                   <td><span class="badge bg-label-primary me-1">OS</span></td>
                   <td>
                     <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/silver-performer.jpeg') }}" alt="Avatar"
+                      <img src="{{ asset('admin/assets/img/avatars/silver-badge.png') }}" alt="Avatar"
                         class="rounded-circle">
                     </div>
                   </td>
