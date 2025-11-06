@@ -20,6 +20,7 @@ use App\Http\Controllers\DepartmentAssignmentController;
 use App\Http\Controllers\FormBuilderController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AssignFormToUserController;
+use App\Http\Controllers\AwardController;
 use App\Http\Controllers\CommercialGainsCounsultancyResearchIncomeController;
 use App\Http\Controllers\EmployabilityController;
 use App\Http\Controllers\IntellectualPropertyController;
@@ -168,6 +169,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/get-departments', [SurveyController::class, 'getDepartments'])->name('reports.getDepartments');
     Route::get('/reports/faculty-feedback', [SurveyController::class, 'feedbackReport'])->name('feedback.report');
     Route::get('downloads', [DownloadsController::class, 'index'])->name('pms.downloads');
+    Route::get('awards', [AwardController::class, 'index'])->name('pms.awards');
 });
 
 require __DIR__ . '/auth.php';

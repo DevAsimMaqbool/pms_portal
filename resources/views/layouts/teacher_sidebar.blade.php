@@ -78,8 +78,8 @@
           <div data-i18n="Reports">Reports</div>
         </a>
       </li>
-      <li class="menu-item">
-        <a href="#" class="menu-link">
+      <li class="menu-item {{ request()->routeIs('pms.awards') ? 'active' : '' }}">
+        <a href="{{ route('pms.awards') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-award"></i>
           <div data-i18n="Awards">Awards</div>
         </a>
