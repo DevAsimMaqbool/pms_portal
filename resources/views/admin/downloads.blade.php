@@ -78,7 +78,7 @@
                         <i class="ti tabler-download icon-base"></i>
                       </span>
                     </div>
-                    <h5 class="fw-bold mb-0 text-white">Sop's</h5>
+                    <h5 class="fw-bold mb-0 text-white">SOPs</h5>
                   </div>
                 </div>
               </div>
@@ -91,7 +91,7 @@
                       <i class="ti tabler-download icon-base"></i>
                     </div>
                     <h6 class="text-center mb-2 text-white">Click to Download</h6>
-                    <p class="text-center fs-13 mb-0">PMS Sop's.
+                    <p class="text-center fs-13 mb-0">PMS SOPs.
                     </p>
                   </div>
                 </div>
