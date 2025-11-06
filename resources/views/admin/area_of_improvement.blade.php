@@ -29,6 +29,7 @@
               <thead class="border-bottom">
                 <tr>
                   <th>Indicator</th>
+                  <th>Progress</th>
                   <th>Rating</th>
                   <th>Score</th>
                 </tr>
@@ -44,7 +45,11 @@
                       <div class="d-flex flex-column me-4">
                         <small class="text-body">Research Publications</small>
                       </div>
-                      <div class="progress w-50 me-4" style="height:8px;">
+                    </div>
+                  </td>
+                  <td class="dt-type-numeric">
+                    <div class="d-flex align-items-center">
+                      <div class="progress w-100 me-3" style="height: 6px;">
                         <div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="50"
                           aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
@@ -69,7 +74,11 @@
                       <div class="d-flex flex-column me-4">
                         <small class="text-body">Line Manager Satisfaction Rating</small>
                       </div>
-                      <div class="progress w-50 me-4" style="height:8px;">
+                    </div>
+                  </td>
+                  <td class="dt-type-numeric">
+                    <div class="d-flex align-items-center">
+                      <div class="progress w-100 me-3" style="height: 6px;">
                         <div class="progress-bar bg-orange" role="progressbar" style="width: 35%" aria-valuenow="53"
                           aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
@@ -94,7 +103,12 @@
                       <div class="d-flex flex-column me-4">
                         <small class="text-body">Student Pass Percentage</small>
                       </div>
-                      <div class="progress w-50 me-4" style="height:8px;">
+
+                    </div>
+                  </td>
+                  <td class="dt-type-numeric">
+                    <div class="d-flex align-items-center">
+                      <div class="progress w-100 me-3" style="height: 6px;">
                         <div class="progress-bar bg-danger" role="progressbar" style="width: 59%" aria-valuenow="59"
                           aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
@@ -120,7 +134,11 @@
                       <div class="d-flex flex-column me-4">
                         <small class="text-body">Research productivity of PG students</small>
                       </div>
-                      <div class="progress w-50 me-4" style="height:8px;">
+                    </div>
+                  </td>
+                  <td class="dt-type-numeric">
+                    <div class="d-flex align-items-center">
+                      <div class="progress w-100 me-3" style="height: 6px;">
                         <div class="progress-bar bg-label-orange" role="progressbar" style="width: 63%" aria-valuenow="63"
                           aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
@@ -144,7 +162,11 @@
                       <div class="d-flex flex-column me-4">
                         <small class="text-body">Student Satisfaction</small>
                       </div>
-                      <div class="progress w-50 me-4" style="height:8px;">
+                    </div>
+                  </td>
+                  <td class="dt-type-numeric">
+                    <div class="d-flex align-items-center">
+                      <div class="progress w-100 me-3" style="height: 6px;">
                         <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
                           aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
@@ -158,10 +180,6 @@
                     </p>
                   </td>
                 </tr>
-
-
-
-
               </tbody>
             </table>
           </div>
