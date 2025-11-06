@@ -133,34 +133,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-                                                                                                                                                                                                                                                                                                      .flip-card-inner {
-                                                                                                                                                                                                                                                                                                        transition: none;
-                                                                                                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                                                                                      .flip-card-front,
-                                                                                                                                                                                                                                                                                                      .flip-card-back {
-                                                                                                                                                                                                                                                                                                        position: relative;
-                                                                                                                                                                                                                                                                                                        transform: none;
-                                                                                                                                                                                                                                                                                                        backface-visibility: visible;
-                                                                                                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                                                                                      .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                                                                                                                                                                                                                                                                                                                                                                            .flip-card-inner {
+                                                                                                                                                                                                                                                                                                                                                                                                              transition: none;
+                                                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                                                            .flip-card-front,
+                                                                                                                                                                                                                                                                                                                                                                                                            .flip-card-back {
+                                                                                                                                                                                                                                                                                                                                                                                                              position: relative;
+                                                                                                                                                                                                                                                                                                                                                                                                              transform: none;
+                                                                                                                                                                                                                                                                                                                                                                                                              backface-visibility: visible;
+                                                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                                                            .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                      background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                      background-image:
-                                                                                                                                                                                                                                                                                                      radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                                                                                                                                                                                                                      radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                                                                                                                                                                                                                                                                                                                                                                                            background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                                                                                                                                                                                                                                                                                                                                                                                            background-image:
+                                                                                                                                                                                                                                                                                                                                                                                                            radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                                                                                                                                                                                                                                                                                                                                                                            radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                                                                                                                                                                                                                    background-image:
-                                                                                                                                                                                                                                                                                                      radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                                                                                                                                                                                                                      radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                                                                                                                                                                                                                      radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                                                                                                                                                                                                                                                                                                                                                                                          background-image:
+                                                                                                                                                                                                                                                                                                                                                                                                            radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                                                                                                                                                                                                                                                                                                                                                                            radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                                                                                                                                                                                                                                                                                                                                                                            radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                                                                                                                                                                                                                      background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                                                                                                                                                                                                                                                                                                                                                                            background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                                                                                                                                                                                                                      */
+                                                                                                                                                                                                                                                                                                                                                                                                            */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -493,7 +493,7 @@
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
             data-bs-custom-class="tooltip-warning"
             data-bs-original-title="You’re doing well and meeting your goals.
-                                                                                                                                                                                                                                                                                                                                                                              Keep your consistency — it’s your strength.">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Keep your consistency — it’s your strength.">
             <div class="card-body d-flex">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-warning rounded p-1_5 me-4"><i
@@ -515,7 +515,7 @@
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
             data-bs-custom-class="tooltip-danger"
             data-bs-original-title="Not quite there yet — but growth starts here.
-                                                                                                                                                                                                                                                                                                                                                                              Reflect. Refocus. Rise higher.">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Reflect. Refocus. Rise higher.">
             <div class="card-body d-flex">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
@@ -538,7 +538,7 @@
           <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
             data-bs-custom-class="tooltip-success"
             data-bs-original-title="You’re going beyond what’s asked of you.
-                                                                                                                                                                                                                                                                                                                                                                              Keep shining — your impact inspires others.">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Keep shining — your impact inspires others.">
             <div class="card-body d-flex">
               <div class="d-flex w-50 align-items-center me-4">
                 <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
@@ -751,21 +751,42 @@
       <!-- Website Analytics -->
       <div class="col-xl-4 col">
         <div class="card h-100">
-          <div class="card-header d-flex align-items-center justify-content-between">
-            <h5 class="card-title m-0 me-2">My Badges</h5>
+          <div class="card-header d-flex justify-content-between">
+            <div class="card-title mb-0">
+              <h5 class="mb-1">Milestones Unlocked</h5>
+              <p class="card-subtitle">Each badge tells your success story.</p>
+            </div>
           </div>
           <div class="card-body">
             <div class="d-flex justify-content-center gap-3 flex-wrap">
-              <div class="avatar avatar-xxl" style="background: none !important;" data-bs-toggle="tooltip"
-                data-bs-placement="top" data-bs-html="true" data-bs-custom-class="tooltip-secondary"
-                title="Score: 90% <br>Year: 2025<br>Indicator: Classes Held">
-                <img src="{{ asset('admin/assets/img/avatars/gold-badge.png') }}" class="rounded-circle">
+              <div class="avatar avatar-xxl d-flex flex-column align-items-center" style="background: none !important;"
+                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                data-bs-custom-class="tooltip-secondary" title="Score: 90% <br>Year: 2025<br>Indicator: Classes Held">
+                <img src="{{ asset('admin/assets/img/avatars/gold-badge.png') }}" class="rounded-circle mb-1">
+                <div class="text-center">
+                  <span class="badge mb-1" style="background-color: #fdcc55 !important;">Gold</span><br>
+                  <span class="badge inde-status">2025</span>
+                </div>
               </div>
-              <div class="avatar avatar-xxl">
-                <img src="{{ asset('admin/assets/img/avatars/silver-badge.png') }}" class="rounded-circle">
+
+              <div class="avatar avatar-xxl d-flex flex-column align-items-center" style="background: none !important;"
+                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                data-bs-custom-class="tooltip-secondary" title="Score: 90% <br>Year: 2025<br>Indicator: Classes Held">
+                <img src="{{ asset('admin/assets/img/avatars/silver-badge.png') }}" class="rounded-circle mb-1">
+                <div class="text-center">
+                  <span class="badge mb-1" style="background-color: #b3bac4 !important;">Silver</span><br>
+                  <span class="badge inde-status">2025</span>
+                </div>
               </div>
-              <div class="avatar avatar-xxl">
-                <img src="{{ asset('admin/assets/img/avatars/bronze-badge.png') }}" class="rounded-circle">
+
+              <div class="avatar avatar-xxl d-flex flex-column align-items-center" style="background: none !important;"
+                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                data-bs-custom-class="tooltip-secondary" title="Score: 90% <br>Year: 2025<br>Indicator: Classes Held">
+                <img src="{{ asset('admin/assets/img/avatars/bronze-badge.png') }}" class="rounded-circle mb-1">
+                <div class="text-center">
+                  <span class="badge mb-1" style="background-color: #ba8353 !important;">Bronze</span><br>
+                  <span class="badge inde-status">2025</span>
+                </div>
               </div>
             </div>
 
@@ -935,8 +956,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                                                                                                                                                                        #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                      `;
+                                                                                                                                                                                                                                                                                                                                                                                                              #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                                                                                                                                                                                            `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -964,8 +985,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                                                                                                                                                                        #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                      `;
+                                                                                                                                                                                                                                                                                                                                                                                                              #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                                                                                                                                                                                            `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1111,10 +1132,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                                                                                                                                                                                                      <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                                                                                                                                                                                                      border-radius:50%;margin-right:5px;"></span>
-                                                                                                                                                                                                                                                                                                      ${label} (${shortLabels[i]})
-                                                                                                                                                                                                                                                                                                      `;
+                                                                                                                                                                                                                                                                                                                                                                                                            <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                                                                                                                                                                                                                                                                            border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                            ${label} (${shortLabels[i]})
+                                                                                                                                                                                                                                                                                                                                                                                                            `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1266,10 +1287,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                                                                                                                                                                                                      <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                                                                                                                                                                                                      border-radius:50%;margin-right:5px;"></span>
-                                                                                                                                                                                                                                                                                                      ${label} (${shortLabels[i]})
-                                                                                                                                                                                                                                                                                                      `;
+                                                                                                                                                                                                                                                                                                                                                                                                            <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                                                                                                                                                                                                                                                                            border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                                                                                                                                                                                                                                                                            ${label} (${shortLabels[i]})
+                                                                                                                                                                                                                                                                                                                                                                                                            `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
