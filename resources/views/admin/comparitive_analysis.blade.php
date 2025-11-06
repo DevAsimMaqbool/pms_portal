@@ -364,7 +364,7 @@
         </div>
         <!--/ Active Projects -->
         <!-- Popular Instructors -->
-        <div class="col-md-6 col-xxl-4 mb-6">
+        {{-- <div class="col-md-6 col-xxl-4 mb-6">
           <div class="card h-100">
 
             <div class="card-header d-flex align-items-center justify-content-between">
@@ -472,6 +472,106 @@
 
               </ul>
             </div>
+          </div>
+        </div> --}}
+        <!--/ Popular Instructors -->
+        <!-- Popular Instructors -->
+        <div class="col-md-6 col-xxl-4 mb-6">
+          <div class="card text-bg-secondary h-100">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <div class="card-title mb-0">
+                <h5 class="m-0 me-2 text-white">Institutional Level Toppers</h5>
+              </div>
+            </div>
+            <div class="card-body">
+
+                 <!-- schroller -->
+               
+
+                  <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                          {{-- <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                          </div> --}}
+                          <div class="carousel-inner">
+                            <div class="carousel-item active">
+                               
+                               <div class="user-avatar-section">
+                                  <div class=" d-flex align-items-center flex-column">
+                                    <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/1.png')}}" height="100" width="100" alt="User avatar">
+                                    <div class="user-info text-center">
+                                      <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
+                                      <h5 class="m-0">Dr. Tehreem Masood</h5>
+                                      <p class="m-0">Associate Professor</p>
+                                      <small class="m-0">Department of Software Engineering</small>
+                                    </div>
+                                    <img class="img-fluid rounded-circle mt-2 mb-2" src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100" alt="User avatar">
+                                    <div class="user-info text-center">
+                                      <span class="badge bg-label-primary">98%</span>
+                                      <p class="m-0">Leding with excellence and inspiring success across the institution</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              
+                            </div>
+                            <div class="carousel-item">
+                              
+                                <div class="user-avatar-section">
+                                  <div class=" d-flex align-items-center flex-column">
+                                    <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/3.png')}}" height="100" width="100" alt="User avatar">
+                                    <div class="user-info text-center">
+                                      <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
+                                      <h5 class="m-0">Abdullah Tanweer</h5>
+                                      <p class="m-0">Associate Professor</p>
+                                      <small class="m-0">Department of Software Engineering</small>
+                                    </div>
+                                    <img class="img-fluid rounded-circle mt-2 mb-2" src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100" alt="User avatar">
+                                    <div class="user-info text-center">
+                                      <span class="badge bg-label-primary">98%</span>
+                                      <p class="m-0">Leding with excellence and inspiring success across the institution</p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                            </div>
+                            <div class="carousel-item">
+
+                                <div class="user-avatar-section">
+                                  <div class=" d-flex align-items-center flex-column">
+                                    <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/1.png')}}" height="100" width="100" alt="User avatar">
+                                    <div class="user-info text-center">
+                                      <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
+                                      <h5 class="m-0">Dr. Tehreem Masood</h5>
+                                      <p class="m-0">Associate Professor</p>
+                                      <small class="m-0">Department of Software Engineering</small>
+                                    </div>
+                                    <img class="img-fluid rounded-circle mt-2 mb-2" src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100" alt="User avatar">
+                                    <div class="user-info text-center">
+                                      <span class="badge bg-label-primary">98%</span>
+                                      <p class="m-0">Leding with excellence and inspiring success across the institution</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              
+                            </div>
+                          </div>
+                          <a class="carousel-control-prev" href="#carouselExample" role="button" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                          </a>
+                          <a class="carousel-control-next" href="#carouselExample" role="button" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                          </a>
+                        </div>
+
+
+
+                 <!--/ end schrol --> 
+            
+            </div>
+
           </div>
         </div>
         <!--/ Popular Instructors -->
