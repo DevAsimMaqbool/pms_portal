@@ -78,7 +78,7 @@
                         <i class="ti tabler-download icon-base"></i>
                       </span>
                     </div>
-                    <h5 class="fw-bold mb-0 text-white">SOPs</h5>
+                    <h5 class="fw-bold mb-0 text-white">PMS SOPs</h5>
                   </div>
                 </div>
               </div>
