@@ -118,8 +118,7 @@
               <div class="card-title mb-0">
                 <h5 class="m-0 me-2">Self vs Self</h5>
                 <p class="mb-0">Your performance against the selected KPA is <span
-                    class=" badge inde-status me-1">growing</span><span
-                    class=" badge inde-precentage">90</span></p>
+                    class=" badge inde-status me-1">growing</span><span class=" badge inde-precentage">90</span></p>
               </div>
             </div>
             <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
@@ -259,14 +258,14 @@
               <ul class="p-0 m-0">
                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-primary"
-                  data-bs-original-title="(Sadia Ashraf) Faculty Of Economics and Commerce">
+                  data-bs-original-title="(Rashid Hussain) Faculty of Computer Science and Information Technology">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-primary rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-trophy icon-md"></i>
                     </div>
                     <div>
-                      <small class="text-cut-hot">Faculty Of Economics and Commerce</small>
-                      <h6 class="mb-0 text-cut-one">Sadia Ashraf</h6>
+                      <small class="text-cut-hot">Faculty of Computer Science and Information Technology</small>
+                      <h6 class="mb-0 text-cut-one">Rashid Hussain</h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -279,14 +278,14 @@
                 </li>
                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-success"
-                  data-bs-original-title="(Amna Ilyas) Faculty of Business and Management Sciences">
+                  data-bs-original-title="(Israr Hussain) Faculty of Business and Management Sciences">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-success rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-trophy icon-md"></i>
                     </div>
                     <div>
                       <small class="text-cut-hot">Faculty of Business and Management Sciences</small>
-                      <h6 class="mb-0 text-cut-one">Amna Ilyas</h6>
+                      <h6 class="mb-0 text-cut-one">Israr Hussain</h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -300,14 +299,14 @@
 
                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-warning"
-                  data-bs-original-title="(Muhammad Ashraf) Faculty of Computer Science and Information Technology">
+                  data-bs-original-title="(Sadia Ashraf) Faculty of Computer Science and Information Technology">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-warning rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-award  icon-md"></i>
                     </div>
                     <div>
                       <small class="text-cut-hot">Faculty of Computer Science and Information Technology</small>
-                      <h6 class="mb-0 text-cut-one">Muhammad Ashraf</h6>
+                      <h6 class="mb-0 text-cut-one">Sadia Ashraf</h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -321,14 +320,14 @@
 
                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-warning"
-                  data-bs-original-title="(Rashid Hussain) Faculty of Allied Health Sciences">
+                  data-bs-original-title="(Rubab Naqvi) Faculty of Allied Health Sciences">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-warning rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-award icon-md"></i>
                     </div>
                     <div>
                       <small class="text-cut-hot">Faculty of Allied Health Sciences</small>
-                      <h6 class="mb-0 text-cut-one">Rashid Hussain</h6>
+                      <h6 class="mb-0 text-cut-one">Rubab Naqvi</h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -340,14 +339,15 @@
                   </div>
                 </li>
                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
-                  data-bs-custom-class="tooltip-danger" data-bs-original-title="(Haider Ali) Faculty of Social Sciences">
+                  data-bs-custom-class="tooltip-danger"
+                  data-bs-original-title="(Dr Sajid Hussain) Faculty of Social Sciences">
                   <div class="d-flex w-50 align-items-center me-4">
                     <div class="badge bg-label-danger rounded p-1_5 me-4"><i
                         class="icon-base ti tabler-trophy-off icon-md"></i>
                     </div>
                     <div>
                       <small class="text-cut-hot">Faculty of Social Sciences</small>
-                      <h6 class="mb-0 text-cut-one">Haider Ali</h6>
+                      <h6 class="mb-0 text-cut-one">Dr Sajid Hussain</h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -597,23 +597,23 @@
 
                 // Build Indicator Average list
                 $indicatorList.append(`
-                                                                                                              <div class="d-flex justify-content-between align-items-center mb-6">
-                                                                                                                  <div class="d-flex align-items-center">
-                                                                                                                      <div class="avatar avatar me-4">
-                                                                                                                          <img src="{{ asset('admin/assets/img/avatars/1.png')}}" alt="Avatar"
-                                                                                                                              class="rounded-circle" />
-                                                                                                                      </div>
-                                                                                                                      <div>
-                                                                                                                          <div>
-                                                                                                                              <h6 class="mb-0 text-truncate">${indicator.name}</h6>
-                                                                                                                              <small class="text-truncate text-body">${indicator.job_title}</small>
-                                                                                                                          </div>
-                                                                                                                      </div>
-                                                                                                                  </div>
-                                                                                                                  <div class="text-end">
-                                                                                                                      <h6 class="mb-0" style="color:${indicator.color}">${indicator.avg}%</h6>
-                                                                                                                  </div>
-                                                                                                              </div>`);
+                                                                                                                                <div class="d-flex justify-content-between align-items-center mb-6">
+                                                                                                                                    <div class="d-flex align-items-center">
+                                                                                                                                        <div class="avatar avatar me-4">
+                                                                                                                                            <img src="{{ asset('admin/assets/img/avatars/1.png')}}" alt="Avatar"
+                                                                                                                                                class="rounded-circle" />
+                                                                                                                                        </div>
+                                                                                                                                        <div>
+                                                                                                                                            <div>
+                                                                                                                                                <h6 class="mb-0 text-truncate">${indicator.name}</h6>
+                                                                                                                                                <small class="text-truncate text-body">${indicator.job_title}</small>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                    <div class="text-end">
+                                                                                                                                        <h6 class="mb-0" style="color:${indicator.color}">${indicator.avg}%</h6>
+                                                                                                                                    </div>
+                                                                                                                                </div>`);
               });
 
               updateBarChart(indicatorNames, avgValues, colors);
@@ -893,9 +893,9 @@
             const item = document.createElement("div");
             item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
             item.innerHTML = `
-                                                                                                                                                              <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                                                                              <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                                                                            `;
+                                                                                                                                                                                <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                                                                                                                <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                                                                                                              `;
             legendContainer.appendChild(item);
           });
         }
@@ -1070,11 +1070,11 @@
                   size: 0,
                   customSVG: {
                     SVG: `
-                                                                                                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-                                                                                                                <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
-                                                                                                                <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
-                                                                                                              </svg>
-                                                                                                            `,
+                                                                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                                                                                                                                  <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
+                                                                                                                                  <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
+                                                                                                                                </svg>
+                                                                                                                              `,
                     offsetX: -10,
                     offsetY: -28
                   }
@@ -1101,9 +1101,9 @@
             const item = document.createElement("div");
             item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
             item.innerHTML = `
-                                                                                                      <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                      <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                    `;
+                                                                                                                        <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                                                        <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                                                      `;
             legendContainer.appendChild(item);
           });
         }
@@ -1168,12 +1168,12 @@
           // ✅ Compare values and update text
           if (seriesData.length >= 2 && statusEl) {
             if (seriesData[0] > seriesData[1]) {
-              statusPer.textContent = seriesData[1]+ '%';
+              statusPer.textContent = seriesData[1] + '%';
               statusPer.style.background = 'red';
               statusEl.textContent = 'declining';
               statusEl.style.background = 'red'; // optional visual cue
             } else if (seriesData[0] < seriesData[1]) {
-              statusPer.textContent = seriesData[1]+ '%';
+              statusPer.textContent = seriesData[1] + '%';
               statusPer.style.background = 'green';
               statusEl.textContent = 'growing';
               statusEl.style.background = 'green'; // optional visual cue
@@ -1188,7 +1188,7 @@
         renderCarrierPerformanceChart("carrierPerformance11", [60, 90], ['Spring 25', 'Fall 25']);
 
 
-      
+
         function renderCarrierChart(categories, values, highlightName = "Abdullah Tanveer") {
           const c = document.querySelector("#carrierPerformance");
           const legendContainer = document.getElementById("carrierCustomLegend");
@@ -1238,7 +1238,7 @@
             ],
             xaxis: {
               categories: categories,
-              max: 100, 
+              max: 100,
               labels: {
                 style: {
                   colors: "#6E6B7B",
@@ -1281,10 +1281,10 @@
               const item = document.createElement("div");
               item.className = "d-flex align-items-center mx-2 my-1";
               item.innerHTML = `
-                                                  <span style="width:14px;height:14px;background:${colors[i % colors.length]};
-                                                  border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                  <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                `;
+                                                                    <span style="width:14px;height:14px;background:${colors[i % colors.length]};
+                                                                    border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                    <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                  `;
               legendContainer.appendChild(item);
 
               if (label === highlightName) {  // ✅ Only show emoji on highlighted bar
@@ -1414,11 +1414,11 @@
                     size: 0,
                     customSVG: {
                       SVG: `
-                                                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-                                                                  <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
-                                                                  <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
-                                                                  </svg>
-                                                                  `,
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                                                                                    <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
+                                                                                    <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
+                                                                                    </svg>
+                                                                                    `,
                       offsetX: -10,
                       offsetY: -28,
                     },
@@ -1440,9 +1440,9 @@
               const item = document.createElement("div");
               item.className = "d-flex align-items-center mx-2 my-1";
               item.innerHTML = `
-                                                                                                      <span style="width:14px;height:14px;background:${colors[i % colors.length]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                      <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                    `;
+                                                                                                                        <span style="width:14px;height:14px;background:${colors[i % colors.length]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                                                        <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                                                      `;
               legendContainer.appendChild(item);
             });
           }
