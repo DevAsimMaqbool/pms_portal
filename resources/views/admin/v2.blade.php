@@ -943,7 +943,7 @@
       const windowHeight = window.innerHeight;
 
       // Set scroll height dynamically based on window height
-      const maxHeight = 454;
+      const maxHeight = 409;
       scrollableDiv.style.maxHeight = `${maxHeight}px`;
 
       // Enable vertical scroll
@@ -972,7 +972,7 @@
       const windowHeight = window.innerHeight;
 
       // Set scroll height dynamically based on window height
-      const maxHeight = 454;
+      const maxHeight = 409;
       scrollableDiv.style.maxHeight = `${maxHeight}px`;
 
       // Enable vertical scroll
