@@ -89,53 +89,118 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel4">Sitara-e-Qiyadat</h5>
+                    <h4 class="modal-title" id="exampleModalLabel4">Sitara-e-Qiyadat</h4>
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col mb-4">
-                            <label for="nameEx" class="form-label">
-                                <strong>The Sitara-e-Qiyadat – Chairman’s Leadership Excellence
-                                    Award</strong>
-                                has been established to honor outstanding leaders within the Superior
-                                University community
-                                whose vision, commitment, and influence have set new benchmarks of
-                                excellence.
-                                <br>
-                                This prestigious award recognizes individuals who not only demonstrate
-                                exceptional leadership
-                                within their areas of responsibility but also embody the spirit of
-                                innovation, courage,
-                                and service that leadership demands in shaping society.
-                                <br>
-                                The Sitara-e-Qiyadat award symbolizes the pioneering spirit of Superior
-                                University:
-                                a spirit that believes in leading from the front, creating new
-                                possibilities,
-                                and making meaningful contributions to society.
-                                <br>
-                                It is a tribute to those leaders who exemplify Superior’s commitment to
-                                excellence
-                                and whose efforts ripple far beyond the boundaries.
-                            </label>
+                   <!-- data -->
+                        <div class="row rounded-3" style="background:linear-gradient(135deg, #000000 0%, #1a0000 40%, #ad4949 100%)">
+                            <div class="col-md-8 order-md-0 order-1 d-flex justify-content-center align-items-center text-white">
+                                <p class="mb-6">The Sitara-e-Qiyadat – Chairman’s Leadership Excellence Award has been established to honor outstanding leaders within the Superior University community whose vision, commitment, and influence have set new benchmarks of excellence. This prestigious award recognizes individuals who not only demonstrate exceptional leadership within their areas of responsibility but also embody the spirit of innovation, courage, and
+                                service that leadership demands in shaping society. The Sitara-e-Qiyadat award symbolizes the pioneering spirit of Superior University: a spirit that believes in leading from the front, creating new possibilities, and making meaningful contributions to society. It is a tribute to those leaders who exemplify Superior’s commitment to excellence, and whose efforts ripple far beyond the boundaries.</p>
+                                
+                            </div>
+                            <div class="col-md-4 order-md-1 order-0">
+                                <div class="text-center mx-3 mx-md-0">
+                                <img src="{{ asset('admin/assets/img/avatars/rewards-twos.png') }}" class="img-fluid" alt="Api Key Image" width="202">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row g-4">
-                        <div class="col mb-0">
-                            <label for="emailExLarge" class="form-label">Email</label>
-                            <input type="email" id="emailExLarge" class="form-control" placeholder="xxxx@xxx.xx" />
+                   <!-- /data -->
+                    <!-- data -->
+                        <div class="row mt-6">
+                            
+                            <div class="col-md-12">
+                                  
+
+                                  <div class="table-responsive text-nowrap">
+                                <table class="table table-bordered table-hover"">
+                                    <thead class="table-dark">
+                                    <tr>
+                                        <th>Award Category</th>
+                                        <th>Level</th>
+                                        <th>Period</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="table-border-bottom-0">
+                                    <tr>
+                                        <td>
+                                        <i class="icon-base ti tabler-user-heart icon-md text-success me-4"></i>
+                                        <span class="fw-medium">Best Deen of the Year</span>
+                                        </td>
+                                        <td>Universitry</td>
+                                        <td><span class="badge bg-label-primary me-1">Annual</span></td>
+                                       
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        <i class="icon-base ti tabler-user-heart icon-md text-success me-4"></i>
+                                        <span class="fw-medium">Best Support Leader</span>
+                                        </td>
+                                        <td>Universitry Administration</td>
+                                        <td><span class="badge bg-label-primary me-1">Annual</span></td>
+                                       
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        <i class="icon-base ti tabler-user-heart icon-md text-success me-4"></i>
+                                        <span class="fw-medium">Best Program Leader-UnderGrad of the Year</span>
+                                        </td>
+                                        <td>Universitry</td>
+                                        <td><span class="badge bg-label-primary me-1">Annual</span></td>
+                                       
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        <i class="icon-base ti tabler-user-heart icon-md text-success me-4"></i>
+                                        <span class="fw-medium">Best Program Leader-PostGrad of the Year</span>
+                                        </td>
+                                        <td>Universitry</td>
+                                        <td><span class="badge bg-label-primary me-1">Annual</span></td>
+                                       
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        <i class="icon-base ti tabler-user-heart icon-md text-success me-4"></i>
+                                        <span class="fw-medium">Special Initiatives</span>
+                                        </td>
+                                        <td>Universitry</td>
+                                        <td><span class="badge bg-label-primary me-1">Annual</span></td>
+                                       
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        <i class="icon-base ti tabler-user-heart icon-md text-success me-4"></i>
+                                        <span class="fw-medium">Best House Leader</span>
+                                        </td>
+                                        <td>Universitry</td>
+                                        <td><span class="badge bg-label-primary me-1">Annual</span></td>
+                                       
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        <i class="icon-base ti tabler-user-heart icon-md text-success me-4"></i>
+                                        <span class="fw-medium">Best HOD of Year</span>
+                                        </td>
+                                        <td>Universitry</td>
+                                        <td><span class="badge bg-label-primary me-1">Annual</span></td>
+                                       
+                                    </tr>
+                                    
+                                    </tbody>
+                                </table>
+                                </div>
+
+
+
+                            </div>
                         </div>
-                        <div class="col mb-0">
-                            <label for="dobExLarge" class="form-label">DOB</label>
-                            <input type="date" id="dobExLarge" class="form-control" />
-                        </div>
-                    </div>
+                   <!-- /data -->
+                   
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
