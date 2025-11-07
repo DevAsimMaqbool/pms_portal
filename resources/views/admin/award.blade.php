@@ -11,7 +11,7 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100">
                     <div class="text-center"
-                        style="background:linear-gradient(135deg, #000000 0%, #1a0000 40%, #4b0000 100%)">
+                        style="background:linear-gradient(135deg, #000000 0%, #1a0000 40%, #ad4949 100%)">
                         <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/rewards-fives.png') }}"
                             alt="Card girl image" width="250">
                     </div>
@@ -25,7 +25,7 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100">
                     <div class="text-center"
-                        style="background:linear-gradient(135deg, #000000 0%, #1a0000 40%, #4b0000 100%)">
+                        style="background:linear-gradient(135deg, #000000 0%, #1a0000 40%, #ad4949 100%)">
                         <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/rewards-threes.png') }}"
                             alt="Card girl image" width="250">
                     </div>
@@ -39,7 +39,7 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100">
                     <div class="text-center"
-                        style="background:linear-gradient(135deg, #000000 0%, #1a0000 40%, #4b0000 100%)">
+                        style="background:linear-gradient(135deg, #000000 0%, #1a0000 40%, #ad4949 100%)">
                         <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/rewards-twos.png') }}"
                             alt="Card girl image" width="250">
                     </div>
@@ -53,7 +53,7 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100">
                     <div class="text-center"
-                        style="background:linear-gradient(135deg, #000000 0%, #1a0000 40%, #4b0000 100%)">
+                        style="background:linear-gradient(135deg, #000000 0%, #1a0000 40%, #ad4949 100%)">
                         <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/rewards-one.png') }}"
                             alt="Card girl image" width="250">
                     </div>
@@ -67,7 +67,7 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100">
                     <div class="text-center"
-                        style="background:linear-gradient(135deg, #000000 0%, #1a0000 40%, #4b0000 100%)">
+                        style="background:linear-gradient(135deg, #000000 0%, #1a0000 40%, #ad4949 100%)">
                         <img class="img-fluid" src="{{ asset('admin/assets/img/avatars/rewards-fours.png') }}"
                             alt="Card girl image" width="250">
                     </div>
