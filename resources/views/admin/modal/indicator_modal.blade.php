@@ -595,7 +595,7 @@
 </div>
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
-<div class="modal fade" id="CompletionofCourseFolderinHard" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="CompletionofCourseFolder" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -605,7 +605,7 @@
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-folder icon-md"></i>
-                    </div> Completion of Course Folder in Hard
+                    </div> Completion of Course Folder
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -951,7 +951,7 @@
 </div>
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
-<div class="modal fade" id="SubmissionofExamResults" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="TimelySubmissionofExamResults" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -961,7 +961,7 @@
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     <div class="badge bg-label-primary rounded p-2"><i
-                            class="icon-base ti tabler-chart-bar-popular icon-md"></i></div>Submission of Exam
+                            class="icon-base ti tabler-chart-bar-popular icon-md"></i></div>Timely Submission of Exam
                     Results
 
                 </h3>
@@ -1591,7 +1591,7 @@
 </div>
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
-<div class="modal fade" id="ImprovementinStudentPerformanceMetrics" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="AverageStudentScore" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -1601,8 +1601,7 @@
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     <div class="badge bg-label-primary rounded p-2"><i
-                            class="icon-base ti tabler-chart-histogram icon-md"></i></div> Improvement in Student
-                    Performance Metrics
+                            class="icon-base ti tabler-chart-histogram icon-md"></i></div> Average Student Score
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -1610,15 +1609,15 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#ImprovementinStudentPerformanceMetrics-spring"
-                                    aria-controls="ImprovementinStudentPerformanceMetrics-spring" aria-selected="true">
+                                    data-bs-target="#AverageStudentScore-spring"
+                                    aria-controls="AverageStudentScore-spring" aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#ImprovementinStudentPerformanceMetrics-fall"
-                                    aria-controls="ImprovementinStudentPerformanceMetrics-fall" aria-selected="false">
+                                    data-bs-target="#AverageStudentScore-fall" aria-controls="AverageStudentScore-fall"
+                                    aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -1628,8 +1627,7 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="ImprovementinStudentPerformanceMetrics-spring"
-                            role="tabpanel">
+                        <div class="tab-pane fade show active" id="AverageStudentScore-spring" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1665,7 +1663,7 @@
                         </div>
 
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="ImprovementinStudentPerformanceMetrics-fall" role="tabpanel">
+                        <div class="tab-pane fade" id="AverageStudentScore-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -1834,7 +1832,7 @@
     </div>
 </div>
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="ResearchPublications(ScopusIndexed)" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="ResearchPublications" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -1843,7 +1841,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    Research Publications (Scopus Indexed)
+                    Scopus Publications
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -1986,7 +1984,7 @@
 
 <!-- / Payment Methods modal -->
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="ResearchproductivityofPGstudents" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="ResearchProductivityofPGStudents(MS/Mphil/PhD)" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -1995,7 +1993,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    Research productivity of PG students
+                    Research Productivity of PG Students(MS / Mphil / PhD)
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -2003,15 +2001,17 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#ResearchproductivityofPGstudents-spring"
-                                    aria-controls="ResearchproductivityofPGstudents-spring" aria-selected="true">
+                                    data-bs-target="#ResearchProductivityofPGStudents(MS/Mphil/PhD)-spring"
+                                    aria-controls="ResearchProductivityofPGStudents(MS/Mphil/PhD)-spring"
+                                    aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#ResearchproductivityofPGstudents-fall"
-                                    aria-controls="ResearchproductivityofPGstudents-fall" aria-selected="false">
+                                    data-bs-target="#ResearchProductivityofPGStudents(MS/Mphil/PhD)-fall"
+                                    aria-controls="ResearchProductivityofPGStudents(MS/Mphil/PhD)-fall"
+                                    aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -2021,8 +2021,8 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="ResearchproductivityofPGstudents-spring"
-                            role="tabpanel">
+                        <div class="tab-pane fade show active"
+                            id="ResearchProductivityofPGStudents(MS/Mphil/PhD)-spring" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -2074,7 +2074,8 @@
                         </div>
 
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="ResearchproductivityofPGstudents-fall" role="tabpanel">
+                        <div class="tab-pane fade" id="ResearchProductivityofPGStudents(MS/Mphil/PhD)-fall"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -2328,7 +2329,7 @@
 
 <!-- / Payment Methods modal -->
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="LineManagerSatisfactionRating" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="LineManagersReview&RatingonTasks" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -2337,7 +2338,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    Line Manager Satisfaction Rating
+                    Line Manager's Review & Rating on Tasks
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -2345,15 +2346,15 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#LineManagerSatisfactionRating-spring"
-                                    aria-controls="LineManagerSatisfactionRating-spring" aria-selected="true">
+                                    data-bs-target="#LineManagersReview&RatingonTasks-spring"
+                                    aria-controls="LineManagersReview&RatingonTasks-spring" aria-selected="true">
                                     🌸 Spring 2025
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#LineManagerSatisfactionRating-fall"
-                                    aria-controls="LineManagerSatisfactionRating-fall" aria-selected="false">
+                                    data-bs-target="#LineManagersReview&RatingonTasks-fall"
+                                    aria-controls="LineManagersReview&RatingonTasks-fall" aria-selected="false">
                                     🍂 Fall 2025
                                 </button>
                             </li>
@@ -2363,7 +2364,7 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="LineManagerSatisfactionRating-spring"
+                        <div class="tab-pane fade show active" id="LineManagersReview&RatingonTasks-spring"
                             role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
@@ -2409,7 +2410,7 @@
                         </div>
 
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="LineManagerSatisfactionRating-fall" role="tabpanel">
+                        <div class="tab-pane fade" id="LineManagersReview&RatingonTasks-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
@@ -2730,7 +2731,7 @@
     </div>
 </div>
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="ScholarsSatisfaction(inthesisstage)" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="ScholarsSatisfaction(InThesisStage)" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -2739,7 +2740,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    Scholar's Satisfaction (in thesis stage)
+                    Scholar's Satisfaction(In Thesis Stage)
                 </h3>
                 <div class="card">
                     <!-- <div class="card-header d-flex justify-content-between align-items-center">
@@ -2845,7 +2846,7 @@
 <!-- / Payment Methods modal -->
 
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="No.MultidisciplinaryProjects" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="MultidisciplinaryProjects" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -2854,7 +2855,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    No. Multidisciplinary Projects
+                    Multidisciplinary Projects
                 </h3>
                 <div class="card">
                     <div class="card-body">
@@ -2891,7 +2892,7 @@
 <!-- / Payment Methods modal -->
 
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="CommercialGains/Consultancy/ResearchIncome" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="CommercialConsultancy/ResearchIncome" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -2900,7 +2901,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    Commercial Gains / Consultancy/Research Income
+                    Commercial Consultancy/Research Income
                 </h3>
                 <div class="card">
                     <div class="card-body">
@@ -2937,7 +2938,7 @@
 <!-- / Payment Methods modal -->
 
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="IntellectualProperties" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="Patents/IntellectualProperty(IPR)" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -2946,7 +2947,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    Intellectual Properties
+                    Patents/Intellectual Property (IPR)
                 </h3>
                 <div class="card">
                     <div class="card-body">
@@ -3027,7 +3028,7 @@
 <!-- / Payment Methods modal -->
 
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="Spinoffs" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="SpinOffs" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -3036,7 +3037,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    Spin offs
+                    Spin Offs
                 </h3>
                 <div class="card">
                     <div class="card-body">
