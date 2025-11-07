@@ -1832,7 +1832,7 @@
     </div>
 </div>
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="Scopus Publications" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="ScopusPublications" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
