@@ -57,7 +57,7 @@
                                 
                                 <div class="row g-6">
                                     <div class="col-md-6">
-                                        <label for="name_of_project_initiated" class="form-label">Name of project initiated during the quarter</label>
+                                        <label for="name_of_project_initiated" class="form-label">Project Name</label>
                                         <input type="text" id="name_of_project_initiated" name="name_of_project_initiated" class="form-control" >
                                     </div>
 
