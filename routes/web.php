@@ -170,6 +170,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/faculty-feedback', [SurveyController::class, 'feedbackReport'])->name('feedback.report');
     Route::get('downloads', [DownloadsController::class, 'index'])->name('pms.downloads');
     Route::get('awards', [AwardController::class, 'index'])->name('pms.awards');
+
+    Route::get('/hod-taget', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
 });
 
 require __DIR__ . '/auth.php';

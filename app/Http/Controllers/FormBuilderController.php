@@ -65,7 +65,7 @@ class FormBuilderController extends Controller
     public function show($id, $slug)
     {
         $form = Form::where('title', $slug)->with('fields')->firstOrFail();
-        return view('admin.form.form_show', ['form' => $form,'id'=>$id]);
+        return view('admin.form.form_show', ['form' => $form, 'id' => $id]);
     }
 
     /**
@@ -108,5 +108,10 @@ class FormBuilderController extends Controller
     public function destroy(Request $request)
     {
         //
+    }
+
+    public function HodTargetForms()
+    {
+        return view('admin.form.hod_targets');
     }
 }
