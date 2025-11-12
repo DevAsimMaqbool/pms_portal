@@ -96,10 +96,10 @@
                         <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                         <input type="hidden"  id="form_status" name="form_status" value="HOD" required>
 
-                        <div class="row g-6">
+                        <div class="row">
                             <div class="col-md-6">
                             <label for="faculty_member" class="form-label">Name of Faculty Member</label>
-                            <select id="faculty_member" name="faculty_member_id" class="form-select" required>
+                            <select  name="faculty_member_id" id="select2Success" class="select2 form-select"  multiple required>
                                 <option value="">-- Select Faculty Member --</option>
                                 @foreach($facultyMembers as $member)
                                     <option 
@@ -112,64 +112,11 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="department" class="form-label">Department</label>
-                            <input type="text" id="department" name="department" class="form-control" disabled>
-                        </div>
+        
 
-                        <div class="col-md-6">
-                            <label for="job_title" class="form-label">Designation</label>
-                            <input type="text" id="job_title" name="job_title" class="form-control" disabled>
-                        </div>
 
-                            {{-- <div class="col-md-6">
-                                <label for="target_category" class="form-label">Target Category</label>
-                                <select id="target_category" name="target_category" class="form-select" required>
-                                    <option value="">Select Target Category</option>
-                                    <option value="Scopus-Indexed">Scopus Indexed</option>
-                                    <option value="HEC">HEC</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="target_of_publications" class="form-label">Target of Publications</label>
-                                <input type="text" id="target_of_publications" class="form-control" name="target_of_publications" required>
-                                
-                            </div> --}}
-                            <div class="col-md-6">
-                                <label class="form-label d-block">Capacity building need?</label>
-                                <div>
-                                    <input type="radio" name="capacity_building" id="capacity_yes" value="1"> 
-                                    <label for="capacity_yes">Yes</label>
 
-                                    <input type="radio" name="capacity_building" id="capacity_no" value="0" checked> 
-                                    <label for="capacity_no">No</label>
-                                </div>
-                            </div>
 
-                            <div class="col-md-6" id="extra_select_container" style="display: none;">
-                                <label for="need" class="form-label">Select the need</label>
-                                <select id="need" name="need" class="form-select">
-                                    <option value="">-- Select Option --</option>
-                                    <option value="Basics-of-research">Basics of research</option>
-                                    <option value="Analytical-tools">Analytical tools</option>
-                                    <option value="Advanced-analytics">Advanced analytics</option>
-                                </select>
-                                
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="any_specifics_related_to_capacity_building" class="form-label">Any Specifics related to capacity building</label>
-                                <input type="text" id="any_specifics_related_to_capacity_building" class="form-control" name="any_specifics_related_to_capacity_building">
-                                
-                            </div>
-                            <div class="col-md-6">
-                                <label for="frequency" class="form-label">Frequency/No of trainings</label>
-                                <input type="number" id="frequency" class="form-control" name="frequency">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="frequency" class="form-label">Frequency/No of trainings</label>
-                                <input type="number" id="frequency" class="form-control" name="frequency">
-                            </div>
                             
                         </div>
                         <div class="row g-6 mt-0">
@@ -533,15 +480,6 @@
 
             $('#department').val(department ?? '');
             $('#job_title').val(job_title ?? '');
-        });
-       
-        $('input[name="capacity_building"]').on('change', function () {
-            if ($(this).val() === '1') {
-                $('#extra_select_container').show();
-            } else {
-                $('#extra_select_container').hide();
-                $('#need').val(''); // clear selection if hidden
-            }
         });
          $('#researchForm2').on('submit', function (e) {
             e.preventDefault();
