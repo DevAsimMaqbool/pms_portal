@@ -122,7 +122,7 @@
                             <input type="text" id="job_title" name="job_title" class="form-control" disabled>
                         </div>
 
-                            {{-- <div class="col-md-6">
+                            <div class="col-md-6">
                                 <label for="target_category" class="form-label">Target Category</label>
                                 <select id="target_category" name="target_category" class="form-select" required>
                                     <option value="">Select Target Category</option>
@@ -134,7 +134,7 @@
                                 <label for="target_of_publications" class="form-label">Target of Publications</label>
                                 <input type="text" id="target_of_publications" class="form-control" name="target_of_publications" required>
                                 
-                            </div> --}}
+                            </div>
                             <div class="col-md-6">
                                 <label class="form-label d-block">Capacity building need?</label>
                                 <div>
@@ -166,66 +166,7 @@
                                 <label for="frequency" class="form-label">Frequency/No of trainings</label>
                                 <input type="number" id="frequency" class="form-control" name="frequency">
                             </div>
-                            <div class="col-md-6">
-                                <label for="frequency" class="form-label">Frequency/No of trainings</label>
-                                <input type="number" id="frequency" class="form-control" name="frequency">
-                            </div>
-                            
                         </div>
-                        <div class="row g-6 mt-0">
-                            <div class="col-md-4">
-                                <small class="fw-medium d-block pt-4 mb-4">Scopus</small>
-                                <div class="input-group mb-4">
-                                    <span class="input-group-text">Q1</span>
-                                    <input type="number" class="form-control" name="scopus_q1" id="scopus-q1">
-                                </div>
-                                <div class="input-group mb-4">
-                                    <span class="input-group-text">Q2</span>
-                                    <input type="number" class="form-control" name="scopus_q2" id="scopus-q2">
-                                </div>
-                                <div class="input-group mb-4">
-                                    <span class="input-group-text">Q3</span>
-                                    <input type="number" class="form-control" name="scopus_q3" id="scopus-q3">
-                                </div>
-                                <div class="input-group">
-                                    <span class="input-group-text">Q4</span>
-                                    <input type="number" class="form-control" name="scopus_q4" id="scopus-q4">
-                                </div>
-                            </div>
-                             <div class="col-md-4">
-                                <small class="fw-medium d-block pt-4 mb-4">HEC</small>
-                                <div class="input-group mb-4">
-                                    <span class="input-group-text">W</span>
-                                    <input type="number" class="form-control" name="hec_w" id="hec-w">
-                                </div>
-                                <div class="input-group mb-4">
-                                    <span class="input-group-text">X</span>
-                                    <input type="number" class="form-control" name="hec_x" id="hec-x">
-                                </div>
-                                <div class="input-group">
-                                    <span class="input-group-text">Y</span>
-                                    <input type="number" class="form-control" name="hec_y" id="hec-y">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <small class="fw-medium d-block pt-4 mb-4">Medical</small>
-                                <div class="input-group">
-                                    <span class="input-group-text">Recognized</span>
-                                    <input type="number" class="form-control" name="medical_recognized" id="medical-recognized">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <button type="button" class="btn btn-outline-secondary waves-effect w-100 total-target">Tota 0</button>
-                            </div>
-                              <div class="col-md-6">
-                                <label for="frequency" class="form-label">National</label>
-                                <input type="number" id="frequency" class="form-control" name="frequency">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="frequency" class="form-label">Inter National</label>
-                                <input type="number" id="frequency" class="form-control" name="frequency">
-                            </div>
-                        </div>    
                         <div class="col-4 text-center demo-vertical-spacing">
                             <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                         </div>
@@ -506,24 +447,6 @@
     });
 }
     $(document).ready(function () {
-        function updateTotal() {
-        let ids = [
-            '#scopus-q1', '#scopus-q2', '#scopus-q3', '#scopus-q4',
-            '#hec-w', '#hec-x', '#hec-y',
-            '#medical-recognized'
-        ];
-
-        let total = 0;
-        ids.forEach(id => {
-            total += Number($(id).val()) || 0;
-        });
-
-        $('.total-target').text('Total ' + total);
-    }
-
-    // Trigger on input change
-    $('#scopus-q1, #scopus-q2, #scopus-q3, #scopus-q4, #hec-w, #hec-x, #hec-y, #medical-recognized')
-        .on('input', updateTotal);
          fetchIndicatorForms3();
         // Extra fields for Form 2
          $('#faculty_member').on('change', function () {
