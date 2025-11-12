@@ -1393,8 +1393,8 @@
                                             <td class="align-top pe-6 ps-0 py-6 text-body">
                                             </td>
                                             <td class="px-0 w-px-100">
-                                                <p class="fw-medium mb-2">Underload</p>
-                                                <p class="fw-medium mb-2">Overload</p>
+                                                <p class="fw-medium mb-2">Underload By</p>
+                                                <p class="fw-medium mb-2">Overload By</p>
                                             </td>
                                             <td class="px-0 w-px-100 fw-medium text-heading">
                                                 <p class="fw-medium mb-2">1</p>
