@@ -81,7 +81,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Strength</th>
                                             <th>Respondent</th>
                                             <th>Score</th>
@@ -134,7 +134,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Strength</th>
                                             <th>Respondent</th>
                                             <th>Score</th>
@@ -228,7 +228,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
@@ -278,7 +278,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
@@ -364,7 +364,7 @@
                                     <th>Sr#</th>
                                     <th>Class</th>
                                     <th>Program</th>
-                                    <th>Career</th>
+                                    <th>Career (PG/UG)</th>
                                     <th>Scheduled</th>
                                     <th>Present</th>
                                     <th>Absent</th>
@@ -460,7 +460,7 @@
                                     <th>Sr#</th>
                                     <th>Class</th>
                                     <th>Program</th>
-                                    <th>Career</th>
+                                    <th>Career (PG/UG)</th>
                                     <th>Scheduled</th>
                                     <th>Held</th>
                                     <th>Not Held</th>
@@ -655,7 +655,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Status</th>
                                             <th>Score</th>
                                             <th>Rating</th>
@@ -719,7 +719,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Status</th>
                                             <th>Score</th>
                                             <th>Rating</th>
@@ -825,7 +825,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Status</th>
                                             <th>Score</th>
                                             <th>Rating</th>
@@ -887,7 +887,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Status</th>
                                             <th>Score</th>
                                             <th>Rating</th>
@@ -1045,7 +1045,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Status</th>
                                             <th>Score</th>
                                             <th>Rating</th>
@@ -1107,7 +1107,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Status</th>
                                             <th>Score</th>
                                             <th>Rating</th>
@@ -1558,7 +1558,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Pass %</th>
                                             <th>Failed %</th>
                                             <th>Score</th>
@@ -1614,7 +1614,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Pass %</th>
                                             <th>Failed %</th>
                                             <th>Score</th>
@@ -1711,7 +1711,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Average Student Score</th>
                                             <th>Score</th>
                                             <th>Rating</th>
@@ -1756,7 +1756,7 @@
                                             <th>Sr#</th>
                                             <th>Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Average Student Score</th>
                                             <th>Score</th>
                                             <th>Rating</th>
@@ -2127,7 +2127,7 @@
                                             <th>Achieved</th>
                                             <th>Student Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Internationnaly Co-authored</th>
                                             <th>Score</th>
                                             <th>Rating</th>
@@ -2205,7 +2205,7 @@
                                             <td>X</td>
                                             <td>4</td>
                                             <td>3</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL  2023-2027-BSAI-F23-5A</td>
+                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5A</td>
                                             <td>BSSE</td>
                                             <td>UG</td>
                                             <td>1</td>
@@ -2218,7 +2218,7 @@
                                             <td>W</td>
                                             <td>2</td>
                                             <td>1</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL  2023-2027-BSAI-F23-5C</td>
+                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5C</td>
                                             <td>BSAI</td>
                                             <td>PG</td>
                                             <td>1</td>
@@ -2232,7 +2232,7 @@
                                             <td>Recognized</td>
                                             <td>10</td>
                                             <td>9</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL  2023-2027-BSAI-F23-5B</td>
+                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5B</td>
                                             <td>BSAI</td>
                                             <td>PG</td>
                                             <td>1</td>
@@ -2251,8 +2251,8 @@
                             role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
-                                    
-                                     <thead class="table-primary">
+
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Category</th>
                                             <th>Journal Rank</th>
@@ -2260,7 +2260,7 @@
                                             <th>Achieved</th>
                                             <th>Student Class</th>
                                             <th>Program</th>
-                                            <th>Career</th>
+                                            <th>Career (PG/UG)</th>
                                             <th>Internationnaly Co-authored</th>
                                             <th>Score</th>
                                             <th>Rating</th>
@@ -2338,7 +2338,7 @@
                                             <td>X</td>
                                             <td>2</td>
                                             <td>1</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL  2023-2027-BSAI-F23-5A</td>
+                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5A</td>
                                             <td>BSSE</td>
                                             <td>UG</td>
                                             <td>1</td>
@@ -2351,7 +2351,7 @@
                                             <td>W</td>
                                             <td>4</td>
                                             <td>3</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL  2023-2027-BSAI-F23-5C</td>
+                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5C</td>
                                             <td>BSAI</td>
                                             <td>PG</td>
                                             <td>1</td>
@@ -2365,7 +2365,7 @@
                                             <td>Recognized</td>
                                             <td>10</td>
                                             <td>9</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL  2023-2027-BSAI-F23-5B</td>
+                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5B</td>
                                             <td>BSAI</td>
                                             <td>PG</td>
                                             <td>1</td>
@@ -2456,7 +2456,7 @@
                                             <td><span class="badge bg-label-success me-1">EE</span></td>
                                         </tr>
 
-                                         <tr>
+                                        <tr>
                                             <td>3</td>
                                             <td>Program Accreditation/Compliance Work</td>
                                             <td>
@@ -2495,7 +2495,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       <tr>
+                                        <tr>
                                             <td>1</td>
                                             <td>Cross-departmental Projects</td>
                                             <td>
@@ -2523,7 +2523,7 @@
                                             <td><span class="badge bg-label-success me-1">EE</span></td>
                                         </tr>
 
-                                         <tr>
+                                        <tr>
                                             <td>4</td>
                                             <td>Program Accreditation/Compliance Work</td>
                                             <td>
@@ -2927,7 +2927,7 @@
                                         </td>
                                         <td><span class="badge bg-label-danger me-1">BE</span></td>
                                     </tr>
-                                     <tr>
+                                    <tr>
                                         <td>6</td>
                                         <td>Society Fair</td>
                                         {{-- <td>33</td>
@@ -2937,7 +2937,7 @@
                                         </td>
                                         <td><span class="badge bg-label-danger me-1">BE</span></td>
                                     </tr>
-                            
+
 
                                 </tbody>
                             </table>
@@ -3070,7 +3070,7 @@
                                     <th>Scholar Name</th>
                                     <th>Class</th>
                                     <th>Program</th>
-                                    <th>Career</th>
+                                    <th>Career (PG/UG)</th>
                                     <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
