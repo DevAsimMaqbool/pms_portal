@@ -48,9 +48,7 @@
                 <div class="tab-content">
                     {{-- ================= FORM 1 ================= --}}
                     @if(auth()->user()->hasRole(['HOD', 'Teacher']))
-                    
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                    <h5 class="">Commercial Consultancy/Research Income</h5>
                           <form id="researchForm1" enctype="multipart/form-data"class="row">
                                 @csrf
                                 <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
@@ -59,7 +57,10 @@
                                 <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER" required>
                                 
                                 <div class="row g-6">
-                                    
+                                    <div class="col-md-6">
+                                        <label for="no_of_consultancies_done" class="form-label">No of consultancies done</label>
+                                        <input type="text" id="no_of_consultancies_done" name="no_of_consultancies_done" class="form-control" >
+                                    </div>
 
                                     <div class="col-md-6">
                                         <label for="title_of_consultancy" class="form-label">Title of consultancy</label>
@@ -75,18 +76,9 @@
                                         <label for="name_of_client_organization" class="form-label">Name of client organization</label>
                                         <input type="text" id="name_of_client_organization" name="name_of_client_organization" class="form-control" >
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="consultancy_fee" class="form-label">Consultancy fee</label>
-                                        <input type="text" id="consultancy_fee" name="consultancy_fee" class="form-control" >
-                                    </div>
-                                    <div class="col-md-12">
-                        
-                                        <label for="formFile" class="form-label">Attachments</label>
-                                        <input class="form-control" type="file" id="formFile">
-                                    </div>
 
                                     {{-- Industrial Projects Group --}}
-                                    {{-- <div id="industrialProjectsWrapper">
+                                    <div id="industrialProjectsWrapper">
                                         <div class="industrial-project-group border p-3 mt-3 rounded">
                                             <div class="row g-3">
                                                 <div class="col-md-6">
@@ -125,7 +117,7 @@
 
                                     <div class="mt-3">
                                         <button type="button" id="addProject" class="btn btn-primary waves-effect waves-light"><i class="icon-base ti tabler-plus me-1"></i><span class="align-middle">Add</span></button>
-                                    </div> --}}
+                                    </div>
 
 
 
@@ -301,8 +293,52 @@
  @if(auth()->user()->hasRole(['HOD','Teacher']))
 <script>
 $(document).ready(function () {
+    let projectIndex = 1;
 
-   
+    $('#addProject').on('click', function () {
+        let newGroup = `
+            <div class="industrial-project-group border p-3 mt-3 rounded">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">No of industrial projects</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][no_of_projects]" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Name of industrial projects</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][name_of_project]" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Name of contracting industry</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][name_of_contracting_industry]" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Total duration of the project</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][total_duration_of_project]" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Estimated project cost</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][estimate_cost_project]" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Estimated completion month/year</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][completion_year]" class="form-control">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect removeProject"><i class="icon-base ti tabler-x me-1"></i> <span class="align-middle">Delete</span></button>
+            </div>
+        `;
+        $('#industrialProjectsWrapper').append(newGroup);
+        projectIndex++;
+    });
+
+    $(document).on('click', '.removeProject', function () {
+        $(this).closest('.industrial-project-group').remove();
+    });
     $('#researchForm1').on('submit', function (e) {
             e.preventDefault();
             let form = $(this);
