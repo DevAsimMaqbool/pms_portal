@@ -48,8 +48,6 @@
                 <div class="tab-content">
                      @if(auth()->user()->hasRole(['HOD', 'Teacher']))
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                       <h5 class="mb-1">Patents/Intellectual Property (IPR)</h5>
-                       <h5 class="text-primary">Target 5</h5>
                             <form id="researchForm1" enctype="multipart/form-data"class="row">
                                 @csrf
                                 <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
@@ -57,42 +55,21 @@
                                 <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER" required>
                                 
-                                <div class="row g-6 mt-0">
+                                <div class="row g-6">
                                     <div class="col-md-6">
-                                        <label for="name_of_ip_filed" class="form-label">Title of IP/Patents</label>
-                                        <input type="text" id="name_of_ip_filed" name="name_of_ip_filed" class="form-control" >
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Type</label>
-                                        <select id="patents_ip_type" name="patents_ip_type" class="form-select" required="">
-                                            <option value="">-- Select --</option>
-                                            <option value="copyright">Copyright</option>
-                                            <option value="Trademark">Trademark</option>
-                                            <option value="Design">Design</option>
-                                            <option value="Other">Other</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6" id="other-type-field" style="display:none;">
-                                        <label class="form-label">Please specify other type</label>
-                                        <input type="text" name="other_detail" id="other_detail" class="form-control" placeholder="Enter details">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="no_of_ip_disclosed" class="form-label">Filing / Registration #</label>
-                                        <input type="number" id="no_of_ip_disclosed" name="no_of_ip_disclosed" class="form-control" >
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="no_of_ip_disclosed" class="form-label">Area og Application</label>
+                                        <label for="no_of_ip_disclosed" class="form-label">No of IP disclosed</label>
                                         <input type="text" id="no_of_ip_disclosed" name="no_of_ip_disclosed" class="form-control" >
                                     </div>
+
                                     <div class="col-md-6">
-                                        <label for="no_of_ip_filed" class="form-label">Date of filing Registration</label>
-                                        <input type="date" id="no_of_ip_filed" name="no_of_ip_filed" class="form-control" >
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="no_of_ip_filed" class="form-label">Supporting docs as attachment</label>
-                                        <input type="file" id="no_of_ip_filed" name="no_of_ip_filed" class="form-control" >
+                                        <label for="no_of_ip_filed" class="form-label">No of IP filled</label>
+                                        <input type="text" id="no_of_ip_filed" name="no_of_ip_filed" class="form-control" >
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <label for="name_of_ip_filed" class="form-label">Name of IP filled</label>
+                                        <input type="text" id="name_of_ip_filed" name="name_of_ip_filed" class="form-control" >
+                                    </div>
 
                                 
                                         </div>
@@ -267,16 +244,6 @@
 @if(auth()->user()->hasRole(['HOD','Teacher']))
     <script>
     $(document).ready(function () {
-        $('#patents_ip_type').on('change', function () {
-            var selectedValue = $(this).val();
-            if (selectedValue === 'Other') {
-                $('#other-type-field').show();
-                $('#other_detail').attr('required', true);
-            } else {
-                $('#other-type-field').hide();
-                $('#other_detail').removeAttr('required').val('');
-            }
-        });
        
         // Extra fields for Form 1
 
