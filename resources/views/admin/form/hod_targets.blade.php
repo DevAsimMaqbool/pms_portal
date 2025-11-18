@@ -23,26 +23,34 @@
                     <div class="col-md-4">
                         <label class="form-label" for="indicator">Select Indicator</label>
                         <select id="indicator" class="select2 form-select" data-allow-clear="true" name="indicator"
-                            required>
-                            <option value="asim">ASim</option>
-                            <option value="asim">ASim</option>
-                            <option value="asim">ASim</option>
+                            multiple required>
+                            <option value="135"># of Grants Won</option>
+                            <option value="136">Multidisciplinary Projects</option>
+                            <option value="137">Commercial Consultancy/Research Income</option>
+                            <option value="138">Patents/Intellectual Property (IPR)</option>
+                            <option value="198">Industrial Projects</option>
+                            <option value="199">Products Delivered to Industry</option>
                         </select>
                         <div class="invalid-feedback" id="indicatorError"></div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label class="form-label" for="target">Target</label>
-                        <input type="text" id="target" name="target" class="form-control" placeholder="1">
+                        <input type="number" id="target" name="target" class="form-control" placeholder="1">
                         <div class="invalid-feedback" id="targetError"></div>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label" for="multicol-language">Language</label>
-                        <select id="multicol-language" class="select2 form-select" multiple>
-                            <option value="en">English</option>
-                            <option value="fr">French</option>
-                            <option value="de">German</option>
-                            <option value="pt">Portuguese</option>
-                        </select>
+                    <div class="col-md-6">
+                        <label class="form-label" for="multicol-language">Name of Faculty Member</label>
+                         <select  name="faculty_member_id" id="select2Success" class="select2 form-select"  multiple required>
+                                <option value="">-- Select Faculty Member --</option>
+                                @foreach($facultyMembers as $member)
+                                    <option 
+                                        value="{{ $member->id }}" 
+                                        data-department="{{ $member->department }}" 
+                                        data-job_title="{{ $member->job_title }}">
+                                        {{ $member->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                     </div>
                 </div>
                 <div class="pt-6">
