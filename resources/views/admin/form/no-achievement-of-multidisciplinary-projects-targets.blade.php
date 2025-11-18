@@ -48,6 +48,8 @@
                 <div class="tab-content">
                      @if(auth()->user()->hasRole(['HOD', 'Teacher']))
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                    <h5 class="mb-1">Multidisciplinary Projects</h5>
+                    <h5 class="text-primary">Target 5</h5>
                             <form id="researchForm1" enctype="multipart/form-data"class="row">
                                 @csrf
                                 <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
@@ -55,34 +57,34 @@
                                 <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER" required>
                                 
-                                <div class="row g-6">
+                                <div class="row g-6 mt-0">
                                     <div class="col-md-6">
                                         <label for="name_of_project_initiated" class="form-label">Project Name</label>
                                         <input type="text" id="name_of_project_initiated" name="name_of_project_initiated" class="form-control" >
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="other_disciplines_engaged" class="form-label">Other disciplines engaged</label>
+                                        <label for="other_disciplines_engaged" class="form-label">Other Disciplines Engaged</label>
                                         <input type="text" id="other_disciplines_engaged" name="other_disciplines_engaged" class="form-control" >
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="partner_industry" class="form-label">Target/partner industry</label>
+                                        <label for="partner_industry" class="form-label">Target/Partner Industry</label>
                                         <input type="text" id="partner_industry" name="partner_industry" class="form-control" >
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="identified_public_sector_entity" class="form-label">Identified public sector entity</label>
+                                        <label for="identified_public_sector_entity" class="form-label">Identified Public Sector Entity</label>
                                         <input type="text" id="identified_public_sector_entity" name="identified_public_sector_entity" class="form-control" >
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="completion_time_of_project" class="form-label">Target completion time of the project</label>
+                                        <label for="completion_time_of_project" class="form-label">Target Completion Time Of The Project</label>
                                         <input type="text" id="completion_time_of_project" name="completion_time_of_project" class="form-control" >
                                     </div>
 
                                     <div class="col-md-6">
-                                            <label class="form-label d-block">Prototype/product developed</label>
+                                            <label class="form-label d-block">Prototype/Product Developed</label>
                                             <div>
                                                 <input type="radio" name="product_developed" id="product_developed_yes" value="YES"> 
                                                 <label for="product_developed_yes">Yes</label>
@@ -96,7 +98,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                            <label class="form-label d-block">Third party validation of the product</label>
+                                            <label class="form-label d-block">Third Party Validation Of The Product</label>
                                             <div>
                                                 <input type="radio" name="third_party_validation" id="third_party_validation_yes" value="YES"> 
                                                 <label for="third_party_validation_yes">Yes</label>
@@ -110,7 +112,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                            <label class="form-label d-block">IP claim?</label>
+                                            <label class="form-label d-block">IP Claim?</label>
                                             <div>
                                                 <input type="radio" name="ip_claim" id="ip_claim_yes" value="YES"> 
                                                 <label for="ip_claim_yes">Yes</label>
@@ -121,7 +123,7 @@
                                     </div>
 
                                     <div class="col-md-6" id="extra_select_container" style="display: none;">
-                                            <label for="provide_details" class="form-label">In case yes, provide details</label>
+                                            <label for="provide_details" class="form-label">In Case Yes, Provide Details</label>
                                             <input type="text" id="provide_details" name="provide_details" class="form-control" >
                                     </div>
                                 </div>

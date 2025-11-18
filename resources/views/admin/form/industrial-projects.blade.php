@@ -19,83 +19,109 @@
         <div class="card">
             <div class="card-datatable table-responsive card-body">
                 @if(auth()->user()->hasRole(['Dean','ORIC']))
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs mb-3" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Intellectual Properties</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
-                        </li>
-                    </ul>
-                    @endif
-                 @if(auth()->user()->hasRole(['HOD']))
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs mb-3" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Intellectual Properties</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
-                        </li>
-                    </ul>
-                 @endif
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs mb-3" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Commercial Gains / Consultancy/Research Income</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
+                    </li>
+                </ul>
+                @endif
+                @if(auth()->user()->hasRole(['HOD']))
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs mb-3" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Commercial Gains / Consultancy/Research Income</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
+                    </li>
+                </ul>
+                @endif
 
-                 <!-- Tab panes -->
+                <!-- Tab panes -->
                 <div class="tab-content">
-                     @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+                    {{-- ================= FORM 1 ================= --}}
+                    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                       <h5 class="mb-1">Patents/Intellectual Property (IPR)</h5>
-                       <h5 class="text-primary">Target 5</h5>
-                            <form id="researchForm1" enctype="multipart/form-data"class="row">
+                          <form id="researchForm1" enctype="multipart/form-data"class="row">
                                 @csrf
                                 <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
                                 <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
                                 <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER" required>
                                 
-                                <div class="row g-6 mt-0">
+                                <div class="row g-6">
                                     <div class="col-md-6">
-                                        <label for="name_of_ip_filed" class="form-label">Title Of IP/Patents</label>
-                                        <input type="text" id="name_of_ip_filed" name="name_of_ip_filed" class="form-control" >
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Type</label>
-                                        <select id="patents_ip_type" name="patents_ip_type" class="form-select" required="">
-                                            <option value="">-- Select --</option>
-                                            <option value="copyright">Copyright</option>
-                                            <option value="Trademark">Trademark</option>
-                                            <option value="Design">Design</option>
-                                            <option value="Other">Other</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6" id="other-type-field" style="display:none;">
-                                        <label class="form-label">Please Specify Other Type</label>
-                                        <input type="text" name="other_detail" id="other_detail" class="form-control" placeholder="Enter details">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="no_of_ip_disclosed" class="form-label">Filing / Registration #</label>
-                                        <input type="number" id="no_of_ip_disclosed" name="no_of_ip_disclosed" class="form-control" >
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="no_of_ip_disclosed" class="form-label">Area Of Application</label>
-                                        <input type="text" id="no_of_ip_disclosed" name="no_of_ip_disclosed" class="form-control" >
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="no_of_ip_filed" class="form-label">Date Of Filing Registration</label>
-                                        <input type="date" id="no_of_ip_filed" name="no_of_ip_filed" class="form-control" >
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="no_of_ip_filed" class="form-label">Supporting Docs As Attachment</label>
-                                        <input type="file" id="no_of_ip_filed" name="no_of_ip_filed" class="form-control" >
+                                        <label for="no_of_consultancies_done" class="form-label">No of consultancies done</label>
+                                        <input type="text" id="no_of_consultancies_done" name="no_of_consultancies_done" class="form-control" >
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <label for="title_of_consultancy" class="form-label">Title of consultancy</label>
+                                        <input type="text" id="title_of_consultancy" name="title_of_consultancy" class="form-control" >
+                                    </div>
 
-                                
+                                    <div class="col-md-6">
+                                        <label for="duration_of_consultancy" class="form-label">Duration of consultancy</label>
+                                        <input type="text" id="duration_of_consultancy" name="duration_of_consultancy" class="form-control" >
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="name_of_client_organization" class="form-label">Name of client organization</label>
+                                        <input type="text" id="name_of_client_organization" name="name_of_client_organization" class="form-control" >
+                                    </div>
+
+                                    {{-- Industrial Projects Group --}}
+                                    <div id="industrialProjectsWrapper">
+                                        <div class="industrial-project-group border p-3 mt-3 rounded">
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">No of industrial projects</label>
+                                                    <input type="text" name="industrial_projects[0][no_of_projects]" class="form-control">
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Name of industrial projects</label>
+                                                    <input type="text" name="industrial_projects[0][name_of_project]" class="form-control">
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Name of contracting industry</label>
+                                                    <input type="text" name="industrial_projects[0][name_of_contracting_industry]" class="form-control">
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Total duration of the project</label>
+                                                    <input type="text" name="industrial_projects[0][total_duration_of_project]" class="form-control">
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Estimated project cost</label>
+                                                    <input type="text" name="industrial_projects[0][estimate_cost_project]" class="form-control">
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Estimated completion month/year</label>
+                                                    <input type="text" name="industrial_projects[0][completion_year]" class="form-control">
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect removeProject"><i class="icon-base ti tabler-x me-1"></i> <span class="align-middle">Delete</span></button>
                                         </div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <button type="button" id="addProject" class="btn btn-primary waves-effect waves-light"><i class="icon-base ti tabler-plus me-1"></i><span class="align-middle">Add</span></button>
+                                    </div>
+
+
+
+                                </div>
                                 <div class="col-4 text-center demo-vertical-spacing">
                                     <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                                 </div>
@@ -104,103 +130,103 @@
                     @endif
                     @if(auth()->user()->hasRole(['HOD']))
                     <div class="tab-pane fade" id="form2" role="tabpanel">
-                        <form id="researchForm2" enctype="multipart/form-data"class="row">
-                            @csrf
-                            <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
-                            <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
-                            <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
-                            <input type="hidden"  id="form_status" name="form_status" value="HOD" required>
-                            
-                          <div class="row g-6">
-                                <div class="col-md-6">
-                                    <label for="target_of_ip_disclosures" class="form-label">Target of ip disclosures</label>
-                                    <input type="text" id="target_of_ip_disclosures" name="target_of_ip_disclosures" class="form-control" >
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="target_of_ip_filed" class="form-label">Target of ip filled</label>
-                                    <input type="text" id="target_of_ip_filed" name="target_of_ip_filed" class="form-control" >
-                                </div>
-
-                            
-                            </div>
-                            <div class="col-4 text-center demo-vertical-spacing">
-                                <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
-                            </div>
-                        </form>
-                    </div> 
-                    <div class="tab-pane fade" id="form3" role="tabpanel">
-                        @if(auth()->user()->hasRole(['HOD']))
-                                    <div class="d-flex">
-                                        <select id="bulkAction" class="form-select w-auto me-2">
-                                            <option value="">-- Select Action --</option>
-                                            <option value="2">Verified</option>
-                                            <option value="1">UnVerified</option>
-                                        </select>
-                                        <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                            <form id="researchForm2" enctype="multipart/form-data"class="row">
+                                @csrf
+                                <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
+                                <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
+                                <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
+                                <input type="hidden"  id="form_status" name="form_status" value="HOD" required>
+                                
+                                <div class="row g-6">
+                                    <div class="col-md-6">
+                                        <label for="target_of_projects" class="form-label">Target of consultancy projects</label>
+                                        <input type="text" id="target_of_projects" name="target_of_consultancy_projects" class="form-control" >
                                     </div>
-                        @endif
-                        <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" id="selectAll"></th>
-                                        <th>#</th>
-                                        <th>Created By</th>
-                                        <th>No IP Disclosed</th>
-                                        <th>Created Date</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div> 
-                    @endif    
+
+                                    <div class="col-md-6">
+                                        <label for="target_of_faculties" class="form-label">Target of industrial projects</label>
+                                        <input type="text" id="target_of_faculties" name="target_of_industrial_projects" class="form-control" >
+                                    </div>
+
+                                
+                                </div>
+                                <div class="col-4 text-center demo-vertical-spacing">
+                                    <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
+                                </div>
+                            </form>
+                    </div>
+                      <div class="tab-pane fade" id="form3" role="tabpanel">
+                            @if(auth()->user()->hasRole(['HOD']))
+                                        <div class="d-flex">
+                                            <select id="bulkAction" class="form-select w-auto me-2">
+                                                <option value="">-- Select Action --</option>
+                                                <option value="2">Verified</option>
+                                                <option value="1">UnVerified</option>
+                                            </select>
+                                            <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                                        </div>
+                            @endif
+                            <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="selectAll"></th>
+                                            <th>#</th>
+                                            <th>Created By</th>
+                                            <th>Title Consultancy</th>
+                                            <th>Created Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                    @endif
                     @if(auth()->user()->hasRole(['Dean','ORIC']))
-                 <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                    <div class="d-flex">
-                        <select id="bulkAction" class="form-select w-auto me-2">
-                            <option value="">-- Select Action --</option>
-                            <option value="3">Review</option>
-                            <option value="2">UnReview</option>
-                        </select>
-                        <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                    </div>
-                   <table id="complaintTable1" class="table table-bordered table-striped" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="selectAll"></th>
-                                <th>#</th>
-                                <th>Created By</th>
-                                <th>No IP Disclosed</th>
-                                <th>Created Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                    </table>
-                 </div>
-                 <div class="tab-pane fade" id="form2" role="tabpanel">
-                  <div class="d-flex">
-                        <select id="bulkAction" class="form-select w-auto me-2">
-                            <option value="">-- Select Action --</option>
-                            <option value="2">Verified</option>
-                            <option value="1">UnVerified</option>
-                        </select>
-                        <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                    </div>
-                     <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="selectAll"></th>
-                                <th>#</th>
-                                <th>Created By</th>
-                                <th>Target IP Disclosed</th>
-                                <th>Created Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                    </table>
-                 </div>
-                 @endif   
-                  @if(auth()->user()->hasRole(['Human Resources']))
+                            <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                                <div class="d-flex">
+                                    <select id="bulkAction" class="form-select w-auto me-2">
+                                        <option value="">-- Select Action --</option>
+                                        <option value="3">Review</option>
+                                        <option value="2">UnReview</option>
+                                    </select>
+                                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                                </div>
+                            <table id="complaintTable1" class="table table-bordered table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="selectAll"></th>
+                                            <th>#</th>
+                                            <th>Created By</th>
+                                            <th>Title Consultancy</th>
+                                            <th>Created Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="form2" role="tabpanel">
+                            <div class="d-flex">
+                                    <select id="bulkAction" class="form-select w-auto me-2">
+                                        <option value="">-- Select Action --</option>
+                                        <option value="2">Verified</option>
+                                        <option value="1">UnVerified</option>
+                                    </select>
+                                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                                </div>
+                                <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="selectAll"></th>
+                                            <th>#</th>
+                                            <th>Created By</th>
+                                            <th>Target of consultancy projects</th>
+                                            <th>Created Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            @endif
+                             @if(auth()->user()->hasRole(['Human Resources']))
                    <div>
                    <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
                         <thead>
@@ -208,14 +234,14 @@
                                 <th><input type="checkbox" id="selectAll"></th>
                                 <th>#</th>
                                 <th>Created By</th>
-                                <th>Target IP Disclosed</th>
+                                <th>Target of consultancy projects</th>
                                 <th>Created Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                     </table></div>
                  @endif
-                </div>
+                </div> 
             </div>
         </div>
          <!-- Modal -->
@@ -260,38 +286,72 @@
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
      <script>
-    window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+        window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
     </script>
 @endpush
 @push('script')
-@if(auth()->user()->hasRole(['HOD','Teacher']))
-    <script>
-    $(document).ready(function () {
-        $('#patents_ip_type').on('change', function () {
-            var selectedValue = $(this).val();
-            if (selectedValue === 'Other') {
-                $('#other-type-field').show();
-                $('#other_detail').attr('required', true);
-            } else {
-                $('#other-type-field').hide();
-                $('#other_detail').removeAttr('required').val('');
-            }
-        });
-       
-        // Extra fields for Form 1
+ @if(auth()->user()->hasRole(['HOD','Teacher']))
+<script>
+$(document).ready(function () {
+    let projectIndex = 1;
 
-        $('#researchForm1').on('submit', function (e) {
+    $('#addProject').on('click', function () {
+        let newGroup = `
+            <div class="industrial-project-group border p-3 mt-3 rounded">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">No of industrial projects</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][no_of_projects]" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Name of industrial projects</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][name_of_project]" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Name of contracting industry</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][name_of_contracting_industry]" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Total duration of the project</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][total_duration_of_project]" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Estimated project cost</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][estimate_cost_project]" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Estimated completion month/year</label>
+                        <input type="text" name="industrial_projects[${projectIndex}][completion_year]" class="form-control">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect removeProject"><i class="icon-base ti tabler-x me-1"></i> <span class="align-middle">Delete</span></button>
+            </div>
+        `;
+        $('#industrialProjectsWrapper').append(newGroup);
+        projectIndex++;
+    });
+
+    $(document).on('click', '.removeProject', function () {
+        $(this).closest('.industrial-project-group').remove();
+    });
+    $('#researchForm1').on('submit', function (e) {
             e.preventDefault();
             let form = $(this);
             let formData = new FormData(this);
 
             $.ajax({
-                url: "{{ route('intellectual-properties.store') }}",
+                url: "{{ route('counsultancy.store') }}",
                 type: "POST",
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: function (response) {
+                    alert(response)
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                     form[0].reset();
@@ -308,7 +368,9 @@
 
                             // Loop through all validation errors
                             $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
+                                 let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                fieldName = fieldName.replace('[]]', ']');
+                                let input = form.find('[name="' + fieldName + '"], [name="' + field + '"]');
 
                                 if (input.length) {
                                     input.addClass('is-invalid');
@@ -324,14 +386,14 @@
                 }
             });
         });
-    });
-    </script>
-    @endif
-    @if(auth()->user()->hasRole(['HOD']))
+});
+</script>
+@endif
+ @if(auth()->user()->hasRole(['HOD']))
     <script>
-    function fetchIndicatorForms3() {
+        function fetchIndicatorForms3() {
     $.ajax({
-        url: "{{ route('intellectual-properties.index') }}",
+        url: "{{ route('counsultancy.index') }}",
         method: "GET",
          data: {
             status: "HOD" // you can send more values
@@ -351,7 +413,7 @@
                     `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
                     i + 1,
                     form.creator ? form.creator.name : 'N/A',
-                    form.no_of_ip_disclosed || 'N/A',
+                    form.title_of_consultancy || 'N/A',
                     createdAt,
                     `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                 ];
@@ -364,7 +426,7 @@
                         { title: "<input type='checkbox' id='selectAll'>" },
                         { title: "#" },
                         { title: "Created By" },
-                        { title: "No IP Disclosed" },
+                        { title: "Title Consultancy" },
                         { title: "Created Date" },
                         { title: "Actions" }
                     ]
@@ -380,15 +442,16 @@
     });
 }
     $(document).ready(function () {
-        fetchIndicatorForms3();
-        // Extra fields for Form 2
+         fetchIndicatorForms3();
+       
+       
          $('#researchForm2').on('submit', function (e) {
             e.preventDefault();
             let form = $(this);
             let formData = new FormData(this);
 
             $.ajax({
-                url: "{{ route('intellectual-properties.store') }}",
+                url: "{{ route('counsultancy.store') }}",
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -426,7 +489,8 @@
                 }
             });
         });
-        $(document).on('click', '.view-form-btn', function() {
+
+         $(document).on('click', '.view-form-btn', function() {
                 const form = $(this).data('form');
                 $('#modalExtraFields').find('.optional-field').remove();
 
@@ -472,25 +536,49 @@
                     // update the label text
                     $('label[for="approveCheckbox"]').text(statusLabel);
                 }
-                if (form.no_of_ip_disclosed) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>No of ip disclosed</th><td>${form.no_of_ip_disclosed}</td></tr>`);
-                }
-                
-                if (form.no_of_ip_filed) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>No of ip filed</th><td>${form.no_of_ip_filed}</td></tr>`);
-                }
-                if (form.name_of_ip_filed) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Name of ip filed</th><td>${form.name_of_ip_filed}</td></tr>`);
-                }
-                if (form.target_of_ip_disclosures) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Target of ip disclosures</th><td>${form.target_of_ip_disclosures}</td></tr>`);
-                }
-                 if (form.target_of_ip_filed) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Target of ip filed</th><td>${form.target_of_ip_filed}</td></tr>`);
-                }
+                 
+                    if (form.no_of_consultancies_done) {
+                            $('#modalExtraFields').append(`<tr class="optional-field"><th>No of consultancies done</th><td>${form.no_of_consultancies_done}</td></tr>`);
+                    }
+                    if (form.title_of_consultancy) {
+                            $('#modalExtraFields').append(`<tr class="optional-field"><th>Title of consultancy</th><td>${form.title_of_consultancy}</td></tr>`);
+                    }
+                    if (form.duration_of_consultancy) {
+                            $('#modalExtraFields').append(`<tr class="optional-field"><th>Duration of consultancy</th><td>${form.duration_of_consultancy}</td></tr>`);
+                    }
+                    if (form.name_of_client_organization) {
+                            $('#modalExtraFields').append(`<tr class="optional-field"><th>Name of client organization</th><td>${form.name_of_client_organization}</td></tr>`);
+                    }
+                    // ✅ append projects dynamically
+                    if (form.projects && form.projects.length > 0) {
+             
+                        form.projects.forEach((project, index) => {
+                            $('#modalExtraFields').append(`
+                                <tr class="optional-field">
+                                    <th>Project ${index + 1}</th>
+                                    <td>
+                                        <strong>No:</strong> ${project.no_of_projects || 'N/A'}<br>
+                                        <strong>Name:</strong> ${project.name_of_project || 'N/A'}<br>
+                                        <strong>Industry:</strong> ${project.name_of_contracting_industry || 'N/A'}<br>
+                                        <strong>Duration:</strong> ${project.total_duration_of_project || 'N/A'}<br>
+                                        <strong>Cost:</strong> ${project.estimate_cost_project || 'N/A'}<br>
+                                        <strong>Completion Year:</strong> ${project.completion_year || 'N/A'}
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Projects</th>
+                                <td>No projects available</td>
+                            </tr>
+                        `);
+                    }
+               
                 $('#viewFormModal').modal('show');
             });
-             $(document).on('change', '#approveCheckbox', function () {
+                 $(document).on('change', '#approveCheckbox', function () {
                 let id = $(this).data('id');
                 let table_status = $(this).data('table_status');
                 let status;
@@ -499,7 +587,7 @@
                 }
 
                 $.ajax({
-                    url: `/intellectual-properties/${id}`,
+                    url: `/counsultancy/${id}`,
                     type: 'POST',
                     data: {
                         _method: 'PUT',
@@ -526,7 +614,7 @@
 <script>
 function fetchIndicatorForms() {
     $.ajax({
-        url: "{{ route('intellectual-properties.index') }}",
+        url: "{{ route('counsultancy.index') }}",
         method: "GET",
          data: {
             status: "HOD" // you can send more values
@@ -546,7 +634,7 @@ function fetchIndicatorForms() {
                     `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
                     i + 1,
                     form.creator ? form.creator.name : 'N/A',
-                    form.target_of_ip_disclosures  || 'N/A',
+                    form.target_of_consultancy_projects || 'N/A',
                     createdAt,
                     `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                 ];
@@ -559,7 +647,7 @@ function fetchIndicatorForms() {
                         { title: "<input type='checkbox' id='selectAll'>" },
                         { title: "#" },
                         { title: "Created By" },
-                        { title: "Target IP Disclosed" },
+                        { title: "Target of consultancy projects" },
                         { title: "Created Date" },
                         { title: "Actions" }
                     ]
@@ -576,7 +664,7 @@ function fetchIndicatorForms() {
 }
 function fetchIndicatorForms1() {
     $.ajax({
-        url: "{{ route('intellectual-properties.index') }}",
+        url: "{{ route('counsultancy.index') }}",
         method: "GET",
          data: {
             status: "RESEARCHER" // you can send more values
@@ -596,7 +684,7 @@ function fetchIndicatorForms1() {
                     `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
                     i + 1,
                     form.creator ? form.creator.name : 'N/A',
-                    form.no_of_ip_disclosed || 'N/A',
+                    form.title_of_consultancy || 'N/A',
                     createdAt,
                     `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                 ];
@@ -609,7 +697,7 @@ function fetchIndicatorForms1() {
                         { title: "<input type='checkbox' id='selectAll'>" },
                         { title: "#" },
                         { title: "Created By" },
-                        { title: "No IP Disclosed" },
+                        { title: "Title consultancy" },
                         { title: "Created Date" },
                         { title: "Actions" }
                     ]
@@ -641,8 +729,6 @@ function fetchIndicatorForms1() {
         $('#modalExtraFields').find('.optional-field').remove();
 
         $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
-        $('#modalTargetCategory').text(form.target_category || 'N/A');
-        $('#modalTargetOfpublications').text(form.target_of_publications || 'N/A');
         $('#modalStatus').text(form.status || 'Pending');
         $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
         if (window.currentUserRole === 'Dean') {
@@ -727,28 +813,58 @@ function fetchIndicatorForms1() {
             // update the label text
             $('label[for="approveCheckbox"]').text(statusLabel);
         }
-                if(form.form_status=='HOD'){
-                    if (form.target_of_ip_disclosures) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target of ip disclosures</th><td>${form.target_of_ip_disclosures}</td></tr>`);
+        
+         if(form.form_status=='RESEARCHER'){
+                     if (form.no_of_consultancies_done) {
+                            $('#modalExtraFields').append(`<tr class="optional-field"><th>No of consultancies done</th><td>${form.no_of_consultancies_done}</td></tr>`);
                     }
-                    if (form.target_of_ip_filed) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target of ip filed</th><td>${form.target_of_ip_filed}</td></tr>`);
+                    if (form.title_of_consultancy) {
+                            $('#modalExtraFields').append(`<tr class="optional-field"><th>Title of consultancy</th><td>${form.title_of_consultancy}</td></tr>`);
                     }
+                    if (form.duration_of_consultancy) {
+                            $('#modalExtraFields').append(`<tr class="optional-field"><th>Duration of consultancy</th><td>${form.duration_of_consultancy}</td></tr>`);
+                    }
+                    if (form.name_of_client_organization) {
+                            $('#modalExtraFields').append(`<tr class="optional-field"><th>Name of client organization</th><td>${form.name_of_client_organization}</td></tr>`);
+                    }
+                    // ✅ append projects dynamically
+                    if (form.projects && form.projects.length > 0) {
+             
+                        form.projects.forEach((project, index) => {
+                            $('#modalExtraFields').append(`
+                                <tr class="optional-field">
+                                    <th>Project ${index + 1}</th>
+                                    <td>
+                                        <strong>No:</strong> ${project.no_of_projects || 'N/A'}<br>
+                                        <strong>Name:</strong> ${project.name_of_project || 'N/A'}<br>
+                                        <strong>Industry:</strong> ${project.name_of_contracting_industry || 'N/A'}<br>
+                                        <strong>Duration:</strong> ${project.total_duration_of_project || 'N/A'}<br>
+                                        <strong>Cost:</strong> ${project.estimate_cost_project || 'N/A'}<br>
+                                        <strong>Completion Year:</strong> ${project.completion_year || 'N/A'}
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Projects</th>
+                                <td>No projects available</td>
+                            </tr>
+                        `);
+                    }
+         } if(form.form_status=='HOD'){
+                 if (form.target_of_consultancy_projects) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target of consultancy projects</th><td>${form.target_of_consultancy_projects}</td></tr>`);
                 }
-
-                if(form.form_status=='RESEARCHER'){
-                    if (form.no_of_ip_disclosed) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>No of ip disclosed</th><td>${form.no_of_ip_disclosed}</td></tr>`);
-                    }
-                    
-                    if (form.no_of_ip_filed) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>No of ip filed</th><td>${form.no_of_ip_filed}</td></tr>`);
-                    }
-                    if (form.name_of_ip_filed) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Name of ip filed</th><td>${form.name_of_ip_filed}</td></tr>`);
-                    }
+                if (form.target_of_industrial_projects) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target of industrial projects</th><td>${form.target_of_industrial_projects}</td></tr>`);
                 }
+         }
+      
 
+
+        
         $('#viewFormModal').modal('show');
     });
        
@@ -763,7 +879,7 @@ function fetchIndicatorForms1() {
                        status = $(this).is(':checked') ? 2 : 1;
                     }
                 }
-                 if (window.currentUserRole === "ORIC"){
+                if (window.currentUserRole === "ORIC"){
                     if(table_status=="RESEARCHER"){
                        status = $(this).is(':checked') ? 4 : 3;
                     }if(table_status=="HOD"){
@@ -777,7 +893,7 @@ function fetchIndicatorForms1() {
                 }
 
                 $.ajax({
-                    url: `/intellectual-properties/${id}`,
+                    url: `/counsultancy/${id}`,
                     type: 'POST',
                     data: {
                         _method: 'PUT',

@@ -33,7 +33,7 @@
                         <div id="grant-details-container" >
                             <div class="grant-group row g-3 mb-3">
                                 <div class="col-md-4">
-                                    <label class="form-label">Name Of Grant</label>
+                                    <label class="form-label">Name of Grant</label>
                                     <input type="text" name="grants[0][name]" class="form-control" required>
                                 </div>
                                 <div class="col-md-4">
@@ -61,7 +61,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4 proof-container" style="display:none;">
-                                    <label class="form-label proof-label">Proof Of Submission</label>
+                                    <label class="form-label proof-label">Proof of Submission</label>
                                     <input type="file" name="grants[0][proof]" class="form-control">
                                 </div>
                                 {{-- <div class="col-md-2 d-flex align-items-end">
@@ -108,7 +108,7 @@ $(document).ready(function () {
         <div class="grant-group row g-3 mb-3">
         <hr>
             <div class="col-md-4">
-                <label class="form-label">Name Of Grant</label>
+                <label class="form-label">Name of Grant</label>
                 <input type="text" name="grants[${grantIndex}][name]" class="form-control" required>
             </div>
             <div class="col-md-4">
@@ -136,7 +136,7 @@ $(document).ready(function () {
                 </select>
             </div>
             <div class="col-md-4 proof-container" style="display:none;">
-                <label class="form-label proof-label">Proof Of Submission</label>
+                <label class="form-label proof-label">Proof of Submission</label>
                 <input type="file" name="grants[${grantIndex}][proof]" class="form-control">
             </div>
             <div class="col-md-2 d-flex align-items-end">
