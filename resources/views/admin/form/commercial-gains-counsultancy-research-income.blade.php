@@ -50,7 +50,8 @@
                     @if(auth()->user()->hasRole(['HOD', 'Teacher']))
                     
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                    <h5 class="">Commercial Consultancy/Research Income</h5>
+                    <h5 class="mb-1">Commercial Consultancy/Research Income</h5>
+                    <h5 class="text-primary">Target 5</h5>
                           <form id="researchForm1" enctype="multipart/form-data"class="row">
                                 @csrf
                                 <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
@@ -58,25 +59,25 @@
                                 <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER" required>
                                 
-                                <div class="row g-6">
+                                <div class="row g-6 mt-0">
                                     
 
                                     <div class="col-md-6">
-                                        <label for="title_of_consultancy" class="form-label">Title of consultancy</label>
+                                        <label for="title_of_consultancy" class="form-label">Title Of Consultancy</label>
                                         <input type="text" id="title_of_consultancy" name="title_of_consultancy" class="form-control" >
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="duration_of_consultancy" class="form-label">Duration of consultancy</label>
+                                        <label for="duration_of_consultancy" class="form-label">Duration Of Consultancy</label>
                                         <input type="text" id="duration_of_consultancy" name="duration_of_consultancy" class="form-control" >
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="name_of_client_organization" class="form-label">Name of client organization</label>
+                                        <label for="name_of_client_organization" class="form-label">Name Of Client Organization</label>
                                         <input type="text" id="name_of_client_organization" name="name_of_client_organization" class="form-control" >
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="consultancy_fee" class="form-label">Consultancy fee</label>
+                                        <label for="consultancy_fee" class="form-label">Consultancy Fee</label>
                                         <input type="text" id="consultancy_fee" name="consultancy_fee" class="form-control" >
                                     </div>
                                     <div class="col-md-12">
