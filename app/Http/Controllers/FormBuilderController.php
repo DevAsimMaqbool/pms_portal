@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FormBuilderController extends Controller
 {
@@ -112,6 +114,9 @@ class FormBuilderController extends Controller
 
     public function HodTargetForms()
     {
-        return view('admin.form.hod_targets');
+        $user = Auth::user();
+        $employee_id = $user->employee_id;
+        $facultyMembers = User::where('manager_id', $employee_id)->get(['id','name','department','job_title']);
+        return view('admin.form.hod_targets',compact('facultyMembers'));
     }
 }
