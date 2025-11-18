@@ -19,34 +19,37 @@
         <div class="card">
             <div class="card-datatable table-responsive card-body">
                 {{-- <h5>KPA to role</h5> --}}
-                <form id="researchForm" enctype="multipart/form-data"class="row">
+                <form id="researchForm" enctype="multipart/form-data" class="row">
                     @csrf
                     <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
                     <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
-                    <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
-                    
+                    <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
+
                     <div class="row g-6">
                         <div class="col-md-6">
                             <label for="no_of_consultancies_done" class="form-label">No of consultancies done</label>
-                            <input type="text" id="no_of_consultancies_done" name="no_of_consultancies_done" class="form-control" >
+                            <input type="text" id="no_of_consultancies_done" name="no_of_consultancies_done"
+                                class="form-control">
                         </div>
 
                         <div class="col-md-6">
                             <label for="title_of_consultancy" class="form-label">Title of consultancy</label>
-                            <input type="text" id="title_of_consultancy" name="title_of_consultancy" class="form-control" >
+                            <input type="text" id="title_of_consultancy" name="title_of_consultancy" class="form-control">
                         </div>
 
                         <div class="col-md-6">
                             <label for="duration_of_consultancy" class="form-label">Duration of consultancy</label>
-                            <input type="text" id="duration_of_consultancy" name="duration_of_consultancy" class="form-control" >
+                            <input type="text" id="duration_of_consultancy" name="duration_of_consultancy"
+                                class="form-control">
                         </div>
 
                         <div class="col-md-6">
                             <label for="name_of_client_organization" class="form-label">Name of client organization</label>
-                            <input type="text" id="name_of_client_organization" name="name_of_client_organization" class="form-control" >
+                            <input type="text" id="name_of_client_organization" name="name_of_client_organization"
+                                class="form-control">
                         </div>
 
-                         {{-- Industrial Projects Group --}}
+                        {{-- Industrial Projects Group --}}
                         <div id="industrialProjectsWrapper">
                             <div class="industrial-project-group border p-3 mt-3 rounded">
                                 <div class="row g-3">
@@ -62,7 +65,8 @@
 
                                     <div class="col-md-6">
                                         <label class="form-label">Name of contracting industry</label>
-                                        <input type="text" name="industrial_projects[0][contracting_industry]" class="form-control">
+                                        <input type="text" name="industrial_projects[0][contracting_industry]"
+                                            class="form-control">
                                     </div>
 
                                     <div class="col-md-6">
@@ -80,12 +84,15 @@
                                         <input type="text" name="industrial_projects[0][completion]" class="form-control">
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect removeProject"><i class="icon-base ti tabler-x me-1"></i> <span class="align-middle">Delete</span></button>
+                                <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect removeProject"><i
+                                        class="icon-base ti tabler-x me-1"></i> <span
+                                        class="align-middle">Delete</span></button>
                             </div>
                         </div>
 
                         <div class="mt-3">
-                            <button type="button" id="addProject" class="btn btn-primary waves-effect waves-light"><i class="icon-base ti tabler-plus me-1"></i><span class="align-middle">Add</span></button>
+                            <button type="button" id="addProject" class="btn btn-primary waves-effect waves-light"><i
+                                    class="icon-base ti tabler-plus me-1"></i><span class="align-middle">Add</span></button>
                         </div>
 
 
@@ -113,54 +120,54 @@
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 @endpush
 @push('script')
-<script>
-$(document).ready(function () {
-    let projectIndex = 1;
+    <script>
+        $(document).ready(function () {
+            let projectIndex = 1;
 
-    $('#addProject').on('click', function () {
-        let newGroup = `
-            <div class="industrial-project-group border p-3 mt-3 rounded">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">No of industrial projects</label>
-                        <input type="text" name="industrial_projects[${projectIndex}][no]" class="form-control">
-                    </div>
+            $('#addProject').on('click', function () {
+                let newGroup = `
+                <div class="industrial-project-group border p-3 mt-3 rounded">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">No of industrial projects</label>
+                            <input type="text" name="industrial_projects[${projectIndex}][no]" class="form-control">
+                        </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Name of industrial projects</label>
-                        <input type="text" name="industrial_projects[${projectIndex}][name]" class="form-control">
-                    </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Name of industrial projects</label>
+                            <input type="text" name="industrial_projects[${projectIndex}][name]" class="form-control">
+                        </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Name of contracting industry</label>
-                        <input type="text" name="industrial_projects[${projectIndex}][contracting_industry]" class="form-control">
-                    </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Name of contracting industry</label>
+                            <input type="text" name="industrial_projects[${projectIndex}][contracting_industry]" class="form-control">
+                        </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Total duration of the project</label>
-                        <input type="text" name="industrial_projects[${projectIndex}][duration]" class="form-control">
-                    </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Total duration of the project</label>
+                            <input type="text" name="industrial_projects[${projectIndex}][duration]" class="form-control">
+                        </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Estimated project cost</label>
-                        <input type="text" name="industrial_projects[${projectIndex}][cost]" class="form-control">
-                    </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Estimated project cost</label>
+                            <input type="text" name="industrial_projects[${projectIndex}][cost]" class="form-control">
+                        </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Estimated completion month/year</label>
-                        <input type="text" name="industrial_projects[${projectIndex}][completion]" class="form-control">
+                        <div class="col-md-6">
+                            <label class="form-label">Estimated completion month/year</label>
+                            <input type="text" name="industrial_projects[${projectIndex}][completion]" class="form-control">
+                        </div>
                     </div>
+                    <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect removeProject"><i class="icon-base ti tabler-x me-1"></i> <span class="align-middle">Delete</span></button>
                 </div>
-                <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect removeProject"><i class="icon-base ti tabler-x me-1"></i> <span class="align-middle">Delete</span></button>
-            </div>
-        `;
-        $('#industrialProjectsWrapper').append(newGroup);
-        projectIndex++;
-    });
+            `;
+                $('#industrialProjectsWrapper').append(newGroup);
+                projectIndex++;
+            });
 
-    $(document).on('click', '.removeProject', function () {
-        $(this).closest('.industrial-project-group').remove();
-    });
-});
-</script>
+            $(document).on('click', '.removeProject', function () {
+                $(this).closest('.industrial-project-group').remove();
+            });
+        });
+    </script>
 @endpush

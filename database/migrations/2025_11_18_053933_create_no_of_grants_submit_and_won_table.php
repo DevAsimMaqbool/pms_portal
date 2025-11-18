@@ -10,17 +10,16 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('intellectual_properties', function (Blueprint $table) {
+        Schema::create('no_of_grants_submit_and_wons', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('indicator_id');
             $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER'])->default('RESEARCHER');
-            $table->string('name_of_ip_filed')->nullable();
-            $table->string('patents_ip_type')->nullable();
-            $table->string('other_detail')->nullable();
-            $table->string('no_of_ip_disclosed')->nullable();
-            $table->string('area_of_application')->nullable();
-            $table->string('date_of_filing_registration')->nullable();
-            $table->string('supporting_docs_as_attachment')->nullable();
+            $table->string('name')->nullable();
+            $table->string('funding_agency')->nullable();
+            $table->string('volume')->nullable();
+            $table->string('role')->nullable();
+            $table->string('grant_status')->nullable();
+            $table->string('proof')->nullable();
             $table->enum('status', ['1', '2', '3', '4', '5', '6'])->default('1');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
@@ -33,6 +32,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('intellectual_properties');
+        Schema::dropIfExists('no_of_grants_submit_and_wons');
     }
 };
