@@ -37,6 +37,7 @@ use App\Http\Controllers\ComparitiveAnalysisController;
 use App\Models\RatingOnImpactOfResearchConferencesOrganized;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\DownloadsController;
+use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -172,6 +173,8 @@ Route::middleware('auth')->group(function () {
     Route::get('awards', [AwardController::class, 'index'])->name('pms.awards');
 
     Route::get('/hod-taget', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
+
+    Route::get('/odoo-test', [AdminUserController::class, 'testOfOdoo'])->name('odoo.test');
 });
 
 require __DIR__ . '/auth.php';
