@@ -6,6 +6,7 @@ use App\Models\IntellectualProperty;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class IntellectualPropertyController extends Controller
@@ -128,19 +129,25 @@ class IntellectualPropertyController extends Controller
     public function store(Request $request)
     {
         try { 
+            
             if($request->form_status=='RESEARCHER'){
                  $rules = [
-                        'kpa_id' => 'required',
-                        'sp_category_id' => 'required',
                         'indicator_id' => 'required',
-                        'no_of_ip_disclosed' => 'required|integer',
-                        'no_of_ip_filed' => 'required|integer',
-                        'name_of_ip_filed' => 'required|string|max:255',
+                        'no_of_ip_disclosed' => 'required|string',
+                        'name_of_ip_filed' => 'required|string',
+                        'patents_ip_type' => 'required|string',
+                        'other_detail' => 'required_if:patents_ip_type,Other|string|nullable',
+                        'area_of_application' => 'required|string',
+                        'date_of_filing_registration' => 'required|string',
+                        'supporting_docs_as_attachment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
                         'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                    ];
+                    $messages = [
+                        'supporting_docs_as_attachment.mimes' => 'Upload JPG / PNG / PDF only.',
                     ];
 
 
-                    $validator = Validator::make($request->all(), $rules);
+                    $validator = Validator::make($request->all(), $rules, $messages);
                     if ($validator->fails()) {
                             return response()->json([
                                 'status' => 'error',
@@ -149,49 +156,62 @@ class IntellectualPropertyController extends Controller
                         }
 
                         $data = $request->only([
-                            'kpa_id',
-                            'sp_category_id',
                             'indicator_id',
                             'no_of_ip_disclosed',
-                            'no_of_ip_filed',
                             'name_of_ip_filed',
-                            'scopus_link',
+                            'patents_ip_type',
+                            'other_detail',
+                            'area_of_application',
+                            'date_of_filing_registration',
                             'form_status'
                         ]);
+                        if ($request->hasFile('supporting_docs_as_attachment')) {
 
-            }
-            if($request->form_status=='HOD'){
-                  $rules = [
-                        'kpa_id' => 'required',
-                        'sp_category_id' => 'required',
-                        'indicator_id' => 'required',
-                        'target_of_ip_disclosures' => 'required|integer',
-                        'target_of_ip_filed' => 'required|integer',
-                        'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-                    ];
-
-                    $validator = Validator::make($request->all(), $rules);
-                    if ($validator->fails()) {
-                            return response()->json([
-                                'status' => 'error',
-                                'errors' => $validator->errors()
-                            ], 422);
+                            $file = $request->file('supporting_docs_as_attachment');
+                            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                            $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                            $uniqueNumber = rand(1000, 9999);
+                            $extension = $file->getClientOriginalExtension();
+                            $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                            $path = $file->storeAs('intellectualProperty', $fileName, 'public');
+                            $data['supporting_docs_as_attachment'] = $path;
                         }
-                    $data = $request->only([
-                            'kpa_id',
-                            'sp_category_id',
-                            'indicator_id',
-                            'target_of_ip_disclosures',
-                            'target_of_ip_filed',
-                            'form_status'
-                        ]);    
 
             }
+            // if($request->form_status=='HOD'){
+            //       $rules = [
+            //             'kpa_id' => 'required',
+            //             'sp_category_id' => 'required',
+            //             'indicator_id' => 'required',
+            //             'target_of_ip_disclosures' => 'required|integer',
+            //             'target_of_ip_filed' => 'required|integer',
+            //             'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+            //         ];
+
+            //         $validator = Validator::make($request->all(), $rules);
+            //         if ($validator->fails()) {
+            //                 return response()->json([
+            //                     'status' => 'error',
+            //                     'errors' => $validator->errors()
+            //                 ], 422);
+            //             }
+            //         $data = $request->only([
+            //                 'kpa_id',
+            //                 'sp_category_id',
+            //                 'indicator_id',
+            //                 'target_of_ip_disclosures',
+            //                 'target_of_ip_filed',
+            //                 'form_status'
+            //             ]);    
+
+            // }
             $employeeId = Auth::user()->employee_id;
+            DB::beginTransaction();
             $data['created_by'] = $employeeId;
             $data['updated_by'] = $employeeId;
 
             $record = IntellectualProperty::create($data);
+            DB::commit();
 
             return response()->json([
                 'status' => 'success',
@@ -200,7 +220,8 @@ class IntellectualPropertyController extends Controller
             ]);
 
         } catch (\Exception $e) {
-              return response()->json(['status'  => 'error','message' => 'Something went wrong: ' . $e->getMessage(),], 500);
+             DB::rollBack();
+             return response()->json(['message' => 'Oops! Something went wrong'], 500);
         }
     }
     /**

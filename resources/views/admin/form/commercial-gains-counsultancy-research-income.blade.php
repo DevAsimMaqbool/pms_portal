@@ -56,8 +56,6 @@
                             <h5 class="text-primary">Target 5</h5>
                             <form id="researchForm1" enctype="multipart/form-data" class="row">
                                 @csrf
-                                <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
-                                <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
                                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
 
@@ -67,29 +65,29 @@
                                     <div class="col-md-6">
                                         <label for="title_of_consultancy" class="form-label">Title Of Consultancy</label>
                                         <input type="text" id="title_of_consultancy" name="title_of_consultancy"
-                                            class="form-control">
+                                            class="form-control" required>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label for="duration_of_consultancy" class="form-label">Duration Of Consultancy</label>
                                         <input type="text" id="duration_of_consultancy" name="duration_of_consultancy"
-                                            class="form-control">
+                                            class="form-control" required>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label for="name_of_client_organization" class="form-label">Name Of Client
                                             Organization</label>
                                         <input type="text" id="name_of_client_organization" name="name_of_client_organization"
-                                            class="form-control">
+                                            class="form-control" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="consultancy_fee" class="form-label">Consultancy Fee</label>
-                                        <input type="text" id="consultancy_fee" name="consultancy_fee" class="form-control">
+                                        <input type="number" id="consultancy_fee" name="consultancy_fee" class="form-control" required>
                                     </div>
                                     <div class="col-md-12">
 
                                         <label for="formFile" class="form-label">Attachments</label>
-                                        <input class="form-control" type="file" name="consultancy_file" id="formFile">
+                                        <input class="form-control" type="file" name="consultancy_file" id="formFile" required>
                                     </div>
                                 </div>
                                 <div class="col-4 text-center demo-vertical-spacing">
@@ -285,6 +283,15 @@
                     let form = $(this);
                     let formData = new FormData(this);
 
+                     // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     $.ajax({
                         url: "{{ route('counsultancy.store') }}",
                         type: "POST",
@@ -292,7 +299,6 @@
                         contentType: false,
                         processData: false,
                         success: function (response) {
-                            alert(response)
                             Swal.close();
                             Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                             form[0].reset();

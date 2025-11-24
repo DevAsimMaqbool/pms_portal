@@ -46,7 +46,7 @@
             <div class="tab-content">
                  
                 {{-- ================= FORM 1 ================= --}}
-                @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+                @if(auth()->user()->hasRole(['Teacher']))
                 <div class="tab-pane fade show active" id="form1" role="tabpanel">
                     <form id="researchForm1" enctype="multipart/form-data">
                         @csrf
@@ -209,15 +209,13 @@
                 <div class="tab-pane fade" id="form2" role="tabpanel">
                      <form id="researchForm2" enctype="multipart/form-data"class="row">
                         @csrf
-                        <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
-                        <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
                         <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                         <input type="hidden"  id="form_status" name="form_status" value="HOD" required>
 
                         <div class="row">
                             <div class="col-md-6">
                             <label for="faculty_member" class="form-label">Name of Faculty Member</label>
-                            <select  name="faculty_member_id" id="select2Success" class="select2 form-select"  multiple required>
+                            <select  name="faculty_member_id[]" id="select2Success" class="select2 form-select"  multiple required>
                                 <option value="">-- Select Faculty Member --</option>
                                 @foreach($facultyMembers as $member)
                                     <option 
@@ -281,14 +279,15 @@
                             </div>
                             <div class="col-md-12">
                                 <button type="button" class="btn btn-outline-secondary waves-effect w-100 total-target">Tota 0</button>
+                                <input type="text" name="target" class="" style="display:none">
                             </div>
                               <div class="col-md-6">
-                                <label for="frequency" class="form-label">National</label>
-                                <input type="number" id="frequency" class="form-control" name="frequency">
+                                <label for="national" class="form-label">National</label>
+                                <input type="number" id="national" class="form-control" name="national">
                             </div>
                             <div class="col-md-6">
-                                <label for="frequency" class="form-label">Inter National</label>
-                                <input type="number" id="frequency" class="form-control" name="frequency">
+                                <label for="international" class="form-label">Inter National</label>
+                                <input type="number" id="international" class="form-control" name="international">
                             </div>
                         </div>    
                         <div class="col-4 text-center demo-vertical-spacing">
@@ -583,6 +582,7 @@
         });
 
         $('.total-target').text('Total ' + total);
+        $('input[name="target"]').val(total);
     }
 
     // Trigger on input change
@@ -603,8 +603,17 @@
             let form = $(this);
             let formData = new FormData(this);
 
+             // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
             $.ajax({
-                url: "{{ route('indicator-form.store') }}",
+                url: "{{ route('faculty-target.store') }}",
                 type: "POST",
                 data: formData,
                 contentType: false,

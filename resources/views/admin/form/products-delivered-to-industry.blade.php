@@ -50,81 +50,88 @@
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
                     <h5 class="mb-1">Products Delivered to Industry</h5>
                     <h5 class="text-primary">Target 5</h5>
-                            <form id="researchForm1" enctype="multipart/form-data"class="row">
+                             <form id="researchForm1" enctype="multipart/form-data" class="row">
                                 @csrf
-                                <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
-                                <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
-                                <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
-                                <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER" required>
-                                
+                                <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
+                                <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
+
                                 <div class="row g-6 mt-0">
                                     <div class="col-md-6">
-                                        <label for="name_of_project_initiated" class="form-label">Project Name</label>
-                                        <input type="text" id="name_of_project_initiated" name="name_of_project_initiated" class="form-control" >
+                                        <label for="project_name" class="form-label">Project Name</label>
+                                        <input type="text" id="project_name" name="project_name" class="form-control" required>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="other_disciplines_engaged" class="form-label">Other Disciplines Engaged</label>
-                                        <input type="text" id="other_disciplines_engaged" name="other_disciplines_engaged" class="form-control" >
+                                        <label for="other_disciplines" class="form-label">Other Disciplines
+                                            Engaged</label>
+                                        <input type="text" id="other_disciplines" name="other_disciplines" class="form-control" required>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label for="partner_industry" class="form-label">Target/Partner Industry</label>
-                                        <input type="text" id="partner_industry" name="partner_industry" class="form-control" >
+                                        <input type="text" id="partner_industry" name="partner_industry" class="form-control" required>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="identified_public_sector_entity" class="form-label">Identified Public Sector Entity</label>
-                                        <input type="text" id="identified_public_sector_entity" name="identified_public_sector_entity" class="form-control" >
+                                        <label for="identified_public_sector_entity" class="form-label">Identified Public Sector
+                                            Entity</label>
+                                        <input type="text" id="identified_public_sector_entity"
+                                            name="identified_public_sector_entity" class="form-control" required>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="completion_time_of_project" class="form-label">Target Completion Time Of The Project</label>
-                                        <input type="text" id="completion_time_of_project" name="completion_time_of_project" class="form-control" >
+                                        <label for="completion_time_of_project" class="form-label">Target Completion Time Of The
+                                            Project</label>
+                                        <input type="text" id="completion_time_of_project" name="completion_time_of_project"
+                                            class="form-control" required>
                                     </div>
 
                                     <div class="col-md-6">
-                                            <label class="form-label d-block">Prototype/Product Developed</label>
-                                            <div>
-                                                <input type="radio" name="product_developed" id="product_developed_yes" value="YES"> 
-                                                <label for="product_developed_yes">Yes</label>
+                                        <label class="form-label d-block">Prototype/Product Developed</label>
+                                        <div>
+                                            <input type="radio" name="product_developed" id="product_developed_yes" value="YES">
+                                            <label for="product_developed_yes">Yes</label>
 
-                                                <input type="radio" name="product_developed" id="product_developed_no" value="NO" checked> 
-                                                <label for="product_developed_no">No</label>
+                                            <input type="radio" name="product_developed" id="product_developed_no" value="NO"
+                                                checked>
+                                            <label for="product_developed_no">No</label>
 
-                                                <input type="radio" name="product_developed" id="product_developed_na" value="NA" > 
-                                                <label for="product_developed_na">NA</label>
-                                            </div>
+                                            <input type="radio" name="product_developed" id="product_developed_na" value="NA">
+                                            <label for="product_developed_na">NA</label>
+                                        </div>
                                     </div>
 
                                     <div class="col-md-6">
-                                            <label class="form-label d-block">Third Party Validation Of The Product</label>
-                                            <div>
-                                                <input type="radio" name="third_party_validation" id="third_party_validation_yes" value="YES"> 
-                                                <label for="third_party_validation_yes">Yes</label>
+                                        <label class="form-label d-block">Third Party Validation Of The Product</label>
+                                        <div>
+                                            <input type="radio" name="third_party_validation" id="third_party_validation_yes"
+                                                value="YES">
+                                            <label for="third_party_validation_yes">Yes</label>
 
-                                                <input type="radio" name="third_party_validation" id="third_party_validation_no" value="NO" checked> 
-                                                <label for="third_party_validation_no">No</label>
+                                            <input type="radio" name="third_party_validation" id="third_party_validation_no"
+                                                value="NO" checked>
+                                            <label for="third_party_validation_no">No</label>
 
-                                                <input type="radio" name="third_party_validation" id="third_party_validation_na" value="NA" > 
-                                                <label for="third_party_validation_na">NA</label>
-                                            </div>
+                                            <input type="radio" name="third_party_validation" id="third_party_validation_na"
+                                                value="NA">
+                                            <label for="third_party_validation_na">NA</label>
+                                        </div>
                                     </div>
 
                                     <div class="col-md-6">
-                                            <label class="form-label d-block">IP Claim?</label>
-                                            <div>
-                                                <input type="radio" name="ip_claim" id="ip_claim_yes" value="YES"> 
-                                                <label for="ip_claim_yes">Yes</label>
+                                        <label class="form-label d-block">IP Claim?</label>
+                                        <div>
+                                            <input type="radio" name="ip_claim" id="ip_claim_yes" value="YES">
+                                            <label for="ip_claim_yes">Yes</label>
 
-                                                <input type="radio" name="ip_claim" id="ip_claim_no" value="NO" checked> 
-                                                <label for="ip_claim_no">No</label>
-                                            </div>
+                                            <input type="radio" name="ip_claim" id="ip_claim_no" value="NO" checked>
+                                            <label for="ip_claim_no">No</label>
+                                        </div>
                                     </div>
 
                                     <div class="col-md-6" id="extra_select_container" style="display: none;">
-                                            <label for="provide_details" class="form-label">In Case Yes, Provide Details</label>
-                                            <input type="text" id="provide_details" name="provide_details" class="form-control" >
+                                        <label for="provide_details" class="form-label">In Case Yes, Provide Details</label>
+                                        <input type="text" id="provide_details" name="provide_details" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="col-4 text-center demo-vertical-spacing">
@@ -295,66 +302,75 @@
     </script>
 @endpush
 @push('script')
-@if(auth()->user()->hasRole(['HOD','Teacher']))
+@if(auth()->user()->hasRole(['HOD','Teacher','Assistant Professor','Professor']))
     <script>
-    $(document).ready(function () {
-         $('input[name="ip_claim"]').on('change', function () {
-                if ($(this).val() === 'YES') {
-                    $('#extra_select_container').show();
-                } else {
-                    $('#extra_select_container').hide();
-                    $('#provide_details').val(''); // clear selection if hidden
-                }
-            });
+            $(document).ready(function () {
+                $('input[name="ip_claim"]').on('change', function () {
+                    if ($(this).val() === 'YES') {
+                        $('#extra_select_container').show();
+                    } else {
+                        $('#extra_select_container').hide();
+                        $('#provide_details').val(''); // clear selection if hidden
+                    }
+                });
 
-        // Extra fields for Form 1
+                // Extra fields for Form 1
 
-        $('#researchForm1').on('submit', function (e) {
-            e.preventDefault();
-            let form = $(this);
-            let formData = new FormData(this);
+                $('#researchForm1').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
 
-            $.ajax({
-                url: "{{ route('achievement-ofmultidisciplinary.store') }}",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    Swal.close();
-                    Swal.fire({ icon: 'success', title: 'Success', text: response.message });
-                    form[0].reset();
-                    form.find('.invalid-feedback').remove();
-                    form.find('.is-invalid').removeClass('is-invalid');
-                },
-                error: function (xhr) {
-                    Swal.close();
-                     // Clear previous errors before showing new ones
-                        form.find('.invalid-feedback').remove();
-                        form.find('.is-invalid').removeClass('is-invalid');
-                     if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
-
-                            // Loop through all validation errors
-                            $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
-
-                                if (input.length) {
-                                    input.addClass('is-invalid');
-
-                                    // Show error message under input
-                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                }
-                            });
-
-                        } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
+                     // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
                         }
-                }
+                    });
+
+                    $.ajax({
+                        url: "{{ route('products-delivered-to-industry.store') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                            form[0].reset();
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            // Clear previous errors before showing new ones
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+
+                                // Loop through all validation errors
+                                $.each(errors, function (field, messages) {
+                                    let input = form.find('[name="' + field + '"]');
+
+                                    if (input.length) {
+                                        input.addClass('is-invalid');
+
+                                        // Show error message under input
+                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                    }
+                                });
+
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
+                        }
+                    });
+                });
             });
-        });
-    });
-    </script>
+        </script>
     @endif
     @if(auth()->user()->hasRole(['HOD']))
     <script>

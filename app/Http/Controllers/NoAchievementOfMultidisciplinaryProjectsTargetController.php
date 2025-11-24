@@ -6,6 +6,7 @@ use App\Models\NoAchievementOfMultidisciplinaryProjectsTarget;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controller
@@ -130,11 +131,9 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
         try { 
             if($request->form_status=='RESEARCHER'){
                  $rules = [
-                        'kpa_id' => 'required',
-                        'sp_category_id' => 'required',
                         'indicator_id' => 'required',
-                        'name_of_project_initiated' => 'required|string',
-                        'other_disciplines_engaged' => 'required|string',
+                        'project_name' => 'required|string',
+                        'other_disciplines' => 'required|string',
                         'partner_industry' => 'required|string',
                         'identified_public_sector_entity' => 'required|string',
                         'completion_time_of_project' => 'required|string',
@@ -154,11 +153,9 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                     }
 
                         $data = $request->only([
-                            'kpa_id',
-                            'sp_category_id',
                             'indicator_id',
-                            'name_of_project_initiated',
-                            'other_disciplines_engaged',
+                            'project_name',
+                            'other_disciplines',
                             'partner_industry',
                             'identified_public_sector_entity',
                             'completion_time_of_project',
@@ -198,10 +195,12 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
 
             }
             $employeeId = Auth::user()->employee_id;
+            DB::beginTransaction();
             $data['created_by'] = $employeeId;
             $data['updated_by'] = $employeeId;
 
             $record = NoAchievementOfMultidisciplinaryProjectsTarget::create($data);
+            DB::commit();
 
             return response()->json([
                 'status' => 'success',
@@ -210,10 +209,8 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
             ]);
 
         } catch (\Exception $e) {
-                 return response()->json([
-                'message' => 'Oops! Something went wrong',
-                'error' => $e->getMessage()
-            ], 500);
+                 DB::rollBack();
+                 return response()->json(['message' => 'Oops! Something went wrong'], 500);
         }
     }
     /**

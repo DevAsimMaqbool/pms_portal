@@ -52,15 +52,13 @@
                             <h5 class="text-primary">Target 5</h5>
                             <form id="researchForm1" enctype="multipart/form-data" class="row">
                                 @csrf
-                                <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
-                                <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
                                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
 
                                 <div class="row g-6 mt-0">
                                     <div class="col-md-6">
                                         <label for="name_of_ip_filed" class="form-label">Title Of IP/Patents</label>
-                                        <input type="text" id="name_of_ip_filed" name="name_of_ip_filed" class="form-control">
+                                        <input type="text" id="name_of_ip_filed" name="name_of_ip_filed" class="form-control" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Type</label>
@@ -79,25 +77,25 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="no_of_ip_disclosed" class="form-label">Filing / Registration #</label>
-                                        <input type="number" id="no_of_ip_disclosed" name="no_of_ip_disclosed"
-                                            class="form-control">
+                                        <input type="text" id="no_of_ip_disclosed" name="no_of_ip_disclosed"
+                                            class="form-control" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="area_of_application" class="form-label">Area Of Application</label>
                                         <input type="text" id="area_of_application" name="area_of_application"
-                                            class="form-control">
+                                            class="form-control" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="date_of_filing_registration" class="form-label">Date Of Filing
                                             Registration</label>
                                         <input type="date" id="date_of_filing_registration" name="date_of_filing_registration"
-                                            class="form-control">
+                                            class="form-control" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="supporting_docs_as_attachment" class="form-label">Supporting Docs As
                                             Attachment</label>
                                         <input type="file" id="supporting_docs_as_attachment"
-                                            name="supporting_docs_as_attachment" class="form-control">
+                                            name="supporting_docs_as_attachment" class="form-control" required>
                                     </div>
 
 
@@ -305,6 +303,15 @@
                     e.preventDefault();
                     let form = $(this);
                     let formData = new FormData(this);
+
+                     // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
 
                     $.ajax({
                         url: "{{ route('intellectual-properties.store') }}",

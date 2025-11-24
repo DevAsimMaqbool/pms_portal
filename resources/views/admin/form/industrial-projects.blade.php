@@ -54,8 +54,6 @@
                     <h5 class="text-primary">Target 5</h5>
                           <form id="researchForm1" enctype="multipart/form-data"class="row">
                                 @csrf
-                                <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
-                                <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
                                 <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER" required>
                                 
@@ -64,30 +62,30 @@
 
                                     <div class="col-md-6">
                                         <label for="project_name" class="form-label">Project Name</label>
-                                        <input type="text" id="project_name" name="project_name" class="form-control" >
+                                        <input type="text" id="project_name" name="project_name" class="form-control" required>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label for="contracting_industry" class="form-label">Contracting Industry</label>
-                                        <input type="text" id="contracting_industry" name="contracting_industry" class="form-control" >
+                                        <input type="text" id="contracting_industry" name="contracting_industry" class="form-control" required>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label for="project_duration" class="form-label">Project Duration</label>
-                                        <input type="number" id="project_duration" name="project_duration" class="form-control" >
+                                        <input type="number" id="project_duration" name="project_duration" class="form-control" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="estimated_project_cost" class="form-label">Estimated Project Cost</label>
-                                        <input type="number" id="estimated_project_cost" name="estimated_project_cost" class="form-control" >
+                                        <input type="number" id="estimated_project_cost" name="estimated_project_cost" class="form-control" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="estimated_complection" class="form-label">Estimated Complection</label>
-                                        <input type="date" id="estimated_complection" name="estimated_complection" class="form-control" >
+                                        <input type="date" id="estimated_complection" name="estimated_complection" class="form-control" required>
                                     </div>
                                     <div class="col-md-6">
                         
                                         <label for="formFile" class="form-label">Attachments</label>
-                                        <input class="form-control" type="file" id="formFile">
+                                        <input class="form-control" type="file" id="formFile" name="attachment" required>
                                     </div>
 
                                     {{-- Industrial Projects Group --}}
@@ -303,7 +301,7 @@
     </script>
 @endpush
 @push('script')
- @if(auth()->user()->hasRole(['HOD','Teacher']))
+ @if(auth()->user()->hasRole(['HOD','Teacher','Assistant Professor','Professor']))
 <script>
 $(document).ready(function () {
 
@@ -313,14 +311,22 @@ $(document).ready(function () {
             let form = $(this);
             let formData = new FormData(this);
 
+             // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
             $.ajax({
-                url: "{{ route('counsultancy.store') }}",
+                url: "{{ route('industrial-projects.store') }}",
                 type: "POST",
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    alert(response)
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                     form[0].reset();

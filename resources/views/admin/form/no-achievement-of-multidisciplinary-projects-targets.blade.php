@@ -54,8 +54,6 @@
                             <h5 class="text-primary">Target 5</h5>
                             <form id="researchForm1" enctype="multipart/form-data" class="row">
                                 @csrf
-                                <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
-                                <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
                                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
 
@@ -337,6 +335,15 @@
                     e.preventDefault();
                     let form = $(this);
                     let formData = new FormData(this);
+
+                     // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
 
                     $.ajax({
                         url: "{{ route('achievement-ofmultidisciplinary.store') }}",

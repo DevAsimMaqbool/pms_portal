@@ -37,6 +37,10 @@ use App\Http\Controllers\ComparitiveAnalysisController;
 use App\Models\RatingOnImpactOfResearchConferencesOrganized;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\DownloadsController;
+use App\Http\Controllers\FacultyTargetController;
+use App\Http\Controllers\IndustrialProjectsController;
+use App\Http\Controllers\NoOfGrantsSubmitAndWonController;
+use App\Http\Controllers\ProductsDeliveredToIndustryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -144,7 +148,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('intellectual-properties', IntellectualPropertyController::class);
         Route::resource('counsultancy', CommercialGainsCounsultancyResearchIncomeController::class);
         Route::resource('international-Coauthored-Paper', InternationalCoauthoredPaperController::class);
+        Route::resource('no-Of-GrantSubmit-And-Won', NoOfGrantsSubmitAndWonController::class);
         Route::resource('achievement-ofmultidisciplinary', NoAchievementOfMultidisciplinaryProjectsTargetController::class);
+        Route::resource('products-delivered-to-industry', ProductsDeliveredToIndustryController::class);
+        Route::resource('industrial-projects', IndustrialProjectsController::class);
+        Route::post('/faculty-target/store', [FacultyTargetController::class, 'store'])->name('faculty-target.store');
     });
 
     Route::resource('/survey', SurveyController::class);

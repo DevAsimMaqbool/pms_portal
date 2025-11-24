@@ -24,9 +24,8 @@
                     <h5 class="text-primary">Target 5</h5>
                     <form id="researchForm" enctype="multipart/form-data" class="row">
                         @csrf
-                        <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
-                        <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
                         <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
+                        <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER">
 
                         <div class="row g-6 mt-0">
 
@@ -62,7 +61,7 @@
                                     </div>
                                     <div class="col-md-4 proof-container" style="display:none;">
                                         <label class="form-label proof-label">Proof Of Submission</label>
-                                        <input type="file" name="grants[0][proof]" class="form-control">
+                                        <input type="file" name="grants[0][proof]" class="form-control" required>
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +126,7 @@
                                                                                                                                                                                     </div>
                                                                                                                                                                                     <div class="col-md-4">
                                                                                                                                                                                         <label class="form-label">Status</label>
-                                                                                                                                                                                        <select name="grants[${grantIndex}][status]" class="form-select grant-status" required>
+                                                                                                                                                                                        <select name="grants[${grantIndex}][grant_status]" class="form-select grant-status" required>
                                                                                                                                                                                             <option value="">-- Select --</option>
                                                                                                                                                                                             <option value="Submitted">Submitted</option>
                                                                                                                                                                                             <option value="Won">Won</option>
@@ -135,7 +134,7 @@
                                                                                                                                                                                     </div>
                                                                                                                                                                                     <div class="col-md-4 proof-container" style="display:none;">
                                                                                                                                                                                         <label class="form-label proof-label">Proof Of Submission</label>
-                                                                                                                                                                                        <input type="file" name="grants[${grantIndex}][proof]" class="form-control">
+                                                                                                                                                                                        <input type="file" name="grants[${grantIndex}][proof]" class="form-control" required>
                                                                                                                                                                                     </div>
                                                                                                                                                                                     <div class="col-md-2 d-flex align-items-end">
                                                                                                                                                                                         <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-grant">
@@ -171,6 +170,71 @@
                         container.find('input[type="file"]').val('');
                     }
                 });
+
+                $('#researchForm').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
+
+                      // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: "{{ route('no-Of-GrantSubmit-And-Won.store') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                            form[0].reset();
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                              // Remove all extra grant groups and keep only the first one
+                            $('#grant-details-container .grant-group:not(:first)').remove();
+
+                            // Reset the proof container of the first group
+                            $('#grant-details-container .grant-group:first .proof-container').hide();
+
+                            // Reset index to 1
+                            grantIndex = 1;
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            // Clear previous errors before showing new ones
+                                form.find('.invalid-feedback').remove();
+                                form.find('.is-invalid').removeClass('is-invalid');
+                            if (xhr.status === 422) {
+                                    let errors = xhr.responseJSON.errors;
+
+                                    // Loop through all validation errors
+                                    $.each(errors, function (field, messages) {
+                                        let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                        fieldName = fieldName.replace('[]]', ']');
+                                        let input = form.find('[name="' + fieldName + '"]');
+
+                                        if (input.length) {
+                                            input.addClass('is-invalid');
+
+                                            // Show error message under input
+                                            input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                        }
+                                    });
+
+                                } else {
+                                    Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
+                                }
+                        }
+                    });
+                });
+
             });
         </script>
     @endif

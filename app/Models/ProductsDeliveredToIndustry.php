@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NoAchievementOfMultidisciplinaryProjectsTarget extends Model
+class ProductsDeliveredToIndustry extends Model
 {
-    use HasFactory;
-
-    protected $fillable = [
+     protected $fillable = [
         'indicator_id',
         'project_name',
         'other_disciplines',
