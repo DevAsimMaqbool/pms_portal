@@ -64,91 +64,13 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Success!</strong> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="row g-6">
-            <!-- <div class="col-md-6 col-xxl-6">
-                                                                                            <div class="card h-100">
-                                                                                            <div class="card-header d-flex align-items-center justify-content-between">
-                                                                                            <div class="card-title mb-0">
-                                                                                            <h5 class="m-0 me-2">KPA</h5>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            <div class="px-5 py-4 border border-start-0 border-end-0">
-                                                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                                            <p class="mb-0 text-uppercase">Name</p>
-                                                                                            <p class="mb-0 text-uppercase">Performance</p>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            <div class="card-body">
-                                                                                            <div class="d-flex justify-content-between align-items-center mb-6">
-                                                                                            <div class="d-flex align-items-center">
-                                                                                            <div class="avatar flex-shrink-0 me-4">
-                                                                                            <span class="avatar-initial rounded bg-label-success"><i
-                                                                                            class="icon-base ti tabler-book icon-lg"></i></span>
-                                                                                            </div>
-                                                                                            <div>
-                                                                                            <div>
-                                                                                            <h6 class="mb-0 text-truncate">Teaching and Learning</h6>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            <div class="text-end">
-                                                                                            <div class="badge bg-label-secondary">90%</div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            <div class="d-flex justify-content-between align-items-center mb-6">
-                                                                                            <div class="d-flex align-items-center">
-                                                                                            <div class="avatar flex-shrink-0 me-4">
-                                                                                            <span class="avatar-initial rounded bg-label-success"><i
-                                                                                            class="icon-base ti tabler-bulb icon-lg"></i></span>
-                                                                                            </div>
-                                                                                            <div>
-                                                                                            <div>
-                                                                                            <h6 class="mb-0 text-truncate">Research, Innovation and Commercialisation</h6>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            <div class="text-end">
-                                                                                            <div class="badge bg-label-secondary">91%</div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            <div class="d-flex justify-content-between align-items-center mb-6">
-                                                                                            <div class="d-flex align-items-center">
-                                                                                            <div class="avatar flex-shrink-0 me-4">
-                                                                                            <span class="avatar-initial rounded bg-label-warning"><i
-                                                                                            class="icon-base ti tabler-circle-dot icon-lg"></i></span>
-                                                                                            </div>
-                                                                                            <div>
-                                                                                            <div>
-                                                                                            <h6 class="mb-0 text-truncate">Institutional Engagement
-                                                                                            (Core only)</h6>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            <div class="text-end">
-                                                                                            <div class="badge bg-label-secondary">92%</div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            <div class="d-flex justify-content-between align-items-center mb-6">
-                                                                                            <div class="d-flex align-items-center">
-                                                                                            <div class="avatar flex-shrink-0 me-4">
-                                                                                            <span class="avatar-initial rounded bg-label-danger"><i
-                                                                                            class="icon-base ti tabler-building-community icon-lg"></i></span>
-                                                                                            </div>
-                                                                                            <div>
-                                                                                            <div>
-                                                                                            <h6 class="mb-0 text-truncate">Institutional Engagement (Operational+ Character
-                                                                                            Strengths)</h6>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            <div class="text-end">
-                                                                                            <div class="badge bg-label-secondary">97%</div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            </div> -->
-
             <!-- Support Tracker -->
             <div class="col-12 col-md-12">
                 <div class="card">
@@ -164,8 +86,8 @@
                                     <label for="term" class="form-label">Select Term</label>
                                     <select id="term" class="form-select" name="term" required>
                                         <option value="">Select Option</option>
-                                        <option value="Fall" {{ isset($records) && $records->first()?->term == 'Fall' ? 'selected' : '' }}>Fall</option>
-                                        <option value="Spring" {{ isset($records) && $records->first()?->term == 'Spring' ? 'selected' : '' }}>Spring
+                                        <option value="Fall 2025" {{ isset($records) && $records->first()?->term == 'Fall 2025' ? 'selected' : '' }}>Fall 2025</option>
+                                        <option value="Spring 2025" {{ isset($records) && $records->first()?->term == 'Spring 2025' ? 'selected' : '' }}>Spring 2025
                                         </option>
                                     </select>
                                 </div>
@@ -239,6 +161,39 @@
     <script src="{{ asset('admin/assets/js/cards-analytics.js')}}"></script>
 
     <script>
+        $(document).ready(function () {
+            $('#term').on('change', function () {
+                var kfaId = $(this).val();
 
+                $.ajax({
+                    url: '{{ route("self-assessment.termData") }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        term: kfaId
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        var kpas = [
+                            'Teaching and Learning',
+                            'Research, Innovation and Commercialisation',
+                            'Institutional Engagement (Core only)',
+                            'Institutional Engagement (Operational+ Character Strengths)'
+                        ];
+
+                        kpas.forEach(function (kpa, index) {
+                            var record = data[kpa] || {};
+                            $('textarea[name="data[' + index + '][general_comments]"]').val(record.general_comments || '');
+                            $('textarea[name="data[' + index + '][challenge]"]').val(record.challenge || '');
+                            $('textarea[name="data[' + index + '][strength]"]').val(record.strength || '');
+                            $('textarea[name="data[' + index + '][working]"]').val(record.working || '');
+                        });
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching term data', xhr);
+                    }
+                });
+            });
+        }); 
     </script>
 @endpush

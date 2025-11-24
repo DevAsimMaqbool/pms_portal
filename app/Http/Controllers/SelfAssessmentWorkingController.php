@@ -51,6 +51,7 @@ class SelfAssessmentWorkingController extends Controller
         $term = $request->input('term');
         $data = $request->input('data', []);
 
+        // KPA names based on position
         $kpas = [
             0 => 'Teaching and Learning',
             1 => 'Research, Innovation and Commercialisation',
@@ -59,11 +60,13 @@ class SelfAssessmentWorkingController extends Controller
         ];
 
         $insertData = [];
+
         foreach ($data as $index => $row) {
+            // Only save if any field has value
             if (!empty($row['challenge']) || !empty($row['working'])) {
                 $insertData[] = [
                     'kpa' => $kpas[$index],
-                    'term' => $term, // ✅ single chosen term for all rows
+                    'term' => $term,
                     'general_comments' => $row['general_comments'] ?? null,
                     'challenge' => $row['challenge'] ?? null,
                     'strength' => $row['strength'] ?? null,
@@ -79,13 +82,14 @@ class SelfAssessmentWorkingController extends Controller
         if (!empty($insertData)) {
             SelfAssessmentWorking::upsert(
                 $insertData,
-                ['kpa', 'term'], // unique per KPA + Term
-                ['general_comments', 'challenge', 'strength', 'working', 'updated_at']
+                ['kpa', 'term'], // unique combination
+                ['general_comments', 'challenge', 'strength', 'working', 'updated_by', 'updated_at']
             );
         }
 
-        return redirect()->route('self-assessment.index')
-            ->with('success', 'Data saved successfully!');
+        return redirect()
+            ->route('self-assessment.index')
+            ->with('success', 'Self-Assessment saved/updated successfully!');
     }
 
     /**
@@ -148,4 +152,18 @@ class SelfAssessmentWorkingController extends Controller
             );
         }
     }
+
+    public function termData(Request $request)
+    {
+        $term = $request->term;
+
+        $authUser = auth()->user();
+
+        $records = SelfAssessmentWorking::where('created_by', $authUser->id)
+            ->where('term', $term)
+            ->get()
+            ->keyBy('kpa');
+        return response()->json($records);
+    }
+
 }
