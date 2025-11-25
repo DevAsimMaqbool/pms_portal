@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\FacultyMemberClass;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AdminUserController extends Controller
 {
@@ -193,9 +195,62 @@ class AdminUserController extends Controller
 
     public function testOfOdoo(Request $request)
     {
-        dd('asim');
-        $users = DB::connection('pgsql')->table('res_users')->limit(1)->get();
-        dd($users);
+        try {
+            $faculty_id = Auth::user()->faculty_id;
+            // $users = DB::connection('pgsql')
+            //     ->table('res_users')
+            //     ->select('id', 'login AS username', 'company_id', 'partner_id')
+            //     ->where('user_type', 'faculty')
+            //     ->where('active', 'true')
+            //     ->limit(10)
+            //     ->get();
+            $records = DB::connection('pgsql')
+                ->table('odoocms_class_faculty as cf')
+                ->leftJoin('odoocms_faculty_staff as fs', 'fs.id', '=', 'cf.faculty_staff_id')
+                ->leftJoin('odoocms_class as c', 'c.id', '=', 'cf.class_id')
+                ->leftJoin('odoocms_academic_term as oat', 'oat.id', '=', 'cf.term_id')
+                ->leftJoin('odoocms_career as cr', 'cr.id', '=', 'c.career_id')
+                ->where('cf.faculty_staff_id', $faculty_id)
+                ->where('oat.active_for_roll', 'true')
+                ->limit(100)
+                ->select([
+                    'c.id as class_id',
+                    'c.name as class_name',
+                    'c.code',
+                    'oat.id as term_id',
+                    'oat.name as term',
+                    'cr.id as career_id',
+                    'cr.name as career',
+                    'cr.code as career_code',
+                ])
+                ->get();
+            foreach ($records as $record) {
+                FacultyMemberClass::updateOrCreate(
+                    [
+                        'faculty_id' => $faculty_id,
+                        'class_id' => $record->class_id,
+                        'term_id' => $record->term_id,
+                    ],
+                    [
+                        'class_name' => $record->class_name,
+                        'code' => $record->code,
+                        'term' => $record->term,
+                        'career_id' => $record->career_id,
+                        'career' => $record->career,
+                        'career_code' => $record->career_code,
+                    ]
+                );
+            }
+
+        } catch (Exception $e) {
+            return apiResponse(
+                $e->getMessage(),
+                [],
+                false,
+                500,
+                ''
+            );
+        }
     }
 
 }
