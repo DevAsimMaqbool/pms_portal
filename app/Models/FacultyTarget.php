@@ -27,4 +27,19 @@ class FacultyTarget extends Model
         'created_by',
         'updated_by'
     ];
+     // ✅ Relation: FacultyTarget belongs to a User
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // ✅ Relation: FacultyTarget belongs to an Indicator
+    public function indicator()
+    {
+        return $this->belongsTo(Indicator::class, 'indicator_id');
+    }
+    public function assign()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'employee_id');
+    }
 }

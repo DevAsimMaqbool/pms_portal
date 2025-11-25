@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class IntellectualPropertyController extends Controller
 {
@@ -62,7 +63,13 @@ class IntellectualPropertyController extends Controller
                          ->whereIn('created_by', $employeeIds)
                         ->whereIn('status', [1, 2])
                         ->where('form_status', 'RESEARCHER')
-                        ->get();
+                        ->get()
+                        ->map(function ($form) {
+                                if ($form->supporting_docs_as_attachment) {
+                                    $form->supporting_docs_as_attachment = Storage::url($form->supporting_docs_as_attachment);
+                                }
+                                return $form;
+                            });
                 
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');

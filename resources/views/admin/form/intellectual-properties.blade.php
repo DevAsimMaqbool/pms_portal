@@ -36,9 +36,6 @@
                             <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Intellectual Properties</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
                         </li>
                     </ul>
@@ -49,7 +46,7 @@
                     @if(auth()->user()->hasRole(['HOD', 'Teacher']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             <h5 class="mb-1">Patents/Intellectual Property (IPR)</h5>
-                            <h5 class="text-primary">Target 5</h5>
+                            <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
                             <form id="researchForm1" enctype="multipart/form-data" class="row">
                                 @csrf
                                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
@@ -108,35 +105,6 @@
                         </div>
                     @endif
                     @if(auth()->user()->hasRole(['HOD']))
-                        <div class="tab-pane fade" id="form2" role="tabpanel">
-                            <form id="researchForm2" enctype="multipart/form-data" class="row">
-                                @csrf
-                                <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
-                                <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
-                                <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
-                                <input type="hidden" id="form_status" name="form_status" value="HOD" required>
-
-                                <div class="row g-6">
-                                    <div class="col-md-6">
-                                        <label for="target_of_ip_disclosures" class="form-label">Target of ip
-                                            disclosures</label>
-                                        <input type="text" id="target_of_ip_disclosures" name="target_of_ip_disclosures"
-                                            class="form-control">
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label for="target_of_ip_filed" class="form-label">Target of ip filled</label>
-                                        <input type="text" id="target_of_ip_filed" name="target_of_ip_filed"
-                                            class="form-control">
-                                    </div>
-
-
-                                </div>
-                                <div class="col-4 text-center demo-vertical-spacing">
-                                    <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
-                                </div>
-                            </form>
-                        </div>
                         <div class="tab-pane fade" id="form3" role="tabpanel">
                             @if(auth()->user()->hasRole(['HOD']))
                                 <div class="d-flex">
@@ -286,6 +254,38 @@
     @if(auth()->user()->hasRole(['HOD', 'Teacher']))
         <script>
             $(document).ready(function () {
+                function fetchTarget(indicatorId) {
+
+                    if (!indicatorId) {
+                        $('#indicatorTarget').text('Target: N/A');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{{ route('faculty-target.getTarget') }}",
+                        type: "GET",
+                        data: {
+                            indicator_id: indicatorId
+                        },
+                        success: function(res) {
+                            if (res.target) {
+                                $('#indicatorTarget').text('Target: ' + res.target);
+                            } else {
+                                $('#indicatorTarget').text('Target: N/A');
+                            }
+                        },
+                        error: function() {
+                            $('#indicatorTarget').text('Target: N/A');
+                        }
+                    });
+                }
+
+                // ✅ Pass PHP variable safely
+                fetchTarget({{ $indicatorId }});
+
+
+
+
                 $('#patents_ip_type').on('change', function () {
                     var selectedValue = $(this).val();
                     if (selectedValue === 'Other') {
@@ -407,53 +407,36 @@
                     }
                 });
             }
+            // ✅ Reusable function for single update
+            function updateSingleStatus(id, status) {
+                $.ajax({
+                    url: `/intellectual-properties/${id}`,           // single row endpoint
+                    type: 'POST',                            // POST with _method PUT
+                    data: {
+                        _method: 'PUT',
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: status
+                    },
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Updated',
+                            text: res.message || 'Status updated successfully!'
+                        });
+                        
+                        fetchIndicatorForms3();
+                    },
+                    error: function (xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Something went wrong!'
+                        });
+                    }
+                });
+            }
             $(document).ready(function () {
                 fetchIndicatorForms3();
-                // Extra fields for Form 2
-                $('#researchForm2').on('submit', function (e) {
-                    e.preventDefault();
-                    let form = $(this);
-                    let formData = new FormData(this);
-
-                    $.ajax({
-                        url: "{{ route('intellectual-properties.store') }}",
-                        type: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            Swal.close();
-                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
-                            form[0].reset();
-                            form.find('.invalid-feedback').remove();
-                            form.find('.is-invalid').removeClass('is-invalid');
-                        },
-                        error: function (xhr) {
-                            Swal.close();
-                            // Clear previous errors before showing new ones
-                            form.find('.invalid-feedback').remove();
-                            form.find('.is-invalid').removeClass('is-invalid');
-                            if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
-
-                                // Loop through all validation errors
-                                $.each(errors, function (field, messages) {
-                                    let input = form.find('[name="' + field + '"]');
-
-                                    if (input.length) {
-                                        input.addClass('is-invalid');
-
-                                        // Show error message under input
-                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                    }
-                                });
-
-                            } else {
-                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
-                            }
-                        }
-                    });
-                });
                 $(document).on('click', '.view-form-btn', function () {
                     const form = $(this).data('form');
                     $('#modalExtraFields').find('.optional-field').remove();
@@ -504,48 +487,110 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>No of ip disclosed</th><td>${form.no_of_ip_disclosed}</td></tr>`);
                     }
 
-                    if (form.no_of_ip_filed) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>No of ip filed</th><td>${form.no_of_ip_filed}</td></tr>`);
-                    }
                     if (form.name_of_ip_filed) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Name of ip filed</th><td>${form.name_of_ip_filed}</td></tr>`);
                     }
-                    if (form.target_of_ip_disclosures) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target of ip disclosures</th><td>${form.target_of_ip_disclosures}</td></tr>`);
+                    if (form.area_of_application) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Area of Application</th><td>${form.area_of_application}</td></tr>`);
                     }
-                    if (form.target_of_ip_filed) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target of ip filed</th><td>${form.target_of_ip_filed}</td></tr>`);
+                    if (form.patents_ip_type) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Type</th><td>${form.patents_ip_type}</td></tr>`);
                     }
-                    $('#viewFormModal').modal('show');
-                });
-                $(document).on('change', '#approveCheckbox', function () {
-                    let id = $(this).data('id');
-                    let table_status = $(this).data('table_status');
-                    let status;
-                    if (window.currentUserRole === "HOD") {
-                        status = $(this).is(':checked') ? 2 : 1;
+                    if (form.other_detail) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Other Detail</th><td>${form.other_detail}</td></tr>`);
+                    }
+                    if (form.date_of_filing_registration) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Date of Filing Registration</th><td>${form.date_of_filing_registration}</td></tr>`);
+                    }
+                     
+
+
+                     if (form.supporting_docs_as_attachment) {
+                        let fileUrl = form.supporting_docs_as_attachment;
+                        let fileExt = fileUrl.split('.').pop().toLowerCase();
+
+                        let filePreview = '';
+
+                        // ✅ If Image → show preview
+                        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)) {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank">
+                                    <img src="${fileUrl}" alt="Screenshot" 
+                                        style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
+                                </a>
+                            `;
+                        }
+                        // ✅ If PDF → show download button
+                        else if (fileExt === 'pdf') {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
+                                    Download PDF
+                                </a>
+                            `;
+                        }
+                        // ✅ Other files → show generic download link
+                        else {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
+                                    Download File
+                                </a>
+                            `;
+                        }
+
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Supporting Document</th>
+                                <td>${filePreview}</td>
+                            </tr>
+                        `);
                     }
 
-                    $.ajax({
-                        url: `/intellectual-properties/${id}`,
-                        type: 'POST',
-                        data: {
-                            _method: 'PUT',
-                            _token: $('meta[name="csrf-token"]').attr('content'),
-                            status: status
-                        },
-                        success: function (response) {
-                            if (response.success) {
-                                alert('Status updated successfully!');
-                                fetchIndicatorForms3();
-                            } else {
-                                alert('Failed to update status.');
-                            }
-                        },
-                        error: function () {
-                            alert('Error updating status.');
+                    $('#viewFormModal').modal('show');
+                });
+
+
+
+                 // ✅ Single checkbox status change
+                $(document).on('change', '#approveCheckbox', function () {
+                    const id = $(this).data('id');
+                    const status = $(this).is(':checked') ? 2 : 1;
+                    updateSingleStatus(id, status);
+                });
+
+                // ✅ Bulk submit button
+                $('#bulkSubmit').on('click', function () {
+                    const status = $('#bulkAction').val();
+                    let selectedIds = [];
+
+                    $('#complaintTable3 .rowCheckbox:checked').each(function () {
+                        selectedIds.push($(this).val());
+                    });
+
+                    if (!status) {
+                        Swal.fire({ icon: 'warning', title: 'Select Action', text: 'Please select a status to update.' });
+                        return;
+                    }
+                    if (!selectedIds.length) {
+                        Swal.fire({ icon: 'warning', title: 'No Selection', text: 'Please select at least one row.' });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to change status for ${selectedIds.length} item(s).`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, update it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            selectedIds.forEach(id => updateSingleStatus(id, status));
                         }
                     });
+                });
+
+                // ✅ Select / Deselect all checkboxes
+                $(document).on('change', '#selectAll', function () {
+                    $('.rowCheckbox').prop('checked', $(this).is(':checked'));
                 });
             });
         </script>
