@@ -8,6 +8,7 @@ class FacultyMemberClass extends Model
 {
     protected $fillable = [
         'class_id',
+        'faculty_id',
         'class_name',
         'code',
         'term_id',

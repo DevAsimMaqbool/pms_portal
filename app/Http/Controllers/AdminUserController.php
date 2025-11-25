@@ -224,7 +224,9 @@ class AdminUserController extends Controller
                     'cr.code as career_code',
                 ])
                 ->get();
+
             foreach ($records as $record) {
+
                 FacultyMemberClass::updateOrCreate(
                     [
                         'faculty_id' => $faculty_id,
