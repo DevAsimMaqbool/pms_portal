@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Indicator;
 use App\Models\IndicatorCategory;
 use App\Models\KeyPerformanceArea;
+use App\Models\RoleKpaAssignment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,17 +17,34 @@ class ComparitiveAnalysisController extends Controller
     public function index()
     {
         try {
-            $kfarea = KeyPerformanceArea::all();
+            $user = Auth::user();
+            $role = $user->roles->first();
+
+            // Assigned KPAs based on role
+            $assignments = RoleKpaAssignment::with('kpa')
+                ->where('role_id', $role->id)
+                ->get();
+
+            // Extract KPAs from assignments
+            $kfarea = $assignments->map(fn($item) => $item->kpa)->unique('id')->values();
             $labels = ['A', 'B', 'C', 'D', 'E', 'F'];
 
             $averageOfAverages = '80.87';
             $dataset1 = [90, 100, 85, 90, 90, 90];
             $dataset2 = [80, 90, 75, 80, 80, 80];
-            return view('admin.comparitive_analysis', compact('kfarea', 'dataset1', 'dataset2', 'averageOfAverages', 'labels'));
+
+            return view('admin.comparitive_analysis', compact(
+                'kfarea',
+                'dataset1',
+                'dataset2',
+                'averageOfAverages',
+                'labels'
+            ));
         } catch (\Exception $e) {
             return apiResponse('Oops! Something went wrong', [], false, 500, '');
         }
     }
+
 
     public function getUsers(Request $request)
     {

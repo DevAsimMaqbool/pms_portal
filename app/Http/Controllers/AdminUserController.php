@@ -6,6 +6,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class AdminUserController extends Controller
 {
@@ -188,6 +189,13 @@ class AdminUserController extends Controller
                 ''
             );
         }
+    }
+
+    public function testOfOdoo(Request $request)
+    {
+        dd('asim');
+        $users = DB::connection('pgsql')->table('res_users')->limit(1)->get();
+        dd($users);
     }
 
 }

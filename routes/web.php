@@ -41,6 +41,7 @@ use App\Http\Controllers\FacultyTargetController;
 use App\Http\Controllers\IndustrialProjectsController;
 use App\Http\Controllers\NoOfGrantsSubmitAndWonController;
 use App\Http\Controllers\ProductsDeliveredToIndustryController;
+use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -169,6 +170,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('pip', PipController::class);
     Route::post('pip/{id}/update-status', [PipController::class, 'updateStatus'])->name('pip.updateStatus');
     Route::resource('/self-assessment', SelfAssessmentWorkingController::class);
+    // web.php
+    Route::post('self-assessment/term-data', [SelfAssessmentWorkingController::class, 'termData'])->name('self-assessment.termData');
+
     Route::get('comparitive-analysis', [ComparitiveAnalysisController::class, 'index'])->name('comparitive.analysis');
     Route::post('/get-indicator-categories-comp', [ComparitiveAnalysisController::class, 'getIndicatorCategories'])->name('Category.IndicatorCategories');
     Route::post('/get-indicators-comp', [ComparitiveAnalysisController::class, 'getIndicators'])->name('indicator.getIndicatorsForComp');
@@ -180,6 +184,8 @@ Route::middleware('auth')->group(function () {
     Route::get('awards', [AwardController::class, 'index'])->name('pms.awards');
 
     Route::get('/hod-taget', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
+
+    Route::get('/odoo-test', [AdminUserController::class, 'testOfOdoo'])->name('odoo.test');
 });
 
 require __DIR__ . '/auth.php';
