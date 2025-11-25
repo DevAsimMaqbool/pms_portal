@@ -390,7 +390,7 @@
                                         <tr>
                                             <td>{{ $sr++ }}</td>
                                             <td>{{ $class->code }}</td>
-                                            <td>{{ $class->class_name }}</td>
+                                            <td>{{ $latestAttendance->program_name }}</td>
                                             <td>{{ $class->career_code }}</td>
                                             <td>{{ $scheduled }}</td>
                                             <td>{{ $latestAttendance->present_count }}</td>

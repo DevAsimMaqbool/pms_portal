@@ -248,7 +248,7 @@ class FacultyMemberClassController extends Controller
             ->where('ca.att_marked', 'true')
             ->select([
                 'ca.class_id',
-                'p.program_name',
+                'p.name as program_name',
                 'ca.date_att',
                 'cal.student_id',
                 'cal.present',
@@ -294,7 +294,7 @@ class FacultyMemberClassController extends Controller
                     'class_date' => $students->first()->date_att, // take date_att from first student
                 ],
                 [
-                    'program_name' => $students->first()->program_name,
+                    'program_name' => $students->first()->program_name ?? null,
                     'total_students' => $totalStudents,
                     'present_count' => $presentCount,
                     'absent_count' => $absentCount,
