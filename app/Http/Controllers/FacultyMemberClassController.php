@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FacultyMemberClass;
+use App\Models\FacultyClassAttendance;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -190,16 +191,17 @@ class FacultyMemberClassController extends Controller
         }
     }
 
-    public function classesAttendance(Request $request)
+    public function classesAttendancebk(Request $request)
     {
         try {
             $currentDate = now()->format('Y-m-d');
             $records = DB::connection('pgsql')
                 ->table('odoocms_class_attendance as ca')
                 ->leftJoin('odoocms_class_attendance_line as cal', 'cal.attendance_id', '=', 'ca.id')
-                ->where('ca.date_att', $currentDate)
+                ->where('ca.date_att', '2022-10-24')
+                //->where('ca.class_id', '49057')
                 ->where('ca.att_marked', 'true')
-                ->limit(1)
+                // ->limit(1)
                 ->select([
                     'ca.class_id',
                     'ca.term_id',
@@ -215,25 +217,12 @@ class FacultyMemberClassController extends Controller
                     'cal.present',
                 ])
                 ->get();
-            dd($records);
-            foreach ($records as $record) {
 
-                FacultyMemberClass::updateOrCreate(
-                    [
-                        'faculty_id' => $faculty_id,
-                        'class_id' => $record->class_id,
-                        'term_id' => $record->term_id,
-                    ],
-                    [
-                        'class_name' => $record->class_name,
-                        'code' => $record->code,
-                        'term' => $record->term,
-                        'career_id' => $record->career_id,
-                        'career' => $record->career,
-                        'career_code' => $record->career_code,
-                    ]
-                );
-            }
+            $totalStudents = $records->count();
+            $presentCount = $records->where('present', true)->count();
+            $absentCount = $totalStudents - $presentCount;
+            $presentPercentage = $totalStudents > 0 ? round(($presentCount / $totalStudents) * 100, 2) : 0;
+            dd($records);
 
         } catch (Exception $e) {
             return apiResponse(
@@ -245,4 +234,75 @@ class FacultyMemberClassController extends Controller
             );
         }
     }
+
+    public function classesAttendance()
+    {
+        // Fetch attendance records
+        $records = DB::connection('pgsql')
+            ->table('odoocms_class_attendance as ca')
+            ->leftJoin('odoocms_class_attendance_line as cal', 'cal.attendance_id', '=', 'ca.id')
+            ->where('ca.date_att', '2022-10-24')
+            ->where('ca.class_id', '49057')
+            ->where('ca.att_marked', 'true')
+            ->select([
+                'ca.class_id',
+                'ca.date_att',
+                'cal.student_id',
+                'cal.present',
+            ])
+            ->get();
+
+        // Group records by class_id
+        $groupedByClass = $records->groupBy('class_id');
+
+        foreach ($groupedByClass as $classId => $students) {
+            $totalStudents = $students->count();
+            $presentCount = $students->where('present', true)->count();
+            $absentCount = $totalStudents - $presentCount;
+
+            $presentPercentage = $totalStudents > 0 ? round(($presentCount / $totalStudents) * 100, 2) : 0;
+            $absentPercentage = $totalStudents > 0 ? round(($absentCount / $totalStudents) * 100, 2) : 0;
+
+            // Determine color and rating
+            if ($presentPercentage >= 90 && $presentPercentage <= 100) {
+                $color = '#6EA8FE';
+                $rating = 'OS';
+            } elseif ($presentPercentage >= 80 && $presentPercentage < 90) {
+                $color = '#96e2b4';
+                $rating = 'EE';
+            } elseif ($presentPercentage >= 70 && $presentPercentage < 80) {
+                $color = '#ffcb9a';
+                $rating = 'ME';
+            } elseif ($presentPercentage >= 60 && $presentPercentage < 70) {
+                $color = '#fd7e13';
+                $rating = 'NI';
+            } elseif ($presentPercentage >= 50 && $presentPercentage < 60) {
+                $color = '#ff4c51';
+                $rating = 'BE';
+            } else {
+                $color = '#d3d3d3'; // default color for <50%
+                $rating = 'NA';
+            }
+
+            // Save or update in FacultyClassAttendance
+            FacultyClassAttendance::updateOrCreate(
+                [
+                    'class_id' => $classId,
+                    'class_date' => $students->first()->date_att, // take date_att from first student
+                ],
+                [
+                    'total_students' => $totalStudents,
+                    'present_count' => $presentCount,
+                    'absent_count' => $absentCount,
+                    'present_percentage' => $presentPercentage,
+                    'absent_percentage' => $absentPercentage,
+                    'color' => $color,
+                    'rating' => $rating,
+                ]
+            );
+        }
+
+        return response()->json(['message' => 'Attendance summary saved successfully.']);
+    }
+
 }
