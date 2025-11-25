@@ -198,6 +198,7 @@ class FacultyMemberClassController extends Controller
             $records = DB::connection('pgsql')
                 ->table('odoocms_class_attendance as ca')
                 ->leftJoin('odoocms_class_attendance_line as cal', 'cal.attendance_id', '=', 'ca.id')
+                ->leftJoin('odoocms_program as p', 'p.id', '=', 'ca.program_id')
                 ->where('ca.date_att', '2022-10-24')
                 //->where('ca.class_id', '49057')
                 ->where('ca.att_marked', 'true')
@@ -206,7 +207,7 @@ class FacultyMemberClassController extends Controller
                     'ca.class_id',
                     'ca.term_id',
                     'ca.batch_id',
-                    'ca.program_id',
+                    'p.program_name',
                     'ca.faculty_id',
                     'ca.date_class',
                     'ca.date_att',
@@ -241,11 +242,13 @@ class FacultyMemberClassController extends Controller
         $records = DB::connection('pgsql')
             ->table('odoocms_class_attendance as ca')
             ->leftJoin('odoocms_class_attendance_line as cal', 'cal.attendance_id', '=', 'ca.id')
+            ->leftJoin('odoocms_program as p', 'p.id', '=', 'ca.program_id')
             ->where('ca.date_att', '2022-10-24')
             ->where('ca.class_id', '49057')
             ->where('ca.att_marked', 'true')
             ->select([
                 'ca.class_id',
+                'p.program_name',
                 'ca.date_att',
                 'cal.student_id',
                 'cal.present',
@@ -260,8 +263,8 @@ class FacultyMemberClassController extends Controller
             $presentCount = $students->where('present', true)->count();
             $absentCount = $totalStudents - $presentCount;
 
-            $presentPercentage = $totalStudents > 0 ? round(($presentCount / $totalStudents) * 100, 2) : 0;
-            $absentPercentage = $totalStudents > 0 ? round(($absentCount / $totalStudents) * 100, 2) : 0;
+            $presentPercentage = $totalStudents > 0 ? round(($presentCount / $totalStudents) * 100) : 0;
+            $absentPercentage = $totalStudents > 0 ? round(($absentCount / $totalStudents) * 100) : 0;
 
             // Determine color and rating
             if ($presentPercentage >= 90 && $presentPercentage <= 100) {
@@ -291,6 +294,7 @@ class FacultyMemberClassController extends Controller
                     'class_date' => $students->first()->date_att, // take date_att from first student
                 ],
                 [
+                    'program_name' => $students->first()->program_name,
                     'total_students' => $totalStudents,
                     'present_count' => $presentCount,
                     'absent_count' => $absentCount,

@@ -373,47 +373,41 @@
                                 </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                    <tr>
-                                        <td>1</td>
-                                        <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
-                                        <td>BSIT</td>
-                                        <td>PG</td>
-                                        <td>10-10-2025</td>
-                                        <td>32</td>
-                                        <td>30</td>
-                                        <td>
-                                            <div class="badge bg-label-primary">93%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
-                                        <td>BSCS</td>
-                                        <td>PG</td>
-                                        <td>10-11-2025</td>
-                                        <td>50</td>
-                                        <td>41</td>
-                                        <td>
-                                            <div class="badge bg-label-success">85%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-success me-1">EE</span></td>
-                                    </tr>
+                                    @php
+                                        $att = myClassesAttendance(Auth::user()->faculty_id);
+                                        $sr = 1;
+                                    @endphp
 
-                                    <tr>
-                                        <td>3</td>
-                                        <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
-                                        <td>BSSE</td>
-                                        <td>UG</td>
-                                        <td>11-11-2025</td>
-                                        <td>50</td>
-                                        <td>40</td>
-                                        <td>
-                                            <div class=" badge bg-label-success">80%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-success me-1">EE</span></td>
-                                    </tr>
+                                    @foreach($att as $class)
+                                        @php
+                                            // Get the latest attendance record for this class
+                                            $latestAttendance = $class->attendances->first();
+                                            if (!$latestAttendance)
+                                                continue; // skip if no attendance
 
+                                            $scheduled = \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y');
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $sr++ }}</td>
+                                            <td>{{ $class->code }}</td>
+                                            <td>{{ $class->class_name }}</td>
+                                            <td>{{ $class->career_code }}</td>
+                                            <td>{{ $scheduled }}</td>
+                                            <td>{{ $latestAttendance->present_count }}</td>
+                                            <td>{{ $latestAttendance->absent_count }}</td>
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $latestAttendance->color }}">
+                                                    {{ $latestAttendance->present_percentage }}%
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge"
+                                                    style="background-color: {{ $latestAttendance->color }}">
+                                                    {{ $latestAttendance->rating }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

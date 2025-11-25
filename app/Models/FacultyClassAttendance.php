@@ -8,6 +8,7 @@ class FacultyClassAttendance extends Model
 {
     protected $fillable = [
         'class_id',
+        'program_name',
         'class_date',
         'total_students',
         'present_count',
@@ -17,4 +18,9 @@ class FacultyClassAttendance extends Model
         'color',
         'rating',
     ];
+
+    public function facultyClass()
+    {
+        return $this->belongsTo(FacultyMemberClass::class, 'class_id', 'class_id');
+    }
 }

@@ -8,6 +8,7 @@ use App\Models\RoleKpaAssignment;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Models\Role;
+use App\Models\FacultyMemberClass;
 
 if (!function_exists('getResponse')) {
     function getResponse($data, $token, $message, $status): array
@@ -190,4 +191,17 @@ function icons()
         'ti tabler-star',
         'ti tabler-device-laptop'
     ];
+}
+
+function myClassesAttendance($facultyId)
+{
+    return FacultyMemberClass::with([
+        'attendances' => function ($query) {
+            $query->orderBy('class_date', 'desc'); // latest attendance first
+        }
+    ])
+        ->where('faculty_id', $facultyId)
+        ->whereHas('attendances') // only classes that have attendance records
+        ->select('class_id', 'class_name', 'code', 'term', 'career_code')
+        ->get();
 }

@@ -17,4 +17,9 @@ class FacultyMemberClass extends Model
         'career',
         'career_code'
     ];
+
+    public function attendances()
+    {
+        return $this->hasMany(FacultyClassAttendance::class, 'class_id', 'class_id');
+    }
 }
