@@ -8,7 +8,10 @@ class FacultyClassAttendance extends Model
 {
     protected $fillable = [
         'class_id',
+        'faculty_id',
         'program_name',
+        'state',
+        'att_marked',
         'class_date',
         'total_students',
         'present_count',

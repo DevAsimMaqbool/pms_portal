@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FacultyMemberClass;
 use App\Models\FacultyClassAttendance;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -236,7 +237,7 @@ class FacultyMemberClassController extends Controller
         }
     }
 
-    public function classesAttendance()
+    public function classesAttendanceBKK()
     {
         // Fetch attendance records
         $records = DB::connection('pgsql')
@@ -254,7 +255,7 @@ class FacultyMemberClassController extends Controller
                 'cal.present',
             ])
             ->get();
-
+        dd($records);
         // Group records by class_id
         $groupedByClass = $records->groupBy('class_id');
 
@@ -307,6 +308,49 @@ class FacultyMemberClassController extends Controller
         }
 
         return response()->json(['message' => 'Attendance summary saved successfully.']);
+    }
+
+    public function classesAttendance()
+    {
+
+        $date = '2025-09-30';
+
+        $attendanceSummary = DB::connection('pgsql')
+            ->table('odoocms_class_attendance as ca')
+            ->leftJoin('odoocms_class_attendance_line as cal', 'cal.attendance_id', '=', 'ca.id')
+            ->leftJoin('odoocms_program as p', 'p.id', '=', 'ca.program_id')
+            ->select([
+                DB::raw('MAX(ca.class_id) as class_id'),
+                DB::raw('MAX(cal.faculty_updated_id) as faculty_id'),
+                DB::raw('MAX(p.name) as program_name'),
+                DB::raw('MAX(cal.state) as state'),
+                DB::raw('BOOL_OR(ca.att_marked) as att_marked'),
+                DB::raw('COUNT(cal.student_id) as total_no_of_students'),
+                DB::raw("COUNT(cal.student_id) FILTER (WHERE cal.present = 'true') as present_students_count"),
+                DB::raw("COUNT(cal.student_id) FILTER (WHERE cal.present = 'false') as absent_students_count")
+            ])
+            ->where('ca.date_class', $date)
+            ->groupBy('ca.id')
+            ->get();
+        foreach ($attendanceSummary as $item) {
+            FacultyClassAttendance::updateOrCreate(
+                [
+                    'class_date' => $date,
+                    'class_id' => $item->class_id,
+                    'faculty_id' => $item->faculty_id,
+                ],
+                [
+                    'program_name' => $item->program_name,
+                    'state' => $item->state,
+                    'att_marked' => $item->att_marked,
+                    'total_students' => $item->total_no_of_students,
+                    'present_count' => $item->present_students_count,
+                    'absent_count' => $item->absent_students_count,
+                ]
+            );
+        }
+        return response()->json(['message' => 'Attendance summary saved successfully.']);
+
     }
 
 }
