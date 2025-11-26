@@ -6,7 +6,9 @@ use App\Models\CommercialGainsCounsultancyResearchIncome;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class CommercialGainsCounsultancyResearchIncomeController extends Controller
 {
@@ -24,17 +26,6 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                    $status = $request->input('status');
                    $hod_ids = User::where('manager_id', $employee_id)
                    ->role('HOD')->pluck('employee_id');
-                    if($status=="HOD"){
-                           $forms = CommercialGainsCounsultancyResearchIncome::with([
-                                'creator' => function ($q) {
-                                    $q->select('employee_id', 'name');
-                                }
-                            ])
-                            ->whereIn('created_by', $hod_ids)
-                            ->whereIn('status', [1, 2])
-                            ->where('form_status', $status)
-                            ->get();
-                    }
                     if($status=="RESEARCHER"){
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
                         ->role('Teacher')->pluck('employee_id');
@@ -42,12 +33,18 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                           $forms = CommercialGainsCounsultancyResearchIncome::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                },'Projects'
+                                }
                             ])
                             ->whereIn('created_by', $all_ids)
                             ->whereIn('status', [3, 2])
                             ->where('form_status', $status)
-                            ->get();
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->consultancy_file) {
+                                    $form->consultancy_file = Storage::url($form->consultancy_file);
+                                }
+                                return $form;
+                            });
                     }
 
             }if ($user->hasRole('HOD')) {
@@ -56,34 +53,36 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                     $forms = CommercialGainsCounsultancyResearchIncome::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
-                            },'Projects'
+                            }
                         ])
                          ->whereIn('created_by', $employeeIds)
                         ->whereIn('status', [1, 2])
                         ->where('form_status', 'RESEARCHER')
-                        ->get();
+                        ->get()
+                        ->map(function ($form) {
+                                if ($form->consultancy_file) {
+                                    $form->consultancy_file = Storage::url($form->consultancy_file);
+                                }
+                                return $form;
+                            });
                 
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
-                    if($status=="HOD"){
-                           $forms = CommercialGainsCounsultancyResearchIncome::with([
-                                'creator' => function ($q) {
-                                    $q->select('employee_id', 'name');
-                                },'Projects'
-                            ])
-                            ->whereIn('status', [2, 3])
-                            ->where('form_status', $status)
-                            ->get();
-                    }
                     if($status=="RESEARCHER"){
                           $forms = CommercialGainsCounsultancyResearchIncome::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                },'Projects'
+                                }
                             ])
                             ->whereIn('status', [4, 3])
                             ->where('form_status', $status)
-                            ->get();
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->consultancy_file) {
+                                    $form->consultancy_file = Storage::url($form->consultancy_file);
+                                }
+                                return $form;
+                            });
                     }
 
             }if ($user->hasRole('Human Resources')) {
@@ -128,35 +127,19 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
     public function store(Request $request)
     {
         try { 
-            $employeeId = Auth::user()->employee_id;
             if($request->form_status=='RESEARCHER'){
                  $rules = [
-                        'kpa_id' => 'required',
-                        'sp_category_id' => 'required',
                         'indicator_id' => 'required',
-                        'no_of_consultancies_done' => 'required|integer',
                         'title_of_consultancy' => 'required|string',
                         'duration_of_consultancy' => 'required|string',
                         'name_of_client_organization' => 'required|string',
-                        'industrial_projects' => 'required|array',
-                        'industrial_projects.*.no_of_projects' => 'required|integer',
-                        'industrial_projects.*.name_of_project' => 'required|string',
-                        'industrial_projects.*.name_of_contracting_industry' => 'required|string',
-                        'industrial_projects.*.total_duration_of_project' => 'required|string',
-                        'industrial_projects.*.estimate_cost_project' => 'required|string',
-                        'industrial_projects.*.completion_year' => 'required|string',
+                        'consultancy_fee' => 'required|numeric|min:0',
+                        'consultancy_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
                         'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                     ];
                     $messages = [
-                        'industrial_projects.*.name_of_project.required' => 'Name of industrial projects is required.',
-                        'industrial_projects.*.no_of_projects.required' => 'No of industrial projects is required.',
-                        'industrial_projects.*.name_of_contracting_industry.required' => 'Name of contracting industry is required.',
-                        'industrial_projects.*.total_duration_of_project.required' => 'Total duration of the project is required.',
-                        'industrial_projects.*.estimate_cost_project.required' => 'Estimated project cost is required.',
-                        'industrial_projects.*.completion_year.required' => 'Estimated completion month/year is required.',
-                        // You can add more custom messages if you want
+                        'consultancy_file.mimes' => 'Upload JPG / PNG / PDF only.',
                     ];
-
 
                     $validator = Validator::make($request->all(), $rules, $messages);
                     if ($validator->fails()) {
@@ -166,92 +149,48 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                             ], 422);
                         }
                         $data = $request->only([
-                            'kpa_id',
-                            'sp_category_id',
                             'indicator_id',
-                            'no_of_consultancies_done',
                             'title_of_consultancy',
                             'duration_of_consultancy',
                             'name_of_client_organization',
+                            'consultancy_fee',
                             'form_status'
                         ]); 
+                    if ($request->hasFile('consultancy_file')) {
+
+                        $file = $request->file('consultancy_file');
+                        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                        $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                        $uniqueNumber = rand(1000, 9999);
+                        $extension = $file->getClientOriginalExtension();
+                        $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                        $path = $file->storeAs('consultancy_file', $fileName, 'public');
+                        $data['consultancy_file'] = $path;
+                    }
+                       $employeeId = Auth::user()->employee_id;
+                        DB::beginTransaction();
                         $data['created_by'] = $employeeId;
                         $data['updated_by'] = $employeeId;
                         $research = CommercialGainsCounsultancyResearchIncome::create($data);
-
-                        // Save multiple industrial projects
-                        if ($request->has('industrial_projects')) {
-                            foreach ($request->industrial_projects as $project) {
-                                $research->projects()->create([
-                                    'no_of_projects' => $project['no_of_projects'],
-                                    'name_of_project' => $project['name_of_project'],
-                                    'name_of_contracting_industry' => $project['name_of_contracting_industry'],
-                                    'total_duration_of_project' => $project['total_duration_of_project'],
-                                    'estimate_cost_project' => $project['estimate_cost_project'],
-                                    'completion_year' => $project['completion_year'],
-                                    'created_by' => $employeeId,
-                                    'updated_by' => $employeeId,
-                                ]);
-                            }
-                        }
-
+                       
+                        DB::commit();
                         return response()->json([
                             'status' => 'success',
                             'message' => 'Form saved successfully!',
                             'data' => $research
                         ]);
-
                        
             }
-            if($request->form_status=='HOD'){
-                  $rules = [
-                        'kpa_id' => 'required',
-                        'sp_category_id' => 'required',
-                        'indicator_id' => 'required',
-                        'target_of_consultancy_projects' => 'required',
-                        'target_of_industrial_projects' => 'required',
-                        'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-                    ];
-
-
-                    $validator = Validator::make($request->all(), $rules);
-                    if ($validator->fails()) {
-                            return response()->json([
-                                'status' => 'error',
-                                'errors' => $validator->errors()
-                            ], 422);
-                        }
-                    $data = $request->only([
-                            'kpa_id',
-                            'sp_category_id',
-                            'indicator_id',
-                            'target_of_consultancy_projects',
-                            'target_of_industrial_projects',
-                            'form_status'
-                        ]); 
-                         $data['created_by'] = $employeeId;
-                         $data['updated_by'] = $employeeId;
-                        $record = CommercialGainsCounsultancyResearchIncome::create($data);
-                        if ($record) {
-                            return response()->json([
-                                'status' => 'success',
-                                'message' => 'Record saved successfully',
-                                'data' => $record
-                            ], 201);
-                        } 
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => 'Failed to save record'
-                        ], 500);
-
-            }
-
-            
-
            
 
         } catch (\Exception $e) {
-
+            DB::rollBack();
+            // return response()->json([
+            //     'message' => 'Oops! Something went wrong',
+            //     'error' => $e->getMessage()
+            // ], 500);
+            return response()->json([
+            'message' => 'Oops! Something went wrong'], 500);
         }
     }
     /**

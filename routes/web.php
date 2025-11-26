@@ -37,6 +37,11 @@ use App\Http\Controllers\ComparitiveAnalysisController;
 use App\Models\RatingOnImpactOfResearchConferencesOrganized;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\DownloadsController;
+use App\Http\Controllers\FacultyTargetController;
+use App\Http\Controllers\IndustrialProjectsController;
+use App\Http\Controllers\NoOfGrantsSubmitAndWonController;
+use App\Http\Controllers\ProductsDeliveredToIndustryController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\FacultyMemberClassController;
 use Illuminate\Support\Facades\Route;
 
@@ -145,8 +150,17 @@ Route::middleware('auth')->group(function () {
         Route::resource('intellectual-properties', IntellectualPropertyController::class);
         Route::resource('counsultancy', CommercialGainsCounsultancyResearchIncomeController::class);
         Route::resource('international-Coauthored-Paper', InternationalCoauthoredPaperController::class);
+        Route::resource('no-Of-GrantSubmit-And-Won', NoOfGrantsSubmitAndWonController::class);
         Route::resource('achievement-ofmultidisciplinary', NoAchievementOfMultidisciplinaryProjectsTargetController::class);
+        Route::resource('products-delivered-to-industry', ProductsDeliveredToIndustryController::class);
+        Route::resource('industrial-projects', IndustrialProjectsController::class);
+        Route::resource('faculty-target', FacultyTargetController::class);
+        // routes/web.php
+        
+
     });
+    Route::get('/faculty-target-gets', [FacultyTargetController::class, 'getTarget'])
+    ->name('faculty-target.getTarget');
 
     Route::resource('/survey', SurveyController::class);
     Route::get('/survey-report', [SurveyController::class, 'report'])->name('survey.report');
@@ -175,7 +189,18 @@ Route::middleware('auth')->group(function () {
     Route::get('downloads', [DownloadsController::class, 'index'])->name('pms.downloads');
     Route::get('awards', [AwardController::class, 'index'])->name('pms.awards');
 
-    Route::get('/hod-taget', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
+    Route::middleware('role:HOD')->group(function () {
+      Route::get('/hod-taget', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
+    });
+    Route::middleware('role:Dean')->group(function () {
+      Route::get('/dean-taget', [FormBuilderController::class, 'DeanTargetForms'])->name('dean.target');
+    });
+    Route::middleware('role:ORIC')->group(function () {
+      Route::get('/oric-taget', [FormBuilderController::class, 'OricTargetForms'])->name('oric.target');
+    });
+    Route::middleware('role:Human Resources')->group(function () {
+      Route::get('/hr-taget', [FormBuilderController::class, 'HrTargetForms'])->name('hr.target');
+    });
 
     Route::get('/odoo-classes', [FacultyMemberClassController::class, 'odooClasses'])->name('odoo.classes');
     Route::get('/classes-attendance', [FacultyMemberClassController::class, 'classesAttendance'])->name('classes.attendance');
