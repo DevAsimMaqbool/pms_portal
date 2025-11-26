@@ -23,8 +23,4 @@ class CommercialGainsCounsultancyResearchIncome extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'employee_id');
     }
-    public function Projects()
-    {
-        return $this->hasMany(CommercialGainsCounsultancyResearchIncomeProject::class, 'consultancy_id');
-    }
 }

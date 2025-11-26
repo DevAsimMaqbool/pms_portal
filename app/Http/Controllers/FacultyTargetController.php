@@ -267,9 +267,7 @@ class FacultyTargetController extends Controller
              ->where('user_id', $employeeId)
             ->first();
 
-        return response()->json([
-            'target' => $record ? $record->target : null
-        ]);
+        return response()->json(['data' => $record]);
     }
 
 }

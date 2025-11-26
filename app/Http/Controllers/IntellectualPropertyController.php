@@ -26,17 +26,6 @@ class IntellectualPropertyController extends Controller
                    $status = $request->input('status');
                    $hod_ids = User::where('manager_id', $employee_id)
                    ->role('HOD')->pluck('employee_id');
-                    if($status=="HOD"){
-                           $forms = IntellectualProperty::with([
-                                'creator' => function ($q) {
-                                    $q->select('employee_id', 'name');
-                                }
-                            ])
-                            ->whereIn('created_by', $hod_ids)
-                            ->whereIn('status', [1, 2])
-                            ->where('form_status', $status)
-                            ->get();
-                    }
                     if($status=="RESEARCHER"){
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
                         ->role('Teacher')->pluck('employee_id');
@@ -49,7 +38,13 @@ class IntellectualPropertyController extends Controller
                             ->whereIn('created_by', $all_ids)
                             ->whereIn('status', [3, 2])
                             ->where('form_status', $status)
-                            ->get();
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->supporting_docs_as_attachment) {
+                                    $form->supporting_docs_as_attachment = Storage::url($form->supporting_docs_as_attachment);
+                                }
+                                return $form;
+                            });
                     }
 
             }if ($user->hasRole('HOD')) {
@@ -73,16 +68,6 @@ class IntellectualPropertyController extends Controller
                 
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
-                    if($status=="HOD"){
-                           $forms = IntellectualProperty::with([
-                                'creator' => function ($q) {
-                                    $q->select('employee_id', 'name');
-                                }
-                            ])
-                            ->whereIn('status', [2, 3])
-                            ->where('form_status', $status)
-                            ->get();
-                    }
                     if($status=="RESEARCHER"){
                           $forms = IntellectualProperty::with([
                                 'creator' => function ($q) {
@@ -91,7 +76,13 @@ class IntellectualPropertyController extends Controller
                             ])
                             ->whereIn('status', [4, 3])
                             ->where('form_status', $status)
-                            ->get();
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->supporting_docs_as_attachment) {
+                                    $form->supporting_docs_as_attachment = Storage::url($form->supporting_docs_as_attachment);
+                                }
+                                return $form;
+                            });
                     }
 
             }if ($user->hasRole('Human Resources')) {

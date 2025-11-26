@@ -25,17 +25,6 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                    $status = $request->input('status');
                    $hod_ids = User::where('manager_id', $employee_id)
                    ->role('HOD')->pluck('employee_id');
-                    if($status=="HOD"){
-                           $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
-                                'creator' => function ($q) {
-                                    $q->select('employee_id', 'name');
-                                }
-                            ])
-                            ->whereIn('created_by', $hod_ids)
-                            ->whereIn('status', [1, 2])
-                            ->where('form_status', $status)
-                            ->get();
-                    }
                     if($status=="RESEARCHER"){
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
                         ->role('Teacher')->pluck('employee_id');
@@ -66,16 +55,6 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                 
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
-                    if($status=="HOD"){
-                           $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
-                                'creator' => function ($q) {
-                                    $q->select('employee_id', 'name');
-                                }
-                            ])
-                            ->whereIn('status', [2, 3])
-                            ->where('form_status', $status)
-                            ->get();
-                    }
                     if($status=="RESEARCHER"){
                           $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
                                 'creator' => function ($q) {

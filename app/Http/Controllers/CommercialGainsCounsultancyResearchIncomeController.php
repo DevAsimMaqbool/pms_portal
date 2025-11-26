@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class CommercialGainsCounsultancyResearchIncomeController extends Controller
 {
@@ -25,17 +26,6 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                    $status = $request->input('status');
                    $hod_ids = User::where('manager_id', $employee_id)
                    ->role('HOD')->pluck('employee_id');
-                    if($status=="HOD"){
-                           $forms = CommercialGainsCounsultancyResearchIncome::with([
-                                'creator' => function ($q) {
-                                    $q->select('employee_id', 'name');
-                                }
-                            ])
-                            ->whereIn('created_by', $hod_ids)
-                            ->whereIn('status', [1, 2])
-                            ->where('form_status', $status)
-                            ->get();
-                    }
                     if($status=="RESEARCHER"){
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
                         ->role('Teacher')->pluck('employee_id');
@@ -43,12 +33,18 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                           $forms = CommercialGainsCounsultancyResearchIncome::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                },'Projects'
+                                }
                             ])
                             ->whereIn('created_by', $all_ids)
                             ->whereIn('status', [3, 2])
                             ->where('form_status', $status)
-                            ->get();
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->consultancy_file) {
+                                    $form->consultancy_file = Storage::url($form->consultancy_file);
+                                }
+                                return $form;
+                            });
                     }
 
             }if ($user->hasRole('HOD')) {
@@ -57,34 +53,36 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                     $forms = CommercialGainsCounsultancyResearchIncome::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
-                            },'Projects'
+                            }
                         ])
                          ->whereIn('created_by', $employeeIds)
                         ->whereIn('status', [1, 2])
                         ->where('form_status', 'RESEARCHER')
-                        ->get();
+                        ->get()
+                        ->map(function ($form) {
+                                if ($form->consultancy_file) {
+                                    $form->consultancy_file = Storage::url($form->consultancy_file);
+                                }
+                                return $form;
+                            });
                 
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
-                    if($status=="HOD"){
-                           $forms = CommercialGainsCounsultancyResearchIncome::with([
-                                'creator' => function ($q) {
-                                    $q->select('employee_id', 'name');
-                                },'Projects'
-                            ])
-                            ->whereIn('status', [2, 3])
-                            ->where('form_status', $status)
-                            ->get();
-                    }
                     if($status=="RESEARCHER"){
                           $forms = CommercialGainsCounsultancyResearchIncome::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                },'Projects'
+                                }
                             ])
                             ->whereIn('status', [4, 3])
                             ->where('form_status', $status)
-                            ->get();
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->consultancy_file) {
+                                    $form->consultancy_file = Storage::url($form->consultancy_file);
+                                }
+                                return $form;
+                            });
                     }
 
             }if ($user->hasRole('Human Resources')) {
