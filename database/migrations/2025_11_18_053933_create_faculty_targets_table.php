@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('indicator_id'); // Indicator
             $table->unsignedBigInteger('user_id'); // Faculty member
-
+            $table->unsignedInteger('target')->nullable();
             $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER'])->default('HOD');
 
             // Scopus targets
@@ -30,6 +30,7 @@ return new class extends Migration {
 
             // Medical target
             $table->unsignedInteger('medical_recognized')->nullable();
+            
 
             // National / International
             $table->unsignedInteger('national')->nullable();

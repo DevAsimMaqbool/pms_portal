@@ -92,7 +92,7 @@
         </a>
       </li>
       @php
-        $result = getRoleAssignments(Auth::user()->getRoleNames()->first(), 2);
+        $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
         $icons = icons();
       @endphp
 

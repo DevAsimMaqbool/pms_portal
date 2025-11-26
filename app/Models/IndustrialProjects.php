@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CommercialGainsCounsultancyResearchIncome extends Model
+class IndustrialProjects extends Model
 {
-    protected $table = 'commercial_gains_counsultancy_research_incomes';
     protected $fillable = [
         'indicator_id',
         'form_status',
-        'title_of_consultancy',
-        'duration_of_consultancy',
-        'name_of_client_organization',
-        'consultancy_fee',
-        'consultancy_file',
+        'project_name',
+        'contracting_industry',
+        'project_duration',
+        'estimated_project_cost',
+        'estimated_complection',
+        'attachment',
         'status',
         'created_by',
         'updated_by',

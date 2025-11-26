@@ -5,21 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NoAchievementOfMultidisciplinaryProjectsTarget extends Model
+class NoOfGrantsSubmitAndWon extends Model
 {
     use HasFactory;
 
+    protected $table = 'no_of_grants_submit_and_wons';
     protected $fillable = [
         'indicator_id',
-        'project_name',
-        'other_disciplines',
-        'partner_industry',
-        'identified_public_sector_entity',
-        'completion_time_of_project',
-        'product_developed',
-        'third_party_validation',
-        'ip_claim',
-        'provide_details',
+        'name',
+        'funding_agency',
+        'volume',
+        'role',
+        'grant_status',
+        'proof',
         'form_status',
         'status',
         'created_by',

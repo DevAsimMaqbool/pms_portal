@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NoAchievementOfMultidisciplinaryProjectsTarget;
+use App\Models\IndustrialProjects;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
-class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controller
+class IndustrialProjectsController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
      /**
      * Display a listing of the resource.
      */
-   public function index(Request $request)
+    public function index(Request $request)
     {
          try {
             $user = Auth::user();
@@ -29,7 +33,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
                         ->role('Teacher')->pluck('employee_id');
                           $all_ids = $teacher_id->merge($hod_ids);
-                          $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
+                          $forms = IndustrialProjects::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
@@ -37,13 +41,19 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                             ->whereIn('created_by', $all_ids)
                             ->whereIn('status', [3, 2])
                             ->where('form_status', $status)
-                            ->get();
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->attachment) {
+                                    $form->attachment = Storage::url($form->attachment);
+                                }
+                                return $form;
+                            });
                     }
 
             }if ($user->hasRole('HOD')) {
                 $employeeIds = User::where('manager_id', $employee_id)
                     ->role('Teacher')->pluck('employee_id');
-                    $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
+                    $forms = IndustrialProjects::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
                             }
@@ -51,25 +61,37 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                          ->whereIn('created_by', $employeeIds)
                         ->whereIn('status', [1, 2])
                         ->where('form_status', 'RESEARCHER')
-                        ->get();
+                        ->get()
+                        ->map(function ($form) {
+                                if ($form->attachment) {
+                                    $form->attachment = Storage::url($form->attachment);
+                                }
+                                return $form;
+                            });
                 
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
                     if($status=="RESEARCHER"){
-                          $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
+                          $forms = IndustrialProjects::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
                             ])
                             ->whereIn('status', [4, 3])
                             ->where('form_status', $status)
-                            ->get();
+                            ->get()
+                            ->map(function ($form) {
+                                if ($form->attachment) {
+                                    $form->attachment = Storage::url($form->attachment);
+                                }
+                                return $form;
+                            });
                     }
 
             }if ($user->hasRole('Human Resources')) {
                 $status = $request->input('status');
                      if($status=="HOD"){
-                           $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
+                           $forms = IndustrialProjects::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
@@ -111,91 +133,76 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
             if($request->form_status=='RESEARCHER'){
                  $rules = [
                         'indicator_id' => 'required',
-                        'project_name' => 'required|string',
-                        'other_disciplines' => 'required|string',
-                        'partner_industry' => 'required|string',
-                        'identified_public_sector_entity' => 'required|string',
-                        'completion_time_of_project' => 'required|string',
-                        'product_developed' => 'required|in:YES,NO,NA',
-                        'third_party_validation' => 'required|in:YES,NO,NA',
-                        'ip_claim' => 'required|in:YES,NO',
-                        'provide_details' => 'required_if:ip_claim,YES|string|nullable',
+                        'project_name' => 'required|string|max:255',
+                        'contracting_industry' => 'required|string|max:255',
+                        'project_duration' => 'required|integer',
+                        'estimated_project_cost' => 'required|integer',
+                        'estimated_complection' => 'required|date',
+                        'attachment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
                         'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                     ];
+                    $messages = [
+                        'attachment.mimes' => 'Upload JPG / PNG / PDF only.',
+                    ];
 
-                    $validator = Validator::make($request->all(), $rules);
+                    $validator = Validator::make($request->all(), $rules, $messages);
                     if ($validator->fails()) {
                             return response()->json([
                                 'status' => 'error',
                                 'errors' => $validator->errors()
                             ], 422);
-                    }
-
+                        }
                         $data = $request->only([
                             'indicator_id',
                             'project_name',
-                            'other_disciplines',
-                            'partner_industry',
-                            'identified_public_sector_entity',
-                            'completion_time_of_project',
-                            'product_developed',
-                            'third_party_validation',
-                            'ip_claim',
-                            'provide_details',
+                            'contracting_industry',
+                            'project_duration',
+                            'estimated_project_cost',
+                            'estimated_complection',
                             'form_status'
-                        ]);
-            }
-            if($request->form_status=='HOD'){
-                  $rules = [
-                        'kpa_id' => 'required',
-                        'sp_category_id' => 'required',
-                        'indicator_id' => 'required',
-                        'target_of_projects' => 'required|string',
-                        'target_of_faculties' => 'required|string',
-                        'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-                    ];
+                        ]); 
+                    if ($request->hasFile('attachment')) {
 
-
-                    $validator = Validator::make($request->all(), $rules);
-                    if ($validator->fails()) {
-                            return response()->json([
-                                'status' => 'error',
-                                'errors' => $validator->errors()
-                            ], 422);
+                        $file = $request->file('attachment');
+                        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                        $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                        $uniqueNumber = rand(1000, 9999);
+                        $extension = $file->getClientOriginalExtension();
+                        $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                        $path = $file->storeAs('industrialProject', $fileName, 'public');
+                        $data['attachment'] = $path;
                     }
-                    $data = $request->only([
-                            'kpa_id',
-                            'sp_category_id',
-                            'indicator_id',
-                            'target_of_projects',
-                            'target_of_faculties',
-                            'form_status'
-                        ]);    
-
+                       $employeeId = Auth::user()->employee_id;
+                        DB::beginTransaction();
+                        $data['created_by'] = $employeeId;
+                        $data['updated_by'] = $employeeId;
+                        $research = IndustrialProjects::create($data);
+                       
+                        DB::commit();
+                        return response()->json([
+                            'status' => 'success',
+                            'message' => 'Form saved successfully!',
+                            'data' => $research
+                        ]);
+                       
             }
-            $employeeId = Auth::user()->employee_id;
-            DB::beginTransaction();
-            $data['created_by'] = $employeeId;
-            $data['updated_by'] = $employeeId;
-
-            $record = NoAchievementOfMultidisciplinaryProjectsTarget::create($data);
-            DB::commit();
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Record saved successfully',
-                'data' => $record
-            ]);
+           
 
         } catch (\Exception $e) {
-                 DB::rollBack();
-                 return response()->json(['message' => 'Oops! Something went wrong'], 500);
+            DB::rollBack();
+            // return response()->json([
+            //     'message' => 'Oops! Something went wrong',
+            //     'error' => $e->getMessage()
+            // ], 500);
+            return response()->json([
+            'message' => 'Oops! Something went wrong'], 500);
         }
     }
+
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(IndustrialProjects $industrialProjects)
     {
         //
     }
@@ -203,7 +210,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(IndustrialProjects $industrialProjects)
     {
         //
     }
@@ -211,13 +218,13 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+   public function update(Request $request, $id)
     {   
         $request->validate([
             'status' => 'required|in:1,2,3,4,5,6'
         ]);
 
-        $target = NoAchievementOfMultidisciplinaryProjectsTarget::findOrFail($id);
+        $target = IndustrialProjects::findOrFail($id);
         $target->status = $request->status;
         $target->updated_by = Auth::id();
         $target->save();
@@ -228,7 +235,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(IndustrialProjects $industrialProjects)
     {
         //
     }

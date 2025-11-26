@@ -89,4 +89,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(RoleKpaAssignment::class, 'role_id', 'role_id');
     }
+
+    public function facultyTargets()
+    {
+        return $this->hasMany(FacultyTarget::class, 'user_id');
+    }
 }

@@ -119,4 +119,15 @@ class FormBuilderController extends Controller
         $facultyMembers = User::where('manager_id', $employee_id)->get(['id','name','department','job_title']);
         return view('admin.form.hod_targets',compact('facultyMembers'));
     }
+    public function DeanTargetForms()
+    {
+        return view('admin.form.dean_targets');
+    }
+    public function OricTargetForms()
+    {
+        return view('admin.form.oric_targets');
+    }
+    public function HrTargetForms(){
+        return view('admin.form.hr_targets');
+    }
 }

@@ -28,5 +28,9 @@ class Indicator extends Model
     {
         return $this->hasMany(IndicatorForm::class, 'indicator_id', 'id');
     }
+    public function facultyTargets()
+    {
+        return $this->hasMany(FacultyTarget::class, 'indicator_id');
+    }
 
 }

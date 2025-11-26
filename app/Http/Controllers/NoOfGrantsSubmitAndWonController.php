@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\IntellectualProperty;
-use App\Models\User;
+use App\Models\NoOfGrantsSubmitAndWon;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
-class IntellectualPropertyController extends Controller
+class NoOfGrantsSubmitAndWonController extends Controller
 {
+
      /**
      * Display a listing of the resource.
      */
@@ -30,7 +30,7 @@ class IntellectualPropertyController extends Controller
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
                         ->role('Teacher')->pluck('employee_id');
                           $all_ids = $teacher_id->merge($hod_ids);
-                          $forms = IntellectualProperty::with([
+                          $forms = NoOfGrantsSubmitAndWon::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
@@ -40,8 +40,8 @@ class IntellectualPropertyController extends Controller
                             ->where('form_status', $status)
                             ->get()
                             ->map(function ($form) {
-                                if ($form->supporting_docs_as_attachment) {
-                                    $form->supporting_docs_as_attachment = Storage::url($form->supporting_docs_as_attachment);
+                                if ($form->proof) {
+                                    $form->proof = Storage::url($form->proof);
                                 }
                                 return $form;
                             });
@@ -50,7 +50,7 @@ class IntellectualPropertyController extends Controller
             }if ($user->hasRole('HOD')) {
                 $employeeIds = User::where('manager_id', $employee_id)
                     ->role('Teacher')->pluck('employee_id');
-                    $forms = IntellectualProperty::with([
+                    $forms = NoOfGrantsSubmitAndWon::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
                             }
@@ -60,8 +60,8 @@ class IntellectualPropertyController extends Controller
                         ->where('form_status', 'RESEARCHER')
                         ->get()
                         ->map(function ($form) {
-                                if ($form->supporting_docs_as_attachment) {
-                                    $form->supporting_docs_as_attachment = Storage::url($form->supporting_docs_as_attachment);
+                                if ($form->proof) {
+                                    $form->proof = Storage::url($form->proof);
                                 }
                                 return $form;
                             });
@@ -69,7 +69,7 @@ class IntellectualPropertyController extends Controller
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
                     if($status=="RESEARCHER"){
-                          $forms = IntellectualProperty::with([
+                          $forms = NoOfGrantsSubmitAndWon::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
@@ -78,8 +78,8 @@ class IntellectualPropertyController extends Controller
                             ->where('form_status', $status)
                             ->get()
                             ->map(function ($form) {
-                                if ($form->supporting_docs_as_attachment) {
-                                    $form->supporting_docs_as_attachment = Storage::url($form->supporting_docs_as_attachment);
+                                if ($form->proof) {
+                                    $form->proof = Storage::url($form->proof);
                                 }
                                 return $form;
                             });
@@ -88,7 +88,7 @@ class IntellectualPropertyController extends Controller
             }if ($user->hasRole('Human Resources')) {
                 $status = $request->input('status');
                      if($status=="HOD"){
-                           $forms = IntellectualProperty::with([
+                           $forms = NoOfGrantsSubmitAndWon::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
@@ -112,36 +112,32 @@ class IntellectualPropertyController extends Controller
             ], 500);
         }
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         try { 
-            
+            $employeeId = Auth::user()->employee_id;
             if($request->form_status=='RESEARCHER'){
-                 $rules = [
-                        'indicator_id' => 'required',
-                        'no_of_ip_disclosed' => 'required|string',
-                        'name_of_ip_filed' => 'required|string',
-                        'patents_ip_type' => 'required|string',
-                        'other_detail' => 'required_if:patents_ip_type,Other|string|nullable',
-                        'area_of_application' => 'required|string',
-                        'date_of_filing_registration' => 'required|string',
-                        'supporting_docs_as_attachment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+               
+                  $rules = [
+                        'indicator_id' => 'required|integer',
+                        'grants' => 'required|array|min:1',
+                        'grants.*.name' => 'required|string',
+                        'grants.*.funding_agency' => 'required|string',
+                        'grants.*.volume' => 'required|string',
+                        'grants.*.role' => 'required|string',
+                        'grants.*.grant_status' => 'required|string',
+                        'grants.*.proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
                         'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                     ];
+
                     $messages = [
-                        'supporting_docs_as_attachment.mimes' => 'Upload JPG / PNG / PDF only.',
+                        'grants.*.name.required' => 'Name Of Grant is required.',
+                        'grants.*.funding_agency.required' => 'Funding Agency is required.',
+                        'grants.*.volume.required' => 'Grant Volume is required.',
+                        'grants.*.proof.mimes' => 'Upload JPG / PNG / PDF only.',
                     ];
 
 
@@ -151,94 +147,62 @@ class IntellectualPropertyController extends Controller
                                 'status' => 'error',
                                 'errors' => $validator->errors()
                             ], 422);
-                        }
+                    }
+                    $savedRecords = [];
+                    foreach ($request->grants as $index => $grant) {
 
-                        $data = $request->only([
-                            'indicator_id',
-                            'no_of_ip_disclosed',
-                            'name_of_ip_filed',
-                            'patents_ip_type',
-                            'other_detail',
-                            'area_of_application',
-                            'date_of_filing_registration',
-                            'form_status'
-                        ]);
-                        if ($request->hasFile('supporting_docs_as_attachment')) {
+                        $filename = null;
 
-                            $file = $request->file('supporting_docs_as_attachment');
+                        if (isset($grant['proof']) && $grant['proof']) {
+
+                            $file = $grant['proof'];
+
+                            // ORIGINAL NAME WITHOUT EXTENSION
                             $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+
+                            // REMOVE INVALID CHARACTERS
                             $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+
+                            // RANDOM 4-DIGIT NUMBER
                             $uniqueNumber = rand(1000, 9999);
+
+                            // EXTENSION
                             $extension = $file->getClientOriginalExtension();
-                            $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
-                            $path = $file->storeAs('intellectualProperty', $fileName, 'public');
-                            $data['supporting_docs_as_attachment'] = $path;
+
+                            // FINAL NAME: example → "misdoc_2345.pdf"
+                            $filename = $safeName . '_' . $uniqueNumber . '.' . $extension;
+
+                            // STORE FILE
+                            $path = $file->storeAs('grants', $filename, 'public');
+
+                            // SAVE FILE PATH
+                            $filename = $path;
                         }
 
+                        $savedRecords[] = NoOfGrantsSubmitAndWon::create([
+                            'indicator_id'   => $request->indicator_id,
+                            'name'           => $grant['name'],
+                            'funding_agency' => $grant['funding_agency'],
+                            'volume'         => $grant['volume'],
+                            'role'           => $grant['role'],
+                            'grant_status'   => $grant['grant_status'],
+                            'proof'          => $filename, // PATH STORED
+                            'form_status'    => $request->form_status ?? 'RESEARCHER',
+                            'status'         => 1,
+                            'created_by'     => $employeeId,
+                            'updated_by'     => $employeeId,
+                        ]);
+                    }
+
+                    return response()->json([ 'status' => 'success','message' => 'Co-authored papers saved successfully', 'data' => $savedRecords], 201);   
             }
-            // if($request->form_status=='HOD'){
-            //       $rules = [
-            //             'kpa_id' => 'required',
-            //             'sp_category_id' => 'required',
-            //             'indicator_id' => 'required',
-            //             'target_of_ip_disclosures' => 'required|integer',
-            //             'target_of_ip_filed' => 'required|integer',
-            //             'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-            //         ];
-
-            //         $validator = Validator::make($request->all(), $rules);
-            //         if ($validator->fails()) {
-            //                 return response()->json([
-            //                     'status' => 'error',
-            //                     'errors' => $validator->errors()
-            //                 ], 422);
-            //             }
-            //         $data = $request->only([
-            //                 'kpa_id',
-            //                 'sp_category_id',
-            //                 'indicator_id',
-            //                 'target_of_ip_disclosures',
-            //                 'target_of_ip_filed',
-            //                 'form_status'
-            //             ]);    
-
-            // }
-            $employeeId = Auth::user()->employee_id;
-            DB::beginTransaction();
-            $data['created_by'] = $employeeId;
-            $data['updated_by'] = $employeeId;
-
-            $record = IntellectualProperty::create($data);
-            DB::commit();
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Record saved successfully',
-                'data' => $record
-            ]);
 
         } catch (\Exception $e) {
-             DB::rollBack();
-             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+               return response()->json(['status' => 'error', 'message' => 'Failed to save records','error' => $e->getMessage()], 500);
         }
     }
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
+     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
@@ -247,19 +211,11 @@ class IntellectualPropertyController extends Controller
             'status' => 'required|in:1,2,3,4,5,6'
         ]);
 
-        $target = IntellectualProperty::findOrFail($id);
+        $target = NoOfGrantsSubmitAndWon::findOrFail($id);
         $target->status = $request->status;
         $target->updated_by = Auth::id();
         $target->save();
 
         return response()->json(['success' => true]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

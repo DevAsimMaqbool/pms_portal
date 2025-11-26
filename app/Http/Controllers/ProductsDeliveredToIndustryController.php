@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NoAchievementOfMultidisciplinaryProjectsTarget;
+use App\Models\ProductsDeliveredToIndustry;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controller
+class ProductsDeliveredToIndustryController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      */
-   public function index(Request $request)
+    public function index(Request $request)
     {
          try {
             $user = Auth::user();
@@ -29,7 +29,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
                         ->role('Teacher')->pluck('employee_id');
                           $all_ids = $teacher_id->merge($hod_ids);
-                          $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
+                          $forms = ProductsDeliveredToIndustry::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
@@ -43,7 +43,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
             }if ($user->hasRole('HOD')) {
                 $employeeIds = User::where('manager_id', $employee_id)
                     ->role('Teacher')->pluck('employee_id');
-                    $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
+                    $forms = ProductsDeliveredToIndustry::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
                             }
@@ -56,7 +56,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
                     if($status=="RESEARCHER"){
-                          $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
+                          $forms = ProductsDeliveredToIndustry::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
@@ -69,7 +69,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
             }if ($user->hasRole('Human Resources')) {
                 $status = $request->input('status');
                      if($status=="HOD"){
-                           $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
+                           $forms = ProductsDeliveredToIndustry::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
@@ -178,7 +178,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
             $data['created_by'] = $employeeId;
             $data['updated_by'] = $employeeId;
 
-            $record = NoAchievementOfMultidisciplinaryProjectsTarget::create($data);
+            $record = ProductsDeliveredToIndustry::create($data);
             DB::commit();
 
             return response()->json([
@@ -192,10 +192,11 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                  return response()->json(['message' => 'Oops! Something went wrong'], 500);
         }
     }
+
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(ProductsDeliveredToIndustry $productsDeliveredToIndustry)
     {
         //
     }
@@ -203,12 +204,12 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(ProductsDeliveredToIndustry $productsDeliveredToIndustry)
     {
         //
     }
 
-    /**
+     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
@@ -217,7 +218,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
             'status' => 'required|in:1,2,3,4,5,6'
         ]);
 
-        $target = NoAchievementOfMultidisciplinaryProjectsTarget::findOrFail($id);
+        $target = ProductsDeliveredToIndustry::findOrFail($id);
         $target->status = $request->status;
         $target->updated_by = Auth::id();
         $target->save();
@@ -228,7 +229,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(ProductsDeliveredToIndustry $productsDeliveredToIndustry)
     {
         //
     }
