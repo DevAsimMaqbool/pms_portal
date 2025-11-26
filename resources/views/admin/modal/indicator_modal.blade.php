@@ -1339,25 +1339,28 @@
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-                                            $att = myClassesAttendance(Auth::user()->faculty_id);
+                                            $att = myClasses(Auth::user()->faculty_id);
                                             $sr = 1;
                                         @endphp
 
                                         @foreach($att as $class)
                                             @php
-                                                // Get the latest attendance record for this class
+                                                // latest attendance or null
                                                 $latestAttendance = $class->attendances->first();
-                                                if (!$latestAttendance)
-                                                    continue; // skip if no attendance
-
-                                                $scheduled = \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y');
+                                                $scheduled = $latestAttendance
+                                                    ? \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y')
+                                                    : '-';
                                             @endphp
+
                                             <tr>
                                                 <td>{{ $sr++ }}</td>
                                                 <td>{{ $class->class_name }}</td>
                                                 <td>{{ $class->code }}</td>
                                                 <td>{{ $class->career_code }}</td>
-                                                <td>{{ $latestAttendance->program_name }}</td>
+
+                                                {{-- Program name (only if attendance exists) --}}
+                                                <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
+
                                             </tr>
                                         @endforeach
                                     </tbody>
