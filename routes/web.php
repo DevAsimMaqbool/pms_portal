@@ -42,6 +42,7 @@ use App\Http\Controllers\IndustrialProjectsController;
 use App\Http\Controllers\NoOfGrantsSubmitAndWonController;
 use App\Http\Controllers\ProductsDeliveredToIndustryController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\FacultyMemberClassController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -201,7 +202,8 @@ Route::middleware('auth')->group(function () {
       Route::get('/hr-taget', [FormBuilderController::class, 'HrTargetForms'])->name('hr.target');
     });
 
-    Route::get('/odoo-test', [AdminUserController::class, 'testOfOdoo'])->name('odoo.test');
+    Route::get('/odoo-classes', [FacultyMemberClassController::class, 'odooClasses'])->name('odoo.classes');
+    Route::get('/classes-attendance', [FacultyMemberClassController::class, 'classesAttendance'])->name('classes.attendance');
 });
 
 require __DIR__ . '/auth.php';
