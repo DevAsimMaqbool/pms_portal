@@ -1298,26 +1298,9 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>1</td>
-                                            <td>2025</td>
-                                            <td>1</td>
-                                            <td>Discrete Structures</td>
-                                            <td>BS Software Engineering</td>
+                                            <td colspan="5">no record found</td>
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>2025</td>
-                                            <td>2</td>
-                                            <td>Digital Logic Design (Lab)</td>
-                                            <td>BS Software Engineering</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>2025</td>
-                                            <td>2</td>
-                                            <td>Probability & Statistics</td>
-                                            <td>BS Data Science</td>
-                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1332,7 +1315,7 @@
                                                 <p class="fw-medium mb-2">Overload By</p>
                                             </td>
                                             <td class="px-0 w-px-100 fw-medium text-heading">
-                                                <p class="fw-medium mb-2">1</p>
+                                                <p class="fw-medium mb-2">0</p>
                                                 <p class="fw-medium mb-2">0</p>
                                             </td>
                                         </tr>
@@ -1348,35 +1331,35 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Session</th>
-                                            <th>Semester</th>
-                                            <th>Course Name</th>
+                                            <th>Class Name</th>
+                                            <th>Class Code</th>
+                                            <th>Career</th>
                                             <th>Program</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>2025</td>
-                                            <td>1</td>
-                                            <td>Pre-Algebra</td>
-                                            <td>BS Software Engineering</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>2025</td>
-                                            <td>2</td>
-                                            <td>Digital Logic Design (Lab)</td>
-                                            <td>BS Software Engineering</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>2025</td>
-                                            <td>2</td>
-                                            <td>Probability & Statistics</td>
-                                            <td>BS Data Science</td>>
-                                        </tr>
+                                    <tbody class="table-border-bottom-0">
+                                        @php
+                                            $att = myClassesAttendance(Auth::user()->faculty_id);
+                                            $sr = 1;
+                                        @endphp
+
+                                        @foreach($att as $class)
+                                            @php
+                                                // Get the latest attendance record for this class
+                                                $latestAttendance = $class->attendances->first();
+                                                if (!$latestAttendance)
+                                                    continue; // skip if no attendance
+
+                                                $scheduled = \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y');
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $sr++ }}</td>
+                                                <td>{{ $class->class_name }}</td>
+                                                <td>{{ $class->code }}</td>
+                                                <td>{{ $class->career_code }}</td>
+                                                <td>{{ $latestAttendance->program_name }}</td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

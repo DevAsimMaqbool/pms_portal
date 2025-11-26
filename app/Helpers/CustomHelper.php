@@ -205,3 +205,15 @@ function myClassesAttendance($facultyId)
         ->select('class_id', 'class_name', 'code', 'term', 'career_code')
         ->get();
 }
+
+function myClasses($facultyId)
+{
+    return FacultyMemberClass::with([
+        'attendances' => function ($query) {
+            $query->orderBy('class_date', 'desc'); // latest attendance first
+        }
+    ])
+        ->where('faculty_id', $facultyId)
+        ->select('class_id', 'class_name', 'code', 'term', 'career_code')
+        ->get();
+}
