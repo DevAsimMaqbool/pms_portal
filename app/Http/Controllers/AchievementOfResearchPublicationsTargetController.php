@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AchievementOfResearchPublicationsTarget;
+use App\Models\AchievementOfResearchPublicationTargetCoAuthor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,18 +50,12 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                           $forms = AchievementOfResearchPublicationsTarget::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                }
+                                },'coAuthors:id,target_id,name,rank,country,designation'
                             ])
                             ->whereIn('created_by', $all_ids)
                             ->whereIn('status', [3, 2])
                             ->where('form_status', $status)
-                            ->get()
-                            ->map(function ($form) {
-                                if ($form->email_screenshot) {
-                                    $form->email_screenshot_url = Storage::url($form->email_screenshot);
-                                }
-                                return $form;
-                            });
+                            ->get();
                     }
 
             }if ($user->hasRole('HOD')) {
@@ -69,53 +64,22 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                     $forms = AchievementOfResearchPublicationsTarget::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
-                            }
+                            },'coAuthors:id,target_id,name,rank,country,designation'
                         ])
                          ->whereIn('created_by', $employeeIds)
                         ->whereIn('status', [1, 2])
                         ->where('form_status', 'RESEARCHER')
-                        ->get()
-                        ->map(function ($form) {
-                            if ($form->email_screenshot) {
-                                $form->email_screenshot_url = Storage::url($form->email_screenshot);
-                            }
-                            return $form;
-                        });
+                        ->get();
                 
             }if ($user->hasRole('ORIC')) {
-                $status = $request->input('status');
-                    if($status=="HOD"){
-                           $forms = AchievementOfResearchPublicationsTarget::with([
-                                'creator' => function ($q) {
-                                    $q->select('employee_id', 'name');
-                                }
-                            ])
-                            ->whereIn('status', [2, 3])
-                            ->where('form_status', $status)
-                            ->get()
-                            ->map(function ($form) {
-                                if ($form->email_screenshot) {
-                                    $form->email_screenshot_url = Storage::url($form->email_screenshot);
-                                }
-                                return $form;
-                            });
-                    }
-                    if($status=="RESEARCHER"){
                           $forms = AchievementOfResearchPublicationsTarget::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                }
+                                },'coAuthors:id,target_id,name,rank,country,designation'
                             ])
                             ->whereIn('status', [4, 3])
-                            ->where('form_status', $status)
-                            ->get()
-                            ->map(function ($form) {
-                                if ($form->email_screenshot) {
-                                    $form->email_screenshot_url = Storage::url($form->email_screenshot);
-                                }
-                                return $form;
-                            });
-                    }
+                            ->where('form_status', 'RESEARCHER')
+                            ->get();
 
             }if ($user->hasRole('Human Resources')) {
                    $status = $request->input('status');
@@ -162,26 +126,19 @@ class AchievementOfResearchPublicationsTargetController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store1(Request $request)
     {
         try { 
             if($request->form_status=='RESEARCHER'){
                  $rules = [
-                        'kpa_id' => 'required',
-                        'sp_category_id' => 'required',
+                        
                         'indicator_id' => 'required',
                         'target_category' => 'required|string',
-                        'target_of_publications' => 'required|string',
-                        'progress_on_publication' => 'required|string',
-                        'draft_stage' => 'required_if:progress_on_publication,At draft stage|string|nullable',
-                        'email_screenshot' => 'required_if:progress_on_publication,In Review|file|mimes:jpg,jpeg,png,pdf|max:2048',
-                        'scopus_link' => 'required_if:progress_on_publication,Published|nullable|url',
                         'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                     ];
 
                     $messages = [
-                        'scopus_link.url' => 'Please provide a valid URL for the Scopus link.',
-                        'email_screenshot.mimes' => 'Upload JPG / PNG / PDF only.',
+                        
                     ];
 
                     $validator = Validator::make($request->all(), $rules, $messages);
@@ -207,48 +164,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                             $data['email_screenshot'] = $request->file('email_screenshot')->store('screenshots', 'public');
                         }
             }
-            if($request->form_status=='HOD'){
-                  $rules = [
-                        'kpa_id' => 'required',
-                        'sp_category_id' => 'required',
-                        'indicator_id' => 'required',
-                        'faculty_member_id' => 'required|exists:users,id',
-                        'target_category' => 'required|string|in:Scopus-Indexed,HEC',
-                        'target_of_publications' => 'required|string|max:255',
-                        'capacity_building' => 'required|boolean',
-                        'need' => 'required_if:capacity_building,1|string|nullable',
-                        'any_specifics_related_to_capacity_building' => 'nullable|string|max:500',
-                        'frequency' => 'nullable|integer|min:0',
-                        'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-                    ];
-
-                    $messages = [
-                            'faculty_member_id.required' => 'Please select a faculty member.',
-                            'need.required_if' => 'You must select a need when capacity building is required.',
-                        ];
-
-                    $validator = Validator::make($request->all(), $rules, $messages);
-                    if ($validator->fails()) {
-                            return response()->json([
-                                'status' => 'error',
-                                'errors' => $validator->errors()
-                            ], 422);
-                        }
-                    $data = $request->only([
-                            'kpa_id',
-                            'sp_category_id',
-                            'indicator_id',
-                            'faculty_member_id',
-                            'target_category',
-                            'target_of_publications',
-                            'capacity_building',
-                            'need',
-                            'any_specifics_related_to_capacity_building',
-                            'frequency',
-                            'form_status'
-                        ]);    
-
-            }
+            
             $employeeId = Auth::user()->employee_id;
             $data['created_by'] = $employeeId;
             $data['updated_by'] = $employeeId;
@@ -265,6 +181,70 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
         }
     }
+    public function store(Request $request)
+{
+    try {
+        $rules = [
+            'indicator_id' => 'required|exists:indicators,id',
+            'target_category' => 'required|string|max:255',
+            'link_of_publications' => 'required|url|max:500',
+            'rank' => 'required|integer|min:0',
+            'nationality' => 'required|string|max:255',
+            'as_author_your_rank' => 'required|integer|min:0',
+            'scopus_q1' => 'nullable|integer|min:0',
+            'scopus_q2' => 'nullable|integer|min:0',
+            'scopus_q3' => 'nullable|integer|min:0',
+            'scopus_q4' => 'nullable|integer|min:0',
+            'hec_w' => 'nullable|integer|min:0',
+            'hec_x' => 'nullable|integer|min:0',
+            'hec_y' => 'nullable|integer|min:0',
+            'medical_recognized' => 'nullable|integer|min:0',
+            'co_author' => 'nullable|array',
+            'co_author.*.name' => 'required_with:co_author|string|max:255',
+            'co_author.*.rank' => 'required_with:co_author|integer|min:0',
+            'co_author.*.univeristy_name' => 'required_with:co_author|string|max:255',
+            'co_author.*.country' => 'required_with:co_author|string|max:255',
+            'co_author.*.designation' => 'required_with:co_author|string|max:255',
+            'co_author.*.no_paper_past' => 'required_with:co_author|integer|min:0',
+            'co_author.*.first_author_superviser' => 'required_with:co_author|in:YES,NO',
+            'co_author.*.student_roll_no' => 'required_with:co_author|string|max:50',
+            'co_author.*.career' => 'required_with:co_author|string|max:255',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status'=>'error','errors'=>$validator->errors()], 422);
+        }
+
+        $employeeId = Auth::user()->employee_id;
+
+        $targetData = $request->only([
+            'indicator_id','target_category','link_of_publications','rank','nationality',
+            'as_author_your_rank','scopus_q1','scopus_q2','scopus_q3','scopus_q4',
+            'hec_w','hec_x','hec_y','medical_recognized','form_status','status'
+        ]);
+        $targetData['created_by'] = $employeeId;
+        $targetData['updated_by'] = $employeeId;
+
+        $target = AchievementOfResearchPublicationsTarget::create($targetData);
+
+        if ($request->has('co_author')) {
+            foreach ($request->co_author as $co) {
+                $co['target_id'] = $target->id;
+                $co['created_by'] = $employeeId;
+                $co['updated_by'] = $employeeId;
+                AchievementOfResearchPublicationTargetCoAuthor::create($co);
+            }
+        }
+
+        return response()->json(['status'=>'success','message'=>'Record saved successfully','data'=>$target->load('coAuthors')]);
+
+    } catch (\Exception $e) {
+        return response()->json(['status'=>'error','message'=>$e->getMessage()], 500);
+    }
+}
+
+    
     /**
      * Display the specified resource.
      */

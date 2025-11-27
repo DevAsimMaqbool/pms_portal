@@ -34,14 +34,14 @@ class FacultyTargetController extends Controller
                            $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator','assign:id,name,employee_id',])
                             ->whereIn('created_by', $hod_ids)
                             ->whereIn('status', [1, 2])
-                            ->where('form_status', 'OTHER')
+                            ->whereIn('form_status', ['OTHER', 'HOD'])
                             ->get();
             }
             if ($user->hasRole('ORIC')) {
                 
                             $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator','assign:id,name,employee_id',])
                             ->whereIn('status', [2, 3])
-                            ->where('form_status', 'OTHER')
+                            ->whereIn('form_status', ['OTHER', 'HOD'])
                             ->get();
 
             }
@@ -49,7 +49,7 @@ class FacultyTargetController extends Controller
                 
                             $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator','assign:id,name,employee_id',])
                             ->whereIn('status', [3, 4])
-                            ->where('form_status', 'OTHER')
+                            ->whereIn('form_status', ['OTHER', 'HOD'])
                             ->get();
 
             }
@@ -267,7 +267,10 @@ class FacultyTargetController extends Controller
              ->where('user_id', $employeeId)
             ->first();
 
-        return response()->json(['data' => $record]);
+        return response()->json([
+            'target' => $record ? $record->target : null,
+            'data' => $record
+        ]);
     }
 
 }

@@ -9,29 +9,20 @@ class AchievementOfResearchPublicationsTarget extends Model
 
     protected $table = 'achievement_of_research_publications_target';
 
-    protected $fillable = [
-        'kpa_id',
-        'sp_category_id',
-        'indicator_id',
-        'target_category',
-        'target_of_publications',
-        'progress_on_publication', // <- add this
-        'draft_stage',
-        'email_screenshot',
-        'scopus_link',
-        'status',
-        'faculty_member_id',
-        'capacity_building',
-        'need',
-        'any_specifics_related_to_capacity_building',
-        'frequency',
-        'form_status',
-        'created_by',
-        'updated_by',
+     protected $fillable = [
+        'indicator_id','target_category','link_of_publications','rank','nationality',
+        'scopus_q1','scopus_q2','scopus_q3','scopus_q4',
+        'hec_w','hec_x','hec_y','medical_recognized','as_author_your_rank',
+        'form_status','status','created_by','updated_by'
     ];
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'employee_id');
     }
+    public function coAuthors()
+    {
+        return $this->hasMany(AchievementOfResearchPublicationTargetCoAuthor::class, 'target_id');
+    }
+
 
 }
