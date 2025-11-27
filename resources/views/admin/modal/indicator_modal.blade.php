@@ -374,17 +374,15 @@
                                 </thead>
                                 <tbody class="table-border-bottom-0">
                                     @php
-                                        $att = myClassesAttendance(Auth::user()->faculty_id);
+                                        $att = myClassesAttendanceData(Auth::user()->faculty_id);
                                         $sr = 1;
                                     @endphp
 
                                     @foreach($att as $class)
                                         @php
-                                            // Get the latest attendance record for this class
                                             $latestAttendance = $class->attendances->first();
                                             if (!$latestAttendance)
-                                                continue; // skip if no attendance
-
+                                                continue;
                                             $scheduled = \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y');
                                         @endphp
                                         <tr>
@@ -392,23 +390,23 @@
                                             <td>{{ $class->code }}</td>
                                             <td>{{ $latestAttendance->program_name }}</td>
                                             <td>{{ $class->career_code }}</td>
-                                            <td>{{ $scheduled }}</td>
-                                            <td>{{ $latestAttendance->present_count }}</td>
-                                            <td>{{ $latestAttendance->absent_count }}</td>
+                                            <td>{{ $class->class_id }}</td>
+                                            <td>{{ $class->avg_present_count }}</td>
+                                            <td>{{ $class->avg_absent_count }}</td>
                                             <td>
-                                                <div class="badge" style="background-color: {{ $latestAttendance->color }}">
-                                                    {{ $latestAttendance->present_percentage }}%
+                                                <div class="badge" style="background-color: {{ $class->color }}">
+                                                    {{ $class->avg_present_percentage }}%
                                                 </div>
                                             </td>
                                             <td>
-                                                <span class="badge"
-                                                    style="background-color: {{ $latestAttendance->color }}">
-                                                    {{ $latestAttendance->rating }}
+                                                <span class="badge" style="background-color: {{ $class->color }}">
+                                                    {{ $class->rating }}
                                                 </span>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
@@ -453,8 +451,10 @@
                                 <tr>
                                     <th>Sr#</th>
                                     <th>Class</th>
+                                    <th>Code</th>
                                     <th>Program</th>
                                     <th>Career (PG/UG)</th>
+                                    <th>Term</th>
                                     <th>Scheduled</th>
                                     <th>Held</th>
                                     <th>Not Held</th>
@@ -463,47 +463,32 @@
                                 </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                    <tr>
-                                        <td>1</td>
-                                        <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                        <td>BSSE</td>
-                                        <td>UG</td>
-                                        <td>32</td>
-                                        <td>30</td>
-                                        <td>2</td>
-                                        <td>
-                                            <div class="badge bg-label-primary">93%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
-                                        <td>BSIT</td>
-                                        <td>PG</td>
-                                        <td>32</td>
-                                        <td>29</td>
-                                        <td>3</td>
-                                        <td>
-                                            <div class="badge bg-label-primary">90%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>CEE601360-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                        <td>BSCS</td>
-                                        <td>PG</td>
-                                        <td>32</td>
-                                        <td>25</td>
-                                        <td>7</td>
-                                        <td>
-                                            <div class=" badge bg-label-warning">78%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                    </tr>
-
+                                    @php $sr = 1; @endphp
+                                    @foreach(myClassesAttendanceRecord(Auth::user()->faculty_id) as $class)
+                                        <tr>
+                                            <td>{{ $sr++ }}</td>
+                                            <td>{{ $class->class_name }}</td>
+                                            <td>{{ $class->code }}</td>
+                                            <td>{{ $class->program ?? '-' }}</td>
+                                            <td>{{ $class->career_code }}</td>
+                                            <td>{{ $class->term }}</td>
+                                            <td>{{ $class->total_rows }}</td>
+                                            <td>{{ $class->class_held_count }}</td>
+                                            <td>{{ $class->class_not_held_count }}</td>
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $class->color }}">
+                                                    {{ $class->held_percentage }}%
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge me-1"
+                                                    style="background-color: {{ $class->color }}">{{ $class->rating }}</span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
+
+
                             </table>
                         </div>
                     </div>
@@ -1311,12 +1296,12 @@
                                             <td class="align-top pe-6 ps-0 py-6 text-body">
                                             </td>
                                             <td class="px-0 w-px-100">
-                                                <p class="fw-medium mb-2">Underload By</p>
-                                                <p class="fw-medium mb-2">Overload By</p>
+                                                <p class="fw-medium mb-2">Total Courses:</p>
+                                                <!-- <p class="fw-medium mb-2">Overload By</p> -->
                                             </td>
                                             <td class="px-0 w-px-100 fw-medium text-heading">
-                                                <p class="fw-medium mb-2">0</p>
-                                                <p class="fw-medium mb-2">0</p>
+                                                <p class="fw-medium mb-2"> 0 </p>
+                                                <!-- <p class="fw-medium mb-2">0</p> -->
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1373,12 +1358,12 @@
                                             <td class="align-top pe-6 ps-0 py-6 text-body">
                                             </td>
                                             <td class="px-0 w-px-100">
-                                                <p class="fw-medium mb-2">Underload By</p>
-                                                <p class="fw-medium mb-2">Overload By</p>
+                                                <p class="fw-medium mb-2">Total Courses:</p>
+                                                <!-- <p class="fw-medium mb-2">Overload By</p> -->
                                             </td>
                                             <td class="px-0 w-px-100 fw-medium text-heading">
-                                                <p class="fw-medium mb-2">1</p>
-                                                <p class="fw-medium mb-2">0</p>
+                                                <p class="fw-medium mb-2"> @php echo count($att); @endphp </p>
+                                                <!-- <p class="fw-medium mb-2">0</p> -->
                                             </td>
                                         </tr>
                                     </tbody>

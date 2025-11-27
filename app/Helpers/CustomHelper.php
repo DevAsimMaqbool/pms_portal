@@ -217,3 +217,149 @@ function myClasses($facultyId)
         ->select('class_id', 'class_name', 'code', 'term', 'career_code')
         ->get();
 }
+
+function myClassesAttendanceRecordBK($facultyId)
+{
+    return FacultyMemberClass::withCount('attendances as total_rows')
+        ->where('faculty_id', $facultyId)
+        ->get()
+        ->map(function ($class) {
+            // get program name from the latest attendance record
+            $class->program = $class->attendances()->latest('class_date')->value('program_name');
+            return $class;
+        });
+}
+
+function myClassesAttendanceRecord($facultyId)
+{
+    return FacultyMemberClass::withCount([
+        'attendances as total_rows',
+        'attendances as class_held_count' => function ($query) {
+            $query->where('att_marked', 1);
+        },
+        'attendances as class_not_held_count' => function ($query) {
+            $query->where('att_marked', 0);
+        },
+    ])
+        ->where('faculty_id', $facultyId)
+        ->get()
+        ->map(function ($class) {
+            // get program name from the latest attendance record
+            $class->program = $class->attendances()->latest('class_date')->value('program_name');
+
+            // Calculate percentage of classes held
+            $class->held_percentage = $class->total_rows
+                ? round(($class->class_held_count / $class->total_rows) * 100, 2)
+                : 0;
+
+            $class->not_held_percentage = $class->total_rows
+                ? round(($class->class_not_held_count / $class->total_rows) * 100, 2)
+                : 0;
+
+            // Determine color and rating
+            if ($class->held_percentage >= 90 && $class->held_percentage <= 100) {
+                $class->color = '#6EA8FE';
+                $class->rating = 'OS';
+            } elseif ($class->held_percentage >= 80 && $class->held_percentage < 90) {
+                $class->color = '#96e2b4';
+                $class->rating = 'EE';
+            } elseif ($class->held_percentage >= 70 && $class->held_percentage < 80) {
+                $class->color = '#ffcb9a';
+                $class->rating = 'ME';
+            } elseif ($class->held_percentage >= 60 && $class->held_percentage < 70) {
+                $class->color = '#fd7e13';
+                $class->rating = 'NI';
+            } elseif ($class->held_percentage >= 50 && $class->held_percentage < 60) {
+                $class->color = '#ff4c51';
+                $class->rating = 'BE';
+            } else {
+                $class->color = '#d3d3d3'; // <50%
+                $class->rating = 'NA';
+            }
+
+            return $class;
+        });
+}
+
+function myClassesAttendanceData($facultyId)
+{
+    return FacultyMemberClass::with([
+        'attendances' => function ($query) {
+            $query->orderBy('class_date', 'desc');
+        }
+    ])
+        ->where('faculty_id', $facultyId)
+        ->get()
+        ->map(function ($class) {
+
+            $latestAttendance = $class->attendances->first();
+            $class->program = $latestAttendance->program_name ?? null;
+
+            // Count only attendances where att_marked = 1
+            $class->class_held_count = $class->attendances->where('att_marked', 1)->count();
+
+            // Total attendances
+            $class->total_rows = $class->attendances->count();
+
+            // Calculate class-level percentage of classes held
+            $class->held_percentage = $class->total_rows
+                ? round(($class->class_held_count / $class->total_rows) * 100, 2)
+                : 0;
+
+            // Calculate **average present and absent per class**
+            $attendanceCount = $class->attendances->count();
+            if ($attendanceCount > 0) {
+                $class->avg_present_count = round($class->attendances->sum('present_count') / $attendanceCount, 2);
+                $class->avg_absent_count = round($class->attendances->sum('absent_count') / $attendanceCount, 2);
+            } else {
+                $class->avg_present_count = 0;
+                $class->avg_absent_count = 0;
+            }
+
+            // Calculate avg_present_percentage
+            $totalStudents = $class->attendances->sum('total_students');
+            $totalPresent = $class->attendances->sum('present_count');
+            $class->avg_present_percentage = $totalStudents
+                ? round(($totalPresent / $totalStudents) * 100, 2)
+                : 0;
+
+            // Determine color and rating based on avg_present_percentage
+            if ($class->avg_present_percentage >= 90) {
+                $class->color = '#6EA8FE';
+                $class->rating = 'OS';
+            } elseif ($class->avg_present_percentage >= 80) {
+                $class->color = '#96e2b4';
+                $class->rating = 'EE';
+            } elseif ($class->avg_present_percentage >= 70) {
+                $class->color = '#ffcb9a';
+                $class->rating = 'ME';
+            } elseif ($class->avg_present_percentage >= 60) {
+                $class->color = '#fd7e13';
+                $class->rating = 'NI';
+            } elseif ($class->avg_present_percentage >= 50) {
+                $class->color = '#ff4c51';
+                $class->rating = 'BE';
+            } else {
+                $class->color = '#d3d3d3';
+                $class->rating = 'NA';
+            }
+
+            // Assign color/rating to each attendance record for Blade
+            foreach ($class->attendances as $att) {
+                $att->color = $class->color;
+                $att->rating = $class->rating;
+
+                // Individual attendance percentage
+                if ($att->total_students > 0) {
+                    $att->present_percentage = round(($att->present_count / $att->total_students) * 100, 2);
+                } else {
+                    $att->present_percentage = 0;
+                }
+            }
+
+            return $class;
+        });
+}
+
+
+

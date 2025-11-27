@@ -330,7 +330,7 @@ class FacultyMemberClassController extends Controller
         //     ->groupBy('ca.id')
         //     ->get();
 
-        $date = '2025-09-30';
+        $date = '2025-10-08';
 
         $attendanceSummary = DB::connection('pgsql')
             ->table('odoocms_class_attendance as ca')
@@ -352,7 +352,7 @@ class FacultyMemberClassController extends Controller
             ->where('ca.date_class', $date)
             ->groupBy('ca.id')
             ->get();
-        dd($attendanceSummary);
+        // dd($attendanceSummary);
         foreach ($attendanceSummary as $item) {
             FacultyClassAttendance::updateOrCreate(
                 [
@@ -363,6 +363,8 @@ class FacultyMemberClassController extends Controller
                 [
                     'program_name' => $item->program_name,
                     'state' => $item->state,
+                    'term_id' => $item->term_id,
+                    'term' => $item->term,
                     'att_marked' => $item->att_marked,
                     'total_students' => $item->total_no_of_students,
                     'present_count' => $item->present_students_count,
