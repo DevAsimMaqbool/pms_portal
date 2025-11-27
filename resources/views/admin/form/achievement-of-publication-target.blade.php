@@ -16,7 +16,7 @@
 <div class="container-xxl flex-grow-1 container-p-y">
 
     <div class="nav-align-top">
-            @if(auth()->user()->hasRole(['Dean','ORIC']))
+            @if(auth()->user()->hasRole(['Dean']))
             <!-- Nav tabs -->
             <ul class="nav nav-pills mb-4" role="tablist">
                 <li class="nav-item">
@@ -46,12 +46,10 @@
             <div class="tab-content">
                  
                 {{-- ================= FORM 1 ================= --}}
-                @if(auth()->user()->hasRole(['Teacher']))
+                @if(auth()->user()->hasRole(['Teacher','HOD']))
                 <div class="tab-pane fade show active" id="form1" role="tabpanel">
                     <form id="researchForm1" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="kpa_id" value="{{ $areaId }}">
-                        <input type="hidden" name="sp_category_id" value="{{ $categoryId }}">
                         <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
                         <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER" required>
                         <div class="row g-6 mt-0">
@@ -61,7 +59,7 @@
                                             <div class="row g-6">
                                                 <div class="col-md-6">
                                                     <label class="form-label">Target Category</label>
-                                                    <select name="target_category" class="form-select" required>
+                                                    <select name="target_category" class="form-select" >
                                                         <option value="">Select Target Category</option>
                                                         <option value="Scopus-Indexed">Scopus Indexed</option>
                                                         <option value="HEC">HEC</option>
@@ -69,22 +67,34 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label">Link Of Publications</label>
-                                                    <input type="url" name="link_of_publications" class="form-control" required>
+                                                    <input type="url" name="link_of_publications" class="form-control" >
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label">Rank</label>
-                                                    <input type="number" name="rank" class="form-control" required>
+                                                    <input type="number" name="rank" class="form-control" >
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="form-label">Progress on publication</label>
-                                                    <select id="progress_on_publication" name="progress_on_publication" class="form-select" required>
-                                                        <option value="">-- Select --</option>
-                                                        <option value="Published">Published</option>
-                                                        <option value="In Review">In Review</option>
-                                                        <option value="At draft stage">At draft stage</option>
-                                                    </select>
+                                                    <label class="form-label">Nationality</label>
+                                                    <input type="text" name="nationality" class="form-control" >
                                                 </div>
-                                                <div class="col-md-6" id="extraFieldContainer"></div>
+                                                
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                     <div class="card shadow-none bg-transparent border border-primary mt-6">
+                                        <div class="card-body">
+                                            <div class="row g-6">
+                        
+                                                <div class="col-md-6">
+                                                    <label class="form-label">As Author Your Rank</label>
+                                                    <input type="number" name="as_author_your_rank" class="form-control" >
+                                                </div>
+                                                
+                                           
+                                               
                                             </div>
                                         </div>
                                     </div>
@@ -92,51 +102,61 @@
 
                                     <div class="card shadow-none bg-transparent border border-primary mt-6">
                                         <div class="card-body">
-                                            <div class="row g-6">
-                                                <div class="col-md-6">
-                                                    <label class="form-label">As Author Your Rank</label>
-                                                    <input type="number" name="as_author_your_rank" class="form-control" required>
+                                            <div id="grant-details-container">
+                                                <div class="row g-6 grant-group">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Co-Author Name</label>
+                                                        <input type="text" name="co_author[0][name]" class="form-control" >
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Rank</label>
+                                                        <input type="number" name="co_author[0][rank]" class="form-control" >
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">University Name</label>
+                                                        <input type="text" name="co_author[0][univeristy_name]" class="form-control" >
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Country</label>
+                                                        <input type="text" name="co_author[0][country]" class="form-control" >
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Designation</label>
+                                                        <input type="text" name="co_author[0][designation]" class="form-control" >
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
+                                                        <input type="number" name="co_author[0][no_paper_past]" class="form-control" >
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label d-block">Does first author your superviser?</label>
+                                                        <div>
+                                                            <input type="radio" name="co_author[0][first_author_superviser]" id="first_author_superviser_yes_0" value="YES">
+                                                            <label for="first_author_superviser_yes_0">Yes</label>
+
+                                                            <input type="radio" name="co_author[0][first_author_superviser]" id="first_author_superviser_no_0" value="NO" checked>
+                                                            <label for="first_author_superviser_no_0">No</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Student Roll Number</label>
+                                                        <input type="text" name="co_author[0][student_roll_no]" class="form-control" >
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Career</label>
+                                                        <input type="text" name="co_author[0][career]" class="form-control" >
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Co-Author Name</label>
-                                                    <input type="text" name="co_author_name" class="form-control" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Rank</label>
-                                                    <input type="number" name="rank" class="form-control" required>
-                                                </div>
-                                                 <div class="col-md-6">
-                                                    <label class="form-label">Univeristy Name</label>
-                                                    <input type="text" name="univeristy_name" class="form-control" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Country</label>
-                                                    <input type="text" name="Country" class="form-control" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Designation</label>
-                                                    <input type="text" name="designation" class="form-control" required>
-                                                </div>
-                                               
-                                                <div class="col-md-12">
-                                                    <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
-                                                    <input type="number" name="designation" class="form-control" required>
-                                                </div>
-                                                 <div class="col-md-6">
-                                                    <label class="form-label">Student Roll Number</label>
-                                                    <input type="text" name="student_roll_no" class="form-control" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Career</label>
-                                                    <input type="text" name="career" class="form-control" required>
-                                                </div>  
-                                                
-                                                
-                                                
-                                                <div class="col-md-6" id="extraFieldContainer"></div>
                                             </div>
                                         </div>
+                                        <div class="card-footer text-body-secondary bg-label-secondary">
+                                            <button type="button" class="btn btn-primary waves-effect waves-light mt-6" id="add-grant">
+                                                <i class="icon-base ti tabler-plus me-1"></i>
+                                                <span class="align-middle">Add</span>
+                                            </button>
+                                        </div>
                                     </div>
+
 
 
                             </div>
@@ -151,19 +171,19 @@
                                         <label class="form-label" for="ecommerce-product-discount-price">Scopus</label>
                                             <div class="input-group mb-4">
                                                 <span class="input-group-text">Q1</span>
-                                                <input type="number" class="form-control" name="scopus_q1" id="scopus-q1">
+                                                <input type="number" class="form-control scopus-q1" name="scopus_q1">
                                             </div>
                                             <div class="input-group mb-4">
                                                 <span class="input-group-text">Q2</span>
-                                                <input type="number" class="form-control" name="scopus_q2" id="scopus-q2">
+                                                <input type="number" class="form-control scopus-q2" name="scopus_q2">
                                             </div>
                                             <div class="input-group mb-4">
                                                 <span class="input-group-text">Q3</span>
-                                                <input type="number" class="form-control" name="scopus_q3" id="scopus-q3">
+                                                <input type="number" class="form-control scopus-q3" name="scopus_q3">
                                             </div>
                                             <div class="input-group">
                                                 <span class="input-group-text">Q4</span>
-                                                <input type="number" class="form-control" name="scopus_q4" id="scopus-q4">
+                                                <input type="number" class="form-control scopus-q4" name="scopus_q4">
                                             </div>
                                         </div>    
                                         <!-- Discounted Price -->
@@ -171,15 +191,15 @@
                                         <label class="form-label" for="ecommerce-product-discount-price">HEC</label>
                                         <div class="input-group mb-4">
                                             <span class="input-group-text">W</span>
-                                            <input type="number" class="form-control" name="hec_w" id="hec-w">
+                                            <input type="number" class="form-control hec-w" name="hec_w">
                                         </div>
                                         <div class="input-group mb-4">
                                             <span class="input-group-text">X</span>
-                                            <input type="number" class="form-control" name="hec_x" id="hec-x">
+                                            <input type="number" class="form-control hec-x" name="hec_x">
                                         </div>
                                         <div class="input-group">
                                             <span class="input-group-text">Y</span>
-                                            <input type="number" class="form-control" name="hec_y" id="hec-y">
+                                            <input type="number" class="form-control hec-y" name="hec_y" >
                                         </div>
                                         </div>
                                         <!-- Charge tax check box -->
@@ -187,7 +207,7 @@
                                               <label class="form-label"> Medical</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text">Recognized</span>
-                                                    <input type="number" class="form-control" name="medical_recognized" id="medical-recognized">
+                                                    <input type="number" class="form-control medical-recognized" name="medical_recognized" >
                                                 </div>
                                         </div>
                                         <!-- Instock switch -->
@@ -298,12 +318,12 @@
                  <div class="tab-pane fade" id="form3" role="tabpanel">
                   @if(auth()->user()->hasRole(['HOD']))
                             <div class="d-flex">
-                                <select id="bulkAction" class="form-select w-auto me-2">
-                                    <option value="">-- Select Action --</option>
-                                    <option value="2">Verified</option>
-                                    <option value="1">UnVerified</option>
-                                </select>
-                                <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                                    <select id="bulkAction" class="form-select w-auto me-2">
+                                        <option value="">-- Select Action --</option>
+                                        <option value="2">Verified</option>
+                                        <option value="1">UnVerified</option>
+                                    </select>
+                                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
                             </div>
                   @endif
                    <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
@@ -320,16 +340,16 @@
                     </table>
                  </div>
                  @endif
-                 @if(auth()->user()->hasRole(['Dean','ORIC']))
+                 @if(auth()->user()->hasRole(['Dean']))
                  <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                    <div class="d-flex">
-                        <select id="bulkAction" class="form-select w-auto me-2">
-                            <option value="">-- Select Action --</option>
-                            <option value="3">Review</option>
-                            <option value="2">UnReview</option>
-                        </select>
-                        <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                    </div>
+                     <div class="d-flex">
+                                    <select id="bulkAction" class="form-select w-auto me-2">
+                                        <option value="">-- Select Action --</option>
+                                        <option value="3">Verified</option>
+                                        <option value="2">UnVerified</option>
+                                    </select>
+                                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                     </div>
                    <table id="complaintTable1" class="table table-bordered table-striped" style="width:100%">
                         <thead>
                             <tr>
@@ -344,15 +364,8 @@
                     </table>
                  </div>
                  <div class="tab-pane fade" id="form2" role="tabpanel">
-                  <div class="d-flex">
-                        <select id="bulkAction" class="form-select w-auto me-2">
-                            <option value="">-- Select Action --</option>
-                            <option value="2">Verified</option>
-                            <option value="1">UnVerified</option>
-                        </select>
-                        <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                    </div>
-                     <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
+                   
+                     {{-- <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
                         <thead>
                             <tr>
                                 <th><input type="checkbox" id="selectAll"></th>
@@ -363,24 +376,33 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                    </table>
+                    </table> --}}
                  </div>
                  @endif
-                 @if(auth()->user()->hasRole(['Human Resources']))
-                   <div>
-                   <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="selectAll"></th>
-                                <th>#</th>
-                                <th>Created By</th>
-                                <th>Indicator Category</th>
-                                <th>Created Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                    </table></div>
-                 @endif
+                 @if(auth()->user()->hasRole(['ORIC']))
+                        <div>
+                            <div class="d-flex">
+                                <select id="bulkAction" class="form-select w-auto me-2">
+                                        <option value="">-- Select Action --</option>
+                                        <option value="4">Verified</option>
+                                        <option value="3">UnVerified</option>
+                                    </select>
+                                <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                            </div>
+                            <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
+                                 <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAll"></th>
+                                        <th>#</th>
+                                        <th>Created By</th>
+                                        <th>Indicator Category</th>
+                                        <th>Created Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    @endif
             </div>
     </div>
  <!-- Modal -->
@@ -395,7 +417,6 @@
                 <table class="table table-bordered">
                     <tr><th>Created By</th><td id="modalCreatedBy"></td></tr>
                     <tr><th>Target Category</th><td id="modalTargetCategory"></td></tr>
-                    <tr><th>Target Of Publications</th><td id="modalTargetOfpublications"></td></tr>
                     <tr><th>Status</th><td>
                     <div class="form-check form-switch mb-2">
                         <input class="form-check-input" type="checkbox" id="approveCheckbox">
@@ -432,49 +453,150 @@
     @if(auth()->user()->hasRole(['HOD','Teacher']))
     <script>
     $(document).ready(function () {
-           $('select[name="target_category"]').on('change', function () {
-                let category = $(this).val();
-                $.ajax({
-                        url: "{{ route('indicator-form.target') }}", // route name
-                        type: "GET",
-                        data: { target_category: category }, // send selected category
-                        dataType: "json",
-                        success: function (data) {
-                            if (data.success) {
-                                // set publications input value
-                                $('input[name="target_of_publications"]').val(data.target_of_publications);
-                            } else {
-                                $('input[name="target_of_publications"]').val(''); // clear if not found
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("AJAX Error:", error);
-    console.log("Status:", status);
-    console.log("Response Text:", xhr.responseText);
-                        }
-                    });
-                });
-        // Extra fields for Form 1
-        $('#progress_on_publication').on('change', function () {
-            const container = $('#extraFieldContainer');
-            container.empty();
+            
 
-            if (this.value === 'At draft stage') {
-                container.html(`<label class="form-label">Draft</label>
-                                <input type="text" name="draft_stage" class="form-control" required>`);
-            } else if (this.value === 'In Review') {
-                container.html(`<label class="form-label">Email Screenshot</label>
-                                <input type="file" name="email_screenshot" class="form-control" accept=".jpg,.jpeg,.png,.pdf" required >`);
-            } else if (this.value === 'Published') {
-                container.html(`<label class="form-label">Scopus link</label>
-                                <input type="url" name="scopus_link" class="form-control" required>`);
+            
+
+           function fetchTarget(formSelector, indicatorId) {
+    if (!indicatorId) {
+        clearTargetFields(formSelector);
+        return;
+    }
+
+    $.ajax({
+        url: "{{ route('faculty-target.getTarget') }}",
+        type: "GET",
+        data: { indicator_id: indicatorId },
+        success: function(res) {
+            if (!res.data) {
+                clearTargetFields(formSelector);
+                return;
             }
-        });
+
+            // SCOPUS
+            toggleField(formSelector, '.scopus-q1', res.data.scopus_q1);
+            toggleField(formSelector, '.scopus-q2', res.data.scopus_q2);
+            toggleField(formSelector, '.scopus-q3', res.data.scopus_q3);
+            toggleField(formSelector, '.scopus-q4', res.data.scopus_q4);
+
+            // HEC
+            toggleField(formSelector, '.hec-w', res.data.hec_w);
+            toggleField(formSelector, '.hec-x', res.data.hec_x);
+            toggleField(formSelector, '.hec-y', res.data.hec_y);
+
+            // MEDICAL
+            toggleField(formSelector, '.medical-recognized', res.data.medical_recognized);
+        },
+        error: function() {
+            clearTargetFields(formSelector);
+            alert('Failed to fetch target data.');
+        }
+    });
+}
+
+// Show/hide field scoped to form
+function toggleField(formSelector, inputClass, value) {
+    let group = $(formSelector).find(inputClass).closest('.input-group');
+    if (value !== null && value !== '') {
+        group.show();
+        $(formSelector).find(inputClass).val(value);
+    } else {
+        group.hide();
+        $(formSelector).find(inputClass).val('');
+    }
+}
+
+// Clear fields scoped to form
+function clearTargetFields(formSelector) {
+    $(formSelector).find('.input-group').hide();
+    $(formSelector).find('.input-group input').val('');
+}
+
+// Usage example for multiple forms
+fetchTarget('#researchForm1', {{ $indicatorId }});
+
+
+
+
+           let grantIndex = 1; // start from 1 because 0 is initial block
+
+            // Add new grant group
+            $('#add-grant').click(function () {
+                let newGroup = `
+                    <div class="row g-6 grant-group mt-4">
+                    <hr>
+                        <div class="col-md-6">
+                            <label class="form-label">Co-Author Name</label>
+                            <input type="text" name="co_author[${grantIndex}][name]" class="form-control" >
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Rank</label>
+                            <input type="number" name="co_author[${grantIndex}][rank]" class="form-control" >
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">University Name</label>
+                            <input type="text" name="co_author[${grantIndex}][univeristy_name]" class="form-control" >
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Country</label>
+                            <input type="text" name="co_author[${grantIndex}][country]" class="form-control" >
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Designation</label>
+                            <input type="text" name="co_author[${grantIndex}][designation]" class="form-control" >
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
+                            <input type="number" name="co_author[${grantIndex}][no_paper_past]" class="form-control" >
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label d-block">Does first author your superviser?</label>
+                            <div>
+                                <input type="radio" name="co_author[${grantIndex}][first_author_superviser]" id="first_author_superviser_yes_${grantIndex}" value="YES">
+                                <label for="first_author_superviser_yes_${grantIndex}">Yes</label>
+
+                                <input type="radio" name="co_author[${grantIndex}][first_author_superviser]" id="first_author_superviser_no_${grantIndex}" value="NO" checked>
+                                <label for="first_author_superviser_no_${grantIndex}">No</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Student Roll Number</label>
+                            <input type="text" name="co_author[${grantIndex}][student_roll_no]" class="form-control" >
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Career</label>
+                            <input type="text" name="co_author[${grantIndex}][career]" class="form-control" >
+                        </div>
+                        <div class="col-md-12 mt-2">
+                            <button type="button" class="btn btn-danger remove-grant">Remove</button>
+                        </div>
+                    </div>
+                `;
+
+                $('#grant-details-container').append(newGroup);
+                grantIndex++;
+            });
+
+            // Remove a grant group
+            $(document).on('click', '.remove-grant', function () {
+                $(this).closest('.grant-group').remove();
+            });
+
+       
 
         $('#researchForm1').on('submit', function (e) {
             e.preventDefault();
             let form = $(this);
             let formData = new FormData(this);
+
+             // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
 
             $.ajax({
                 url: "{{ route('indicator-form.store') }}",
@@ -486,6 +608,16 @@
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                     form[0].reset();
+                    form.find('.invalid-feedback').remove();
+                    form.find('.is-invalid').removeClass('is-invalid');
+
+                    $('#grant-details-container .grant-group:not(:first)').remove();
+
+                            // Reset the proof container of the first group
+                            $('#grant-details-container .grant-group:first .proof-container').hide();
+
+                            // Reset index to 1
+                            grantIndex = 1;
                 },
                 error: function (xhr) {
                     Swal.close();
@@ -497,10 +629,26 @@
 
                             // Loop through all validation errors
                             $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
+                                let fieldName;
+
+                                // Check if field contains a dot (dynamic field)
+                                if (field.indexOf('.') !== -1) {
+                                    // Convert Laravel dot notation to input name format
+                                    fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                    fieldName = fieldName.replace('[]]', ']'); // fix extra brackets
+                                } else {
+                                    // Static field
+                                    fieldName = field;
+                                }
+
+                                // Find input by name
+                                let input = form.find('[name="' + fieldName + '"]');
 
                                 if (input.length) {
                                     input.addClass('is-invalid');
+
+                                    // Remove old error if exists
+                                    input.next('.invalid-feedback').remove();
 
                                     // Show error message under input
                                     input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
@@ -568,6 +716,34 @@
         }
     });
 }
+ // ✅ Reusable function for single update
+            function updateSingleStatus(id, status) {
+                $.ajax({
+                    url: `/indicator-form/${id}`,           // single row endpoint
+                    type: 'POST',                            // POST with _method PUT
+                    data: {
+                        _method: 'PUT',
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: status
+                    },
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Updated',
+                            text: res.message || 'Status updated successfully!'
+                        });
+                        
+                        fetchIndicatorForms3();
+                    },
+                    error: function (xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Something went wrong!'
+                        });
+                    }
+                });
+            }
     $(document).ready(function () {
         function updateTotal() {
         let ids = [
@@ -655,7 +831,6 @@
 
                 $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                 $('#modalTargetCategory').text(form.target_category || 'N/A');
-                $('#modalTargetOfpublications').text(form.target_of_publications || 'N/A');
                 $('#modalStatus').text(form.status || 'Pending');
                 $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
                   if (window.currentUserRole === 'HOD') {
@@ -669,20 +844,7 @@
                             statusLabel = "Verified";
                         }
                         $('label[for="approveCheckbox"]').text(statusLabel);
-                    }else if(window.currentUserRole === 'ORIC'){
-                    
-                    $('#approveCheckbox').prop('checked', form.status == 3);
-                    $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-                    let statusLabel = "Pending"; 
-                    if (form.status == 1) {
-                        statusLabel = "Verified";
-                    } else if (form.status == 2) {
-                        statusLabel = "Approved"; 
-                    } else if (form.status == 3) {
-                        statusLabel = "Approved";
-                    }
-                    $('label[for="approveCheckbox"]').text(statusLabel);
-                } else {
+                    } else {
                     $('#approveCheckbox').closest('.form-check-input').hide();
 
                     let statusLabel = "Pending"; // default
@@ -697,123 +859,126 @@
                     // update the label text
                     $('label[for="approveCheckbox"]').text(statusLabel);
                 }
-                if (form.draft_stage) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Draft Stage</th><td>${form.draft_stage}</td></tr>`);
-                }
                 
-                if (form.email_screenshot_url) {
-                    $('#modalExtraFields').append(`
-                        <tr class="optional-field">
-                            <th>Email Screenshot</th>
-                            <td>
-                                <a href="${form.email_screenshot_url}" target="_blank">
-                                    <img src="${form.email_screenshot_url}" alt="Screenshot" style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
-                                </a>
-                            </td>
-                        </tr>
-                    `);
-                }
+                
 
 
-                if (form.scopus_link) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Scopus Link</th><td><a href="${form.scopus_link}" target="_blank">${form.scopus_link}</a></td></tr>`);
+
+                if (form.link_of_publications) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Publications Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
                 }
-                if (form.frequency) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Frequency/No of trainings</th><td>${form.frequency}</td></tr>`);
+                if (form.rank) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
                 }
-                if (form.need) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Need</th><td>${form.need}</td></tr>`);
+                if (form.nationality) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality</th><td>${form.nationality}</td></tr>`);
                 }
-                if (form.any_specifics_related_to_capacity_building) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Any Specifics related to capacity building</th><td>${form.any_specifics_related_to_capacity_building}</td></tr>`);
+                if (form.scopus_q1) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q1</th><td>${form.scopus_q1}</td></tr>`);
                 }
+                if (form.scopus_q2) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q2</th><td>${form.scopus_q2}</td></tr>`);
+                }
+                if (form.scopus_q3) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q3</th><td>${form.scopus_q3}</td></tr>`);
+                }
+                if (form.scopus_q4) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q4</th><td>${form.scopus_q4}</td></tr>`);
+                }
+                if (form.hec_w) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>W</th><td>${form.hec_w}</td></tr>`);
+                }
+                if (form.hec_x) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>X</th><td>${form.hec_x}</td></tr>`);
+                }
+                if (form.hec_y) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Y</th><td>${form.hec_y}</td></tr>`);
+                }
+                if (form.medical_recognized) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Medical Recognized</th><td>${form.medical_recognized}</td></tr>`);
+                }
+                if (form.as_author_your_rank) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>As Author Your Rank</th><td>${form.as_author_your_rank}</td></tr>`);
+                }
+                // ✅ append projects dynamically
+                //alert(JSON.stringify(form));
+                    if (form.co_authors  && form.co_authors.length > 0) {
+             
+                        form.co_authors.forEach((coAuthor, index) => {
+                            $('#modalExtraFields').append(`
+                                <tr class="optional-field">
+                                    <th>Project ${index + 1}</th>
+                                    <td>
+                                        <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
+                                        <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
+                                        <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
+                                        <strong>country:</strong> ${coAuthor.country || 'N/A'}<br>
+                                        <strong>Designation:</strong> ${coAuthor.designation || 'N/A'}<br>
+                                        <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Projects</th>
+                                <td>No projects available</td>
+                            </tr>
+                        `);
+                    }
                 $('#viewFormModal').modal('show');
             });
-            $(document).on('change', '#approveCheckbox', function () {
-                let id = $(this).data('id');
-                let table_status = $(this).data('table_status');
-                let status;
-                if (window.currentUserRole === "HOD"){
-                    status = $(this).is(':checked') ? 2 : 1;
-                }
-
-                $.ajax({
-                    url: `/indicator-form/${id}`,
-                    type: 'POST',
-                    data: {
-                        _method: 'PUT',
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        status: status
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            alert('Status updated successfully!');
-                            fetchIndicatorForms3();
-                        } else {
-                            alert('Failed to update status.');
-                        }
-                    },
-                    error: function () {
-                        alert('Error updating status.');
-                    }
+           
+                // ✅ Single checkbox status change
+                $(document).on('change', '#approveCheckbox', function () {
+                    const id = $(this).data('id');
+                    const status = $(this).is(':checked') ? 2 : 1;
+                    updateSingleStatus(id, status);
                 });
-            });
+
+                // ✅ Bulk submit button
+                $('#bulkSubmit').on('click', function () {
+                    const status = $('#bulkAction').val();
+                    let selectedIds = [];
+
+                    $('#complaintTable3 .rowCheckbox:checked').each(function () {
+                        selectedIds.push($(this).val());
+                    });
+
+                    if (!status) {
+                        Swal.fire({ icon: 'warning', title: 'Select Action', text: 'Please select a status to update.' });
+                        return;
+                    }
+                    if (!selectedIds.length) {
+                        Swal.fire({ icon: 'warning', title: 'No Selection', text: 'Please select at least one row.' });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to change status for ${selectedIds.length} item(s).`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, update it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            selectedIds.forEach(id => updateSingleStatus(id, status));
+                        }
+                    });
+                });
+
+                // ✅ Select / Deselect all checkboxes
+                $(document).on('change', '#selectAll', function () {
+                    $('.rowCheckbox').prop('checked', $(this).is(':checked'));
+                });
 
     });
     </script>
     @endif
-@if(auth()->user()->hasRole(['Dean','ORIC','Human Resources']))
+@if(auth()->user()->hasRole(['Dean']))
 <script>
-function fetchIndicatorForms() {
-    $.ajax({
-        url: "{{ route('indicator-form.index') }}",
-        method: "GET",
-         data: {
-            status: "HOD" // you can send more values
-        },
-        dataType: "json",
-        success: function (data) {
-            //alert(data.forms);
-            const forms = data.forms || [];
-            
-            const rowData = forms.map((form, i) => {
-                const createdAt = form.created_at 
-                    ? new Date(form.created_at).toISOString().split('T')[0] 
-                    : 'N/A';
 
-                // Pass entire form as JSON in button's data attribute
-                return [
-                    `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
-                    i + 1,
-                    form.creator ? form.creator.name : 'N/A',
-                    form.target_category || 'N/A',
-                    createdAt,
-                    `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
-                ];
-            });
-
-            if (!$.fn.DataTable.isDataTable('#complaintTable2')) {
-                $('#complaintTable2').DataTable({
-                    data: rowData,
-                    columns: [
-                        { title: "<input type='checkbox' id='selectAll'>" },
-                        { title: "#" },
-                        { title: "Created By" },
-                        { title: "Indicator Category" },
-                        { title: "Created Date" },
-                        { title: "Actions" }
-                    ]
-                });
-            } else {
-                $('#complaintTable2').DataTable().clear().rows.add(rowData).draw();
-            }
-        },
-        error: function(xhr) {
-            console.error('Error fetching data:', xhr.responseText);
-            alert('Unable to load data.');
-        }
-    });
-}
 function fetchIndicatorForms1() {
     $.ajax({
         url: "{{ route('indicator-form.index') }}",
@@ -864,16 +1029,36 @@ function fetchIndicatorForms1() {
         }
     });
 }
+    // ✅ Reusable function for single update
+            function updateSingleStatus(id, status) {
+                $.ajax({
+                    url: `/indicator-form/${id}`,           // single row endpoint
+                    type: 'POST',                            // POST with _method PUT
+                    data: {
+                        _method: 'PUT',
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: status
+                    },
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Updated',
+                            text: res.message || 'Status updated successfully!'
+                        });
+                        
+                        fetchIndicatorForms1();
+                    },
+                    error: function (xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Something went wrong!'
+                        });
+                    }
+                });
+            }
     $(document).ready(function () {
-      if (window.currentUserRole === 'Dean') {
-          fetchIndicatorForms();
           fetchIndicatorForms1();
-      }if (window.currentUserRole === 'ORIC') {
-          fetchIndicatorForms();
-          fetchIndicatorForms1();
-      }if (window.currentUserRole === 'Human Resources') {
-          fetchIndicatorForms();
-      }
       
        // Handle click on View button
     $(document).on('click', '.view-form-btn', function() {
@@ -882,78 +1067,20 @@ function fetchIndicatorForms1() {
 
         $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
         $('#modalTargetCategory').text(form.target_category || 'N/A');
-        $('#modalTargetOfpublications').text(form.target_of_publications || 'N/A');
         $('#modalStatus').text(form.status || 'Pending');
         $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
         if (window.currentUserRole === 'Dean') {
-            let statusLabel = "Review"; 
-            if(form.form_status=='RESEARCHER'){
-                $('#approveCheckbox').closest('.form-check-input').show();
-                $('#approveCheckbox').prop('checked', form.status == 3);
-                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-                // Label text for HOD
-                    if (form.status == 2) {
-                        statusLabel = "Review";
-                    } else if (form.status == 3) {
-                        statusLabel = "Review";
-                    }
-            }if(form.form_status=='HOD'){
-                $('#approveCheckbox').closest('.form-check-input').show();
-                $('#approveCheckbox').prop('checked', form.status == 2);
-                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-                // Label text for HOD
-                    if (form.status == 1) {
-                        statusLabel = "Verified";
-                    } else if (form.status == 2) {
-                        statusLabel = "Verified";
-                    }
-            }
-        
-            $('label[for="approveCheckbox"]').text(statusLabel);
-        }else if(window.currentUserRole === 'ORIC'){
-            
-            let statusLabel = "Verify"; 
-            if(form.form_status=='RESEARCHER'){
-                $('#approveCheckbox').closest('.form-check-input').show();
-                $('#approveCheckbox').prop('checked', form.status == 4);
-                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-                // Label text for HOD
-                    if (form.status == 3) {
-                        statusLabel = "Verify";
-                    } else if (form.status == 4) {
-                        statusLabel = "Verify";
-                    }
-            }if(form.form_status=='HOD'){
-                $('#approveCheckbox').closest('.form-check-input').show();
-                $('#approveCheckbox').prop('checked', form.status == 3);
-                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-                // Label text for HOD
-                    if (form.status == 2) {
-                        statusLabel = "Verify";
-                    } else if (form.status == 3) {
-                        statusLabel = "Verify";
-                    }
-            }
-        
-            $('label[for="approveCheckbox"]').text(statusLabel);
-        }else if(window.currentUserRole === 'Human Resources'){
-            
-            let statusLabel = "Verify"; 
-            if(form.form_status=='HOD'){
-                $('#approveCheckbox').closest('.form-check-input').show();
-                $('#approveCheckbox').prop('checked', form.status == 4);
-                $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-                // Label text for HOD
-                    if (form.status == 3) {
-                        statusLabel = "Verify";
-                    } else if (form.status == 3) {
-                        statusLabel = "Verify";
-                    }
-            }
-        
-            $('label[for="approveCheckbox"]').text(statusLabel);
-        }
-         else {
+                        $('#approveCheckbox').prop('checked', form.status == 3);
+                        $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                        // Label text for Dean
+                        let statusLabel = "Pending";
+                        if (form.status == 2) {
+                            statusLabel = "Verified";
+                        } else if (form.status == 3) {
+                            statusLabel = "Verified";
+                        }
+                        $('label[for="approveCheckbox"]').text(statusLabel);
+                    }else {
             $('#approveCheckbox').closest('.form-check-input').hide();
 
             let statusLabel = "Pending"; // default
@@ -968,92 +1095,353 @@ function fetchIndicatorForms1() {
             // update the label text
             $('label[for="approveCheckbox"]').text(statusLabel);
         }
-         if (form.draft_stage) {
-            $('#modalExtraFields').append(`<tr class="optional-field"><th>Draft Stage</th><td>${form.draft_stage}</td></tr>`);
-        }
         
-        if (form.email_screenshot_url) {
-            $('#modalExtraFields').append(`
-                <tr class="optional-field">
-                    <th>Email Screenshot</th>
-                    <td>
-                        <a href="${form.email_screenshot_url}" target="_blank">
-                            <img src="${form.email_screenshot_url}" alt="Screenshot" style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
-                        </a>
-                    </td>
-                </tr>
-            `);
-        }
+         
+        if (form.link_of_publications) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Publications Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                }
+                if (form.rank) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
+                }
+                if (form.nationality) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality</th><td>${form.nationality}</td></tr>`);
+                }
+                if (form.scopus_q1) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q1</th><td>${form.scopus_q1}</td></tr>`);
+                }
+                if (form.scopus_q2) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q2</th><td>${form.scopus_q2}</td></tr>`);
+                }
+                if (form.scopus_q3) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q3</th><td>${form.scopus_q3}</td></tr>`);
+                }
+                if (form.scopus_q4) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q4</th><td>${form.scopus_q4}</td></tr>`);
+                }
+                if (form.hec_w) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>W</th><td>${form.hec_w}</td></tr>`);
+                }
+                if (form.hec_x) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>X</th><td>${form.hec_x}</td></tr>`);
+                }
+                if (form.hec_y) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Y</th><td>${form.hec_y}</td></tr>`);
+                }
+                if (form.medical_recognized) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Medical Recognized</th><td>${form.medical_recognized}</td></tr>`);
+                }
+                if (form.as_author_your_rank) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>As Author Your Rank</th><td>${form.as_author_your_rank}</td></tr>`);
+                }
+                // ✅ append projects dynamically
+                //alert(JSON.stringify(form));
+                    if (form.co_authors  && form.co_authors.length > 0) {
+             
+                        form.co_authors.forEach((coAuthor, index) => {
+                            $('#modalExtraFields').append(`
+                                <tr class="optional-field">
+                                    <th>Project ${index + 1}</th>
+                                    <td>
+                                        <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
+                                        <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
+                                        <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
+                                        <strong>country:</strong> ${coAuthor.country || 'N/A'}<br>
+                                        <strong>Designation:</strong> ${coAuthor.designation || 'N/A'}<br>
+                                        <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Projects</th>
+                                <td>No projects available</td>
+                            </tr>
+                        `);
+                    }
 
-
-        if (form.scopus_link) {
-            $('#modalExtraFields').append(`<tr class="optional-field"><th>Scopus Link</th><td><a href="${form.scopus_link}" target="_blank">${form.scopus_link}</a></td></tr>`);
-        }
-        if (form.frequency) {
-            $('#modalExtraFields').append(`<tr class="optional-field"><th>Frequency/No of trainings</th><td>${form.frequency}</td></tr>`);
-        }
-         if (form.need) {
-            $('#modalExtraFields').append(`<tr class="optional-field"><th>Need</th><td>${form.need}</td></tr>`);
-        }
-        if (form.any_specifics_related_to_capacity_building) {
-            $('#modalExtraFields').append(`<tr class="optional-field"><th>Any Specifics related to capacity building</th><td>${form.any_specifics_related_to_capacity_building}</td></tr>`);
-        }
+       
         $('#viewFormModal').modal('show');
     });
-       
-     $(document).on('change', '#approveCheckbox', function () {
-                let id = $(this).data('id');
-                let table_status = $(this).data('table_status');
-                let status;
-                if (window.currentUserRole === "Dean"){
-                    if(table_status=="RESEARCHER"){
-                       status = $(this).is(':checked') ? 3 : 2;
-                    }if(table_status=="HOD"){
-                       status = $(this).is(':checked') ? 2 : 1;
-                    }
-                }
-                if (window.currentUserRole === "ORIC"){
-                    if(table_status=="RESEARCHER"){
-                       status = $(this).is(':checked') ? 4 : 3;
-                    }if(table_status=="HOD"){
-                       status = $(this).is(':checked') ? 3 : 2;
-                    }
-                }
-                 if (window.currentUserRole === "Human Resources"){
-                    if(table_status=="HOD"){
-                       status = $(this).is(':checked') ? 4 : 3;
-                    }
-                }
 
+    // ✅ Single checkbox status change
+                $(document).on('change', '#approveCheckbox', function () {
+                    const id = $(this).data('id');
+                    const status = $(this).is(':checked') ? 3 : 2;
+                    updateSingleStatus(id, status);
+                });
+
+                // ✅ Bulk submit button
+                $('#bulkSubmit').on('click', function () {
+                    const status = $('#bulkAction').val();
+                    let selectedIds = [];
+
+                    $('#complaintTable1 .rowCheckbox:checked').each(function () {
+                        selectedIds.push($(this).val());
+                    });
+
+                    if (!status) {
+                        Swal.fire({ icon: 'warning', title: 'Select Action', text: 'Please select a status to update.' });
+                        return;
+                    }
+                    if (!selectedIds.length) {
+                        Swal.fire({ icon: 'warning', title: 'No Selection', text: 'Please select at least one row.' });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to change status for ${selectedIds.length} item(s).`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, update it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            selectedIds.forEach(id => updateSingleStatus(id, status));
+                        }
+                    });
+                });
+
+                // ✅ Select / Deselect all checkboxes
+                $(document).on('change', '#selectAll', function () {
+                    $('.rowCheckbox').prop('checked', $(this).is(':checked'));
+                });
+
+    });
+    </script>
+    @endif
+     @if(auth()->user()->hasRole(['ORIC']))
+       <script>
+            function fetchIndicatorForms3() {
                 $.ajax({
-                    url: `/indicator-form/${id}`,
-                    type: 'POST',
+                    url: "{{ route('indicator-form.index') }}",
+                    method: "GET",
+                    data: {
+                        status: "RESEARCHER" // you can send more values
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
+
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
+
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
+                                i + 1,
+                                form.creator ? form.creator.name : 'N/A',
+                                form.target_category || 'N/A',
+                                createdAt,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                            ];
+                        });
+
+                        if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
+                            $('#complaintTable3').DataTable({
+                                data: rowData,
+                                columns: [
+                                    { title: "<input type='checkbox' id='selectAll'>" },
+                                    { title: "#" },
+                                    { title: "Created By" },
+                                    { title: "Indicator Category" },
+                                    { title: "Created Date" },
+                                    { title: "Actions" }
+                                ]
+                            });
+                        } else {
+                            $('#complaintTable3').DataTable().clear().rows.add(rowData).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
+                });
+            }
+            // ✅ Reusable function for single update
+            function updateSingleStatus(id, status) {
+                $.ajax({
+                    url: `/indicator-form/${id}`,           // single row endpoint
+                    type: 'POST',                            // POST with _method PUT
                     data: {
                         _method: 'PUT',
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         status: status
                     },
-                    success: function (response) {
-                        if (response.success) {
-                            alert('Status updated successfully!');
-                            if (table_status === "RESEARCHER") {
-                                fetchIndicatorForms1(); // refresh only researcher table
-                            }
-                            if (table_status === "HOD") {
-                                fetchIndicatorForms(); // refresh only researcher table
-                            }
-                        } else {
-                            alert('Failed to update status.');
-                        }
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Updated',
+                            text: res.message || 'Status updated successfully!'
+                        });
+                        
+                        fetchIndicatorForms3();
                     },
-                    error: function () {
-                        alert('Error updating status.');
+                    error: function (xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Something went wrong!'
+                        });
                     }
                 });
-            });
+            }
+            $(document).ready(function () {
+                fetchIndicatorForms3();
+                $(document).on('click', '.view-form-btn', function () {
+                    const form = $(this).data('form');
+                    $('#modalExtraFields').find('.optional-field').remove();
 
-    });
-    </script>
+                    $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
+            $('#modalTargetCategory').text(form.target_category || 'N/A');
+            $('#modalStatus').text(form.status || 'Pending');
+            $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+            if (window.currentUserRole === 'ORIC') {
+                            $('#approveCheckbox').prop('checked', form.status == 4);
+                            $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                            // Label text for Dean
+                            let statusLabel = "Pending";
+                            if (form.status == 3) {
+                                statusLabel = "Verified";
+                            } else if (form.status == 4) {
+                                statusLabel = "Verified";
+                            }
+                            $('label[for="approveCheckbox"]').text(statusLabel);
+                        }else {
+                            $('#approveCheckbox').closest('.form-check-input').hide();
+
+                            let statusLabel = "Pending"; // default
+                            if (form.status == 1) {
+                                statusLabel = "Not Verified";
+                            } else if (form.status == 2) {
+                                statusLabel = "Verified";
+                            } else if (form.status == 3) {
+                                statusLabel = "Approved";
+                            }
+
+                            // update the label text
+                            $('label[for="approveCheckbox"]').text(statusLabel);
+                        }
+            
+            
+            if (form.link_of_publications) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Publications Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                    }
+                    if (form.rank) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
+                    }
+                    if (form.nationality) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality</th><td>${form.nationality}</td></tr>`);
+                    }
+                    if (form.scopus_q1) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q1</th><td>${form.scopus_q1}</td></tr>`);
+                    }
+                    if (form.scopus_q2) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q2</th><td>${form.scopus_q2}</td></tr>`);
+                    }
+                    if (form.scopus_q3) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q3</th><td>${form.scopus_q3}</td></tr>`);
+                    }
+                    if (form.scopus_q4) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q4</th><td>${form.scopus_q4}</td></tr>`);
+                    }
+                    if (form.hec_w) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>W</th><td>${form.hec_w}</td></tr>`);
+                    }
+                    if (form.hec_x) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>X</th><td>${form.hec_x}</td></tr>`);
+                    }
+                    if (form.hec_y) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Y</th><td>${form.hec_y}</td></tr>`);
+                    }
+                    if (form.medical_recognized) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Medical Recognized</th><td>${form.medical_recognized}</td></tr>`);
+                    }
+                    if (form.as_author_your_rank) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>As Author Your Rank</th><td>${form.as_author_your_rank}</td></tr>`);
+                    }
+                    // ✅ append projects dynamically
+                    //alert(JSON.stringify(form));
+                        if (form.co_authors  && form.co_authors.length > 0) {
+                
+                            form.co_authors.forEach((coAuthor, index) => {
+                                $('#modalExtraFields').append(`
+                                    <tr class="optional-field">
+                                        <th>Project ${index + 1}</th>
+                                        <td>
+                                            <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
+                                            <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
+                                            <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
+                                            <strong>country:</strong> ${coAuthor.country || 'N/A'}<br>
+                                            <strong>Designation:</strong> ${coAuthor.designation || 'N/A'}<br>
+                                            <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}
+                                        </td>
+                                    </tr>
+                                `);
+                            });
+                        } else {
+                            $('#modalExtraFields').append(`
+                                <tr class="optional-field">
+                                    <th>Projects</th>
+                                    <td>No projects available</td>
+                                </tr>
+                            `);
+                        }
+
+                    $('#viewFormModal').modal('show');
+                });
+
+
+
+                 // ✅ Single checkbox status change
+                $(document).on('change', '#approveCheckbox', function () {
+                    const id = $(this).data('id');
+                    const status = $(this).is(':checked') ? 4 : 3;
+                    updateSingleStatus(id, status);
+                });
+
+                // ✅ Bulk submit button
+                $('#bulkSubmit').on('click', function () {
+                    const status = $('#bulkAction').val();
+                    let selectedIds = [];
+
+                    $('#complaintTable3 .rowCheckbox:checked').each(function () {
+                        selectedIds.push($(this).val());
+                    });
+
+                    if (!status) {
+                        Swal.fire({ icon: 'warning', title: 'Select Action', text: 'Please select a status to update.' });
+                        return;
+                    }
+                    if (!selectedIds.length) {
+                        Swal.fire({ icon: 'warning', title: 'No Selection', text: 'Please select at least one row.' });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to change status for ${selectedIds.length} item(s).`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, update it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            selectedIds.forEach(id => updateSingleStatus(id, status));
+                        }
+                    });
+                });
+
+                // ✅ Select / Deselect all checkboxes
+                $(document).on('change', '#selectAll', function () {
+                    $('.rowCheckbox').prop('checked', $(this).is(':checked'));
+                });
+            });
+        </script>
     @endif
     
 @endpush

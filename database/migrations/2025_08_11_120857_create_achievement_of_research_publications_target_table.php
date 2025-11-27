@@ -13,15 +13,28 @@ return new class extends Migration
     {
         Schema::create('achievement_of_research_publications_target', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('kpa_id');
-            $table->unsignedBigInteger('sp_category_id');
             $table->unsignedBigInteger('indicator_id');
 
             $table->string('target_category')->nullable();
-            $table->string('target_of_publications')->nullable();
-            $table->string('draft_stage')->nullable();
-            $table->string('email_screenshot')->nullable();
-            $table->string('scopus_link')->nullable();
+            $table->string('link_of_publications')->nullable();
+            $table->string('rank')->nullable();
+            $table->string('nationality')->nullable();
+            
+            $table->unsignedInteger('scopus_q1')->nullable();
+            $table->unsignedInteger('scopus_q2')->nullable();
+            $table->unsignedInteger('scopus_q3')->nullable();
+            $table->unsignedInteger('scopus_q4')->nullable();
+
+            // HEC targets
+            $table->unsignedInteger('hec_w')->nullable();
+            $table->unsignedInteger('hec_x')->nullable();
+            $table->unsignedInteger('hec_y')->nullable();
+
+            // Medical target
+            $table->unsignedInteger('medical_recognized')->nullable();
+            $table->string('as_author_your_rank')->nullable();
+            
+            $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER'])->default('RESEARCHER');
             $table->enum('status', ['1', '2', '3','4','5','6'])->default('1');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');

@@ -35,6 +35,7 @@ return new class extends Migration {
             // National / International
             $table->unsignedInteger('national')->nullable();
             $table->unsignedInteger('international')->nullable();
+            $table->enum('status', ['1', '2', '3', '4', '5', '6'])->default('1');
 
             // Optional metadata
             $table->unsignedBigInteger('created_by')->nullable();

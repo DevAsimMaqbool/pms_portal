@@ -227,6 +227,36 @@
                     if (form.created_at) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Created Date</th><td>${form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A'}</td></tr>`);
                     }
+                    if (form.scopus_q1) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q1</th><td>${form.scopus_q1}</td></tr>`);
+                }
+                if (form.scopus_q2) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q2</th><td>${form.scopus_q2}</td></tr>`);
+                }
+                if (form.scopus_q3) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q3</th><td>${form.scopus_q3}</td></tr>`);
+                }
+                if (form.scopus_q4) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Q4</th><td>${form.scopus_q4}</td></tr>`);
+                }
+                if (form.hec_w) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>W</th><td>${form.hec_w}</td></tr>`);
+                }
+                if (form.hec_x) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>X</th><td>${form.hec_x}</td></tr>`);
+                }
+                if (form.hec_y) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Y</th><td>${form.hec_y}</td></tr>`);
+                }
+                if (form.medical_recognized) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Medical Recognized</th><td>${form.medical_recognized}</td></tr>`);
+                }
+                if (form.national) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>National</th><td>${form.national}</td></tr>`);
+                }
+                if (form.international) {
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Inter National</th><td>${form.international}</td></tr>`);
+                }
                     $('#viewFormModal').modal('show');
                 });
 
