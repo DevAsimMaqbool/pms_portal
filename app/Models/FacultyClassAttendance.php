@@ -11,6 +11,8 @@ class FacultyClassAttendance extends Model
         'faculty_id',
         'program_name',
         'state',
+        'term_id',
+        'term',
         'att_marked',
         'class_date',
         'total_students',

@@ -312,6 +312,23 @@ class FacultyMemberClassController extends Controller
 
     public function classesAttendance()
     {
+        // $attendanceSummary = DB::connection('pgsql')
+        //     ->table('odoocms_class_attendance as ca')
+        //     ->leftJoin('odoocms_class_attendance_line as cal', 'cal.attendance_id', '=', 'ca.id')
+        //     ->leftJoin('odoocms_program as p', 'p.id', '=', 'ca.program_id')
+        //     ->select([
+        //         DB::raw('MAX(ca.class_id) as class_id'),
+        //         DB::raw('MAX(cal.faculty_updated_id) as faculty_id'),
+        //         DB::raw('MAX(p.name) as program_name'),
+        //         DB::raw('MAX(cal.state) as state'),
+        //         DB::raw('BOOL_OR(ca.att_marked) as att_marked'),
+        //         DB::raw('COUNT(cal.student_id) as total_no_of_students'),
+        //         DB::raw("COUNT(cal.student_id) FILTER (WHERE cal.present = 'true') as present_students_count"),
+        //         DB::raw("COUNT(cal.student_id) FILTER (WHERE cal.present = 'false') as absent_students_count")
+        //     ])
+        //     ->where('ca.date_class', $date)
+        //     ->groupBy('ca.id')
+        //     ->get();
 
         $date = '2025-09-30';
 
@@ -319,11 +336,14 @@ class FacultyMemberClassController extends Controller
             ->table('odoocms_class_attendance as ca')
             ->leftJoin('odoocms_class_attendance_line as cal', 'cal.attendance_id', '=', 'ca.id')
             ->leftJoin('odoocms_program as p', 'p.id', '=', 'ca.program_id')
+            ->leftJoin('odoocms_academic_term as oat', 'oat.id', '=', 'ca.term_id')
             ->select([
                 DB::raw('MAX(ca.class_id) as class_id'),
                 DB::raw('MAX(cal.faculty_updated_id) as faculty_id'),
                 DB::raw('MAX(p.name) as program_name'),
                 DB::raw('MAX(cal.state) as state'),
+                DB::raw('MAX(cal.term_id) as term_id'),
+                DB::raw('MAX(oat.name) as term'),
                 DB::raw('BOOL_OR(ca.att_marked) as att_marked'),
                 DB::raw('COUNT(cal.student_id) as total_no_of_students'),
                 DB::raw("COUNT(cal.student_id) FILTER (WHERE cal.present = 'true') as present_students_count"),
@@ -332,6 +352,7 @@ class FacultyMemberClassController extends Controller
             ->where('ca.date_class', $date)
             ->groupBy('ca.id')
             ->get();
+        dd($attendanceSummary);
         foreach ($attendanceSummary as $item) {
             FacultyClassAttendance::updateOrCreate(
                 [
@@ -350,7 +371,6 @@ class FacultyMemberClassController extends Controller
             );
         }
         return response()->json(['message' => 'Attendance summary saved successfully.']);
-
     }
 
 }
