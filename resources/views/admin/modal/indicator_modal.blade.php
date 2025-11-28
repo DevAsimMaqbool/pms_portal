@@ -2002,6 +2002,28 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                        $facultyTargets = ScopusPublications(Auth::user()->employee_id,128);
+                                        $sr = 1;
+                                        @endphp
+                                        @foreach ($facultyTargets as $facultyTarget)
+                                              @foreach ($facultyTarget->researchPublicationTargets as $researchTarget)
+                                                <tr>
+                                                    <td>{{ $sr++ }}</td> <!-- Serial Number -->
+                                                    <td>{{ $facultyTarget->id }}</td> <!-- Faculty Target ID -->
+                                                    <td>{{ $researchTarget->indicator_id }}</td> <!-- Example field -->
+                                                    <td>
+                                                       <div class=" badge bg-label-danger">50%</div>
+                                                    </td>
+                                                    <td>{{ $researchTarget->rank ?? '-' }}</td> <!-- Optional field -->
+                                                    <td>{{ $researchTarget->nationality ?? '-' }}</td>
+                                                    <td>{{ $researchTarget->scopus_q1 ?? 0 }}</td>
+                                                    <td>{{ $researchTarget->scopus_q2 ?? 0 }}</td>
+                                                    <td>{{ $researchTarget->scopus_q3 ?? 0 }}</td>
+                                                    <td>{{ $researchTarget->scopus_q4 ?? 0 }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endforeach
                                         <tr>
                                             <td>1</td>
                                             <td>1</td>
@@ -3199,36 +3221,29 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                 @php
+                                $ResearchIncomes = CommercialGainsCounsultancyResearchIncome(Auth::user()->employee_id,137);
+                                        
+                                @endphp
+                                @foreach ($ResearchIncomes as $ResearchIncome)
                                     <tr>
-                                        <td>1</td>
-                                        <td>32</td>
-                                        <td>30</td>
-                                        <td>17,00,000</td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $ResearchIncome->target }}</td>  <!-- Required target -->
+                                        <td>{{ $ResearchIncome->achieved_count }}</td> <!-- Achieved count -->
+                                        <td>{{ $ResearchIncome->total_fee }}</td>
                                         <td>
-                                            <div class="badge bg-label-primary">93%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>32</td>
-                                        <td>29</td>
-                                        <td>16,00,000</td>
+                                        <div class="badge" style="background-color: {{ $ResearchIncome->color }}">
+                                                    {{ $ResearchIncome->percentage }}%
+                                                </div>
+                                        </td> 
                                         <td>
-                                            <div class="badge bg-label-primary">90%</div>
+                                            <div class="badge" style="background-color: {{ $ResearchIncome->color }}">
+
+                                                {{ $ResearchIncome->rating }}
+                                            </div>
                                         </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
                                     </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>32</td>
-                                        <td>25</td>
-                                        <td>16,00,000</td>
-                                        <td>
-                                            <div class="badge bg-label-warning">78%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -3266,13 +3281,28 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @php
+                                $data = PatentsIntellectualProperty(Auth::user()->employee_id,138);
+                                        
+                                @endphp
+                                @foreach ($data as $row)
                                     <tr>
-                                        <td>1</td>
-                                        <td>4</td>
-                                        <td>3</td>
-                                        <td><span class="badge bg-label-warning">75%</span></td>
-                                        <td><span class="badge bg-label-warning">ME</span></td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $row->target }}</td>  <!-- Required target -->
+                                        <td>{{ $row->achieved_count }}</td> <!-- Achieved count -->
+                                        <td>
+                                        <div class="badge" style="background-color: {{ $row->color }}">
+                                                    {{ $row->percentage }}%
+                                                </div>
+                                        </td> 
+                                        <td>
+                                            <div class="badge" style="background-color: {{ $row->color }}">
+
+                                                {{ $row->rating }}
+                                            </div>
+                                        </td>
                                     </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
