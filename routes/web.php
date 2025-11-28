@@ -44,6 +44,8 @@ use App\Http\Controllers\ProductsDeliveredToIndustryController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\FacultyMemberClassController;
 use App\Http\Controllers\IndicatorCrudController;
+use App\Http\Controllers\LineManagerFeedbackController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -161,7 +163,7 @@ Route::middleware('auth')->group(function () {
 
     });
     Route::get('/faculty-target-gets', [FacultyTargetController::class, 'getTarget'])
-    ->name('faculty-target.getTarget');
+        ->name('faculty-target.getTarget');
 
     Route::resource('/survey', SurveyController::class);
     Route::get('/survey-report', [SurveyController::class, 'report'])->name('survey.report');
@@ -191,20 +193,26 @@ Route::middleware('auth')->group(function () {
     Route::get('awards', [AwardController::class, 'index'])->name('pms.awards');
 
     Route::middleware('role:HOD')->group(function () {
-      Route::get('/hod-target', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
+        Route::get('/hod-target', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
     });
     Route::middleware('role:Dean')->group(function () {
-      Route::get('/dean-target', [FormBuilderController::class, 'DeanTargetForms'])->name('dean.target');
+        Route::get('/dean-target', [FormBuilderController::class, 'DeanTargetForms'])->name('dean.target');
     });
     Route::middleware('role:ORIC')->group(function () {
-      Route::get('/oric-target', [FormBuilderController::class, 'OricTargetForms'])->name('oric.target');
+        Route::get('/oric-target', [FormBuilderController::class, 'OricTargetForms'])->name('oric.target');
     });
     Route::middleware('role:Human Resources')->group(function () {
-      Route::get('/hr-target', [FormBuilderController::class, 'HrTargetForms'])->name('hr.target');
+        Route::get('/hr-target', [FormBuilderController::class, 'HrTargetForms'])->name('hr.target');
     });
 
     Route::get('/odoo-classes', [FacultyMemberClassController::class, 'odooClasses'])->name('odoo.classes');
     Route::get('/classes-attendance', [FacultyMemberClassController::class, 'classesAttendance'])->name('classes.attendance');
+
+    Route::post('/employee-rating/store', [LineManagerFeedbackController::class, 'store'])->name('employee.rating.store');
+    Route::get('/linemanager-form', [FormBuilderController::class, 'lineManagerForm'])->name('linemanager.form');
 });
+Route::get('/employee-ratings', [LineManagerFeedbackController::class, 'index'])->name('employee.rating.index');
+Route::get('/employee-rating/edit/{id}', [LineManagerFeedbackController::class, 'edit'])->name('employee.rating.edit');
+Route::post('/employee-rating/update/{id}', [LineManagerFeedbackController::class, 'update'])->name('employee.rating.update');
 
 require __DIR__ . '/auth.php';

@@ -116,8 +116,8 @@ class FormBuilderController extends Controller
     {
         $user = Auth::user();
         $employee_id = $user->employee_id;
-        $facultyMembers = User::where('manager_id', $employee_id)->get(['id','name','department','job_title']);
-        return view('admin.form.hod_targets',compact('facultyMembers'));
+        $facultyMembers = User::where('manager_id', $employee_id)->get(['id', 'name', 'department', 'job_title']);
+        return view('admin.form.hod_targets', compact('facultyMembers'));
     }
     public function DeanTargetForms()
     {
@@ -127,7 +127,15 @@ class FormBuilderController extends Controller
     {
         return view('admin.form.oric_targets');
     }
-    public function HrTargetForms(){
+    public function HrTargetForms()
+    {
         return view('admin.form.hr_targets');
+    }
+    public function lineManagerForm()
+    {
+        $user = Auth::user();
+        $employee_id = $user->employee_id;
+        $facultyMembers = User::where('manager_id', $employee_id)->get(['id', 'name', 'department', 'job_title']);
+        return view('admin.form.line_manager_satisfaction_feedback', compact('facultyMembers'));
     }
 }

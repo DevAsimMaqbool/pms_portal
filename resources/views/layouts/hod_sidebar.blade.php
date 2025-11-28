@@ -31,7 +31,6 @@
                 <div data-i18n="Department Performance">Department Performance</div>
             </a>
         </li>
-
         <!-- <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-smart-home"></i>
@@ -49,6 +48,12 @@
             <a href="{{ route('users.index') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-users"></i>
                 <div data-i18n="Team Performance">Team Performance</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('employee.rating.index') ? 'active' : '' }}">
+            <a href="{{ route('employee.rating.index') }}"" class=" menu-link">
+                <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
+                <div data-i18n="Line Manager Feedback">Line Manager Feedback</div>
             </a>
         </li>
         <li class="menu-item {{ request()->routeIs('survey.report') ? 'active' : '' }}">
