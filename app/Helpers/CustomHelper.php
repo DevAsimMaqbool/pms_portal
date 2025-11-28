@@ -102,7 +102,7 @@ function getUserLevel($UserID)
     return $user->level;
 }
 
-function getRoleAssignments(string $roleName, ?int $kapcid = null)
+function getRoleAssignments(string $roleName, ?int $kapcid = null, $form = null)
 {
     $roleId = Role::where('name', $roleName)->value('id');
     ;
@@ -120,6 +120,9 @@ function getRoleAssignments(string $roleName, ?int $kapcid = null)
         }
     ])
         ->where('role_id', $roleId)
+        ->when($form == 1, function ($query) {
+            $query->where('form_status', 1);
+        })
         ->when($kapcid !== null, function ($query) use ($kapcid) {
             $query->where('key_performance_area_id', $kapcid);
         })
