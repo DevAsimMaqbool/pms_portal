@@ -50,6 +50,8 @@
         @include('layouts.dean_sidebar')
       @elseif(auth()->user()->hasRole('Rector'))
         @include('layouts.rector_sidebar')
+      @elseif(auth()->user()->hasRole('ORIC'))
+        @include('layouts.oric_sidebar')  
       @else
         @include('layouts.sidebar')
       @endif

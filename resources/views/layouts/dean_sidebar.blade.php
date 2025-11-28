@@ -44,6 +44,12 @@
                 <div data-i18n="Report">Report</div>
             </a>
         </li>
+         <li class="menu-item {{ request()->routeIs('dean.target') ? 'active' : '' }}">
+            <a href="{{ route('dean.target') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-contract"></i>
+                <div data-i18n="Target">Target</div>
+            </a>
+        </li>
         @if(auth()->user()->hasRole(['Dean']))
             @php
                 $teacherRoleId = auth()->user()->roles->firstWhere('name', 'Dean')->id ?? null;

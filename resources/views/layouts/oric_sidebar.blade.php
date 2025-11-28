@@ -32,7 +32,12 @@
                 <div data-i18n="Home">Home</div>
             </a>
         </li>
-        
+        <li class="menu-item {{ request()->routeIs('oric.target') ? 'active' : '' }}">
+            <a href="{{ route('oric.target') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-contract"></i>
+                <div data-i18n="Target">Target</div>
+            </a>
+        </li>
         
         @if(auth()->user()->hasRole(['ORIC']))
             @php

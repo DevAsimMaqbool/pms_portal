@@ -43,6 +43,7 @@ use App\Http\Controllers\NoOfGrantsSubmitAndWonController;
 use App\Http\Controllers\ProductsDeliveredToIndustryController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\FacultyMemberClassController;
+use App\Http\Controllers\IndicatorCrudController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -156,7 +157,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('industrial-projects', IndustrialProjectsController::class);
         Route::resource('faculty-target', FacultyTargetController::class);
         // routes/web.php
-        
+        Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
 
     });
     Route::get('/faculty-target-gets', [FacultyTargetController::class, 'getTarget'])
@@ -190,16 +191,16 @@ Route::middleware('auth')->group(function () {
     Route::get('awards', [AwardController::class, 'index'])->name('pms.awards');
 
     Route::middleware('role:HOD')->group(function () {
-      Route::get('/hod-taget', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
+      Route::get('/hod-target', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
     });
     Route::middleware('role:Dean')->group(function () {
-      Route::get('/dean-taget', [FormBuilderController::class, 'DeanTargetForms'])->name('dean.target');
+      Route::get('/dean-target', [FormBuilderController::class, 'DeanTargetForms'])->name('dean.target');
     });
     Route::middleware('role:ORIC')->group(function () {
-      Route::get('/oric-taget', [FormBuilderController::class, 'OricTargetForms'])->name('oric.target');
+      Route::get('/oric-target', [FormBuilderController::class, 'OricTargetForms'])->name('oric.target');
     });
     Route::middleware('role:Human Resources')->group(function () {
-      Route::get('/hr-taget', [FormBuilderController::class, 'HrTargetForms'])->name('hr.target');
+      Route::get('/hr-target', [FormBuilderController::class, 'HrTargetForms'])->name('hr.target');
     });
 
     Route::get('/odoo-classes', [FacultyMemberClassController::class, 'odooClasses'])->name('odoo.classes');

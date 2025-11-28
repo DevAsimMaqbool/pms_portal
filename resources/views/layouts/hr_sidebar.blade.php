@@ -32,7 +32,12 @@
                 <div data-i18n="Home">Home</div>
             </a>
         </li>
-       
+       <li class="menu-item {{ request()->routeIs('hr.target') ? 'active' : '' }}">
+            <a href="{{ route('hr.target') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-contract"></i>
+                <div data-i18n="Target">Target</div>
+            </a>
+        </li>
         @if(auth()->user()->hasRole(['Human Resources']))
             @php
                 $teacherRoleId = auth()->user()->roles->firstWhere('name', 'Human Resources')->id ?? null;

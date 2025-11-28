@@ -45,8 +45,13 @@
                 <div class="tab-content">
                     @if(auth()->user()->hasRole(['HOD', 'Teacher']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <h5 class="mb-1">Patents/Intellectual Property (IPR)</h5>
-                            <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
+                            <div class="d-flex justify-content-between">
+                               <div>
+                                <h5 class="mb-1">Patents/Intellectual Property (IPR)</h5>
+                                </div>
+                                <a href="{{ route('indicators_crud.index', ['slug' => 'intellectual-properties', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            </div>  
+                            <h5 class="text-primary" id="indicatorTarget">Target 0</h5>  
                             <form id="researchForm1" enctype="multipart/form-data" class="row">
                                 @csrf
                                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
@@ -122,7 +127,7 @@
                                         <th><input type="checkbox" id="selectAll"></th>
                                         <th>#</th>
                                         <th>Created By</th>
-                                        <th>No IP Disclosed</th>
+                                        <th>Filing / Registration</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -146,7 +151,7 @@
                                         <th><input type="checkbox" id="selectAll"></th>
                                         <th>#</th>
                                         <th>Created By</th>
-                                        <th>No IP Disclosed</th>
+                                        <th>Filing / Registration</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -192,7 +197,7 @@
                                         <th><input type="checkbox" id="selectAll"></th>
                                         <th>#</th>
                                         <th>Created By</th>
-                                        <th>No IP Disclosed</th>
+                                        <th>Filing / Registration</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -400,7 +405,7 @@
                                     { title: "<input type='checkbox' id='selectAll'>" },
                                     { title: "#" },
                                     { title: "Created By" },
-                                    { title: "No IP Disclosed" },
+                                    { title: "Filing / Registration" },
                                     { title: "Created Date" },
                                     { title: "Actions" }
                                 ]
@@ -423,7 +428,8 @@
                     data: {
                         _method: 'PUT',
                         _token: $('meta[name="csrf-token"]').attr('content'),
-                        status: status
+                        status: status,
+                        status_update: true 
                     },
                     success: function (res) {
                         Swal.fire({

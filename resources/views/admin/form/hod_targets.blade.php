@@ -25,7 +25,7 @@
                         <label class="form-label" for="indicator_id">Select Indicator</label>
                         <select id="indicator_id" class="select2 form-select" data-allow-clear="true" name="indicator_id[]"
                             multiple required>
-                            <option value="135"># of Grants Won</option>
+                            <option value="135"># of Grant Proposals Submitted</option>
                             <option value="136">Multidisciplinary Projects</option>
                             <option value="137">Commercial Consultancy/Research Income</option>
                             <option value="138">Patents/Intellectual Property (IPR)</option>
@@ -99,7 +99,7 @@
                     url: "{{ route('faculty-target.index') }}",
                     method: "GET",
                     data: {
-                        status: "HOD" // you can send more values
+                        status: "OTHER" // you can send more values
                     },
                     dataType: "json",
                     success: function (data) {
@@ -168,6 +168,10 @@
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                     form[0].reset();
+
+                    // Reset Select2 dropdowns
+                    $('#indicator_id').val(null).trigger('change');
+                    $('#select2Success').val(null).trigger('change');
                     fetchTarget();
                 },
                 error: function (xhr) {
