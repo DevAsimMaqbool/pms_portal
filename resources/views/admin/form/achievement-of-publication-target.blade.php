@@ -20,7 +20,7 @@
             <!-- Nav tabs -->
             <ul class="nav nav-pills mb-4" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">% Achievement of Publication</a>
+                    <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Scopus Publications</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
@@ -31,7 +31,7 @@
             <!-- Nav tabs -->
             <ul class="nav nav-pills mb-4" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">% Achievement of Publication</a>
+                    <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Scopus Publications</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
@@ -48,6 +48,13 @@
                 {{-- ================= FORM 1 ================= --}}
                 @if(auth()->user()->hasRole(['Teacher','HOD']))
                 <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                
+                <div class="d-flex justify-content-between">
+                               <div>
+                                <h5 class="mb-1">Scopus Publications</h5>
+                                </div>
+                                <a href="{{ route('indicators_crud.index', ['slug' => 'achievement-of-publication-target', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            </div>  
                     <form id="researchForm1" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
@@ -314,6 +321,31 @@
                             <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                         </div>
                     </form>
+                    <hr>
+                    <div class="">
+            <div class="table-responsive text-nowrap">
+               <table id="geTtargetTable" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>User</th>
+                                        <th>Indicator</th>
+                                        <th>Target</th>
+                                        <th>Q1</th>
+                                        <th>Q2</th>
+                                        <th>Q3</th>
+                                        <th>Q4</th>
+                                        <th>W</th>
+                                        <th>X</th>
+                                        <th>Y</th>
+                                        <th>Medical Recognized</th>
+                                        <th>National</th>
+                                        <th>International</th>
+                                    </tr>
+                                </thead>
+                            </table>
+            </div>                
+         </div>
                 </div>
                  <div class="tab-pane fade" id="form3" role="tabpanel">
                   @if(auth()->user()->hasRole(['HOD']))
@@ -666,6 +698,74 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
     @endif
     @if(auth()->user()->hasRole(['HOD']))
     <script>
+    function fetchHodTarget() {
+                $.ajax({
+                    url: "{{ route('faculty-target.index') }}",
+                    method: "GET",
+                    data: {
+                        status: "HOD",
+                        indicator: {{ $indicatorId }}
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
+
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
+
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                i + 1,
+                                form.user ? form.user.name : 'N/A',
+                                form.indicator ? form.indicator.indicator : 'N/A',
+                                form.target || 'N/A',
+                                form.scopus_q1 || 'N/A',
+                                form.scopus_q2 || 'N/A',
+                                form.scopus_q3 || 'N/A',
+                                form.scopus_q4 || 'N/A',
+                                form.hec_w || 'N/A',
+                                form.hec_x || 'N/A',
+                                form.hec_y || 'N/A',
+                                form.medical_recognized || 'N/A',
+                                form.national || 'N/A',
+                                form.international || 'N/A'
+                            ];
+                        });
+
+                        if (!$.fn.DataTable.isDataTable('#geTtargetTable')) {
+                            $('#geTtargetTable').DataTable({
+                                data: rowData,
+                                columns: [
+                                    { title: "#" },
+                                    { title: "User" },
+                                    { title: "Indicator" },
+                                    { title: "Target" },
+                                    { title: "Q1" },
+                                    { title: "Q2" },
+                                    { title: "Q3" },
+                                    { title: "Q4" },
+                                    { title: "W" },
+                                    { title: "X" },
+                                    { title: "Y" },
+                                    { title: "Medical Recognized" },
+                                    { title: "National" },
+                                    { title: "International" }
+
+                                ]
+                            });
+                        } else {
+                            $('#geTtargetTable').DataTable().clear().rows.add(rowData).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
+                });
+            }
     function fetchIndicatorForms3() {
     $.ajax({
         url: "{{ route('indicator-form.index') }}",
@@ -765,6 +865,7 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
     $('#scopus-q1, #scopus-q2, #scopus-q3, #scopus-q4, #hec-w, #hec-x, #hec-y, #medical-recognized')
         .on('input', updateTotal);
          fetchIndicatorForms3();
+         fetchHodTarget();
         // Extra fields for Form 2
          $('#faculty_member').on('change', function () {
             let selected = $(this).find(':selected');
@@ -798,6 +899,8 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                     form[0].reset();
+                    $('#select2Success').val(null).trigger('change');
+                    fetchHodTarget();
                 },
                 error: function (xhr) {
                     Swal.close();

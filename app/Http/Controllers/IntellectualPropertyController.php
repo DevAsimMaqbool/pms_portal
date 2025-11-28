@@ -21,7 +21,7 @@ class IntellectualPropertyController extends Controller
             $user = Auth::user();
             $userId = Auth::id();
             $employee_id = $user->employee_id;
-
+             
             if ($user->hasRole('Dean')) {
                    $status = $request->input('status');
                    $hod_ids = User::where('manager_id', $employee_id)
@@ -47,7 +47,24 @@ class IntellectualPropertyController extends Controller
                             });
                     }
 
-            }if ($user->hasRole('HOD')) {
+            }if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+                $status = $request->input('status');
+                if($status=="Teacher"){
+                        $forms = IntellectualProperty::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])
+                        ->where('created_by', $employee_id)
+                        ->get()
+                        ->map(function ($form) {
+                            if ($form->supporting_docs_as_attachment) {
+                                $form->supporting_docs_as_attachment = Storage::url($form->supporting_docs_as_attachment);
+                            }
+                            return $form;
+                        });
+                }
+                if($status=="HOD"){
                 $employeeIds = User::where('manager_id', $employee_id)
                     ->role('Teacher')->pluck('employee_id');
                     $forms = IntellectualProperty::with([
@@ -65,6 +82,7 @@ class IntellectualPropertyController extends Controller
                                 }
                                 return $form;
                             });
+                    }        
                 
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
@@ -242,17 +260,58 @@ class IntellectualPropertyController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {   
-        $request->validate([
-            'status' => 'required|in:1,2,3,4,5,6'
-        ]);
+    {   try { 
+            if ($request->has('status_update_data')) {
+                $record = IntellectualProperty::findOrFail($id);
+                $rules = [
+                    'indicator_id' => 'required',
+                    'no_of_ip_disclosed' => 'required|string',
+                    'name_of_ip_filed' => 'required|string',
+                    'patents_ip_type' => 'required|string',
+                    'other_detail' => 'required_if:patents_ip_type,Other|string|nullable',
+                    'area_of_application' => 'required|string',
+                    'date_of_filing_registration' => 'required|string',
+                    'supporting_docs_as_attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                    'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                ];
+                $data = $request->only([
+                    'indicator_id', 'no_of_ip_disclosed', 'name_of_ip_filed', 'patents_ip_type',
+                    'other_detail', 'area_of_application', 'date_of_filing_registration', 'form_status'
+                ]);
+                if ($request->hasFile('supporting_docs_as_attachment')) {
+                    $file = $request->file('supporting_docs_as_attachment');
+                    $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                    $fileName = $safeName . '_' . rand(1000,9999) . '.' . $file->getClientOriginalExtension();
+                    $data['supporting_docs_as_attachment'] = $file->storeAs('intellectualProperty', $fileName, 'public');
+                }
+                $data['updated_by'] = Auth::user()->employee_id;
 
-        $target = IntellectualProperty::findOrFail($id);
-        $target->status = $request->status;
-        $target->updated_by = Auth::id();
-        $target->save();
+                $record->update($data);
 
-        return response()->json(['success' => true]);
+                return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+            }
+
+
+
+
+
+            if ($request->has('status_update')) {
+                $request->validate([
+                    'status' => 'required|in:1,2,3,4,5,6'
+                ]);
+
+                $target = IntellectualProperty::findOrFail($id);
+                $target->status = $request->status;
+                $target->updated_by = Auth::id();
+                $target->save();
+
+                return response()->json(['success' => true]);
+            }
+        } catch (\Exception $e) {
+             DB::rollBack();
+             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+        }
     }
 
     /**

@@ -22,10 +22,21 @@ class FacultyTargetController extends Controller
             $employee_id = $user->employee_id;
 
             if ($user->hasRole('HOD')) {
-                   $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
-                ->where('created_by', $employee_id)
-                ->where('form_status', 'OTHER')
-                ->get();
+                   $status = $request->input('status');
+                   $indicator_id = $request->input('indicator');
+                   if($status=="HOD"){
+                         $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
+                            ->where('created_by', $employee_id)
+                            ->where('form_status', 'HOD')
+                            ->where('indicator_id', $indicator_id)
+                            ->get();
+                   }if($status=="OTHER"){
+                       $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
+                            ->where('created_by', $employee_id)
+                            ->where('form_status', 'OTHER')
+                            ->get();
+                   }
+                   
                 
             }
             if ($user->hasRole('Dean')) {
@@ -119,11 +130,16 @@ class FacultyTargetController extends Controller
                             'updated_by' => $employeeId,
                         ];
                         DB::beginTransaction();
+
                         foreach ($request->faculty_member_id as $userId) {
-                                FacultyTarget::create(array_merge($data, [
-                                    'user_id' => $userId,
-                                ]));
-                            }
+                            FacultyTarget::updateOrCreate(
+                                [
+                                    'user_id'      => $userId,
+                                    'indicator_id' => $request->indicator_id
+                                ],
+                                $data
+                            );
+                        }    
                
                        
                         DB::commit();
@@ -162,28 +178,28 @@ class FacultyTargetController extends Controller
                                 foreach ($request->indicator_id as $indicatorId) {
 
                                     // ✅ CHECK IF ALREADY ASSIGNED
-                                    $existing = FacultyTarget::with(['user', 'indicator'])
-                                        ->where('user_id', $userId)
+                                     $existing = FacultyTarget::where('user_id', $userId)
                                         ->where('indicator_id', $indicatorId)
                                         ->first();
 
                                     if ($existing) {
-                                    DB::rollBack();
-                                    return response()->json([
-                                        'status' => 'error',
-                                        'message' => "{$existing->user->name} is already assigned to {$existing->indicator->indicator}.",
-                                        'details' => [
-                                            'faculty_member_id' => $userId,
-                                            'indicator_id'      => $indicatorId
-                                        ]
-                                    ], 409);
-                                }
-
-                                    // ✅ CREATE NEW RECORD
-                                    FacultyTarget::create(array_merge($data, [
-                                        'user_id'      => $userId,
-                                        'indicator_id' => $indicatorId,
-                                    ]));
+                                      // 🔄 UPDATE EXISTING RECORD
+                                        $existing->update([
+                                            'target'      => $request->target,
+                                            'form_status' => $request->form_status,
+                                            'updated_by'  => $employeeId,
+                                        ]);
+                                    }else {
+                                        // ➕ CREATE NEW RECORD
+                                        FacultyTarget::create([
+                                            'user_id'      => $userId,
+                                            'indicator_id' => $indicatorId,
+                                            'target'       => $request->target,
+                                            'form_status'  => $request->form_status,
+                                            'created_by'   => $employeeId,
+                                            'updated_by'   => $employeeId,
+                                        ]);
+                                    }
                                 }
                             }
                

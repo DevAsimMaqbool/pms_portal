@@ -58,18 +58,32 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                             ->get();
                     }
 
-            }if ($user->hasRole('HOD')) {
-                $employeeIds = User::where('manager_id', $employee_id)
-                    ->role('Teacher')->pluck('employee_id');
-                    $forms = AchievementOfResearchPublicationsTarget::with([
+            }if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+
+                $status = $request->input('status');
+                if($status=="Teacher"){
+                        $forms = AchievementOfResearchPublicationsTarget::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
                             },'coAuthors:id,target_id,name,rank,country,designation'
                         ])
-                         ->whereIn('created_by', $employeeIds)
-                        ->whereIn('status', [1, 2])
-                        ->where('form_status', 'RESEARCHER')
+                        ->where('created_by', $employee_id)
                         ->get();
+                }
+
+                if($status=="HOD"){
+                    $employeeIds = User::where('manager_id', $employee_id)
+                        ->role('Teacher')->pluck('employee_id');
+                        $forms = AchievementOfResearchPublicationsTarget::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                },'coAuthors:id,target_id,name,rank,country,designation'
+                            ])
+                            ->whereIn('created_by', $employeeIds)
+                            ->whereIn('status', [1, 2])
+                            ->where('form_status', 'RESEARCHER')
+                            ->get();
+                        }        
                 
             }if ($user->hasRole('ORIC')) {
                           $forms = AchievementOfResearchPublicationsTarget::with([

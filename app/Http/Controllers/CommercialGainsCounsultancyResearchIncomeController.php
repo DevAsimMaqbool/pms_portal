@@ -47,24 +47,45 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                             });
                     }
 
-            }if ($user->hasRole('HOD')) {
-                $employeeIds = User::where('manager_id', $employee_id)
-                    ->role('Teacher')->pluck('employee_id');
-                    $forms = CommercialGainsCounsultancyResearchIncome::with([
+            }if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+                $status = $request->input('status');
+                if($status=="Teacher"){
+                        $forms = CommercialGainsCounsultancyResearchIncome::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
                             }
                         ])
-                         ->whereIn('created_by', $employeeIds)
-                        ->whereIn('status', [1, 2])
-                        ->where('form_status', 'RESEARCHER')
+                        ->where('created_by', $employee_id)
                         ->get()
                         ->map(function ($form) {
-                                if ($form->consultancy_file) {
-                                    $form->consultancy_file = Storage::url($form->consultancy_file);
+                                    if ($form->consultancy_file) {
+                                        $form->consultancy_file = Storage::url($form->consultancy_file);
+                                    }
+                                    return $form;
+                                });
+                }
+
+
+                if($status=="HOD"){
+                    $employeeIds = User::where('manager_id', $employee_id)
+                        ->role('Teacher')->pluck('employee_id');
+                        $forms = CommercialGainsCounsultancyResearchIncome::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
                                 }
-                                return $form;
-                            });
+                            ])
+                            ->whereIn('created_by', $employeeIds)
+                            ->whereIn('status', [1, 2])
+                            ->where('form_status', 'RESEARCHER')
+                            ->get()
+                            ->map(function ($form) {
+                                    if ($form->consultancy_file) {
+                                        $form->consultancy_file = Storage::url($form->consultancy_file);
+                                    }
+                                    return $form;
+                                });
+                        }            
+
                 
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
