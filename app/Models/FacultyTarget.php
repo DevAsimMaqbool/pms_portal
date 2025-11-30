@@ -42,4 +42,19 @@ class FacultyTarget extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'employee_id');
     }
+    // ✅ One-to-Many relation: FacultyTarget → AchievementOfResearchPublicationsTarget
+    public function researchPublicationTargets()
+    {
+        return $this->hasMany(AchievementOfResearchPublicationsTarget::class, 'created_by', 'user_id');
+    }
+    public function intellectualPropertyTargets()
+    {
+        return $this->hasMany(IntellectualProperty::class, 'created_by', 'user_id');
+    }
+    public function commercialGainsCounsultancyTargets()
+    {
+        return $this->hasMany(CommercialGainsCounsultancyResearchIncome::class, 'created_by', 'user_id');
+    }
+    
+
 }

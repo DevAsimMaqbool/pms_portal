@@ -23,6 +23,12 @@ class AchievementOfResearchPublicationsTarget extends Model
     {
         return $this->hasMany(AchievementOfResearchPublicationTargetCoAuthor::class, 'target_id');
     }
+    public function facultyTarget()
+    {
+        return $this->belongsTo(FacultyTarget::class, 'created_by', 'user_id')
+            ->whereColumn('achievement_of_research_publications_target.indicator_id', 'faculty_targets.indicator_id');
+    }
+
 
 
 }
