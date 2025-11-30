@@ -214,5 +214,14 @@ Route::middleware('auth')->group(function () {
 Route::get('/employee-ratings', [LineManagerFeedbackController::class, 'index'])->name('employee.rating.index');
 Route::get('/employee-rating/edit/{id}', [LineManagerFeedbackController::class, 'edit'])->name('employee.rating.edit');
 Route::post('/employee-rating/update/{id}', [LineManagerFeedbackController::class, 'update'])->name('employee.rating.update');
+Route::get('/assignments/by-role', function (\Illuminate\Http\Request $request) {
+    $roleName = $request->role_name;
+    $assignments = getRoleAssignments($roleName); // use your helper
+    return response()->json($assignments);
+})->name('assignments.byRole');
+
+
+Route::post('/assignments/weightage/save', [RoleKpaAssignmentController::class, 'saveWeightage'])
+    ->name('assignments.weightage.save');
 
 require __DIR__ . '/auth.php';

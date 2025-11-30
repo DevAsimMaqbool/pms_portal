@@ -146,4 +146,38 @@ class RoleKpaAssignmentController extends Controller
     {
         //
     }
+    public function saveWeightage(Request $request)
+    {
+        $roleId = Role::where('name', $request->role_id)->value('id');
+
+        // KPA Weightage
+        if ($request->has('kpa_id') && $request->has('kpa_weightage')) {
+            foreach ($request->kpa_id as $index => $kpaId) {
+                RoleKpaAssignment::where('role_id', $roleId)
+                    ->where('key_performance_area_id', $kpaId)
+                    ->update(['kpa_weightage' => $request->kpa_weightage[$index]]);
+            }
+        }
+
+        // Indicator Category Weightage
+        if ($request->has('indicator_category_id') && $request->has('indicator_category_weightage')) {
+            foreach ($request->indicator_category_id as $index => $catId) {
+                RoleKpaAssignment::where('role_id', $roleId)
+                    ->where('indicator_category_id', $catId)
+                    ->update(['indicator_category_weightage' => $request->indicator_category_weightage[$index]]);
+            }
+        }
+
+        // Indicator Weightage
+        if ($request->has('indicator_id') && $request->has('indicator_weightage')) {
+            foreach ($request->indicator_id as $index => $indicatorId) {
+                RoleKpaAssignment::where('role_id', $roleId)
+                    ->where('indicator_id', $indicatorId)
+                    ->update(['indicator_weightage' => $request->indicator_weightage[$index]]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Weightages updated successfully!');
+    }
+
 }

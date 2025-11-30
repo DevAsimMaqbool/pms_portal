@@ -14,6 +14,8 @@ class UserKPAController extends Controller
      */
     public function index(Request $request)
     {
+        $roles = Role::all();
+
         $roleId = Auth::user()->getRoleNames()->first(); // Assuming you get this from the login API and store in DB
         $roleName = 'Dean';
 
@@ -23,7 +25,7 @@ class UserKPAController extends Controller
         $assignments = RoleKpaAssignment::with(['kpa', 'category', 'indicator'])
             ->where('role_id', $roleId)
             ->get();
-        return view('user.kpa', compact('assignments'));
+        return view('user.kpa', compact('assignments', 'roles'));
     }
 
 

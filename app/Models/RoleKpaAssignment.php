@@ -10,8 +10,11 @@ class RoleKpaAssignment extends Model
         'role_id',
         'user_id',
         'key_performance_area_id',
+        'kpa_weightage',
         'indicator_category_id',
+        'indicator_category_weightage',
         'indicator_id',
+        'indicator_weightage',
     ];
 
     public function kpa()

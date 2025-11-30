@@ -136,6 +136,7 @@ function getRoleAssignments(string $roleName, ?int $kapcid = null, $form = null)
             return [
                 'id' => $kpa->id,
                 'performance_area' => $kpa->performance_area,
+                'kpa_weightage' => $kpaGroup->first()->kpa_weightage,
                 'created_by' => $kpa->created_by,
                 'updated_by' => $kpa->updated_by,
                 'created_at' => $kpa->created_at,
@@ -151,6 +152,7 @@ function getRoleAssignments(string $roleName, ?int $kapcid = null, $form = null)
                         'id' => $category->id,
                         'key_performance_area_id' => $category->key_performance_area_id,
                         'indicator_category' => $category->indicator_category,
+                        'indicator_category_weightage' => $catGroup->first()->indicator_category_weightage,
                         'cat_icon' => $category->cat_icon,
                         'cat_short_code' => $category->cat_short_code,
                         'created_by' => $category->created_by,
@@ -166,6 +168,7 @@ function getRoleAssignments(string $roleName, ?int $kapcid = null, $form = null)
                                     'id' => $indicator->id,
                                     'indicator_category_id' => $indicator->indicator_category_id,
                                     'indicator' => $indicator->indicator,
+                                    'indicator_weightage' => $item->indicator_weightage,
                                     'icon' => $indicator->icon,
                                     'short_code' => $indicator->short_code,
                                     'created_by' => $indicator->created_by,
