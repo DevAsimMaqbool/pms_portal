@@ -22,12 +22,11 @@
                 {{-- <h5>KPA to role</h5> --}}
                 <form id="researchForm" enctype="multipart/form-data" class="row">
                     @csrf
-                    <div class="row" style="padding:20px; font-family:Arial; display:flex; flex-wrap:wrap; gap:15px;">
+                    <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="form-label" for="multicol-language">Name of Faculty Member</label>
                             <select name="employee_id" id="select2Success" class="select2 form-select" required>
                                 <option value="">-- Select Faculty Member --</option>
-
                                 @foreach($facultyMembers as $member)
                                     <option value="{{ $member->id }}" data-department="{{ $member->department }}"
                                         data-job_title="{{ $member->job_title }}" {{ request('employee_id') == $member->id ? 'selected' : '' }}>
@@ -35,8 +34,19 @@
                                     </option>
                                 @endforeach
                             </select>
-
                         </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="multicol-language">Year</label>
+                            <select name="year" id="select2Year" class="select2 form-select" required>
+                                <option value="">-- Select Year --</option>
+                                <option value="2025-2026">2025-2026</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="padding:20px; font-family:Arial; display:flex; flex-wrap:wrap; gap:15px;">
+
+
                         <!-- Section 1 -->
                         <h6 style="width:100%; margin-top:20px; margin-bottom:10px; font-weight:bold; font-size:18px;">
                             1- Responsibility & Accountability

@@ -138,4 +138,12 @@ class FormBuilderController extends Controller
         $facultyMembers = User::where('manager_id', $employee_id)->get(['id', 'name', 'department', 'job_title']);
         return view('admin.form.line_manager_satisfaction_feedback', compact('facultyMembers'));
     }
+
+    public function lineManagerEventForm()
+    {
+        $user = Auth::user();
+        $employee_id = $user->employee_id;
+        $facultyMembers = User::where('manager_id', $employee_id)->get(['id', 'name', 'department', 'job_title']);
+        return view('admin.form.line_manager_event_feedback', compact('facultyMembers'));
+    }
 }

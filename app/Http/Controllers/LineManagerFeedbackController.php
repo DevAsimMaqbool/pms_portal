@@ -52,6 +52,7 @@ class LineManagerFeedbackController extends Controller
     {
         $data = $request->validate([
             'employee_id' => 'nullable|integer',
+            'year' => 'nullable',
             'responsibility_accountability_1' => 'nullable|integer',
             'responsibility_accountability_2' => 'nullable|integer',
             'empathy_compassion_1' => 'nullable|integer',
@@ -100,6 +101,7 @@ class LineManagerFeedbackController extends Controller
 
         $data = $request->validate([
             'employee_id' => 'nullable|integer',
+            'year' => 'nullable',
             'responsibility_accountability_1' => 'nullable|integer',
             'responsibility_accountability_2' => 'nullable|integer',
             'empathy_compassion_1' => 'nullable|integer',

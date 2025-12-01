@@ -14,14 +14,14 @@
         <div class="card">
             <!-- Header with Add Feedback Button -->
             <div class="d-flex justify-content-between align-items-center p-3">
-                <h5 class="card-title mb-0">Employee Feedback</h5>
+                <h5 class="card-title mb-0">Employee Event Feedbacks</h5>
                 <!-- <a href="{{ route('linemanager.form') }}" class="btn btn-primary">Add Feedback</a> -->
             </div>
-            <div class="px-3 pb-3">
-                <span class="badge bg-primary">Total: {{ $total }}</span>
-                <span class="badge bg-success">Completed: {{ $completed }}</span>
-                <span class="badge bg-danger">Not Completed: {{ $notCompleted }}</span>
-            </div>
+            <!-- <div class="px-3 pb-3">
+                    <span class="badge bg-primary">Total: {{ $total }}</span>
+                    <span class="badge bg-success">Completed: {{ $completed }}</span>
+                    <span class="badge bg-danger">Not Completed: {{ $notCompleted }}</span>
+                </div> -->
 
             <div class="card-datatable">
                 <table class="table" id="userTable">
@@ -30,8 +30,7 @@
                             <th>#</th>
                             <th>Faculty Member</th>
                             <th>Department</th>
-                            <th>Status</th>
-                            <th>Feedback Year</th>
+                            <th>Event</th>
                             <th>Feedback Date</th>
                             <th>Actions</th>
                         </tr>
@@ -47,23 +46,16 @@
                                 <td>{{ $member->name }}</td>
                                 <td>{{ $member->department ?? 'N/A' }}</td>
 
-                                <td>
-                                    @if($feedback)
-                                        <span class="badge bg-success">Completed</span>
-                                    @else
-                                        <span class="badge bg-danger">Not Completed</span>
-                                    @endif
-                                </td>
-                                <td>{{  $feedback->year ?? 'N/A'}}</td>
+                                <td>{{ $feedback->event_name ?? 'N/A' }}</td>
+
                                 <td>{{ $feedback ? $feedback->created_at->format('Y-m-d') : '---' }}</td>
 
-
                                 <td>
                                     @if($feedback)
-                                        <a href="{{ route('employee.rating.edit', $feedback->id) }}"
+                                        <a href="{{ route('employee.feedback.edit', $feedback->id) }}"
                                             class="btn btn-sm btn-primary">Edit</a>
                                     @else
-                                        <a href="{{ route('linemanager.form', ['employee_id' => $member->id]) }}"
+                                        <a href="{{ route('linemanagerevent.form', ['employee_id' => $member->id]) }}"
                                             class="btn btn-sm btn-success">Add</a>
                                     @endif
                                 </td>

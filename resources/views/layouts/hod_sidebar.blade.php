@@ -56,6 +56,12 @@
                 <div data-i18n="Line Manager Feedback">Line Manager Feedback</div>
             </a>
         </li>
+        <li class="menu-item {{ request()->routeIs('employee.feedback.index') ? 'active' : '' }}">
+            <a href="{{ route('employee.feedback.index') }}"" class=" menu-link">
+                <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
+                <div data-i18n="Line Manager Event Feedback">Line Manager Event Feedback</div>
+            </a>
+        </li>
         <li class="menu-item {{ request()->routeIs('survey.report') ? 'active' : '' }}">
             <a href="{{ route('survey.report') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-contract"></i>

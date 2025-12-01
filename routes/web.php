@@ -45,6 +45,7 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\FacultyMemberClassController;
 use App\Http\Controllers\IndicatorCrudController;
 use App\Http\Controllers\LineManagerFeedbackController;
+use App\Http\Controllers\LineManagerEventFeedbackController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -210,18 +211,27 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/employee-rating/store', [LineManagerFeedbackController::class, 'store'])->name('employee.rating.store');
     Route::get('/linemanager-form', [FormBuilderController::class, 'lineManagerForm'])->name('linemanager.form');
+    Route::get('/linemanagerevent-form', [FormBuilderController::class, 'lineManagerEventForm'])->name('linemanagerevent.form');
+
+    Route::get('/employee-ratings', [LineManagerFeedbackController::class, 'index'])->name('employee.rating.index');
+    Route::get('/employee-rating/edit/{id}', [LineManagerFeedbackController::class, 'edit'])->name('employee.rating.edit');
+    Route::post('/employee-rating/update/{id}', [LineManagerFeedbackController::class, 'update'])->name('employee.rating.update');
+    Route::get('/assignments/by-role', function (\Illuminate\Http\Request $request) {
+        $roleName = $request->role_name;
+        $assignments = getRoleAssignments($roleName); // use your helper
+        return response()->json($assignments);
+    })->name('assignments.byRole');
+
+
+    Route::post('/assignments/weightage/save', [RoleKpaAssignmentController::class, 'saveWeightage'])
+        ->name('assignments.weightage.save');
+
+    Route::get('/employee-feedback', [LineManagerEventFeedbackController::class, 'index'])->name('employee.feedback.index');
+    Route::get('/employee-feedback/edit/{id}', [LineManagerEventFeedbackController::class, 'edit'])->name('employee.feedback.edit');
+    Route::post('/employee-feedback/update/{id}', [LineManagerEventFeedbackController::class, 'update'])->name('employee.feedback.update');
+    Route::get('/employee-feedback/create', [LineManagerEventFeedbackController::class, 'create'])->name('employee.feedback.create');
+    Route::post('/employee-feedback/store', [LineManagerEventFeedbackController::class, 'store'])->name('employee.feedback.store');
+
+
 });
-Route::get('/employee-ratings', [LineManagerFeedbackController::class, 'index'])->name('employee.rating.index');
-Route::get('/employee-rating/edit/{id}', [LineManagerFeedbackController::class, 'edit'])->name('employee.rating.edit');
-Route::post('/employee-rating/update/{id}', [LineManagerFeedbackController::class, 'update'])->name('employee.rating.update');
-Route::get('/assignments/by-role', function (\Illuminate\Http\Request $request) {
-    $roleName = $request->role_name;
-    $assignments = getRoleAssignments($roleName); // use your helper
-    return response()->json($assignments);
-})->name('assignments.byRole');
-
-
-Route::post('/assignments/weightage/save', [RoleKpaAssignmentController::class, 'saveWeightage'])
-    ->name('assignments.weightage.save');
-
 require __DIR__ . '/auth.php';
