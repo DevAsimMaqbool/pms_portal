@@ -7,7 +7,8 @@ use App\Models\KeyPerformanceArea;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 class KeyPerformanceAreaController extends Controller
 {
     public function index(Request $request)
@@ -115,15 +116,15 @@ class KeyPerformanceAreaController extends Controller
     {
         $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
         $area = collect($result)->firstWhere('id', $id); // pick one KPA
-        if($id==14){
+        if ($id == 14) {
             return view('admin.kpa_virtue', compact('area'));
         }
-         if (!$area) {
-               return view("admin.error");
+        if (!$area) {
+            return view("admin.error");
         }
         return view('admin.kpa', compact('area'));
     }
-    public function getIndicators(Request $request)
+    public function getIndicatorsbk(Request $request)
     {
         $indicators = Indicator::whereIn('id', function ($query) use ($request) {
             $query->select('indicator_id')
@@ -137,5 +138,74 @@ class KeyPerformanceAreaController extends Controller
             'indicators' => $indicators
         ]);
     }
+    public function getIndicators(Request $request)
+    {
+        $employeeId = Auth::user()->employee_id; // logged-in employee
+        $userRoleId = Auth::user()->roles->firstWhere('name', Auth::user()->getRoleNames()->first())->id;
+
+        // Fetch indicators assigned to this category & role
+        $indicators = Indicator::whereIn('id', function ($query) use ($request, $userRoleId) {
+            $query->select('indicator_id')
+                ->from('role_kpa_assignments')
+                ->where('indicator_category_id', $request->id)
+                ->where('status', 1)
+                ->where('role_id', $userRoleId);
+        })->get();
+
+        // Map indicator name to table/column or custom calculation
+        $indicatorCalculations = [
+            'Event Performance Feedback' => [
+                'table' => 'line_manager_event_feedback',
+                'column' => 'rating'
+            ],
+            "Line Manager's Review & Rating on Tasks" => [
+                'custom' => true, // use custom overall avg
+            ],
+            // Add more indicators here...
+        ];
+
+        $indicators = $indicators->map(function ($indicator) use ($indicatorCalculations, $employeeId) {
+            $overallAvg = 0;
+
+            if (isset($indicatorCalculations[$indicator->indicator])) {
+                $config = $indicatorCalculations[$indicator->indicator];
+
+                // Custom overall average for LineManagerFeedback
+                if (isset($config['custom']) && $config['custom']) {
+                    $feedbacks = \App\Models\LineManagerFeedback::where('employee_id', $employeeId)->get();
+
+                    if ($feedbacks->count()) {
+                        $total = 0;
+                        foreach ($feedbacks as $item) {
+                            $res_avg = ($item->responsibility_accountability_1 + $item->responsibility_accountability_2) / 2;
+                            $emp_avg = ($item->empathy_compassion_1 + $item->empathy_compassion_2) / 2;
+                            $hum_avg = ($item->humility_service_1 + $item->humility_service_2) / 2;
+                            $hon_avg = ($item->honesty_integrity_1 + $item->honesty_integrity_2) / 2;
+                            $ins_avg = ($item->inspirational_leadership_1 + $item->inspirational_leadership_2) / 2;
+
+                            $overallAvg += ($res_avg + $emp_avg + $hum_avg + $hon_avg + $ins_avg) / 5;
+                        }
+
+                        $overallAvg = $overallAvg / $feedbacks->count(); // avg across all feedback rows
+                    }
+                } else {
+                    // Default simple table/column avg
+                    if (Schema::hasTable($config['table'])) {
+                        $overallAvg = DB::table($config['table'])
+                            ->where('employee_id', $employeeId)
+                            ->avg($config['column']);
+                    }
+                }
+            }
+
+            $indicator->percentage = round($overallAvg);
+            return $indicator;
+        });
+
+        return response()->json([
+            'indicators' => $indicators
+        ]);
+    }
+
 
 }
