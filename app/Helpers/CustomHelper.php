@@ -11,6 +11,8 @@ use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Models\Role;
 use App\Models\FacultyMemberClass;
 use App\Models\FacultyTarget;
+use App\Models\LineManagerFeedback;
+use App\Models\LineManagerEventFeedback;
 
 if (!function_exists('getResponse')) {
     function getResponse($data, $token, $message, $status): array
@@ -226,18 +228,6 @@ function myClasses($facultyId)
         ->get();
 }
 
-function myClassesAttendanceRecordBK($facultyId)
-{
-    return FacultyMemberClass::withCount('attendances as total_rows')
-        ->where('faculty_id', $facultyId)
-        ->get()
-        ->map(function ($class) {
-            // get program name from the latest attendance record
-            $class->program = $class->attendances()->latest('class_date')->value('program_name');
-            return $class;
-        });
-}
-
 function myClassesAttendanceRecord($facultyId)
 {
     return FacultyMemberClass::withCount([
@@ -370,16 +360,19 @@ function myClassesAttendanceData($facultyId)
 }
 
 if (!function_exists('ScopusPublications')) {
-    function ScopusPublications($facultyId, $indicatorId) {
-        $facultyTargets = FacultyTarget::with(['researchPublicationTargets' => function($query) use ($indicatorId) {
-            $query->where('form_status', 'RESEARCHER')
-                  ->where('indicator_id', $indicatorId)
-                  ->whereNotNull('journal_clasification'); // Only targets with classification
-        }])
-        ->where('user_id', $facultyId)
-        ->where('form_status', 'HOD')
-        ->where('indicator_id', $indicatorId)
-        ->get();
+    function ScopusPublications($facultyId, $indicatorId)
+    {
+        $facultyTargets = FacultyTarget::with([
+            'researchPublicationTargets' => function ($query) use ($indicatorId) {
+                $query->where('form_status', 'RESEARCHER')
+                    ->where('indicator_id', $indicatorId)
+                    ->whereNotNull('journal_clasification'); // Only targets with classification
+            }
+        ])
+            ->where('user_id', $facultyId)
+            ->where('form_status', 'HOD')
+            ->where('indicator_id', $indicatorId)
+            ->get();
 
         $data = [];
 
@@ -393,7 +386,8 @@ if (!function_exists('ScopusPublications')) {
         ];
 
         foreach ($facultyTargets as $facultyTarget) {
-            if ($facultyTarget->researchPublicationTargets->isEmpty()) continue;
+            if ($facultyTarget->researchPublicationTargets->isEmpty())
+                continue;
 
             // Group research targets by journal_clasification
             $grouped = $facultyTarget->researchPublicationTargets
@@ -401,7 +395,7 @@ if (!function_exists('ScopusPublications')) {
 
             foreach ($grouped as $classification => $targets) {
                 // Get faculty value dynamically
-                $value = match(strtolower($classification)) {
+                $value = match (strtolower($classification)) {
                     'q1' => $facultyTarget->scopus_q1,
                     'q2' => $facultyTarget->scopus_q2,
                     'q3' => $facultyTarget->scopus_q3,
@@ -417,12 +411,18 @@ if (!function_exists('ScopusPublications')) {
                 $percentage = ($value > 0) ? round(($count / $value) * 100, 2) : 0;
 
                 // Determine rating
-                if ($percentage >= 90) $rating = 'OS';
-                elseif ($percentage >= 80) $rating = 'EE';
-                elseif ($percentage >= 70) $rating = 'ME';
-                elseif ($percentage >= 60) $rating = 'NI';
-                elseif ($percentage > 0) $rating = 'BE';
-                else $rating = 'NA';
+                if ($percentage >= 90)
+                    $rating = 'OS';
+                elseif ($percentage >= 80)
+                    $rating = 'EE';
+                elseif ($percentage >= 70)
+                    $rating = 'ME';
+                elseif ($percentage >= 60)
+                    $rating = 'NI';
+                elseif ($percentage > 0)
+                    $rating = 'BE';
+                else
+                    $rating = 'NA';
 
                 // Pick first target for optional fields
                 $firstTarget = $targets->first();
@@ -451,14 +451,16 @@ if (!function_exists('ScopusPublications')) {
 
 function PatentsIntellectualProperty($facultyId, $indicator_id)
 {
-    $facultyTargets = FacultyTarget::with(['intellectualPropertyTargets' => function($query) use ($indicator_id) {
-        $query->where('form_status', 'RESEARCHER')
-              ->where('indicator_id', $indicator_id);
-    }])
-    ->where('user_id', $facultyId)
-    ->where('form_status', 'OTHER')
-    ->where('indicator_id', $indicator_id)
-    ->get();
+    $facultyTargets = FacultyTarget::with([
+        'intellectualPropertyTargets' => function ($query) use ($indicator_id) {
+            $query->where('form_status', 'RESEARCHER')
+                ->where('indicator_id', $indicator_id);
+        }
+    ])
+        ->where('user_id', $facultyId)
+        ->where('form_status', 'OTHER')
+        ->where('indicator_id', $indicator_id)
+        ->get();
 
     // Add calculated fields to each record
     foreach ($facultyTargets as $target) {
@@ -475,23 +477,23 @@ function PatentsIntellectualProperty($facultyId, $indicator_id)
 
         // Rating logic
         if ($percentage >= 90) {
-            $rating = 'OS';  
-            $color = '#6EA8FE';  
+            $rating = 'OS';
+            $color = '#6EA8FE';
         } elseif ($percentage >= 80) {
-            $rating = 'EE'; 
+            $rating = 'EE';
             $color = '#96e2b4';
         } elseif ($percentage >= 70) {
             $rating = 'ME';
-            $color = '#ffcb9a'; 
+            $color = '#ffcb9a';
         } elseif ($percentage >= 60) {
             $rating = 'NI';
-            $color = '#fd7e13'; 
+            $color = '#fd7e13';
         } elseif ($percentage > 0) {
             $rating = 'BE';
-            $color = '#ff4c51'; 
+            $color = '#ff4c51';
         } else {
             $rating = 'NA';
-            $color = '#000000'; 
+            $color = '#000000';
         }
 
         // Add values into object
@@ -502,16 +504,18 @@ function PatentsIntellectualProperty($facultyId, $indicator_id)
     }
     return $facultyTargets;
 }
-function  CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
+function CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
 {
-    $commercial = FacultyTarget::with(['commercialGainsCounsultancyTargets' => function($query) use ($indicator_id) {
-        $query->where('form_status', 'RESEARCHER')
-              ->where('indicator_id', $indicator_id);
-    }])
-    ->where('user_id', $facultyId)
-    ->where('form_status', 'OTHER')
-    ->where('indicator_id', $indicator_id)
-    ->get();
+    $commercial = FacultyTarget::with([
+        'commercialGainsCounsultancyTargets' => function ($query) use ($indicator_id) {
+            $query->where('form_status', 'RESEARCHER')
+                ->where('indicator_id', $indicator_id);
+        }
+    ])
+        ->where('user_id', $facultyId)
+        ->where('form_status', 'OTHER')
+        ->where('indicator_id', $indicator_id)
+        ->get();
 
     // Add calculated fields to each record
     foreach ($commercial as $target) {
@@ -533,34 +537,145 @@ function  CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
 
         // Rating logic
         if ($percentage >= 90) {
-            $rating = 'OS';  
-            $color = '#6EA8FE';  
+            $rating = 'OS';
+            $color = '#6EA8FE';
         } elseif ($percentage >= 80) {
-            $rating = 'EE'; 
+            $rating = 'EE';
             $color = '#96e2b4';
         } elseif ($percentage >= 70) {
             $rating = 'ME';
-            $color = '#ffcb9a'; 
+            $color = '#ffcb9a';
         } elseif ($percentage >= 60) {
             $rating = 'NI';
-            $color = '#fd7e13'; 
+            $color = '#fd7e13';
         } elseif ($percentage > 0) {
             $rating = 'BE';
-            $color = '#ff4c51'; 
+            $color = '#ff4c51';
         } else {
             $rating = 'NA';
-            $color = '#000000'; 
+            $color = '#000000';
         }
 
         // Add values into object
         $target->achieved_count = $achieved;
-        $target->total_fee = $total_fee; 
+        $target->total_fee = $total_fee;
         $target->percentage = round($percentage, 2);
         $target->rating = $rating;
         $target->color = $color;
     }
     return $commercial;
 }
+
+if (!function_exists('generateVirtueRating')) {
+    function generateVirtueRating($avg)
+    {
+
+        if ($avg >= 90)
+            return ['percentage' => $avg, 'rating' => 'OS', 'color' => 'bg-label-primary'];
+        if ($avg >= 80)
+            return ['percentage' => $avg, 'rating' => 'EE', 'color' => 'bg-label-success'];
+        if ($avg >= 70)
+            return ['percentage' => $avg, 'rating' => 'ME', 'color' => 'bg-label-warning'];
+        if ($avg >= 60)
+            return ['percentage' => $avg, 'rating' => 'NI', 'color' => 'bg-label-orange'];
+        if ($avg > 0)
+            return ['percentage' => $avg, 'rating' => 'BE', 'color' => 'bg-label-danger'];
+
+        return ['percentage' => 0, 'rating' => 'NA', 'color' => 'bg-label-dark'];
+    }
+}
+
+if (!function_exists('lineManagerRatingOnTasks')) {
+    function lineManagerRatingOnTasks($facultyId)
+    {
+        $feedbacks = LineManagerFeedback::where('employee_id', $facultyId)->get();
+
+        foreach ($feedbacks as $item) {
+
+            // Calculate per-virtue average
+            $res_avg = ($item->responsibility_accountability_1 + $item->responsibility_accountability_2) / 2;
+            $emp_avg = ($item->empathy_compassion_1 + $item->empathy_compassion_2) / 2;
+            $hum_avg = ($item->humility_service_1 + $item->humility_service_2) / 2;
+            $hon_avg = ($item->honesty_integrity_1 + $item->honesty_integrity_2) / 2;
+            $ins_avg = ($item->inspirational_leadership_1 + $item->inspirational_leadership_2) / 2;
+
+            // Assign virtue array with rating & color
+            $item->virtues = [
+                [
+                    'name' => 'Honesty & Integrity',
+                    'avg' => $hon_avg,
+                    'rating_data' => generateVirtueRating($hon_avg)
+                ],
+                [
+                    'name' => 'Humility & Service',
+                    'avg' => $hum_avg,
+                    'rating_data' => generateVirtueRating($hum_avg)
+                ],
+                [
+                    'name' => 'Empathy & Compassion',
+                    'avg' => $emp_avg,
+                    'rating_data' => generateVirtueRating($emp_avg)
+                ],
+                [
+                    'name' => 'Responsibility & Accountability',
+                    'avg' => $res_avg,
+                    'rating_data' => generateVirtueRating($res_avg)
+                ],
+                [
+                    'name' => 'Inspirational Leadership',
+                    'avg' => $ins_avg,
+                    'rating_data' => generateVirtueRating($ins_avg)
+                ],
+            ];
+        }
+
+        return $feedbacks;
+    }
+}
+
+if (!function_exists('lineManagerRatingOnEvents')) {
+    function lineManagerRatingOnEvents($facultyId)
+    {
+        $feedbacks = LineManagerEventFeedback::where('employee_id', $facultyId)->get();
+
+        foreach ($feedbacks as $item) {
+
+            // Ensure rating is numeric
+            $percentage = (float) $item->rating;
+
+            // Assign rating data (rating label and color)
+            if ($percentage >= 90) {
+                $label = 'OS';
+                $color = 'bg-label-primary';
+            } elseif ($percentage >= 80) {
+                $label = 'EE';
+                $color = 'bg-label-success';
+            } elseif ($percentage >= 70) {
+                $label = 'ME';
+                $color = 'bg-label-warning';
+            } elseif ($percentage >= 60) {
+                $label = 'NI';
+                $color = 'bg-label-orange';
+            } elseif ($percentage > 0) {
+                $label = 'BE';
+                $color = 'bg-label-danger';
+            } else {
+                $label = 'NA';
+                $color = 'bg-label-dark';
+            }
+
+            $item->rating_data = [
+                'percentage' => $percentage,
+                'label' => $label,
+                'color' => $color
+            ];
+        }
+
+        return $feedbacks;
+    }
+}
+
+
 
 
 

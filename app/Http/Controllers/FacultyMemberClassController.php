@@ -330,7 +330,7 @@ class FacultyMemberClassController extends Controller
         //     ->groupBy('ca.id')
         //     ->get();
 
-        $date = '2025-10-08';
+        $date = '2025-12-01';
 
         $attendanceSummary = DB::connection('pgsql')
             ->table('odoocms_class_attendance as ca')
