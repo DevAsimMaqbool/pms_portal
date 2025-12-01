@@ -185,7 +185,8 @@ class IndicatorController extends Controller
         try {
             $user = Auth::user();
             $employee_id = $user->employee_id;
-            $facultyMembers = User::where('manager_id', $employee_id)->get(['id','name','department','job_title']);
+            $facultyMembers = User::where('manager_id', $employee_id)
+            ->orWhere('employee_id', $employee_id)->get(['id','name','department','job_title']);
             $indicatorForms = IndicatorForm::where('indicator_id', $indicatorId)->first();
             // if no forms exist at all
             if (!$indicatorForms) {

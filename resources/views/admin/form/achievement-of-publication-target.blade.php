@@ -1128,14 +1128,14 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                 if (form.as_author_your_rank) {
                     $('#modalExtraFields').append(`<tr class="optional-field"><th>Your Rank (As Author)</th><td>${form.as_author_your_rank}</td></tr>`);
                 }
-                // ✅ append projects dynamically
+                // ✅ append co Author dynamically
                 //alert(JSON.stringify(form));
                     if (form.co_authors  && form.co_authors.length > 0) {
              
                         form.co_authors.forEach((coAuthor, index) => {
                             $('#modalExtraFields').append(`
                                 <tr class="optional-field">
-                                    <th>Project ${index + 1}</th>
+                                    <th>co Author ${index + 1}</th>
                                     <td>
                                         <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
                                         <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
@@ -1150,8 +1150,8 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                     } else {
                         $('#modalExtraFields').append(`
                             <tr class="optional-field">
-                                <th>Projects</th>
-                                <td>No projects available</td>
+                                <th>co Author</th>
+                                <td>No co Author available</td>
                             </tr>
                         `);
                     }
@@ -1361,14 +1361,14 @@ function fetchIndicatorForms1() {
                 if (form.as_author_your_rank) {
                     $('#modalExtraFields').append(`<tr class="optional-field"><th>Your Rank (As Author)</th><td>${form.as_author_your_rank}</td></tr>`);
                 }
-                // ✅ append projects dynamically
+                // ✅ append co Author dynamically
                 //alert(JSON.stringify(form));
                     if (form.co_authors  && form.co_authors.length > 0) {
              
                         form.co_authors.forEach((coAuthor, index) => {
                             $('#modalExtraFields').append(`
                                 <tr class="optional-field">
-                                    <th>Project ${index + 1}</th>
+                                    <th>co Author ${index + 1}</th>
                                     <td>
                                         <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
                                         <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
@@ -1383,8 +1383,8 @@ function fetchIndicatorForms1() {
                     } else {
                         $('#modalExtraFields').append(`
                             <tr class="optional-field">
-                                <th>Projects</th>
-                                <td>No projects available</td>
+                                <th>co Author</th>
+                                <td>No co Author available</td>
                             </tr>
                         `);
                     }
@@ -1593,14 +1593,14 @@ function fetchIndicatorForms1() {
                     if (form.as_author_your_rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Your Rank (As Author)</th><td>${form.as_author_your_rank}</td></tr>`);
                     }
-                    // ✅ append projects dynamically
+                    // ✅ append co Author dynamically
                     //alert(JSON.stringify(form));
                         if (form.co_authors  && form.co_authors.length > 0) {
                 
                             form.co_authors.forEach((coAuthor, index) => {
                                 $('#modalExtraFields').append(`
                                     <tr class="optional-field">
-                                        <th>Project ${index + 1}</th>
+                                        <th>co Author ${index + 1}</th>
                                         <td>
                                             <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
                                             <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
@@ -1615,8 +1615,8 @@ function fetchIndicatorForms1() {
                         } else {
                             $('#modalExtraFields').append(`
                                 <tr class="optional-field">
-                                    <th>Projects</th>
-                                    <td>No projects available</td>
+                                    <th>co Author</th>
+                                    <td>No co Author available</td>
                                 </tr>
                             `);
                         }
