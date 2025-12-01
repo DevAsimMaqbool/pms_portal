@@ -368,18 +368,86 @@ function myClassesAttendanceData($facultyId)
             return $class;
         });
 }
-function ScopusPublications($facultyId,$indicator_id)
-{
-    $facultyTargets = FacultyTarget::with(['researchPublicationTargets' => function($query) use ($indicator_id) {
-        $query->where('form_status', 'RESEARCHER')
-              ->where('indicator_id', $indicator_id);
-    }])
-    ->where('user_id', $facultyId)
-    ->where('form_status', 'HOD')
-    ->where('indicator_id', $indicator_id)
-    ->get();
-    return $facultyTargets;
+
+if (!function_exists('ScopusPublications')) {
+    function ScopusPublications($facultyId, $indicatorId) {
+        $facultyTargets = FacultyTarget::with(['researchPublicationTargets' => function($query) use ($indicatorId) {
+            $query->where('form_status', 'RESEARCHER')
+                  ->where('indicator_id', $indicatorId)
+                  ->whereNotNull('journal_clasification'); // Only targets with classification
+        }])
+        ->where('user_id', $facultyId)
+        ->where('form_status', 'HOD')
+        ->where('indicator_id', $indicatorId)
+        ->get();
+
+        $data = [];
+
+        $ratingColors = [
+            'OS' => '#6EA8FE',
+            'EE' => '#96e2b4',
+            'ME' => '#ffcb9a',
+            'NI' => '#fd7e13',
+            'BE' => '#ff4c51',
+            'NA' => '#000000',
+        ];
+
+        foreach ($facultyTargets as $facultyTarget) {
+            if ($facultyTarget->researchPublicationTargets->isEmpty()) continue;
+
+            // Group research targets by journal_clasification
+            $grouped = $facultyTarget->researchPublicationTargets
+                ->groupBy(fn($t) => strtoupper($t->journal_clasification));
+
+            foreach ($grouped as $classification => $targets) {
+                // Get faculty value dynamically
+                $value = match(strtolower($classification)) {
+                    'q1' => $facultyTarget->scopus_q1,
+                    'q2' => $facultyTarget->scopus_q2,
+                    'q3' => $facultyTarget->scopus_q3,
+                    'q4' => $facultyTarget->scopus_q4,
+                    'w' => $facultyTarget->hec_w,
+                    'x' => $facultyTarget->hec_x,
+                    'y' => $facultyTarget->hec_y,
+                    'medical' => $facultyTarget->medical_recognized,
+                    default => 0,
+                };
+
+                $count = $targets->count();
+                $percentage = ($value > 0) ? round(($count / $value) * 100, 2) : 0;
+
+                // Determine rating
+                if ($percentage >= 90) $rating = 'OS';
+                elseif ($percentage >= 80) $rating = 'EE';
+                elseif ($percentage >= 70) $rating = 'ME';
+                elseif ($percentage >= 60) $rating = 'NI';
+                elseif ($percentage > 0) $rating = 'BE';
+                else $rating = 'NA';
+
+                // Pick first target for optional fields
+                $firstTarget = $targets->first();
+
+                $data[] = [
+                    'target_category' => $firstTarget->target_category,
+                    'journal_clasification' => $classification,
+                    'value' => $value,
+                    'count' => $count,
+                    'percentage' => $percentage,
+                    'rating' => $rating,
+                    'color' => $ratingColors[$rating],
+                    'rank' => $firstTarget->rank ?? '-',
+                    'nationality' => $firstTarget->nationality ?? '-',
+                ];
+            }
+        }
+
+        return $data;
+    }
 }
+
+
+
+
 
 function PatentsIntellectualProperty($facultyId, $indicator_id)
 {

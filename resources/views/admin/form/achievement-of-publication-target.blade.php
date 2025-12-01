@@ -51,7 +51,7 @@
                 
                 <div class="d-flex justify-content-between">
                                <div>
-                                <h5 class="mb-1">Scopus Publications</h5>
+                                <h5 class="mb-1">Research Publication</h5>
                                 </div>
                                 <a href="{{ route('indicators_crud.index', ['slug' => 'achievement-of-publication-target', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
                             </div>  
@@ -65,7 +65,7 @@
                                         <div class="card-body">
                                             <div class="row g-6">
                                                 <div class="col-md-6">
-                                                    <label class="form-label">Target Category</label>
+                                                    <label class="form-label">Journal Category</label>
                                                     <select name="target_category" class="form-select" >
                                                         <option value="">Select Target Category</option>
                                                         <option value="Scopus-Indexed">Scopus Indexed</option>
@@ -73,16 +73,36 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="form-label">Link Of Publications</label>
+                                                    <label class="form-label">Publications Link</label>
                                                     <input type="url" name="link_of_publications" class="form-control" >
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="form-label">Rank</label>
-                                                    <input type="number" name="rank" class="form-control" >
+                                                    <label class="form-label">Journal Clasification</label>
+                                                   
+                                                    <select name="journal_clasification" class="form-select" id="journal_clasification" disabled>
+                                                        <option value="">Select Journal Classification</option>
+                                                        <option value="Q1" class="scopus scopus-q1-1">Q1</option>
+                                                        <option value="Q2" class="scopus scopus-q2-1">Q2</option>
+                                                        <option value="Q3" class="scopus scopus-q3-1">Q3</option>
+                                                        <option value="Q4" class="scopus scopus-q4-1">Q4</option>
+                                                        <option value="W" class="hec hec-w-1">W</option>
+                                                        <option value="X" class="hec hec-x-1">X</option>
+                                                        <option value="Y" class="hec hec-y-1">Y</option>
+                                                        <option value="Medical" class="hec medical-recognized-1">Medical</option>
+                                                    </select>
+
+
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="form-label">Nationality</label>
-                                                    <input type="text" name="nationality" class="form-control" >
+                                                    <label class="form-label d-block">Journal Status</label>
+                                                    <div>
+                                                        <input type="radio" name="nationality" id="national" value="National">
+                                                        <label for="national">National</label>
+
+                                                        <input type="radio" name="nationality" id="international" value="International"
+                                                            checked>
+                                                        <label for="international">International</label>
+                                                    </div>
                                                 </div>
                                                 
                                                
@@ -96,7 +116,7 @@
                                             <div class="row g-6">
                         
                                                 <div class="col-md-6">
-                                                    <label class="form-label">As Author Your Rank</label>
+                                                    <label class="form-label">Your Rank (As Author)</label>
                                                     <input type="number" name="as_author_your_rank" class="form-control" >
                                                 </div>
                                                 
@@ -127,32 +147,47 @@
                                                         <label class="form-label">Country</label>
                                                         <input type="text" name="co_author[0][country]" class="form-control" >
                                                     </div>
-                                                    <div class="col-md-6">
+                                                     <div class="col-md-6">
+                                                        <label class="form-label d-block">Your Role</label>
+                                                        <div>
+                                                            <input type="radio" name="co_author[0][your_role]" id="student" value="Student" checked>
+                                                            <label for="student">Student</label>
+
+                                                            <input type="radio" name="co_author[0][your_role]" id="other" value="Other">
+                                                            <label for="other">Other</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6" style="display:none">
                                                         <label class="form-label">Designation</label>
                                                         <input type="text" name="co_author[0][designation]" class="form-control" >
+                                                    </div>
+                                                    <div class="col-md-6" >
+                                                        <label class="form-label">Student Roll Number</label>
+                                                        <input type="text" name="co_author[0][student_roll_no]" class="form-control" >
                                                     </div>
                                                     <div class="col-md-12">
                                                         <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
                                                         <input type="number" name="co_author[0][no_paper_past]" class="form-control" >
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <label class="form-label d-block">Does first author your superviser?</label>
+                                                     <div class="col-md-6">
+                                                        <label class="form-label d-block">Is the student first Co-author?</label>
                                                         <div>
-                                                            <input type="radio" name="co_author[0][first_author_superviser]" id="first_author_superviser_yes_0" value="YES">
-                                                            <label for="first_author_superviser_yes_0">Yes</label>
+                                                            <input type="radio" name="co_author[0][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_yes" value="YES">
+                                                            <label for="is_the_student_fitst_coauthor_yes">Yes</label>
 
-                                                            <input type="radio" name="co_author[0][first_author_superviser]" id="first_author_superviser_no_0" value="NO" checked>
-                                                            <label for="first_author_superviser_no_0">No</label>
+                                                            <input type="radio" name="co_author[0][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_no" value="NO" checked>
+                                                            <label for="is_the_student_fitst_coauthor_no">No</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label class="form-label">Student Roll Number</label>
-                                                        <input type="text" name="co_author[0][student_roll_no]" class="form-control" >
-                                                    </div>
-                                                    <div class="col-md-6">
                                                         <label class="form-label">Career</label>
-                                                        <input type="text" name="co_author[0][career]" class="form-control" >
+                                                        <select name="co_author[0][career]" class="form-select">
+                                                            <option value="">Select Career</option>
+                                                            <option value="PG">PG</option>
+                                                            <option value="MS">MS</option>
+                                                        </select>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -173,7 +208,6 @@
                                         <h5 class="card-title mb-0">Targets</h5>
                                     </div>
                                     <div class="card-body">
-                                        <!-- Base Price -->
                                         <div class="mb-6">
                                         <label class="form-label" for="ecommerce-product-discount-price">Scopus</label>
                                             <div class="input-group mb-4">
@@ -193,7 +227,6 @@
                                                 <input type="number" class="form-control scopus-q4" name="scopus_q4">
                                             </div>
                                         </div>    
-                                        <!-- Discounted Price -->
                                         <div class="mb-6">
                                         <label class="form-label" for="ecommerce-product-discount-price">HEC</label>
                                         <div class="input-group mb-4">
@@ -209,7 +242,6 @@
                                             <input type="number" class="form-control hec-y" name="hec_y" >
                                         </div>
                                         </div>
-                                        <!-- Charge tax check box -->
                                         <div class="mb-6">
                                               <label class="form-label"> Medical</label>
                                                 <div class="input-group">
@@ -217,7 +249,6 @@
                                                     <input type="number" class="form-control medical-recognized" name="medical_recognized" >
                                                 </div>
                                         </div>
-                                        <!-- Instock switch -->
                                         
                                     </div>
                                     </div>
@@ -485,7 +516,84 @@
     @if(auth()->user()->hasRole(['HOD','Teacher']))
     <script>
     $(document).ready(function () {
+            $(document).on('change', 'select[name="target_category"]', function () {
+    let category = $(this).val();
+    let journalSelect = $('#journal_clasification');
+
+    // Reset select first
+    journalSelect.val('');
+    journalSelect.prop('disabled', true);
+
+    // Hide all options except placeholder
+    journalSelect.find('option').each(function() {
+        if ($(this).val() === '') {
             
+        } else {
+            $(this).hide(); // hide all others by default
+        }
+    });
+
+    // Stop if no category selected
+    if (!category) return;
+
+    // Enable the select
+    journalSelect.prop('disabled', false);
+
+    // Show only relevant options that have a value (ignore empty value options)
+    if (category === "Scopus-Indexed") {
+        journalSelect.find('.scopus').each(function() {
+            if ($(this).val() !== '') { // only show if value exists
+                $(this).show();
+            }
+        });
+    } else if (category === "HEC") {
+        journalSelect.find('.hec').each(function() {
+            if ($(this).val() !== '') { // only show if value exists
+                $(this).show();
+            }
+        });
+    }
+});
+
+// Function to toggle fields based on role within a specific row
+function toggleCoAuthorFieldsRow($row) {
+    let role = $row.find('input[name$="[your_role]"]:checked').val();
+
+    if (role === 'Student') {
+        // Show student-specific fields
+        $row.find('input[name$="[student_roll_no]"]').closest('.col-md-6').show();
+        $row.find('input[name$="[is_the_student_fitst_coauthor]"]').closest('.col-md-6').show();
+        $row.find('select[name$="[career]"]').closest('.col-md-6').show();
+
+        // Hide designation
+        $row.find('input[name$="[designation]"]').closest('.col-md-6').hide();
+    } else {
+        // Show designation
+        $row.find('input[name$="[designation]"]').closest('.col-md-6').show();
+
+        // Hide student-specific fields
+        $row.find('input[name$="[student_roll_no]"]').closest('.col-md-6').hide();
+        $row.find('input[name$="[is_the_student_fitst_coauthor]"]').closest('.col-md-6').hide();
+        $row.find('select[name$="[career]"]').closest('.col-md-6').hide();
+    }
+}
+
+// Initialize all existing rows on page load
+$('.grant-group').each(function() {
+    toggleCoAuthorFieldsRow($(this));
+});
+
+// Listen for role changes for any row (existing + future)
+$(document).on('change', 'input[name$="[your_role]"]', function() {
+    let $row = $(this).closest('.grant-group');
+    toggleCoAuthorFieldsRow($row);
+});
+
+
+
+
+
+
 
             
 
@@ -532,9 +640,12 @@ function toggleField(formSelector, inputClass, value) {
     if (value !== null && value !== '') {
         group.show();
         $(formSelector).find(inputClass).val(value);
+       
     } else {
         group.hide();
         $(formSelector).find(inputClass).val('');
+        $(formSelector).find(inputClass + '-1').val('').hide(); // targets .scopus-q-1
+        
     }
 }
 
@@ -555,55 +666,69 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
             // Add new grant group
             $('#add-grant').click(function () {
                 let newGroup = `
-                    <div class="row g-6 grant-group mt-4">
-                    <hr>
-                        <div class="col-md-6">
-                            <label class="form-label">Co-Author Name</label>
-                            <input type="text" name="co_author[${grantIndex}][name]" class="form-control" >
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Rank</label>
-                            <input type="number" name="co_author[${grantIndex}][rank]" class="form-control" >
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">University Name</label>
-                            <input type="text" name="co_author[${grantIndex}][univeristy_name]" class="form-control" >
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Country</label>
-                            <input type="text" name="co_author[${grantIndex}][country]" class="form-control" >
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Designation</label>
-                            <input type="text" name="co_author[${grantIndex}][designation]" class="form-control" >
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
-                            <input type="number" name="co_author[${grantIndex}][no_paper_past]" class="form-control" >
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label d-block">Does first author your superviser?</label>
-                            <div>
-                                <input type="radio" name="co_author[${grantIndex}][first_author_superviser]" id="first_author_superviser_yes_${grantIndex}" value="YES">
-                                <label for="first_author_superviser_yes_${grantIndex}">Yes</label>
+    <div class="row g-6 grant-group mt-4">
+        <hr>
+        <div class="col-md-6">
+            <label class="form-label">Co-Author Name</label>
+            <input type="text" name="co_author[${grantIndex}][name]" class="form-control" >
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Rank</label>
+            <input type="number" name="co_author[${grantIndex}][rank]" class="form-control" >
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">University Name</label>
+            <input type="text" name="co_author[${grantIndex}][univeristy_name]" class="form-control" >
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Country</label>
+            <input type="text" name="co_author[${grantIndex}][country]" class="form-control" >
+        </div>
+        <div class="col-md-6">
+            <label class="form-label d-block">Your Role</label>
+            <div>
+                <input type="radio" name="co_author[${grantIndex}][your_role]" id="student_${grantIndex}" value="Student" checked>
+                <label for="student_${grantIndex}">Student</label>
 
-                                <input type="radio" name="co_author[${grantIndex}][first_author_superviser]" id="first_author_superviser_no_${grantIndex}" value="NO" checked>
-                                <label for="first_author_superviser_no_${grantIndex}">No</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Student Roll Number</label>
-                            <input type="text" name="co_author[${grantIndex}][student_roll_no]" class="form-control" >
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Career</label>
-                            <input type="text" name="co_author[${grantIndex}][career]" class="form-control" >
-                        </div>
-                        <div class="col-md-12 mt-2">
-                            <button type="button" class="btn btn-danger remove-grant">Remove</button>
-                        </div>
-                    </div>
-                `;
+                <input type="radio" name="co_author[${grantIndex}][your_role]" id="other_${grantIndex}" value="Other">
+                <label for="other_${grantIndex}">Other</label>
+            </div>
+        </div>
+        <div class="col-md-6" style="display:none">
+            <label class="form-label">Designation</label>
+            <input type="text" name="co_author[${grantIndex}][designation]" class="form-control" >
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Student Roll Number</label>
+            <input type="text" name="co_author[${grantIndex}][student_roll_no]" class="form-control" >
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
+            <input type="number" name="co_author[${grantIndex}][no_paper_past]" class="form-control" >
+        </div>
+        <div class="col-md-6">
+            <label class="form-label d-block">Is the student first Co-author?</label>
+            <div>
+                <input type="radio" name="co_author[${grantIndex}][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_yes_${grantIndex}" value="YES">
+                <label for="is_the_student_fitst_coauthor_yes_${grantIndex}">Yes</label>
+
+                <input type="radio" name="co_author[${grantIndex}][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_no_${grantIndex}" value="NO" checked>
+                <label for="is_the_student_fitst_coauthor_no_${grantIndex}">No</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Career</label>
+            <select name="co_author[${grantIndex}][career]" class="form-select">
+                <option value="">Select Career</option>
+                <option value="PG">PG</option>
+                <option value="MS">MS</option>
+            </select>
+        </div>
+        <div class="col-md-12 mt-2">
+            <button type="button" class="btn btn-danger remove-grant">Remove</button>
+        </div>
+    </div>
+    `;
 
                 $('#grant-details-container').append(newGroup);
                 grantIndex++;
@@ -1001,7 +1126,7 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                     $('#modalExtraFields').append(`<tr class="optional-field"><th>Medical Recognized</th><td>${form.medical_recognized}</td></tr>`);
                 }
                 if (form.as_author_your_rank) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>As Author Your Rank</th><td>${form.as_author_your_rank}</td></tr>`);
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Your Rank (As Author)</th><td>${form.as_author_your_rank}</td></tr>`);
                 }
                 // ✅ append projects dynamically
                 //alert(JSON.stringify(form));
@@ -1234,7 +1359,7 @@ function fetchIndicatorForms1() {
                     $('#modalExtraFields').append(`<tr class="optional-field"><th>Medical Recognized</th><td>${form.medical_recognized}</td></tr>`);
                 }
                 if (form.as_author_your_rank) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>As Author Your Rank</th><td>${form.as_author_your_rank}</td></tr>`);
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Your Rank (As Author)</th><td>${form.as_author_your_rank}</td></tr>`);
                 }
                 // ✅ append projects dynamically
                 //alert(JSON.stringify(form));
@@ -1466,7 +1591,7 @@ function fetchIndicatorForms1() {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Medical Recognized</th><td>${form.medical_recognized}</td></tr>`);
                     }
                     if (form.as_author_your_rank) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>As Author Your Rank</th><td>${form.as_author_your_rank}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Your Rank (As Author)</th><td>${form.as_author_your_rank}</td></tr>`);
                     }
                     // ✅ append projects dynamically
                     //alert(JSON.stringify(form));
