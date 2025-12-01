@@ -27,13 +27,15 @@
                             <label class="form-label" for="multicol-language">Name of Faculty Member</label>
                             <select name="employee_id" id="select2Success" class="select2 form-select" required>
                                 <option value="">-- Select Faculty Member --</option>
+
                                 @foreach($facultyMembers as $member)
                                     <option value="{{ $member->id }}" data-department="{{ $member->department }}"
-                                        data-job_title="{{ $member->job_title }}">
+                                        data-job_title="{{ $member->job_title }}" {{ request('employee_id') == $member->id ? 'selected' : '' }}>
                                         {{ $member->name }}
                                     </option>
                                 @endforeach
                             </select>
+
                         </div>
                         <!-- Section 1 -->
                         <h6 style="width:100%; margin-top:20px; margin-bottom:10px; font-weight:bold; font-size:18px;">

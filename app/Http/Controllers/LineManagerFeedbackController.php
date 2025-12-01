@@ -14,8 +14,27 @@ class LineManagerFeedbackController extends Controller
      */
     public function index()
     {
-        $ratings = LineManagerFeedback::with('employee')->get();
-        return view('admin.form.line_manager_satisfaction_feedback_view', compact('ratings'));
+        $user = Auth::user();
+        $employee_id = $user->employee_id;
+
+        $facultyMembers = User::where('manager_id', $employee_id)
+            ->get(['id', 'name', 'department', 'job_title']);
+
+        // Feedback mapped by employee_id
+        $ratings = LineManagerFeedback::whereIn('employee_id', $facultyMembers->pluck('id'))
+            ->where('status', 1)
+            ->get()
+            ->keyBy('employee_id');
+
+        // Counts
+        $total = $facultyMembers->count();
+        $completed = $ratings->count();
+        $notCompleted = $total - $completed;
+
+        return view(
+            'admin.form.line_manager_satisfaction_feedback_view',
+            compact('facultyMembers', 'ratings', 'total', 'completed', 'notCompleted')
+        );
     }
 
     /**

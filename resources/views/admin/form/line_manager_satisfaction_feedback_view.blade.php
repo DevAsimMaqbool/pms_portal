@@ -15,7 +15,12 @@
             <!-- Header with Add Feedback Button -->
             <div class="d-flex justify-content-between align-items-center p-3">
                 <h5 class="card-title mb-0">Employee Feedback</h5>
-                <a href="{{ route('linemanager.form') }}" class="btn btn-primary">Add Feedback</a>
+                <!-- <a href="{{ route('linemanager.form') }}" class="btn btn-primary">Add Feedback</a> -->
+            </div>
+            <div class="px-3 pb-3">
+                <span class="badge bg-primary">Total: {{ $total }}</span>
+                <span class="badge bg-success">Completed: {{ $completed }}</span>
+                <span class="badge bg-danger">Not Completed: {{ $notCompleted }}</span>
             </div>
 
             <div class="card-datatable">
@@ -24,35 +29,46 @@
                         <tr>
                             <th>#</th>
                             <th>Faculty Member</th>
-                            <th>Responsibility & Accountability</th>
-                            <th>Empathy & Compassion</th>
-                            <th>Humility & Service</th>
-                            <th>Honesty & Integrity</th>
-                            <th>Inspirational Leadership</th>
-                            <th>Remarks</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Feedback Date</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($ratings as $rating)
+                        @foreach($facultyMembers as $member)
+                            @php
+    $feedback = $ratings[$member->id] ?? null;
+                            @endphp
+
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $rating->employee?->name ?? 'N/A' }}</td>
-                                <td>{{ $rating->responsibility_accountability_1 }},
-                                    {{ $rating->responsibility_accountability_2 }}
-                                </td>
-                                <td>{{ $rating->empathy_compassion_1 }}, {{ $rating->empathy_compassion_2 }}</td>
-                                <td>{{ $rating->humility_service_1 }}, {{ $rating->humility_service_2 }}</td>
-                                <td>{{ $rating->honesty_integrity_1 }}, {{ $rating->honesty_integrity_2 }}</td>
-                                <td>{{ $rating->inspirational_leadership_1 }}, {{ $rating->inspirational_leadership_2 }}</td>
-                                <td>{{ $rating->remarks }}</td>
+                                <td>{{ $member->name }}</td>
+                                <td>{{ $member->department ?? 'N/A' }}</td>
+
                                 <td>
-                                    <a href="{{ route('employee.rating.edit', $rating->id) }}"
-                                        class="btn btn-sm btn-primary">Edit</a>
+                                    @if($feedback)
+                                        <span class="badge bg-success">Completed</span>
+                                    @else
+                                        <span class="badge bg-danger">Not Completed</span>
+                                    @endif
+                                </td>
+
+                                <td>{{ $feedback ? $feedback->created_at->format('Y-m-d') : '---' }}</td>
+
+                                <td>
+                                    @if($feedback)
+                                        <a href="{{ route('employee.rating.edit', $feedback->id) }}"
+                                            class="btn btn-sm btn-primary">Edit</a>
+                                    @else
+                                        <a href="{{ route('linemanager.form', ['employee_id' => $member->id]) }}"
+                                            class="btn btn-sm btn-success">Add</a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
+
                 </table>
             </div>
         </div>
