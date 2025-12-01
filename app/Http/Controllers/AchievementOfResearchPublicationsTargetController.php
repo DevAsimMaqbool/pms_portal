@@ -202,7 +202,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'indicator_id' => 'required|exists:indicators,id',
             'target_category' => 'required|string|max:255',
             'link_of_publications' => 'required|url|max:500',
-            'rank' => 'required|integer|min:0',
+            'journal_clasification' => 'required',
             'nationality' => 'required|string|max:255',
             'as_author_your_rank' => 'required|integer|min:0',
             'scopus_q1' => 'nullable|integer|min:0',
@@ -218,11 +218,12 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'co_author.*.rank' => 'required_with:co_author|integer|min:0',
             'co_author.*.univeristy_name' => 'required_with:co_author|string|max:255',
             'co_author.*.country' => 'required_with:co_author|string|max:255',
-            'co_author.*.designation' => 'required_with:co_author|string|max:255',
+            'co_author.*.your_role' => 'required_with:co_author|in:Student,Other',
+            'co_author.*.designation' => '',
             'co_author.*.no_paper_past' => 'required_with:co_author|integer|min:0',
-            'co_author.*.first_author_superviser' => 'required_with:co_author|in:YES,NO',
-            'co_author.*.student_roll_no' => 'required_with:co_author|string|max:50',
-            'co_author.*.career' => 'required_with:co_author|string|max:255',
+            'co_author.*.is_the_student_fitst_coauthor' => '',
+            'co_author.*.student_roll_no' => '',
+            'co_author.*.career' => '',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -233,7 +234,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         $employeeId = Auth::user()->employee_id;
 
         $targetData = $request->only([
-            'indicator_id','target_category','link_of_publications','rank','nationality',
+            'indicator_id','target_category','link_of_publications','journal_clasification','nationality',
             'as_author_your_rank','scopus_q1','scopus_q2','scopus_q3','scopus_q4',
             'hec_w','hec_x','hec_y','medical_recognized','form_status','status'
         ]);

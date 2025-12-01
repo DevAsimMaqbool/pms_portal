@@ -1891,7 +1891,7 @@
     </div>
 </div>
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="ScopusPublications" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="ResearchPublications" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -1900,7 +1900,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    Scopus Publications
+                    Research Publications
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -1990,68 +1990,43 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
+                                            <th>Category</th>
+                                            <th>Clasification</th>
+                                            <th>Nat /International</th>
                                             <th>Target</th>
                                             <th>Achieved</th>
                                             <th>Score</th>
                                             <th>Rating</th>
-                                            <th>International</th>
-                                            <th>Q1</th>
-                                            <th>Q2</th>
-                                            <th>Q3</th>
-                                            <th>Q4</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php
-                                        $facultyTargets = ScopusPublications(Auth::user()->employee_id,128);
+                                        $facultyData  = ScopusPublications(Auth::user()->employee_id,128);
                                         $sr = 1;
                                         @endphp
-                                        @foreach ($facultyTargets as $facultyTarget)
-                                              @foreach ($facultyTarget->researchPublicationTargets as $researchTarget)
-                                                <tr>
-                                                    <td>{{ $sr++ }}</td> <!-- Serial Number -->
-                                                    <td>{{ $facultyTarget->id }}</td> <!-- Faculty Target ID -->
-                                                    <td>{{ $researchTarget->indicator_id }}</td> <!-- Example field -->
-                                                    <td>
-                                                       <div class=" badge bg-label-danger">50%</div>
-                                                    </td>
-                                                    <td>{{ $researchTarget->rank ?? '-' }}</td> <!-- Optional field -->
-                                                    <td>{{ $researchTarget->nationality ?? '-' }}</td>
-                                                    <td>{{ $researchTarget->scopus_q1 ?? 0 }}</td>
-                                                    <td>{{ $researchTarget->scopus_q2 ?? 0 }}</td>
-                                                    <td>{{ $researchTarget->scopus_q3 ?? 0 }}</td>
-                                                    <td>{{ $researchTarget->scopus_q4 ?? 0 }}</td>
-                                                </tr>
-                                            @endforeach
+                                        @foreach ($facultyData as $row)
+                                            <tr>
+                                                <td>{{ $sr++ }}</td>
+                                                <td>{{ $row['target_category'] }}</td>
+                                                <td>{{ $row['journal_clasification'] }}</td>
+                                                <td>{{ $row['nationality'] }}</td>
+                                                <td>{{ $row['value'] }}</td>
+                                                <td>{{ $row['count'] }}</td>
+                                                <td>
+                                                <div class="badge" style="background-color: {{$row['color'] }}">
+                                                    {{ $row['percentage'] }}%
+                                                </div>
+                                                </td> 
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $row['color'] }}">
+
+                                                        {{ $row['rating'] }}
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         @endforeach
-                                        <tr>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">50%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>3</td>
-                                            <td>
-                                                <div class=" badge bg-label-orange">60%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-orange">NI</span></td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                        </tr>
+                                        
+                                       
                                     </tbody>
                                 </table>
                             </div>
