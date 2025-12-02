@@ -7,7 +7,8 @@ use App\Models\KeyPerformanceArea;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 class KeyPerformanceAreaController extends Controller
 {
     public function index(Request $request)
@@ -111,19 +112,51 @@ class KeyPerformanceAreaController extends Controller
         $area = KeyPerformanceArea::with('indicatorCategories.indicators')->findOrFail($id);
         return view('admin.performance', compact('area'));
     }
+    public function kpabk($id)
+    {
+        $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+        $area = collect($result)->firstWhere('id', $id); // pick one KPA
+        if ($id == 14) {
+            return view('admin.kpa_virtue', compact('area'));
+        }
+        if (!$area) {
+            return view("admin.error");
+        }
+        return view('admin.kpa', compact('area'));
+    }
     public function kpa($id)
     {
         $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
         $area = collect($result)->firstWhere('id', $id); // pick one KPA
-        if($id==14){
+
+        if (!$area) {
+            return view("admin.error");
+        }
+
+        $employeeId = Auth::user()->employee_id;
+
+        // Fetch indicator categories under this KPA
+        $indicatorCategories = \App\Models\IndicatorsPercentage::select('indicator_category_id', DB::raw('AVG(score) as avg_score'))
+            ->where('employee_id', $employeeId)
+            ->where('key_performance_area_id', $id)
+            ->groupBy('indicator_category_id')
+            ->get();
+
+        // Map avg score to the area categories
+        $area['category'] = collect($area['category'])->map(function ($cat) use ($indicatorCategories) {
+            $avg = $indicatorCategories->firstWhere('indicator_category_id', $cat['id']);
+            $cat['score'] = $avg ? round($avg->avg_score, 2) : 0;
+            return $cat;
+        });
+
+        if ($id == 14) {
             return view('admin.kpa_virtue', compact('area'));
         }
-         if (!$area) {
-               return view("admin.error");
-        }
+
         return view('admin.kpa', compact('area'));
     }
-    public function getIndicators(Request $request)
+
+    public function getIndicatorsbk(Request $request)
     {
         $indicators = Indicator::whereIn('id', function ($query) use ($request) {
             $query->select('indicator_id')
@@ -137,5 +170,46 @@ class KeyPerformanceAreaController extends Controller
             'indicators' => $indicators
         ]);
     }
+    public function getIndicators(Request $request)
+    {
+        $employeeId = Auth::user()->employee_id; // logged-in employee
+        $userRoleId = Auth::user()->roles->firstWhere('name', Auth::user()->getRoleNames()->first())->id;
+
+        // Fetch indicators assigned to this category & role
+        $indicators = Indicator::whereIn('id', function ($query) use ($request, $userRoleId) {
+            $query->select('indicator_id')
+                ->from('role_kpa_assignments')
+                ->where('indicator_category_id', $request->id)
+                ->where('status', 1)
+                ->where('role_id', $userRoleId);
+        })->get();
+
+        // Fetch saved percentages for this employee
+        $savedPercentages = \App\Models\IndicatorsPercentage::where('employee_id', $employeeId)
+            ->whereIn('indicator_id', $indicators->pluck('id'))
+            ->get()
+            ->keyBy('indicator_id'); // keyed by indicator_id for fast lookup
+
+        // Map percentage to indicators
+        $indicators = $indicators->map(function ($indicator) use ($savedPercentages) {
+            if (isset($savedPercentages[$indicator->id])) {
+                $saved = $savedPercentages[$indicator->id];
+                $indicator->percentage = round($saved->score);
+                $indicator->color = $saved->color;   // ✅ add color
+                $indicator->rating = $saved->rating; // optional
+            } else {
+                $indicator->percentage = 0;
+                $indicator->color = '#d3d3d3';       // fallback color
+                $indicator->rating = 'NA';           // fallback rating
+            }
+
+            return $indicator;
+        });
+
+        return response()->json([
+            'indicators' => $indicators
+        ]);
+    }
+
 
 }

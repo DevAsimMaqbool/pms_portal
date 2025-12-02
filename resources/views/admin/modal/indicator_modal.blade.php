@@ -1925,8 +1925,8 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                        $facultyData  = ScopusPublications(Auth::user()->employee_id,128);
-                                        $sr = 1;
+                                            $facultyData = ScopusPublications(Auth::user()->employee_id, 128);
+                                            $sr = 1;
                                         @endphp
                                         @foreach ($facultyData as $row)
                                             <tr>
@@ -1936,10 +1936,10 @@
                                                 <td>{{ $row['value'] }}</td>
                                                 <td>{{ $row['count'] }}</td>
                                                 <td>
-                                                <div class="badge" style="background-color: {{$row['color'] }}">
-                                                    {{ $row['percentage'] }}%
-                                                </div>
-                                                </td> 
+                                                    <div class="badge" style="background-color: {{$row['color'] }}">
+                                                        {{ $row['percentage'] }}%
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $row['color'] }}">
 
@@ -1948,8 +1948,8 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                        
-                                       
+
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2587,32 +2587,8 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>1</td>
-                                            <td>Responsibility & Accountability</td>
-                                            <td><span class="badge bg-label-success">88%</span></td>
-                                            <td><span class="badge bg-label-success">EE</span></td>
+                                            <td colspan="4">no record found</td>
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Empathy & Compassion</td>
-                                            <td><span class="badge bg-label-warning">77%</span></td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Humility & Service</td>
-                                            <td><span class="badge bg-label-orange">67%</span></td>
-                                            <td><span class="badge bg-label-orange">NI</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Honesty & Integrity</td>
-                                            <td><span class="badge bg-label-danger">59%</span></td>
-                                            <td><span class="badge bg-label-danger">BE</span></td>
-                                        </tr>
-
-
-
                                     </tbody>
                                 </table>
                             </div>
@@ -2621,6 +2597,10 @@
                         <!-- Fall -->
                         <div class="tab-pane fade" id="LineManagersReview&RatingonTasks-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
+                                @php
+                                    $feedback = lineManagerRatingOnTasks(Auth::user()->employee_id)->first();
+                                @endphp
+
                                 <table class="table table-hover align-middle custom-table">
                                     <thead class="table-primary">
                                         <tr>
@@ -2630,36 +2610,36 @@
                                             <th>Rating</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Honesty & Integrity</td>
-                                            <td><span class="badge bg-label-success">85%</span></td>
-                                            <td><span class="badge bg-label-success">EE</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Humility & Service</td>
-                                            <td><span class="badge bg-label-warning">75%</span></td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Empathy & Compassion</td>
-                                            <td><span class="badge bg-label-orange">63%</span></td>
-                                            <td><span class="badge bg-label-orange">NI</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Responsibility & Accountability</td>
-                                            <td><span class="badge bg-label-danger">65%</span></td>
-                                            <td><span class="badge bg-label-danger">BE</span></td>
-                                        </tr>
+                                        @if($feedback && $feedback->virtues)
+                                            @foreach($feedback->virtues as $index => $virtue)
+                                                <tr>
+                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $virtue['name'] }}</td>
 
+                                                    <td>
+                                                        <span class="badge {{ $virtue['rating_data']['color'] }}">
+                                                            {{ $virtue['rating_data']['percentage'] }}%
+                                                        </span>
+                                                    </td>
 
-
+                                                    <td>
+                                                        <span class="badge {{ $virtue['rating_data']['color'] }}">
+                                                            {{ $virtue['rating_data']['rating'] }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="4">No feedback available.</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
+
+
                             </div>
                         </div>
                     </div>
@@ -2777,82 +2757,39 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
-                            <table class="table table-striped align-middle custom-table"">
-                                <thead class=" table-primary">
-                                <tr>
-                                    <th>Sr#</th>
-                                    <th>Event</th>
-                                    {{-- <th>Target</th>
-                                    <th>Achieved</th> --}}
-                                    <th>Score</th>
-                                    <th>Rating</th>
-                                </tr>
+                            @php
+                                $feedbacks = lineManagerRatingOnEvents(Auth::user()->employee_id);
+                            @endphp
+
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Event</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Sports Festival</td>
-                                        {{-- <td>32</td>
-                                        <td>30</td> --}}
-                                        <td>
-                                            <div class="badge bg-label-primary">93%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Alumni Reunion</td>
-                                        {{-- <td>10</td>
-                                        <td>9</td> --}}
-                                        <td>
-                                            <div class=" badge bg-label-primary">90%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Canvocation</td>
-                                        {{-- <td>30</td>
-                                        <td>25</td> --}}
-                                        <td>
-                                            <div class="badge bg-label-success">83%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-success me-1">EE</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Rector's Conference</td>
-                                        {{-- <td>20</td>
-                                        <td>15</td> --}}
-                                        <td>
-                                            <div class=" badge bg-label-warning">75%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>SEE Pakistan</td>
-                                        {{-- <td>33</td>
-                                        <td>10</td> --}}
-                                        <td>
-                                            <div class=" badge bg-label-danger">30%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Society Fair</td>
-                                        {{-- <td>33</td>
-                                        <td>10</td> --}}
-                                        <td>
-                                            <div class=" badge bg-label-danger">60%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                    </tr>
-
-
+                                    @foreach($feedbacks as $index => $item)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $item->event_name }}</td>
+                                            <td>
+                                                <div class="badge {{ $item->rating_data['color'] }}">
+                                                    {{ $item->rating_data['percentage'] }}%
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge {{ $item->rating_data['color'] }} me-1">
+                                                    {{ $item->rating_data['label'] }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -3173,29 +3110,29 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                 @php
-                                $ResearchIncomes = CommercialGainsCounsultancyResearchIncome(Auth::user()->employee_id,137);
-                                        
-                                @endphp
-                                @foreach ($ResearchIncomes as $ResearchIncome)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $ResearchIncome->target }}</td>  <!-- Required target -->
-                                        <td>{{ $ResearchIncome->achieved_count }}</td> <!-- Achieved count -->
-                                        <td>{{ $ResearchIncome->total_fee }}</td>
-                                        <td>
-                                        <div class="badge" style="background-color: {{ $ResearchIncome->color }}">
+                                    @php
+                                        $ResearchIncomes = CommercialGainsCounsultancyResearchIncome(Auth::user()->employee_id, 137);
+
+                                    @endphp
+                                    @foreach ($ResearchIncomes as $ResearchIncome)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $ResearchIncome->target }}</td> <!-- Required target -->
+                                            <td>{{ $ResearchIncome->achieved_count }}</td> <!-- Achieved count -->
+                                            <td>{{ $ResearchIncome->total_fee }}</td>
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $ResearchIncome->color }}">
                                                     {{ $ResearchIncome->percentage }}%
                                                 </div>
-                                        </td> 
-                                        <td>
-                                            <div class="badge" style="background-color: {{ $ResearchIncome->color }}">
+                                            </td>
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $ResearchIncome->color }}">
 
-                                                {{ $ResearchIncome->rating }}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                                    {{ $ResearchIncome->rating }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -3233,28 +3170,28 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @php
-                                $data = PatentsIntellectualProperty(Auth::user()->employee_id,138);
-                                        
-                                @endphp
-                                @foreach ($data as $row)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $row->target }}</td>  <!-- Required target -->
-                                        <td>{{ $row->achieved_count }}</td> <!-- Achieved count -->
-                                        <td>
-                                        <div class="badge" style="background-color: {{ $row->color }}">
+                                    @php
+                                        $data = PatentsIntellectualProperty(Auth::user()->employee_id, 138);
+
+                                    @endphp
+                                    @foreach ($data as $row)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $row->target }}</td> <!-- Required target -->
+                                            <td>{{ $row->achieved_count }}</td> <!-- Achieved count -->
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $row->color }}">
                                                     {{ $row->percentage }}%
                                                 </div>
-                                        </td> 
-                                        <td>
-                                            <div class="badge" style="background-color: {{ $row->color }}">
+                                            </td>
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $row->color }}">
 
-                                                {{ $row->rating }}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                                    {{ $row->rating }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

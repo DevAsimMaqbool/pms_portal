@@ -72,45 +72,82 @@
                     <div class="card-body">
                         <h5 class="card-title mb-0">{{ $area['performance_area'] }} 🎉</h5>
                         <p class="mb-2">Overall KPA Performance</p>
-                        <h4 class="text-primary mb-1">72%</h4>
+                        <h4 class="text-primary mb-1">{{ avgKpaScore(Auth::user()->id, request()->segment(2)) }}%</h4>
 
                         @if ($area['id'] == 1)
                             <p class="card-text">
-                                This KPA focuses on effective teaching delivery at undergraduate and postgraduate levels, efficient course and classroom management, and continuous enhancement of teaching outputs to ensure quality education. Excellence in teaching and learning is the foundation of student success. It shapes competent graduates, strengthens institutional reputation, and promotes lifelong learning.
+                                This KPA focuses on effective teaching delivery at undergraduate and postgraduate levels,
+                                efficient course and classroom management, and continuous enhancement of teaching outputs to
+                                ensure quality education. Excellence in teaching and learning is the foundation of student
+                                success. It shapes competent graduates, strengthens institutional reputation, and promotes
+                                lifelong learning.
                             </p>
                         @elseif ($area['id'] == 2)
                             <p class="card-text">
-                                This KPA measures research productivity, quality, and supervision at the postgraduate level. It also covers the development of knowledge products and the translation of research into practical innovations and commercial outcomes. Advancing research and innovation builds intellectual capital, drives societal progress, and connects academic insights with industry applications for sustainable growth.
+                                This KPA measures research productivity, quality, and supervision at the postgraduate level. It
+                                also covers the development of knowledge products and the translation of research into practical
+                                innovations and commercial outcomes. Advancing research and innovation builds intellectual
+                                capital, drives societal progress, and connects academic insights with industry applications for
+                                sustainable growth.
                             </p>
                         @elseif ($area['id'] == 3)
                             <p class="card-text">
-                                This KPA focuses on ensuring the institution’s long-term financial health and operational viability through diversified revenue streams, effective resource utilization, and profitable growth. It emphasizes achieving enrollment and revenue targets, maintaining profitability across programs and centers, and strengthening financial resilience through prudent recovery and cost management. A sustainable financial model supports institutional excellence, strategic expansion, and the ability to reinvest in quality improvement.
+                                This KPA focuses on ensuring the institution’s long-term financial health and operational
+                                viability through diversified revenue streams, effective resource utilization, and profitable
+                                growth. It emphasizes achieving enrollment and revenue targets, maintaining profitability across
+                                programs and centers, and strengthening financial resilience through prudent recovery and cost
+                                management. A sustainable financial model supports institutional excellence, strategic
+                                expansion, and the ability to reinvest in quality improvement.
                             </p>
                         @elseif ($area['id'] == 4)
                             <p class="card-text">
-                               Evaluates the institution’s performance in meeting internationalization goals through the Superior Go Global and 1M Global Experience initiatives. It reflects progress in building global partnerships, promoting student mobility, and offering international work or learning experiences that enhance global competencies and institutional reputation.
+                                Evaluates the institution’s performance in meeting internationalization goals through the
+                                Superior Go Global and 1M Global Experience initiatives. It reflects progress in building global
+                                partnerships, promoting student mobility, and offering international work or learning
+                                experiences that enhance global competencies and institutional reputation.
                             </p>
                         @elseif ($area['id'] == 5)
                             <p class="card-text">
-                                This KPA emphasizes the institution’s commitment to creating a positive social and environmental impact through collective engagement of faculty, staff, and students. It focuses on fostering a culture of service, sustainability, and civic responsibility both within and beyond the campus. By actively contributing to community development and sustainability initiatives, the institution demonstrates its role as a socially conscious and ethically driven organization dedicated to the betterment of society.
-Rating Descriptions.
+                                This KPA emphasizes the institution’s commitment to creating a positive social and environmental
+                                impact through collective engagement of faculty, staff, and students. It focuses on fostering a
+                                culture of service, sustainability, and civic responsibility both within and beyond the campus.
+                                By actively contributing to community development and sustainability initiatives, the
+                                institution demonstrates its role as a socially conscious and ethically driven organization
+                                dedicated to the betterment of society.
+                                Rating Descriptions.
                             </p>
                         @elseif ($area['id'] == 6)
                             <p class="card-text">
-                                 This KPA represents the institution’s collective reputation, credibility, and distinctiveness in the academic and professional landscape. It emphasizes building a strong, trusted, and recognizable brand through excellence in accreditation, affiliations, stakeholder satisfaction, and global partnerships. A strong brand identity reflects consistent quality, meaningful industry linkages, and positive perceptions among students, faculty, alumni, and employers — ultimately reinforcing the institution’s prestige and competitive advantage.
-                            </p> 
+                                This KPA represents the institution’s collective reputation, credibility, and distinctiveness in
+                                the academic and professional landscape. It emphasizes building a strong, trusted, and
+                                recognizable brand through excellence in accreditation, affiliations, stakeholder satisfaction,
+                                and global partnerships. A strong brand identity reflects consistent quality, meaningful
+                                industry linkages, and positive perceptions among students, faculty, alumni, and employers —
+                                ultimately reinforcing the institution’s prestige and competitive advantage.
+                            </p>
                         @elseif ($area['id'] == 7)
                             <p class="card-text">
-                            This KPA reflects the effectiveness, integrity, and inclusiveness of leadership practices that guide academic and operational excellence. It emphasizes transparent decision-making, stakeholder satisfaction, and a culture of accountability. Through proactive planning, team development, and compliance with institutional policies, this area ensures that leadership at all levels is participative, future-oriented, and aligned with the university’s mission. Effective governance fosters engagement, builds trust, and strengthens institutional coherence across departments and campuses.
-                            </p> 
+                                This KPA reflects the effectiveness, integrity, and inclusiveness of leadership practices that
+                                guide academic and operational excellence. It emphasizes transparent decision-making,
+                                stakeholder satisfaction, and a culture of accountability. Through proactive planning, team
+                                development, and compliance with institutional policies, this area ensures that leadership at
+                                all levels is participative, future-oriented, and aligned with the university’s mission.
+                                Effective governance fosters engagement, builds trust, and strengthens institutional coherence
+                                across departments and campuses.
+                            </p>
                         @elseif ($area['id'] == 13)
                             <p class="card-text">
-                               This KPA emphasizes proactive participation in departmental tasks, institutional initiatives, and events that enhance collaboration, visibility, and collective achievement. Institutional engagement fosters teamwork, ownership, and a shared sense of purpose, strengthening the institution’s culture and external partnerships.
-                            </p> 
+                                This KPA emphasizes proactive participation in departmental tasks, institutional initiatives,
+                                and events that enhance collaboration, visibility, and collective achievement. Institutional
+                                engagement fosters teamwork, ownership, and a shared sense of purpose, strengthening the
+                                institution’s culture and external partnerships.
+                            </p>
                         @elseif ($area['id'] == 14)
                             <p class="card-text">
-                                This KPA embodies responsibility, accountability, empathy, humility, honesty, and inspirational leadership as guiding principles for personal and professional conduct.
-Character virtues create the moral compass for excellence. They nurture ethical leaders who act with integrity, compassion, and service to others.
+                                This KPA embodies responsibility, accountability, empathy, humility, honesty, and inspirational
+                                leadership as guiding principles for personal and professional conduct.
+                                Character virtues create the moral compass for excellence. They nurture ethical leaders who act
+                                with integrity, compassion, and service to others.
                             </p>
                         @else
                             <p class="card-text">Other text</p>
@@ -123,31 +160,32 @@ Character virtues create the moral compass for excellence. They nurture ethical 
             <div class="col-12 col-md-8">
                 <div class="card">
                     <div class="card-header">
-  <div class="row w-100 align-items-center">
-    
-    <!-- Left side -->
-    <div class="col-md-5">
-      <h5 class="card-title mb-0">
-        {{ $area['performance_area'] }} Performance
-      </h5>
-    </div>
+                        <div class="row w-100 align-items-center">
 
-    <!-- Right side -->
-    <div class="col-md-7 text-md-end text-start p-0">
-      <div class="btn-group" role="group" aria-label="radio toggle button group">
-        <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
-        <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
+                            <!-- Left side -->
+                            <div class="col-md-5">
+                                <h5 class="card-title mb-0">
+                                    {{ $area['performance_area'] }} Performance
+                                </h5>
+                            </div>
 
-        <input type="radio" class="btn-check" name="termRadio" id="spring25">
-        <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
+                            <!-- Right side -->
+                            <div class="col-md-7 text-md-end text-start p-0">
+                                <div class="btn-group" role="group" aria-label="radio toggle button group">
+                                    <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
+                                    <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
 
-        <input type="radio" class="btn-check" name="termRadio" id="fall25">
-        <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
-      </div>
-    </div>
+                                    <input type="radio" class="btn-check" name="termRadio" id="spring25">
+                                    <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring
+                                        2025</label>
 
-  </div>
-</div>
+                                    <input type="radio" class="btn-check" name="termRadio" id="fall25">
+                                    <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
 
                     <div class="card-body pt-2">
                         {{-- <canvas class="chartjs" id="radarChart" data-height="355"></canvas> --}}
@@ -289,28 +327,28 @@ Character virtues create the moral compass for excellence. They nurture ethical 
         });
         document.addEventListener("DOMContentLoaded", function () {
             try {
+                // ✅ Dynamic labels and scores from Blade
                 const chartLabels = @json(collect($area['category'])->pluck('indicator_category')) || [];
                 const shortLabels = @json(collect($area['category'])->pluck('cat_short_code')) || [];
-
-                // ✅ Static dataset values (adjusts automatically to match labels)
-                const staticValues = [70, 90, 85, 80];
-                const dataset1 = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
+                const dataset1 = @json(collect($area['category'])->pluck('score')) || [];
 
                 const g = document.getElementById("radarChart");
                 if (!g || !chartLabels.length) return;
 
                 const ctx = g.getContext("2d");
 
-                // 🎨 Dynamic label colors
+                // 🎨 Colors for points
                 const labelColors = [
                     "#e74c3c", "#3498db", "#27ae60", "#f39c12",
                     "#9b59b6", "#16a085", "#d35400", "#2c3e50"
                 ];
 
+                // Gradient for area fill
                 const gradient = ctx.createLinearGradient(0, 0, 0, 150);
                 gradient.addColorStop(0, "rgba(115,103,240,0.9)");
                 gradient.addColorStop(1, "rgba(85,85,255,0.8)");
 
+                // ✅ Create radar chart
                 const radarChart = new Chart(ctx, {
                     type: "radar",
                     data: {
@@ -336,10 +374,10 @@ Character virtues create the moral compass for excellence. They nurture ethical 
                         animation: { duration: 600 },
                         scales: {
                             r: {
-                                min: 50, // ✅ Show full scale
+                                min: 50,
                                 max: 100,
                                 ticks: {
-                                    display: true, // ✅ Show 60,70,80,90,100
+                                    display: true,
                                     stepSize: 10,
                                     color: "#666",
                                     backdropColor: "transparent",
@@ -369,52 +407,29 @@ Character virtues create the moral compass for excellence. They nurture ethical 
                         }
                     }
                 });
-                 
-                 document.getElementById("overall").addEventListener("change", function () {
-        if (this.checked) {
-                 const staticValues=[70, 90, 85, 80];
-          radarChart.data.datasets[0].data = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
-          radarChart.update();
-        }
-      });
-      document.getElementById("spring25").addEventListener("change", function () {
-        if (this.checked) {
-          const staticValues=[60, 70, 80, 90];
-          radarChart.data.datasets[0].data = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
-          radarChart.update();
-        }
-      });
-
-      document.getElementById("fall25").addEventListener("change", function () {
-        if (this.checked) {
-          const staticValues=[90, 80, 70, 60];
-          radarChart.data.datasets[0].data = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
-          radarChart.update();
-        }
-      });
 
                 // ✅ Custom Legend
                 const legendDiv = document.getElementById("customLegend");
                 if (legendDiv) {
-                    legendDiv.innerHTML = ""; // Clear old legend if any
+                    legendDiv.innerHTML = "";
                     chartLabels.forEach((label, i) => {
                         let li = document.createElement("li");
                         li.className = "mx-3";
                         li.style.fontSize = "9px";
                         li.style.cursor = "pointer";
                         li.innerHTML = `
-                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                    border-radius:50%;margin-right:5px;"></span>
-                    ${label} (${shortLabels[i]})
+                        <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                        border-radius:50%;margin-right:5px;"></span>
+                        ${label} (${shortLabels[i]})
                     `;
 
                         li.addEventListener("mouseenter", () => {
-                        radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
-                        radarChart.update();
+                            radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
+                            radarChart.update();
                         });
                         li.addEventListener("mouseleave", () => {
-                        radarChart.setActiveElements([]);
-                        radarChart.update();
+                            radarChart.setActiveElements([]);
+                            radarChart.update();
                         });
 
                         legendDiv.appendChild(li);
@@ -423,8 +438,8 @@ Character virtues create the moral compass for excellence. They nurture ethical 
             } catch (error) {
                 console.error("Radar chart initialization error:", error);
             }
-
         });
+
 
         function initChartProgress() {
             var elements = document.querySelectorAll(".chart-progress");
@@ -507,32 +522,33 @@ Character virtues create the moral compass for excellence. They nurture ethical 
 
                         if (response.indicators && response.indicators.length > 0) {
                             let colors = ["primary", "success", "warning", "secondary-color", "danger"];
-                            let fixedValues = [90, 85, 70, 65, 50];
+
                             $.each(response.indicators, function (index, indicator) {
-                                let color = colors[index % colors.length];
-                                let randomValue = fixedValues[index % fixedValues.length];
+                                let color = indicator.color || 'primary';
                                 let formattedIndicator = indicator.indicator.replace(/[\s#']+/g, '');
+                                let percentage = indicator.percentage || 0;
+
                                 $list.append(`
-                                                                                                    <li class="d-flex mb-6">
-                                                                                                        <div class="chart-progress me-4" data-color="${color}" data-series="${randomValue}" data-progress_variant="true"></div>
-                                                                                                        <div class="row w-100 align-items-center">
-                                                                                                            <div class="col-9">
-                                                                                                                <div class="me-2">
-                                                                                                                    <h6 class="mb-1_5">${indicator.indicator}</h6>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="col-3 text-end">
-                                                                                                                <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
-                                                                                                                    <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                                                                                                                </button>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </li>
-                                                                                                `);
+                                                                                                                <li class="d-flex mb-6">
+                                                                                                                    <div class="chart-progress me-4" data-color="${color}" data-series="${percentage}" data-progress_variant="true"></div>
+
+                                                                                                                    <div class="row w-100 align-items-center">
+                                                                                                                        <div class="col-9">
+                                                                                                                            <div class="me-2">
+                                                                                                                                <h6 class="mb-1_5">${indicator.indicator}</h6>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <div class="col-3 text-end">
+                                                                                                                            <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
+                                                                                                                                <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
+                                                                                                                            </button>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </li>
+                                                                                                                `);
                             });
 
-                            // ✅ Re-init charts after AJAX load
-                            initChartProgress();
+                            initChartProgress(); // re-init charts after AJAX load
                         } else {
                             $list.append('<li>No indicators found</li>');
                         }
