@@ -697,7 +697,6 @@
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
-                                            <th>Program</th>
                                             <th>Career (PG/UG)</th>
                                             <th>Status</th>
                                             <th>Score</th>
@@ -705,47 +704,36 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
-                                            <td>BSCS</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">90%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                        </tr>
+                           
+                                     @php
+                                        $CompletionofCourseFolders  = CompletionofCourseFolder(Auth::user()->employee_id,120);
+                                                
+                                        @endphp
+                                        @foreach ($CompletionofCourseFolders as $CompletionofCourser)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $CompletionofCourser->facultyClass->code }}</td> 
+                                                <td>{{ $CompletionofCourser->facultyClass?->career_code ?? 'N/A' }}</td>
+                                                <td>
+                                                <div class="badge" style="background-color: {{ $CompletionofCourser->color }}">
+                                                            {{ $CompletionofCourser->status_folder }}
+                                                        </div>
+                                                </td> 
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $CompletionofCourser->color }}">
 
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
-                                            <td>BSSE</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class="badge bg-label-danger">Not Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">60%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
+                                                        {{ $CompletionofCourser->completion_of_Course_folder }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $CompletionofCourser->color }}">
 
-                                        <tr>
-                                            <td>3</td>
-                                            <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
-                                            <td>BSIT</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">20%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
+                                                        {{ $CompletionofCourser->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                       
                                     </tbody>
                                 </table>
                             </div>
@@ -865,7 +853,6 @@
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
-                                            <th>Program</th>
                                             <th>Career (PG/UG)</th>
                                             <th>Status</th>
                                             <th>Score</th>
@@ -873,46 +860,35 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-success">96%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-success me-1">EE</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">90%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                        </tr>
+                                     @php
+                                        $ComplianceandUsageofLMS  = ComplianceandUsageofLMS(Auth::user()->employee_id,121);
+                                                
+                                        @endphp
+                                        @foreach ($ComplianceandUsageofLMS as $ComplianceandUsageofLMSData)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $ComplianceandUsageofLMSData->facultyClass->code }}</td> 
+                                                <td>{{ $ComplianceandUsageofLMSData->facultyClass?->career_code ?? 'N/A' }}</td>
+                                                <td>
+                                                <div class="badge" style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
+                                                            {{ $ComplianceandUsageofLMSData->status_folder }}
+                                                        </div>
+                                                </td> 
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
 
-                                        <tr>
-                                            <td>3</td>
-                                            <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
-                                            <td>BSCS</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class="badge bg-label-danger">Not Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">60%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
+                                                        {{ $ComplianceandUsageofLMSData->compliance_and_usage_of_lms }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
+
+                                                        {{ $ComplianceandUsageofLMSData->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        
 
                                     </tbody>
                                 </table>

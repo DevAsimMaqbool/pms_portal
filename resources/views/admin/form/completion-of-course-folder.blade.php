@@ -288,7 +288,7 @@
                                 
                                 classSelect.empty().append('<option value="">-- Select classes --</option>');
                                 data.forEach(function (cls) {
-                                    classSelect.append(`<option value="${cls.code}">${cls.code}</option>`);
+                                    classSelect.append(`<option value="${cls.class_id}">${cls.code}</option>`);
                                 });
 
                                 // Re-initialize select2 for the updated select

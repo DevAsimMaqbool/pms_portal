@@ -20,9 +20,15 @@ class CompletionOfCourseFolder extends Model
     ];
     public $timestamps = true; 
 
-    
-    public function creator()
+    public function facultyMember()
     {
-        return $this->belongsTo(User::class, 'created_by', 'employee_id');
+        return $this->belongsTo(User::class, 'faculty_member_id', 'id');
+    }
+    /**
+     * Get the class associated with this course folder.
+     */
+    public function facultyClass()
+    {
+        return $this->belongsTo(FacultyMemberClass::class, 'class_cod', 'class_id');
     }
 }

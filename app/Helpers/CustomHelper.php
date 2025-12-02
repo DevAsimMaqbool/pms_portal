@@ -3,6 +3,7 @@
 //namespace App\Helpers;
 
 use App\Models\AchievementOfResearchPublicationsTarget;
+use App\Models\CompletionOfCourseFolder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\User;
 use App\Models\RoleKpaAssignment;
@@ -666,6 +667,78 @@ function noofGrantsWon($facultyId, $indicator_id)
         $target->color = $color;
     }
     return $facultyTargets;
+}
+function CompletionofCourseFolder($facultyId, $indicator_id)
+{
+    $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember','facultyClass'])
+    ->where('faculty_member_id', $facultyId)
+    ->where('form_status', 'HOD')
+    ->where('completion_of_Course_folder_indicator_id', $indicator_id)
+    ->get();
+     foreach ($CompletionOfCourseFolder as $target) {
+                // Rating logic
+        if ($target->completion_of_Course_folder == 100) {
+            $rating = 'OS';  
+            $color = '#6EA8FE'; 
+            $status= 'Completed'; 
+        } elseif ($target->completion_of_Course_folder == 50) {
+            $rating = 'ME'; 
+            $color = '#ffcb9a';
+            $status= 'Partially Completed'; 
+        } elseif ($target->completion_of_Course_folder == 25) {
+            $rating = 'BE';
+            $color = '#ff4c51'; 
+            $status= 'Not Completed'; 
+        } else {
+            $rating = 'NA';
+            $color = '#000000'; 
+            $status= 'NA'; 
+        }
+        
+        $target->rating = $rating;
+        $target->color = $color;
+        $target->status_folder = $status;
+     }
+     return $CompletionOfCourseFolder;
+    
+
+   
+}
+function ComplianceandUsageofLMS($facultyId, $indicator_id)
+{
+    $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember','facultyClass'])
+    ->where('faculty_member_id', $facultyId)
+    ->where('form_status', 'HOD')
+    ->where('compliance_and_usage_of_lms_indicator_id', $indicator_id)
+    ->get();
+     foreach ($CompletionOfCourseFolder as $target) {
+                // Rating logic
+        if ($target->compliance_and_usage_of_lms == 100) {
+            $rating = 'OS';  
+            $color = '#6EA8FE'; 
+            $status= 'Completed'; 
+        } elseif ($target->compliance_and_usage_of_lms == 50) {
+            $rating = 'ME'; 
+            $color = '#ffcb9a';
+            $status= 'Partially Completed'; 
+        } elseif ($target->compliance_and_usage_of_lms == 25) {
+            $rating = 'BE';
+            $color = '#ff4c51'; 
+            $status= 'Not Completed'; 
+        } else {
+            $rating = 'NA';
+            $color = '#000000'; 
+            $status= 'NA'; 
+        }
+        
+        $target->rating = $rating;
+        $target->color = $color;
+        $target->status_folder = $status;
+     }
+     return $CompletionOfCourseFolder;
+    
+
+   
 }
 
 
