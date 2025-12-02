@@ -112,7 +112,7 @@ class KeyPerformanceAreaController extends Controller
         $area = KeyPerformanceArea::with('indicatorCategories.indicators')->findOrFail($id);
         return view('admin.performance', compact('area'));
     }
-    public function kpa($id)
+    public function kpabk($id)
     {
         $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
         $area = collect($result)->firstWhere('id', $id); // pick one KPA
@@ -124,6 +124,38 @@ class KeyPerformanceAreaController extends Controller
         }
         return view('admin.kpa', compact('area'));
     }
+    public function kpa($id)
+    {
+        $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+        $area = collect($result)->firstWhere('id', $id); // pick one KPA
+
+        if (!$area) {
+            return view("admin.error");
+        }
+
+        $employeeId = Auth::user()->employee_id;
+
+        // Fetch indicator categories under this KPA
+        $indicatorCategories = \App\Models\IndicatorsPercentage::select('indicator_category_id', DB::raw('AVG(score) as avg_score'))
+            ->where('employee_id', $employeeId)
+            ->where('key_performance_area_id', $id)
+            ->groupBy('indicator_category_id')
+            ->get();
+
+        // Map avg score to the area categories
+        $area['category'] = collect($area['category'])->map(function ($cat) use ($indicatorCategories) {
+            $avg = $indicatorCategories->firstWhere('indicator_category_id', $cat['id']);
+            $cat['score'] = $avg ? round($avg->avg_score, 2) : 0;
+            return $cat;
+        });
+
+        if ($id == 14) {
+            return view('admin.kpa_virtue', compact('area'));
+        }
+
+        return view('admin.kpa', compact('area'));
+    }
+
     public function getIndicatorsbk(Request $request)
     {
         $indicators = Indicator::whereIn('id', function ($query) use ($request) {
@@ -152,53 +184,25 @@ class KeyPerformanceAreaController extends Controller
                 ->where('role_id', $userRoleId);
         })->get();
 
-        // Map indicator name to table/column or custom calculation
-        $indicatorCalculations = [
-            'Event Performance Feedback' => [
-                'table' => 'line_manager_event_feedback',
-                'column' => 'rating'
-            ],
-            "Line Manager's Review & Rating on Tasks" => [
-                'custom' => true, // use custom overall avg
-            ],
-            // Add more indicators here...
-        ];
+        // Fetch saved percentages for this employee
+        $savedPercentages = \App\Models\IndicatorsPercentage::where('employee_id', $employeeId)
+            ->whereIn('indicator_id', $indicators->pluck('id'))
+            ->get()
+            ->keyBy('indicator_id'); // keyed by indicator_id for fast lookup
 
-        $indicators = $indicators->map(function ($indicator) use ($indicatorCalculations, $employeeId) {
-            $overallAvg = 0;
-
-            if (isset($indicatorCalculations[$indicator->indicator])) {
-                $config = $indicatorCalculations[$indicator->indicator];
-
-                // Custom overall average for LineManagerFeedback
-                if (isset($config['custom']) && $config['custom']) {
-                    $feedbacks = \App\Models\LineManagerFeedback::where('employee_id', $employeeId)->get();
-
-                    if ($feedbacks->count()) {
-                        $total = 0;
-                        foreach ($feedbacks as $item) {
-                            $res_avg = ($item->responsibility_accountability_1 + $item->responsibility_accountability_2) / 2;
-                            $emp_avg = ($item->empathy_compassion_1 + $item->empathy_compassion_2) / 2;
-                            $hum_avg = ($item->humility_service_1 + $item->humility_service_2) / 2;
-                            $hon_avg = ($item->honesty_integrity_1 + $item->honesty_integrity_2) / 2;
-                            $ins_avg = ($item->inspirational_leadership_1 + $item->inspirational_leadership_2) / 2;
-
-                            $overallAvg += ($res_avg + $emp_avg + $hum_avg + $hon_avg + $ins_avg) / 5;
-                        }
-
-                        $overallAvg = $overallAvg / $feedbacks->count(); // avg across all feedback rows
-                    }
-                } else {
-                    // Default simple table/column avg
-                    if (Schema::hasTable($config['table'])) {
-                        $overallAvg = DB::table($config['table'])
-                            ->where('employee_id', $employeeId)
-                            ->avg($config['column']);
-                    }
-                }
+        // Map percentage to indicators
+        $indicators = $indicators->map(function ($indicator) use ($savedPercentages) {
+            if (isset($savedPercentages[$indicator->id])) {
+                $saved = $savedPercentages[$indicator->id];
+                $indicator->percentage = round($saved->score);
+                $indicator->color = $saved->color;   // ✅ add color
+                $indicator->rating = $saved->rating; // optional
+            } else {
+                $indicator->percentage = 0;
+                $indicator->color = '#d3d3d3';       // fallback color
+                $indicator->rating = 'NA';           // fallback rating
             }
 
-            $indicator->percentage = round($overallAvg);
             return $indicator;
         });
 

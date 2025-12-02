@@ -2662,24 +2662,30 @@
                                     </thead>
 
                                     <tbody>
-                                        @foreach($feedback->virtues as $index => $virtue)
+                                        @if($feedback && $feedback->virtues)
+                                            @foreach($feedback->virtues as $index => $virtue)
+                                                <tr>
+                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $virtue['name'] }}</td>
+
+                                                    <td>
+                                                        <span class="badge {{ $virtue['rating_data']['color'] }}">
+                                                            {{ $virtue['rating_data']['percentage'] }}%
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge {{ $virtue['rating_data']['color'] }}">
+                                                            {{ $virtue['rating_data']['rating'] }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
                                             <tr>
-                                                <td>{{ $index + 1 }}</td>
-                                                <td>{{ $virtue['name'] }}</td>
-
-                                                <td>
-                                                    <span class="badge {{ $virtue['rating_data']['color'] }}">
-                                                        {{ $virtue['rating_data']['percentage'] }}%
-                                                    </span>
-                                                </td>
-
-                                                <td>
-                                                    <span class="badge {{ $virtue['rating_data']['color'] }}">
-                                                        {{ $virtue['rating_data']['rating'] }}
-                                                    </span>
-                                                </td>
+                                                <td colspan="4">No feedback available.</td>
                                             </tr>
-                                        @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
 

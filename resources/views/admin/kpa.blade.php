@@ -72,7 +72,7 @@
                     <div class="card-body">
                         <h5 class="card-title mb-0">{{ $area['performance_area'] }} 🎉</h5>
                         <p class="mb-2">Overall KPA Performance</p>
-                        <h4 class="text-primary mb-1">72%</h4>
+                        <h4 class="text-primary mb-1">{{ avgKpaScore(Auth::user()->id, request()->segment(2)) }}%</h4>
 
                         @if ($area['id'] == 1)
                             <p class="card-text">
@@ -327,28 +327,28 @@
         });
         document.addEventListener("DOMContentLoaded", function () {
             try {
+                // ✅ Dynamic labels and scores from Blade
                 const chartLabels = @json(collect($area['category'])->pluck('indicator_category')) || [];
                 const shortLabels = @json(collect($area['category'])->pluck('cat_short_code')) || [];
-
-                // ✅ Static dataset values (adjusts automatically to match labels)
-                const staticValues = [70, 90, 85, 80];
-                const dataset1 = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
+                const dataset1 = @json(collect($area['category'])->pluck('score')) || [];
 
                 const g = document.getElementById("radarChart");
                 if (!g || !chartLabels.length) return;
 
                 const ctx = g.getContext("2d");
 
-                // 🎨 Dynamic label colors
+                // 🎨 Colors for points
                 const labelColors = [
                     "#e74c3c", "#3498db", "#27ae60", "#f39c12",
                     "#9b59b6", "#16a085", "#d35400", "#2c3e50"
                 ];
 
+                // Gradient for area fill
                 const gradient = ctx.createLinearGradient(0, 0, 0, 150);
                 gradient.addColorStop(0, "rgba(115,103,240,0.9)");
                 gradient.addColorStop(1, "rgba(85,85,255,0.8)");
 
+                // ✅ Create radar chart
                 const radarChart = new Chart(ctx, {
                     type: "radar",
                     data: {
@@ -374,10 +374,10 @@
                         animation: { duration: 600 },
                         scales: {
                             r: {
-                                min: 50, // ✅ Show full scale
+                                min: 50,
                                 max: 100,
                                 ticks: {
-                                    display: true, // ✅ Show 60,70,80,90,100
+                                    display: true,
                                     stepSize: 10,
                                     color: "#666",
                                     backdropColor: "transparent",
@@ -408,43 +408,20 @@
                     }
                 });
 
-                document.getElementById("overall").addEventListener("change", function () {
-                    if (this.checked) {
-                        const staticValues = [70, 90, 85, 80];
-                        radarChart.data.datasets[0].data = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
-                        radarChart.update();
-                    }
-                });
-                document.getElementById("spring25").addEventListener("change", function () {
-                    if (this.checked) {
-                        const staticValues = [60, 70, 80, 90];
-                        radarChart.data.datasets[0].data = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
-                        radarChart.update();
-                    }
-                });
-
-                document.getElementById("fall25").addEventListener("change", function () {
-                    if (this.checked) {
-                        const staticValues = [90, 80, 70, 60];
-                        radarChart.data.datasets[0].data = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
-                        radarChart.update();
-                    }
-                });
-
                 // ✅ Custom Legend
                 const legendDiv = document.getElementById("customLegend");
                 if (legendDiv) {
-                    legendDiv.innerHTML = ""; // Clear old legend if any
+                    legendDiv.innerHTML = "";
                     chartLabels.forEach((label, i) => {
                         let li = document.createElement("li");
                         li.className = "mx-3";
                         li.style.fontSize = "9px";
                         li.style.cursor = "pointer";
                         li.innerHTML = `
-                                <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                border-radius:50%;margin-right:5px;"></span>
-                                ${label} (${shortLabels[i]})
-                                `;
+                        <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                        border-radius:50%;margin-right:5px;"></span>
+                        ${label} (${shortLabels[i]})
+                    `;
 
                         li.addEventListener("mouseenter", () => {
                             radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -461,8 +438,8 @@
             } catch (error) {
                 console.error("Radar chart initialization error:", error);
             }
-
         });
+
 
         function initChartProgress() {
             var elements = document.querySelectorAll(".chart-progress");
@@ -547,27 +524,28 @@
                             let colors = ["primary", "success", "warning", "secondary-color", "danger"];
 
                             $.each(response.indicators, function (index, indicator) {
-                                let color = colors[index % colors.length];
+                                let color = indicator.color || 'primary';
                                 let formattedIndicator = indicator.indicator.replace(/[\s#']+/g, '');
                                 let percentage = indicator.percentage || 0;
 
                                 $list.append(`
-        <li class="d-flex mb-6">
-            <div class="chart-progress me-4" data-color="${color}" data-series="${percentage}" data-progress_variant="true"></div>
-            <div class="row w-100 align-items-center">
-                <div class="col-9">
-                    <div class="me-2">
-                        <h6 class="mb-1_5">${indicator.indicator}</h6>
-                    </div>
-                </div>
-                <div class="col-3 text-end">
-                    <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
-                        <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                    </button>
-                </div>
-            </div>
-        </li>
-        `);
+                                                                                                                <li class="d-flex mb-6">
+                                                                                                                    <div class="chart-progress me-4" data-color="${color}" data-series="${percentage}" data-progress_variant="true"></div>
+
+                                                                                                                    <div class="row w-100 align-items-center">
+                                                                                                                        <div class="col-9">
+                                                                                                                            <div class="me-2">
+                                                                                                                                <h6 class="mb-1_5">${indicator.indicator}</h6>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <div class="col-3 text-end">
+                                                                                                                            <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
+                                                                                                                                <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
+                                                                                                                            </button>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </li>
+                                                                                                                `);
                             });
 
                             initChartProgress(); // re-init charts after AJAX load
