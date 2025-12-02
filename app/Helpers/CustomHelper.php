@@ -3,6 +3,7 @@
 //namespace App\Helpers;
 
 use App\Models\AchievementOfResearchPublicationsTarget;
+use App\Models\CompletionOfCourseFolder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\User;
 use App\Models\RoleKpaAssignment;
@@ -618,6 +619,184 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
         $target->color = $color;
     }
     return $commercial;
+}
+function MultidisciplinaryProjects($facultyId, $indicator_id)
+{
+    $facultyTargets = FacultyTarget::with(['achievementOfMultidisciplinaryProjectsTarget' => function($query) use ($indicator_id) {
+        $query->where('form_status', 'RESEARCHER')
+              ->where('indicator_id', $indicator_id);
+    }])
+    ->where('user_id', $facultyId)
+    ->where('form_status', 'OTHER')
+    ->where('indicator_id', $indicator_id)
+    ->get();
+
+    // Add calculated fields to each record
+    foreach ($facultyTargets as $target) {
+
+        $achieved = $target->achievementOfMultidisciplinaryProjectsTarget->count(); // Number of achieved publications
+        $required = (int) $target->target;                          // Faculty target value
+
+        // Prevent divide by zero
+        if ($required > 0) {
+            $percentage = ($achieved / $required) * 100;
+        } else {
+            $percentage = 0;
+        }
+
+        // Rating logic
+        if ($percentage >= 90) {
+            $rating = 'OS';  
+            $color = '#6EA8FE';  
+        } elseif ($percentage >= 80) {
+            $rating = 'EE'; 
+            $color = '#96e2b4';
+        } elseif ($percentage >= 70) {
+            $rating = 'ME';
+            $color = '#ffcb9a'; 
+        } elseif ($percentage >= 60) {
+            $rating = 'NI';
+            $color = '#fd7e13'; 
+        } elseif ($percentage > 0) {
+            $rating = 'BE';
+            $color = '#ff4c51'; 
+        } else {
+            $rating = 'NA';
+            $color = '#000000'; 
+        }
+
+        // Add values into object
+        $target->achieved_count = $achieved;
+        $target->percentage = round($percentage, 2);
+        $target->rating = $rating;
+        $target->color = $color;
+    }
+    return $facultyTargets;
+}
+function noofGrantsWon($facultyId, $indicator_id)
+{
+    $facultyTargets = FacultyTarget::with(['noofGrantsWonTarget' => function($query) use ($indicator_id) {
+        $query->where('form_status', 'RESEARCHER')
+              ->where('indicator_id', $indicator_id);
+    }])
+    ->where('user_id', $facultyId)
+    ->where('form_status', 'OTHER')
+    ->where('indicator_id', $indicator_id)
+    ->get();
+
+    // Add calculated fields to each record
+    foreach ($facultyTargets as $target) {
+
+        $achieved = $target->noofGrantsWonTarget->count(); // Number of achieved publications
+        $required = (int) $target->target;                          // Faculty target value
+
+        // Prevent divide by zero
+        if ($required > 0) {
+            $percentage = ($achieved / $required) * 100;
+        } else {
+            $percentage = 0;
+        }
+
+        // Rating logic
+        if ($percentage >= 90) {
+            $rating = 'OS';  
+            $color = '#6EA8FE';  
+        } elseif ($percentage >= 80) {
+            $rating = 'EE'; 
+            $color = '#96e2b4';
+        } elseif ($percentage >= 70) {
+            $rating = 'ME';
+            $color = '#ffcb9a'; 
+        } elseif ($percentage >= 60) {
+            $rating = 'NI';
+            $color = '#fd7e13'; 
+        } elseif ($percentage > 0) {
+            $rating = 'BE';
+            $color = '#ff4c51'; 
+        } else {
+            $rating = 'NA';
+            $color = '#000000'; 
+        }
+
+        // Add values into object
+        $target->achieved_count = $achieved;
+        $target->percentage = round($percentage, 2);
+        $target->rating = $rating;
+        $target->color = $color;
+    }
+    return $facultyTargets;
+}
+function CompletionofCourseFolder($facultyId, $indicator_id)
+{
+    $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember','facultyClass'])
+    ->where('faculty_member_id', $facultyId)
+    ->where('form_status', 'HOD')
+    ->where('completion_of_Course_folder_indicator_id', $indicator_id)
+    ->get();
+     foreach ($CompletionOfCourseFolder as $target) {
+                // Rating logic
+        if ($target->completion_of_Course_folder == 100) {
+            $rating = 'OS';  
+            $color = '#6EA8FE'; 
+            $status= 'Completed'; 
+        } elseif ($target->completion_of_Course_folder == 50) {
+            $rating = 'ME'; 
+            $color = '#ffcb9a';
+            $status= 'Partially Completed'; 
+        } elseif ($target->completion_of_Course_folder == 25) {
+            $rating = 'BE';
+            $color = '#ff4c51'; 
+            $status= 'Not Completed'; 
+        } else {
+            $rating = 'NA';
+            $color = '#000000'; 
+            $status= 'NA'; 
+        }
+        
+        $target->rating = $rating;
+        $target->color = $color;
+        $target->status_folder = $status;
+     }
+     return $CompletionOfCourseFolder;
+    
+
+   
+}
+function ComplianceandUsageofLMS($facultyId, $indicator_id)
+{
+    $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember','facultyClass'])
+    ->where('faculty_member_id', $facultyId)
+    ->where('form_status', 'HOD')
+    ->where('compliance_and_usage_of_lms_indicator_id', $indicator_id)
+    ->get();
+     foreach ($CompletionOfCourseFolder as $target) {
+                // Rating logic
+        if ($target->compliance_and_usage_of_lms == 100) {
+            $rating = 'OS';  
+            $color = '#6EA8FE'; 
+            $status= 'Completed'; 
+        } elseif ($target->compliance_and_usage_of_lms == 50) {
+            $rating = 'ME'; 
+            $color = '#ffcb9a';
+            $status= 'Partially Completed'; 
+        } elseif ($target->compliance_and_usage_of_lms == 25) {
+            $rating = 'BE';
+            $color = '#ff4c51'; 
+            $status= 'Not Completed'; 
+        } else {
+            $rating = 'NA';
+            $color = '#000000'; 
+            $status= 'NA'; 
+        }
+        
+        $target->rating = $rating;
+        $target->color = $color;
+        $target->status_folder = $status;
+     }
+     return $CompletionOfCourseFolder;
+    
+
+   
 }
 
 if (!function_exists('generateVirtueRating')) {

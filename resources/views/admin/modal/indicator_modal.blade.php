@@ -697,7 +697,6 @@
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
-                                            <th>Program</th>
                                             <th>Career (PG/UG)</th>
                                             <th>Status</th>
                                             <th>Score</th>
@@ -705,47 +704,36 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
-                                            <td>BSCS</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">90%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                        </tr>
+                           
+                                     @php
+                                        $CompletionofCourseFolders  = CompletionofCourseFolder(Auth::user()->employee_id,120);
+                                                
+                                        @endphp
+                                        @foreach ($CompletionofCourseFolders as $CompletionofCourser)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $CompletionofCourser->facultyClass->code }}</td> 
+                                                <td>{{ $CompletionofCourser->facultyClass?->career_code ?? 'N/A' }}</td>
+                                                <td>
+                                                <div class="badge" style="background-color: {{ $CompletionofCourser->color }}">
+                                                            {{ $CompletionofCourser->status_folder }}
+                                                        </div>
+                                                </td> 
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $CompletionofCourser->color }}">
 
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
-                                            <td>BSSE</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class="badge bg-label-danger">Not Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">60%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
+                                                        {{ $CompletionofCourser->completion_of_Course_folder }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $CompletionofCourser->color }}">
 
-                                        <tr>
-                                            <td>3</td>
-                                            <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
-                                            <td>BSIT</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">20%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
+                                                        {{ $CompletionofCourser->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                       
                                     </tbody>
                                 </table>
                             </div>
@@ -865,7 +853,6 @@
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
-                                            <th>Program</th>
                                             <th>Career (PG/UG)</th>
                                             <th>Status</th>
                                             <th>Score</th>
@@ -873,46 +860,35 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-success">96%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-success me-1">EE</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">90%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                        </tr>
+                                     @php
+                                        $ComplianceandUsageofLMS  = ComplianceandUsageofLMS(Auth::user()->employee_id,121);
+                                                
+                                        @endphp
+                                        @foreach ($ComplianceandUsageofLMS as $ComplianceandUsageofLMSData)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $ComplianceandUsageofLMSData->facultyClass->code }}</td> 
+                                                <td>{{ $ComplianceandUsageofLMSData->facultyClass?->career_code ?? 'N/A' }}</td>
+                                                <td>
+                                                <div class="badge" style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
+                                                            {{ $ComplianceandUsageofLMSData->status_folder }}
+                                                        </div>
+                                                </td> 
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
 
-                                        <tr>
-                                            <td>3</td>
-                                            <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
-                                            <td>BSCS</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class="badge bg-label-danger">Not Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">60%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
+                                                        {{ $ComplianceandUsageofLMSData->compliance_and_usage_of_lms }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
+
+                                                        {{ $ComplianceandUsageofLMSData->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        
 
                                     </tbody>
                                 </table>
@@ -1906,20 +1882,21 @@
                 <div class="nav-align-top nav-tabs-shadow">
                     <div class="d-flex justify-content-center mb-3 mt-3">
                         <ul class="nav custom-tabs" role="tablist">
+                            
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
-                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
-                                    aria-selected="true">
-                                    🌸 Spring 2025
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
                                     aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
                                     aria-selected="false">
                                     🍂 Fall 2025
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
+                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
+                                    aria-selected="true">
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                         </ul>
@@ -1927,62 +1904,10 @@
 
                     <!-- Tab Content -->
                     <div class="tab-content">
-                        <!-- Spring -->
-                        <div class="tab-pane fade show active"
-                            id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
-                            role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Target</th>
-                                            <th>Achieved</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                            <th>International</th>
-                                            <th>Q1</th>
-                                            <th>Q2</th>
-                                            <th>Q3</th>
-                                            <th>Q4</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>3</td>
-                                            <td>
-                                                <div class=" badge bg-label-orange">60%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-orange">NI</span></td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">50%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                       
 
                         <!-- Fall -->
-                        <div class="tab-pane fade"
+                        <div class="tab-pane fade show active"
                             id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
                             role="tabpanel">
                             <div class="table-responsive text-nowrap">
@@ -1992,7 +1917,6 @@
                                             <th>Sr#</th>
                                             <th>Category</th>
                                             <th>Clasification</th>
-                                            <th>Nat /International</th>
                                             <th>Target</th>
                                             <th>Achieved</th>
                                             <th>Score</th>
@@ -2009,7 +1933,6 @@
                                                 <td>{{ $sr++ }}</td>
                                                 <td>{{ $row['target_category'] }}</td>
                                                 <td>{{ $row['journal_clasification'] }}</td>
-                                                <td>{{ $row['nationality'] }}</td>
                                                 <td>{{ $row['value'] }}</td>
                                                 <td>{{ $row['count'] }}</td>
                                                 <td>
@@ -2031,6 +1954,33 @@
                                 </table>
                             </div>
                         </div>
+
+                         <!-- Spring -->
+                        <div class="tab-pane fade"
+                            id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
+                            role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Category</th>
+                                            <th>Clasification</th>
+                                            <th>Target</th>
+                                            <th>Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>
@@ -3040,15 +2990,29 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @php
+                                $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id,135);
+                                        
+                                @endphp
+                                @foreach ($noofGrantsWon as $noofGrantsWon_row)
                                     <tr>
-                                        <td>1</td>
-                                        <td>6</td>
-                                        <td>5</td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $noofGrantsWon_row->target }}</td>  <!-- Required target -->
+                                        <td>{{ $noofGrantsWon_row->achieved_count }}</td> <!-- Achieved count -->
                                         <td>
-                                            <div class="badge bg-label-success">83%</div>
+                                        <div class="badge" style="background-color: {{ $noofGrantsWon_row->color }}">
+                                                    {{ $noofGrantsWon_row->percentage }}%
+                                                </div>
+                                        </td> 
+                                        <td>
+                                            <div class="badge" style="background-color: {{ $noofGrantsWon_row->color }}">
+
+                                                {{ $noofGrantsWon_row->rating }}
+                                            </div>
                                         </td>
-                                        <td><span class="badge bg-label-success me-1">EE</span></td>
                                     </tr>
+                                @endforeach
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -3086,15 +3050,28 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                 @php
+                                $data = MultidisciplinaryProjects(Auth::user()->employee_id,136);
+                                        
+                                @endphp
+                                @foreach ($data as $row)
                                     <tr>
-                                        <td>1</td>
-                                        <td>10</td>
-                                        <td>9</td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $row->target }}</td>  <!-- Required target -->
+                                        <td>{{ $row->achieved_count }}</td> <!-- Achieved count -->
                                         <td>
-                                            <div class="badge bg-label-primary">90%</div>
+                                        <div class="badge" style="background-color: {{ $row->color }}">
+                                                    {{ $row->percentage }}%
+                                                </div>
+                                        </td> 
+                                        <td>
+                                            <div class="badge" style="background-color: {{ $row->color }}">
+
+                                                {{ $row->rating }}
+                                            </div>
                                         </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
                                     </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
