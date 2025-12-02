@@ -55,6 +55,14 @@ class FacultyTarget extends Model
     {
         return $this->hasMany(CommercialGainsCounsultancyResearchIncome::class, 'created_by', 'user_id');
     }
+    public function achievementOfMultidisciplinaryProjectsTarget()
+    {
+        return $this->hasMany(NoAchievementOfMultidisciplinaryProjectsTarget::class, 'created_by', 'user_id');
+    }
+    public function noofGrantsWonTarget()
+    {
+        return $this->hasMany(NoOfGrantsSubmitAndWon::class, 'created_by', 'user_id');
+    }
     
 
 }

@@ -561,6 +561,112 @@ function  CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
     }
     return $commercial;
 }
+function MultidisciplinaryProjects($facultyId, $indicator_id)
+{
+    $facultyTargets = FacultyTarget::with(['achievementOfMultidisciplinaryProjectsTarget' => function($query) use ($indicator_id) {
+        $query->where('form_status', 'RESEARCHER')
+              ->where('indicator_id', $indicator_id);
+    }])
+    ->where('user_id', $facultyId)
+    ->where('form_status', 'OTHER')
+    ->where('indicator_id', $indicator_id)
+    ->get();
+
+    // Add calculated fields to each record
+    foreach ($facultyTargets as $target) {
+
+        $achieved = $target->achievementOfMultidisciplinaryProjectsTarget->count(); // Number of achieved publications
+        $required = (int) $target->target;                          // Faculty target value
+
+        // Prevent divide by zero
+        if ($required > 0) {
+            $percentage = ($achieved / $required) * 100;
+        } else {
+            $percentage = 0;
+        }
+
+        // Rating logic
+        if ($percentage >= 90) {
+            $rating = 'OS';  
+            $color = '#6EA8FE';  
+        } elseif ($percentage >= 80) {
+            $rating = 'EE'; 
+            $color = '#96e2b4';
+        } elseif ($percentage >= 70) {
+            $rating = 'ME';
+            $color = '#ffcb9a'; 
+        } elseif ($percentage >= 60) {
+            $rating = 'NI';
+            $color = '#fd7e13'; 
+        } elseif ($percentage > 0) {
+            $rating = 'BE';
+            $color = '#ff4c51'; 
+        } else {
+            $rating = 'NA';
+            $color = '#000000'; 
+        }
+
+        // Add values into object
+        $target->achieved_count = $achieved;
+        $target->percentage = round($percentage, 2);
+        $target->rating = $rating;
+        $target->color = $color;
+    }
+    return $facultyTargets;
+}
+function noofGrantsWon($facultyId, $indicator_id)
+{
+    $facultyTargets = FacultyTarget::with(['noofGrantsWonTarget' => function($query) use ($indicator_id) {
+        $query->where('form_status', 'RESEARCHER')
+              ->where('indicator_id', $indicator_id);
+    }])
+    ->where('user_id', $facultyId)
+    ->where('form_status', 'OTHER')
+    ->where('indicator_id', $indicator_id)
+    ->get();
+
+    // Add calculated fields to each record
+    foreach ($facultyTargets as $target) {
+
+        $achieved = $target->noofGrantsWonTarget->count(); // Number of achieved publications
+        $required = (int) $target->target;                          // Faculty target value
+
+        // Prevent divide by zero
+        if ($required > 0) {
+            $percentage = ($achieved / $required) * 100;
+        } else {
+            $percentage = 0;
+        }
+
+        // Rating logic
+        if ($percentage >= 90) {
+            $rating = 'OS';  
+            $color = '#6EA8FE';  
+        } elseif ($percentage >= 80) {
+            $rating = 'EE'; 
+            $color = '#96e2b4';
+        } elseif ($percentage >= 70) {
+            $rating = 'ME';
+            $color = '#ffcb9a'; 
+        } elseif ($percentage >= 60) {
+            $rating = 'NI';
+            $color = '#fd7e13'; 
+        } elseif ($percentage > 0) {
+            $rating = 'BE';
+            $color = '#ff4c51'; 
+        } else {
+            $rating = 'NA';
+            $color = '#000000'; 
+        }
+
+        // Add values into object
+        $target->achieved_count = $achieved;
+        $target->percentage = round($percentage, 2);
+        $target->rating = $rating;
+        $target->color = $color;
+    }
+    return $facultyTargets;
+}
 
 
 
