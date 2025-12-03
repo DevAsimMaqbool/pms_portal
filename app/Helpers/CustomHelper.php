@@ -227,7 +227,7 @@ function myClassesAttendance($facultyId)
 
 function myClasses($facultyId)
 {
-    return FacultyMemberClass::with([
+    $classes = FacultyMemberClass::with([
         'attendances' => function ($query) {
             $query->orderBy('class_date', 'desc'); // latest attendance first
         }
@@ -235,6 +235,24 @@ function myClasses($facultyId)
         ->where('faculty_id', $facultyId)
         ->select('class_id', 'class_name', 'code', 'term', 'career_code')
         ->get();
+    $count = $classes->count();
+
+    // Determine score & rating based on count
+    if ($count > 3) {
+        $score = 100;
+    } elseif ($count === 3) {
+        $score = 80;
+    } else {
+        $score = 60;
+    }
+    saveIndicatorPercentage(
+        $facultyId = getUserID($facultyId),
+        $keyPerformanceAreaId = 1,
+        $indicatorCategoryId = 3,
+        $indicatorId = 122,
+        $score
+    );
+    return $classes;
 }
 
 function myClassesAttendanceRecord($facultyId)
@@ -419,7 +437,107 @@ function myClassesAttendanceData($facultyId)
 }
 
 if (!function_exists('ScopusPublications')) {
-    function ScopusPublications($facultyId, $indicatorId)
+    function ScopusPublications($facultyId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
+    {
+        $facultyTargets = FacultyTarget::with([
+            'researchPublicationTargets' => function ($query) use ($indicatorId) {
+                $query->where('form_status', 'RESEARCHER')
+                    ->where('indicator_id', $indicatorId)
+                    ->whereNotNull('journal_clasification');
+            }
+        ])
+            ->where('user_id', $facultyId)
+            ->where('form_status', 'HOD')
+            ->where('indicator_id', $indicatorId)
+            ->get();
+
+        $data = [];
+
+        $ratingColors = [
+            'OS' => '#6EA8FE',
+            'EE' => '#96e2b4',
+            'ME' => '#ffcb9a',
+            'NI' => '#fd7e13',
+            'BE' => '#ff4c51',
+            'NA' => '#000000',
+        ];
+
+        $totalTarget = 0;
+        $totalSubmitted = 0;
+
+        foreach ($facultyTargets as $facultyTarget) {
+            $targetCount = $facultyTarget->target ?? 0;
+            $submissionCount = $facultyTarget->researchPublicationTargets->count();
+
+            $totalTarget += $targetCount;
+            $totalSubmitted += $submissionCount;
+
+            if ($facultyTarget->researchPublicationTargets->isEmpty())
+                continue;
+
+            $grouped = $facultyTarget->researchPublicationTargets
+                ->groupBy(fn($t) => strtoupper($t->journal_clasification));
+
+            foreach ($grouped as $classification => $targets) {
+                $value = match (strtolower($classification)) {
+                    'q1' => $facultyTarget->scopus_q1,
+                    'q2' => $facultyTarget->scopus_q2,
+                    'q3' => $facultyTarget->scopus_q3,
+                    'q4' => $facultyTarget->scopus_q4,
+                    'w' => $facultyTarget->hec_w,
+                    'x' => $facultyTarget->hec_x,
+                    'y' => $facultyTarget->hec_y,
+                    'medical' => $facultyTarget->medical_recognized,
+                    default => 0,
+                };
+
+                $count = $targets->count();
+                $percentage = ($value > 0) ? round(($count / $value) * 100, 2) : 0;
+
+                $rating = match (true) {
+                    $percentage >= 90 => 'OS',
+                    $percentage >= 80 => 'EE',
+                    $percentage >= 70 => 'ME',
+                    $percentage >= 60 => 'NI',
+                    $percentage > 0 => 'BE',
+                    default => 'NA',
+                };
+
+                $firstTarget = $targets->first();
+
+                $data[] = [
+                    'target_category' => $firstTarget->target_category,
+                    'journal_clasification' => $classification,
+                    'value' => $value,
+                    'count' => $count,
+                    'percentage' => $percentage,
+                    'rating' => $rating,
+                    'color' => $ratingColors[$rating],
+                    'rank' => $firstTarget->rank ?? '-',
+                    'nationality' => $firstTarget->nationality ?? '-',
+                ];
+            }
+        }
+
+        // ✅ Correct overall percentage: total submitted / total target
+        $avgPercentage = ($totalTarget > 0) ? round(($totalSubmitted / $totalTarget) * 100, 2) : 0;
+
+        // ✅ Save globally
+        saveIndicatorPercentage(
+            $facultyId,
+            $keyPerformanceAreaId = 2,
+            $indicatorCategoryId = 5,
+            $indicatorId = 128,
+            $avgPercentage
+        );
+
+        return $data;
+    }
+}
+
+
+if (!function_exists('ScopusPublicationsbk')) {
+    function ScopusPublicationsbk($facultyId, $indicatorId)
     {
         $facultyTargets = FacultyTarget::with([
             'researchPublicationTargets' => function ($query) use ($indicatorId) {
@@ -622,14 +740,16 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
 }
 function MultidisciplinaryProjects($facultyId, $indicator_id)
 {
-    $facultyTargets = FacultyTarget::with(['achievementOfMultidisciplinaryProjectsTarget' => function($query) use ($indicator_id) {
-        $query->where('form_status', 'RESEARCHER')
-              ->where('indicator_id', $indicator_id);
-    }])
-    ->where('user_id', $facultyId)
-    ->where('form_status', 'OTHER')
-    ->where('indicator_id', $indicator_id)
-    ->get();
+    $facultyTargets = FacultyTarget::with([
+        'achievementOfMultidisciplinaryProjectsTarget' => function ($query) use ($indicator_id) {
+            $query->where('form_status', 'RESEARCHER')
+                ->where('indicator_id', $indicator_id);
+        }
+    ])
+        ->where('user_id', $facultyId)
+        ->where('form_status', 'OTHER')
+        ->where('indicator_id', $indicator_id)
+        ->get();
 
     // Add calculated fields to each record
     foreach ($facultyTargets as $target) {
@@ -646,23 +766,23 @@ function MultidisciplinaryProjects($facultyId, $indicator_id)
 
         // Rating logic
         if ($percentage >= 90) {
-            $rating = 'OS';  
-            $color = '#6EA8FE';  
+            $rating = 'OS';
+            $color = '#6EA8FE';
         } elseif ($percentage >= 80) {
-            $rating = 'EE'; 
+            $rating = 'EE';
             $color = '#96e2b4';
         } elseif ($percentage >= 70) {
             $rating = 'ME';
-            $color = '#ffcb9a'; 
+            $color = '#ffcb9a';
         } elseif ($percentage >= 60) {
             $rating = 'NI';
-            $color = '#fd7e13'; 
+            $color = '#fd7e13';
         } elseif ($percentage > 0) {
             $rating = 'BE';
-            $color = '#ff4c51'; 
+            $color = '#ff4c51';
         } else {
             $rating = 'NA';
-            $color = '#000000'; 
+            $color = '#000000';
         }
 
         // Add values into object
@@ -675,14 +795,16 @@ function MultidisciplinaryProjects($facultyId, $indicator_id)
 }
 function noofGrantsWon($facultyId, $indicator_id)
 {
-    $facultyTargets = FacultyTarget::with(['noofGrantsWonTarget' => function($query) use ($indicator_id) {
-        $query->where('form_status', 'RESEARCHER')
-              ->where('indicator_id', $indicator_id);
-    }])
-    ->where('user_id', $facultyId)
-    ->where('form_status', 'OTHER')
-    ->where('indicator_id', $indicator_id)
-    ->get();
+    $facultyTargets = FacultyTarget::with([
+        'noofGrantsWonTarget' => function ($query) use ($indicator_id) {
+            $query->where('form_status', 'RESEARCHER')
+                ->where('indicator_id', $indicator_id);
+        }
+    ])
+        ->where('user_id', $facultyId)
+        ->where('form_status', 'OTHER')
+        ->where('indicator_id', $indicator_id)
+        ->get();
 
     // Add calculated fields to each record
     foreach ($facultyTargets as $target) {
@@ -699,23 +821,23 @@ function noofGrantsWon($facultyId, $indicator_id)
 
         // Rating logic
         if ($percentage >= 90) {
-            $rating = 'OS';  
-            $color = '#6EA8FE';  
+            $rating = 'OS';
+            $color = '#6EA8FE';
         } elseif ($percentage >= 80) {
-            $rating = 'EE'; 
+            $rating = 'EE';
             $color = '#96e2b4';
         } elseif ($percentage >= 70) {
             $rating = 'ME';
-            $color = '#ffcb9a'; 
+            $color = '#ffcb9a';
         } elseif ($percentage >= 60) {
             $rating = 'NI';
-            $color = '#fd7e13'; 
+            $color = '#fd7e13';
         } elseif ($percentage > 0) {
             $rating = 'BE';
-            $color = '#ff4c51'; 
+            $color = '#ff4c51';
         } else {
             $rating = 'NA';
-            $color = '#000000'; 
+            $color = '#000000';
         }
 
         // Add values into object
@@ -728,75 +850,75 @@ function noofGrantsWon($facultyId, $indicator_id)
 }
 function CompletionofCourseFolder($facultyId, $indicator_id)
 {
-    $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember','facultyClass'])
-    ->where('faculty_member_id', $facultyId)
-    ->where('form_status', 'HOD')
-    ->where('completion_of_Course_folder_indicator_id', $indicator_id)
-    ->get();
-     foreach ($CompletionOfCourseFolder as $target) {
-                // Rating logic
+    $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember', 'facultyClass'])
+        ->where('faculty_member_id', $facultyId)
+        ->where('form_status', 'HOD')
+        ->where('completion_of_Course_folder_indicator_id', $indicator_id)
+        ->get();
+    foreach ($CompletionOfCourseFolder as $target) {
+        // Rating logic
         if ($target->completion_of_Course_folder == 100) {
-            $rating = 'OS';  
-            $color = '#6EA8FE'; 
-            $status= 'Completed'; 
+            $rating = 'OS';
+            $color = '#6EA8FE';
+            $status = 'Completed';
         } elseif ($target->completion_of_Course_folder == 70) {
-            $rating = 'ME'; 
+            $rating = 'ME';
             $color = '#ffcb9a';
-            $status= 'Partially Completed'; 
+            $status = 'Partially Completed';
         } elseif ($target->completion_of_Course_folder == 25) {
             $rating = 'BE';
-            $color = '#ff4c51'; 
-            $status= 'Not Completed'; 
+            $color = '#ff4c51';
+            $status = 'Not Completed';
         } else {
             $rating = 'NA';
-            $color = '#000000'; 
-            $status= 'NA'; 
+            $color = '#000000';
+            $status = 'NA';
         }
-        
+
         $target->rating = $rating;
         $target->color = $color;
         $target->status_folder = $status;
-     }
-     return $CompletionOfCourseFolder;
-    
+    }
+    return $CompletionOfCourseFolder;
 
-   
+
+
 }
 function ComplianceandUsageofLMS($facultyId, $indicator_id)
 {
-    $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember','facultyClass'])
-    ->where('faculty_member_id', $facultyId)
-    ->where('form_status', 'HOD')
-    ->where('compliance_and_usage_of_lms_indicator_id', $indicator_id)
-    ->get();
-     foreach ($CompletionOfCourseFolder as $target) {
-                // Rating logic
+    $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember', 'facultyClass'])
+        ->where('faculty_member_id', $facultyId)
+        ->where('form_status', 'HOD')
+        ->where('compliance_and_usage_of_lms_indicator_id', $indicator_id)
+        ->get();
+    foreach ($CompletionOfCourseFolder as $target) {
+        // Rating logic
         if ($target->compliance_and_usage_of_lms == 100) {
-            $rating = 'OS';  
-            $color = '#6EA8FE'; 
-            $status= 'Completed'; 
+            $rating = 'OS';
+            $color = '#6EA8FE';
+            $status = 'Completed';
         } elseif ($target->compliance_and_usage_of_lms == 70) {
-            $rating = 'ME'; 
+            $rating = 'ME';
             $color = '#ffcb9a';
-            $status= 'Partially Completed'; 
+            $status = 'Partially Completed';
         } elseif ($target->compliance_and_usage_of_lms == 25) {
             $rating = 'BE';
-            $color = '#ff4c51'; 
-            $status= 'Not Completed'; 
+            $color = '#ff4c51';
+            $status = 'Not Completed';
         } else {
             $rating = 'NA';
-            $color = '#000000'; 
-            $status= 'NA'; 
+            $color = '#000000';
+            $status = 'NA';
         }
-        
+
         $target->rating = $rating;
         $target->color = $color;
         $target->status_folder = $status;
-     }
-     return $CompletionOfCourseFolder;
-    
+    }
+    return $CompletionOfCourseFolder;
 
-   
+
+
 }
 
 if (!function_exists('generateVirtueRating')) {
@@ -1029,16 +1151,18 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
         //     ->get();
 
 
-           $facultyTargets = FacultyTarget::with([
-                'researchPublicationTargets' => function ($query) use ($indicatorId) {
-                    $query->where('form_status', 'RESEARCHER')
-                        ->where('indicator_id', $indicatorId)
-                        ->whereNotNull('journal_clasification')
-                        ->with(['coAuthors' => function ($q) {
+        $facultyTargets = FacultyTarget::with([
+            'researchPublicationTargets' => function ($query) use ($indicatorId) {
+                $query->where('form_status', 'RESEARCHER')
+                    ->where('indicator_id', $indicatorId)
+                    ->whereNotNull('journal_clasification')
+                    ->with([
+                        'coAuthors' => function ($q) {
                             $q->where('your_role', 'Student'); // Only student co-authors
-                        }])->orderBy('target_category', 'DESC');
-                }
-            ])
+                        }
+                    ])->orderBy('target_category', 'DESC');
+            }
+        ])
             ->where('user_id', $facultyId)
             ->where('form_status', 'HOD')
             ->where('indicator_id', $indicatorId)
@@ -1106,8 +1230,8 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
                 // Pick first target for optional fields
                 $firstTarget = $targets->first();
                 $coAuthorsdata = $firstTarget->coAuthors->first();
-                $studentRoll=$coAuthorsdata->student_roll_no ?? '-';
-                $studentcareer=$coAuthorsdata->career ?? '-';
+                $studentRoll = $coAuthorsdata->student_roll_no ?? '-';
+                $studentcareer = $coAuthorsdata->career ?? '-';
 
                 $data[] = [
                     'target_category' => $firstTarget->target_category,
@@ -1119,8 +1243,8 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
                     'color' => $ratingColors[$rating],
                     'rank' => $firstTarget->rank ?? '-',
                     'nationality' => $firstTarget->nationality ?? '-',
-                    'student_roll_no' =>  $studentRoll?? '-',
-                    'student_career' =>  $studentcareer?? '-',
+                    'student_roll_no' => $studentRoll ?? '-',
+                    'student_career' => $studentcareer ?? '-',
                 ];
             }
         }

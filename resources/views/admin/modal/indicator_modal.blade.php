@@ -704,36 +704,39 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                           
-                                     @php
-                                        $CompletionofCourseFolders  = CompletionofCourseFolder(Auth::user()->employee_id,120);
-                                                
+
+                                        @php
+                                            $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, 120);
+
                                         @endphp
                                         @foreach ($CompletionofCourseFolders as $CompletionofCourser)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $CompletionofCourser->facultyClass->code }}</td> 
+                                                <td>{{ $CompletionofCourser->facultyClass->code }}</td>
                                                 <td>{{ $CompletionofCourser->facultyClass?->career_code ?? 'N/A' }}</td>
                                                 <td>
-                                                <div class="badge" style="background-color: {{ $CompletionofCourser->color }}">
-                                                            {{ $CompletionofCourser->status_folder }}
-                                                        </div>
-                                                </td> 
+                                                    <div class="badge"
+                                                        style="background-color: {{ $CompletionofCourser->color }}">
+                                                        {{ $CompletionofCourser->status_folder }}
+                                                    </div>
+                                                </td>
                                                 <td>
-                                                    <div class="badge" style="background-color: {{ $CompletionofCourser->color }}">
+                                                    <div class="badge"
+                                                        style="background-color: {{ $CompletionofCourser->color }}">
 
                                                         {{ $CompletionofCourser->completion_of_Course_folder }}%
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="badge" style="background-color: {{ $CompletionofCourser->color }}">
+                                                    <div class="badge"
+                                                        style="background-color: {{ $CompletionofCourser->color }}">
 
                                                         {{ $CompletionofCourser->rating }}
                                                     </div>
                                                 </td>
                                             </tr>
                                         @endforeach
-                                       
+
                                     </tbody>
                                 </table>
                             </div>
@@ -860,35 +863,39 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     @php
-                                        $ComplianceandUsageofLMS  = ComplianceandUsageofLMS(Auth::user()->employee_id,121);
-                                                
+                                        @php
+                                            $ComplianceandUsageofLMS = ComplianceandUsageofLMS(Auth::user()->employee_id, 121);
+
                                         @endphp
                                         @foreach ($ComplianceandUsageofLMS as $ComplianceandUsageofLMSData)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $ComplianceandUsageofLMSData->facultyClass->code }}</td> 
-                                                <td>{{ $ComplianceandUsageofLMSData->facultyClass?->career_code ?? 'N/A' }}</td>
+                                                <td>{{ $ComplianceandUsageofLMSData->facultyClass->code }}</td>
+                                                <td>{{ $ComplianceandUsageofLMSData->facultyClass?->career_code ?? 'N/A' }}
+                                                </td>
                                                 <td>
-                                                <div class="badge" style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
-                                                            {{ $ComplianceandUsageofLMSData->status_folder }}
-                                                        </div>
-                                                </td> 
+                                                    <div class="badge"
+                                                        style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
+                                                        {{ $ComplianceandUsageofLMSData->status_folder }}
+                                                    </div>
+                                                </td>
                                                 <td>
-                                                    <div class="badge" style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
+                                                    <div class="badge"
+                                                        style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
 
                                                         {{ $ComplianceandUsageofLMSData->compliance_and_usage_of_lms }}%
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="badge" style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
+                                                    <div class="badge"
+                                                        style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
 
                                                         {{ $ComplianceandUsageofLMSData->rating }}
                                                     </div>
                                                 </td>
                                             </tr>
                                         @endforeach
-                                        
+
 
                                     </tbody>
                                 </table>
@@ -1007,47 +1014,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
-                                            <td>BSIT</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class=" badge bg-label-success">Timely Submitted</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-success">95%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-success me-1">EE</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
-                                            <td>BSCS</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class=" badge bg-label-success">Timely Submitted</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">90%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>3</td>
-                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                            <td>BSSE</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">Not Submitted</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-orange">85%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-orange me-1">NI</span></td>
-                                        </tr>
+                                        <td colspan="7">no record found</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -1069,47 +1036,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class=" badge bg-label-success">Timely Submitted</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-success">95%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-success me-1">EE</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CSE601560-F25-PB-GCL-BSITM-SPRING 2022-2026-BSIT-8A</td>
-                                            <td>BSIT</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class=" badge bg-label-success">Timely Submitted</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">81%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>3</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
-                                            <td>BSCS</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">Late Submitted</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-orange">85%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-orange me-1">NI</span></td>
-                                        </tr>
+                                        <td colspan="7">no record found</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -1331,19 +1258,20 @@
                                 <table class="table m-0 table-borderless">
                                     <tbody>
                                         <tr>
-                                            <td class="align-top pe-6 ps-0 py-6 text-body">
+                                            <td class="align-top pe-6 ps-0 py-6 text-body">Total Courses:
+                                                {{ count($att) }}
                                             </td>
                                             <td class="px-0 w-px-100">
-                                                <p class="fw-medium mb-2">Total Courses:</p>
-                                                <!-- <p class="fw-medium mb-2">Overload By</p> -->
-                                            </td>
-                                            <td class="px-0 w-px-100 fw-medium text-heading">
-                                                <p class="fw-medium mb-2"> @php echo count($att); @endphp </p>
-                                                <!-- <p class="fw-medium mb-2">0</p> -->
+                                                <span class="fw-medium">
+                                                    <span class="badge bg-{{ count($att) > 3 ? 'danger' : 'success' }}">
+                                                        {{ count($att) > 3 ? 'Overload' : 'Underload' }}
+                                                    </span>
+                                                </span>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
+
                             </div>
                         </div>
                     </div>
@@ -1882,7 +1810,7 @@
                 <div class="nav-align-top nav-tabs-shadow">
                     <div class="d-flex justify-content-center mb-3 mt-3">
                         <ul class="nav custom-tabs" role="tablist">
-                            
+
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
@@ -1904,7 +1832,7 @@
 
                     <!-- Tab Content -->
                     <div class="tab-content">
-                       
+
 
                         <!-- Fall -->
                         <div class="tab-pane fade show active"
@@ -1955,7 +1883,7 @@
                             </div>
                         </div>
 
-                         <!-- Spring -->
+                        <!-- Spring -->
                         <div class="tab-pane fade"
                             id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
                             role="tabpanel">
@@ -1973,8 +1901,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       
-                                       
+
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2177,10 +2105,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @php
-                                        $ResearchProductivityofPGStudents = ResearchProductivityofPGStudents(Auth::user()->employee_id,128);
-                                    @endphp
-                                     @foreach ($ResearchProductivityofPGStudents as $ResearchProductivityofPGStudent)
+                                        @php
+                                            $ResearchProductivityofPGStudents = ResearchProductivityofPGStudents(Auth::user()->employee_id, 128);
+                                        @endphp
+                                        @foreach ($ResearchProductivityofPGStudents as $ResearchProductivityofPGStudent)
                                             <tr>
                                                 <td>{{ $ResearchProductivityofPGStudent['target_category'] }}</td>
                                                 <td>{{ $ResearchProductivityofPGStudent['journal_clasification'] }}</td>
@@ -2189,19 +2117,21 @@
                                                 <td>{{ $ResearchProductivityofPGStudent['student_roll_no'] }}</td>
                                                 <td>{{ $ResearchProductivityofPGStudent['student_career'] }}</td>
                                                 <td>
-                                                    <div class="badge" style="background-color: {{$ResearchProductivityofPGStudent['color'] }}">
+                                                    <div class="badge"
+                                                        style="background-color: {{$ResearchProductivityofPGStudent['color'] }}">
                                                         {{ $ResearchProductivityofPGStudent['percentage'] }}%
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="badge" style="background-color: {{ $ResearchProductivityofPGStudent['color'] }}">
+                                                    <div class="badge"
+                                                        style="background-color: {{ $ResearchProductivityofPGStudent['color'] }}">
 
                                                         {{ $ResearchProductivityofPGStudent['rating'] }}
                                                     </div>
                                                 </td>
                                             </tr>
                                         @endforeach
-                                    
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2906,29 +2836,31 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @php
-                                $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id,135);
-                                        
-                                @endphp
-                                @foreach ($noofGrantsWon as $noofGrantsWon_row)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $noofGrantsWon_row->target }}</td>  <!-- Required target -->
-                                        <td>{{ $noofGrantsWon_row->achieved_count }}</td> <!-- Achieved count -->
-                                        <td>
-                                        <div class="badge" style="background-color: {{ $noofGrantsWon_row->color }}">
+                                    @php
+                                        $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id, 135);
+
+                                    @endphp
+                                    @foreach ($noofGrantsWon as $noofGrantsWon_row)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $noofGrantsWon_row->target }}</td> <!-- Required target -->
+                                            <td>{{ $noofGrantsWon_row->achieved_count }}</td> <!-- Achieved count -->
+                                            <td>
+                                                <div class="badge"
+                                                    style="background-color: {{ $noofGrantsWon_row->color }}">
                                                     {{ $noofGrantsWon_row->percentage }}%
                                                 </div>
-                                        </td> 
-                                        <td>
-                                            <div class="badge" style="background-color: {{ $noofGrantsWon_row->color }}">
+                                            </td>
+                                            <td>
+                                                <div class="badge"
+                                                    style="background-color: {{ $noofGrantsWon_row->color }}">
 
-                                                {{ $noofGrantsWon_row->rating }}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                    
+                                                    {{ $noofGrantsWon_row->rating }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
                                 </tbody>
                             </table>
                         </div>
@@ -2966,28 +2898,28 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                 @php
-                                $data = MultidisciplinaryProjects(Auth::user()->employee_id,136);
-                                        
-                                @endphp
-                                @foreach ($data as $row)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $row->target }}</td>  <!-- Required target -->
-                                        <td>{{ $row->achieved_count }}</td> <!-- Achieved count -->
-                                        <td>
-                                        <div class="badge" style="background-color: {{ $row->color }}">
+                                    @php
+                                        $data = MultidisciplinaryProjects(Auth::user()->employee_id, 136);
+
+                                    @endphp
+                                    @foreach ($data as $row)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $row->target }}</td> <!-- Required target -->
+                                            <td>{{ $row->achieved_count }}</td> <!-- Achieved count -->
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $row->color }}">
                                                     {{ $row->percentage }}%
                                                 </div>
-                                        </td> 
-                                        <td>
-                                            <div class="badge" style="background-color: {{ $row->color }}">
+                                            </td>
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $row->color }}">
 
-                                                {{ $row->rating }}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                                    {{ $row->rating }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
