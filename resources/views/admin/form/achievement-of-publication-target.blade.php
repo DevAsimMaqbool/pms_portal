@@ -396,6 +396,8 @@
                                 <th>#</th>
                                 <th>Created By</th>
                                 <th>Indicator Category</th>
+                                <th>Classification</th>
+                                <th>Status</th>
                                 <th>Created Date</th>
                                 <th>Actions</th>
                             </tr>
@@ -420,6 +422,8 @@
                                 <th>#</th>
                                 <th>Created By</th>
                                 <th>Indicator Category</th>
+                                <th>Classification</th>
+                                <th>Status</th>
                                 <th>Created Date</th>
                                 <th>Actions</th>
                             </tr>
@@ -459,6 +463,8 @@
                                         <th>#</th>
                                         <th>Created By</th>
                                         <th>Indicator Category</th>
+                                        <th>Classification</th>
+                                        <th>Status</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -488,6 +494,9 @@
                     <tr><th>Created Date</th><td id="modalCreatedDate"></td></tr>
                     <tbody id="modalExtraFields"></tbody>
                 </table>
+                <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center"><i class="icon-base ti tabler-history me-3"></i>History</h5>
+                <ul class="timeline mb-0" id="modalExtraFieldsHistory">
+                </ul>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -767,7 +776,7 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                     
 
                      // Fields to keep
-                    let keepFields = ['scopus_q1', 'scopus_q2', 'scopus_q3', 'scopus_q4','hec_w','hec_x','hec_w','medical_recognized'];
+                    let keepFields = ['scopus_q1', 'scopus_q2', 'scopus_q3', 'scopus_q4','hec_w','hec_x','hec_y','medical_recognized'];
 
                     // Store current values of fields to keep
                     let keepValues = {};
@@ -925,12 +934,18 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                     ? new Date(form.created_at).toISOString().split('T')[0] 
                     : 'N/A';
 
+                let statusText = 'N/A';
+                if (form.status == 1) statusText = 'Unverified';
+                else if (form.status == 2) statusText = 'Verified';
+
                 // Pass entire form as JSON in button's data attribute
                 return [
                     `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
                     i + 1,
                     form.creator ? form.creator.name : 'N/A',
                     form.target_category || 'N/A',
+                    form.journal_clasification || 'N/A',
+                    `<span class="badge bg-label-primary">${statusText}</span>`,
                     createdAt,
                     `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                 ];
@@ -944,6 +959,8 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                         { title: "#" },
                         { title: "Created By" },
                         { title: "Indicator Category" },
+                        { title: "Classification" },
+                        { title: "Status" },
                         { title: "Created Date" },
                         { title: "Actions" }
                     ]
@@ -1073,6 +1090,7 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
          $(document).on('click', '.view-form-btn', function() {
                 const form = $(this).data('form');
                 $('#modalExtraFields').find('.optional-field').remove();
+                $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
                 $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                 $('#modalTargetCategory').text(form.target_category || 'N/A');
@@ -1158,8 +1176,10 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                                         <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
                                         <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
                                         <strong>country:</strong> ${coAuthor.country || 'N/A'}<br>
-                                        <strong>Designation:</strong> ${coAuthor.designation || 'N/A'}<br>
-                                        <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}
+                                        <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
+                                        ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                        ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
+                                        ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
                                     </td>
                                 </tr>
                             `);
@@ -1172,6 +1192,60 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                             </tr>
                         `);
                     }
+                    if (form.update_history) {
+                            // Parse JSON string if it's a string
+                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                            if (history.length > 0) {
+                                
+                                let historyHtml = '';
+
+                                history.forEach(update => {
+                                    let histortText = 'N/A';
+
+                                    // Role-based status mapping
+                                    if (update.role === 'HOD') {
+                                        if (update.status == '1') histortText = 'Unverified';
+                                        else if (update.status == '2') histortText = 'Verified';
+                                    } else if (update.role === 'Dean') {
+                                        if (update.status == '2') histortText = 'Unverified';
+                                        else if (update.status == '3') histortText = 'Verified';
+                                    } else if (update.role === 'ORIC') {
+                                        if (update.status == '3') histortText = 'Unverified';
+                                        else if (update.status == '4') histortText = 'Verified';
+                                    } else {
+                                        histortText = update.status; // fallback
+                                    }
+                                    historyHtml += `
+                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                            <span class="timeline-point timeline-point-primary"></span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header mb-3">
+                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-lighter rounded-3">
+                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `;
+                                });
+
+                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            }
+                        }
+                        else {
+                            $('#modalExtraFieldsHistory').append(`
+                                <li class="optional-field">
+                                    <th>No History Avalable</th>
+                                </li>
+                            `);
+                        }
                 $('#viewFormModal').modal('show');
             });
            
@@ -1240,6 +1314,9 @@ function fetchIndicatorForms1() {
                 const createdAt = form.created_at 
                     ? new Date(form.created_at).toISOString().split('T')[0] 
                     : 'N/A';
+                    let statusText = 'N/A';
+                    if (form.status == 2) statusText = 'Unverified';
+                    else if (form.status == 3) statusText = 'Verified';
 
                 // Pass entire form as JSON in button's data attribute
                 return [
@@ -1247,6 +1324,8 @@ function fetchIndicatorForms1() {
                     i + 1,
                     form.creator ? form.creator.name : 'N/A',
                     form.target_category || 'N/A',
+                    form.journal_clasification || 'N/A',
+                    `<span class="badge bg-label-primary">${statusText}</span>`,
                     createdAt,
                     `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                 ];
@@ -1260,6 +1339,8 @@ function fetchIndicatorForms1() {
                         { title: "#" },
                         { title: "Created By" },
                         { title: "Indicator Category" },
+                        { title: "Classification" },
+                        { title: "Status" },
                         { title: "Created Date" },
                         { title: "Actions" }
                     ]
@@ -1309,6 +1390,7 @@ function fetchIndicatorForms1() {
     $(document).on('click', '.view-form-btn', function() {
         const form = $(this).data('form');
         $('#modalExtraFields').find('.optional-field').remove();
+        $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
         $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
         $('#modalTargetCategory').text(form.target_category || 'N/A');
@@ -1391,8 +1473,10 @@ function fetchIndicatorForms1() {
                                         <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
                                         <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
                                         <strong>country:</strong> ${coAuthor.country || 'N/A'}<br>
-                                        <strong>Designation:</strong> ${coAuthor.designation || 'N/A'}<br>
-                                        <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}
+                                        <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
+                                        ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                        ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
+                                        ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
                                     </td>
                                 </tr>
                             `);
@@ -1405,6 +1489,60 @@ function fetchIndicatorForms1() {
                             </tr>
                         `);
                     }
+                    if (form.update_history) {
+                            // Parse JSON string if it's a string
+                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                            if (history.length > 0) {
+                                
+                                let historyHtml = '';
+
+                                history.forEach(update => {
+                                    let histortText = 'N/A';
+
+                                    // Role-based status mapping
+                                    if (update.role === 'HOD') {
+                                        if (update.status == '1') histortText = 'Unverified';
+                                        else if (update.status == '2') histortText = 'Verified';
+                                    } else if (update.role === 'Dean') {
+                                        if (update.status == '2') histortText = 'Unverified';
+                                        else if (update.status == '3') histortText = 'Verified';
+                                    } else if (update.role === 'ORIC') {
+                                        if (update.status == '3') histortText = 'Unverified';
+                                        else if (update.status == '4') histortText = 'Verified';
+                                    } else {
+                                        histortText = update.status; // fallback
+                                    }
+                                    historyHtml += `
+                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                            <span class="timeline-point timeline-point-primary"></span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header mb-3">
+                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-lighter rounded-3">
+                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `;
+                                });
+
+                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            }
+                        }
+                        else {
+                            $('#modalExtraFieldsHistory').append(`
+                                <li class="optional-field">
+                                    <th>No History Avalable</th>
+                                </li>
+                            `);
+                        }
 
        
         $('#viewFormModal').modal('show');
@@ -1474,6 +1612,9 @@ function fetchIndicatorForms1() {
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            let statusText = 'N/A';
+                            if (form.status == 3) statusText = 'Unapprove';
+                            else if (form.status == 4) statusText = 'Approve';    
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -1481,6 +1622,8 @@ function fetchIndicatorForms1() {
                                 i + 1,
                                 form.creator ? form.creator.name : 'N/A',
                                 form.target_category || 'N/A',
+                                form.journal_clasification || 'N/A',
+                                `<span class="badge bg-label-primary">${statusText}</span>`,
                                 createdAt,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
@@ -1494,6 +1637,8 @@ function fetchIndicatorForms1() {
                                     { title: "#" },
                                     { title: "Created By" },
                                     { title: "Indicator Category" },
+                                    { title: "Classification" },
+                                    { title: "Status" },
                                     { title: "Created Date" },
                                     { title: "Actions" }
                                 ]
@@ -1541,6 +1686,7 @@ function fetchIndicatorForms1() {
                 $(document).on('click', '.view-form-btn', function () {
                     const form = $(this).data('form');
                     $('#modalExtraFields').find('.optional-field').remove();
+                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
             $('#modalTargetCategory').text(form.target_category || 'N/A');
@@ -1623,8 +1769,10 @@ function fetchIndicatorForms1() {
                                             <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
                                             <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
                                             <strong>country:</strong> ${coAuthor.country || 'N/A'}<br>
-                                            <strong>Designation:</strong> ${coAuthor.designation || 'N/A'}<br>
-                                            <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}
+                                            <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
+                                            ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                            ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
+                                            ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
                                         </td>
                                     </tr>
                                 `);
@@ -1637,6 +1785,63 @@ function fetchIndicatorForms1() {
                                 </tr>
                             `);
                         }
+                         
+                        if (form.update_history) {
+                            // Parse JSON string if it's a string
+                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                            if (history.length > 0) {
+                                
+                                let historyHtml = '';
+
+                                history.forEach(update => {
+                                    let histortText = 'N/A';
+
+                                    // Role-based status mapping
+                                    if (update.role === 'HOD') {
+                                        if (update.status == '1') histortText = 'Unverified';
+                                        else if (update.status == '2') histortText = 'Verified';
+                                    } else if (update.role === 'Dean') {
+                                        if (update.status == '2') histortText = 'Unverified';
+                                        else if (update.status == '3') histortText = 'Verified';
+                                    } else if (update.role === 'ORIC') {
+                                        if (update.status == '3') histortText = 'Unverified';
+                                        else if (update.status == '4') histortText = 'Verified';
+                                    } else {
+                                        histortText = update.status; // fallback
+                                    }
+                                    historyHtml += `
+                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                            <span class="timeline-point timeline-point-primary"></span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header mb-3">
+                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-lighter rounded-3">
+                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `;
+                                });
+
+                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            }
+                        }
+                        else {
+                            $('#modalExtraFieldsHistory').append(`
+                                <li class="optional-field">
+                                    <th>No History Avalable</th>
+                                </li>
+                            `);
+                        }
+                       
+                                                     
 
                     $('#viewFormModal').modal('show');
                 });

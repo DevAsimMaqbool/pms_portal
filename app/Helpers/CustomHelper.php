@@ -425,6 +425,7 @@ if (!function_exists('ScopusPublications')) {
             'researchPublicationTargets' => function ($query) use ($indicatorId) {
                 $query->where('form_status', 'RESEARCHER')
                     ->where('indicator_id', $indicatorId)
+                    ->where('status', 4)
                     ->whereNotNull('journal_clasification'); // Only targets with classification
             }
         ])
