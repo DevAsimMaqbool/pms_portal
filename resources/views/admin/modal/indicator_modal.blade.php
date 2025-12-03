@@ -531,49 +531,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-primary">100%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
-                                            <td>BSCS</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">90%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
-                                            <td>BSIT</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class="badge bg-label-warning">Partially Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">70%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
-
-
-
+                                        <td colspan="7">no record found</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -692,47 +650,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
-                                            <td>BSCS</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">91%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
-                                            <td>BSIT</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class="badge bg-label-warning">Partially Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-orange">85%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-orange me-1">NI</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class="badge bg-label-success">Completed</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">70%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
-
-
+                                        <td colspan="7">no record found</td>
                                     </tbody>
                                 </table>
                             </div>

@@ -905,8 +905,13 @@ function CompletionofCourseFolder($facultyId, $indicator_id)
         ->where('form_status', 'HOD')
         ->where('completion_of_Course_folder_indicator_id', $indicator_id)
         ->get();
+
+    $totalScore = 0;
+    $count = 0;
+
     foreach ($CompletionOfCourseFolder as $target) {
-        // Rating logic
+
+        // Rating logic (unchanged)
         if ($target->completion_of_Course_folder == 100) {
             $rating = 'OS';
             $color = '#6EA8FE';
@@ -920,20 +925,36 @@ function CompletionofCourseFolder($facultyId, $indicator_id)
             $color = '#ff4c51';
             $status = 'Not Completed';
         } else {
-            $rating = 'NA';
+            $rating = 'NI';
             $color = '#000000';
             $status = 'NA';
         }
 
+        // Modify object (unchanged)
         $target->rating = $rating;
         $target->color = $color;
         $target->status_folder = $status;
+
+        // For saving avg %
+        $totalScore += $target->completion_of_Course_folder;
+        $count++;
     }
+
+    // Compute average percentage
+    $avgPercentage = $count > 0 ? floor($totalScore / $count) : 0;
+
+    // Save to IndicatorsPercentage table
+    saveIndicatorPercentage(
+        $facultyId,
+        $keyPerformanceAreaId = 1,
+        $indicatorCategoryId = 3,
+        $indicator_id,
+        $avgPercentage
+    );
+
     return $CompletionOfCourseFolder;
-
-
-
 }
+
 function ComplianceandUsageofLMS($facultyId, $indicator_id)
 {
     $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember', 'facultyClass'])
@@ -941,8 +962,12 @@ function ComplianceandUsageofLMS($facultyId, $indicator_id)
         ->where('form_status', 'HOD')
         ->where('compliance_and_usage_of_lms_indicator_id', $indicator_id)
         ->get();
+
+    $percentages = []; // collect all percentages for avg
+
     foreach ($CompletionOfCourseFolder as $target) {
-        // Rating logic
+
+        // rating logic (unchanged)
         if ($target->compliance_and_usage_of_lms == 100) {
             $rating = 'OS';
             $color = '#6EA8FE';
@@ -956,19 +981,35 @@ function ComplianceandUsageofLMS($facultyId, $indicator_id)
             $color = '#ff4c51';
             $status = 'Not Completed';
         } else {
-            $rating = 'NA';
+            $rating = 'NI';
             $color = '#000000';
             $status = 'NA';
         }
 
+        // attach existing values back to object
         $target->rating = $rating;
         $target->color = $color;
         $target->status_folder = $status;
+
+        // collect for avg
+        $percentages[] = $target->compliance_and_usage_of_lms;
     }
+
+    // ✅ Calculate average of compliance (%)
+    $avgPercentage = count($percentages)
+        ? round(array_sum($percentages) / count($percentages), 2)
+        : 0;
+
+    // ✅ Save globally (corrected)
+    saveIndicatorPercentage(
+        $facultyId,
+        $keyPerformanceAreaId = 1,
+        $indicatorCategoryId = 3,
+        $indicator_id,
+        $avgPercentage
+    );
+
     return $CompletionOfCourseFolder;
-
-
-
 }
 
 if (!function_exists('generateVirtueRating')) {
