@@ -19,8 +19,12 @@ class ProductsDeliveredToIndustry extends Model
         'provide_details',
         'form_status',
         'status',
+        'update_history',
         'created_by',
         'updated_by'
+    ];
+    protected $casts = [
+        'update_history' => 'array',
     ];
     public function creator()
     {

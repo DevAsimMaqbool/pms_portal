@@ -16,8 +16,12 @@ class CommercialGainsCounsultancyResearchIncome extends Model
         'consultancy_fee',
         'consultancy_file',
         'status',
+        'update_history',
         'created_by',
         'updated_by',
+    ];
+    protected $casts = [
+        'update_history' => 'array',
     ];
     public function creator()
     {

@@ -24,6 +24,7 @@ return new class extends Migration {
             $table->enum('ip_claim', ['YES', 'NO'])->default('NO');
             $table->string('provide_details')->nullable();
             $table->enum('status', ['1', '2', '3', '4', '5', '6'])->default('1');
+            $table->json('update_history')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
