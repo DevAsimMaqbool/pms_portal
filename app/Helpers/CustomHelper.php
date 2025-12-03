@@ -635,18 +635,18 @@ function PatentsIntellectualProperty($facultyId, $indicator_id)
         ->where('indicator_id', $indicator_id)
         ->get();
 
-    // Add calculated fields to each record
+    $percentages = []; // To calculate overall average
+
     foreach ($facultyTargets as $target) {
 
         $achieved = $target->intellectualPropertyTargets->count(); // Number of achieved publications
         $required = (int) $target->target;                          // Faculty target value
 
         // Prevent divide by zero
-        if ($required > 0) {
-            $percentage = ($achieved / $required) * 100;
-        } else {
-            $percentage = 0;
-        }
+        $percentage = ($required > 0) ? ($achieved / $required) * 100 : 0;
+
+        // Save for average calculation
+        $percentages[] = $percentage;
 
         // Rating logic
         if ($percentage >= 90) {
@@ -669,14 +669,28 @@ function PatentsIntellectualProperty($facultyId, $indicator_id)
             $color = '#000000';
         }
 
-        // Add values into object
+        // Add calculated values into object
         $target->achieved_count = $achieved;
         $target->percentage = round($percentage, 2);
         $target->rating = $rating;
         $target->color = $color;
     }
+
+    // ✅ Calculate overall average percentage
+    $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
+
+    // ✅ Save globally
+    saveIndicatorPercentage(
+        $facultyId,
+        $keyPerformanceAreaId = 2,
+        $indicatorCategoryId = 8,
+        $indicator_id,
+        $avgPercentage
+    );
+
     return $facultyTargets;
 }
+
 function CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
 {
     $commercial = FacultyTarget::with([
@@ -690,23 +704,17 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
         ->where('indicator_id', $indicator_id)
         ->get();
 
-    // Add calculated fields to each record
+    $percentages = []; // For calculating overall average
+
     foreach ($commercial as $target) {
 
-
-        // All consultancy rows
         $rows = $target->commercialGainsCounsultancyTargets;
         $achieved = $rows->count();
-        // Sum consultancy fees
         $total_fee = $rows->sum('consultancy_fee');
-        $required = (int) $target->target;                          // Faculty target value
+        $required = (int) $target->target;
 
         // Prevent divide by zero
-        if ($required > 0) {
-            $percentage = ($achieved / $required) * 100;
-        } else {
-            $percentage = 0;
-        }
+        $percentage = ($required > 0) ? ($achieved / $required) * 100 : 0;
 
         // Rating logic
         if ($percentage >= 90) {
@@ -728,6 +736,9 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
             $rating = 'NA';
             $color = '#000000';
         }
+
+        // Save percentage for avg calculation
+        $percentages[] = $percentage;
 
         // Add values into object
         $target->achieved_count = $achieved;
@@ -736,33 +747,45 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
         $target->rating = $rating;
         $target->color = $color;
     }
+
+    // ✅ Calculate overall average percentage
+    $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
+
+    // ✅ Save globally
+    saveIndicatorPercentage(
+        $facultyId,
+        $keyPerformanceAreaId = 2,
+        $indicatorCategoryId = 8,
+        $indicator_id,
+        $avgPercentage
+    );
+
     return $commercial;
 }
-function MultidisciplinaryProjects($facultyId, $indicator_id)
+function MultidisciplinaryProjects($facultyId, $indicatorId)
 {
     $facultyTargets = FacultyTarget::with([
-        'achievementOfMultidisciplinaryProjectsTarget' => function ($query) use ($indicator_id) {
+        'achievementOfMultidisciplinaryProjectsTarget' => function ($query) use ($indicatorId) {
             $query->where('form_status', 'RESEARCHER')
-                ->where('indicator_id', $indicator_id);
+                ->where('indicator_id', $indicatorId);
         }
     ])
         ->where('user_id', $facultyId)
         ->where('form_status', 'OTHER')
-        ->where('indicator_id', $indicator_id)
+        ->where('indicator_id', $indicatorId)
         ->get();
 
-    // Add calculated fields to each record
+    // -------------------------
+    // EXISTING FUNCTIONALITY
+    // -------------------------
     foreach ($facultyTargets as $target) {
 
-        $achieved = $target->achievementOfMultidisciplinaryProjectsTarget->count(); // Number of achieved publications
-        $required = (int) $target->target;                          // Faculty target value
+        $achieved = $target->achievementOfMultidisciplinaryProjectsTarget->count();
+        $required = (int) $target->target;
 
-        // Prevent divide by zero
-        if ($required > 0) {
-            $percentage = ($achieved / $required) * 100;
-        } else {
-            $percentage = 0;
-        }
+        $percentage = ($required > 0)
+            ? ($achieved / $required) * 100
+            : 0;
 
         // Rating logic
         if ($percentage >= 90) {
@@ -785,14 +808,40 @@ function MultidisciplinaryProjects($facultyId, $indicator_id)
             $color = '#000000';
         }
 
-        // Add values into object
+        // Attach calculated values
         $target->achieved_count = $achieved;
-        $target->percentage = round($percentage, 2);
+        $target->percentage = floor($percentage * 100) / 100;
         $target->rating = $rating;
         $target->color = $color;
     }
+
+    // -------------------------
+    // NEW PART → CALCULATE AVG
+    // -------------------------
+
+    // Extract all percentages (already calculated)
+    $allPercentages = collect($facultyTargets)->pluck('percentage')->filter()->toArray();
+
+    if (count($allPercentages) > 0) {
+        $avgPercentage = floor((array_sum($allPercentages) / count($allPercentages)) * 100) / 100;
+    } else {
+        $avgPercentage = 0;
+    }
+
+    // -------------------------
+    // SAVE GLOBALLY
+    // -------------------------
+    saveIndicatorPercentage(
+        $facultyId,
+        $keyPerformanceAreaId = 2,
+        $indicatorCategoryId = 8,
+        $indicatorId = 136,
+        $avgPercentage
+    );
+
     return $facultyTargets;
 }
+
 function noofGrantsWon($facultyId, $indicator_id)
 {
     $facultyTargets = FacultyTarget::with([

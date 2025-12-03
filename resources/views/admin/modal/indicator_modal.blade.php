@@ -528,57 +528,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Policy Advocacy</td>
-                                        <td>30</td>
-                                        <td>25</td>
-                                        <td>
-                                            <div class="badge bg-label-success">83%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-success me-1">EE</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Policy Briefs</td>
-                                        <td>32</td>
-                                        <td>30</td>
-                                        <td>
-                                            <div class="badge bg-label-primary">93%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Popular Articles</td>
-                                        <td>33</td>
-                                        <td>10</td>
-                                        <td>
-                                            <div class=" badge bg-label-danger">30%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>White Papers</td>
-                                        <td>20</td>
-                                        <td>15</td>
-                                        <td>
-                                            <div class=" badge bg-label-warning">75%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Case Studies</td>
-                                        <td>10</td>
-                                        <td>9</td>
-                                        <td>
-                                            <div class=" badge bg-label-primary">90%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                    </tr>
-
+                                    <td colspan="5">no record found</td>
                                 </tbody>
                             </table>
                         </div>
@@ -1435,40 +1385,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class=" badge bg-label-success">45%</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">5%</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-success">90</div>
-                                            </td>
-                                            <td><span class="badge bg-label-success me-1">EE</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
-                                            <td>BSAI</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class=" badge bg-label-success">25%</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">75%</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">30</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
-
+                                        <td colspan="8">no record found</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -1491,39 +1408,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
-                                            <td>BSSE</td>
-                                            <td>PG</td>
-                                            <td>
-                                                <div class=" badge bg-label-success">44%</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">6%</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">88</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CSE601560-F25-PB-GCL-BSITM-SPRING 2022-2026-BSIT-8A</td>
-                                            <td>BSIT</td>
-                                            <td>UG</td>
-                                            <td>
-                                                <div class=" badge bg-label-success">25%</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">75%</div>
-                                            </td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">30</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
+                                        <td colspan="8">no record found</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -1587,29 +1472,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
-                                            <td>BSAI</td>
-                                            <td>PG</td>
-                                            <td>70</td>
-                                            <td>
-                                                <div class=" badge bg-label-orange">71%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-orange me-1">NI</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSSEM-SPRING 2025-2029-BSSEM-S25-1A</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>50</td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">45%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                        </tr>
+                                        <td colspan="7">no record found</td>
 
                                     </tbody>
                                 </table>
@@ -1632,29 +1495,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CSE601110-F25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-3A</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>80</td>
-                                            <td>
-                                                <div class=" badge bg-label-success">90%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-success me-1">EE</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CSE601180-F25-PB-GCL-BSITM-FALL 2022-2026-GG-BSIT-F22</td>
-                                            <td>BSIT</td>
-                                            <td>PG</td>
-                                            <td>80</td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">85%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning me-1">ME</span></td>
-                                        </tr>
+                                        <td colspan="7">no record found</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -2771,34 +2612,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Dr. Bilal Ahmad</td>
-                                        <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                        <td>BSSE</td>
-                                        <td>UG</td>
-                                        <td><span class="badge bg-label-primary">91.67%</span></td>
-                                        <td><span class="badge bg-label-primary">OS</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Dr. Arfan Jaffar</td>
-                                        <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
-                                        <td>BSCS</td>
-                                        <td>PG</td>
-                                        <td><span class="badge bg-label-success">85%</span></td>
-                                        <td><span class="badge bg-label-success">EE</span></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Dr. Tehreem Masood</td>
-                                        <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
-                                        <td>BSIT</td>
-                                        <td>PG</td>
-                                        <td><span class="badge bg-label-warning">75%</span></td>
-                                        <td><span class="badge bg-label-warning">ME</span></td>
-                                    </tr>
+                                    <td colspan="7">no record found</td>
                                 </tbody>
                             </table>
                         </div>

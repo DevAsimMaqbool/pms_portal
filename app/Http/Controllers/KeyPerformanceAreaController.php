@@ -145,7 +145,7 @@ class KeyPerformanceAreaController extends Controller
         // Map avg score to the area categories
         $area['category'] = collect($area['category'])->map(function ($cat) use ($indicatorCategories) {
             $avg = $indicatorCategories->firstWhere('indicator_category_id', $cat['id']);
-            $cat['score'] = $avg ? round($avg->avg_score, 2) : 0;
+            $cat['score'] = $avg ? floor($avg->avg_score) : 0;
             return $cat;
         });
 
@@ -194,7 +194,7 @@ class KeyPerformanceAreaController extends Controller
         $indicators = $indicators->map(function ($indicator) use ($savedPercentages) {
             if (isset($savedPercentages[$indicator->id])) {
                 $saved = $savedPercentages[$indicator->id];
-                $indicator->percentage = round($saved->score);
+                $indicator->percentage = floor($saved->score);
                 $indicator->color = $saved->color;   // ✅ add color
                 $indicator->rating = $saved->rating; // optional
             } else {
