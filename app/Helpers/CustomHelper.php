@@ -1138,19 +1138,6 @@ function avgKpaScore($employeeId, $kpaId)
 if (!function_exists('ResearchProductivityofPGStudents')) {
     function ResearchProductivityofPGStudents($facultyId, $indicatorId)
     {
-        // $facultyTargets = FacultyTarget::with([
-        //     'researchPublicationTargets' => function ($query) use ($indicatorId) {
-        //         $query->where('form_status', 'RESEARCHER')
-        //             ->where('indicator_id', $indicatorId)
-        //             ->whereNotNull('journal_clasification'); // Only targets with classification
-        //     }
-        // ])
-        //     ->where('user_id', $facultyId)
-        //     ->where('form_status', 'HOD')
-        //     ->where('indicator_id', $indicatorId)
-        //     ->get();
-
-
         $facultyTargets = FacultyTarget::with([
             'researchPublicationTargets' => function ($query) use ($indicatorId) {
                 $query->where('form_status', 'RESEARCHER')
@@ -1212,7 +1199,7 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
 
                 $count = $targets->count();
                 $percentage = ($value > 0) ? round(($count / $value) * 100, 2) : 0;
-
+                $percentages[] = $percentage;
                 // Determine rating
                 if ($percentage >= 90)
                     $rating = 'OS';
@@ -1248,6 +1235,16 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
                 ];
             }
         }
+        $avgPercentage = count($percentages)
+            ? round(array_sum($percentages) / count($percentages), 2)
+            : 0;
+        saveIndicatorPercentage(
+            $facultyId,
+            $keyPerformanceAreaId = 2,
+            $indicatorCategoryId = 6,
+            $indicatorId = 133,
+            $avgPercentage
+        );
         return $data;
     }
 }
