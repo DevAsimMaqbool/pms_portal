@@ -70,7 +70,7 @@
                                                         <label for="completed">Completed</label>
 
                                                         <input type="radio" name="folder_lms[0][completion_of_Course_folder]" id="partially_completed"
-                                                            value="50" checked>
+                                                            value="70" checked>
                                                         <label for="partially_completed">Partially Completed</label>
 
                                                         <input type="radio" name="folder_lms[0][completion_of_Course_folder]" id="not_Completed"
@@ -88,7 +88,7 @@
                                                     <label for="lms_completed">Completed</label>
 
                                                     <input type="radio" name="folder_lms[0][compliance_and_usage_of_lms]" id="lms_partially_completed"
-                                                        value="50" checked>
+                                                        value="70" checked>
                                                     <label for="lms_partially_completed">Partially Completed</label>
 
                                                     <input type="radio" name="folder_lms[0][compliance_and_usage_of_lms]" id="lms_not_Completed"
@@ -209,7 +209,7 @@
                                 <input type="radio" name="folder_lms[${grantIndex}][completion_of_Course_folder]" id="completed_${grantIndex}" value="100">
                                 <label for="completed_${grantIndex}">Completed</label>
 
-                                <input type="radio" name="folder_lms[${grantIndex}][completion_of_Course_folder]" id="partially_completed_${grantIndex}" value="50" checked>
+                                <input type="radio" name="folder_lms[${grantIndex}][completion_of_Course_folder]" id="partially_completed_${grantIndex}" value="70" checked>
                                 <label for="partially_completed_${grantIndex}">Partially Completed</label>
 
                                 <input type="radio" name="folder_lms[${grantIndex}][completion_of_Course_folder]" id="not_Completed_${grantIndex}" value="25">
@@ -223,7 +223,7 @@
                                 <input type="radio" name="folder_lms[${grantIndex}][compliance_and_usage_of_lms]" id="lms_completed_${grantIndex}" value="100">
                                 <label for="lms_completed_${grantIndex}">Completed</label>
 
-                                <input type="radio" name="folder_lms[${grantIndex}][compliance_and_usage_of_lms]" id="lms_partially_completed_${grantIndex}" value="50" checked>
+                                <input type="radio" name="folder_lms[${grantIndex}][compliance_and_usage_of_lms]" id="lms_partially_completed_${grantIndex}" value="70" checked>
                                 <label for="lms_partially_completed_${grantIndex}">Partially Completed</label>
 
                                 <input type="radio" name="folder_lms[${grantIndex}][compliance_and_usage_of_lms]" id="lms_not_Completed_${grantIndex}" value="25">
