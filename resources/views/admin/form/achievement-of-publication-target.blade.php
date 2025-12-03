@@ -764,7 +764,24 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                 success: function (response) {
                     Swal.close();
                     Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                    
+
+                     // Fields to keep
+                    let keepFields = ['scopus_q1', 'scopus_q2', 'scopus_q3', 'scopus_q4','hec_w','hec_x','hec_w','medical_recognized'];
+
+                    // Store current values of fields to keep
+                    let keepValues = {};
+                    keepFields.forEach(function(name) {
+                        keepValues[name] = form.find(`[name="${name}"]`).val();
+                    });
+
+                    // Reset the entire form
                     form[0].reset();
+
+                    // Restore the kept values
+                    keepFields.forEach(function(name) {
+                        form.find(`[name="${name}"]`).val(keepValues[name]);
+                    });
                     form.find('.invalid-feedback').remove();
                     form.find('.is-invalid').removeClass('is-invalid');
 

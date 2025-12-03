@@ -2170,122 +2170,38 @@
                                             <th>Journal Rank</th>
                                             <th>Target</th>
                                             <th>Achieved</th>
-                                            <th>Student Class</th>
-                                            <th>Program</th>
-                                            <th>Career (PG/UG)</th>
-                                            <th>Internationnaly Co-authored</th>
+                                            <th>Student</th>
+                                            <th>Career</th>
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td rowspan="4">Scopus</td>
-                                            <td>Q4</td>
-                                            <td>20</td>
-                                            <td>18</td>
-                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-primary">90%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-primary">OS</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Q3</td>
-                                            <td>32</td>
-                                            <td>30</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
-                                            <td>BSIT</td>
-                                            <td>PG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-primary">93%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-primary">OS</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Q2</td>
-                                            <td>32</td>
-                                            <td>25</td>
-                                            <td>CEE601360-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                            <td>BSCS</td>
-                                            <td>PG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">78%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Q1</td>
-                                            <td>32</td>
-                                            <td>24</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
-                                            <td>BSSE</td>
-                                            <td>PG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">71%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td rowspan="3">HEC</td>
-                                            <td>Y</td>
-                                            <td>100</td>
-                                            <td>80</td>
-                                            <td>CSE601110-F25-PB-GCL-BSDSM-FALL 2023-2027-BSDS-F23-5A</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-success">80%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-success">EE</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>X</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5A</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">50%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger">BE</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>W</td>
-                                            <td>4</td>
-                                            <td>3</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5C</td>
-                                            <td>BSAI</td>
-                                            <td>PG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">75%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Medical</td>
-                                            <td>Recognized</td>
-                                            <td>10</td>
-                                            <td>9</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5B</td>
-                                            <td>BSAI</td>
-                                            <td>PG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-primary">90%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-primary">OS</span></td>
-                                        </tr>
+                                    @php
+                                        $ResearchProductivityofPGStudents = ResearchProductivityofPGStudents(Auth::user()->employee_id,128);
+                                    @endphp
+                                     @foreach ($ResearchProductivityofPGStudents as $ResearchProductivityofPGStudent)
+                                            <tr>
+                                                <td>{{ $ResearchProductivityofPGStudent['target_category'] }}</td>
+                                                <td>{{ $ResearchProductivityofPGStudent['journal_clasification'] }}</td>
+                                                <td>{{ $ResearchProductivityofPGStudent['value'] }}</td>
+                                                <td>{{ $ResearchProductivityofPGStudent['count'] }}</td>
+                                                <td>{{ $ResearchProductivityofPGStudent['student_roll_no'] }}</td>
+                                                <td>{{ $ResearchProductivityofPGStudent['student_career'] }}</td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{$ResearchProductivityofPGStudent['color'] }}">
+                                                        {{ $ResearchProductivityofPGStudent['percentage'] }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $ResearchProductivityofPGStudent['color'] }}">
+
+                                                        {{ $ResearchProductivityofPGStudent['rating'] }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    
                                     </tbody>
                                 </table>
                             </div>
