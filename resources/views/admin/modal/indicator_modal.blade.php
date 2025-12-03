@@ -89,37 +89,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>60</td>
-                                            <td>55</td>
-                                            <td><span class="badge bg-label-primary">91.67%</span></td>
-                                            <td><span class="badge bg-label-primary">OS</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
-                                            <td>BSCS</td>
-                                            <td>UG</td>
-                                            <td>50</td>
-                                            <td>41</td>
-                                            <td><span class="badge bg-label-success">85%</span></td>
-                                            <td><span class="badge bg-label-success">EE</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>3</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSDSM-SPRING 2025-2029-BSDSM-S25-1A</td>
-                                            <td>BSIT</td>
-                                            <td>PG</td>
-                                            <td>45</td>
-                                            <td>35</td>
-                                            <td><span class="badge bg-label-warning">75%</span></td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
+                                        <td colspan="8">no record found</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -142,37 +112,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22 </td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>60</td>
-                                            <td>55</td>
-                                            <td><span class="badge bg-label-primary">91.67%</span></td>
-                                            <td><span class="badge bg-label-primary">OS</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5A</td>
-                                            <td>BSCS</td>
-                                            <td>PG</td>
-                                            <td>50</td>
-                                            <td>41</td>
-                                            <td><span class="badge bg-label-warning">85%</span></td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>3</td>
-                                            <td>CSE601560-F25-PB-GCL-BSSEM-SPRING 2022-2026-BSSE-8A</td>
-                                            <td>BSIT</td>
-                                            <td>UG</td>
-                                            <td>45</td>
-                                            <td>35</td>
-                                            <td><span class="badge bg-label-success">75%</span></td>
-                                            <td><span class="badge bg-label-success">EE</span></td>
-                                        </tr>
+                                        <td colspan="8">no record found</td>
                                     </tbody>
                                 </table>
                             </div>

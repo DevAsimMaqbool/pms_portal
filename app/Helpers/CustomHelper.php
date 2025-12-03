@@ -1213,8 +1213,8 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
             })
             ->get();
 
-
         $data = [];
+        $percentages = []; // Initialize to avoid count() on null
 
         $ratingColors = [
             'OS' => '#6EA8FE',
@@ -1250,6 +1250,7 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
                 $count = $targets->count();
                 $percentage = ($value > 0) ? round(($count / $value) * 100, 2) : 0;
                 $percentages[] = $percentage;
+
                 // Determine rating
                 if ($percentage >= 90)
                     $rating = 'OS';
@@ -1266,7 +1267,7 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
 
                 // Pick first target for optional fields
                 $firstTarget = $targets->first();
-                $coAuthorsdata = $firstTarget->coAuthors->first();
+                $coAuthorsdata = $firstTarget->coAuthors->first() ?? null;
                 $studentRoll = $coAuthorsdata->student_roll_no ?? '-';
                 $studentcareer = $coAuthorsdata->career ?? '-';
 
@@ -1280,14 +1281,16 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
                     'color' => $ratingColors[$rating],
                     'rank' => $firstTarget->rank ?? '-',
                     'nationality' => $firstTarget->nationality ?? '-',
-                    'student_roll_no' => $studentRoll ?? '-',
-                    'student_career' => $studentcareer ?? '-',
+                    'student_roll_no' => $studentRoll,
+                    'student_career' => $studentcareer,
                 ];
             }
         }
+
         $avgPercentage = count($percentages)
             ? round(array_sum($percentages) / count($percentages), 2)
             : 0;
+
         saveIndicatorPercentage(
             $facultyId,
             $keyPerformanceAreaId = 2,
@@ -1295,6 +1298,7 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
             $indicatorId = 133,
             $avgPercentage
         );
+
         return $data;
     }
 }
