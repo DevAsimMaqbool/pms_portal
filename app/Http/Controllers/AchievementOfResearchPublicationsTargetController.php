@@ -50,7 +50,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                           $forms = AchievementOfResearchPublicationsTarget::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                },'coAuthors:id,target_id,name,rank,country,designation'
+                                },'coAuthors'
                             ])
                             ->whereIn('created_by', $all_ids)
                             ->whereIn('status', [3, 2])
@@ -65,7 +65,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                         $forms = AchievementOfResearchPublicationsTarget::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
-                            },'coAuthors:id,target_id,name,rank,country,designation'
+                            },'coAuthors'
                         ])
                         ->where('created_by', $employee_id)
                         ->get();
@@ -77,7 +77,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                         $forms = AchievementOfResearchPublicationsTarget::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                },'coAuthors:id,target_id,name,rank,country,designation'
+                                },'coAuthors'
                             ])
                             ->whereIn('created_by', $employeeIds)
                             ->whereIn('status', [1, 2])
@@ -89,7 +89,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                           $forms = AchievementOfResearchPublicationsTarget::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                },'coAuthors:id,target_id,name,rank,country,designation'
+                                },'coAuthors'
                             ])
                             ->whereIn('status', [4, 3])
                             ->where('form_status', 'RESEARCHER')
@@ -286,8 +286,33 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         ]);
 
         $target = AchievementOfResearchPublicationsTarget::findOrFail($id);
+
+
+        // Get current update history
+        $history = $target->update_history ? json_decode($target->update_history, true) : [];
+
+        // Get current user info
+        $currentUserId = Auth::id();
+        $currentUserName = Auth::user()->name;
+        $userRoll = Auth::user()->getRoleNames()->first() ?? 'N/A';
+
+        // Avoid duplicate consecutive updates by the same user with the same status
+        $lastUpdate = end($history);
+        if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+            $history[] = [
+                'user_id'    => $currentUserId,
+                'user_name'  => $currentUserName,
+                'status'     => $request->status,
+                'role'     => $userRoll,
+                'updated_at' => now()->toDateTimeString(),
+            ];
+        }
+
+
+
         $target->status = $request->status;
-        $target->updated_by = Auth::id();
+        $target->update_history = json_encode($history);
+        $target->updated_by = $currentUserId;
         $target->save();
 
         return response()->json(['success' => true]);

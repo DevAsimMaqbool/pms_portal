@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('consultancy_fee')->nullable();
             $table->string('consultancy_file')->nullable();
             $table->enum('status', ['1', '2', '3', '4', '5', '6'])->default('1');
+            $table->json('update_history')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
