@@ -225,8 +225,32 @@ class IndustrialProjectsController extends Controller
         ]);
 
         $target = IndustrialProjects::findOrFail($id);
+
+        // Get current update history
+        $history = $target->update_history ? json_decode($target->update_history, true) : [];
+
+
+        // Get current user info
+        $currentUserId = Auth::id();
+        $currentUserName = Auth::user()->name;
+        $userRoll = Auth::user()->getRoleNames()->first() ?? 'N/A';
+
+        // Avoid duplicate consecutive updates by the same user with the same status
+        $lastUpdate = end($history);
+        if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+            $history[] = [
+                'user_id'    => $currentUserId,
+                'user_name'  => $currentUserName,
+                'status'     => $request->status,
+                'role'     => $userRoll,
+                'updated_at' => now()->toDateTimeString(),
+            ];
+        }
+
+
         $target->status = $request->status;
-        $target->updated_by = Auth::id();
+        $target->update_history = json_encode($history);
+        $target->updated_by = $currentUserId;
         $target->save();
 
         return response()->json(['success' => true]);

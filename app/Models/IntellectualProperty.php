@@ -20,8 +20,12 @@ class IntellectualProperty extends Model
         'date_of_filing_registration',
         'supporting_docs_as_attachment',
         'status',
+        'update_history',
         'created_by',
         'updated_by',
+    ];
+    protected $casts = [
+        'update_history' => 'array',
     ];
     public function creator()
     {

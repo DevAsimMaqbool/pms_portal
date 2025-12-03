@@ -16,8 +16,12 @@ class IndustrialProjects extends Model
         'estimated_complection',
         'attachment',
         'status',
+        'update_history',
         'created_by',
         'updated_by',
+    ];
+    protected $casts = [
+        'update_history' => 'array',
     ];
     public function creator()
     {

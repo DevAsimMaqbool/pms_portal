@@ -20,8 +20,12 @@ class NoOfGrantsSubmitAndWon extends Model
         'proof',
         'form_status',
         'status',
+        'update_history',
         'created_by',
         'updated_by'
+    ];
+    protected $casts = [
+        'update_history' => 'array',
     ];
     public function creator()
     {

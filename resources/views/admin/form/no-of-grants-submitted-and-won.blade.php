@@ -123,6 +123,7 @@
                                         <th>Created By</th>
                                         <th>Name</th>
                                         <th>Funding Agency</th>
+                                        <th>Status</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -148,6 +149,7 @@
                                         <th>Created By</th>
                                         <th>Name</th>
                                         <th>Funding Agency</th>
+                                        <th>Status</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -195,6 +197,7 @@
                                         <th>Created By</th>
                                         <th>Name</th>
                                         <th>Funding Agency</th>
+                                        <th>Status</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -234,6 +237,9 @@
                             </tr>
                             <tbody id="modalExtraFields"></tbody>
                         </table>
+                        <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center"><i class="icon-base ti tabler-history me-3"></i>History</h5>
+                        <ul class="timeline mb-0" id="modalExtraFieldsHistory">
+                        </ul>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -453,6 +459,9 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            let statusText = 'N/A';
+                            if (form.status == 1) statusText = 'Unverified';
+                            else if (form.status == 2) statusText = 'Verified';    
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -461,6 +470,7 @@
                                 form.creator ? form.creator.name : 'N/A',
                                 form.name || 'N/A',
                                 form.funding_agency || 'N/A',
+                                `<span class="badge bg-label-primary">${statusText}</span>`,
                                 createdAt,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
@@ -475,6 +485,7 @@
                                     { title: "Created By" },
                                     { title: "Name" },
                                     { title: "Funding Agency" },
+                                    { title: "Status" },
                                     { title: "Created Date" },
                                     { title: "Actions" }
                                 ]
@@ -522,6 +533,7 @@
                 $(document).on('click', '.view-form-btn', function () {
                     const form = $(this).data('form');
                     $('#modalExtraFields').find('.optional-field').remove();
+                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
@@ -611,6 +623,60 @@
                             </tr>
                         `);
                     }
+                    if (form.update_history) {
+                            // Parse JSON string if it's a string
+                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                            if (history.length > 0) {
+                                
+                                let historyHtml = '';
+
+                                history.forEach(update => {
+                                    let histortText = 'N/A';
+
+                                    // Role-based status mapping
+                                    if (update.role === 'HOD') {
+                                        if (update.status == '1') histortText = 'Unverified';
+                                        else if (update.status == '2') histortText = 'Verified';
+                                    } else if (update.role === 'Dean') {
+                                        if (update.status == '2') histortText = 'Unverified';
+                                        else if (update.status == '3') histortText = 'Verified';
+                                    } else if (update.role === 'ORIC') {
+                                        if (update.status == '3') histortText = 'Unverified';
+                                        else if (update.status == '4') histortText = 'Verified';
+                                    } else {
+                                        histortText = update.status; // fallback
+                                    }
+                                    historyHtml += `
+                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                            <span class="timeline-point timeline-point-primary"></span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header mb-3">
+                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-lighter rounded-3">
+                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `;
+                                });
+
+                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            }
+                        }
+                        else {
+                            $('#modalExtraFieldsHistory').append(`
+                                <li class="optional-field">
+                                    <th>No History Avalable</th>
+                                </li>
+                            `);
+                        }
 
                     $('#viewFormModal').modal('show');
                 });
@@ -680,6 +746,9 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            let statusText = 'N/A';
+                            if (form.status == 2) statusText = 'Unverified';
+                            else if (form.status == 3) statusText = 'Verified';     
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -688,6 +757,7 @@
                                 form.creator ? form.creator.name : 'N/A',
                                 form.name || 'N/A',
                                 form.funding_agency || 'N/A',
+                                `<span class="badge bg-label-primary">${statusText}</span>`,
                                 createdAt,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
@@ -702,6 +772,7 @@
                                     { title: "Created By" },
                                     { title: "Name" },
                                     { title: "Funding Agency" },
+                                    { title: "Status" },
                                     { title: "Created Date" },
                                     { title: "Actions" }
                                 ]
@@ -749,6 +820,7 @@
                 $(document).on('click', '.view-form-btn', function () {
                     const form = $(this).data('form');
                     $('#modalExtraFields').find('.optional-field').remove();
+                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
@@ -839,6 +911,60 @@
                             </tr>
                         `);
                     }
+                    if (form.update_history) {
+                            // Parse JSON string if it's a string
+                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                            if (history.length > 0) {
+                                
+                                let historyHtml = '';
+
+                                history.forEach(update => {
+                                    let histortText = 'N/A';
+
+                                    // Role-based status mapping
+                                    if (update.role === 'HOD') {
+                                        if (update.status == '1') histortText = 'Unverified';
+                                        else if (update.status == '2') histortText = 'Verified';
+                                    } else if (update.role === 'Dean') {
+                                        if (update.status == '2') histortText = 'Unverified';
+                                        else if (update.status == '3') histortText = 'Verified';
+                                    } else if (update.role === 'ORIC') {
+                                        if (update.status == '3') histortText = 'Unverified';
+                                        else if (update.status == '4') histortText = 'Verified';
+                                    } else {
+                                        histortText = update.status; // fallback
+                                    }
+                                    historyHtml += `
+                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                            <span class="timeline-point timeline-point-primary"></span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header mb-3">
+                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-lighter rounded-3">
+                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `;
+                                });
+
+                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            }
+                        }
+                        else {
+                            $('#modalExtraFieldsHistory').append(`
+                                <li class="optional-field">
+                                    <th>No History Avalable</th>
+                                </li>
+                            `);
+                        }
                     
 
                     $('#viewFormModal').modal('show');
@@ -909,6 +1035,9 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            let statusText = 'N/A';
+                            if (form.status == 3) statusText = 'Unapprove';
+                            else if (form.status == 4) statusText = 'Approve';      
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -917,6 +1046,7 @@
                                 form.creator ? form.creator.name : 'N/A',
                                 form.name || 'N/A',
                                 form.funding_agency || 'N/A',
+                                `<span class="badge bg-label-primary">${statusText}</span>`,
                                 createdAt,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
@@ -931,6 +1061,7 @@
                                     { title: "Created By" },
                                     { title: "Name" },
                                     { title: "Funding Agency" },
+                                    { title: "Status" },
                                     { title: "Created Date" },
                                     { title: "Actions" }
                                 ]
@@ -978,6 +1109,7 @@
                 $(document).on('click', '.view-form-btn', function () {
                     const form = $(this).data('form');
                     $('#modalExtraFields').find('.optional-field').remove();
+                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
@@ -1069,6 +1201,60 @@
                             </tr>
                         `);
                     }
+                    if (form.update_history) {
+                            // Parse JSON string if it's a string
+                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                            if (history.length > 0) {
+                                
+                                let historyHtml = '';
+
+                                history.forEach(update => {
+                                    let histortText = 'N/A';
+
+                                    // Role-based status mapping
+                                    if (update.role === 'HOD') {
+                                        if (update.status == '1') histortText = 'Unverified';
+                                        else if (update.status == '2') histortText = 'Verified';
+                                    } else if (update.role === 'Dean') {
+                                        if (update.status == '2') histortText = 'Unverified';
+                                        else if (update.status == '3') histortText = 'Verified';
+                                    } else if (update.role === 'ORIC') {
+                                        if (update.status == '3') histortText = 'Unverified';
+                                        else if (update.status == '4') histortText = 'Verified';
+                                    } else {
+                                        histortText = update.status; // fallback
+                                    }
+                                    historyHtml += `
+                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                            <span class="timeline-point timeline-point-primary"></span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header mb-3">
+                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-lighter rounded-3">
+                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `;
+                                });
+
+                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            }
+                        }
+                        else {
+                            $('#modalExtraFieldsHistory').append(`
+                                <li class="optional-field">
+                                    <th>No History Avalable</th>
+                                </li>
+                            `);
+                        }
 
                     $('#viewFormModal').modal('show');
                 });
