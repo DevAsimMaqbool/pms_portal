@@ -374,7 +374,7 @@
                         animation: { duration: 600 },
                         scales: {
                             r: {
-                                min: 50,
+                                min: Math.min(...dataset1) <= 0 ? 0 : 50,
                                 max: 100,
                                 ticks: {
                                     display: true,
@@ -418,10 +418,10 @@
                         li.style.fontSize = "9px";
                         li.style.cursor = "pointer";
                         li.innerHTML = `
-                        <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                        border-radius:50%;margin-right:5px;"></span>
-                        ${label} (${shortLabels[i]})
-                    `;
+        <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+        border-radius:50%;margin-right:5px;"></span>
+        ${label} (${shortLabels[i]})
+        `;
 
                         li.addEventListener("mouseenter", () => {
                             radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -529,23 +529,23 @@
                                 let percentage = indicator.percentage || 0;
 
                                 $list.append(`
-                                                                                                                <li class="d-flex mb-6">
-                                                                                                                    <div class="chart-progress me-4" data-color="${color}" data-series="${percentage}" data-progress_variant="true"></div>
+        <li class="d-flex mb-6">
+        <div class="chart-progress me-4" data-color="${color}" data-series="${percentage}" data-progress_variant="true"></div>
 
-                                                                                                                    <div class="row w-100 align-items-center">
-                                                                                                                        <div class="col-9">
-                                                                                                                            <div class="me-2">
-                                                                                                                                <h6 class="mb-1_5">${indicator.indicator}</h6>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                        <div class="col-3 text-end">
-                                                                                                                            <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
-                                                                                                                                <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                                                                                                                            </button>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </li>
-                                                                                                                `);
+        <div class="row w-100 align-items-center">
+        <div class="col-9">
+        <div class="me-2">
+        <h6 class="mb-1_5">${indicator.indicator}</h6>
+        </div>
+        </div>
+        <div class="col-3 text-end">
+        <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
+        <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
+        </button>
+        </div>
+        </div>
+        </li>
+        `);
                             });
 
                             initChartProgress(); // re-init charts after AJAX load
