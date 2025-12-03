@@ -133,34 +133,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-                                                                                                                                                                                                                                                                                                                                                                                                              .flip-card-inner {
-                                                                                                                                                                                                                                                                                                                                                                                                                transition: none;
-                                                                                                                                                                                                                                                                                                                                                                                                              }
-                                                                                                                                                                                                                                                                                                                                                                                                              .flip-card-front,
-                                                                                                                                                                                                                                                                                                                                                                                                              .flip-card-back {
-                                                                                                                                                                                                                                                                                                                                                                                                                position: relative;
-                                                                                                                                                                                                                                                                                                                                                                                                                transform: none;
-                                                                                                                                                                                                                                                                                                                                                                                                                backface-visibility: visible;
-                                                                                                                                                                                                                                                                                                                                                                                                              }
-                                                                                                                                                                                                                                                                                                                                                                                                              .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                                                                                                                                                                                                                                                                                                                                                  .flip-card-inner {
+                                                                                                                                                                                                                                                                                                                                                                                    transition: none;
+                                                                                                                                                                                                                                                                                                                                                                                  }
+                                                                                                                                                                                                                                                                                                                                                                                  .flip-card-front,
+                                                                                                                                                                                                                                                                                                                                                                                  .flip-card-back {
+                                                                                                                                                                                                                                                                                                                                                                                    position: relative;
+                                                                                                                                                                                                                                                                                                                                                                                    transform: none;
+                                                                                                                                                                                                                                                                                                                                                                                    backface-visibility: visible;
+                                                                                                                                                                                                                                                                                                                                                                                  }
+                                                                                                                                                                                                                                                                                                                                                                                  .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                                                                                                                              background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                                                                                                                              background-image:
-                                                                                                                                                                                                                                                                                                                                                                                                              radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                                                                                                                                                                                                                                                                                                                              radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                                                                                                                                                                                                                                                                                                                                                                  background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                                                                                                                                                                                                                                                                                                                                                                  background-image:
+                                                                                                                                                                                                                                                                                                                                                                                  radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                                                                                                                                                                                                                                                                                                                                                  radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                            background-image:
-                                                                                                                                                                                                                                                                                                                                                                                                              radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                                                                                                                                                                                                                                                                                                                              radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                                                                                                                                                                                                                                                                                                                              radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                                                                                                                                                                                                                                                                                                                                                                background-image:
+                                                                                                                                                                                                                                                                                                                                                                                  radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                                                                                                                                                                                                                                                                                                                                                  radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                                                                                                                                                                                                                                                                                                                                                  radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                              background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                                                                                                                                                                                                                                                                                                                                                  background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                              */
+                                                                                                                                                                                                                                                                                                                                                                                  */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -265,611 +265,580 @@
   </style>
 @endpush
 @section('content')
-  <!-- Content -->
-  <div class="container-xxl flex-grow-1 container-p-y">
-    <!-- Accordion1 -->
-    <div class="row gy-6">
+      <!-- Content -->
+      <div class="container-xxl flex-grow-1 container-p-y">
+        <!-- Accordion1 -->
+        <div class="row gy-6">
 
 
-      <!-- Sales Overview -->
-      <div class="col-lg-3 col-md-12 d-flex flex-column">
-        <div class="row flex-fill">
+          <!-- Sales Overview -->
+          <div class="col-lg-3 col-md-12 d-flex flex-column">
+            <div class="row flex-fill">
 
-          <!-- Generated Leads -->
-          <div class="col-lg-12 col-md-6 col-sm-12">
-            <div class="card" style="box-shadow: none;background: none;">
-              <div class="card-header text-center">
-                <div class="card-title mb-0">
-                  <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', $employee->name)) }} 🎉</h5>
-                  <div class="mb-2 rounded bg-label-success p-1" data-bs-toggle="tooltip" data-bs-placement="top"
-                    data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->department }}">
-                    <span class=" bg-label-success text-cut-department">
-                      {{ Auth::user()->department }}
-                    </span>
+              <!-- Generated Leads -->
+              <div class="col-lg-12 col-md-6 col-sm-12">
+                <div class="card" style="box-shadow: none;background: none;">
+                  <div class="card-header text-center">
+                    <div class="card-title mb-0">
+                      <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', $employee->name)) }} 🎉</h5>
+                      <div class="mb-2 rounded bg-label-success p-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->department }}">
+                        <span class=" bg-label-success text-cut-department">
+                          {{ Auth::user()->department }}
+                        </span>
+                      </div>
+                      <p class="card-subtitle">Welcome to your Performance Hub</p>
+
+                    </div>
                   </div>
-                  <p class="card-subtitle">Welcome to your Performance Hub</p>
-
                 </div>
               </div>
+              <!--/ Generated Leads -->
+              <!-- Profit last month -->
+              <div class="col-lg-4 col-md-3 col-sm-6">
+                <div class="card h-100" style="background-color: #ac7cad;">
+                  <div class="card-body d-flex justify-content-center align-items-center ">
+                    <h6 class="mb-0 text-center text-white">As {{$employee->job_title}}</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-3 col-sm-6">
+                <div class="card h-100 {{overallAvgScore(Auth::user()->employee_id)['color']}}">
+                  <div class="card-body d-flex justify-content-center align-items-center">
+                    <h4 class="mb-0 text-center">{{overallAvgScore(Auth::user()->employee_id)['avg']}}%</h4>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-md-3 col-sm-6">
+                <div class="card bg-success h-100" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.">
+                  <div class="card-body d-flex justify-content-center align-items-center">
+                    <h4 class="mb-0 text-center text-white">EE</h4>
+                  </div>
+                </div>
+              </div>
+              <!--/ Expenses -->
             </div>
           </div>
-          <!--/ Generated Leads -->
-          <!-- Profit last month -->
-          <div class="col-lg-4 col-md-3 col-sm-6">
-            <div class="card h-100" style="background-color: #ac7cad;">
-              <div class="card-body d-flex justify-content-center align-items-center ">
-                <h6 class="mb-0 text-center text-white">As {{$employee->job_title}}</h6>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-3 col-sm-6">
-            <div class="card h-100">
-              <div class="card-body d-flex justify-content-center align-items-center">
-                <h4 class="mb-0 text-center">82%</h4>
-              </div>
-            </div>
-          </div>
+          <!--/ Sales Overview -->
 
-          <div class="col-lg-4 col-md-3 col-sm-6">
-            <div class="card bg-success h-100" data-bs-toggle="tooltip" data-bs-placement="top"
-              data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.">
-              <div class="card-body d-flex justify-content-center align-items-center">
-                <h4 class="mb-0 text-center text-white">EE</h4>
-              </div>
-            </div>
-          </div>
-          <!--/ Expenses -->
-        </div>
-      </div>
-      <!--/ Sales Overview -->
+          <!-- Website Analytics -->
+          @php
+  $result = getRoleAssignments($employee->roles->first()->name);
+  $icon1 = ['tabler-book', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
+  $index2 = 0;
+          @endphp
 
-      <!-- Website Analytics -->
-      @php
-        $result = getRoleAssignments($employee->roles->first()->name);
-        $icon1 = ['tabler-book ', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
-        $colors1 = ['primary', 'success', 'warning', 'orange', 'danger'];
-        //$colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
-        $colors2 = ['#0d6efd', '#198754', '#FFA500', '#FFF200', '#dc3545'];
-        $series1 = [90, 85, 70, 65, 50];
-        $index1 = 0;
-        $index2 = 0;
-      @endphp
-      @foreach($result as $kpakey => $kpa)
-        @php
-          $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
-          $iconClass = $icon1[$index2 % count($icon1)];
-          $color1 = $colors1[$index2 % count($colors1)];
-          $index2++;
-        @endphp
-        {{-- <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
+          @foreach($result as $kpakey => $kpa)
+            @php
+    $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+    $iconClass = $icon1[$index2 % count($icon1)];
+    $index2++;
 
-          <!-- FRONT SIDE -->
-          <div class="card bg-{{ $color1 }} text-white h-100">
-            <div class="card-body d-flex justify-content-between align-items-center">
-              <div class="card-title mb-0 text-white">
-                <p class="mb-0">{{ $kpa['performance_area'] }}</p>
-              </div>
-              <div class="card-icon">
-                <span class="badge bg-label-{{ $color1 }} rounded p-2">
-                  <i class="icon-base ti {{ $iconClass }} icon-26px"></i>
-                </span>
-              </div>
-            </div>
-          </div>
+    // Get dynamic average, rating, and color
+    $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
+    $avg = $kpaResult['avg'];
+    $rating = $kpaResult['rating'];
+    $color = $kpaResult['color']; // this will be used for bg and bg-label
 
-        </div> --}}
-        <div class="col-lg-3 col-md-4" id="{{ $targetId }}">
-          <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class=" text-decoration-none">
-            <div class="flip-card h-100">
-              <div class="flip-card-inner">
+            @endphp
 
-                <!-- FRONT -->
-                <div class="flip-card-front card bg-{{ $color1 }} text-white">
+            <div class="col-lg-3 col-md-4" id="{{ $targetId }}">
+              <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
+                <div class="flip-card h-100">
+                  <div class="flip-card-inner">
 
-                  <div class="card-body position-relative d-flex flex-column justify-content-between">
-                    <div>
-                      <div class="d-flex align-items-center mb-1">
-                        <div class="avatar me-4">
-                          <span class="avatar-initial rounded bg-label-{{ $color1 }}">
-                            <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
-                          </span>
+                    <!-- FRONT -->
+                    <div class="flip-card-front card bg-{{ $color }} text-white">
+                      <div class="card-body position-relative d-flex flex-column justify-content-between">
+                        <div>
+                          <div class="d-flex align-items-center mb-1">
+                            <div class="avatar me-4">
+                              <span class="avatar-initial rounded bg-label-{{ $color }}">
+                                <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
+                              </span>
+                            </div>
+                          </div>
+                          <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
+                        </div>
+
+                        <!-- Metrics bottom right -->
+                        <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
+                          <span class="metric-badge bg-{{ $color }} fw-bold">{{ $avg }}</span>
+                          <span class="metric-badge bg-{{ $color }} fw-bold">{{ $rating }}</span>
                         </div>
                       </div>
-                      <p class=" mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
                     </div>
-                    <!-- Metrics bottom right -->
-                    <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
-                      @if ($kpa['id'] == 1)
-                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
-                        <span class=" metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
-                      @elseif ($kpa['id'] == 2)
-                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
-                        <span class=" metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
-                      @elseif ($kpa['id'] == 13)
-                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
-                        <span class=" metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
-                      @elseif ($kpa['id'] == 14)
-                        <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
-                        <span class=" metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
-                      @endif
-                    </div>
-                  </div>
 
-                </div>
-
-                <!-- BACK -->
-                <div class="flip-card-back card bg-{{ $color1 }} text-dark h-100">
-                  <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                    <div class="badge rounded p-2 mb-2 bg-label-{{ $color1 }}"><i
-                        class="icon-base ti {{ $iconClass }} icon-lg"></i>
+                    <!-- BACK -->
+                    <div class="flip-card-back card bg-{{ $color }} text-dark h-100">
+                      <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <div class="badge rounded p-2 mb-2 bg-label-{{ $color }}">
+                          <i class="icon-base ti {{ $iconClass }} icon-lg"></i>
+                        </div>
+                        <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] }}</h6>
+                        <p class="text-center mb-0 text-white fs-13">
+                          {{ $kpa['description'] ?? 'Keep performing well in this area!' }}
+                        </p>
+                      </div>
                     </div>
-                    <h6 class=" mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
-                    @if ($kpa['id'] == 1)
-                      <p class=" text-center mb-0 text-white fs-13">
-                        You’re achieving excellence with distinction.You set the pace for others to follow.
-                      </p>
-                    @elseif ($kpa['id'] == 2)
-                      <p class="text-center mb-0 text-white fs-13">
-                        You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
-                      </p>
-                    @elseif ($kpa['id'] == 13)
-                      <p class="text-center mb-0 text-white fs-13">
-                        You’re doing well and meeting your goals.Keep your consistency — it’s your strength.
-                      </p>
-                    @elseif ($kpa['id'] == 14)
-                      <p class="text-center mb-0 text-white fs-13">
-                        Represents ethical conduct and leadership grounded in integrity, empathy, humility, and
-                        accountability.
-                      </p>
-                    @else
-                      <p class="text-center mb-0 text-white fs-13">Other text</p>
-                    @endif
+
                   </div>
                 </div>
-
-              </div>
+              </a>
             </div>
-          </a>
+          @endforeach
+
+          <!--/ Website Analytics -->
+
         </div>
+        <div class="row gy-6 mt-2">
 
-      @endforeach
-
-      <!--/ Website Analytics -->
-
-    </div>
-    <div class="row gy-6 mt-2">
-
-      <div class="col-md-6 col-lg-4">
-        <div class="d-flex justify-content-between">
-          <h5 class="fw-bold">Key Indicators</h5>
-        </div>
-        <!--/ Statistics -->
-        <div id="scrollableCol">
-          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-warning"
-            data-bs-original-title="You’re on your way — just refine and push forward.Every effort moves you closer to success.">
-            <div class="card-body d-flex">
-              <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-orange rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-mood-smile icon-md"></i>
-                </div>
-                <div>
-                  <small class="text-dark text-cut-hot">Student Satisfaction</small>
+          <div class="col-md-6 col-lg-4">
+            <div class="d-flex justify-content-between">
+              <h5 class="fw-bold">Key Indicators</h5>
+            </div>
+            <!--/ Statistics -->
+            <div id="scrollableCol">
+              <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                data-bs-custom-class="tooltip-warning"
+                data-bs-original-title="You’re on your way — just refine and push forward.Every effort moves you closer to success.">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-50 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-mood-smile icon-md"></i>
+                    </div>
+                    <div>
+                      <small class="text-dark text-cut-hot">Student Satisfaction</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center">
+                    <div class="progress w-100 me-4" style="height:8px;">
+                      <div class="progress-bar bg-orange" role="progressbar" style="width: 0%" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">0%</span>
+                    <span class="badge bg-label-secondary ms-1">N/A</span>
+                  </div>
                 </div>
               </div>
-              <div class="d-flex flex-grow-1 align-items-center">
-                <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+              @php
+  // Get dynamic average, rating, and color
+  $kpaResult = indicatorAvgScore(117, Auth::user()->employee_id);
+  $avg = $kpaResult['avg'];
+  $rating = $kpaResult['rating'];
+  $color = $kpaResult['color']; // this will be used for bg and bg-label
+
+              @endphp
+              <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                data-bs-custom-class="tooltip-{{$color}}"
+                data-bs-original-title="You’re achieving excellence with distinction.You set the pace for others to follow.">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-50 align-items-center me-4">
+                    <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-chalkboard icon-md"></i></div>
+                    <div>
+                      <small class="text-dark text-cut-hot">Classes Held</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center">
+                    <div class="progress w-100 me-4" style="height:8px;">
+                      <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$avg}}%" aria-valuenow="{{$avg}}"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">{{$avg}}%</span>
+                    <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
+                  </div>
                 </div>
-                <span class="text-body-secondary">65%</span>
-                <span class="badge bg-label-orange ms-1">NI</span>
+              </div>
+
+              <!-- <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                                                    data-bs-custom-class="tooltip-warning"
+                                                    data-bs-original-title="You’re doing well and meeting your goals.Keep your consistency — it’s your strength.">
+                                                    <div class="card-body d-flex">
+                                                      <div class="d-flex w-50 align-items-center me-4">
+                                                        <div class="badge bg-label-warning rounded p-1_5 me-4"><i
+                                                            class="icon-base ti tabler-user-check icon-md"></i></div>
+                                                        <div>
+                                                          <small class="text-dark text-cut-hot">Student Attendance</small>
+                                                        </div>
+                                                      </div>
+                                                      <div class="d-flex flex-grow-1 align-items-center">
+                                                        <div class="progress w-100 me-4" style="height:8px;">
+                                                          <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="65"
+                                                            aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                        <span class="text-body-secondary">70%</span>
+                                                        <span class="badge bg-label-warning ms-1">ME</span>
+                                                      </div>
+                                                    </div>
+                                                  </div> -->
+              @php
+  // Get dynamic average, rating, and color
+  $kpaResult = indicatorAvgScore(128, Auth::user()->employee_id);
+  $avg = $kpaResult['avg'];
+  $rating = $kpaResult['rating'];
+  $color = $kpaResult['color']; // this will be used for bg and bg-label
+
+              @endphp
+              <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                data-bs-custom-class="tooltip-{{$color}}"
+                data-bs-original-title="Not quite there yet — but growth starts here.Reflect. Refocus. Rise higher.">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-50 align-items-center me-4">
+                    <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-book-2 icon-md"></i>
+                    </div>
+                    <div>
+                      <small class="text-dark text-cut-hot">Research Publications</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center">
+                    <div class="progress w-100 me-4" style="height:8px;">
+                      <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$avg}}%" aria-valuenow="{{$avg}}"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">{{$avg}}%</span>
+                    <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                data-bs-custom-class="tooltip-secondary"
+                data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-50 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
+                    </div>
+                    <div>
+                      <small class="text-dark text-cut-hot">Manager Satisfaction</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center">
+                    <div class="progress w-100 me-4" style="height:8px;">
+                      <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">0%</span>
+                    <span class="badge bg-label-secondary ms-1">N/A</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-primary"
-            data-bs-original-title="You’re achieving excellence with distinction.You set the pace for others to follow.">
-            <div class="card-body d-flex">
-              <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-primary rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-chalkboard icon-md"></i></div>
-                <div>
-                  <small class="text-dark text-cut-hot">Classes Held</small>
+          <div class="col-md-6 col-lg-4">
+
+            <div class=" d-flex justify-content-between">
+              <h5 class="fw-bold">Top Performers</h5>
+            </div>
+            <div id="scrollableCol1">
+              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success"
+                data-bs-original-title="(Lecturer) Department of Software Engineering">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-70 align-items-center me-4">
+                    <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-0 text-cut">Haider Ali</h6>
+                      <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                    <span class="badge bg-label-success ms-1">82</span>
+                    <span class="badge bg-label-success ms-1">EE</span>
+                  </div>
                 </div>
               </div>
-              <div class="d-flex flex-grow-1 align-items-center">
-                <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 65%" aria-valuenow="65"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+
+
+
+              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-primary"
+                data-bs-original-title="(Lecturer) Superior University Franchise.">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-70 align-items-center me-4">
+                    <div class="badge bg-label-primary rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-0 text-cut">Sadia Ashraf</h6>
+                      <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                    <span class="badge bg-label-primary ms-1">91</span>
+                    <span class="badge bg-label-primary ms-1">OS</span>
+                  </div>
                 </div>
-                <span class="text-body-secondary">90%</span>
-                <span class="badge bg-label-primary ms-1">OS</span>
+              </div>
+
+              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning"
+                data-bs-original-title="(Lecturer) Superior University Franchise">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-70 align-items-center me-4">
+                    <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-0 text-cut">Amna Ilyas</h6>
+                      <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                    <span class="badge bg-label-warning ms-1">70</span>
+                    <span class="badge bg-label-warning ms-1">ME</span>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-danger"
+                data-bs-original-title="(Lecturer) Teaching">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-70 align-items-center me-4">
+                    <div class="badge bg-label-danger rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-trophy-off icon-md"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-0 text-cut">Muhammad Ashraf</h6>
+
+                      <small class="text-dark fs-10 text-cut">Teaching</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                    <span class="badge bg-label-danger ms-1">50</span>
+                    <span class="badge bg-label-danger ms-1">BE</span>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning"
+                data-bs-original-title="(Lecturer) Faisalabad - Uni Campus">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-70 align-items-center me-4">
+                    <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-0">Rashid Hussain</h6>
+                      <small class="text-dark fs-10">Faisalabad - Uni Campus</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                    <span class="badge bg-label-warning ms-1">70</span>
+                    <span class="badge bg-label-warning ms-1">ME</span>
+                  </div>
+                </div>
               </div>
             </div>
+
           </div>
 
-          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-warning"
-            data-bs-original-title="You’re doing well and meeting your goals.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Keep your consistency — it’s your strength.">
-            <div class="card-body d-flex">
-              <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-warning rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-user-check icon-md"></i></div>
-                <div>
-                  <small class="text-dark text-cut-hot">Student Attendance</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center">
-                <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="65"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="text-body-secondary">70%</span>
-                <span class="badge bg-label-warning ms-1">ME</span>
-              </div>
+          <div class="col-md-6 col-lg-4">
+            <div class=" d-flex justify-content-between">
+              <h5 class="fw-bold">Overall KPA Performance</h5>
             </div>
-          </div>
-          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-danger"
-            data-bs-original-title="Not quite there yet — but growth starts here.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Reflect. Refocus. Rise higher.">
-            <div class="card-body d-flex">
-              <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-danger rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
+            <div class="row g-6">
+              <!-- Profit last month -->
+              <!-- Generated Leads -->
+              <div class="col-xl-12">
+                <div class="card caed-wave-bg ">
+                  <div class="card-header d-flex justify-content-between">
+                    <div class="card-title mb-0">
+                      <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><span
+                          class="icon-xs icon-base ti tabler-chart-pie me-2"></span>Overall </button>
+                    </div>
+                    <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="top"
+                      data-bs-original-title="View large">
+                      <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button"
+                        data-bs-toggle="modal" data-bs-target="#fullscreenModal">
+                        <i class="icon-base ti tabler-arrows-maximize"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <canvas class="chartjs" id="radarChart1"></canvas>
+                  </div>
                 </div>
-                <div>
-                  <small class="text-dark text-cut-hot">Research Publications</small>
-                </div>
+
               </div>
-              <div class="d-flex flex-grow-1 align-items-center">
-                <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="text-body-secondary">50%</span>
-                <span class="badge bg-label-danger ms-1">BE</span>
-              </div>
+
+              <!--/ Generated Leads -->
+
+
+              <!--/ Expenses -->
             </div>
-          </div>
-
-          <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-success"
-            data-bs-original-title="You’re going beyond what’s asked of you.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Keep shining — your impact inspires others.">
-            <div class="card-body d-flex">
-              <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
-                </div>
-                <div>
-                  <small class="text-dark text-cut-hot">Manager Satisfaction</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center">
-                <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="text-body-secondary">86%</span>
-                <span class="badge bg-label-success ms-1">EE</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4">
-
-        <div class=" d-flex justify-content-between">
-          <h5 class="fw-bold">Top Performers</h5>
-        </div>
-        <div id="scrollableCol1">
-          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success"
-            data-bs-original-title="(Lecturer) Department of Software Engineering">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-success rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
-                </div>
-                <div>
-                  <h6 class="mb-0 text-cut">Haider Ali</h6>
-                  <small class="text-dark fs-10 text-cut">Department of Software Engineering</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                <span class="badge bg-label-success ms-1">82</span>
-                <span class="badge bg-label-success ms-1">EE</span>
-              </div>
-            </div>
-          </div>
 
 
 
-          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-primary"
-            data-bs-original-title="(Lecturer) Superior University Franchise.">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-primary rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
-                </div>
-                <div>
-                  <h6 class="mb-0 text-cut">Sadia Ashraf</h6>
-                  <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                <span class="badge bg-label-primary ms-1">91</span>
-                <span class="badge bg-label-primary ms-1">OS</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning"
-            data-bs-original-title="(Lecturer) Superior University Franchise">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
-                </div>
-                <div>
-                  <h6 class="mb-0 text-cut">Amna Ilyas</h6>
-                  <small class="text-dark fs-10 text-cut">Superior University Franchise</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                <span class="badge bg-label-warning ms-1">70</span>
-                <span class="badge bg-label-warning ms-1">ME</span>
-              </div>
-            </div>
-          </div>
 
 
-          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-danger"
-            data-bs-original-title="(Lecturer) Teaching">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-danger rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-trophy-off icon-md"></i>
-                </div>
-                <div>
-                  <h6 class="mb-0 text-cut">Muhammad Ashraf</h6>
-
-                  <small class="text-dark fs-10 text-cut">Teaching</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                <span class="badge bg-label-danger ms-1">50</span>
-                <span class="badge bg-label-danger ms-1">BE</span>
-              </div>
-            </div>
           </div>
 
 
 
-          <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-warning"
-            data-bs-original-title="(Lecturer) Faisalabad - Uni Campus">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-warning rounded p-1_5 me-4"><i class="icon-base ti tabler-award icon-md"></i>
-                </div>
-                <div>
-                  <h6 class="mb-0">Rashid Hussain</h6>
-                  <small class="text-dark fs-10">Faisalabad - Uni Campus</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
 
-                <span class="badge bg-label-warning ms-1">70</span>
-                <span class="badge bg-label-warning ms-1">ME</span>
+
+          <!-- Website Analytics -->
+          <div class="col-xl-4 col">
+
+            <div class="card h-100">
+              <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title m-0 me-2">Research Innovation & Commercialization</h5>
+
+              </div>
+              <div class="card-body">
+                <div id="carrierPerformance"></div>
+                <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
               </div>
             </div>
           </div>
-        </div>
+          <!--/ Website Analytics -->
 
-      </div>
+          <!-- Average Daily Sales -->
+          <div class="col-xl-4 col-sm-6">
+            <div class="card h-100">
+              <div class="card-header d-flex align-items-center justify-content-between">
+                <div class="card-title mb-0">
+                  <h5 class="m-0 me-2">Virtue Mirror</h5>
+                </div>
+              </div>
+              <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
+              <div class="card-body pt-2">
+                <canvas class="chartjs" id="virtueChart" data-height="355"></canvas>
+              </div>
 
-      <div class="col-md-6 col-lg-4">
-        <div class=" d-flex justify-content-between">
-          <h5 class="fw-bold">Overall KPA Performance</h5>
-        </div>
-        <div class="row g-6">
-          <!-- Profit last month -->
-          <!-- Generated Leads -->
-          <div class="col-xl-12">
-            <div class="card caed-wave-bg ">
+            </div>
+          </div>
+          <!--/ Average Daily Sales -->
+          <!-- Website Analytics -->
+          <div class="col-xl-4 col">
+            <div class="card h-100">
               <div class="card-header d-flex justify-content-between">
                 <div class="card-title mb-0">
-                  <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><span
-                      class="icon-xs icon-base ti tabler-chart-pie me-2"></span>Overall </button>
-                </div>
-                <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="top"
-                  data-bs-original-title="View large">
-                  <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button"
-                    data-bs-toggle="modal" data-bs-target="#fullscreenModal">
-                    <i class="icon-base ti tabler-arrows-maximize"></i>
-                  </button>
+                  <h5 class="mb-1">Milestones Unlocked</h5>
+                  <p class="card-subtitle">Each badge tells your success story.</p>
                 </div>
               </div>
               <div class="card-body">
-                <canvas class="chartjs" id="radarChart1"></canvas>
-              </div>
-            </div>
-
-          </div>
-
-          <!--/ Generated Leads -->
-
-
-          <!--/ Expenses -->
-        </div>
-
-
-
-
-
-      </div>
-
-
-
-
-
-      <!-- Website Analytics -->
-      <div class="col-xl-4 col">
-
-        <div class="card h-100">
-          <div class="card-header d-flex align-items-center justify-content-between">
-            <h5 class="card-title m-0 me-2">Research Innovation & Commercialization</h5>
-
-          </div>
-          <div class="card-body">
-            <div id="carrierPerformance"></div>
-            <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
-          </div>
-        </div>
-      </div>
-      <!--/ Website Analytics -->
-
-      <!-- Average Daily Sales -->
-      <div class="col-xl-4 col-sm-6">
-        <div class="card h-100">
-          <div class="card-header d-flex align-items-center justify-content-between">
-            <div class="card-title mb-0">
-              <h5 class="m-0 me-2">Virtue Mirror</h5>
-            </div>
-          </div>
-          <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
-          <div class="card-body pt-2">
-            <canvas class="chartjs" id="virtueChart" data-height="355"></canvas>
-          </div>
-
-        </div>
-      </div>
-      <!--/ Average Daily Sales -->
-      <!-- Website Analytics -->
-      <div class="col-xl-4 col">
-        <div class="card h-100">
-          <div class="card-header d-flex justify-content-between">
-            <div class="card-title mb-0">
-              <h5 class="mb-1">Milestones Unlocked</h5>
-              <p class="card-subtitle">Each badge tells your success story.</p>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="d-flex justify-content-center gap-3 flex-wrap">
-              <div class="avatar avatar-xxl d-flex flex-column align-items-center" style="background: none !important;"
-                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
-                data-bs-custom-class="tooltip-secondary" title="Score: 90% <br>Year: 2025<br>Indicator: Classes Held">
-                <img src="{{ asset('admin/assets/img/avatars/gold-badge.png') }}" class="rounded-circle mb-1">
-                <div class="text-center">
-                  <span class="badge mb-1" style="background-color: #fdcc55 !important;">Gold</span><br>
-                  <span class="badge inde-status">2025</span>
-                </div>
-              </div>
-
-              <div class="avatar avatar-xxl d-flex flex-column align-items-center" style="background: none !important;"
-                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
-                data-bs-custom-class="tooltip-secondary"
-                title="Score: 90% <br>Year: 2025<br>Indicator: Number of Knowledge Products">
-                <img src="{{ asset('admin/assets/img/avatars/silver-badge.png') }}" class="rounded-circle mb-1">
-                <div class="text-center">
-                  <span class="badge mb-1" style="background-color: #b3bac4 !important;">Silver</span><br>
-                  <span class="badge inde-status">2025</span>
-                </div>
-              </div>
-
-              <div class="avatar avatar-xxl d-flex flex-column align-items-center" style="background: none !important;"
-                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
-                data-bs-custom-class="tooltip-secondary"
-                title="Score: 90% <br>Year: 2025<br>Indicator: Student Satisfaction">
-                <img src="{{ asset('admin/assets/img/avatars/bronze-badge.png') }}" class="rounded-circle mb-1">
-                <div class="text-center">
-                  <span class="badge mb-1" style="background-color: #ba8353 !important;">Bronze</span><br>
-                  <span class="badge inde-status">2025</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--/ Website Analytics -->
-
-
-  </div>
-  <!--/ Accordion1 -->
-
-
-
-
-
-  <!-- Modal -->
-  <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalFullTitle">Overall KPA Performance</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-
-
-
-          <div class="row g-6 pt-2">
-            <div class="col-12 col-12" id="targetDivchart">
-              <div class="card caed-wave-bg">
-
-                <div class="card-header d-flex justify-content-between">
-                  <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-                    <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
-                    <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
-
-                    <input type="radio" class="btn-check" name="termRadio" id="spring25">
-                    <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
-
-                    <input type="radio" class="btn-check" name="termRadio" id="fall25">
-                    <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
-                  </div>
-                </div>
-
-                <div class="card-body pt-0">
-                  <div class="row justify-content-center text-center">
-                    <div class="col-md-8 d-flex justify-content-center">
-                      <canvas class="chartjs" id="radarChart"></canvas>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                  <div class="avatar avatar-xxl d-flex flex-column align-items-center" style="background: none !important;"
+                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                    data-bs-custom-class="tooltip-secondary" title="Score: 90% <br>Year: 2025<br>Indicator: Classes Held">
+                    <img src="{{ asset('admin/assets/img/avatars/gold-badge.png') }}" class="rounded-circle mb-1">
+                    <div class="text-center">
+                      <span class="badge mb-1" style="background-color: #fdcc55 !important;">Gold</span><br>
+                      <span class="badge inde-status">2025</span>
                     </div>
+                  </div>
 
-                    <div class="col-12 mt-2">
-                      <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0"
-                        style="list-style:none;">
-                      </ul>
+                  <div class="avatar avatar-xxl d-flex flex-column align-items-center" style="background: none !important;"
+                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                    data-bs-custom-class="tooltip-secondary"
+                    title="Score: 90% <br>Year: 2025<br>Indicator: Number of Knowledge Products">
+                    <img src="{{ asset('admin/assets/img/avatars/silver-badge.png') }}" class="rounded-circle mb-1">
+                    <div class="text-center">
+                      <span class="badge mb-1" style="background-color: #b3bac4 !important;">Silver</span><br>
+                      <span class="badge inde-status">2025</span>
+                    </div>
+                  </div>
+
+                  <div class="avatar avatar-xxl d-flex flex-column align-items-center" style="background: none !important;"
+                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                    data-bs-custom-class="tooltip-secondary"
+                    title="Score: 90% <br>Year: 2025<br>Indicator: Student Satisfaction">
+                    <img src="{{ asset('admin/assets/img/avatars/bronze-badge.png') }}" class="rounded-circle mb-1">
+                    <div class="text-center">
+                      <span class="badge mb-1" style="background-color: #ba8353 !important;">Bronze</span><br>
+                      <span class="badge inde-status">2025</span>
                     </div>
                   </div>
                 </div>
 
-
               </div>
             </div>
           </div>
-
-
-
-
-
-
-
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+        <!--/ Website Analytics -->
+
+
+      </div>
+      <!--/ Accordion1 -->
+
+
+
+
+
+      <!-- Modal -->
+      <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalFullTitle">Overall KPA Performance</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+
+              <div class="row g-6 pt-2">
+                <div class="col-12 col-12" id="targetDivchart">
+                  <div class="card caed-wave-bg">
+
+                    <div class="card-header d-flex justify-content-between">
+                      <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                        <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
+                        <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
+
+                        <input type="radio" class="btn-check" name="termRadio" id="spring25">
+                        <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
+
+                        <input type="radio" class="btn-check" name="termRadio" id="fall25">
+                        <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
+                      </div>
+                    </div>
+
+                    <div class="card-body pt-0">
+                      <div class="row justify-content-center text-center">
+                        <div class="col-md-8 d-flex justify-content-center">
+                          <canvas class="chartjs" id="radarChart"></canvas>
+                        </div>
+
+                        <div class="col-12 mt-2">
+                          <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0"
+                            style="list-style:none;">
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  </div>
-  <!-- / Content -->
+      </div>
+      <!-- / Content -->
 @endsection
 @push('script')
   <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
@@ -958,8 +927,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                                                                                                                                                                                                                                                                                #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                                                                                                                              `;
+                                                                                                                                                                                                                                                                                                                                                                                    #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                                                                                                                                                                  `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -987,8 +956,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                                                                                                                                                                                                                                                                                #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                                                                                                                              `;
+                                                                                                                                                                                                                                                                                                                                                                                    #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                                                                                                                                                                  `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1134,10 +1103,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                                                                                                                                                                                                                                                                                                              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                                                                                                                                                                                                                                                                                                              border-radius:50%;margin-right:5px;"></span>
-                                                                                                                                                                                                                                                                                                                                                                                                              ${label} (${shortLabels[i]})
-                                                                                                                                                                                                                                                                                                                                                                                                              `;
+                                                                                                                                                                                                                                                                                                                                                                                  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                                                                                                                                                                                                                                                  border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                                                                                                                                                                                                                                                  ${label} (${shortLabels[i]})
+                                                                                                                                                                                                                                                                                                                                                                                  `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1289,10 +1258,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                                                                                                                                                                                                                                                                                                              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                                                                                                                                                                                                                                                                                                              border-radius:50%;margin-right:5px;"></span>
-                                                                                                                                                                                                                                                                                                                                                                                                              ${label} (${shortLabels[i]})
-                                                                                                                                                                                                                                                                                                                                                                                                              `;
+                                                                                                                                                                                                                                                                                                                                                                                  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                                                                                                                                                                                                                                                  border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                                                                                                                                                                                                                                                  ${label} (${shortLabels[i]})
+                                                                                                                                                                                                                                                                                                                                                                                  `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);

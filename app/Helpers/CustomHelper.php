@@ -1344,6 +1344,113 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
     }
 }
 
+function overallAvgScore($emp_id)
+{
+    $avg = IndicatorsPercentage::where('employee_id', $emp_id)
+        ->avg('score');
+
+    $avg = $avg ? round($avg, 2) : 0.00;
+
+    // Determine rating & color dynamically
+    if ($avg >= 90 && $avg <= 100) {
+        $color = 'bg-label-primary';
+        $rating = 'OS';
+    } elseif ($avg >= 80) {
+        $color = 'bg-label-success';
+        $rating = 'EE';
+    } elseif ($avg >= 70) {
+        $color = 'bg-label-warning';
+        $rating = 'ME';
+    } elseif ($avg >= 60) {
+        $color = 'bg-label-orange';
+        $rating = 'NI';
+    } elseif ($avg >= 50) {
+        $color = 'bg-label-danger';
+        $rating = 'BE';
+    } else {
+        $color = 'secondary';
+        $rating = 'NA';
+    }
+
+    return [
+        'avg' => $avg,
+        'rating' => $rating,
+        'color' => $color,
+    ];
+}
+
+function kpaAvgScore($kpa_id, $emp_id)
+{
+    $avg = IndicatorsPercentage::where('employee_id', $emp_id)
+        ->where('key_performance_area_id', $kpa_id)
+        ->avg('score');
+
+    $avg = $avg ? round($avg, 2) : 0.00;
+
+    // Determine rating & color dynamically
+    if ($avg >= 90 && $avg <= 100) {
+        $color = 'primary';
+        $rating = 'OS';
+    } elseif ($avg >= 80) {
+        $color = 'success';
+        $rating = 'EE';
+    } elseif ($avg >= 70) {
+        $color = 'warning';
+        $rating = 'ME';
+    } elseif ($avg >= 60) {
+        $color = 'orange';
+        $rating = 'NI';
+    } elseif ($avg >= 50) {
+        $color = 'danger';
+        $rating = 'BE';
+    } else {
+        $color = 'secondary';
+        $rating = 'NA';
+    }
+
+    return [
+        'avg' => $avg,
+        'rating' => $rating,
+        'color' => $color,
+    ];
+}
+
+function indicatorAvgScore($indicator_id, $emp_id)
+{
+    $avg = IndicatorsPercentage::where('employee_id', $emp_id)
+        ->where('indicator_id', $indicator_id)
+        ->avg('score');
+
+    $avg = $avg ? round($avg, 2) : 0.00;
+
+    if ($avg >= 90 && $avg <= 100) {
+        $color = 'primary';
+        $rating = 'OS';
+    } elseif ($avg >= 80) {
+        $color = 'success';
+        $rating = 'EE';
+    } elseif ($avg >= 70) {
+        $color = 'warning';
+        $rating = 'ME';
+    } elseif ($avg >= 60) {
+        $color = 'warning';
+        $rating = 'NI';
+    } elseif ($avg >= 50) {
+        $color = 'danger';
+        $rating = 'BE';
+    } else {
+        $color = 'secondary';
+        $rating = 'NA';
+    }
+
+    return [
+        'avg' => $avg,
+        'rating' => $rating,
+        'color' => $color,
+    ];
+}
+
+
 
 
 
