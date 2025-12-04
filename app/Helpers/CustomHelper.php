@@ -1450,6 +1450,59 @@ function indicatorAvgScore($indicator_id, $emp_id)
     ];
 }
 
+function indicatorCategoryAvgScore($category_id, $kpa_id, $emp_id)
+{
+    $avg = IndicatorsPercentage::where('employee_id', $emp_id)
+        ->where('key_performance_area_id', $kpa_id)
+        ->where('indicator_category_id', $category_id)
+        ->avg('score');
+
+    $avg = $avg ? round($avg, 2) : 0.00;
+
+    // Determine rating & color dynamically
+    if ($avg >= 90) {
+        $color = 'primary';
+        $rating = 'OS';
+    } elseif ($avg >= 80) {
+        $color = 'success';
+        $rating = 'EE';
+    } elseif ($avg >= 70) {
+        $color = 'warning';
+        $rating = 'ME';
+    } elseif ($avg >= 60) {
+        $color = 'orange';
+        $rating = 'NI';
+    } elseif ($avg >= 0) {
+        $color = 'danger';
+        $rating = 'BE';
+    } else {
+        $color = 'secondary';
+        $rating = 'N/A';
+    }
+
+    return [
+        'avg' => $avg,
+        'rating' => $rating,
+        'color' => $color,
+    ];
+}
+
+function topThreeIndicators(int $kpaId, int $employeeId = null): array
+{
+    $employeeId = $employeeId ?? auth()->id();
+
+    // Fetch top 3 indicators ordered by score descending
+    $topIndicators = \DB::table('indicators_percentages')
+        ->where('employee_id', $employeeId)
+        ->where('key_performance_area_id', $kpaId)
+        ->orderByDesc('score')
+        ->limit(3)
+        ->pluck('indicator_id')
+        ->toArray();
+
+    return $topIndicators;
+}
+
 
 
 
