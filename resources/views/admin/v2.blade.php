@@ -26,11 +26,15 @@
       font-size: 13px !important;
     }
 
-    .bg-orange,
-    .bg-label-orange {
+    .bg-orange{
       background-color: #fd7e1459 !important;
       color: #fd7e14 !important
     }
+    .bg-label-orange {
+    background-color: color-mix(in sRGB, var(--bs-paper-bg) var(--bs-bg-label-tint-amount), var(--bs-orange)) !important;
+    color: var(--bs-orange) !important;
+}
+
 
     .card-border-shadow-orange {
       --bs-card-border-bottom-color: #FFF200 !important
@@ -327,6 +331,7 @@
           @php
   $result = getRoleAssignments($employee->roles->first()->name);
   $icon1 = ['tabler-book', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
+  $static_color = ['primary', 'success', 'warning', 'orange', 'danger'];
   $index2 = 0;
           @endphp
 
@@ -334,6 +339,7 @@
             @php
     $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
     $iconClass = $icon1[$index2 % count($icon1)];
+    $iconClasscolor = $static_color[$index2 % count($static_color)];
     $index2++;
 
     // Get dynamic average, rating, and color
@@ -350,12 +356,12 @@
                   <div class="flip-card-inner">
 
                     <!-- FRONT -->
-                    <div class="flip-card-front card bg-{{ $color }} text-white">
+                    <div class="flip-card-front card bg-{{ $iconClasscolor }} text-white">
                       <div class="card-body position-relative d-flex flex-column justify-content-between">
                         <div>
                           <div class="d-flex align-items-center mb-1">
                             <div class="avatar me-4">
-                              <span class="avatar-initial rounded bg-label-{{ $color }}">
+                              <span class="avatar-initial rounded bg-label-{{ $iconClasscolor }}">
                                 <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
                               </span>
                             </div>
@@ -365,16 +371,16 @@
 
                         <!-- Metrics bottom right -->
                         <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
-                          <span class="metric-badge bg-{{ $color }} fw-bold">{{ $avg }}</span>
-                          <span class="metric-badge bg-{{ $color }} fw-bold">{{ $rating }}</span>
+                          <span class="metric-badge bg-label-{{ $color }} fw-bold">{{ $avg }}</span>
+                          <span class="metric-badge bg-label-{{ $color }} fw-bold">{{ $rating }}</span>
                         </div>
                       </div>
                     </div>
 
                     <!-- BACK -->
-                    <div class="flip-card-back card bg-{{ $color }} text-dark h-100">
+                    <div class="flip-card-back card bg-{{ $iconClasscolor }} text-dark h-100">
                       <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                        <div class="badge rounded p-2 mb-2 bg-label-{{ $color }}">
+                        <div class="badge rounded p-2 mb-2 bg-label-{{ $iconClasscolor }}">
                           <i class="icon-base ti {{ $iconClass }} icon-lg"></i>
                         </div>
                         <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] }}</h6>
