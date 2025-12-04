@@ -27,8 +27,8 @@ font-size: 13px !important;
 }
 
 .bg-orange {
-background-color: #fd7e1459 !important;
-color: #fd7e14 !important
+background-color: #fd7e13 !important;
+color: #fd7e13 !important
 }
 
 .bg-label-orange {
@@ -310,7 +310,7 @@ data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->
 <div class="col-lg-4 col-md-3 col-sm-6">
 <div class="card h-100 {{overallAvgScore(Auth::user()->employee_id)['color']}}">
 <div class="card-body d-flex justify-content-center align-items-center">
-<h4 class="mb-0 text-center">{{overallAvgScore(Auth::user()->employee_id)['avg']}}%</h4>
+<h4 class="mb-0 text-center">{{ round(overallAvgScore(Auth::user()->employee_id)['avg'], 1) }}%</h4>
 </div>
 </div>
 </div>
