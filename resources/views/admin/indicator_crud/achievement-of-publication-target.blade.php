@@ -28,7 +28,6 @@
                                                         <th>#</th>
                                                         <th>Created By</th>
                                                         <th>Indicator Category</th>
-                                                        <th>Rank</th>
                                                         <th>Q1</th>
                                                         <th>Q2</th>
                                                         <th>Q3</th>
@@ -219,19 +218,26 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            let editButton = '';
+                            if (parseInt(form.status) === 1) {
+                                editButton = `
+                                    <button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" 
+                                        data-form='${JSON.stringify(form)}'>
+                                        <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
+                                    </button>`;
+                            }    
 
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
                                 form.creator ? form.creator.name : 'N/A',
                                 form.target_category || 'N/A',
-                                form.rank || 'N/A',
                                 form.scopus_q1 || 'N/A',
                                 form.scopus_q2 || 'N/A',
                                 form.scopus_q3 || 'N/A',
                                 form.scopus_q4 || 'N/A',
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit</button>`
+                                editButton
                             ];
                         });
 
@@ -242,7 +248,6 @@
                                     { title: "#" },
                                     { title: "Created By" },
                                     { title: "Indicator Category" },
-                                    { title: "Rank" },
                                     { title: "Q1" },
                                     { title: "Q2" },
                                     { title: "Q3" },
