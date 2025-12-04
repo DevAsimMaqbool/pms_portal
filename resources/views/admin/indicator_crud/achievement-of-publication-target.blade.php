@@ -26,13 +26,11 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Created By</th>
                                                         <th>Indicator Category</th>
-                                                        <th>Q1</th>
-                                                        <th>Q2</th>
-                                                        <th>Q3</th>
-                                                        <th>Q4</th>
+                                                        <th>Classification</th>
+                                                        <th>Na /International</th>
                                                         <th>Created Date</th>
+                                                        <th>History</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -172,7 +170,10 @@
                     </div>
 
                     <div class="col-4 mt-3">
-                        <button type="button" class="btn btn-success w-100" id="updateFormBtn">UPDATE</button>
+                        {{-- <button type="button" class="btn btn-success w-100" id="updateFormBtn">UPDATE</button> --}}
+                        <div class="alert alert-danger" role="alert">Update is not allow at this time!</div>
+                        <P>
+
                     </div>
                 </form>
             </div>
@@ -181,6 +182,54 @@
 </div>
 
         <!-- / model -->
+ <!-- Modal -->
+       <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="viewFormModalLabel">
+                <i class="icon-base ti tabler-history me-3"></i>History
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <table class="table table-bordered mb-3"> 
+                <tr>
+                    <td>
+                        <div class="d-flex justify-content-left align-items-center">
+                            <div class="avatar-wrapper">
+                                <div class="avatar avatar-sm me-3">
+                                    <span class="avatar-initial rounded-circle bg-label-info">🙍🏻‍♂️</span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-50">
+                                <span class="text-truncate fw-medium text-heading" id="modalCreatedBy">Website SEO</span>
+                                <small class="text-truncate" id="modalCreatedDate"></small>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center">
+                <i class="icon-base ti tabler-history me-3"></i>History
+            </h5>
+            <ul class="timeline mb-0" id="modalExtraFieldsHistory"></ul>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+        <!--/ Add Permission Modal -->
+
+
+
+
+
+
     </div>
     <!-- / Content -->
 @endsection
@@ -230,13 +279,16 @@
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
-                                form.creator ? form.creator.name : 'N/A',
                                 form.target_category || 'N/A',
-                                form.scopus_q1 || 'N/A',
-                                form.scopus_q2 || 'N/A',
-                                form.scopus_q3 || 'N/A',
-                                form.scopus_q4 || 'N/A',
+                                form.journal_clasification || 'N/A',
+                                form.nationality || 'N/A',
                                 createdAt,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
+                                    data-history='${JSON.stringify(form.update_history)}'
+                                    data-user='${form.creator ? form.creator.name : "N/A"}'
+                                    data-created='${form.created_at}'>
+                                    <span class="icon-xs icon-base ti tabler-history me-2"></span>History
+                                </button>`,
                                 editButton
                             ];
                         });
@@ -246,13 +298,11 @@
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
-                                    { title: "Created By" },
                                     { title: "Indicator Category" },
-                                    { title: "Q1" },
-                                    { title: "Q2" },
-                                    { title: "Q3" },
-                                    { title: "Q4" },
+                                    { title: "Classification" },
+                                    { title: "Na /International" },
                                     { title: "Created Date" },
+                                    { title: "History" },
                                     { title: "Actions" }
                                 ]
                             });
@@ -307,6 +357,76 @@ $(document).on('click', '.edit-form-btn', function() {
     // Show modal
     $('#updateFormModal').modal('show');
 });
+
+$(document).on('click', '.view-form-btn', function () {
+    // Clear modal
+    $('#modalExtraFieldsHistory').empty();
+    $('#modalCreatedBy').text('');
+    $('#modalCreatedDate').text('');
+
+    // Read data-history
+    let historyData = $(this).attr('data-history'); // raw string
+    let history = [];
+
+    try {
+        // Decode HTML entities first
+        historyData = historyData.replace(/&quot;/g, '"'); // convert &quot; → "
+        // Parse JSON (sometimes it's double-encoded)
+        history = JSON.parse(historyData);
+        if (typeof history === 'string') {
+            history = JSON.parse(history); // decode inner string if needed
+        }
+    } catch (e) {
+        console.error('Failed to parse history JSON:', e);
+        history = [];
+    }
+
+    // Creator and created date
+    let creator = $(this).data('user') || 'N/A';
+    let created = $(this).data('created') || 'N/A';
+    $('#modalCreatedBy').text(creator);
+    $('#modalCreatedDate').text(new Date(created).toLocaleString());
+
+    // Build timeline
+    if (Array.isArray(history) && history.length > 0) {
+        let historyHtml = '';
+        history.forEach(update => {
+            let histortText = 'N/A';
+            if (update.role === 'HOD') histortText = update.status == '1' ? 'Unverified' : (update.status == '2' ? 'Verified' : update.status);
+            else if (update.role === 'Dean') histortText = update.status == '2' ? 'Unverified' : (update.status == '3' ? 'Verified' : update.status);
+            else if (update.role === 'ORIC') histortText = update.status == '3' ? 'Unverified' : (update.status == '4' ? 'Verified' : update.status);
+            else histortText = update.status || 'N/A';
+
+            historyHtml += `
+                <li class="timeline-item timeline-item-transparent optional-field">
+                    <span class="timeline-point timeline-point-primary"></span>
+                    <div class="timeline-event">
+                        <div class="timeline-header mb-3">
+                            <h6 class="mb-0">${update.user_name || 'N/A'}</h6>
+                            <small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                        </div>
+                        <div class="d-flex align-items-center mb-1">
+                            <div class="badge bg-lighter rounded-3">
+                                <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                            </div>
+                            <div class="badge bg-lighter rounded-3 ms-2">
+                                <span class="h6 mb-0 text-body">${histortText}</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            `;
+        });
+        $('#modalExtraFieldsHistory').append(historyHtml);
+    } else {
+        $('#modalExtraFieldsHistory').append(`<li class="optional-field"><span>No History Available</span></li>`);
+    }
+
+    $('#viewFormModal').modal('show');
+});
+
+
+
 
 // Function to add Co-Author fields dynamically
 function addCoAuthor(author = {}) {
