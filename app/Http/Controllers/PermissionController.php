@@ -165,19 +165,6 @@ class PermissionController extends Controller
     }
     public function V2(Request $request, $id = null)
     {
-
-        // $token = session('access_token');
-        // $userId = session('user_id');
-        // $baseUrl = config('services.pms.base_url');
-        // $response = Http::withToken($token)->get("{$this->baseUrl}/get-employee-info", [
-        //     'user_id' => $userId,
-        // ]);
-        // if ($response->successful()) {
-        //     $employee = $response->json();
-
-        //     // ✅ Pass employee data to a Blade view
-        //     return view('admin.dashbord', compact('employee'));
-        // }
         if ($id) {
 
             $user = User::findOrFail($id); // get data against given id
@@ -228,10 +215,15 @@ class PermissionController extends Controller
         }
         $categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
         $data = [100, 40, 50, 60, 70, 80, 90, 85];
+        $dataset1 = [];
 
+        foreach ($assignments->groupBy('kpa.id') as $kpaId => $group) {
+            $result = kpaAvgScore($kpaId, $employee->id);
+            $dataset1[] = $result['avg'];   // only avg
+        }
 
         if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor') {
-            return view('admin.v2', compact('employee'));
+            return view('admin.v2', compact('employee', 'dataset1'));
         } else
             if ($role->name == 'HOD') {
                 return view('admin.hod-v2', compact('employee'));
