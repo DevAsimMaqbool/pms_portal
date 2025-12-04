@@ -1352,24 +1352,24 @@ function overallAvgScore($emp_id)
     $avg = $avg ? round($avg, 2) : 0.00;
 
     // Determine rating & color dynamically
-    if ($avg >= 90 && $avg <= 100) {
-        $color = 'bg-label-primary';
+    if ($avg >= 90) {
+        $color = 'primary';
         $rating = 'OS';
     } elseif ($avg >= 80) {
-        $color = 'bg-label-success';
+        $color = 'success';
         $rating = 'EE';
     } elseif ($avg >= 70) {
-        $color = 'bg-label-warning';
+        $color = 'warning';
         $rating = 'ME';
     } elseif ($avg >= 60) {
-        $color = 'bg-label-orange';
+        $color = 'orange';
         $rating = 'NI';
-    } elseif ($avg >= 50) {
-        $color = 'bg-label-danger';
+    } elseif ($avg >= 0) {
+        $color = 'danger';
         $rating = 'BE';
     } else {
         $color = 'secondary';
-        $rating = 'NA';
+        $rating = 'N/A';
     }
 
     return [
@@ -1388,7 +1388,7 @@ function kpaAvgScore($kpa_id, $emp_id)
     $avg = $avg ? round($avg, 2) : 0.00;
 
     // Determine rating & color dynamically
-    if ($avg >= 90 && $avg <= 100) {
+    if ($avg >= 90) {
         $color = 'primary';
         $rating = 'OS';
     } elseif ($avg >= 80) {
@@ -1400,12 +1400,12 @@ function kpaAvgScore($kpa_id, $emp_id)
     } elseif ($avg >= 60) {
         $color = 'orange';
         $rating = 'NI';
-    } elseif ($avg >= 50) {
+    } elseif ($avg >= 0) {
         $color = 'danger';
         $rating = 'BE';
     } else {
         $color = 'secondary';
-        $rating = 'NA';
+        $rating = 'N/A';
     }
 
     return [
@@ -1423,7 +1423,7 @@ function indicatorAvgScore($indicator_id, $emp_id)
 
     $avg = $avg ? round($avg, 2) : 0.00;
 
-    if ($avg >= 90 && $avg <= 100) {
+    if ($avg >= 90) {
         $color = 'primary';
         $rating = 'OS';
     } elseif ($avg >= 80) {
@@ -1433,14 +1433,14 @@ function indicatorAvgScore($indicator_id, $emp_id)
         $color = 'warning';
         $rating = 'ME';
     } elseif ($avg >= 60) {
-        $color = 'warning';
+        $color = 'orange';
         $rating = 'NI';
-    } elseif ($avg >= 50) {
+    } elseif ($avg >= 0) {
         $color = 'danger';
         $rating = 'BE';
     } else {
         $color = 'secondary';
-        $rating = 'NA';
+        $rating = 'N/A';
     }
 
     return [
