@@ -17,7 +17,7 @@ return new class extends Migration
                 $table->dropColumn('first_author_superviser');
             }
             if (!Schema::hasColumn('achievement_of_research_publications_target_co_author', 'your_role')) {
-                $table->enum('your_role', ['Student', 'Other'])->nullable()->after('country'); // adjust 'after' as needed
+                $table->enum('your_role', ['Student', 'Researcher', 'Professional'])->nullable()->after('country'); // adjust 'after' as needed
             }
 
             // Add is_the_student_fitst_coauthor enum column

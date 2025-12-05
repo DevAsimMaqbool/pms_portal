@@ -35,8 +35,8 @@ class ProductsDeliveredToIndustryController extends Controller
                                 }
                             ])
                             ->whereIn('created_by', $all_ids)
-                            ->whereIn('status', [3, 2])
                             ->where('form_status', $status)
+                            ->orderBy('id', 'desc')
                             ->get();
                     }
 
@@ -51,6 +51,7 @@ class ProductsDeliveredToIndustryController extends Controller
                          ->whereIn('created_by', $employeeIds)
                         ->whereIn('status', [1, 2])
                         ->where('form_status', 'RESEARCHER')
+                        ->orderBy('id', 'desc')
                         ->get();
                 
             }if ($user->hasRole('ORIC')) {
@@ -61,8 +62,9 @@ class ProductsDeliveredToIndustryController extends Controller
                                     $q->select('employee_id', 'name');
                                 }
                             ])
-                            ->whereIn('status', [4, 3])
+                            ->whereIn('status', [2, 3])
                             ->where('form_status', $status)
+                            ->orderBy('id', 'desc')
                             ->get();
                     }
 
@@ -76,6 +78,7 @@ class ProductsDeliveredToIndustryController extends Controller
                             ])
                             ->whereIn('status', [3, 4])
                             ->where('form_status', $status)
+                            ->orderBy('id', 'desc')
                             ->get();
                     }
             }

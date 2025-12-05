@@ -53,8 +53,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                                 },'coAuthors'
                             ])
                             ->whereIn('created_by', $all_ids)
-                            ->whereIn('status', [3, 2])
                             ->where('form_status', $status)
+                            ->orderBy('id', 'desc')
                             ->get();
                     }
 
@@ -68,6 +68,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                             },'coAuthors'
                         ])
                         ->where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
                         ->get();
                 }
 
@@ -82,6 +83,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                             ->whereIn('created_by', $employeeIds)
                             ->whereIn('status', [1, 2])
                             ->where('form_status', 'RESEARCHER')
+                            ->orderBy('id', 'desc')
                             ->get();
                         }        
                 
@@ -91,8 +93,9 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                                     $q->select('employee_id', 'name');
                                 },'coAuthors'
                             ])
-                            ->whereIn('status', [4, 3])
+                            ->whereIn('status', [2, 3])
                             ->where('form_status', 'RESEARCHER')
+                            ->orderBy('id', 'desc')
                             ->get();
 
             }if ($user->hasRole('Human Resources')) {
@@ -218,7 +221,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'co_author.*.rank' => 'required_with:co_author|integer|min:0',
             'co_author.*.univeristy_name' => 'required_with:co_author|string|max:255',
             'co_author.*.country' => 'required_with:co_author|string|max:255',
-            'co_author.*.your_role' => 'required_with:co_author|in:Student,Other',
+            'co_author.*.your_role' => 'required_with:co_author|in:Student,Researcher,Professional',
             'co_author.*.designation' => '',
             'co_author.*.no_paper_past' => 'required_with:co_author|integer|min:0',
             'co_author.*.is_the_student_fitst_coauthor' => '',
