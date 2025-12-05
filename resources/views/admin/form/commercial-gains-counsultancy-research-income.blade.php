@@ -129,23 +129,14 @@
                     @endif
                     @if(auth()->user()->hasRole(['Dean']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <div class="d-flex">
-                                <select id="bulkAction" class="form-select w-auto me-2">
-                                        <option value="">-- Select Action --</option>
-                                        <option value="3">Verified</option>
-                                        <option value="2">UnVerified</option>
-                                    </select>
-                                <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                            </div>
+                            
                             <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAll"></th>
                                         <th>#</th>
                                         <th>Created By</th>
                                         <th>Title Consultancy</th>
                                         <th>Duration</th>
-                                        <th>Status</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -161,8 +152,8 @@
                             <div class="d-flex">
                                 <select id="bulkAction" class="form-select w-auto me-2">
                                         <option value="">-- Select Action --</option>
-                                        <option value="4">Verified</option>
-                                        <option value="3">UnVerified</option>
+                                        <option value="3">Verified</option>
+                                        <option value="2">UnVerified</option>
                                     </select>
                                 <button id="bulkSubmit" class="btn btn-primary">Submit</button>
                             </div>
@@ -199,7 +190,7 @@
                                 <th>Created By</th>
                                 <td id="modalCreatedBy"></td>
                             </tr>
-                            <tr>
+                            <tr id="status-approval">
                                 <th>Status</th>
                                 <td>
                                     <div class="form-check form-switch mb-2">
@@ -526,12 +517,9 @@
                                     if (update.role === 'HOD') {
                                         if (update.status == '1') histortText = 'Unverified';
                                         else if (update.status == '2') histortText = 'Verified';
-                                    } else if (update.role === 'Dean') {
+                                    } else if (update.role === 'ORIC') {
                                         if (update.status == '2') histortText = 'Unverified';
                                         else if (update.status == '3') histortText = 'Verified';
-                                    } else if (update.role === 'ORIC') {
-                                        if (update.status == '3') histortText = 'Unverified';
-                                        else if (update.status == '4') histortText = 'Verified';
                                     } else {
                                         histortText = update.status; // fallback
                                     }
@@ -632,9 +620,195 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                               
+
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                i + 1,
+                                form.creator ? form.creator.name : 'N/A',
+                                form.title_of_consultancy || 'N/A',
+                                form.duration_of_consultancy || 'N/A',
+                                createdAt,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                            ];
+                        });
+
+                        if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
+                            $('#complaintTable3').DataTable({
+                                data: rowData,
+                                columns: [
+                                    { title: "#" },
+                                    { title: "Created By" },
+                                    { title: "Title Consultancy" },
+                                    { title: "Duration" },
+                                    { title: "Created Date" },
+                                    { title: "Actions" }
+                                ]
+                            });
+                        } else {
+                            $('#complaintTable3').DataTable().clear().rows.add(rowData).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
+                });
+            }
+            
+            $(document).ready(function () {
+                fetchIndicatorForms3();
+
+                $(document).on('click', '.view-form-btn', function () {
+                    const form = $(this).data('form');
+                    $('#modalExtraFields').find('.optional-field').remove();
+                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
+
+                    $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
+                    $('#modalStatus').text(form.status || 'Pending');
+                    $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+                    if (window.currentUserRole === 'Dean') {
+                       $('#status-approval').hide();
+                        $('label[for="approveCheckbox"]').hide();
+                        $('#approveCheckbox').closest('.form-check-input').hide();
+                    }  else {
+                        
+                    }
+
+                    
+                    if (form.title_of_consultancy) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Title of consultancy</th><td>${form.title_of_consultancy}</td></tr>`);
+                    }
+                    if (form.duration_of_consultancy) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Duration of consultancy</th><td>${form.duration_of_consultancy}</td></tr>`);
+                    }
+                    if (form.name_of_client_organization) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Name of client organization</th><td>${form.name_of_client_organization}</td></tr>`);
+                    }
+                    if (form.consultancy_fee) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Consultancy Fee</th><td>${form.consultancy_fee}</td></tr>`);
+                    }
+                     if (form.consultancy_file) {
+                        let fileUrl = form.consultancy_file;
+                        let fileExt = fileUrl.split('.').pop().toLowerCase();
+
+                        let filePreview = '';
+
+                        // ✅ If Image → show preview
+                        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)) {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank">
+                                    <img src="${fileUrl}" alt="Screenshot" 
+                                        style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
+                                </a>
+                            `;
+                        }
+                        // ✅ If PDF → show download button
+                        else if (fileExt === 'pdf') {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
+                                    Download PDF
+                                </a>
+                            `;
+                        }
+                        // ✅ Other files → show generic download link
+                        else {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
+                                    Download File
+                                </a>
+                            `;
+                        }
+
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Supporting Document</th>
+                                <td>${filePreview}</td>
+                            </tr>
+                        `);
+                    }
+                    if (form.update_history) {
+                            // Parse JSON string if it's a string
+                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                            if (history.length > 0) {
+                                
+                                let historyHtml = '';
+
+                                history.forEach(update => {
+                                    let histortText = 'N/A';
+
+                                    // Role-based status mapping
+                                    if (update.role === 'HOD') {
+                                        if (update.status == '1') histortText = 'Unverified';
+                                        else if (update.status == '2') histortText = 'Verified';
+                                    } else if (update.role === 'ORIC') {
+                                        if (update.status == '2') histortText = 'Unverified';
+                                        else if (update.status == '3') histortText = 'Verified';
+                                    } else {
+                                        histortText = update.status; // fallback
+                                    }
+                                    historyHtml += `
+                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                            <span class="timeline-point timeline-point-primary"></span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header mb-3">
+                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-lighter rounded-3">
+                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `;
+                                });
+
+                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            }
+                        }
+                        else {
+                            $('#modalExtraFieldsHistory').append(`
+                                <li class="optional-field">
+                                    <th>No History Avalable</th>
+                                </li>
+                            `);
+                        }
+                    
+
+                    $('#viewFormModal').modal('show');
+                });
+                
+
+              
+            });
+        </script>
+    @endif
+    @if(auth()->user()->hasRole(['ORIC']))
+        <script>
+            function fetchIndicatorForms3() {
+                $.ajax({
+                    url: "{{ route('counsultancy.index') }}",
+                    method: "GET",
+                    data: {
+                        status: "RESEARCHER" // you can send more values
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
+
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
                             let statusText = 'N/A';
-                            if (form.status == 2) statusText = 'Unverified';
-                            else if (form.status == 3) statusText = 'Verified';    
+                            if (form.status == 2) statusText = 'Unapprove';
+                            else if (form.status == 3) statusText = 'Approve';    
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -712,7 +886,7 @@
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                    if (window.currentUserRole === 'Dean') {
+                    if (window.currentUserRole === 'ORIC') {
                         $('#approveCheckbox').prop('checked', form.status == 3);
                         $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
                         // Label text for HOD
@@ -806,12 +980,9 @@
                                     if (update.role === 'HOD') {
                                         if (update.status == '1') histortText = 'Unverified';
                                         else if (update.status == '2') histortText = 'Verified';
-                                    } else if (update.role === 'Dean') {
+                                    } else if (update.role === 'ORIC') {
                                         if (update.status == '2') histortText = 'Unverified';
                                         else if (update.status == '3') histortText = 'Verified';
-                                    } else if (update.role === 'ORIC') {
-                                        if (update.status == '3') histortText = 'Unverified';
-                                        else if (update.status == '4') histortText = 'Verified';
                                     } else {
                                         histortText = update.status; // fallback
                                     }
@@ -853,286 +1024,6 @@
                 $(document).on('change', '#approveCheckbox', function () {
                     const id = $(this).data('id');
                     const status = $(this).is(':checked') ? 3 : 2;
-                    updateSingleStatus(id, status);
-                });
-
-                // ✅ Bulk submit button
-                $('#bulkSubmit').on('click', function () {
-                    const status = $('#bulkAction').val();
-                    let selectedIds = [];
-
-                    $('#complaintTable3 .rowCheckbox:checked').each(function () {
-                        selectedIds.push($(this).val());
-                    });
-
-                    if (!status) {
-                        Swal.fire({ icon: 'warning', title: 'Select Action', text: 'Please select a status to update.' });
-                        return;
-                    }
-                    if (!selectedIds.length) {
-                        Swal.fire({ icon: 'warning', title: 'No Selection', text: 'Please select at least one row.' });
-                        return;
-                    }
-
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: `You are about to change status for ${selectedIds.length} item(s).`,
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, update it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            selectedIds.forEach(id => updateSingleStatus(id, status));
-                        }
-                    });
-                });
-
-                // ✅ Select / Deselect all checkboxes
-                $(document).on('change', '#selectAll', function () {
-                    $('.rowCheckbox').prop('checked', $(this).is(':checked'));
-                });
-            });
-        </script>
-    @endif
-    @if(auth()->user()->hasRole(['ORIC']))
-        <script>
-            function fetchIndicatorForms3() {
-                $.ajax({
-                    url: "{{ route('counsultancy.index') }}",
-                    method: "GET",
-                    data: {
-                        status: "RESEARCHER" // you can send more values
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        //alert(data.forms);
-                        const forms = data.forms || [];
-
-                        const rowData = forms.map((form, i) => {
-                            const createdAt = form.created_at
-                                ? new Date(form.created_at).toISOString().split('T')[0]
-                                : 'N/A';
-                            let statusText = 'N/A';
-                            if (form.status == 3) statusText = 'Unapprove';
-                            else if (form.status == 4) statusText = 'Approve';    
-
-                            // Pass entire form as JSON in button's data attribute
-                            return [
-                                `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
-                                i + 1,
-                                form.creator ? form.creator.name : 'N/A',
-                                form.title_of_consultancy || 'N/A',
-                                form.duration_of_consultancy || 'N/A',
-                                `<span class="badge bg-label-primary">${statusText}</span>`,
-                                createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
-                            ];
-                        });
-
-                        if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
-                            $('#complaintTable3').DataTable({
-                                data: rowData,
-                                columns: [
-                                    { title: "<input type='checkbox' id='selectAll'>" },
-                                    { title: "#" },
-                                    { title: "Created By" },
-                                    { title: "Title Consultancy" },
-                                    { title: "Duration" },
-                                    { title: "Status" },
-                                    { title: "Created Date" },
-                                    { title: "Actions" }
-                                ]
-                            });
-                        } else {
-                            $('#complaintTable3').DataTable().clear().rows.add(rowData).draw();
-                        }
-                    },
-                    error: function (xhr) {
-                        console.error('Error fetching data:', xhr.responseText);
-                        alert('Unable to load data.');
-                    }
-                });
-            }
-            // ✅ Reusable function for single update
-            function updateSingleStatus(id, status) {
-                $.ajax({
-                    url: `/counsultancy/${id}`,           // single row endpoint
-                    type: 'POST',                            // POST with _method PUT
-                    data: {
-                        _method: 'PUT',
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        status: status
-                    },
-                    success: function (res) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Updated',
-                            text: res.message || 'Status updated successfully!'
-                        });
-                        
-                        fetchIndicatorForms3();
-                    },
-                    error: function (xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON?.message || 'Something went wrong!'
-                        });
-                    }
-                });
-            }
-            $(document).ready(function () {
-                fetchIndicatorForms3();
-
-                $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
-                    $('#modalExtraFields').find('.optional-field').remove();
-                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
-
-                    $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
-                    $('#modalStatus').text(form.status || 'Pending');
-                    $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                    if (window.currentUserRole === 'ORIC') {
-                        $('#approveCheckbox').prop('checked', form.status == 4);
-                        $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-                        // Label text for HOD
-                        let statusLabel = "Pending";
-                        if (form.status == 3) {
-                            statusLabel = "Verified";
-                        } else if (form.status == 4) {
-                            statusLabel = "Verified";
-                        }
-                        $('label[for="approveCheckbox"]').text(statusLabel);
-                    }  else {
-                        $('#approveCheckbox').closest('.form-check-input').hide();
-
-                        let statusLabel = "Pending"; // default
-                        if (form.status == 1) {
-                            statusLabel = "Not Verified";
-                        } else if (form.status == 2) {
-                            statusLabel = "Verified";
-                        } else if (form.status == 3) {
-                            statusLabel = "Approved";
-                        }
-
-                        // update the label text
-                        $('label[for="approveCheckbox"]').text(statusLabel);
-                    }
-
-                    
-                    if (form.title_of_consultancy) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Title of consultancy</th><td>${form.title_of_consultancy}</td></tr>`);
-                    }
-                    if (form.duration_of_consultancy) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Duration of consultancy</th><td>${form.duration_of_consultancy}</td></tr>`);
-                    }
-                    if (form.name_of_client_organization) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Name of client organization</th><td>${form.name_of_client_organization}</td></tr>`);
-                    }
-                    if (form.consultancy_fee) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Consultancy Fee</th><td>${form.consultancy_fee}</td></tr>`);
-                    }
-                     if (form.consultancy_file) {
-                        let fileUrl = form.consultancy_file;
-                        let fileExt = fileUrl.split('.').pop().toLowerCase();
-
-                        let filePreview = '';
-
-                        // ✅ If Image → show preview
-                        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)) {
-                            filePreview = `
-                                <a href="${fileUrl}" target="_blank">
-                                    <img src="${fileUrl}" alt="Screenshot" 
-                                        style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
-                                </a>
-                            `;
-                        }
-                        // ✅ If PDF → show download button
-                        else if (fileExt === 'pdf') {
-                            filePreview = `
-                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
-                                    Download PDF
-                                </a>
-                            `;
-                        }
-                        // ✅ Other files → show generic download link
-                        else {
-                            filePreview = `
-                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
-                                    Download File
-                                </a>
-                            `;
-                        }
-
-                        $('#modalExtraFields').append(`
-                            <tr class="optional-field">
-                                <th>Supporting Document</th>
-                                <td>${filePreview}</td>
-                            </tr>
-                        `);
-                    }
-                    if (form.update_history) {
-                            // Parse JSON string if it's a string
-                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
-
-                            if (history.length > 0) {
-                                
-                                let historyHtml = '';
-
-                                history.forEach(update => {
-                                    let histortText = 'N/A';
-
-                                    // Role-based status mapping
-                                    if (update.role === 'HOD') {
-                                        if (update.status == '1') histortText = 'Unverified';
-                                        else if (update.status == '2') histortText = 'Verified';
-                                    } else if (update.role === 'Dean') {
-                                        if (update.status == '2') histortText = 'Unverified';
-                                        else if (update.status == '3') histortText = 'Verified';
-                                    } else if (update.role === 'ORIC') {
-                                        if (update.status == '3') histortText = 'Unverified';
-                                        else if (update.status == '4') histortText = 'Verified';
-                                    } else {
-                                        histortText = update.status; // fallback
-                                    }
-                                    historyHtml += `
-                                        <li class="timeline-item timeline-item-transparent optional-field">
-                                            <span class="timeline-point timeline-point-primary"></span>
-                                            <div class="timeline-event">
-                                                <div class="timeline-header mb-3">
-                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
-                                                </div>
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <div class="badge bg-lighter rounded-3">
-                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
-                                                    </div>
-                                                    <div class="badge bg-lighter rounded-3 ms-2">
-                                                     <span class="h6 mb-0 text-body">${histortText}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    `;
-                                });
-
-                                $('#modalExtraFieldsHistory').append(historyHtml);
-                            }
-                        }
-                        else {
-                            $('#modalExtraFieldsHistory').append(`
-                                <li class="optional-field">
-                                    <th>No History Avalable</th>
-                                </li>
-                            `);
-                        }
-                    
-
-                    $('#viewFormModal').modal('show');
-                });
-                 // ✅ Single checkbox status change
-                $(document).on('change', '#approveCheckbox', function () {
-                    const id = $(this).data('id');
-                    const status = $(this).is(':checked') ? 4 : 3;
                     updateSingleStatus(id, status);
                 });
 

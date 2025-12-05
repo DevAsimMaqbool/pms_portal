@@ -393,8 +393,7 @@ $(document).on('click', '.view-form-btn', function () {
         history.forEach(update => {
             let histortText = 'N/A';
             if (update.role === 'HOD') histortText = update.status == '1' ? 'Unverified' : (update.status == '2' ? 'Verified' : update.status);
-            else if (update.role === 'Dean') histortText = update.status == '2' ? 'Unverified' : (update.status == '3' ? 'Verified' : update.status);
-            else if (update.role === 'ORIC') histortText = update.status == '3' ? 'Unverified' : (update.status == '4' ? 'Verified' : update.status);
+            else if (update.role === 'ORIC') histortText = update.status == '2' ? 'Unverified' : (update.status == '3' ? 'Verified' : update.status);
             else histortText = update.status || 'N/A';
 
             historyHtml += `

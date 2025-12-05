@@ -376,6 +376,7 @@ $color = $kpaResult['color']; // this will be used for bg and bg-label
 <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
 <span class="metric-badge bg-label-{{ $color }} fw-bold">{{ $avg }}</span>
 <span class="metric-badge bg-label-{{ $color }} fw-bold">{{ $rating }}</span>
+{{-- <span class="metric-badge bg-label-{{ $color }} fw-bold" style="width: 80px;">70.02/100</span> --}}
 </div>
 </div>
 </div>
@@ -1337,6 +1338,7 @@ const chartLabels = [
 ];
 const dataset1 = [85, 90, 95, 85, 95, 100];
 const dataset2 = [80, 90, 75, 80, 80, 80];
+const dataset3 = [70, 70, 90, 70, 90, 90];
 const canvas = document.getElementById("virtueChart");
 if (!canvas) return;
 const ctx = canvas.getContext("2d");
@@ -1378,6 +1380,18 @@ pointBackgroundColor: "rgba(85, 85, 255, 1)",
 pointRadius: 5,
 pointHoverRadius: 7,
 pointStyle: 'circle'
+},
+{
+label: "Student",
+data: dataset3,
+fill: true,
+borderColor: "rgba(85, 255, 0, 1)",
+borderWidth: 2,
+pointBorderColor: "#00ff26ff",
+pointBackgroundColor: "rgba(30, 255, 0, 1)",
+pointRadius: 5,
+pointHoverRadius: 7,
+pointStyle: 'circle'
 }
 ]
 },
@@ -1415,7 +1429,7 @@ const myChart = new Chart(ctx, config);
 
 // === Custom Legend with Checkboxes ===
 const legendContainer = document.getElementById("chart-legend");
-const checkboxColors = ["#FF55B8", "#5555FF"]; // Inside Mirror, Social Mirror
+const checkboxColors = ["#FF55B8", "#5555FF","#00ff0dff"]; // Inside Mirror, Social Mirror
 
 myChart.data.datasets.forEach((dataset, index) => {
 const wrapper = document.createElement("div");

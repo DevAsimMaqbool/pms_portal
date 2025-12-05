@@ -36,8 +36,8 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                                 }
                             ])
                             ->whereIn('created_by', $all_ids)
-                            ->whereIn('status', [3, 2])
                             ->where('form_status', $status)
+                            ->orderBy('id', 'desc')
                             ->get()
                             ->map(function ($form) {
                                 if ($form->consultancy_file) {
@@ -56,6 +56,7 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                             }
                         ])
                         ->where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
                         ->get()
                         ->map(function ($form) {
                                     if ($form->consultancy_file) {
@@ -77,6 +78,7 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                             ->whereIn('created_by', $employeeIds)
                             ->whereIn('status', [1, 2])
                             ->where('form_status', 'RESEARCHER')
+                            ->orderBy('id', 'desc')
                             ->get()
                             ->map(function ($form) {
                                     if ($form->consultancy_file) {
@@ -95,8 +97,9 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                                     $q->select('employee_id', 'name');
                                 }
                             ])
-                            ->whereIn('status', [4, 3])
+                            ->whereIn('status', [2, 3])
                             ->where('form_status', $status)
+                            ->orderBy('id', 'desc')
                             ->get()
                             ->map(function ($form) {
                                 if ($form->consultancy_file) {
@@ -116,6 +119,7 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                             ])
                             ->whereIn('status', [3, 4])
                             ->where('form_status', $status)
+                            ->orderBy('id', 'desc')
                             ->get();
                     }
             }

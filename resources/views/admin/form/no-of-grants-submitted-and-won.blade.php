@@ -133,23 +133,14 @@
                     @endif
                     @if(auth()->user()->hasRole(['Dean']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <div class="d-flex">
-                                <select id="bulkAction" class="form-select w-auto me-2">
-                                        <option value="">-- Select Action --</option>
-                                        <option value="3">Verified</option>
-                                        <option value="2">UnVerified</option>
-                                    </select>
-                                <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                            </div>
+                            
                             <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                                  <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAll"></th>
                                         <th>#</th>
                                         <th>Created By</th>
                                         <th>Name</th>
                                         <th>Funding Agency</th>
-                                        <th>Status</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -184,8 +175,8 @@
                             <div class="d-flex">
                                 <select id="bulkAction" class="form-select w-auto me-2">
                                         <option value="">-- Select Action --</option>
-                                        <option value="4">Verified</option>
-                                        <option value="3">UnVerified</option>
+                                        <option value="3">Verified</option>
+                                        <option value="2">UnVerified</option>
                                     </select>
                                 <button id="bulkSubmit" class="btn btn-primary">Submit</button>
                             </div>
@@ -222,7 +213,7 @@
                                 <th>Created By</th>
                                 <td id="modalCreatedBy"></td>
                             </tr>
-                            <tr>
+                            <tr id="status-approval">
                                 <th>Status</th>
                                 <td>
                                     <div class="form-check form-switch mb-2">
@@ -638,12 +629,9 @@
                                     if (update.role === 'HOD') {
                                         if (update.status == '1') histortText = 'Unverified';
                                         else if (update.status == '2') histortText = 'Verified';
-                                    } else if (update.role === 'Dean') {
+                                    } else if (update.role === 'ORIC') {
                                         if (update.status == '2') histortText = 'Unverified';
                                         else if (update.status == '3') histortText = 'Verified';
-                                    } else if (update.role === 'ORIC') {
-                                        if (update.status == '3') histortText = 'Unverified';
-                                        else if (update.status == '4') histortText = 'Verified';
                                     } else {
                                         histortText = update.status; // fallback
                                     }
@@ -746,18 +734,14 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
-                            let statusText = 'N/A';
-                            if (form.status == 2) statusText = 'Unverified';
-                            else if (form.status == 3) statusText = 'Verified';     
+                                
 
                             // Pass entire form as JSON in button's data attribute
                             return [
-                                `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
                                 i + 1,
                                 form.creator ? form.creator.name : 'N/A',
                                 form.name || 'N/A',
                                 form.funding_agency || 'N/A',
-                                `<span class="badge bg-label-primary">${statusText}</span>`,
                                 createdAt,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
@@ -767,12 +751,10 @@
                             $('#complaintTable3').DataTable({
                                 data: rowData,
                                 columns: [
-                                    { title: "<input type='checkbox' id='selectAll'>" },
                                     { title: "#" },
                                     { title: "Created By" },
                                     { title: "Name" },
                                     { title: "Funding Agency" },
-                                    { title: "Status" },
                                     { title: "Created Date" },
                                     { title: "Actions" }
                                 ]
@@ -787,34 +769,7 @@
                     }
                 });
             }
-            // ✅ Reusable function for single update
-            function updateSingleStatus(id, status) {
-                $.ajax({
-                    url: `/no-Of-GrantSubmit-And-Won/${id}`,           // single row endpoint
-                    type: 'POST',                            // POST with _method PUT
-                    data: {
-                        _method: 'PUT',
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        status: status
-                    },
-                    success: function (res) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Updated',
-                            text: res.message || 'Status updated successfully!'
-                        });
-                        
-                        fetchIndicatorForms3();
-                    },
-                    error: function (xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON?.message || 'Something went wrong!'
-                        });
-                    }
-                });
-            }
+            
             $(document).ready(function () {
                 fetchIndicatorForms3();
                 $(document).on('click', '.view-form-btn', function () {
@@ -826,30 +781,11 @@
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
                     if (window.currentUserRole === 'Dean') {
-                        $('#approveCheckbox').prop('checked', form.status == 3);
-                        $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-                        // Label text for Dean
-                        let statusLabel = "Pending";
-                        if (form.status == 2) {
-                            statusLabel = "Verified";
-                        } else if (form.status == 3) {
-                            statusLabel = "Verified";
-                        }
-                        $('label[for="approveCheckbox"]').text(statusLabel);
-                    }  else {
+                        $('#status-approval').hide();
+                        $('label[for="approveCheckbox"]').hide();
                         $('#approveCheckbox').closest('.form-check-input').hide();
-
-                        let statusLabel = "Pending"; // default
-                        if (form.status == 1) {
-                            statusLabel = "Not Verified";
-                        } else if (form.status == 2) {
-                            statusLabel = "Verified";
-                        } else if (form.status == 3) {
-                            statusLabel = "Approved";
-                        }
-
-                        // update the label text
-                        $('label[for="approveCheckbox"]').text(statusLabel);
+                    }  else {
+                        
                     }
                     
                     if (form.name) {
@@ -926,12 +862,9 @@
                                     if (update.role === 'HOD') {
                                         if (update.status == '1') histortText = 'Unverified';
                                         else if (update.status == '2') histortText = 'Verified';
-                                    } else if (update.role === 'Dean') {
+                                    } else if (update.role === 'ORIC') {
                                         if (update.status == '2') histortText = 'Unverified';
                                         else if (update.status == '3') histortText = 'Verified';
-                                    } else if (update.role === 'ORIC') {
-                                        if (update.status == '3') histortText = 'Unverified';
-                                        else if (update.status == '4') histortText = 'Verified';
                                     } else {
                                         histortText = update.status; // fallback
                                     }
@@ -972,48 +905,6 @@
 
 
 
-                 // ✅ Single checkbox status change
-                $(document).on('change', '#approveCheckbox', function () {
-                    const id = $(this).data('id');
-                    const status = $(this).is(':checked') ? 3 : 2;
-                    updateSingleStatus(id, status);
-                });
-
-                // ✅ Bulk submit button
-                $('#bulkSubmit').on('click', function () {
-                    const status = $('#bulkAction').val();
-                    let selectedIds = [];
-
-                    $('#complaintTable3 .rowCheckbox:checked').each(function () {
-                        selectedIds.push($(this).val());
-                    });
-
-                    if (!status) {
-                        Swal.fire({ icon: 'warning', title: 'Select Action', text: 'Please select a status to update.' });
-                        return;
-                    }
-                    if (!selectedIds.length) {
-                        Swal.fire({ icon: 'warning', title: 'No Selection', text: 'Please select at least one row.' });
-                        return;
-                    }
-
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: `You are about to change status for ${selectedIds.length} item(s).`,
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, update it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            selectedIds.forEach(id => updateSingleStatus(id, status));
-                        }
-                    });
-                });
-
-                // ✅ Select / Deselect all checkboxes
-                $(document).on('change', '#selectAll', function () {
-                    $('.rowCheckbox').prop('checked', $(this).is(':checked'));
-                });
             });
         </script>
     @endif
@@ -1036,8 +927,8 @@
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
                             let statusText = 'N/A';
-                            if (form.status == 3) statusText = 'Unapprove';
-                            else if (form.status == 4) statusText = 'Approve';      
+                            if (form.status == 2) statusText = 'Unapprove';
+                            else if (form.status == 3) statusText = 'Approve';      
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -1115,13 +1006,13 @@
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
                     if (window.currentUserRole === 'ORIC') {
-                        $('#approveCheckbox').prop('checked', form.status == 4);
+                        $('#approveCheckbox').prop('checked', form.status == 3);
                         $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
                         // Label text for ORIC
                         let statusLabel = "Pending";
-                        if (form.status == 3) {
+                        if (form.status == 2) {
                             statusLabel = "Verified";
-                        } else if (form.status == 4) {
+                        } else if (form.status == 3) {
                             statusLabel = "Verified";
                         }
                         $('label[for="approveCheckbox"]').text(statusLabel);
@@ -1216,12 +1107,9 @@
                                     if (update.role === 'HOD') {
                                         if (update.status == '1') histortText = 'Unverified';
                                         else if (update.status == '2') histortText = 'Verified';
-                                    } else if (update.role === 'Dean') {
+                                    } else if (update.role === 'ORIC') {
                                         if (update.status == '2') histortText = 'Unverified';
                                         else if (update.status == '3') histortText = 'Verified';
-                                    } else if (update.role === 'ORIC') {
-                                        if (update.status == '3') histortText = 'Unverified';
-                                        else if (update.status == '4') histortText = 'Verified';
                                     } else {
                                         histortText = update.status; // fallback
                                     }
@@ -1264,7 +1152,7 @@
                  // ✅ Single checkbox status change
                 $(document).on('change', '#approveCheckbox', function () {
                     const id = $(this).data('id');
-                    const status = $(this).is(':checked') ? 4 : 3;
+                    const status = $(this).is(':checked') ? 3 : 2;
                     updateSingleStatus(id, status);
                 });
 
