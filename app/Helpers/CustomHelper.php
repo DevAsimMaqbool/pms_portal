@@ -1502,6 +1502,109 @@ function topThreeIndicators(int $kpaId, int $employeeId = null): array
 
     return $topIndicators;
 }
+function Research_publication_count($facultyId, $indicator_id)
+{
+    $facultyTargets = FacultyTarget::with([
+        'researchPublicationTargets' => function ($query) use ($indicator_id) {
+            $query->where('form_status', 'RESEARCHER')
+                ->where('indicator_id', $indicator_id);
+        }
+    ])
+        ->where('user_id', $facultyId)
+        ->where('form_status', 'HOD')
+        ->where('indicator_id', $indicator_id)
+        ->get();
+
+    $percentages = []; // To calculate overall average
+
+    foreach ($facultyTargets as $target) {
+
+        $achieved = $target->researchPublicationTargets->count(); // Number of achieved publications
+        $required = (int) $target->target;                          // Faculty target value
+
+        // Prevent divide by zero
+        $percentage = ($required > 0) ? ($achieved / $required) * 100 : 0;
+
+        // Save for average calculation
+        $percentages[] = $percentage;
+
+        // Rating logic
+        if ($percentage >= 90) {
+            $rating = 'OS';
+            $color = '#6EA8FE';
+        } elseif ($percentage >= 80) {
+            $rating = 'EE';
+            $color = '#96e2b4';
+        } elseif ($percentage >= 70) {
+            $rating = 'ME';
+            $color = '#ffcb9a';
+        } elseif ($percentage >= 60) {
+            $rating = 'NI';
+            $color = '#fd7e13';
+        } elseif ($percentage > 0) {
+            $rating = 'BE';
+            $color = '#ff4c51';
+        } else {
+            $rating = 'NA';
+            $color = '#000000';
+        }
+
+        // Add calculated values into object
+        $target->achieved_count = $achieved;
+        $target->percentage = round($percentage, 2);
+        $target->rating = $rating;
+        $target->color = $color;
+    }
+
+    
+
+    return $facultyTargets;
+}
+function Research_Innovation_Commercialization($facultyId, $indicator_id)
+{
+    $PIP = PatentsIntellectualProperty($facultyId, 138)->first();
+    $CG = CommercialGainsCounsultancyResearchIncome($facultyId, 137)->first();
+    $MP = MultidisciplinaryProjects($facultyId, 136)->first();
+    $RP = Research_publication_count($facultyId, 128)->first();
+
+
+    return [
+        "RP" => [
+            "title" => 'Research Publications',
+            "cod" => 'RP',
+            "target" => $RP?->target ?? 0,
+            "achieved" => $RP?->achieved_count ?? 0,
+            "percentage" => $RP?->percentage ?? 0,
+            "color" => $RP?->color ?? '#000'
+        ],
+        "PIP" => [
+            "title" => 'Patents & IP',
+            "cod" => 'PIP',
+            "target" => $PIP?->target ?? 0,
+            "achieved" => $PIP?->achieved_count ?? 0,
+            "percentage" => $PIP?->percentage ?? 0,
+            "color" => $PIP?->color ?? '#000'
+        ],
+        "CG" => [
+            "title" => 'Commercial Gains',
+            "cod" => 'CG',
+            "target" => $CG?->target ?? 0,
+            "achieved" => $CG?->achieved_count ?? 0,
+            "percentage" => $CG?->percentage ?? 0,
+            "color" => $CG?->color ?? '#000'
+        ],
+        "MP" => [
+            "title" => 'Multidisciplinary Projects',
+            "cod" => 'MP',
+            "target" => $MP?->target ?? 0,
+            "achieved" => $MP?->achieved_count ?? 0,
+            "percentage" => $MP?->percentage ?? 0,
+            "color" => $MP?->color ?? '#000'
+        ],
+    ];
+
+}
+
 
 if (!function_exists('getIndicatorsByScore')) {
     function getIndicatorsByScore($scoreCompare, $scoreValue, $employeeId = null, $kpaId = null)

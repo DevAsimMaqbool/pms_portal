@@ -410,7 +410,7 @@ $color = $kpaResult['color']; // this will be used for bg and bg-label
 <h5 class="fw-bold">Key Indicators</h5>
 </div>
 <!--/ Statistics -->
-<div id="scrollableCol">
+<div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
 <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
 data-bs-custom-class="tooltip-warning"
 data-bs-original-title="You’re on your way — just refine and push forward.Every effort moves you closer to success.">
@@ -520,6 +520,29 @@ aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
 </div>
 
+<div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+data-bs-custom-class="tooltip-{{$colorManager}}"
+data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+<div class="card-body d-flex">
+<div class="d-flex w-50 align-items-center me-4">
+<div class="badge bg-label-{{$colorManager}} rounded p-1_5 me-4"><i
+class="icon-base ti tabler-stars icon-md"></i>
+</div>
+<div>
+<small class="text-dark text-cut-hot">Manager Satisfaction</small>
+</div>
+</div>
+<div class="d-flex flex-grow-1 align-items-center">
+<div class="progress w-100 me-4" style="height:8px;">
+<div class="progress-bar bg-{{$colorManager}}" role="progressbar" style="width: {{$avgManager}}%"
+aria-valuenow="{{$avgManager}}" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+<span class="text-body-secondary">{{$avgManager}}%</span>
+<span class="badge bg-label-{{$colorManager}} ms-1">{{$ratingManager}}</span>
+</div>
+</div>
+</div>
+
 <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
 data-bs-custom-class="tooltip-{{$colorManager}}"
 data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
@@ -542,6 +565,7 @@ aria-valuenow="{{$avgManager}}" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
 </div>
 </div>
+
 </div>
 </div>
 
@@ -550,8 +574,100 @@ aria-valuenow="{{$avgManager}}" aria-valuemin="0" aria-valuemax="100"></div>
 <div class=" d-flex justify-content-between">
 <h5 class="fw-bold">Top Performers</h5>
 </div>
-<div id="scrollableCol1">
-<div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success"
+<div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
+
+
+<div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+data-bs-original-title="Yet there is no top performer !">
+<div class="card-body d-flex">
+<div class="d-flex w-70 align-items-center me-4">
+<div class="badge bg-label-secondary rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-empty icon-md"></i>
+</div>
+<div>
+<h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+<small class="text-dark fs-10 text-cut">...</small>
+</div>
+</div>
+<div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+</div>
+</div>
+</div>
+
+<div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+data-bs-original-title="Yet there is no top performer !">
+<div class="card-body d-flex">
+<div class="d-flex w-70 align-items-center me-4">
+<div class="badge bg-label-secondary rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-empty icon-md"></i>
+</div>
+<div>
+<h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+<small class="text-dark fs-10 text-cut">...</small>
+</div>
+</div>
+<div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+</div>
+</div>
+</div>
+
+<div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+data-bs-original-title="Yet there is no top performer !">
+<div class="card-body d-flex">
+<div class="d-flex w-70 align-items-center me-4">
+<div class="badge bg-label-secondary rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-empty icon-md"></i>
+</div>
+<div>
+<h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+<small class="text-dark fs-10 text-cut">...</small>
+</div>
+</div>
+<div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+</div>
+</div>
+</div>
+
+
+<div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+data-bs-original-title="Yet there is no top performer !">
+<div class="card-body d-flex">
+<div class="d-flex w-70 align-items-center me-4">
+<div class="badge bg-label-secondary rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-empty icon-md"></i>
+</div>
+<div>
+<h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+<small class="text-dark fs-10 text-cut">...</small>
+</div>
+</div>
+<div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+</div>
+</div>
+</div>
+
+
+<div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+data-bs-original-title="Yet there is no top performer !">
+<div class="card-body d-flex">
+<div class="d-flex w-70 align-items-center me-4">
+<div class="badge bg-label-secondary rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-empty icon-md"></i>
+</div>
+<div>
+<h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+<small class="text-dark fs-10 text-cut">...</small>
+</div>
+</div>
+<div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+</div>
+</div>
+</div>
+
+
+
+
+{{-- <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-success"
 data-bs-original-title="(Lecturer) Department of Software Engineering">
 <div class="card-body d-flex">
 <div class="d-flex w-70 align-items-center me-4">
@@ -651,7 +767,7 @@ data-bs-original-title="(Lecturer) Faisalabad - Uni Campus">
 <span class="badge bg-label-warning ms-1">ME</span>
 </div>
 </div>
-</div>
+</div> --}}
 </div>
 
 </div>
@@ -952,6 +1068,31 @@ window.addEventListener("resize", () => {
 scrollableDiv.style.maxHeight = `${newHeight}px`;
 });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const scrollableDivs = document.querySelectorAll(".scrollableCol");
+    let isSyncingScroll = false;
+
+    scrollableDivs.forEach(div => {
+        div.addEventListener("scroll", () => {
+            if (isSyncingScroll) return;
+            isSyncingScroll = true;
+
+            const scrollTop = div.scrollTop;
+
+            scrollableDivs.forEach(otherDiv => {
+                if (otherDiv !== div) {
+                    otherDiv.scrollTop = scrollTop; // instant sync
+                }
+            });
+
+            isSyncingScroll = false;
+        });
+    });
+});
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
 const scrollableDiv = document.getElementById("scrollableCol1");
 const windowHeight = window.innerHeight;
@@ -1208,29 +1349,33 @@ legendDiv.appendChild(li);
 
 document.addEventListener("DOMContentLoaded", function () {
 const c = document.querySelector("#carrierPerformance");
-const categories = [
-"Journal Publication",
-"Multidisciplinary Projects",
-"Commercial Gains",
-"Intellectual Properties",
-"Spin Off"
-];
+const researchData = @json($researchData);
+const categories = Object.values(researchData).map(item => item.title);
+const cod = Object.values(researchData).map(item => item.cod);
 // Distinct color for each category
 const colors = [
 "#1F77B4", // Publication
 "#FF7F0E", // Projects
-"#2CA02C", // Commercial Gains
-"#9467BD", // Intellectual Properties
-"#D62728"  // Spin Off
+"#2CA02C"
 ];
 // Lighter versions for "Achieved"
 const lightColors = [
 "#6BAED6", // lighter blue
 "#FFBB78", // lighter orange
-"#98DF8A", // lighter green
-"#C5B0D5", // lighter purple
-"#FF9896"  // lighter red
+"#98DF8A"
 ];
+// Build series dynamically
+const targetSeries = Object.values(researchData).map((item, i) => ({
+    x: item.cod,
+    y: item.target,
+    fillColor: colors[i] // use your colors array
+}));
+
+const achievedSeries = Object.values(researchData).map((item, i) => ({
+    x: item.cod,
+    y: item.achieved,
+    fillColor: lightColors[i] // use lighter colors array
+}));
 const a = {
 chart: {
 height: 330,
@@ -1249,30 +1394,12 @@ borderRadius: 6
 },
 dataLabels: { enabled: false },
 // Two series: Target & Achieved
-series: [
-{
-name: "Target",
-data: [
-{ x: "JP", y: 5, fillColor: colors[0] },
-{ x: "MP", y: 7, fillColor: colors[1] },
-{ x: "CG", y: 3, fillColor: colors[2] },
-{ x: "IP", y: 6, fillColor: colors[3] },
-{ x: "SO", y: 5, fillColor: colors[4] }
-]
-},
-{
-name: "Achieved",
-data: [
-{ x: "JP", y: 4, fillColor: lightColors[0] },
-{ x: "MP", y: 3.5, fillColor: lightColors[1] },
-{ x: "CG", y: 2, fillColor: lightColors[2] },
-{ x: "IP", y: 4, fillColor: lightColors[3] },
-{ x: "SO", y: 2, fillColor: lightColors[4] }
-]
-}
-],
+ series: [
+        { name: "Target", data: targetSeries },
+        { name: "Achieved", data: achievedSeries }
+    ],
 xaxis: {
-categories: ["JP", "MP", "CG", "IP", "SO"],
+categories: cod,
 labels: {
 style: {
 colors: "#6E6B7B",
