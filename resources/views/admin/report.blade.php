@@ -93,6 +93,7 @@
         .report-title {
             text-align: right;
         }
+
         .report-center {
             text-align: center;
         }
@@ -228,7 +229,7 @@
 
         .kpi-table td:nth-child(2) {
             width: 48px;
-            background: #efefef
+            /* background: #efefef */
         }
 
         .kpi-table .achieved-cell {
@@ -300,7 +301,7 @@
         }
 
         .achievements {
-            padding: 6px 18px 8px
+            padding: 6px 18px 8px;
         }
 
         .achievements h3 {
@@ -350,6 +351,26 @@
         .subcard li {
             margin: 2px 0;
             font-size: 11px;
+        }
+
+        .achievement-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            background: #efefef;
+            padding: 10px;
+        }
+
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 999px;
+            font-size: 11px;
+            line-height: 1.3;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .06);
         }
 
         /* Download button */
@@ -678,15 +699,18 @@
             stroke: #6cc04a;
             stroke-width: 3
         }
+
         /* Column width control */
         .kpi-table th:nth-child(1),
         .kpi-table td:nth-child(1) {
-            width: 50%; /* First column 50% */
+            width: 50%;
+            /* First column 50% */
         }
 
         .kpi-table th:nth-child(n+2),
         .kpi-table td:nth-child(n+2) {
-            width: 16.66%; /* Remaining 3 columns share 50% equally */
+            width: 16.66%;
+            /* Remaining 3 columns share 50% equally */
         }
 
         /* Print adjustments to prevent overlap */
@@ -735,7 +759,8 @@
     <div class="page A4">
         <header class="page-header">
             <div class="identity">
-                <h5 class="name">{{ Str::before($user->name, '-') }}</h5>
+                <h5 class="name">{{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}</h5>
+                <div class="role">{{ $user->barcode }}</div>
                 <div class="role">{{ $user->job_title }}</div>
                 <div class="dept">{{ $user->department }}</div>
             </div>
@@ -749,8 +774,10 @@
         <section class="intro">
             <p>
                 This Performance Insight Report provides a comprehensive review of your performance as
-                <em>Associate Professor</em> for the period of 2024-2025. The report covers key areas essential to your
-                role including: Teaching, Research and Institutional Engagement. By analyzing achievements, and
+                <em>{{ $user->job_title }}</em> for the period of 2024-2025. The report covers key areas essential to
+                your
+                role including: Teaching and Learning, Research, Innovation and Commercialisation and Institutional
+                Engagement. By analyzing achievements, and
                 pinpoints areas for improvement to ensure sustained professional development and optimized
                 contributions to the university's mission.
             </p>
@@ -793,7 +820,8 @@
                             $kpaResult = kpaAvgScore(1, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching and Learning</td>
                         <td class="report-center">100%</td>
@@ -805,7 +833,8 @@
                             $kpaResult = kpaAvgScore(2, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Research, Innovation and Commercialisation</td>
                         <td class="report-center">100%</td>
@@ -817,7 +846,8 @@
                             $kpaResult = kpaAvgScore(13, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Institutional Engagement</td>
                         <td class="report-center">100%</td>
@@ -835,38 +865,24 @@
                 <div class="pill pill-red">60% and Below BE</div>
             </div> -->
         </section>
-
         <section class="achievements">
             <h3>Notable Performance Achievements</h3>
-            <div class="cards">
-                <div class="card">
-                    <div class="subcard">
-                        <div class="sub-title">Teaching and Learning</div>
-                        <ol>
-                            <li>Student Satisfaction.</li>
-                            <li>Classes Held.</li>
-                            <li>Student Attendance.</li>
-                        </ol>
-                    </div>
-                    <div class="subcard">
-                        <div class="sub-title">Institutional Engagement</div>
-                        <ol>
-                            <li>Line Manager Satisfaction.</li>
-                            <li>Achievement Of Tasks.</li>
-                            <li>Event Performance Feedback.</li>
-                        </ol>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="subcard">
-                        <div class="sub-title">Research, Innovation and Commercialisation</div>
-                        <ol>
-                            <li>Research Publications.</li>
-                            <li>Scholar's Satisfaction.</li>
-                            <li>Research Productivity of PG Students.</li>
-                        </ol>
-                    </div>
-                </div>
+            <div class="achievement-tags">
+                @foreach ($noteable as $tag)
+                    <span class="tag-pill">
+                        {{ $tag->indicator->indicator }} ({{ $tag->kpa->short_code }})
+                    </span>
+                @endforeach
+            </div>
+        </section>
+        <section class="achievements">
+            <h3>Development Areas</h3>
+            <div class="achievement-tags">
+                @foreach ($areaOfDevelopment as $devAera)
+                    <span class="tag-pill">
+                        {{ $devAera->indicator->indicator }} ({{ $devAera->kpa->short_code }})
+                    </span>
+                @endforeach
             </div>
         </section>
 
@@ -876,7 +892,8 @@
     <div class="page A4">
         <header class="page-header">
             <div class="identity">
-                <h5 class="name">{{ Str::before($user->name, '-') }}</h5>
+                <h5 class="name">{{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}</h5>
+                <div class="role">{{ $user->barcode }}</div>
                 <div class="role">{{ $user->job_title }}</div>
                 <div class="dept">{{ $user->department }}</div>
             </div>
@@ -923,7 +940,8 @@
                             $kpaResult = indicatorCategoryAvgScore(23, 1, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Delivery  (PG/UG)</td>
                         <td class="report-center">100%</td>
@@ -935,7 +953,8 @@
                             $kpaResult = indicatorCategoryAvgScore(3, 1, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Management</td>
                         <td class="report-center">100%</td>
@@ -947,7 +966,8 @@
                             $kpaResult = indicatorCategoryAvgScore(25, 1, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Output</td>
                         <td class="report-center">100%</td>
@@ -965,16 +985,31 @@
                 <div class="pill pill-red">60% and Below BE</div>
             </div> -->
         </section>
+        @php
+            $noteable = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, 1);
+            $areaOfDevelopment = getIndicatorsByScore('<', 70, Auth::user()->employee_id, 1);
+        @endphp
 
-        <section class="two-col-table">
-            <div class="t-header">Key Strengths</div>
-            <div class="t-header">Development Areas</div>
-            <div class="t-row">Student Teaching Satisfaction</div>
-            <div class="t-row">Student Attendance</div>
-            <div class="t-row">Classes Held</div>
-            <div class="t-row">Submission of Exam Results</div>
-            <div class="t-row">Student Pass Percentage</div>
-            <div class="t-row">Improvement in Student Performance</div>
+        <section class="achievements">
+            <h3>Notable Performance Achievements</h3>
+            <div class="achievement-tags">
+                @foreach ($noteable as $tag)
+                    <span class="tag-pill">
+                        {{ $tag->indicator->indicator }} ({{ $tag->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
+        </section>
+
+        <section class="achievements">
+            <h3>Development Areas</h3>
+            <div class="achievement-tags">
+                @foreach ($areaOfDevelopment as $devArea)
+                    <span class="tag-pill">
+                        {{ $devArea->indicator->indicator }} ({{ $devArea->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
         </section>
 
         <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
@@ -984,7 +1019,8 @@
     <div class="page A4">
         <header class="page-header">
             <div class="identity">
-                <h5 class="name">{{ Str::before($user->name, '-') }}</h5>
+                <h5 class="name">{{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}</h5>
+                <div class="role">{{ $user->barcode }}</div>
                 <div class="role">{{ $user->job_title }}</div>
                 <div class="dept">{{ $user->department }}</div>
             </div>
@@ -998,10 +1034,12 @@
         <section class="research-intro">
             <div class="research-grid">
                 <aside class="research-left">
-                    <h2 class="research-heading">
-                        <span class="research">Research</span>
-                        <span class="perf"></span>
+
+                    <h2 class="tp-heading">
+                        <span class="t-red">Research, Innovation</span>
+                        <span class="t-blue">and Commercialization</span>
                     </h2>
+
                     <p>
                         Research performance is assessed through a combination of publication quantity and quality,
                         funding success, research impact (citations), and collaboration with external organizations,
@@ -1032,7 +1070,8 @@
                             $kpaResult = indicatorCategoryAvgScore(5, 2, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Research Productivity & Quality</td>
                         <td class="report-center">100%</td>
@@ -1044,7 +1083,8 @@
                             $kpaResult = indicatorCategoryAvgScore(32, 2, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Other Knowledge Products</td>
                         <td class="report-center">100%</td>
@@ -1056,7 +1096,8 @@
                             $kpaResult = indicatorCategoryAvgScore(6, 2, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Research Supervision at PG Level</td>
                         <td class="report-center">100%</td>
@@ -1068,7 +1109,8 @@
                             $kpaResult = indicatorCategoryAvgScore(8, 2, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Innovation & Commercialization</td>
                         <td class="report-center">100%</td>
@@ -1087,15 +1129,31 @@
             </div> -->
         </section>
 
-        <section class="two-col-table">
-            <div class="t-header">Key Strenghts</div>
-            <div class="t-header">Development Areas</div>
-            <div class="t-row">Research Publications</div>
-            <div class="t-row">Research Productivity of PG Students</div>
-            <div class="t-row">Number of Knowledge Products</div>
-            <div class="t-row"></div>
-            <div class="t-row">Scholar's Satisfaction</div>
-            <div class="t-row"></div>
+        @php
+            $noteable = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, 2);
+            $areaOfDevelopment = getIndicatorsByScore('<', 70, Auth::user()->employee_id, 2);
+        @endphp
+
+        <section class="achievements">
+            <h3>Notable Performance Achievements</h3>
+            <div class="achievement-tags">
+                @foreach ($noteable as $tag)
+                    <span class="tag-pill">
+                        {{ $tag->indicator->indicator }} ({{ $tag->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
+        </section>
+
+        <section class="achievements">
+            <h3>Development Areas</h3>
+            <div class="achievement-tags">
+                @foreach ($areaOfDevelopment as $devArea)
+                    <span class="tag-pill">
+                        {{ $devArea->indicator->indicator }} ({{ $devArea->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
         </section>
 
         <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
@@ -1104,7 +1162,8 @@
     <div class="page A4">
         <header class="page-header">
             <div class="identity">
-                <h5 class="name">{{ Str::before($user->name, '-') }}</h5>
+                <h5 class="name">{{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}</h5>
+                <div class="role">{{ $user->barcode }}</div>
                 <div class="role">{{ $user->job_title }}</div>
                 <div class="dept">{{ $user->department }}</div>
             </div>
@@ -1153,7 +1212,8 @@
                             $kpaResult = indicatorCategoryAvgScore(27, 13, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Performance in Departmental Tasks</td>
                         <td class="report-center">100%</td>
@@ -1165,7 +1225,8 @@
                             $kpaResult = indicatorCategoryAvgScore(28, 13, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Performance in Events</td>
                         <td class="report-center">100%</td>
@@ -1184,14 +1245,33 @@
             </div> -->
         </section>
 
-        <section class="two-col-table">
-            <div class="t-header">Key Strenghts</div>
-            <div class="t-header">Development Areas</div>
-            <div class="t-row">Line Manager's Review & Rating on Tasks</div>
-            <div class="t-row"></div>
-            <div class="t-row">Event Performance Feedback</div>
-            <div class="t-row"></div>
+        @php
+            $noteable = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, 13);
+            $areaOfDevelopment = getIndicatorsByScore('<', 70, Auth::user()->employee_id, 13);
+        @endphp
+
+        <section class="achievements">
+            <h3>Notable Performance Achievements</h3>
+            <div class="achievement-tags">
+                @foreach ($noteable as $tag)
+                    <span class="tag-pill">
+                        {{ $tag->indicator->indicator }} ({{ $tag->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
         </section>
+
+        <section class="achievements">
+            <h3>Development Areas</h3>
+            <div class="achievement-tags">
+                @foreach ($areaOfDevelopment as $devArea)
+                    <span class="tag-pill">
+                        {{ $devArea->indicator->indicator }} ({{ $devArea->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
+        </section>
+
 
         <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
     </div>
@@ -1200,7 +1280,8 @@
     <!-- <div class="page A4">
         <header class="page-header">
             <div class="identity">
-                <h5 class="name">{{ Str::before($user->name, '-') }}</h5>
+                <h5 class="name">{{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}</h5>
+                <div class="role">{{ $user->barcode }}</div>
                 <div class="role">{{ $user->job_title }}</div>
                 <div class="dept">{{ $user->department }}</div>
             </div>

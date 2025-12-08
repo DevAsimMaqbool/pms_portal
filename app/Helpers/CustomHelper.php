@@ -1503,6 +1503,35 @@ function topThreeIndicators(int $kpaId, int $employeeId = null): array
     return $topIndicators;
 }
 
+if (!function_exists('getIndicatorsByScore')) {
+    function getIndicatorsByScore($scoreCompare, $scoreValue, $employeeId = null, $kpaId = null)
+    {
+        $query = IndicatorsPercentage::with([
+            'kpa:id,short_code',
+            'category:id,cat_short_code',
+            'indicator:id,indicator'
+        ]);
+
+        // Optional filters
+        if (!empty($employeeId)) {
+            $query->where('employee_id', $employeeId);
+        }
+
+        if (!empty($kpaId)) {
+            $query->where('key_performance_area_id', $kpaId);
+        }
+
+        return $query
+            ->where('score', $scoreCompare, $scoreValue)
+            ->get([
+                'key_performance_area_id',
+                'indicator_category_id',
+                'indicator_id',
+                'score'
+            ]);
+    }
+}
+
 
 
 

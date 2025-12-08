@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Department;
 use App\Models\Role;
+use App\Models\IndicatorsPercentage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
@@ -249,6 +250,10 @@ class UserController extends Controller
             $datasetInstitutional[] = $institutional['avg'];    // only avg
         }
 
-        return view('admin.report', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional'));
+        $noteable = getIndicatorsByScore('>=', 80, $id);
+        $areaOfDevelopment = getIndicatorsByScore('<', 70, $id);
+
+
+        return view('admin.report', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional', 'noteable', 'areaOfDevelopment'));
     }
 }

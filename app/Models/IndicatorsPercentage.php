@@ -15,4 +15,19 @@ class IndicatorsPercentage extends Model
         'rating',
         'color',
     ];
+
+    public function kpa()
+    {
+        return $this->belongsTo(KeyPerformanceArea::class, 'key_performance_area_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(IndicatorCategory::class, 'indicator_category_id');
+    }
+
+    public function indicator()
+    {
+        return $this->belongsTo(Indicator::class, 'indicator_id');
+    }
 }
