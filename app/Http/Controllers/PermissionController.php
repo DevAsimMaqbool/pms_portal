@@ -223,7 +223,9 @@ class PermissionController extends Controller
         }
 
         if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor') {
-            return view('admin.v2', compact('employee', 'dataset1'));
+
+            $researchData = Research_Innovation_Commercialization(Auth::user()->employee_id, 0);
+            return view('admin.v2', compact('employee', 'dataset1','researchData'));
         } else
             if ($role->name == 'HOD') {
                 return view('admin.hod-v2', compact('employee'));
