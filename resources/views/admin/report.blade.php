@@ -93,6 +93,9 @@
         .report-title {
             text-align: right;
         }
+        .report-center {
+            text-align: center;
+        }
 
         .report-title .title {
             font-family: "Montserrat", sans-serif;
@@ -204,7 +207,7 @@
 
         .kpi-table {
             width: 100%;
-            border-collapse: separate;
+            border-collapse: collapse;
             border-spacing: 0;
             box-shadow: 0 0 0 1px #c8c8c8 inset;
             table-layout: fixed
@@ -675,6 +678,16 @@
             stroke: #6cc04a;
             stroke-width: 3
         }
+        /* Column width control */
+        .kpi-table th:nth-child(1),
+        .kpi-table td:nth-child(1) {
+            width: 50%; /* First column 50% */
+        }
+
+        .kpi-table th:nth-child(n+2),
+        .kpi-table td:nth-child(n+2) {
+            width: 16.66%; /* Remaining 3 columns share 50% equally */
+        }
 
         /* Print adjustments to prevent overlap */
         @page {
@@ -722,13 +735,13 @@
     <div class="page A4">
         <header class="page-header">
             <div class="identity">
-                <h5 class="name">{{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}</h5>
+                <h5 class="name">{{ Str::before($user->name, '-') }}</h5>
                 <div class="role">{{ $user->job_title }}</div>
                 <div class="dept">{{ $user->department }}</div>
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="year">2024-2025</div>
+                <div class="title">2024-2025</div>
                 <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
             </div>
         </header>
@@ -783,9 +796,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching and Learning</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
                         @php
@@ -795,9 +808,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Research, Innovation and Commercialisation</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
                         @php
@@ -807,9 +820,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Institutional Engagement</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -869,7 +882,7 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="year">2024-2025</div>
+                <div class="title">2024-2025</div>
                 <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
             </div>
         </header>
@@ -913,9 +926,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Delivery  (PG/UG)</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
                         @php
@@ -925,9 +938,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Management</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
                         @php
@@ -937,9 +950,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Output</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -977,7 +990,7 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="year">2024-2025</div>
+                <div class="title">2024-2025</div>
                 <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
             </div>
         </header>
@@ -1022,9 +1035,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Research Productivity & Quality</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
                         @php
@@ -1034,9 +1047,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Other Knowledge Products</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
                         @php
@@ -1046,9 +1059,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Research Supervision at PG Level</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
                         @php
@@ -1058,9 +1071,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Innovation & Commercialization</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -1097,7 +1110,7 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="year">2024-2025</div>
+                <div class="title">2024-2025</div>
                 <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
             </div>
         </header>
@@ -1143,9 +1156,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Performance in Departmental Tasks</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
                         @php
@@ -1155,9 +1168,9 @@
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >= 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Performance in Events</td>
-                        <td>100%</td>
-                        <td>{{ $avg }}%</td>
-                        <td class="achieved-cell" style="background-color:{{ $color }}">{{$rating}}</td>
+                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                 </tbody>
             </table>
