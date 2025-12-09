@@ -15,6 +15,7 @@ use App\Models\FacultyTarget;
 use App\Models\LineManagerFeedback;
 use App\Models\LineManagerEventFeedback;
 use App\Models\IndicatorsPercentage;
+use App\Models\RatingRule;
 
 if (!function_exists('getResponse')) {
     function getResponse($data, $token, $message, $status): array
@@ -1632,6 +1633,41 @@ if (!function_exists('getIndicatorsByScore')) {
                 'indicator_id',
                 'score'
             ]);
+    }
+}
+if (!function_exists('getRatingByPercentage')) {
+    /**
+     * Get rating and color based on percentage
+     *
+     * @param float|int $percentage
+     * @return array
+     */
+    function getRatingByPercentage($percentage)
+    {
+         if ($percentage > 100) {
+                $percentage = 100;
+        }
+        $rule = RatingRule::where('min_percentage', '<=', $percentage)
+            ->where('max_percentage', '>=', $percentage)
+            ->first();
+
+        if (!$rule) {
+            return [
+                'min_percentage' => 0,
+                'max_percentage'  => 0,
+                'rating' => 'NA',
+                'description'  => 'NA',
+                'color'  => '#000000'
+            ];
+        }
+
+        return [
+            'min_percentage' => $rule->min_percentage,
+            'max_percentage'  => $rule->max_percentage,
+            'rating'  => $rule->rating,
+            'description'  => $rule->description,
+            'color'  => $rule->color
+        ];
     }
 }
 
