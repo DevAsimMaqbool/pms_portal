@@ -327,28 +327,27 @@
         });
         document.addEventListener("DOMContentLoaded", function () {
             try {
-                // ✅ Dynamic labels and scores from Blade
                 const chartLabels = @json(collect($area['category'])->pluck('indicator_category')) || [];
                 const shortLabels = @json(collect($area['category'])->pluck('cat_short_code')) || [];
                 const dataset1 = @json(collect($area['category'])->pluck('score')) || [];
+
+                // ✅ NEW: Convert any value > 100 into 100
+                const fixedDataset1 = dataset1.map(v => (v > 100 ? 100 : v));
 
                 const g = document.getElementById("radarChart");
                 if (!g || !chartLabels.length) return;
 
                 const ctx = g.getContext("2d");
 
-                // 🎨 Colors for points
                 const labelColors = [
                     "#e74c3c", "#3498db", "#27ae60", "#f39c12",
                     "#9b59b6", "#16a085", "#d35400", "#2c3e50"
                 ];
 
-                // Gradient for area fill
                 const gradient = ctx.createLinearGradient(0, 0, 0, 150);
                 gradient.addColorStop(0, "rgba(115,103,240,0.9)");
                 gradient.addColorStop(1, "rgba(85,85,255,0.8)");
 
-                // ✅ Create radar chart
                 const radarChart = new Chart(ctx, {
                     type: "radar",
                     data: {
@@ -356,7 +355,8 @@
                         datasets: [
                             {
                                 label: "Achievements",
-                                data: dataset1,
+                                // ⬇️ Use fixed values here
+                                data: fixedDataset1,
                                 fill: true,
                                 backgroundColor: gradient,
                                 borderColor: "rgba(85,85,255,1)",
@@ -374,7 +374,7 @@
                         animation: { duration: 600 },
                         scales: {
                             r: {
-                                min: Math.min(...dataset1) <= 0 ? 0 : 50,
+                                min: Math.min(...fixedDataset1) <= 0 ? 0 : 50,
                                 max: 100,
                                 ticks: {
                                     display: true,
@@ -408,7 +408,6 @@
                     }
                 });
 
-                // ✅ Custom Legend
                 const legendDiv = document.getElementById("customLegend");
                 if (legendDiv) {
                     legendDiv.innerHTML = "";
@@ -439,6 +438,7 @@
                 console.error("Radar chart initialization error:", error);
             }
         });
+
 
 
         function initChartProgress() {
@@ -529,23 +529,23 @@
                                 let percentage = indicator.percentage || 0;
 
                                 $list.append(`
-        <li class="d-flex mb-6">
-        <div class="chart-progress me-4" data-color="${color}" data-series="${percentage}" data-progress_variant="true"></div>
+                <li class="d-flex mb-6">
+                <div class="chart-progress me-4" data-color="${color}" data-series="${percentage}" data-progress_variant="true"></div>
 
-        <div class="row w-100 align-items-center">
-        <div class="col-9">
-        <div class="me-2">
-        <h6 class="mb-1_5">${indicator.indicator}</h6>
-        </div>
-        </div>
-        <div class="col-3 text-end">
-        <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
-        <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-        </button>
-        </div>
-        </div>
-        </li>
-        `);
+                <div class="row w-100 align-items-center">
+                <div class="col-9">
+                <div class="me-2">
+                <h6 class="mb-1_5">${indicator.indicator}</h6>
+                </div>
+                </div>
+                <div class="col-3 text-end">
+                <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
+                <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
+                </button>
+                </div>
+                </div>
+                </li>
+                `);
                             });
 
                             initChartProgress(); // re-init charts after AJAX load
