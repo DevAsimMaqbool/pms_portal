@@ -142,7 +142,9 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label">Country</label>
-                                                        <input type="text" name="co_author[0][country]" class="form-control" >
+                                                        <select name="co_author[0][country]" class="country-dropdown select2 form-select">
+                                                            <option Value="Pakistan">Pakistan</option>
+                                                        </select>
                                                     </div>
                                                      <div class="col-md-6">
                                                         <label class="form-label d-block">Co-Author Role</label>
@@ -165,9 +167,13 @@
                                                         <label class="form-label">Student Roll Number</label>
                                                         <input type="text" name="co_author[0][student_roll_no]" class="form-control" >
                                                     </div>
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
                                                         <input type="number" name="co_author[0][no_paper_past]" class="form-control" >
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Co-Author Email</label>
+                                                        <input type="email" name="co_author[0][co_author_email]" class="form-control" >
                                                     </div>
                                                      <div class="col-md-6">
                                                         <label class="form-label d-block">Is the student first Co-author?</label>
@@ -526,7 +532,8 @@
     // Hide all options except placeholder
     journalSelect.find('option').each(function() {
         if ($(this).val() === '') {
-            
+            //if use that hide in like q1 hide not show then remove this cod $(this).hide(); in if condition
+             $(this).hide();
         } else {
             $(this).hide(); // hide all others by default
         }
@@ -541,15 +548,17 @@
     // Show only relevant options that have a value (ignore empty value options)
     if (category === "Scopus-Indexed") {
         journalSelect.find('.scopus').each(function() {
-            if ($(this).val() !== '') { // only show if value exists
+            /*if ($(this).val() !== '') { 
                 $(this).show();
-            }
+            }*/
+            $(this).show();
         });
     } else if (category === "HEC") {
         journalSelect.find('.hec').each(function() {
-            if ($(this).val() !== '') { // only show if value exists
+            /*if ($(this).val() !== '') { 
                 $(this).show();
-            }
+            }*/
+            $(this).show();
         });
     }
 });
@@ -681,7 +690,9 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
         </div>
         <div class="col-md-6">
             <label class="form-label">Country</label>
-            <input type="text" name="co_author[${grantIndex}][country]" class="form-control" >
+            <select name="co_author[${grantIndex}][country]" class="country-dropdown select2 form-select">
+                <option Value="Pakistan">Pakistan</option>
+            </select>
         </div>
         <div class="col-md-6">
             <label class="form-label d-block">Co-Author Role</label>
@@ -704,9 +715,13 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
             <label class="form-label">Student Roll Number</label>
             <input type="text" name="co_author[${grantIndex}][student_roll_no]" class="form-control" >
         </div>
-        <div class="col-md-12">
+        <div class="col-md-6">
             <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
             <input type="number" name="co_author[${grantIndex}][no_paper_past]" class="form-control" >
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Co-Author Email</label>
+            <input type="email" name="co_author[${grantIndex}][co_author_email]" class="form-control" >
         </div>
         <div class="col-md-6">
             <label class="form-label d-block">Is the student first Co-author?</label>
