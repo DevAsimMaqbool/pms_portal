@@ -48,6 +48,7 @@ use App\Http\Controllers\IndicatorCrudController;
 use App\Http\Controllers\LineManagerFeedbackController;
 use App\Http\Controllers\LineManagerEventFeedbackController;
 use App\Http\Controllers\RatingRuleController;
+use App\Http\Controllers\PmsPolicyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -165,7 +166,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('completion-of-course-folder', CompletionOfCourseFolderController::class);
         Route::get('/get-faculty-classes/{faculty_id}', [CompletionOfCourseFolderController::class, 'getFacultyClasses']);
 
-
     });
     Route::get('/faculty-target-gets', [FacultyTargetController::class, 'getTarget'])
         ->name('faculty-target.getTarget');
@@ -247,6 +247,14 @@ Route::middleware('auth')->group(function () {
         // API to get rating by percentage
         Route::get('/percentage/{percentage}', [RatingRuleController::class, 'getRating']);
     });
+
+    Route::get('/policy', [PmsPolicyController::class, 'index'])->name('policy.index');
+    Route::get('/policy/create', [PmsPolicyController::class, 'create'])->name('policy.create');
+    Route::post('/policy/store', [PmsPolicyController::class, 'store'])->name('policy.store');
+    Route::get('/policy/edit/{id}', [PmsPolicyController::class, 'edit'])->name('policy.edit');
+    Route::post('/policy/update/{id}', [PmsPolicyController::class, 'update'])->name('policy.update');
+    Route::delete('/policy/delete/{id}', [PmsPolicyController::class, 'destroy'])->name('policy.destroy');
+
 
 
 
