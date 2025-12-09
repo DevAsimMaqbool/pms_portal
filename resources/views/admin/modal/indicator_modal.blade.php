@@ -1507,27 +1507,7 @@
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
-                    <div class="d-flex justify-content-center mb-3 mt-3">
-                        <ul class="nav custom-tabs" role="tablist">
 
-                            <li class="nav-item">
-                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
-                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-fall"
-                                    aria-selected="false">
-                                    🍂 Fall 2025
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
-                                    aria-controls="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
-                                    aria-selected="true">
-                                    🌸 Spring 2026
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
 
                     <!-- Tab Content -->
                     <div class="tab-content">
@@ -1581,33 +1561,6 @@
                                 </table>
                             </div>
                         </div>
-
-                        <!-- Spring -->
-                        <div class="tab-pane fade"
-                            id="Testimonials/QualitativeFeedbackfromStudentsonhowtheteachinghasinfluencedthemacademically-spring"
-                            role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Category</th>
-                                            <th>Clasification</th>
-                                            <th>Target</th>
-                                            <th>Achieved</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-
                     </div>
                 </div>
             </div>
@@ -1630,163 +1583,10 @@
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
-                    <div class="d-flex justify-content-center mb-3 mt-3">
-                        <ul class="nav custom-tabs" role="tablist">
-                            <li class="nav-item">
-                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#ResearchProductivityofPGStudents(MS/Mphil/PhD)-spring"
-                                    aria-controls="ResearchProductivityofPGStudents(MS/Mphil/PhD)-spring"
-                                    aria-selected="true">
-                                    🌸 Spring 2025
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#ResearchProductivityofPGStudents(MS/Mphil/PhD)-fall"
-                                    aria-controls="ResearchProductivityofPGStudents(MS/Mphil/PhD)-fall"
-                                    aria-selected="false">
-                                    🍂 Fall 2025
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-
                     <!-- Tab Content -->
                     <div class="tab-content">
-                        <!-- Spring -->
-                        <div class="tab-pane fade show active"
-                            id="ResearchProductivityofPGStudents(MS/Mphil/PhD)-spring" role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Category</th>
-                                            <th>Journal Rank</th>
-                                            <th>Target</th>
-                                            <th>Achieved</th>
-                                            <th>Student Class</th>
-                                            <th>Program</th>
-                                            <th>Career (PG/UG)</th>
-                                            <th>Internationnaly Co-authored</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td rowspan="4">Scopus</td>
-                                            <td>Q4</td>
-                                            <td>3</td>
-                                            <td>3</td>
-                                            <td>CBA601270-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-primary">100%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-primary">OS</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Q3</td>
-                                            <td>32</td>
-                                            <td>30</td>
-                                            <td>CCQ601150-S25-PB-GCL-BSAIM-SPRING 2025-2029-BSAIM-S25-1A</td>
-                                            <td>BSIT</td>
-                                            <td>PG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-primary">93%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-primary">OS</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Q2</td>
-                                            <td>32</td>
-                                            <td>25</td>
-                                            <td>CEE601360-S25-PB-GCL-BSSEM-FALL 2024-2028-BSSE-2E</td>
-                                            <td>BSCS</td>
-                                            <td>PG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">78%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Q1</td>
-                                            <td>32</td>
-                                            <td>24</td>
-                                            <td>CSE601180-F25-PB-GCL-BSSEM-FALL 2022-2026-GG-BSSE-F22</td>
-                                            <td>BSSE</td>
-                                            <td>PG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">71%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td rowspan="3">HEC</td>
-                                            <td>Y</td>
-                                            <td>100</td>
-                                            <td>80</td>
-                                            <td>CSE601110-F25-PB-GCL-BSDSM-FALL 2023-2027-BSDS-F23-5A</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-success">80%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-success">EE</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>X</td>
-                                            <td>4</td>
-                                            <td>3</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5A</td>
-                                            <td>BSSE</td>
-                                            <td>UG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-warning">75%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-warning">ME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>W</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5C</td>
-                                            <td>BSAI</td>
-                                            <td>PG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-danger">50%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-danger">BE</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Medical</td>
-                                            <td>Recognized</td>
-                                            <td>10</td>
-                                            <td>9</td>
-                                            <td>CSE601110-F25-PB-GCL-BSAIM-FALL 2023-2027-BSAI-F23-5B</td>
-                                            <td>BSAI</td>
-                                            <td>PG</td>
-                                            <td>1</td>
-                                            <td>
-                                                <div class=" badge bg-label-primary">90%</div>
-                                            </td>
-                                            <td><span class="badge bg-label-primary">OS</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="ResearchProductivityofPGStudents(MS/Mphil/PhD)-fall"
+                        <div class="tab-pane fade show active" id="ResearchProductivityofPGStudents(MS/Mphil/PhD)-fall"
                             role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
