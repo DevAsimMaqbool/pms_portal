@@ -1644,12 +1644,14 @@ if (!function_exists('getRatingByPercentage')) {
      */
     function getRatingByPercentage($percentage)
     {
-         if ($percentage > 100) {
-                $percentage = 100;
+         if ($percentage > 99) {
+                $percentage = 99;
         }
         $rule = RatingRule::where('min_percentage', '<=', $percentage)
-            ->where('max_percentage', '>=', $percentage)
-            ->first();
+        ->where('max_percentage', '>', $percentage)
+        ->orderBy('min_percentage', 'desc')
+        ->first();
+
 
         if (!$rule) {
             return [
