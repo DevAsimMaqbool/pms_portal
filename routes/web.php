@@ -47,7 +47,7 @@ use App\Http\Controllers\FacultyMemberClassController;
 use App\Http\Controllers\IndicatorCrudController;
 use App\Http\Controllers\LineManagerFeedbackController;
 use App\Http\Controllers\LineManagerEventFeedbackController;
-
+use App\Http\Controllers\RatingRuleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -235,6 +235,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/employee-feedback/update/{id}', [LineManagerEventFeedbackController::class, 'update'])->name('employee.feedback.update');
     Route::get('/employee-feedback/create', [LineManagerEventFeedbackController::class, 'create'])->name('employee.feedback.create');
     Route::post('/employee-feedback/store', [LineManagerEventFeedbackController::class, 'store'])->name('employee.feedback.store');
+
+    Route::prefix('rating-rules')->group(function () {
+        Route::get('/', [RatingRuleController::class, 'index']);
+        Route::get('/fetch', [RatingRuleController::class, 'fetch']);
+        Route::post('/store', [RatingRuleController::class, 'store']);
+        Route::get('/edit/{id}', [RatingRuleController::class, 'edit']);
+        Route::post('/update/{id}', [RatingRuleController::class, 'update']);
+        Route::delete('/delete/{id}', [RatingRuleController::class, 'delete']);
+
+        // API to get rating by percentage
+        Route::get('/percentage/{percentage}', [RatingRuleController::class, 'getRating']);
+    });
+
 
 
 });

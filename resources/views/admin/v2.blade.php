@@ -351,6 +351,9 @@ $avg = $kpaResult['avg'];
 $rating = $kpaResult['rating'];
 $color = $kpaResult['color']; // this will be used for bg and bg-label
 
+$schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
+$schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
+
 @endphp
 
 <div class="col-lg-3 col-md-4" id="{{ $targetId }}">
@@ -389,7 +392,7 @@ $color = $kpaResult['color']; // this will be used for bg and bg-label
 </div>
 <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] }}</h6>
 <p class="text-center mb-0 text-white fs-13">
-{{ $kpa['description'] ?? 'Keep performing well in this area!' }}
+{{ $schroll_rating_description ?? 'Keep performing well in this area!' }}
 </p>
 </div>
 </div>
@@ -411,9 +414,15 @@ $color = $kpaResult['color']; // this will be used for bg and bg-label
 </div>
 <!--/ Statistics -->
 <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
+@php
+
+$st_sgetRatingByPercentage = getRatingByPercentage(-1);
+$st_srating_description = $st_sgetRatingByPercentage['description'];
+
+@endphp
 <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
 data-bs-custom-class="tooltip-warning"
-data-bs-original-title="You’re on your way — just refine and push forward.Every effort moves you closer to success.">
+data-bs-original-title="{{ $st_srating_description }}">
 <div class="card-body d-flex">
 <div class="d-flex w-50 align-items-center me-4">
 <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
@@ -439,11 +448,13 @@ $kpaResult = indicatorAvgScore(117, Auth::user()->employee_id);
 $avg = $kpaResult['avg'] ?? 0;
 $rating = $kpaResult['rating'] ?? 0;
 $color = $kpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
+$getRatingByPercentage = getRatingByPercentage($avg);
+$rating_description = $getRatingByPercentage['description'];
 
 @endphp
 <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
 data-bs-custom-class="tooltip-{{$color}}"
-data-bs-original-title="You’re achieving excellence with distinction.You set the pace for others to follow.">
+data-bs-original-title="{{ $rating_description }}">
 <div class="card-body d-flex">
 <div class="d-flex w-50 align-items-center me-4">
 <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
@@ -490,16 +501,20 @@ $kpaResult = indicatorAvgScore(128, Auth::user()->employee_id);
 $avg = $kpaResult['avg'] ?? 0;
 $rating = $kpaResult['rating'] ?? 0;
 $color = $kpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
+$re_getRatingByPercentage = getRatingByPercentage($avg);
+$re_rating_description = $re_getRatingByPercentage['description'];
 
 $kpaResultManager = indicatorAvgScore(188, Auth::user()->employee_id);
 $avgManager = $kpaResultManager['avg'] ?? 0;
 $ratingManager = $kpaResultManager['rating'] ?? 0;
 $colorManager = $kpaResultManager['color'] ?? 'secondary';
+$ms_getRatingByPercentage = getRatingByPercentage($avgManager);
+$ms_rating_description = $ms_getRatingByPercentage['description'];
 
 @endphp
 <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
 data-bs-custom-class="tooltip-{{$color}}"
-data-bs-original-title="Not quite there yet — but growth starts here.Reflect. Refocus. Rise higher.">
+data-bs-original-title="{{ $re_rating_description }}">
 <div class="card-body d-flex">
 <div class="d-flex w-50 align-items-center me-4">
 <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
@@ -522,7 +537,7 @@ aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
 
 <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
 data-bs-custom-class="tooltip-{{$colorManager}}"
-data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+data-bs-original-title="{{ $ms_rating_description }}">
 <div class="card-body d-flex">
 <div class="d-flex w-50 align-items-center me-4">
 <div class="badge bg-label-{{$colorManager}} rounded p-1_5 me-4"><i
@@ -542,26 +557,35 @@ aria-valuenow="{{$avgManager}}" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
 </div>
 </div>
+@php
+// Get dynamic average, rating, and color
+$courseloadkpaResult = indicatorAvgScore(122, Auth::user()->employee_id);
+$courseloadavg = $courseloadkpaResult['avg'] ?? 0;
+$courseloadrating = $courseloadkpaResult['rating'] ?? 0;
+$courseloadcolor = $courseloadkpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
+$courseloadgetRatingByPercentage = getRatingByPercentage($courseloadavg);
+$courseload_description = $courseloadgetRatingByPercentage['description'];
 
+@endphp
 <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-data-bs-custom-class="tooltip-{{$colorManager}}"
-data-bs-original-title="You’re going beyond what’s asked of you.Keep shining — your impact inspires others.">
+data-bs-custom-class="tooltip-{{$courseloadcolor}}"
+data-bs-original-title="{{ $courseload_description }}">
 <div class="card-body d-flex">
 <div class="d-flex w-50 align-items-center me-4">
-<div class="badge bg-label-{{$colorManager}} rounded p-1_5 me-4"><i
+<div class="badge bg-label-{{$courseloadcolor}} rounded p-1_5 me-4"><i
 class="icon-base ti tabler-stars icon-md"></i>
 </div>
 <div>
-<small class="text-dark text-cut-hot">Manager Satisfaction</small>
+<small class="text-dark text-cut-hot">Course Load</small>
 </div>
 </div>
 <div class="d-flex flex-grow-1 align-items-center">
 <div class="progress w-100 me-4" style="height:8px;">
-<div class="progress-bar bg-{{$colorManager}}" role="progressbar" style="width: {{$avgManager}}%"
-aria-valuenow="{{$avgManager}}" aria-valuemin="0" aria-valuemax="100"></div>
+<div class="progress-bar bg-{{$courseloadcolor}}" role="progressbar" style="width: {{$courseloadavg}}%"
+aria-valuenow="{{$courseloadavg}}" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
-<span class="text-body-secondary">{{$avgManager}}%</span>
-<span class="badge bg-label-{{$colorManager}} ms-1">{{$ratingManager}}</span>
+<span class="text-body-secondary">{{$courseloadavg}}%</span>
+<span class="badge bg-label-{{$courseloadcolor}} ms-1">{{$courseloadrating}}</span>
 </div>
 </div>
 </div>
