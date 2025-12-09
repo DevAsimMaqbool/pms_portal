@@ -25,6 +25,10 @@ return new class extends Migration
                 $table->enum('is_the_student_fitst_coauthor', ['YES', 'NO'])->nullable()->after('your_role');
             }
 
+            if (!Schema::hasColumn('achievement_of_research_publications_target_co_author', 'co_author_email')) {
+                $table->string('co_author_email')->nullable()->after('designation');
+            }
+
         });
     }
 
@@ -40,6 +44,7 @@ return new class extends Migration
             // Drop newly added columns
             $table->dropColumn('your_role');
             $table->dropColumn('is_the_student_fitst_coauthor');
+            $table->dropColumn('co_author_email');
         });
     }
 };
