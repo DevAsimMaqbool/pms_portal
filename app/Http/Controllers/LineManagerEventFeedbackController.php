@@ -17,14 +17,16 @@ class LineManagerEventFeedbackController extends Controller
         $user = Auth::user();
         $employee_id = $user->employee_id;
 
+        // All faculty members under this manager
         $facultyMembers = User::where('manager_id', $employee_id)
             ->get(['id', 'name', 'department', 'job_title']);
 
-        // Feedback mapped by employee_id
+        // All feedbacks for these faculty members, grouped by employee_id
         $ratings = LineManagerEventFeedback::whereIn('employee_id', $facultyMembers->pluck('id'))
             ->where('status', 1)
+            ->orderBy('created_at', 'desc') // optional, latest first
             ->get()
-            ->keyBy('employee_id');
+            ->groupBy('employee_id');
 
         // Counts
         $total = $facultyMembers->count();
@@ -36,6 +38,7 @@ class LineManagerEventFeedbackController extends Controller
             compact('facultyMembers', 'ratings', 'total', 'completed', 'notCompleted')
         );
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -52,15 +55,34 @@ class LineManagerEventFeedbackController extends Controller
     {
         $request->validate([
             'employee_id' => 'required|exists:users,id',
-            'event_name' => 'required|string|max:255',
-            'rating' => 'required|integer|min:20|max:100',
+            'event_name' => 'required|array|min:1', // must be an array
+            'event_name.*' => 'required|string|max:255', // each selected event
+            'score' => 'required|numeric|min:0|max:5',
             'remarks' => 'nullable|string',
         ]);
 
-        LineManagerEventFeedback::create($request->all());
+        // Convert rating (1-5 stars to 20-100)
+        $convertedRating = $request->score * 20;
 
-        return redirect()->route('employee.feedback.index')
-            ->with('success', 'Feedback saved successfully.');
+        foreach ($request->event_name as $event) {
+            LineManagerEventFeedback::updateOrCreate(
+                [
+                    'employee_id' => $request->employee_id,
+                    'event_name' => $event,
+                ],
+                [
+                    'rating' => $convertedRating,
+                    'remarks' => $request->remarks,
+                ]
+            );
+        }
+
+        // Return JSON for AJAX
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Feedback saved successfully.',
+            'redirect' => route('employee.feedback.index'), // optional, if you want to redirect via JS
+        ]);
     }
 
     /**
@@ -78,7 +100,7 @@ class LineManagerEventFeedbackController extends Controller
     {
         // Fetch the existing feedback
         $feedback = LineManagerEventFeedback::findOrFail($id);
-
+        $starScore = $feedback->rating / 20;
         // Get current authenticated user's employee_id
         $user = Auth::user();
         $employee_id = $user->employee_id;
@@ -88,7 +110,7 @@ class LineManagerEventFeedbackController extends Controller
             ->get(['id', 'name', 'department', 'job_title']);
 
         // Pass to view
-        return view('admin.form.line_manager_event_feedback_edit', compact('feedback', 'facultyMembers'));
+        return view('admin.form.line_manager_event_feedback_edit', compact('feedback', 'facultyMembers', 'starScore'));
     }
 
 
@@ -97,22 +119,38 @@ class LineManagerEventFeedbackController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $feedback = LineManagerEventFeedback::findOrFail($id);
-
-        // Validate request
-        $data = $request->validate([
-            'employee_id' => 'required|integer|exists:users,id',
-            'event_name' => 'required|string',
-            'rating' => 'required|integer|in:20,40,60,80,100',
+        $request->validate([
+            'employee_id' => 'required|exists:users,id',
+            'event_name' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($request, $id) {
+                    $exists = LineManagerEventFeedback::where('employee_id', $request->employee_id)
+                        ->where('event_name', $value)
+                        ->where('id', '<>', $id) // exclude current record
+                        ->exists();
+                    if ($exists) {
+                        $fail('Feedback for this employee and event already exists.');
+                    }
+                }
+            ],
+            'score' => 'required|numeric|min:0|max:5',
             'remarks' => 'nullable|string',
         ]);
 
-        // Update the feedback
-        $feedback->update($data);
+        $feedback = LineManagerEventFeedback::findOrFail($id);
+        $feedback->update([
+            'employee_id' => $request->employee_id,
+            'event_name' => $request->event_name,
+            'rating' => $request->score * 20, // convert to 20–100 scale
+            'remarks' => $request->remarks,
+        ]);
 
         return redirect()->route('employee.feedback.index')
-            ->with('success', 'Feedback updated successfully!');
+            ->with('success', 'Feedback updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.

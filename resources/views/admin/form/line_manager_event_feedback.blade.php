@@ -3,6 +3,7 @@
 @push('style')
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
 @endpush
 
 @section('content')
@@ -33,8 +34,8 @@
                         <!-- Event -->
                         <div class="col-md-6">
                             <label class="fw-bold mb-2 d-block">Event</label>
-                            <select name="event_name" class="select2 form-select" required>
-                                <option value="">-- Select Event --</option>
+                            <select name="event_name[]" class="select2 form-select" multiple required>
+                                <option value="" disabled>-- Select Event --</option>
                                 <option value="Sports Festival">Sports Festival</option>
                                 <option value="Alumni Reunion">Alumni Reunion</option>
                                 <option value="Canvocation">Canvocation</option>
@@ -47,30 +48,18 @@
                         <!-- Event Feedback Rating -->
                         <div class="col-md-6 mt-7">
                             <label class="fw-bold mb-2 d-block">Event Feedback Rating</label>
-                            <div class="d-flex justify-content-between flex-wrap" style="gap:5px;">
-                                <label class="d-flex align-items-center" style="gap:5px;">
-                                    <input type="radio" name="rating" value="20" required> Strongly Disagree
-                                </label>
-                                <label class="d-flex align-items-center" style="gap:5px;">
-                                    <input type="radio" name="rating" value="40"> Disagree
-                                </label>
-                                <label class="d-flex align-items-center" style="gap:5px;">
-                                    <input type="radio" name="rating" value="60"> Neutral
-                                </label>
-                                <label class="d-flex align-items-center" style="gap:5px;">
-                                    <input type="radio" name="rating" value="80"> Agree
-                                </label>
-                                <label class="d-flex align-items-center" style="gap:5px;">
-                                    <input type="radio" name="rating" value="100"> Strongly Agree
-                                </label>
+                            <div id="ratingBox" class="half-star-ratings raty" data-half="true" data-number="5">
                             </div>
+
+                            <input type="hidden" name="rating" id="rating" value="">
                         </div>
 
 
                         <!-- Remarks -->
                         <div class="mt-7 mb-3 w-100">
-                            <label class="fw-bold mb-2 d-block">Remarks</label>
-                            <textarea name="remarks" class="form-control" style="height:120px; resize:none;"></textarea>
+                            <label class="fw-bold mb-2 d-block">Remarks*</label>
+                            <textarea name="remarks" class="form-control" style="height:120px; resize:none;" required
+                                placeholder="Type your remarks or feedback…"></textarea>
                         </div>
 
                     </div>
@@ -90,6 +79,9 @@
 @push('script')
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+    <!-- Page JS -->
+    <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
 
     <script>
         $(document).ready(function () {
@@ -117,7 +109,11 @@
                     },
                     success: function (response) {
                         Swal.close();
-                        Swal.fire('Success', response.message, 'success');
+                        Swal.fire('Success', response.message, 'success').then(() => {
+                            if (response.redirect) {
+                                window.location.href = response.redirect; // redirect after alert
+                            }
+                        });
                         $('#researchForm')[0].reset();
                         $('.select2').val('').trigger('change'); // reset selects
                     },

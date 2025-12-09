@@ -3,6 +3,7 @@
 @push('style')
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
 @endpush
 
 @section('content')
@@ -10,6 +11,22 @@
 
         <div class="card">
             <div class="card-datatable table-responsive card-body">
+                @if ($errors->any())
+                    <div id="errorAlert" class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    <script>
+                        setTimeout(function () {
+                            const alert = document.getElementById('errorAlert');
+                            if (alert) alert.style.display = 'none';
+                        }, 2000); // 2000ms = 2 seconds
+                    </script>
+                @endif
 
                 <form id="researchForm" class="row" method="POST"
                     action="{{ route('employee.feedback.update', $feedback->id) }}">
@@ -47,14 +64,9 @@
                         <!-- Event Feedback Rating -->
                         <div class="col-md-6 mt-7">
                             <label class="fw-bold mb-2 d-block">Event Feedback Rating</label>
-                            <div class="d-flex justify-content-between flex-wrap" style="gap:5px;">
-                                @foreach([20 => 'Strongly Disagree', 40 => 'Disagree', 60 => 'Neutral', 80 => 'Agree', 100 => 'Strongly Agree'] as $value => $label)
-                                    <label class="d-flex align-items-center" style="gap:5px;">
-                                        <input type="radio" name="rating" value="{{ $value }}" required {{ isset($feedback) && $feedback->rating == $value ? 'checked' : '' }}>
-                                        {{ $label }}
-                                    </label>
-                                @endforeach
-                            </div>
+                            <div id="ratingBox" class="half-star-ratings raty" data-half="true"
+                                data-score="{{ $starScore }}" data-number="5"></div>
+                            <input type="hidden" name="rating" id="rating" value="{{ $starScore }}">
                         </div>
 
                         <!-- Remarks -->
@@ -81,4 +93,7 @@
 @push('script')
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+    <!-- Page JS -->
+    <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
 @endpush
