@@ -25,8 +25,8 @@
                 <div data-i18n="My Performances">My Performances</div>
             </a>
         </li>
-        <li class="menu-item {{ request()->routeIs('v2') ? 'active' : '' }}">
-            <a href="{{ route('v2') }}"" class=" menu-link">
+        <li class="menu-item {{ request()->routeIs('teacher_dashboard') ? 'active' : '' }}">
+            <a href="{{ route('teacher_dashboard') }}"" class=" menu-link">
                 <i class="menu-icon icon-base ti tabler-users-group"></i>
                 <div data-i18n="Faculty Performance">Faculty Performance</div>
             </a>
@@ -44,7 +44,7 @@
                 <div data-i18n="Report">Report</div>
             </a>
         </li>
-         <li class="menu-item {{ request()->routeIs('dean.target') ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('dean.target') ? 'active' : '' }}">
             <a href="{{ route('dean.target') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-contract"></i>
                 <div data-i18n="Target">Target</div>
@@ -158,12 +158,6 @@
                 </li>
             @endforeach
         @endif
-        <li class="menu-item">
-            <a href="{{ route('v2') }}"" class=" menu-link">
-                <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
-                <div data-i18n="v2">v2</div>
-            </a>
-        </li>
     </ul>
 
 </aside>

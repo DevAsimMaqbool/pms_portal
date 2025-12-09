@@ -67,9 +67,9 @@ Route::get('/v3', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PermissionController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard-v1', [PermissionController::class, 'dashboardV1'])->name('dashboard_v1');
-    Route::get('/v2/{id?}', [PermissionController::class, 'V2'])->name('v2');
+    Route::get('/teacher_dashboard/{id?}', [PermissionController::class, 'V2'])->name('teacher_dashboard');
     Route::get('/my_performance/{id?}', [PermissionController::class, 'myPerformance'])->name('my_performance');
-    // Route::get('/teacher_dashboard/{id?}', [RectorDashboardController::class, 'teacherDashboard'])->name('teacher_dashboard');
+    // Route::get('/teacher_dashboard_bk/{id?}', [RectorDashboardController::class, 'teacherDashboard'])->name('teacher_dashboard_bk');
     Route::get('student/dashboard', [PermissionController::class, 'dashboard'])->name('student.dashboard');
     Route::get('teacher/dashboard', [PermissionController::class, 'dashboard'])->name('teacher.dashboard');
     Route::get('survey/dashboard', [PermissionController::class, 'dashboard'])->name('survey.dashboard');
@@ -104,7 +104,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/departments', DepartmentController::class);
     Route::resource('/rector-dashboard', RectorDashboardController::class);
-    Route::get('/teacher_dashboard/{id?}', [RectorDashboardController::class, 'teacherDashboard'])->name('teacher_dashboard');
+    Route::get('/teacher_dashboard_rect/{id?}', [RectorDashboardController::class, 'teacherDashboard'])->name('teacher_dashboard_rect');
     Route::get('/departments/{department}/report', [RectorDashboardController::class, 'departmentDashboard'])
         ->name('departments.report');
 

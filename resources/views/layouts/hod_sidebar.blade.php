@@ -25,8 +25,8 @@
                 <div data-i18n="My Performances">My Performances</div>
             </a>
         </li>
-        <li class="menu-item {{ request()->routeIs('v2') ? 'active' : '' }}">
-            <a href="{{ route('v2') }}"" class=" menu-link">
+        <li class="menu-item {{ request()->routeIs('teacher_dashboard') ? 'active' : '' }}">
+            <a href="{{ route('teacher_dashboard') }}"" class=" menu-link">
                 <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
                 <div data-i18n="Department Performance">Department Performance</div>
             </a>
