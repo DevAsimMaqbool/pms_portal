@@ -138,34 +138,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-                                                                                                                                                                                                                                                                                                                                                                                                        .flip-card-inner {
-                                                                                                                                                                                                                                                                                                                                                                                                          transition: none;
-                                                                                                                                                                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                                                                                                                                                                        .flip-card-front,
-                                                                                                                                                                                                                                                                                                                                                                                                        .flip-card-back {
-                                                                                                                                                                                                                                                                                                                                                                                                          position: relative;
-                                                                                                                                                                                                                                                                                                                                                                                                          transform: none;
-                                                                                                                                                                                                                                                                                                                                                                                                          backface-visibility: visible;
-                                                                                                                                                                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                                                                                                                                                                        .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-inner {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            transition: none;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-front,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-back {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            position: relative;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            transform: none;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            backface-visibility: visible;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                                                                                                                        background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                                                                                                                        background-image:
-                                                                                                                                                                                                                                                                                                                                                                                                        radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                                                                                                                                                                                                                                                                                                                        radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          background-image:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                      background-image:
-                                                                                                                                                                                                                                                                                                                                                                                                        radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                                                                                                                                                                                                                                                                                                                        radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                                                                                                                                                                                                                                                                                                                        radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        background-image:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                        background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                        */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -474,26 +474,26 @@
           </div>
 
           <!-- <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                                                                                                                              data-bs-custom-class="tooltip-warning"
-                                                                                                                              data-bs-original-title="You’re doing well and meeting your goals.Keep your consistency — it’s your strength.">
-                                                                                                                              <div class="card-body d-flex">
-                                                                                                                                <div class="d-flex w-50 align-items-center me-4">
-                                                                                                                                  <div class="badge bg-label-warning rounded p-1_5 me-4"><i
-                                                                                                                                      class="icon-base ti tabler-user-check icon-md"></i></div>
-                                                                                                                                  <div>
-                                                                                                                                    <small class="text-dark text-cut-hot">Student Attendance</small>
-                                                                                                                                  </div>
-                                                                                                                                </div>
-                                                                                                                                <div class="d-flex flex-grow-1 align-items-center">
-                                                                                                                                  <div class="progress w-100 me-4" style="height:8px;">
-                                                                                                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="65"
-                                                                                                                                      aria-valuemin="0" aria-valuemax="100"></div>
-                                                                                                                                  </div>
-                                                                                                                                  <span class="text-body-secondary">70%</span>
-                                                                                                                                  <span class="badge bg-label-warning ms-1">ME</span>
-                                                                                                                                </div>
-                                                                                                                              </div>
-                                                                                                                            </div> -->
+                                                                                                                                                                                            data-bs-custom-class="tooltip-warning"
+                                                                                                                                                                                            data-bs-original-title="You’re doing well and meeting your goals.Keep your consistency — it’s your strength.">
+                                                                                                                                                                                            <div class="card-body d-flex">
+                                                                                                                                                                                              <div class="d-flex w-50 align-items-center me-4">
+                                                                                                                                                                                                <div class="badge bg-label-warning rounded p-1_5 me-4"><i
+                                                                                                                                                                                                    class="icon-base ti tabler-user-check icon-md"></i></div>
+                                                                                                                                                                                                <div>
+                                                                                                                                                                                                  <small class="text-dark text-cut-hot">Student Attendance</small>
+                                                                                                                                                                                                </div>
+                                                                                                                                                                                              </div>
+                                                                                                                                                                                              <div class="d-flex flex-grow-1 align-items-center">
+                                                                                                                                                                                                <div class="progress w-100 me-4" style="height:8px;">
+                                                                                                                                                                                                  <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="65"
+                                                                                                                                                                                                    aria-valuemin="0" aria-valuemax="100"></div>
+                                                                                                                                                                                                </div>
+                                                                                                                                                                                                <span class="text-body-secondary">70%</span>
+                                                                                                                                                                                                <span class="badge bg-label-warning ms-1">ME</span>
+                                                                                                                                                                                              </div>
+                                                                                                                                                                                            </div>
+                                                                                                                                                                                          </div> -->
           @php
             // Get dynamic average, rating, and color
             $kpaResult = indicatorAvgScore(128, Auth::user()->employee_id);
@@ -899,13 +899,28 @@
                   </div>
                   <div>
                     <div>
-                      <h6 class="mb-0 text-truncate">Maven Analytics</h6>
-                      <small class="text-truncate text-body">Business Intelligence</small>
+                      <h6 class="mb-0 text-truncate">Research Publications</h6>
                     </div>
                   </div>
                 </div>
                 <div class="text-end">
-                  <h6 class="mb-0">33</h6>
+                  <h6 class="mb-0">150</h6>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mb-6">
+                <div class="d-flex align-items-center">
+                  <div class="avatar avatar me-4">
+                    <img src="{{ asset('admin/assets/img/avatars/gold-badge.png') }}" alt="Avatar"
+                      class="rounded-circle" />
+                  </div>
+                  <div>
+                    <div>
+                      <h6 class="mb-0 text-truncate">Course Load</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-end">
+                  <h6 class="mb-0">100</h6>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center mb-6">
@@ -916,13 +931,12 @@
                   </div>
                   <div>
                     <div>
-                      <h6 class="mb-0 text-truncate">Bentlee Emblin</h6>
-                      <small class="text-truncate text-body">Digital Marketing</small>
+                      <h6 class="mb-0 text-truncate">Manager Satisfaction</h6>
                     </div>
                   </div>
                 </div>
                 <div class="text-end">
-                  <h6 class="mb-0">52</h6>
+                  <h6 class="mb-0">90</h6>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center mb-6">
@@ -933,13 +947,12 @@
                   </div>
                   <div>
                     <div>
-                      <h6 class="mb-0 text-truncate">Benedetto Rossiter</h6>
-                      <small class="text-truncate text-body">UI/UX Design</small>
+                      <h6 class="mb-0 text-truncate">Classes Held</h6>
                     </div>
                   </div>
                 </div>
                 <div class="text-end">
-                  <h6 class="mb-0">12</h6>
+                  <h6 class="mb-0">59.05</h6>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center mb-6">
@@ -950,47 +963,28 @@
                   </div>
                   <div>
                     <div>
-                      <h6 class="mb-0 text-truncate">Benedetto Rossiter</h6>
-                      <small class="text-truncate text-body">UI/UX Design</small>
+                      <h6 class="mb-0 text-truncate">Completion of Course Folder</h6>
                     </div>
                   </div>
                 </div>
                 <div class="text-end">
-                  <h6 class="mb-0">12</h6>
+                  <h6 class="mb-0">60</h6>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center mb-6">
                 <div class="d-flex align-items-center">
                   <div class="avatar avatar me-4">
-                    <img src="{{ asset('admin/assets/img/avatars/bronze-badge.png') }}" alt="Avatar"
+                    <img src="{{ asset('admin/assets/img/avatars/silver-badge.png') }}" alt="Avatar"
                       class="rounded-circle" />
                   </div>
                   <div>
                     <div>
-                      <h6 class="mb-0 text-truncate">Benedetto Rossiter</h6>
-                      <small class="text-truncate text-body">UI/UX Design</small>
+                      <h6 class="mb-0 text-truncate">Event Performance Feedback</h6>
                     </div>
                   </div>
                 </div>
                 <div class="text-end">
-                  <h6 class="mb-0">12</h6>
-                </div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center mb-6">
-                <div class="d-flex align-items-center">
-                  <div class="avatar avatar me-4">
-                    <img src="{{ asset('admin/assets/img/avatars/bronze-badge.png') }}" alt="Avatar"
-                      class="rounded-circle" />
-                  </div>
-                  <div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Benedetto Rossiter</h6>
-                      <small class="text-truncate text-body">UI/UX Design</small>
-                    </div>
-                  </div>
-                </div>
-                <div class="text-end">
-                  <h6 class="mb-0">12</h6>
+                  <h6 class="mb-0">80</h6>
                 </div>
               </div>
             </div>
@@ -1206,8 +1200,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                                                                                                                                                                                                                                                                        #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                                                                                                                      `;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1297,10 +1291,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                  border-radius:50%;margin-right:5px;"></span>
-                                  ${label} (${shortLabels[i]})
-                                  `;
+                                                                                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                    border-radius:50%;margin-right:5px;"></span>
+                                                                                    ${label} (${shortLabels[i]})
+                                                                                    `;
         legendDiv.appendChild(li);
       });
     });
@@ -1432,10 +1426,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                  <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                  border-radius:50%;margin-right:5px;"></span>
-                                  ${label} (${shortLabels[i]})
-                                  `;
+                                                                                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                    border-radius:50%;margin-right:5px;"></span>
+                                                                                    ${label} (${shortLabels[i]})
+                                                                                    `;
         legendDiv.appendChild(li);
       });
     });
