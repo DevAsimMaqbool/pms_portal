@@ -71,9 +71,9 @@
 
                         <!-- Remarks -->
                         <div class="mt-7 mb-3 w-100">
-                            <label class="fw-bold mb-2 d-block">Remarks</label>
-                            <textarea name="remarks" class="form-control"
-                                style="height:120px; resize:none;">{{ $feedback->remarks ?? '' }}</textarea>
+                            <label class="fw-bold mb-2 d-block">Remarks*</label>
+                            <textarea name="remarks" class="form-control" style="height:120px; resize:none;" required
+                                placeholder="Type your remarks or feedback…">{{ $feedback->remarks ?? '' }}</textarea>
                         </div>
 
                     </div>

@@ -284,9 +284,10 @@
 
                         <!-- Remarks -->
                         <div style="width:100%; margin-top:30px; margin-bottom:20px;">
-                            <label style="font-weight:bold; margin-bottom:8px; display:block;">Remarks</label>
+                            <label style="font-weight:bold; margin-bottom:8px; display:block;">Remarks*</label>
                             <textarea name="remarks"
-                                style="width:100%; height:120px; padding:10px; border:1px solid #ccc; border-radius:6px;"></textarea>
+                                style="width:100%; height:120px; padding:10px; border:1px solid #ccc; border-radius:6px;"
+                                required placeholder="Type your remarks or feedback…"></textarea>
                         </div>
 
                     </div>
