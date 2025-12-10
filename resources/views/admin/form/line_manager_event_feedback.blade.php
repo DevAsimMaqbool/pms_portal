@@ -59,7 +59,7 @@
                         <div class="mt-7 mb-3 w-100">
                             <label class="fw-bold mb-2 d-block">Remarks*</label>
                             <textarea name="remarks" class="form-control" style="height:120px; resize:none;" required
-                                placeholder="Type your remarks or feedback…"></textarea>
+                                placeholder="Please provide details of the assigned task(s) and the employee’s designated role and responsibilities during the event."></textarea>
                         </div>
 
                     </div>

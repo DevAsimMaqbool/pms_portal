@@ -21,6 +21,9 @@ class LineManagerFeedback extends Model
         'inspirational_leadership_1',
         'inspirational_leadership_2',
         'remarks',
+        'assessment_type',
+        'created_by',
+        'updated_by'
     ];
 
     public function employee()

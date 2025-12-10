@@ -64,10 +64,31 @@ class LineManagerFeedbackController extends Controller
             'inspirational_leadership_1' => 'nullable|integer',
             'inspirational_leadership_2' => 'nullable|integer',
             'remarks' => 'nullable|string',
+
         ]);
+        $employeeId = $request->employee_id;
+        $year = $request->year;
 
+        // Check if the employee has already submitted feedback for this year
+        $existing = LineManagerFeedback::where('created_by', $employeeId)
+            ->where('year', $year)
+            ->first();
+
+        if ($existing) {
+            return redirect()->route('self-assessment.index')
+                ->with('error', 'You have already submitted feedback for this year.');
+        }
+        if ($request->assessment_type) {
+            unset($data['employee_id']);
+            $data['assessment_type'] = $request->assessment_type;
+            $data['created_by'] = $request->employee_id;
+            $data['updated_by'] = $request->employee_id;
+        }
         $rating = LineManagerFeedback::create($data);
-
+        if ($request->assessment_type) {
+            return redirect()->route('self-assessment.index')
+                ->with('success', 'Assessment saved successfully!');
+        }
         return redirect()->route('employee.rating.index')
             ->with('success', 'Rating saved successfully!');
     }

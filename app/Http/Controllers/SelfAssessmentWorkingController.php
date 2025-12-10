@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SelfAssessmentWorking;
+use App\Models\LineManagerFeedback;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -23,7 +24,10 @@ class SelfAssessmentWorkingController extends Controller
                 ->keyBy(function ($item) {
                     return $item->kpa;
                 });
-            return view('admin.self_assessment', compact('records'));
+            $rating = LineManagerFeedback::where('created_by', $authUser->id)
+                ->where('status', 1)
+                ->first();
+            return view('admin.self_assessment', compact('records', 'rating'));
         } catch (\Exception $e) {
             return apiResponse(
                 'Oops! Something went wrong',
