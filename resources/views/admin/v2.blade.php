@@ -347,7 +347,11 @@
 
           // Get dynamic average, rating, and color
           $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
+          $kpaAvgWeightage = kpaAvgWeightage($kpa['id'], 21);
+          $weight=$kpaAvgWeightage['kpa_weightage'];
+          
           $avg = $kpaResult['avg'];
+          $weight_ss=($avg*$weight)/100;
           $rating = $kpaResult['rating'];
           $color = $kpaResult['color']; // this will be used for bg and bg-label
 
@@ -379,8 +383,8 @@
                     <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
                       <span class="metric-badge bg-label-{{ $color }} fw-bold">{{ $avg }}</span>
                       <span class="metric-badge bg-label-{{ $color }} fw-bold">{{ $rating }}</span>
-                      {{-- <span class="metric-badge bg-label-{{ $color }} fw-bold" style="width: 80px;">70.02/100</span>
-                      --}}
+                      <span class="metric-badge bg-label-{{ $color }} fw-bold" style="width: 80px;">{{ $weight_ss }}/{{ $weight }}</span>
+                     
                     </div>
                   </div>
                 </div>
