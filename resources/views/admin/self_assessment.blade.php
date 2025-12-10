@@ -169,8 +169,8 @@
                                             <div class="col-md-2" style="margin-left: 8px;">
                                                 <label class="form-label" for="multicol-language">Year</label>
                                                 <select name="year" id="select2Year" class="select2 form-select" required>
-                                                    <option value="">-- Select Year --</option>
-                                                    <option value="2025-2026" {{  $rating->year ?? '' == '2025-2026' ? 'selected' : '' }}>2025-2026</option>
+                                                    <option value="">-- Select Year --</option>$rating->
+                                                    <option value="2025-2026" {{ optional($rating)->year == 20 ? '2025-2026' : '' }}>2025-2026</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -194,18 +194,18 @@
                                                 </label>
                                                 <div style="margin-top:8px;">
                                                     <label style="margin-right:15px;">
-                                                        <input type="radio" name="responsibility_accountability_1" value="20" {{ $rating->responsibility_accountability_1 == 20 ? 'checked' : '' }}>
+                                                        <input type="radio" name="responsibility_accountability_1" value="20" {{ optional($rating)->responsibility_accountability_1 == 20 ? 'checked' : '' }}>
                                                         Strongly Disagree</label>
                                                     <label style="margin-right:15px;"><input type="radio"
-                                                            name="responsibility_accountability_1" value="40" {{ $rating->responsibility_accountability_1 == 40 ? 'checked' : '' }}>
+                                                            name="responsibility_accountability_1" value="40" {{ optional($rating)->responsibility_accountability_1 == 40 ? 'checked' : '' }}>
                                                         Disagree</label>
                                                     <label style="margin-right:15px;"><input type="radio"
-                                                            name="responsibility_accountability_1" value="60" {{ $rating->responsibility_accountability_1 == 60 ? 'checked' : '' }}>
+                                                            name="responsibility_accountability_1" value="60" {{ optional($rating)->responsibility_accountability_1 == 60 ? 'checked' : '' }}>
                                                         Neutral</label>
                                                     <label style="margin-right:15px;"><input type="radio"
-                                                            name="responsibility_accountability_1" value="80" {{ $rating->responsibility_accountability_1 == 80 ? 'checked' : '' }}>
+                                                            name="responsibility_accountability_1" value="80" {{ optional($rating)->responsibility_accountability_1 == 80 ? 'checked' : '' }}>
                                                         Agree</label>
-                                                    <label><input type="radio" name="responsibility_accountability_1" value="100" {{ $rating->responsibility_accountability_1 == 100 ? 'checked' : '' }}>
+                                                    <label><input type="radio" name="responsibility_accountability_1" value="100" {{ optional($rating)->responsibility_accountability_1 == 100 ? 'checked' : '' }}>
                                                         Strongly
                                                         Agree</label>
                                                 </div>
