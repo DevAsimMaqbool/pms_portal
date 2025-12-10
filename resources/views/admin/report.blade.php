@@ -912,8 +912,11 @@
                         <span class="t-blue">Learning</span>
                     </h2>
                     <p>
-                        Teaching performance is evaluated through student success rates, feedback, teaching compliance,
-                        and the adoption of innovative practices that engage and motivate students effectively.
+                        Teaching and Learning refer to the quality and effectiveness of academic delivery, curriculum
+                        design, student
+                        engagement, learning outcomes, and ongoing improvements in pedagogy. It focuses on providing a
+                        high-quality,
+                        student-centered educational experience. Performance is measured against the following sub-KPAs.
                     </p>
                 </aside>
                 <div class="triangle-wrap">
@@ -1033,17 +1036,17 @@
 
         <section class="research-intro">
             <div class="research-grid">
-                <aside class="research-left">
-
+                <aside class="tp-left">
                     <h2 class="tp-heading">
                         <span class="t-red">Research, Innovation</span>
                         <span class="t-blue">and Commercialization</span>
                     </h2>
-
                     <p>
-                        Research performance is assessed through a combination of publication quantity and quality,
-                        funding success, research impact (citations), and collaboration with external organizations,
-                        including industry.
+                        Research, Innovation and Commercialisation refer to the university’s efforts to produce
+                        impactful
+                        research, foster innovation, and translate knowledge into commercial or societal value. It
+                        includes research productivity, innovation culture, applied research, and development of
+                        commercially beneficial outcomes. Performance is measured against the following sub-KPAs.
                     </p>
                 </aside>
                 <div class="radar-wrap">
@@ -1182,9 +1185,13 @@
                         <span class="t-blue">Engagement</span>
                     </h2>
                     <p>
-                        Institutional engagement is evaluated based on contributions to academic governance, curriculum
-                        design, strategic decision-making, and maintaining relationships with industry and academic
-                        partners.
+                        This KPA emphasizes proactive participation in departmental tasks, institutional initiatives,
+                        and events that enhance
+                        collaboration, visibility, and collective achievement. Institutional engagement fosters
+                        teamwork, ownership, and a
+                        shared sense of purpose, strengthening the institution’s culture and external partnerships.
+                        Performance is measured
+                        against the following sub-KPAs.
                     </p>
                 </aside>
                 <div class="triangle-wrap">
