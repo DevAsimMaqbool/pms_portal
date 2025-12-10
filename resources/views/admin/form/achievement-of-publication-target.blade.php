@@ -138,12 +138,23 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label">University Name</label>
-                                                        <input type="text" name="co_author[0][univeristy_name]" class="form-control" >
+                                                        <select name="co_author[0][univeristy_name]" class="univeristy-dropdown select2 form-select">
+                                                            <option value="">Select Univeristy</option>
+                                                            @foreach(getUniveristyJson() as $uni)
+                                                                 <option value="{{ $uni['University Name'] }}">
+                                                                        {{ $uni['University Name'] }}
+                                                                    </option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label">Country</label>
+                                                        
                                                         <select name="co_author[0][country]" class="country-dropdown select2 form-select">
-                                                            <option Value="Pakistan">Pakistan</option>
+                                                            <option value="">Select Country</option>
+                                                            @foreach(getAllCountries() as $country)
+                                                                <option value="{{ $country['iso'] }}">{{ $country['name'] }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                      <div class="col-md-6">
@@ -670,9 +681,25 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
 
 
            let grantIndex = 1; // start from 1 because 0 is initial block
+           var countries = @json(getAllCountries());
+           var universities = @json(getUniveristyJson());
 
             // Add new grant group
             $('#add-grant').click(function () {
+                let options = '<option value="">Select Country</option>';
+                let optionsUni = '<option value="">Select Univeristy</option>';
+
+                    // Build options
+                    countries.forEach(function(country) {
+                        options += '<option value="' + country.iso + '">' + country.name + '</option>';
+                    });
+                    universities.forEach(function(uni) {
+                        optionsUni += `<option value="${uni['University Name']}">
+                        ${uni['University Name']}
+                    </option>`;
+                    });
+                  
+
                 let newGroup = `
     <div class="row g-6 grant-group mt-4">
         <hr>
@@ -686,12 +713,14 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
         </div>
         <div class="col-md-6">
             <label class="form-label">University Name</label>
-            <input type="text" name="co_author[${grantIndex}][univeristy_name]" class="form-control" >
+            <select name="co_author[${grantIndex}][univeristy_name]" class="univeristy-dropdown select2 form-select">
+                    ${optionsUni}
+            </select>
         </div>
         <div class="col-md-6">
             <label class="form-label">Country</label>
             <select name="co_author[${grantIndex}][country]" class="country-dropdown select2 form-select">
-                <option Value="Pakistan">Pakistan</option>
+                    ${options}
             </select>
         </div>
         <div class="col-md-6">
@@ -748,6 +777,12 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
     `;
 
                 $('#grant-details-container').append(newGroup);
+                $('#grant-details-container').find('select.country-dropdown').last().select2({
+                    width: '100%'
+                });
+                $('#grant-details-container').find('select.univeristy-dropdown').last().select2({
+                    width: '100%'
+                });
                 grantIndex++;
             });
 
