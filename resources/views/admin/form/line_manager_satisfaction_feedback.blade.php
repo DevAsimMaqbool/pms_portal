@@ -287,7 +287,8 @@
                             <label style="font-weight:bold; margin-bottom:8px; display:block;">Remarks*</label>
                             <textarea name="remarks"
                                 style="width:100%; height:120px; padding:10px; border:1px solid #ccc; border-radius:6px;"
-                                required placeholder="Type your remarks or feedback…"></textarea>
+                                required
+                                placeholder="Please provide details of the assigned task(s) and the employee’s designated role and responsibilities during the event."></textarea>
                         </div>
 
                     </div>
