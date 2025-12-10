@@ -86,7 +86,7 @@
               <!-- BACK -->
               <div class="flip-card-back">
                 <div class="card bg-primary text-white">
-                  @if($policies->sop_file)
+                  @if($policies && $policies->sop_file)
                     <a href="{{ asset('storage/' . $policies->sop_file) }}" target="_blank" style="color:#ffffff">
                       <div class="card-body">
                         <div class="badge rounded p-2 mb-2 bg-white text-primary">
@@ -134,7 +134,7 @@
               <!-- BACK -->
               <div class="flip-card-back">
                 <div class="card bg-primary text-white">
-                  @if($policies->policy_file)
+                  @if($policies && $policies->policy_file)
                     <a href="{{ asset('storage/' . $policies->policy_file) }}" target="_blank" style="color:#ffffff">
                       <div class="card-body">
                         <div class="badge rounded p-2 mb-2 bg-white text-primary">
