@@ -17,6 +17,8 @@ use App\Models\LineManagerEventFeedback;
 use App\Models\IndicatorsPercentage;
 use App\Models\RatingRule;
 use Illuminate\Support\Facades\DB;
+use PragmaRX\Countries\Package\Countries;
+use Illuminate\Support\Facades\File;
 
 if (!function_exists('getResponse')) {
     function getResponse($data, $token, $message, $status): array
@@ -1695,6 +1697,40 @@ if (!function_exists('getRatingByPercentage')) {
             'description'  => $rule->description,
             'color'  => $rule->color
         ];
+    }
+}
+if (!function_exists('getAllCountries')) {
+    function getAllCountries()
+    {
+        $countries = new Countries();
+
+        // Get all country names
+        return $countries->all()->map(function ($country) {
+        return [
+            'name' => $country->name->common,
+            'iso' => $country->cca2,
+        ];
+    })->values()->toArray();
+    }
+}
+if (!function_exists('getUniveristyJson')) {
+    /**
+     * Get countries from JSON file
+     *
+     * @return array
+     */
+    function getUniveristyJson()
+    {
+        $path = public_path('admin/assets/json/countries.json');
+
+        if (!File::exists($path)) {
+            return [];
+        }
+
+        $json = File::get($path);
+
+        $data = json_decode($json, true);
+        return $data;
     }
 }
 
