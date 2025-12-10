@@ -86,17 +86,27 @@
               <!-- BACK -->
               <div class="flip-card-back">
                 <div class="card bg-primary text-white">
-                  <div class="card-body">
-                    <div class="badge rounded p-2 mb-2 bg-white text-primary">
-                      <i class="ti tabler-download icon-base"></i>
+                  @if($policies->sop_file)
+                    <a href="{{ asset('storage/' . $policies->sop_file) }}" target="_blank" style="color:#ffffff">
+                      <div class="card-body">
+                        <div class="badge rounded p-2 mb-2 bg-white text-primary">
+                          <i class="ti tabler-download icon-base"></i>
+                        </div>
+                        <h6 class="text-center mb-2 text-white">Click to Download</h6>
+                        <p class="text-center fs-13 mb-0">PMS SOPs</p>
+                      </div>
+                    </a>
+                  @else
+                    <div class="card-body">
+                      <div class="badge rounded p-2 mb-2 bg-white text-primary">
+                        <i class="ti tabler-download icon-base"></i>
+                      </div>
+                      <h6 class="text-center mb-2 text-white">SOPs not uploaded</h6>
+                      <p class="text-center fs-13 mb-0">PMS SOPs</p>
                     </div>
-                    <h6 class="text-center mb-2 text-white">Click to Download</h6>
-                    <p class="text-center fs-13 mb-0">PMS SOPs.
-                    </p>
-                  </div>
+                  @endif
                 </div>
               </div>
-
             </div>
           </div>
         </a>
@@ -124,14 +134,25 @@
               <!-- BACK -->
               <div class="flip-card-back">
                 <div class="card bg-primary text-white">
-                  <div class="card-body">
-                    <div class="badge rounded p-2 mb-2 bg-white text-primary">
-                      <i class="ti tabler-download icon-base"></i>
+                  @if($policies->policy_file)
+                    <a href="{{ asset('storage/' . $policies->policy_file) }}" target="_blank" style="color:#ffffff">
+                      <div class="card-body">
+                        <div class="badge rounded p-2 mb-2 bg-white text-primary">
+                          <i class="ti tabler-download icon-base"></i>
+                        </div>
+                        <h6 class="text-center mb-2 text-white">Click to Download</h6>
+                        <p class="text-center fs-13 mb-0">PMS Policy</p>
+                      </div>
+                    </a>
+                  @else
+                    <div class="card-body">
+                      <div class="badge rounded p-2 mb-2 bg-white text-primary">
+                        <i class="ti tabler-download icon-base"></i>
+                      </div>
+                      <h6 class="text-center mb-2 text-white">Policy not uploaded</h6>
+                      <p class="text-center fs-13 mb-0">PMS Policy</p>
                     </div>
-                    <h6 class="text-center mb-2 text-white">Click to Download</h6>
-                    <p class="text-center fs-13 mb-0">PMS Policy.
-                    </p>
-                  </div>
+                  @endif
                 </div>
               </div>
 

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\PmsPolicy;
 use Illuminate\Http\Request;
 
 class DownloadsController extends Controller
@@ -14,7 +16,8 @@ class DownloadsController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.downloads');
+        $policies = PmsPolicy::orderBy('created_at', 'desc')->first();
+        return view('admin.downloads', compact('policies'));
 
     }
     /**
