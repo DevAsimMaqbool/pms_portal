@@ -16,6 +16,7 @@ use App\Models\LineManagerFeedback;
 use App\Models\LineManagerEventFeedback;
 use App\Models\IndicatorsPercentage;
 use App\Models\RatingRule;
+use Illuminate\Support\Facades\DB;
 
 if (!function_exists('getResponse')) {
     function getResponse($data, $token, $message, $status): array
@@ -1380,6 +1381,30 @@ function overallAvgScore($emp_id)
     ];
 }
 
+if (!function_exists('kpaAvgWeightage')) {
+    function kpaAvgWeightage($kpa_id, $role_id)
+    {
+
+        $RoleKpaAssignment=  RoleKpaAssignment::where('role_id', $role_id)
+            ->where('key_performance_area_id', $kpa_id)
+            ->first();
+            if ($RoleKpaAssignment) {
+                return [
+                    'role_id' => $RoleKpaAssignment->role_id,
+                    'key_performance_area_id' => $RoleKpaAssignment->key_performance_area_id,
+                    'kpa_weightage' => $RoleKpaAssignment->kpa_weightage,
+                ];
+            }
+          return [
+                'role_id' => 0,
+                'key_performance_area_id' => 0,
+                'kpa_weightage' => 0,
+            ];   
+
+
+
+    }
+}
 function kpaAvgScore($kpa_id, $emp_id)
 {
     $avg = IndicatorsPercentage::where('employee_id', $emp_id)
