@@ -231,41 +231,41 @@
                                         <label class="form-label" for="ecommerce-product-discount-price">Scopus</label>
                                             <div class="input-group mb-4">
                                                 <span class="input-group-text">Q1</span>
-                                                <input type="number" class="form-control scopus-q1" name="scopus_q1">
+                                                <input type="number" class="form-control scopus-q1" name="scopus_q1" readonly>
                                             </div>
                                             <div class="input-group mb-4">
                                                 <span class="input-group-text">Q2</span>
-                                                <input type="number" class="form-control scopus-q2" name="scopus_q2">
+                                                <input type="number" class="form-control scopus-q2" name="scopus_q2" readonly>
                                             </div>
                                             <div class="input-group mb-4">
                                                 <span class="input-group-text">Q3</span>
-                                                <input type="number" class="form-control scopus-q3" name="scopus_q3">
+                                                <input type="number" class="form-control scopus-q3" name="scopus_q3" readonly>
                                             </div>
                                             <div class="input-group">
                                                 <span class="input-group-text">Q4</span>
-                                                <input type="number" class="form-control scopus-q4" name="scopus_q4">
+                                                <input type="number" class="form-control scopus-q4" name="scopus_q4" readonly>
                                             </div>
                                         </div>    
                                         <div class="mb-6">
                                         <label class="form-label" for="ecommerce-product-discount-price">HEC</label>
                                         <div class="input-group mb-4">
                                             <span class="input-group-text">W</span>
-                                            <input type="number" class="form-control hec-w" name="hec_w">
+                                            <input type="number" class="form-control hec-w" name="hec_w" readonly>
                                         </div>
                                         <div class="input-group mb-4">
                                             <span class="input-group-text">X</span>
-                                            <input type="number" class="form-control hec-x" name="hec_x">
+                                            <input type="number" class="form-control hec-x" name="hec_x" readonly>
                                         </div>
                                         <div class="input-group">
                                             <span class="input-group-text">Y</span>
-                                            <input type="number" class="form-control hec-y" name="hec_y" >
+                                            <input type="number" class="form-control hec-y" name="hec_y" readonly>
                                         </div>
                                         </div>
                                         <div class="mb-6">
                                               <label class="form-label"> Medical</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text">Recognized</span>
-                                                    <input type="number" class="form-control medical-recognized" name="medical_recognized" >
+                                                    <input type="number" class="form-control medical-recognized" name="medical_recognized" readonly>
                                                 </div>
                                         </div>
                                         
@@ -833,6 +833,8 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
 
                     // Reset the entire form
                     form[0].reset();
+                    $('.country-dropdown').val(null).trigger('change');
+                    $('.univeristy-dropdown').val(null).trigger('change');
 
                     // Restore the kept values
                     keepFields.forEach(function(name) {

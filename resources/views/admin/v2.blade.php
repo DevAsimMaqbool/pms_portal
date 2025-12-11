@@ -200,10 +200,20 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 50px;
-      height: 50px;
+      width: 70px;
+      height: 40px;
       font-size: 14px;
-      margin-left: 6px;
+      border-radius: 12px;
+      /* square with slightly rounded corners */
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+    }
+     .heading-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      height: 30px;
+      font-size: 14px;
       border-radius: 12px;
       /* square with slightly rounded corners */
       box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
@@ -380,11 +390,32 @@
                     </div>
 
                     <!-- Metrics bottom right -->
-                    <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
+                    {{-- <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
                       <span class="metric-badge bg-label-{{ $color }} fw-bold">{{ $avg }}</span>
                       <span class="metric-badge bg-label-{{ $color }} fw-bold">{{ $rating }}</span>
                       <span class="metric-badge bg-label-{{ $color }} fw-bold" style="width: 80px;">{{ $weight_ss }}/{{ $weight }}</span>
                      
+                    </div> --}}
+                    <div class="position-absolute bottom-0 end-0 p-2">
+
+                        <div class="row gx-2 m-0">
+                          <div class="col-4 col-sm-4">
+                            <div class="d-flex gap-2 align-items-center">
+                              <span class="heading-badge bg-label-{{ $color }}">Score</span>
+                            </div>
+                            <span class="metric-badge bg-label-{{ $color }} mt-2">{{ $avg }}</span>
+                          </div>
+                        <div class="col-4 col-sm-4">
+                            <div class="d-flex gap-2 align-items-center">
+                              <span class="heading-badge bg-label-{{ $color }}">Rating</span>
+                            </div>
+                            <span class="metric-badge bg-label-{{ $color }} mt-2">{{ $rating }}</span>
+                          </div><div class="col-4 col-sm-4">
+                            <div class="d-flex gap-2 align-items-center">
+                              <span class="heading-badge bg-label-{{ $color }}">Weight</span>
+                            </div>
+                            <span class="metric-badge bg-label-{{ $color }} mt-2">{{ $weight_ss }}</span>
+                          </div></div>
                     </div>
                   </div>
                 </div>
