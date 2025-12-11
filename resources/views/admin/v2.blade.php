@@ -320,7 +320,7 @@
           <div class="col-lg-4 col-md-3 col-sm-6">
             <div class="card h-100 {{overallAvgScore(Auth::user()->employee_id)['color']}}">
               <div class="card-body d-flex justify-content-center align-items-center">
-                <h4 class="mb-0 text-center">{{ round(overallAvgScore(Auth::user()->employee_id)['avg'], 1) }}%</h4>
+                <h5 class="mb-0 text-center" id="avg-teachervalue">0%</h5>
               </div>
             </div>
           </div>
@@ -346,6 +346,7 @@
         $icon1 = ['tabler-book', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
         $static_color = ['primary', 'success', 'warning', 'orange', 'danger'];
         $index2 = 0;
+        $totalWeightSS = 0;
       @endphp
 
       @foreach($result as $kpakey => $kpa)
@@ -362,6 +363,7 @@
           
           $avg = $kpaResult['avg'];
           $weight_ss=($avg*$weight)/100;
+           $totalWeightSS += $weight_ss;
           $rating = $kpaResult['rating'];
           $color = $kpaResult['color']; // this will be used for bg and bg-label
 
@@ -396,7 +398,7 @@
                       <span class="metric-badge bg-label-{{ $color }} fw-bold" style="width: 80px;">{{ $weight_ss }}/{{ $weight }}</span>
                      
                     </div> --}}
-                    <div class="position-absolute bottom-0 end-0 p-2">
+                    {{-- <div class="position-absolute bottom-0 end-0 p-2">
 
                         <div class="row gx-2 m-0">
                           <div class="col-4 col-sm-4">
@@ -410,13 +412,49 @@
                               <span class="heading-badge bg-label-{{ $color }}">Rating</span>
                             </div>
                             <span class="metric-badge bg-label-{{ $color }} mt-2">{{ $rating }}</span>
-                          </div><div class="col-4 col-sm-4">
+                          </div>
+                          <div class="col-4 col-sm-4">
                             <div class="d-flex gap-2 align-items-center">
                               <span class="heading-badge bg-label-{{ $color }}">Weight</span>
                             </div>
                             <span class="metric-badge bg-label-{{ $color }} mt-2">{{ $weight_ss }}</span>
-                          </div></div>
-                    </div>
+                          </div>
+                          </div>
+                    </div> --}}
+                    {{-- <div class="mt-2">
+                            <div class="d-flex justify-content-between mb-1 small">
+                                <span class="text-white fw-semibold">Score:</span>
+                                <span class="badge bg-label-{{ $color }}">{{ $avg }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1 small">
+                                <span class="text-white fw-semibold">Rating:</span>
+                                <span class="badge bg-label-{{ $color }}">{{ $rating }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1 small">
+                                <span class="text-white fw-semibold">Weight:</span>
+                                <span class="badge bg-label-{{ $color }}">{{ $weight_ss }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between small">
+                                <span class="text-white fw-semibold">Weighted Score:</span>
+                                <span class="badge bg-label-{{ $color }}">{{ $weight_ss }}</span>
+                            </div>
+                        </div> --}}
+                       <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
+                          <div class="mb-1">
+                            <span class="fw-semibold">Score </span> <span class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}</span>
+                          </div>
+                          <div class="mb-1">
+                            <span class="fw-semibold">Rating </span> <span class="badge bg-label-{{ $color }}">{{ $rating }}</span>
+                          </div>
+                          <div class="mb-1">
+                            <span class="fw-semibold">Weight </span> <span class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}</span>
+                          </div>
+                          <div>
+                            <span class="fw-semibold">Weighted Score </span> <span class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}</span>
+                          </div>
+                        </div>
+
+
                   </div>
                 </div>
 
@@ -1118,7 +1156,12 @@
   <script src="{{ asset('admin/assets/js/cards-advance.js') }}"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      let total = {{ $totalWeightSS }};
+      let avgElement = document.getElementById('avg-teachervalue');
       const elements = document.querySelectorAll('.text-cut');
+      if(avgElement) {
+        avgElement.innerText = total.toFixed(1) + '%';
+      }
 
       function fitToOneLine(el) {
         const originalText = el.dataset.originalText || el.textContent.trim();
