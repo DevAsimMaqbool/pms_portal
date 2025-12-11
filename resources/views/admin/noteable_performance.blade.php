@@ -83,7 +83,7 @@
 
                   <td>
                     <p class="text-warning fw-medium mb-0 d-flex align-items-center gap-1">
-                      70%
+                      {{ number_format(70, 1) }}%
                     </p>
                   </td>
                   <td><span class="badge bg-label-warning me-1">ME</span></td>
@@ -114,7 +114,7 @@
 
                   <td>
                     <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      82%
+                      {{ number_format(82, 1) }}%
                     </p>
                   </td>
                   <td><span class="badge bg-label-success me-1">EE</span></td>
@@ -143,7 +143,7 @@
 
                   <td>
                     <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      81%
+                      {{ number_format(81, 1) }}%
                     </p>
                   </td>
                   <td><span class="badge bg-label-success me-1">EE</span></td>
@@ -172,7 +172,7 @@
 
                   <td>
                     <p class="text-primary fw-medium mb-0 d-flex align-items-center gap-1">
-                      92%
+                      {{ number_format(92, 1) }}%
                     </p>
                   </td>
                   <td><span class="badge bg-label-primary me-1">OS</span></td>
@@ -205,7 +205,7 @@
 
                   <td>
                     <p class="text-primary fw-medium mb-0 d-flex align-items-center gap-1">
-                      90%
+                      {{ number_format(90, 1) }}%
                     </p>
                   </td>
                   <td><span class="badge bg-label-primary me-1">OS</span></td>
