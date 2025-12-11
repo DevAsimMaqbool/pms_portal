@@ -1386,21 +1386,21 @@ if (!function_exists('kpaAvgWeightage')) {
     function kpaAvgWeightage($kpa_id, $role_id)
     {
 
-        $RoleKpaAssignment=  RoleKpaAssignment::where('role_id', $role_id)
+        $RoleKpaAssignment = RoleKpaAssignment::where('role_id', $role_id)
             ->where('key_performance_area_id', $kpa_id)
             ->first();
-            if ($RoleKpaAssignment) {
-                return [
-                    'role_id' => $RoleKpaAssignment->role_id,
-                    'key_performance_area_id' => $RoleKpaAssignment->key_performance_area_id,
-                    'kpa_weightage' => $RoleKpaAssignment->kpa_weightage,
-                ];
-            }
-          return [
-                'role_id' => 0,
-                'key_performance_area_id' => 0,
-                'kpa_weightage' => 0,
-            ];   
+        if ($RoleKpaAssignment) {
+            return [
+                'role_id' => $RoleKpaAssignment->role_id,
+                'key_performance_area_id' => $RoleKpaAssignment->key_performance_area_id,
+                'kpa_weightage' => $RoleKpaAssignment->kpa_weightage,
+            ];
+        }
+        return [
+            'role_id' => 0,
+            'key_performance_area_id' => 0,
+            'kpa_weightage' => 0,
+        ];
 
 
 
@@ -1583,7 +1583,7 @@ function Research_publication_count($facultyId, $indicator_id)
         $target->color = $color;
     }
 
-    
+
 
     return $facultyTargets;
 }
@@ -1670,31 +1670,31 @@ if (!function_exists('getRatingByPercentage')) {
      */
     function getRatingByPercentage($percentage)
     {
-         if ($percentage > 99) {
-                $percentage = 99;
+        if ($percentage > 99) {
+            $percentage = 99;
         }
         $rule = RatingRule::where('min_percentage', '<=', $percentage)
-        ->where('max_percentage', '>', $percentage)
-        ->orderBy('min_percentage', 'desc')
-        ->first();
+            ->where('max_percentage', '>', $percentage)
+            ->orderBy('min_percentage', 'desc')
+            ->first();
 
 
         if (!$rule) {
             return [
                 'min_percentage' => 0,
-                'max_percentage'  => 0,
+                'max_percentage' => 0,
                 'rating' => 'NA',
-                'description'  => 'NA',
-                'color'  => '#000000'
+                'description' => 'NA',
+                'color' => '#000000'
             ];
         }
 
         return [
             'min_percentage' => $rule->min_percentage,
-            'max_percentage'  => $rule->max_percentage,
-            'rating'  => $rule->rating,
-            'description'  => $rule->description,
-            'color'  => $rule->color
+            'max_percentage' => $rule->max_percentage,
+            'rating' => $rule->rating,
+            'description' => $rule->description,
+            'color' => $rule->color
         ];
     }
 }
@@ -1736,6 +1736,14 @@ if (!function_exists('getUniveristyJson')) {
 
         $data = json_decode($json, true);
         return $data;
+    }
+}
+
+if (!function_exists('lineManagerRemarksOnTasks')) {
+    function lineManagerRemarksOnTasks($facultyId)
+    {
+        $remarks = LineManagerFeedback::where('employee_id', $facultyId)->value('remarks');
+        return $remarks ?: 'No remarks yet'; // empty string will fallback
     }
 }
 

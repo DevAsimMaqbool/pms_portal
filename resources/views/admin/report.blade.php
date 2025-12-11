@@ -373,6 +373,18 @@
             box-shadow: 0 1px 1px rgba(0, 0, 0, .06);
         }
 
+        .tag-pill-remarks {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 15px !important;
+            font-size: 11px;
+            line-height: 1.3;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .06);
+        }
+
         /* Download button */
         .download-btn {
             position: fixed;
@@ -1284,7 +1296,7 @@
     </div>
 
     <!-- Page 6: DEVELOPMENT SUGGESTIONS -->
-    <!-- <div class="page A4">
+    <div class="page A4">
         <header class="page-header">
             <div class="identity">
                 <h5 class="name">{{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}</h5>
@@ -1294,63 +1306,33 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="year">2023-2024</div>
-                <div class="issued">Issued on November 02, 2024</div>
+                <div class="title">2024-2025</div>
+                <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
             </div>
         </header>
 
         <section class="dev-suggest">
-            <div class="dev-heading">
-                <span class="dev">DEVELOPMENT</span>
-                <span class="sugg">SUGGESTIONS</span>
-            </div>
+            <h2 class="tp-heading">
+                <span class="t-red">Line Manager</span>
+                <span class="t-blue">Remarks</span>
+            </h2>
 
-            <div class="dev-grid">
-                <div class="dev-card">
-                    <div class="dev-pill green">Stewardship</div>
-                    <p>
-                        To improve stewardship, you should focus on taking greater responsibility for both individual
-                        and team outcomes. This includes being proactive in identifying challenges, offering solutions,
-                        and ensuring that tasks are completed efficiently. Developing stronger communication skills and
-                        demonstrating accountability in decision-making will help build trust and foster a culture of
-                        shared ownership within the team.
-                    </p>
+            <section class="achievements">
+                <div class="achievement-tags">
+                    @php
+                        $remarks = lineManagerRemarksOnTasks(Auth::user()->employee_id);
+                    @endphp
+
+                    <span class="tag-pill-remarks">
+                        {{ $remarks ?? 'No remarks yet' }}
+                    </span>
                 </div>
-                <div class="dev-card">
-                    <div class="dev-pill blue">Industrial Research Engagement</div>
-                    <p>
-                        For industrial research engagement, you should actively seek opportunities to collaborate with
-                        industry partners and understand current industry challenges. Attending relevant conferences,
-                        workshops, and networking events can open doors to partnerships that benefit both academic and
-                        industrial growth. Applying research findings to practical industry problems will also bridge
-                        the gap between theory and practice, enhancing the value of your work.
-                    </p>
-                </div>
-                <div class="dev-card">
-                    <div class="dev-pill magenta">Teaching Innovation</div>
-                    <p>
-                        In order to innovate in teaching, you should explore new teaching methods, such as integrating
-                        technology or using interactive, student-centered approaches. Experimenting with flipped
-                        classrooms, gamification, or real-time student feedback can lead to more engaging and effective
-                        learning experiences. Regularly reflecting on your teaching practices and staying updated on
-                        educational trends will help adapt to evolving student needs and improve course delivery.
-                    </p>
-                </div>
-                <div class="dev-card">
-                    <div class="dev-pill orange">Research Output</div>
-                    <p>
-                        To increase your research output, you should set clear, realistic goals for publishing and
-                        dedicate time for focused writing. Developing a structured approach to research, such as setting
-                        deadlines for each phase, can help maintain consistent progress. Collaborating with colleagues
-                        and seeking mentorship can also help improve the quality of work, streamline the publication
-                        process, and increase the chances of having research published in high-impact journals.
-                    </p>
-                </div>
-            </div>
+            </section>
+
         </section>
 
         <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
-    </div> -->
+    </div>
 
     <!-- Chart.js and init -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
