@@ -6,7 +6,7 @@
         <script>
           document.write(new Date().getFullYear());
         </script>
-        , made by <a href="https://www.superior.edu.pk/" target="_blank" class="footer-link">The Superior Group</a>
+        | Concept & Design: HR Department | Platform Development: IBS with ♥️
       </div>
       <div class="d-none d-lg-inline-block">
 

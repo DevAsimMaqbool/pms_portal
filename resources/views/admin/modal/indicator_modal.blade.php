@@ -1570,7 +1570,7 @@
 
 <!-- / Payment Methods modal -->
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="ResearchProductivityofPGStudents(MS/Mphil/PhD)" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="ResearchProductivityofPGStudents(MS/MPhil/PhD)" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -1579,14 +1579,14 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    Research Productivity of PG Students(MS / Mphil / PhD)
+                    Research Productivity of PG Students(MS / MPhil / PhD)
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Fall -->
-                        <div class="tab-pane fade show active" id="ResearchProductivityofPGStudents(MS/Mphil/PhD)-fall"
+                        <div class="tab-pane fade show active" id="ResearchProductivityofPGStudents(MS/MPhil/PhD)-fall"
                             role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
