@@ -38,7 +38,7 @@
     
                                             <div class="col-md-6">
                                                 <label for="faculty_member" class="form-label">Name of Faculty Member</label>
-                                                <select  name="faculty_member_id" class="select2 form-select faculty-member" required>
+                                                <select  name="folder_lms[0][faculty_member_id]" class="select2 form-select faculty-member" required>
                                                     <option value="">-- Select Faculty Member --</option>
                                                     @foreach($facultyMembers as $member)
                                                     
@@ -56,7 +56,7 @@
 
                                             <div class="col-md-6">
                                                 <label for="faculty_member" class="form-label">Class</label>
-                                                <select  name="class_name[]" id="select2Success" class="select2 form-select  faculty-class" multiple required>
+                                                <select  name="folder_lms[0][class_name]" class="select2 form-select faculty-class" required>
                                                     <option value="">-- Select classes --</option>
                                                 </select>
                                             </div>
@@ -65,15 +65,15 @@
                                             <div class="col-md-12">
                                                     <label class="form-label d-block">1- Course Folder Status as per QCH</label>
                                                     <div>
-                                                        <input type="radio" name="completion_of_Course_folder" id="completed"
+                                                        <input type="radio" name="folder_lms[0][completion_of_Course_folder]" id="completed"
                                                             value="100">
                                                         <label for="completed">Completed</label>
 
-                                                        <input type="radio" name="completion_of_Course_folder" id="partially_completed"
+                                                        <input type="radio" name="folder_lms[0][completion_of_Course_folder]" id="partially_completed"
                                                             value="70" checked>
                                                         <label for="partially_completed">Partially Completed</label>
 
-                                                        <input type="radio" name="completion_of_Course_folder" id="not_Completed"
+                                                        <input type="radio" name="folder_lms[0][completion_of_Course_folder]" id="not_Completed"
                                                             value="25">
                                                         <label for="not_Completed">Not Completed</label>
                                                     </div>
@@ -83,15 +83,15 @@
                                             <div class="col-md-12">
                                                 <label class="form-label d-block">2- LMS Compliance Status</label>
                                                 <div>
-                                                <input type="radio" name="compliance_and_usage_of_lms" id="lms_completed"
+                                                <input type="radio" name="folder_lms[0][compliance_and_usage_of_lms]" id="lms_completed"
                                                         value="100">
                                                     <label for="lms_completed">Completed</label>
 
-                                                    <input type="radio" name="compliance_and_usage_of_lms" id="lms_partially_completed"
+                                                    <input type="radio" name="folder_lms[0][compliance_and_usage_of_lms]" id="lms_partially_completed"
                                                         value="70" checked>
                                                     <label for="lms_partially_completed">Partially Completed</label>
 
-                                                    <input type="radio" name="compliance_and_usage_of_lms" id="lms_not_Completed"
+                                                    <input type="radio" name="folder_lms[0][compliance_and_usage_of_lms]" id="lms_not_Completed"
                                                         value="25">
                                                     <label for="lms_not_Completed">Not Completed</label>
                                                 </div>
@@ -100,6 +100,11 @@
 
 
                                         </div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <button type="button" class="btn btn-primary waves-effect waves-light" id="add-grant"><i
+                                                class="icon-base ti tabler-plus me-1"></i> <span
+                                                class="align-middle">Add</span></button>
                                     </div>
                                 </div>
                                 <div class="col-4 text-center demo-vertical-spacing">
@@ -165,9 +170,90 @@
             $(document).ready(function () {
 
 
-               
+
+                
+      
+                let grantIndex = 1; // start from 1 because your first row is 0
+
+                $('#add-grant').click(function () {
+                    let newGroup = `
+                    <div class="grant-group row g-3 mb-3 mt-3 p-3 border border-primary">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Name of Faculty Member</label>
+                            <select name="folder_lms[${grantIndex}][faculty_member_id]" class="select2 form-select faculty-member" required>
+                                <option value="">-- Select Faculty Member --</option>
+                                @foreach($facultyMembers as $member)
+                                     <option 
+                                        value="{{ $member->id }}" 
+                                        data-faculty_id="{{ $member->faculty_id }}" 
+                                        data-department="{{ $member->department }}" 
+                                        data-job_title="{{ $member->job_title }}">
+                                        {{ $member->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Class</label>
+                            <select name="folder_lms[${grantIndex}][class_name]" class="select2 form-select faculty-class" required>
+                                <option value="">-- Select classes --</option>
+                                
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label d-block">1- Course Folder Status as per QCH</label>
+                            <div>
+                                <input type="radio" name="folder_lms[${grantIndex}][completion_of_Course_folder]" id="completed_${grantIndex}" value="100">
+                                <label for="completed_${grantIndex}">Completed</label>
+
+                                <input type="radio" name="folder_lms[${grantIndex}][completion_of_Course_folder]" id="partially_completed_${grantIndex}" value="70" checked>
+                                <label for="partially_completed_${grantIndex}">Partially Completed</label>
+
+                                <input type="radio" name="folder_lms[${grantIndex}][completion_of_Course_folder]" id="not_Completed_${grantIndex}" value="25">
+                                <label for="not_Completed_${grantIndex}">Not Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label d-block">2- LMS Compliance Status</label>
+                            <div>
+                                <input type="radio" name="folder_lms[${grantIndex}][compliance_and_usage_of_lms]" id="lms_completed_${grantIndex}" value="100">
+                                <label for="lms_completed_${grantIndex}">Completed</label>
+
+                                <input type="radio" name="folder_lms[${grantIndex}][compliance_and_usage_of_lms]" id="lms_partially_completed_${grantIndex}" value="70" checked>
+                                <label for="lms_partially_completed_${grantIndex}">Partially Completed</label>
+
+                                <input type="radio" name="folder_lms[${grantIndex}][compliance_and_usage_of_lms]" id="lms_not_Completed_${grantIndex}" value="25">
+                                <label for="lms_not_Completed_${grantIndex}">Not Completed</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-grant">
+                                <i class="icon-base ti tabler-x me-1"></i>
+                                <span class="align-middle">Delete</span>
+                            </button>
+                        </div>
+
+                    </div>
+                    `;
+
+                    $('#grant-details-container').append(newGroup);
+
+                    // Initialize select2 for new selects
+                    //$(`select[name^="folder_lms[${grantIndex}]"]`).select2();
+                    $(`.grant-group:eq(${grantIndex}) .select2`).select2();
+
+                    grantIndex++;
+                });
 
 
+                // Remove a grant group
+                $(document).on('click', '.remove-grant', function () {
+                    $(this).closest('.grant-group').remove();
+                });
 
                 // Show/hide proof field based on status
                 $(document).on('change', '.grant-status', function () {
@@ -258,32 +344,26 @@
                             // Clear previous errors before showing new ones
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
-                             if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
+                            if (xhr.status === 422) {
+                                    let errors = xhr.responseJSON.errors;
 
-                            // Loop through all validation errors
-                            $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
+                                    // Loop through all validation errors
+                                    $.each(errors, function (field, messages) {
+                                        let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                        fieldName = fieldName.replace('[]]', ']');
+                                        let input = form.find('[name="' + fieldName + '"]');
 
-                                if (input.length) {
-                                    input.addClass('is-invalid');
+                                        if (input.length) {
+                                            input.addClass('is-invalid');
 
-                                    // Show error message under input
-                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                }
-                            });
+                                            // Show error message under input
+                                            input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                        }
+                                    });
 
-                        } else if (xhr.status === 409) {
-                            // 🔥 Duplicate record message
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Duplicate Entry',
-                                text: xhr.responseJSON.message
-                            });
-
-                        } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
-                        }
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
                         }
                     });
                 });
