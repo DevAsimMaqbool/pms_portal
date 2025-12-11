@@ -326,12 +326,12 @@
           </div>
 
           <div class="col-lg-4 col-md-3 col-sm-6">
-            <div class="card bg-{{overallAvgScore(Auth::user()->employee_id)['color']}} h-100" data-bs-toggle="tooltip"
+            <div class="card h-100" id="rating-teachercolor"data-bs-toggle="tooltip"
               data-bs-placement="top"
-              data-bs-custom-class="tooltip-{{overallAvgScore(Auth::user()->employee_id)['color']}}"
+              data-bs-custom-class="tooltip-"
               data-bs-original-title="You’re going beyond what’s asked of you.">
               <div class="card-body d-flex justify-content-center align-items-center">
-                <h4 class="mb-0 text-center text-white">{{overallAvgScore(Auth::user()->employee_id)['rating']}}</h4>
+                <h4 class="mb-0 text-center text-white" id="rating-teachervalue"></h4>
               </div>
             </div>
           </div>
@@ -441,16 +441,16 @@
                         </div> --}}
                        <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
                           <div class="mb-1">
-                            <span class="fw-semibold">Score </span> <span class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}</span>
+                            <span class="fw-semibold">Score </span> <span class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
                           </div>
                           <div class="mb-1">
                             <span class="fw-semibold">Rating </span> <span class="badge bg-label-{{ $color }}">{{ $rating }}</span>
                           </div>
                           <div class="mb-1">
-                            <span class="fw-semibold">Weight </span> <span class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}</span>
+                            <span class="fw-semibold">Weight </span> <span class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
                           </div>
                           <div>
-                            <span class="fw-semibold">Weighted Score </span> <span class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}</span>
+                            <span class="fw-semibold">Weighted Score </span> <span class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
                           </div>
                         </div>
 
@@ -1157,10 +1157,50 @@
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       let total = {{ $totalWeightSS }};
-      let avgElement = document.getElementById('avg-teachervalue');
+      total = parseFloat(total.toFixed(1));
+     
       const elements = document.querySelectorAll('.text-cut');
-      if(avgElement) {
-        avgElement.innerText = total.toFixed(1) + '%';
+      function getRatingAndColor(percentage) {
+        let rating = '';
+        let color = '';
+
+        if (percentage >= 90) {
+            rating = 'OS';
+            color = '#6EA8FE';
+        } else if (percentage >= 80) {
+            rating = 'EE';
+            color = '#96e2b4';
+        } else if (percentage >= 70) {
+            rating = 'ME';
+            color = '#ffcb9a';
+        } else if (percentage >= 60) {
+            rating = 'NI';
+            color = '#fd7e13';
+        } else if (percentage > 0) {
+            rating = 'BE';
+            color = '#ff4c51';
+        } else {
+            rating = 'NA';
+            color = '#000000';
+        }
+
+        return { rating, color };
+    }
+
+      let result = getRatingAndColor(total);
+      let avgElement = document.getElementById('avg-teachervalue');
+      let ratingElement = document.getElementById('rating-teachervalue');
+      let ratingColor = document.getElementById('rating-teachercolor');
+      
+      if (avgElement) {
+        
+          avgElement.innerText = total.toFixed(1) + '%';
+      }
+      if (ratingElement) {
+          ratingElement.innerText = result.rating;
+      }
+      if (ratingColor) {
+          ratingColor.style.backgroundColor = result.color;
       }
 
       function fitToOneLine(el) {
