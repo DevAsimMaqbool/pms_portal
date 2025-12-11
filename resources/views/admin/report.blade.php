@@ -837,7 +837,7 @@
                         @endphp
                         <td>Teaching and Learning</td>
                         <td class="report-center">100%</td>
-                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
@@ -850,7 +850,7 @@
                         @endphp
                         <td>Research, Innovation and Commercialisation</td>
                         <td class="report-center">100%</td>
-                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
@@ -863,7 +863,7 @@
                         @endphp
                         <td>Institutional Engagement</td>
                         <td class="report-center">100%</td>
-                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                 </tbody>
@@ -960,7 +960,7 @@
                         @endphp
                         <td>Teaching Delivery  (PG/UG)</td>
                         <td class="report-center">100%</td>
-                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
@@ -973,7 +973,7 @@
                         @endphp
                         <td>Teaching Management</td>
                         <td class="report-center">100%</td>
-                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
@@ -986,7 +986,7 @@
                         @endphp
                         <td>Teaching Output</td>
                         <td class="report-center">100%</td>
-                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                 </tbody>
@@ -1090,7 +1090,7 @@
                         @endphp
                         <td>Research Productivity & Quality</td>
                         <td class="report-center">100%</td>
-                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
@@ -1103,7 +1103,7 @@
                         @endphp
                         <td>Other Knowledge Products</td>
                         <td class="report-center">100%</td>
-                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
@@ -1116,7 +1116,7 @@
                         @endphp
                         <td>Research Supervision at PG Level</td>
                         <td class="report-center">100%</td>
-                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
@@ -1236,7 +1236,7 @@
                         @endphp
                         <td>Performance in Departmental Tasks</td>
                         <td class="report-center">100%</td>
-                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
@@ -1249,7 +1249,7 @@
                         @endphp
                         <td>Performance in Events</td>
                         <td class="report-center">100%</td>
-                        <td class="report-center">{{ $avg }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                 </tbody>
@@ -1324,7 +1324,7 @@
                     @endphp
 
                     <span class="tag-pill-remarks">
-                        {{ $remarks ?? 'No remarks yet' }}
+                        {{ $remarks}}
                     </span>
                 </div>
             </section>

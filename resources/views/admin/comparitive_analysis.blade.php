@@ -118,7 +118,8 @@
               <div class="card-title mb-0">
                 <h5 class="m-0 me-2">Self vs Self</h5>
                 <p class="mb-0">Your performance against the selected KPA is <span
-                    class=" badge inde-status me-1">growing</span><span class=" badge inde-precentage">90</span></p>
+                    class=" badge inde-status me-1">growing</span><span
+                    class=" badge inde-precentage">{{ number_format(90.00, 1) }}</span></p>
               </div>
             </div>
             <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
@@ -273,7 +274,7 @@
                       <div class="progress-bar bg-primary" role="progressbar" style="width: 91%" aria-valuenow="91"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <span class="text-body-secondary">91%</span>
+                    <span class="text-body-secondary">{{ number_format(91, 1) }}%</span>
                   </div>
                 </li>
                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -293,7 +294,7 @@
                       <div class="progress-bar bg-success" role="progressbar" style="width: 82%" aria-valuenow="82"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <span class="text-body-secondary">82%</span>
+                    <span class="text-body-secondary">{{ number_format(82, 1) }}%</span>
                   </div>
                 </li>
 
@@ -314,7 +315,7 @@
                       <div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <span class="text-body-secondary">70%</span>
+                    <span class="text-body-secondary">{{ number_format(70, 1) }}%</span>
                   </div>
                 </li>
 
@@ -335,7 +336,7 @@
                       <div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <span class="text-body-secondary">70%</span>
+                    <span class="text-body-secondary">{{ number_format(70, 1) }}%</span>
                   </div>
                 </li>
                 <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -355,7 +356,7 @@
                       <div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="50"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <span class="text-body-secondary">50%</span>
+                    <span class="text-body-secondary">{{ number_format(50, 1) }}%</span>
                   </div>
                 </li>
               </ul>
@@ -485,91 +486,103 @@
             </div>
             <div class="card-body">
 
-                 <!-- schroller -->
-               
+              <!-- schroller -->
 
-                  <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-                          {{-- <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                          </div> --}}
-                          <div class="carousel-inner">
-                            <div class="carousel-item active">
-                               
-                               <div class="user-avatar-section">
-                                  <div class=" d-flex align-items-center flex-column">
-                                    <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/1.png')}}" height="100" width="100" alt="User avatar">
-                                    <div class="user-info text-center">
-                                      <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
-                                      <h5 class="m-0">Dr. Tehreem Masood</h5>
-                                      <p class="m-0">Associate Professor</p>
-                                      <small class="m-0">Department of Software Engineering</small>
-                                    </div>
-                                    <img class="img-fluid rounded-circle mt-2 mb-2" src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100" alt="User avatar">
-                                    <div class="user-info text-center">
-                                      <span class="badge bg-label-primary">98%</span>
-                                      <p class="m-0">Leding with excellence and inspiring success across the institution</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              
-                            </div>
-                            <div class="carousel-item">
-                              
-                                <div class="user-avatar-section">
-                                  <div class=" d-flex align-items-center flex-column">
-                                    <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/3.png')}}" height="100" width="100" alt="User avatar">
-                                    <div class="user-info text-center">
-                                      <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
-                                      <h5 class="m-0">Abdullah Tanweer</h5>
-                                      <p class="m-0">Associate Professor</p>
-                                      <small class="m-0">Department of Software Engineering</small>
-                                    </div>
-                                    <img class="img-fluid rounded-circle mt-2 mb-2" src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100" alt="User avatar">
-                                    <div class="user-info text-center">
-                                      <span class="badge bg-label-primary">98%</span>
-                                      <p class="m-0">Leding with excellence and inspiring success across the institution</p>
-                                    </div>
-                                  </div>
-                                </div>
 
-                            </div>
-                            <div class="carousel-item">
+              <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                {{-- <div class="carousel-indicators">
+                  <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                  <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                  <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+                </div> --}}
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
 
-                                <div class="user-avatar-section">
-                                  <div class=" d-flex align-items-center flex-column">
-                                    <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/1.png')}}" height="100" width="100" alt="User avatar">
-                                    <div class="user-info text-center">
-                                      <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
-                                      <h5 class="m-0">Dr. Tehreem Masood</h5>
-                                      <p class="m-0">Associate Professor</p>
-                                      <small class="m-0">Department of Software Engineering</small>
-                                    </div>
-                                    <img class="img-fluid rounded-circle mt-2 mb-2" src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100" alt="User avatar">
-                                    <div class="user-info text-center">
-                                      <span class="badge bg-label-primary">98%</span>
-                                      <p class="m-0">Leding with excellence and inspiring success across the institution</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              
-                            </div>
-                          </div>
-                          <a class="carousel-control-prev" href="#carouselExample" role="button" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                          </a>
-                          <a class="carousel-control-next" href="#carouselExample" role="button" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                          </a>
+                    <div class="user-avatar-section">
+                      <div class=" d-flex align-items-center flex-column">
+                        <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/1.png')}}"
+                          height="100" width="100" alt="User avatar">
+                        <div class="user-info text-center">
+                          <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
+                          <h5 class="m-0">Dr. Tehreem Masood</h5>
+                          <p class="m-0">Associate Professor</p>
+                          <small class="m-0">Department of Software Engineering</small>
                         </div>
+                        <img class="img-fluid rounded-circle mt-2 mb-2"
+                          src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100"
+                          alt="User avatar">
+                        <div class="user-info text-center">
+                          <span class="badge bg-label-primary">{{ number_format(98, 1) }}%</span>
+                          <p class="m-0">Leding with excellence and inspiring success across the institution</p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="carousel-item">
+
+                    <div class="user-avatar-section">
+                      <div class=" d-flex align-items-center flex-column">
+                        <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/3.png')}}"
+                          height="100" width="100" alt="User avatar">
+                        <div class="user-info text-center">
+                          <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
+                          <h5 class="m-0">Abdullah Tanweer</h5>
+                          <p class="m-0">Associate Professor</p>
+                          <small class="m-0">Department of Software Engineering</small>
+                        </div>
+                        <img class="img-fluid rounded-circle mt-2 mb-2"
+                          src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100"
+                          alt="User avatar">
+                        <div class="user-info text-center">
+                          <span class="badge bg-label-primary">{{ number_format(98, 1) }}%</span>
+                          <p class="m-0">Leding with excellence and inspiring success across the institution</p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="carousel-item">
+
+                    <div class="user-avatar-section">
+                      <div class=" d-flex align-items-center flex-column">
+                        <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/1.png')}}"
+                          height="100" width="100" alt="User avatar">
+                        <div class="user-info text-center">
+                          <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
+                          <h5 class="m-0">Dr. Tehreem Masood</h5>
+                          <p class="m-0">Associate Professor</p>
+                          <small class="m-0">Department of Software Engineering</small>
+                        </div>
+                        <img class="img-fluid rounded-circle mt-2 mb-2"
+                          src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100"
+                          alt="User avatar">
+                        <div class="user-info text-center">
+                          <span class="badge bg-label-primary">{{ number_format(98, 1) }}%</span>
+                          <p class="m-0">Leding with excellence and inspiring success across the institution</p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExample" role="button" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExample" role="button" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </a>
+              </div>
 
 
 
-                 <!--/ end schrol --> 
-            
+              <!--/ end schrol -->
+
             </div>
 
           </div>
@@ -697,23 +710,23 @@
 
                 // Build Indicator Average list
                 $indicatorList.append(`
-                                                                                                                                <div class="d-flex justify-content-between align-items-center mb-6">
-                                                                                                                                    <div class="d-flex align-items-center">
-                                                                                                                                        <div class="avatar avatar me-4">
-                                                                                                                                            <img src="{{ asset('admin/assets/img/avatars/1.png')}}" alt="Avatar"
-                                                                                                                                                class="rounded-circle" />
-                                                                                                                                        </div>
-                                                                                                                                        <div>
-                                                                                                                                            <div>
-                                                                                                                                                <h6 class="mb-0 text-truncate">${indicator.name}</h6>
-                                                                                                                                                <small class="text-truncate text-body">${indicator.job_title}</small>
-                                                                                                                                            </div>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="text-end">
-                                                                                                                                        <h6 class="mb-0" style="color:${indicator.color}">${indicator.avg}%</h6>
-                                                                                                                                    </div>
-                                                                                                                                </div>`);
+                                                                                                                                                  <div class="d-flex justify-content-between align-items-center mb-6">
+                                                                                                                                                      <div class="d-flex align-items-center">
+                                                                                                                                                          <div class="avatar avatar me-4">
+                                                                                                                                                              <img src="{{ asset('admin/assets/img/avatars/1.png')}}" alt="Avatar"
+                                                                                                                                                                  class="rounded-circle" />
+                                                                                                                                                          </div>
+                                                                                                                                                          <div>
+                                                                                                                                                              <div>
+                                                                                                                                                                  <h6 class="mb-0 text-truncate">${indicator.name}</h6>
+                                                                                                                                                                  <small class="text-truncate text-body">${indicator.job_title}</small>
+                                                                                                                                                              </div>
+                                                                                                                                                          </div>
+                                                                                                                                                      </div>
+                                                                                                                                                      <div class="text-end">
+                                                                                                                                                          <h6 class="mb-0" style="color:${indicator.color}">${indicator.avg}%</h6>
+                                                                                                                                                      </div>
+                                                                                                                                                  </div>`);
               });
 
               updateBarChart(indicatorNames, avgValues, colors);
@@ -993,9 +1006,9 @@
             const item = document.createElement("div");
             item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
             item.innerHTML = `
-                                                                                                                                                                                <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                                                                                                <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                                                                                              `;
+                                                                                                                                                                                                  <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                                                                                                                                  <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                                                                                                                                `;
             legendContainer.appendChild(item);
           });
         }
@@ -1170,11 +1183,11 @@
                   size: 0,
                   customSVG: {
                     SVG: `
-                                                                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-                                                                                                                                  <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
-                                                                                                                                  <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
-                                                                                                                                </svg>
-                                                                                                                              `,
+                                                                                                                                                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                                                                                                                                                    <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
+                                                                                                                                                    <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
+                                                                                                                                                  </svg>
+                                                                                                                                                `,
                     offsetX: -10,
                     offsetY: -28
                   }
@@ -1201,9 +1214,9 @@
             const item = document.createElement("div");
             item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
             item.innerHTML = `
-                                                                                                                        <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                                        <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                                      `;
+                                                                                                                                          <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                                                                          <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                                                                        `;
             legendContainer.appendChild(item);
           });
         }
@@ -1381,10 +1394,10 @@
               const item = document.createElement("div");
               item.className = "d-flex align-items-center mx-2 my-1";
               item.innerHTML = `
-                                                                    <span style="width:14px;height:14px;background:${colors[i % colors.length]};
-                                                                    border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                    <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                  `;
+                                                                                      <span style="width:14px;height:14px;background:${colors[i % colors.length]};
+                                                                                      border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                      <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                    `;
               legendContainer.appendChild(item);
 
               if (label === highlightName) {  // ✅ Only show emoji on highlighted bar
@@ -1514,11 +1527,11 @@
                     size: 0,
                     customSVG: {
                       SVG: `
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-                                                                                    <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
-                                                                                    <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
-                                                                                    </svg>
-                                                                                    `,
+                                                                                                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                                                                                                      <circle cx="11" cy="11" r="7" fill="#FF5733" stroke="#fff" stroke-width="2"/>
+                                                                                                      <text x="11" y="15" text-anchor="middle" font-size="10" fill="#fff">👤</text>
+                                                                                                      </svg>
+                                                                                                      `,
                       offsetX: -10,
                       offsetY: -28,
                     },
@@ -1540,9 +1553,9 @@
               const item = document.createElement("div");
               item.className = "d-flex align-items-center mx-2 my-1";
               item.innerHTML = `
-                                                                                                                        <span style="width:14px;height:14px;background:${colors[i % colors.length]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                                                        <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                                                      `;
+                                                                                                                                          <span style="width:14px;height:14px;background:${colors[i % colors.length]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
+                                                                                                                                          <span style="font-size:13px;color:#6e6b7b;">${label}</span>
+                                                                                                                                        `;
               legendContainer.appendChild(item);
             });
           }

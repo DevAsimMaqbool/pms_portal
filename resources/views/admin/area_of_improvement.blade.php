@@ -64,7 +64,7 @@
                   <td><span class="badge bg-label-danger">BE</span></td>
                   <td>
                     <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
-                      50%
+                      {{ number_format(50, 1) }}%
                     </p>
                   </td>
                 </tr>
@@ -93,7 +93,7 @@
                   <td><span class="badge bg-label-danger">BE</span></td>
                   <td>
                     <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
-                      53%
+                      {{ number_format(53, 1) }}%
                     </p>
                   </td>
                 </tr>
@@ -123,7 +123,7 @@
                   <td><span class="badge bg-label-danger">BE</span></td>
                   <td>
                     <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
-                      59%
+                      {{ number_format(59, 1) }}%
                     </p>
                   </td>
                 </tr>
@@ -153,7 +153,7 @@
                   <td class="pt-5"><span class="badge bg-label-orange">NI</span></td>
                   <td class="pt-5">
                     <p class="text-orange fw-medium mb-0 d-flex align-items-center gap-1">
-                      63%
+                      {{ number_format(63, 1) }}%
                     </p>
                   </td>
                 </tr>
@@ -181,7 +181,7 @@
                   <td class="pt-5"><span class="badge bg-label-orange">NI</span></td>
                   <td class="pt-5">
                     <p class="text-orange fw-medium mb-0 d-flex align-items-center gap-1">
-                      65%
+                      {{ number_format(65, 1) }}%
                     </p>
                   </td>
                 </tr>

@@ -138,34 +138,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-inner {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            transition: none;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-front,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-back {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            position: relative;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            transform: none;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            backface-visibility: visible;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                                                                                                                                                                                                                                                                                                  .flip-card-inner {
+                                                                                                                                                                                                                                                                                                                                    transition: none;
+                                                                                                                                                                                                                                                                                                                                  }
+                                                                                                                                                                                                                                                                                                                                  .flip-card-front,
+                                                                                                                                                                                                                                                                                                                                  .flip-card-back {
+                                                                                                                                                                                                                                                                                                                                    position: relative;
+                                                                                                                                                                                                                                                                                                                                    transform: none;
+                                                                                                                                                                                                                                                                                                                                    backface-visibility: visible;
+                                                                                                                                                                                                                                                                                                                                  }
+                                                                                                                                                                                                                                                                                                                                  .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          background-image:
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                                                                                                                                                                                                                                                                                                                  background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                                                                                                                                                                                                                                                                                                                  background-image:
+                                                                                                                                                                                                                                                                                                                                  radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                                                                                                                                                                                                                                                                                                  radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        background-image:
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                                                                                                                                                                                                                                                                                                                background-image:
+                                                                                                                                                                                                                                                                                                                                  radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                                                                                                                                                                                                                                                                                                  radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                                                                                                                                                                                                                                                                                                  radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                                                                                                                                                                                                                                                                                                  background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          */
+                                                                                                                                                                                                                                                                                                                                  */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -207,7 +207,8 @@
       /* square with slightly rounded corners */
       box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
     }
-     .heading-badge {
+
+    .heading-badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -326,10 +327,8 @@
           </div>
 
           <div class="col-lg-4 col-md-3 col-sm-6">
-            <div class="card h-100" id="rating-teachercolor"data-bs-toggle="tooltip"
-              data-bs-placement="top"
-              data-bs-custom-class="tooltip-"
-              data-bs-original-title="You’re going beyond what’s asked of you.">
+            <div class="card h-100" id="rating-teachercolor" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-" data-bs-original-title="You’re going beyond what’s asked of you.">
               <div class="card-body d-flex justify-content-center align-items-center">
                 <h4 class="mb-0 text-center text-white" id="rating-teachervalue"></h4>
               </div>
@@ -359,11 +358,11 @@
           // Get dynamic average, rating, and color
           $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
           $kpaAvgWeightage = kpaAvgWeightage($kpa['id'], 21);
-          $weight=$kpaAvgWeightage['kpa_weightage'];
-          
+          $weight = $kpaAvgWeightage['kpa_weightage'];
+
           $avg = $kpaResult['avg'];
-          $weight_ss=($avg*$weight)/100;
-           $totalWeightSS += $weight_ss;
+          $weight_ss = ($avg * $weight) / 100;
+          $totalWeightSS += $weight_ss;
           $rating = $kpaResult['rating'];
           $color = $kpaResult['color']; // this will be used for bg and bg-label
 
@@ -395,64 +394,69 @@
                     {{-- <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
                       <span class="metric-badge bg-label-{{ $color }} fw-bold">{{ $avg }}</span>
                       <span class="metric-badge bg-label-{{ $color }} fw-bold">{{ $rating }}</span>
-                      <span class="metric-badge bg-label-{{ $color }} fw-bold" style="width: 80px;">{{ $weight_ss }}/{{ $weight }}</span>
-                     
+                      <span class="metric-badge bg-label-{{ $color }} fw-bold" style="width: 80px;">{{ $weight_ss }}/{{
+                        $weight }}</span>
+
                     </div> --}}
                     {{-- <div class="position-absolute bottom-0 end-0 p-2">
 
-                        <div class="row gx-2 m-0">
-                          <div class="col-4 col-sm-4">
-                            <div class="d-flex gap-2 align-items-center">
-                              <span class="heading-badge bg-label-{{ $color }}">Score</span>
-                            </div>
-                            <span class="metric-badge bg-label-{{ $color }} mt-2">{{ $avg }}</span>
-                          </div>
+                      <div class="row gx-2 m-0">
                         <div class="col-4 col-sm-4">
-                            <div class="d-flex gap-2 align-items-center">
-                              <span class="heading-badge bg-label-{{ $color }}">Rating</span>
-                            </div>
-                            <span class="metric-badge bg-label-{{ $color }} mt-2">{{ $rating }}</span>
+                          <div class="d-flex gap-2 align-items-center">
+                            <span class="heading-badge bg-label-{{ $color }}">Score</span>
                           </div>
-                          <div class="col-4 col-sm-4">
-                            <div class="d-flex gap-2 align-items-center">
-                              <span class="heading-badge bg-label-{{ $color }}">Weight</span>
-                            </div>
-                            <span class="metric-badge bg-label-{{ $color }} mt-2">{{ $weight_ss }}</span>
+                          <span class="metric-badge bg-label-{{ $color }} mt-2">{{ $avg }}</span>
+                        </div>
+                        <div class="col-4 col-sm-4">
+                          <div class="d-flex gap-2 align-items-center">
+                            <span class="heading-badge bg-label-{{ $color }}">Rating</span>
                           </div>
+                          <span class="metric-badge bg-label-{{ $color }} mt-2">{{ $rating }}</span>
+                        </div>
+                        <div class="col-4 col-sm-4">
+                          <div class="d-flex gap-2 align-items-center">
+                            <span class="heading-badge bg-label-{{ $color }}">Weight</span>
                           </div>
+                          <span class="metric-badge bg-label-{{ $color }} mt-2">{{ $weight_ss }}</span>
+                        </div>
+                      </div>
                     </div> --}}
                     {{-- <div class="mt-2">
-                            <div class="d-flex justify-content-between mb-1 small">
-                                <span class="text-white fw-semibold">Score:</span>
-                                <span class="badge bg-label-{{ $color }}">{{ $avg }}</span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-1 small">
-                                <span class="text-white fw-semibold">Rating:</span>
-                                <span class="badge bg-label-{{ $color }}">{{ $rating }}</span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-1 small">
-                                <span class="text-white fw-semibold">Weight:</span>
-                                <span class="badge bg-label-{{ $color }}">{{ $weight_ss }}</span>
-                            </div>
-                            <div class="d-flex justify-content-between small">
-                                <span class="text-white fw-semibold">Weighted Score:</span>
-                                <span class="badge bg-label-{{ $color }}">{{ $weight_ss }}</span>
-                            </div>
-                        </div> --}}
-                       <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
-                          <div class="mb-1">
-                            <span class="fw-semibold">Score </span> <span class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
-                          </div>
-                          <div class="mb-1">
-                            <span class="fw-semibold">Rating </span> <span class="badge bg-label-{{ $color }}">{{ $rating }}</span>
-                          </div>
-                          <div class="mb-1">
-                            <span class="fw-semibold">Weight </span> <span class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
-                          </div>
-                          <div>
-                            <span class="fw-semibold">Weighted Score </span> <span class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
-                          </div>
-                        </div>
+                      <div class="d-flex justify-content-between mb-1 small">
+                        <span class="text-white fw-semibold">Score:</span>
+                        <span class="badge bg-label-{{ $color }}">{{ $avg }}</span>
+                      </div>
+                      <div class="d-flex justify-content-between mb-1 small">
+                        <span class="text-white fw-semibold">Rating:</span>
+                        <span class="badge bg-label-{{ $color }}">{{ $rating }}</span>
+                      </div>
+                      <div class="d-flex justify-content-between mb-1 small">
+                        <span class="text-white fw-semibold">Weight:</span>
+                        <span class="badge bg-label-{{ $color }}">{{ $weight_ss }}</span>
+                      </div>
+                      <div class="d-flex justify-content-between small">
+                        <span class="text-white fw-semibold">Weighted Score:</span>
+                        <span class="badge bg-label-{{ $color }}">{{ $weight_ss }}</span>
+                      </div>
+                    </div> --}}
+                    <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
+                      <div class="mb-1">
+                        <span class="fw-semibold">Score </span> <span
+                          class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
+                      </div>
+                      <div class="mb-1">
+                        <span class="fw-semibold">Rating </span> <span
+                          class="badge bg-label-{{ $color }}">{{ $rating }}</span>
+                      </div>
+                      <div class="mb-1">
+                        <span class="fw-semibold">Weight </span> <span
+                          class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
+                      </div>
+                      <div>
+                        <span class="fw-semibold">Weighted Score </span> <span
+                          class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
+                      </div>
+                    </div>
 
 
                   </div>
@@ -540,33 +544,33 @@
                   <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$avg}}%"
                     aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <span class="text-body-secondary">{{$avg}}%</span>
+                <span class="text-body-secondary">{{number_format($avg, 1)}}%</span>
                 <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
               </div>
             </div>
           </div>
 
           <!-- <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                                                                                                                                                                                            data-bs-custom-class="tooltip-warning"
-                                                                                                                                                                                            data-bs-original-title="You’re doing well and meeting your goals.Keep your consistency — it’s your strength.">
-                                                                                                                                                                                            <div class="card-body d-flex">
-                                                                                                                                                                                              <div class="d-flex w-50 align-items-center me-4">
-                                                                                                                                                                                                <div class="badge bg-label-warning rounded p-1_5 me-4"><i
-                                                                                                                                                                                                    class="icon-base ti tabler-user-check icon-md"></i></div>
-                                                                                                                                                                                                <div>
-                                                                                                                                                                                                  <small class="text-dark text-cut-hot">Student Attendance</small>
-                                                                                                                                                                                                </div>
-                                                                                                                                                                                              </div>
-                                                                                                                                                                                              <div class="d-flex flex-grow-1 align-items-center">
-                                                                                                                                                                                                <div class="progress w-100 me-4" style="height:8px;">
-                                                                                                                                                                                                  <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="65"
-                                                                                                                                                                                                    aria-valuemin="0" aria-valuemax="100"></div>
-                                                                                                                                                                                                </div>
-                                                                                                                                                                                                <span class="text-body-secondary">70%</span>
-                                                                                                                                                                                                <span class="badge bg-label-warning ms-1">ME</span>
-                                                                                                                                                                                              </div>
-                                                                                                                                                                                            </div>
-                                                                                                                                                                                          </div> -->
+                                                                                    data-bs-custom-class="tooltip-warning"
+                                                                                    data-bs-original-title="You’re doing well and meeting your goals.Keep your consistency — it’s your strength.">
+                                                                                    <div class="card-body d-flex">
+                                                                                      <div class="d-flex w-50 align-items-center me-4">
+                                                                                        <div class="badge bg-label-warning rounded p-1_5 me-4"><i
+                                                                                            class="icon-base ti tabler-user-check icon-md"></i></div>
+                                                                                        <div>
+                                                                                          <small class="text-dark text-cut-hot">Student Attendance</small>
+                                                                                        </div>
+                                                                                      </div>
+                                                                                      <div class="d-flex flex-grow-1 align-items-center">
+                                                                                        <div class="progress w-100 me-4" style="height:8px;">
+                                                                                          <div class="progress-bar bg-warning" role="progressbar" style="width: 65%" aria-valuenow="65"
+                                                                                            aria-valuemin="0" aria-valuemax="100"></div>
+                                                                                        </div>
+                                                                                        <span class="text-body-secondary">70%</span>
+                                                                                        <span class="badge bg-label-warning ms-1">ME</span>
+                                                                                      </div>
+                                                                                    </div>
+                                                                                  </div> -->
           @php
             // Get dynamic average, rating, and color
             $kpaResult = indicatorAvgScore(128, Auth::user()->employee_id);
@@ -600,7 +604,7 @@
                   <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$avg}}%"
                     aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <span class="text-body-secondary">{{$avg}}%</span>
+                <span class="text-body-secondary">{{number_format($avg, 1)}}%</span>
                 <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
               </div>
             </div>
@@ -622,7 +626,7 @@
                   <div class="progress-bar bg-{{$colorManager}}" role="progressbar" style="width: {{$avgManager}}%"
                     aria-valuenow="{{$avgManager}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <span class="text-body-secondary">{{$avgManager}}%</span>
+                <span class="text-body-secondary">{{number_format($avgManager, 1)}}%</span>
                 <span class="badge bg-label-{{$colorManager}} ms-1">{{$ratingManager}}</span>
               </div>
             </div>
@@ -653,7 +657,7 @@
                   <div class="progress-bar bg-{{$courseloadcolor}}" role="progressbar" style="width: {{$courseloadavg}}%"
                     aria-valuenow="{{$courseloadavg}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <span class="text-body-secondary">{{$courseloadavg}}%</span>
+                <span class="text-body-secondary">{{number_format($courseloadavg, 1)}}%</span>
                 <span class="badge bg-label-{{$courseloadcolor}} ms-1">{{$courseloadrating}}</span>
               </div>
             </div>
@@ -977,7 +981,7 @@
                   </div>
                 </div>
                 <div class="text-end">
-                  <h6 class="mb-0">150</h6>
+                  <h6 class="mb-0">{{ number_format(150, 1) }}%</h6>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center mb-6">
@@ -993,7 +997,7 @@
                   </div>
                 </div>
                 <div class="text-end">
-                  <h6 class="mb-0">100</h6>
+                  <h6 class="mb-0">{{ number_format(100, 1) }}%</h6>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center mb-6">
@@ -1009,7 +1013,7 @@
                   </div>
                 </div>
                 <div class="text-end">
-                  <h6 class="mb-0">90</h6>
+                  <h6 class="mb-0">{{ number_format(90, 1) }}%</h6>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center mb-6">
@@ -1025,7 +1029,7 @@
                   </div>
                 </div>
                 <div class="text-end">
-                  <h6 class="mb-0">59.05</h6>
+                  <h6 class="mb-0">{{ number_format(59.05, 1) }}%</h6>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center mb-6">
@@ -1041,7 +1045,7 @@
                   </div>
                 </div>
                 <div class="text-end">
-                  <h6 class="mb-0">60</h6>
+                  <h6 class="mb-0">{{ number_format(60, 1) }}%</h6>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center mb-6">
@@ -1057,7 +1061,7 @@
                   </div>
                 </div>
                 <div class="text-end">
-                  <h6 class="mb-0">80</h6>
+                  <h6 class="mb-0">{{ number_format(80, 1) }}%</h6>
                 </div>
               </div>
             </div>
@@ -1158,49 +1162,49 @@
     document.addEventListener("DOMContentLoaded", function () {
       let total = {{ $totalWeightSS }};
       total = parseFloat(total.toFixed(1));
-     
+
       const elements = document.querySelectorAll('.text-cut');
       function getRatingAndColor(percentage) {
         let rating = '';
         let color = '';
 
         if (percentage >= 90) {
-            rating = 'OS';
-            color = '#6EA8FE';
+          rating = 'OS';
+          color = '#6EA8FE';
         } else if (percentage >= 80) {
-            rating = 'EE';
-            color = '#96e2b4';
+          rating = 'EE';
+          color = '#96e2b4';
         } else if (percentage >= 70) {
-            rating = 'ME';
-            color = '#ffcb9a';
+          rating = 'ME';
+          color = '#ffcb9a';
         } else if (percentage >= 60) {
-            rating = 'NI';
-            color = '#fd7e13';
+          rating = 'NI';
+          color = '#fd7e13';
         } else if (percentage > 0) {
-            rating = 'BE';
-            color = '#ff4c51';
+          rating = 'BE';
+          color = '#ff4c51';
         } else {
-            rating = 'NA';
-            color = '#000000';
+          rating = 'NA';
+          color = '#000000';
         }
 
         return { rating, color };
-    }
+      }
 
       let result = getRatingAndColor(total);
       let avgElement = document.getElementById('avg-teachervalue');
       let ratingElement = document.getElementById('rating-teachervalue');
       let ratingColor = document.getElementById('rating-teachercolor');
-      
+
       if (avgElement) {
-        
-          avgElement.innerText = total.toFixed(1) + '%';
+
+        avgElement.innerText = total.toFixed(1) + '%';
       }
       if (ratingElement) {
-          ratingElement.innerText = result.rating;
+        ratingElement.innerText = result.rating;
       }
       if (ratingColor) {
-          ratingColor.style.backgroundColor = result.color;
+        ratingColor.style.backgroundColor = result.color;
       }
 
       function fitToOneLine(el) {
@@ -1318,8 +1322,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        `;
+                                                                                                                                                                                                                                                                                                                                  #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                                                                                                                `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1409,10 +1413,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                    border-radius:50%;margin-right:5px;"></span>
-                                                                                    ${label} (${shortLabels[i]})
-                                                                                    `;
+              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+              border-radius:50%;margin-right:5px;"></span>
+              ${label} (${shortLabels[i]})
+              `;
         legendDiv.appendChild(li);
       });
     });
@@ -1544,10 +1548,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                    border-radius:50%;margin-right:5px;"></span>
-                                                                                    ${label} (${shortLabels[i]})
-                                                                                    `;
+              <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+              border-radius:50%;margin-right:5px;"></span>
+              ${label} (${shortLabels[i]})
+              `;
         legendDiv.appendChild(li);
       });
     });
