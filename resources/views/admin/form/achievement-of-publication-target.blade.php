@@ -152,8 +152,10 @@
                                                         
                                                         <select name="co_author[0][country]" class="country-dropdown select2 form-select">
                                                             <option value="">Select Country</option>
-                                                            @foreach(getAllCountries() as $country)
-                                                                <option value="{{ $country['iso'] }}">{{ $country['name'] }}</option>
+                                                            @foreach(getAllCountries() as $con)
+                                                                 <option value="{{ $con['code'] }}">
+                                                                        {{ $con['name'] }}
+                                                                    </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -690,8 +692,10 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                 let optionsUni = '<option value="">Select Univeristy</option>';
 
                     // Build options
-                    countries.forEach(function(country) {
-                        options += '<option value="' + country.iso + '">' + country.name + '</option>';
+                     countries.forEach(function(con) {
+                        options += `<option value="${con['code']}">
+                        ${con['name']}
+                    </option>`;
                     });
                     universities.forEach(function(uni) {
                         optionsUni += `<option value="${uni['University Name']}">
