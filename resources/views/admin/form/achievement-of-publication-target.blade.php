@@ -11,6 +11,12 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <style>
+        .form-disabled {
+            color: #acaab1;
+            background-color: #f3f2f3;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -251,45 +257,48 @@
                                                 <label class="form-label" for="ecommerce-product-discount-price">Scopus</label>
                                                 <div class="input-group mb-4">
                                                     <span class="input-group-text">Q1</span>
-                                                    <input type="number" class="form-control scopus-q1" name="scopus_q1"
-                                                        readonly>
+                                                    <input type="number" class="form-control scopus-q1 form-disabled"
+                                                        name="scopus_q1" readonly>
                                                 </div>
                                                 <div class="input-group mb-4">
                                                     <span class="input-group-text">Q2</span>
-                                                    <input type="number" class="form-control scopus-q2" name="scopus_q2"
-                                                        readonly>
+                                                    <input type="number" class="form-control scopus-q2 form-disabled"
+                                                        name="scopus_q2" readonly>
                                                 </div>
                                                 <div class="input-group mb-4">
                                                     <span class="input-group-text">Q3</span>
-                                                    <input type="number" class="form-control scopus-q3" name="scopus_q3"
-                                                        readonly>
+                                                    <input type="number" class="form-control scopus-q3 form-disabled"
+                                                        name="scopus_q3" readonly>
                                                 </div>
                                                 <div class="input-group">
                                                     <span class="input-group-text">Q4</span>
-                                                    <input type="number" class="form-control scopus-q4" name="scopus_q4"
-                                                        readonly>
+                                                    <input type="number" class="form-control scopus-q4 form-disabled"
+                                                        name="scopus_q4" readonly>
                                                 </div>
                                             </div>
                                             <div class="mb-6">
                                                 <label class="form-label" for="ecommerce-product-discount-price">HEC</label>
                                                 <div class="input-group mb-4">
                                                     <span class="input-group-text">W</span>
-                                                    <input type="number" class="form-control hec-w" name="hec_w" readonly>
+                                                    <input type="number" class="form-control hec-w form-disabled" name="hec_w"
+                                                        readonly>
                                                 </div>
                                                 <div class="input-group mb-4">
                                                     <span class="input-group-text">X</span>
-                                                    <input type="number" class="form-control hec-x" name="hec_x" readonly>
+                                                    <input type="number" class="form-control hec-x form-disabled" name="hec_x"
+                                                        readonly>
                                                 </div>
                                                 <div class="input-group">
                                                     <span class="input-group-text">Y</span>
-                                                    <input type="number" class="form-control hec-y" name="hec_y" readonly>
+                                                    <input type="number" class="form-control hec-y form-disabled" name="hec_y"
+                                                        readonly>
                                                 </div>
                                             </div>
                                             <div class="mb-6">
                                                 <label class="form-label"> Medical</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text">Recognized</span>
-                                                    <input type="number" class="form-control medical-recognized"
+                                                    <input type="number" class="form-control medical-recognized form-disabled"
                                                         name="medical_recognized" readonly>
                                                 </div>
                                             </div>
@@ -300,7 +309,7 @@
                             </div>
 
 
-                            <div class="col-1 mt-3">
+                            <div class="col-4 mt-3">
                                 <button class="btn btn-primary w-100">SUBMIT</button>
                             </div>
                         </form>
@@ -393,7 +402,7 @@
                                     <input type="number" id="international" class="form-control" name="international">
                                 </div>
                             </div>
-                            <div class="col-1 text-center demo-vertical-spacing">
+                            <div class="col-4 text-center demo-vertical-spacing">
                                 <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                             </div>
                         </form>
