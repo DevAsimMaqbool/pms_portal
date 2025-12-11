@@ -19,26 +19,26 @@
         <div class="card">
             <div class="card-datatable table-responsive card-body">
                 {{-- <h5>KPA to role</h5> --}}
-                <form id="researchForm" enctype="multipart/form-data"class="row">
+                <form id="researchForm" enctype="multipart/form-data" class="row">
                     @csrf
                     <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
                     <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
-                    <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
-                    
+                    <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
+
                     <div class="row g-6">
                         <div class="col-md-6">
                             <label for="target_of_projects" class="form-label">Target of projects</label>
-                            <input type="text" id="target_of_projects" name="target_of_projects" class="form-control" >
+                            <input type="text" id="target_of_projects" name="target_of_projects" class="form-control">
                         </div>
 
                         <div class="col-md-6">
                             <label for="target_of_faculties" class="form-label">Target Faculties</label>
-                            <input type="text" id="target_of_faculties" name="target_of_faculties" class="form-control" >
+                            <input type="text" id="target_of_faculties" name="target_of_faculties" class="form-control">
                         </div>
 
-                       
+
                     </div>
-                    <div class="col-4 text-center demo-vertical-spacing">
+                    <div class="col-1 text-center demo-vertical-spacing">
                         <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                     </div>
                 </form>
