@@ -40,12 +40,12 @@ class CompletionOfCourseFolderController extends Controller
 
             // Validation rules
             $rules = [
-                'folder_lms' => 'required|array',
-                'folder_lms.*.faculty_member_id' => 'required|integer',
-                'folder_lms.*.faculty_member_id' => 'integer|exists:users,id',
-                'folder_lms.*.class_name' => 'required',
-                'folder_lms.*.completion_of_Course_folder' => 'required|integer',
-                'folder_lms.*.compliance_and_usage_of_lms' => 'required|integer',
+                'faculty_member_id' => 'required|integer',
+                'faculty_member_id' => 'integer|exists:users,id',
+                'class_name' => 'required|array',
+                'class_name.*' => 'string',
+                'completion_of_Course_folder' => 'required|integer',
+                'compliance_and_usage_of_lms' => 'required|integer',
                 'completion_of_Course_folder_indicator_id' => 'nullable|integer',
                 'compliance_and_usage_of_lms_indicator_id' => 'nullable|integer',
                 'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
@@ -64,28 +64,30 @@ class CompletionOfCourseFolderController extends Controller
 
          
 
-                foreach ($request->folder_lms as $row) {
+                foreach ($request->class_name as $classCode) {
 
-                    // Check duplicate (if same faculty already submitted)
-                    // $exists = CompletionOfCourseFolder::where('faculty_member_id', $row['faculty_member_id'])
-                    //     ->where('form_status', $request->form_status)
-                    //     ->first();
+                     // 🔍 Check if this faculty + this class already exists
+                        $exists = CompletionOfCourseFolder::where('faculty_member_id', $request->faculty_member_id)
+                                    ->where('class_cod', $classCode)
+                                    ->exists();
 
-                    // if ($exists) {
-                    //     continue; 
-                    // }
+                        if ($exists) {
+                            DB::rollBack(); // rollback transactions before exit
+                            return response()->json([
+                                'status' => 'error',
+                                'message' => "This class ($classCode) is already submitted for this faculty member."
+                            ], 409);
+                        }
 
                     // Insert record
                     CompletionOfCourseFolder::create([
-                        'faculty_member_id' => $row['faculty_member_id'],
-                        'class_cod' => $row['class_name'],
+                        'faculty_member_id' => $request->faculty_member_id,
+                        'class_cod' => $classCode,
 
-                        // course folder status
-                        'completion_of_Course_folder' => $row['completion_of_Course_folder'],
+                        'completion_of_Course_folder' => $request->completion_of_Course_folder,
                         'completion_of_Course_folder_indicator_id' => $request->completion_of_Course_folder_indicator_id,
 
-                        // LMS status
-                        'compliance_and_usage_of_lms' => $row['compliance_and_usage_of_lms'],
+                        'compliance_and_usage_of_lms' => $request->compliance_and_usage_of_lms,
                         'compliance_and_usage_of_lms_indicator_id' => $request->compliance_and_usage_of_lms_indicator_id,
 
                         'form_status' => $request->form_status,
