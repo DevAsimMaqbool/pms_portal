@@ -33,6 +33,12 @@
   <script src="{{ asset('admin/assets/vendor/js/template-customizer.js') }}"></script>
   <script src="{{ asset('admin/assets/js/config.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    .bg-ni {
+      background-color: #fd7e13 !important;
+      color: white;
+    }
+  </style>
 </head>
 
 <body>
@@ -51,7 +57,7 @@
       @elseif(auth()->user()->hasRole('Rector'))
         @include('layouts.rector_sidebar')
       @elseif(auth()->user()->hasRole('ORIC'))
-        @include('layouts.oric_sidebar')  
+        @include('layouts.oric_sidebar')
       @else
         @include('layouts.sidebar')
       @endif

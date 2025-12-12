@@ -49,6 +49,7 @@ use App\Http\Controllers\LineManagerFeedbackController;
 use App\Http\Controllers\LineManagerEventFeedbackController;
 use App\Http\Controllers\RatingRuleController;
 use App\Http\Controllers\PmsPolicyController;
+use App\Http\Controllers\SelfNominationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -254,6 +255,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/policy/edit/{id}', [PmsPolicyController::class, 'edit'])->name('policy.edit');
     Route::post('/policy/update/{id}', [PmsPolicyController::class, 'update'])->name('policy.update');
     Route::delete('/policy/delete/{id}', [PmsPolicyController::class, 'destroy'])->name('policy.destroy');
+
+    Route::get('/nomination', [SelfNominationController::class, 'index'])->name('nomination.index');
+    Route::get('/nomination/create', [SelfNominationController::class, 'create'])->name('nomination.create');
+    Route::post('/nomination/store', [SelfNominationController::class, 'store'])->name('nomination.store');
+    Route::get('/nomination/edit/{id}', [SelfNominationController::class, 'edit'])->name('nomination.edit');
+    Route::post('/nomination/update/{id}', [SelfNominationController::class, 'update'])->name('nomination.update');
+    Route::delete('/nomination/delete/{id}', [SelfNominationController::class, 'destroy'])->name('nomination.destroy');
+
 
 
 

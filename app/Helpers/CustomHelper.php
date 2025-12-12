@@ -1657,7 +1657,9 @@ if (!function_exists('getIndicatorsByScore')) {
                 'key_performance_area_id',
                 'indicator_category_id',
                 'indicator_id',
-                'score'
+                'score',
+                'rating',
+                'color'
             ]);
     }
 }
@@ -1744,6 +1746,60 @@ if (!function_exists('lineManagerRemarksOnTasks')) {
     {
         $remarks = LineManagerFeedback::where('employee_id', $facultyId)->value('remarks');
         return $remarks ?: 'No remarks yet'; // empty string will fallback
+    }
+}
+
+if (!function_exists('getTopIndicatorsOfEmployee')) {
+    function getTopIndicatorsOfEmployee($employeeId)
+    {
+        $indicators = IndicatorsPercentage::with('kpa:id,performance_area,short_code')
+            ->where('employee_id', $employeeId)
+            ->get([
+                'key_performance_area_id',
+                'score'
+            ]);
+
+        // Calculate average, color, and rating per KPA
+        $avgByKpa = $indicators
+            ->groupBy('key_performance_area_id')
+            ->map(function ($group, $kpaId) {
+                $avg = round($group->avg('score'), 2);
+
+                // Determine color and rating based on avg
+                if ($avg >= 90) {
+                    $color = 'primary';
+                    $rating = 'OS';
+                } elseif ($avg >= 80) {
+                    $color = 'success';
+                    $rating = 'EE';
+                } elseif ($avg >= 70) {
+                    $color = 'warning';
+                    $rating = 'ME';
+                } elseif ($avg >= 60) {
+                    $color = 'ni';
+                    $rating = 'NI';
+                } elseif ($avg >= 0) {
+                    $color = 'danger';
+                    $rating = 'BE';
+                } else {
+                    $color = 'secondary';
+                    $rating = 'N/A';
+                }
+
+                // Get KPA info from first record
+                $kpa = $group->first()->kpa;
+
+                return [
+                    'kpa_id' => $kpaId,
+                    'performance_area' => $kpa->performance_area ?? null,
+                    'kpa_short_code' => $kpa->short_code ?? null,
+                    'avg' => $avg,
+                    'color' => $color,
+                    'rating' => $rating
+                ];
+            });
+
+        return $avgByKpa;
     }
 }
 
