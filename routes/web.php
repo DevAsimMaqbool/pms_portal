@@ -166,6 +166,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('completion-of-course-folder', CompletionOfCourseFolderController::class);
         Route::get('/get-faculty-classes/{faculty_id}', [CompletionOfCourseFolderController::class, 'getFacultyClasses']);
 
+
+        //form crud
+        Route::put('/indicator-form/update/{id}', [AchievementOfResearchPublicationsTargetController::class, 'updateResearchPublication']) ->name('research.update');
+
     });
     Route::get('/faculty-target-gets', [FacultyTargetController::class, 'getTarget'])
         ->name('faculty-target.getTarget');

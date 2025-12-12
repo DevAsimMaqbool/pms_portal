@@ -359,6 +359,75 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         ], 500);
     }
 }
+public function updateResearchPublication(Request $request, $id)
+{
+    $userId = Auth::id(); // current logged-in user
+
+    $form = AchievementOfResearchPublicationsTarget::with('coAuthors')->findOrFail($id);
+
+    $request->validate([
+            'target_category' => 'required|string|max:255',
+            'link_of_publications' => 'required|url|max:500',
+            'journal_clasification' => 'required',
+            'nationality' => 'required|string|max:255',
+            'as_author_your_rank' => 'required|integer|min:0',
+            'co_author.*.id' => 'nullable|exists:achievement_of_research_publications_target_co_author,id',
+            'co_author.*.name' => 'required_with:co_author|string|max:255',
+            'co_author.*.rank' => 'required_with:co_author|integer|min:0',
+            'co_author.*.univeristy_name' => 'required_with:co_author|string|max:255',
+            'co_author.*.country' => 'required_with:co_author|string|max:255',
+            'co_author.*.your_role' => 'required_with:co_author|in:Student,Researcher,Professional',
+            'co_author.*.designation' => '',
+            'co_author.*.no_paper_past' => 'required_with:co_author|integer|min:0',
+            'co_author.*.is_the_student_fitst_coauthor' => '',
+            'co_author.*.student_roll_no' => '',
+            'co_author.*.career' => '',
+        
+    ]);
+
+    // Update main form fields
+    $form->update($request->only([
+        'target_category',
+        'link_of_publications',
+        'journal_clasification',
+        'nationality',
+        'as_author_your_rank'
+    ]));
+
+    // Keep track of co-author IDs
+    $coAuthorIds = [];
+
+    if ($request->has('co_author')) {
+        foreach ($request->co_author as $co) {
+            if (isset($co['id']) && $co['id']) {
+
+                // Update existing co-author
+                $existing = $form->coAuthors()->find($co['id']);
+                if ($existing) {
+                    $co['updated_by'] = $userId; // set updated_by
+                    $existing->update($co);
+                    $coAuthorIds[] = $existing->id;
+                }
+            } else {
+                // Create new co-author
+                $co['created_by'] = $userId; // set created_by
+                $co['updated_by'] = $userId; // also set updated_by for new record
+                $new = $form->coAuthors()->create($co);
+                $coAuthorIds[] = $new->id;
+            }
+        }
+    }
+
+    // Delete co-authors removed in the request
+    $form->coAuthors()->whereNotIn('id', $coAuthorIds)->delete();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Research publication updated successfully.'
+    ]);
+}
+
+
 
 
 }
