@@ -552,13 +552,16 @@ function addCoAuthor(author = {}, index = null) {
 
     $('#grant-details-container').append(html);
 
-    // Initialize Select2
-    $(`#grant-details-container .select2`).last().select2({
-        dropdownParent: $('#updateFormModal')
-    });
-
-    // Apply student toggle logic for this row
     let $row = $('#grant-details-container .grant-group').last();
+
+// Initialize Select2 for both selects
+$row.find('.univeristy-dropdown.select2').select2({
+    dropdownParent: $('#updateFormModal')
+});
+$row.find('.country-dropdown.select2').select2({
+    dropdownParent: $('#updateFormModal')
+});
+
     toggleCoAuthorFieldsRow($row);
 
     // Listen for role change
