@@ -39,6 +39,48 @@
                    
             </div>
         </div>
+         <!-- Modal -->
+       <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="viewFormModalLabel">
+                <i class="icon-base ti tabler-history me-3"></i>History
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <table class="table table-bordered mb-3"> 
+                <tr>
+                    <td>
+                        <div class="d-flex justify-content-left align-items-center">
+                            <div class="avatar-wrapper">
+                                <div class="avatar avatar-sm me-3">
+                                    <span class="avatar-initial rounded-circle bg-label-info">🙍🏻‍♂️</span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-50">
+                                <span class="text-truncate fw-medium text-heading" id="modalCreatedBy">Website SEO</span>
+                                <small class="text-truncate" id="modalCreatedDate"></small>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center">
+                <i class="icon-base ti tabler-history me-3"></i>History
+            </h5>
+            <ul class="timeline mb-0" id="modalExtraFieldsHistory"></ul>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+        <!--/ Add Permission Modal -->
         <!-- Update Intellectual Property Modal -->
 <div class="modal fade" id="researchFormModal" tabindex="-1" aria-labelledby="researchFormModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -86,6 +128,7 @@
                         <div class="col-md-6">
                             <label for="supporting_docs_as_attachment" class="form-label">Supporting Docs As Attachment</label>
                             <input type="file" id="supporting_docs_as_attachment" name="supporting_docs_as_attachment" class="form-control">
+                            <div id="intellectual-img"></div>
                         </div>
                     </div>
 
@@ -143,6 +186,12 @@
                                 form.creator ? form.creator.name : 'N/A',
                                 form.no_of_ip_disclosed || 'N/A',
                                 createdAt,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
+                                    data-history='${JSON.stringify(form.update_history)}'
+                                    data-user='${form.creator ? form.creator.name : "N/A"}'
+                                    data-created='${form.created_at}'>
+                                    <span class="icon-xs icon-base ti tabler-history me-2"></span>History
+                                </button>`,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit</button>`
                             ];
                         });
@@ -155,6 +204,7 @@
                                     { title: "Created By" },
                                     { title: "Filing / Registration" },
                                     { title: "Created Date" },
+                                    { title: "History" },
                                     { title: "Actions" }
                                 ]
                             });
@@ -172,7 +222,71 @@
     
             $(document).ready(function () {
                 fetchIntelletualForms();
+                $(document).on('click', '.view-form-btn', function () {
+                // Clear modal
+                $('#modalExtraFieldsHistory').empty();
+                $('#modalCreatedBy').text('');
+                $('#modalCreatedDate').text('');
 
+                // Read data-history
+                let historyData = $(this).attr('data-history'); // raw string
+                let history = [];
+
+                try {
+                    // Decode HTML entities first
+                    historyData = historyData.replace(/&quot;/g, '"'); // convert &quot; → "
+                    // Parse JSON (sometimes it's double-encoded)
+                    history = JSON.parse(historyData);
+                    if (typeof history === 'string') {
+                        history = JSON.parse(history); // decode inner string if needed
+                    }
+                } catch (e) {
+                    console.error('Failed to parse history JSON:', e);
+                    history = [];
+                }
+
+                // Creator and created date
+                let creator = $(this).data('user') || 'N/A';
+                let created = $(this).data('created') || 'N/A';
+                $('#modalCreatedBy').text(creator);
+                $('#modalCreatedDate').text(new Date(created).toLocaleString());
+
+                // Build timeline
+                if (Array.isArray(history) && history.length > 0) {
+                    let historyHtml = '';
+                    history.forEach(update => {
+                        let histortText = 'N/A';
+                        if (update.role === 'HOD') histortText = update.status == '1' ? 'Unverified' : (update.status == '2' ? 'Verified' : update.status);
+                        else if (update.role === 'ORIC') histortText = update.status == '2' ? 'Unverified' : (update.status == '3' ? 'Verified' : update.status);
+                        else histortText = update.status || 'N/A';
+
+                        historyHtml += `
+                            <li class="timeline-item timeline-item-transparent optional-field">
+                                <span class="timeline-point timeline-point-primary"></span>
+                                <div class="timeline-event">
+                                    <div class="timeline-header mb-3">
+                                        <h6 class="mb-0">${update.user_name || 'N/A'}</h6>
+                                        <small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-1">
+                                        <div class="badge bg-lighter rounded-3">
+                                            <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                        </div>
+                                        <div class="badge bg-lighter rounded-3 ms-2">
+                                            <span class="h6 mb-0 text-body">${histortText}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        `;
+                    });
+                    $('#modalExtraFieldsHistory').append(historyHtml);
+                } else {
+                    $('#modalExtraFieldsHistory').append(`<li class="optional-field"><span>No History Available</span></li>`);
+                }
+
+                $('#viewFormModal').modal('show');
+            });
     // Open modal and populate data
     $(document).on('click', '.edit-form-btn', function () {
         const form = $(this).data('form');
@@ -184,6 +298,39 @@
         $('#researchForm1 #no_of_ip_disclosed').val(form.no_of_ip_disclosed);
         $('#researchForm1 #area_of_application').val(form.area_of_application);
         $('#researchForm1 #date_of_filing_registration').val(form.date_of_filing_registration);
+        if (form.supporting_docs_as_attachment) {
+                        let fileUrl = form.supporting_docs_as_attachment;
+                        let fileExt = fileUrl.split('.').pop().toLowerCase();
+
+                        let filePreview = '';
+
+                        // ✅ If Image → show preview
+                        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)) {
+                            filePreview = `<div class="avatar avatar-xl me-3 mt-2 bg-secondary">
+                                <a href="${fileUrl}" target="_blank">
+                                    <img src="${fileUrl}" alt="Screenshot" class="rounded-circle">
+                                </a></div>
+                            `;
+                        }
+                        // ✅ If PDF → show download button
+                        else if (fileExt === 'pdf') {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary mt-3">
+                                    Download PDF
+                                </a>
+                            `;
+                        }
+                        // ✅ Other files → show generic download link
+                        else {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
+                                    Download File
+                                </a>
+                            `;
+                        }
+
+                        $("#intellectual-img").html(filePreview);
+                    }
 
         $('#researchFormModal').modal('show');
     });
