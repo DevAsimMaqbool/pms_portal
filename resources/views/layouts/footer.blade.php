@@ -6,7 +6,7 @@
         <script>
           document.write(new Date().getFullYear());
         </script>
-        | Concept & Design: HR Department | Platform Development: IBS with ♥️
+        | Concept & Design: HR Department | Platform Development: MIS with ♥️
       </div>
       <div class="d-none d-lg-inline-block">
 
