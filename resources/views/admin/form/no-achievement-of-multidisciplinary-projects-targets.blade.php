@@ -138,8 +138,8 @@
                                         <input type="text" id="provide_details" name="provide_details" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-4 text-center demo-vertical-spacing">
-                                    <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
+                                <div class="col-4 demo-vertical-spacing">
+                                    <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                 </div>
                             </form>
                         </div>
