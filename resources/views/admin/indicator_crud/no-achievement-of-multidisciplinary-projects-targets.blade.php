@@ -17,7 +17,7 @@
 
         <!-- Multi Column with Form Separator -->
         <div class="card">
-             <h5 class="card-header">Intellectual Property</h5>
+             <h5 class="card-header">Multidisciplinary Projects</h5>
             <div class="card-datatable table-responsive card-body">
                     @if(auth()->user()->hasRole(['HOD', 'Teacher']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
@@ -27,8 +27,9 @@
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Created By</th>
-                                                        <th>Filing / Registration</th>
+                                                        <th>Project Name</th>
                                                         <th>Created Date</th>
+                                                        <th>History</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -39,7 +40,8 @@
                    
             </div>
         </div>
-         <!-- Modal -->
+        <!-- Update Intellectual Property Modal -->
+           <!-- Modal -->
        <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -81,55 +83,103 @@
 </div>
 
         <!--/ Add Permission Modal -->
-        <!-- Update Intellectual Property Modal -->
-<div class="modal fade" id="researchFormModal" tabindex="-1" aria-labelledby="researchFormModalLabel" aria-hidden="true">
+ <!-- Update commercial gain Modal -->
+<div class="modal fade" id="multidisciplinaryProjectFormModal" tabindex="-1" aria-labelledby="commericaGainFormModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="researchFormModalLabel">Edit Intellectual Property</h5>
+                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Commercial Consultancy/Research Income 1</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="researchForm1" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="record_id" name="record_id">
+                    <input type="hidden" name="_method" value="PUT">
 
                     <div class="row g-3">
+                       
+                        
                         <div class="col-md-6">
-                            <label for="name_of_ip_filed" class="form-label">Title Of IP/Patents</label>
-                            <input type="text" id="name_of_ip_filed" name="name_of_ip_filed" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Type</label>
-                            <select id="patents_ip_type" name="patents_ip_type" class="form-select" required>
-                                <option value="">-- Select --</option>
-                                <option value="copyright">Copyright</option>
-                                <option value="Trademark">Trademark</option>
-                                <option value="Design">Design</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6" id="other-type-field" style="display:none;">
-                            <label class="form-label">Please Specify Other Type</label>
-                            <input type="text" name="other_detail" id="other_detail" class="form-control" placeholder="Enter details">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="no_of_ip_disclosed" class="form-label">Filing / Registration #</label>
-                            <input type="text" id="no_of_ip_disclosed" name="no_of_ip_disclosed" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="area_of_application" class="form-label">Area Of Application</label>
-                            <input type="text" id="area_of_application" name="area_of_application" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="date_of_filing_registration" class="form-label">Date Of Filing Registration</label>
-                            <input type="date" id="date_of_filing_registration" name="date_of_filing_registration" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="supporting_docs_as_attachment" class="form-label">Supporting Docs As Attachment</label>
-                            <input type="file" id="supporting_docs_as_attachment" name="supporting_docs_as_attachment" class="form-control">
-                            <div id="intellectual-img"></div>
-                        </div>
+                                        <label for="project_name" class="form-label">Project Name</label>
+                                        <input type="text" id="project_name" name="project_name" class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="other_disciplines" class="form-label">Other Disciplines
+                                            Engaged</label>
+                                        <input type="text" id="other_disciplines" name="other_disciplines" class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="partner_industry" class="form-label">Target/Partner Industry</label>
+                                        <input type="text" id="partner_industry" name="partner_industry" class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="identified_public_sector_entity" class="form-label">Identified Public Sector
+                                            Entity</label>
+                                        <input type="text" id="identified_public_sector_entity"
+                                            name="identified_public_sector_entity" class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="completion_time_of_project" class="form-label">Target Completion Time Of The
+                                            Project</label>
+                                        <input type="text" id="completion_time_of_project" name="completion_time_of_project"
+                                            class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label d-block">Prototype/Product Developed</label>
+                                        <div>
+                                            <input type="radio" name="product_developed" id="product_developed_yes" value="YES">
+                                            <label for="product_developed_yes">Yes</label>
+
+                                            <input type="radio" name="product_developed" id="product_developed_no" value="NO"
+                                                checked>
+                                            <label for="product_developed_no">No</label>
+
+                                            <input type="radio" name="product_developed" id="product_developed_na" value="NA">
+                                            <label for="product_developed_na">NA</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label d-block">Third Party Validation Of The Product</label>
+                                        <div>
+                                            <input type="radio" name="third_party_validation" id="third_party_validation_yes"
+                                                value="YES">
+                                            <label for="third_party_validation_yes">Yes</label>
+
+                                            <input type="radio" name="third_party_validation" id="third_party_validation_no"
+                                                value="NO" checked>
+                                            <label for="third_party_validation_no">No</label>
+
+                                            <input type="radio" name="third_party_validation" id="third_party_validation_na"
+                                                value="NA">
+                                            <label for="third_party_validation_na">NA</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label d-block">IP Claim?</label>
+                                        <div>
+                                            <input type="radio" name="ip_claim" id="ip_claim_yes" value="YES">
+                                            <label for="ip_claim_yes">Yes</label>
+
+                                            <input type="radio" name="ip_claim" id="ip_claim_no" value="NO" checked>
+                                            <label for="ip_claim_no">No</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6" id="extra_select_container" style="display: none;">
+                                        <label for="provide_details" class="form-label">In Case Yes, Provide Details</label>
+                                        <input type="text" id="provide_details" name="provide_details" class="form-control">
+                                    </div>
+                        
+                        
+                        
                     </div>
 
                     <div class="mt-4 text-end">
@@ -141,6 +191,7 @@
         </div>
     </div>
 </div>
+
 
     </div>
     <!-- / Content -->
@@ -163,9 +214,9 @@
 @push('script')
     @if(auth()->user()->hasRole(['HOD', 'Teacher']))
         <script>
-            function fetchIntelletualForms() {
+            function fetchCommercialForms() {
                 $.ajax({
-                    url: "{{ route('intellectual-properties.index') }}",
+                    url: "{{ route('achievement-ofmultidisciplinary.index') }}",
                     method: "GET",
                     data: {
                         status: "Teacher" // you can send more values
@@ -186,15 +237,15 @@
                                         data-form='${JSON.stringify(form)}'>
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
-                            }     
+                            }       
 
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
                                 form.creator ? form.creator.name : 'N/A',
-                                form.no_of_ip_disclosed || 'N/A',
+                                form.project_name || 'N/A',
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
+                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
                                     data-history='${JSON.stringify(form.update_history)}'
                                     data-user='${form.creator ? form.creator.name : "N/A"}'
                                     data-created='${form.created_at}'>
@@ -210,7 +261,7 @@
                                 columns: [
                                     { title: "#" },
                                     { title: "Created By" },
-                                    { title: "Filing / Registration" },
+                                    { title: "Project Name" },
                                     { title: "Created Date" },
                                     { title: "History" },
                                     { title: "Actions" }
@@ -229,7 +280,7 @@
                 
     
             $(document).ready(function () {
-                fetchIntelletualForms();
+                fetchCommercialForms();
                 $(document).on('click', '.view-form-btn', function () {
                 // Clear modal
                 $('#modalExtraFieldsHistory').empty();
@@ -295,92 +346,75 @@
 
                 $('#viewFormModal').modal('show');
             });
-    // Open modal and populate data
-    $(document).on('click', '.edit-form-btn', function () {
+            $(document).on('click', '.edit-form-btn', function () {
         const form = $(this).data('form');
-
         $('#researchForm1 #record_id').val(form.id);
-        $('#researchForm1 #name_of_ip_filed').val(form.name_of_ip_filed);
-        $('#researchForm1 #patents_ip_type').val(form.patents_ip_type).trigger('change');
-        $('#researchForm1 #other_detail').val(form.other_detail);
-        $('#researchForm1 #no_of_ip_disclosed').val(form.no_of_ip_disclosed);
-        $('#researchForm1 #area_of_application').val(form.area_of_application);
-        $('#researchForm1 #date_of_filing_registration').val(form.date_of_filing_registration);
-        if (form.supporting_docs_as_attachment) {
-                        let fileUrl = form.supporting_docs_as_attachment;
-                        let fileExt = fileUrl.split('.').pop().toLowerCase();
+        $('#researchForm1 #project_name').val(form.project_name);
+        $('#researchForm1 #other_disciplines').val(form.other_disciplines);
+        $('#researchForm1 #partner_industry').val(form.partner_industry);
+        $('#researchForm1 #identified_public_sector_entity').val(form.identified_public_sector_entity);
+        $('#researchForm1 #completion_time_of_project').val(form.completion_time_of_project);
+        $('#researchForm1 #provide_details').val(form.provide_details);
 
-                        let filePreview = '';
+        // ✅ Radio: Prototype/Product Developed
+        $('input[name="product_developed"][value="' + form.product_developed + '"]')
+            .prop('checked', true);
 
-                        // ✅ If Image → show preview
-                        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)) {
-                            filePreview = `<div class="avatar avatar-xl me-3 mt-2 bg-secondary">
-                                <a href="${fileUrl}" target="_blank">
-                                    <img src="${fileUrl}" alt="Screenshot" class="rounded-circle">
-                                </a></div>
-                            `;
-                        }
-                        // ✅ If PDF → show download button
-                        else if (fileExt === 'pdf') {
-                            filePreview = `
-                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary mt-3">
-                                    Download PDF
-                                </a>
-                            `;
-                        }
-                        // ✅ Other files → show generic download link
-                        else {
-                            filePreview = `
-                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
-                                    Download File
-                                </a>
-                            `;
-                        }
+        // ✅ Radio: Third Party Validation
+        $('input[name="third_party_validation"][value="' + form.third_party_validation + '"]')
+            .prop('checked', true);
 
-                        $("#intellectual-img").html(filePreview);
-                    }
+        // ✅ Radio: IP Claim
+        $('input[name="ip_claim"][value="' + form.ip_claim + '"]')
+            .prop('checked', true);
 
-        $('#researchFormModal').modal('show');
-    });
-
-    // Show/hide other type field
-    $('#patents_ip_type').on('change', function () {
-        if ($(this).val() === 'Other') {
-            $('#other-type-field').show();
-            $('#other_detail').attr('required', true);
+        // ✅ Show/Hide Provide Details on Edit
+        if (form.ip_claim === 'YES') {
+            $('#extra_select_container').show();
         } else {
-            $('#other-type-field').hide();
-            $('#other_detail').removeAttr('required').val('');
+            $('#extra_select_container').hide();
+            $('#provide_details').val('');
         }
-    });
+        
 
-    // Submit updated data
+        $('#multidisciplinaryProjectFormModal').modal('show');
+    });
+     $('input[name="ip_claim"]').on('change', function () {
+                    if ($(this).val() === 'YES') {
+                        $('#extra_select_container').show();
+                    } else {
+                        $('#extra_select_container').hide();
+                        $('#provide_details').val(''); // clear selection if hidden
+                    }
+                });
+      // Submit updated data
     $('#researchForm1').on('submit', function (e) {
         e.preventDefault();
+        let form = $(this);
         let formData = new FormData(this);
         const recordId = $('#record_id').val();
-        formData.append('status_update_data', true);
-
-        formData.append('_method', 'PUT'); // Laravel PUT
-
         Swal.fire({
             title: 'Updating...',
             allowOutsideClick: false,
             didOpen: () => Swal.showLoading()
         });
 
+
         $.ajax({
-            url: '/intellectual-properties/' + recordId,
-            type: 'POST',
+            url: "{{ route('multidisciplinary.update', '') }}/" + recordId,
+            method: 'POST',
             data: formData,
             contentType: false,
             processData: false,
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function (response) {
                 Swal.close();
                 Swal.fire('Success', response.message, 'success');
-                $('#researchFormModal').modal('hide');
+                $('#multidisciplinaryProjectFormModal').modal('hide');
                 $('#researchForm1')[0].reset();
-                fetchIntelletualForms(); // reload table
+                form.find('.invalid-feedback').remove();
+                form.find('.is-invalid').removeClass('is-invalid');
+                fetchCommercialForms(); // reload table
             },
             error: function (xhr) {
                 Swal.close();
@@ -397,6 +431,7 @@
             }
         });
     });
+     
 
 });
 

@@ -608,7 +608,7 @@ $('#researchForm1').submit(function(e){
             text: res.message || 'Form updated successfully'
         });
         form.find('.invalid-feedback').remove();
-                            form.find('.is-invalid').removeClass('is-invalid');
+        form.find('.is-invalid').removeClass('is-invalid');
         $('#updateFormModal').modal('hide');
         fetchAchievementForms(); // refresh table
     },

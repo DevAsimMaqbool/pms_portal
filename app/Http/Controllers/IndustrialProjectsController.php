@@ -50,8 +50,26 @@ class IndustrialProjectsController extends Controller
                             });
                     }
 
-            }if ($user->hasRole('HOD')) {
-                $employeeIds = User::where('manager_id', $employee_id)
+            }if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+                $status = $request->input('status');
+                if($status=="Teacher"){
+                    $forms = IndustrialProjects::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])
+                         ->where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
+                        ->get()
+                        ->map(function ($form) {
+                                if ($form->attachment) {
+                                    $form->attachment = Storage::url($form->attachment);
+                                }
+                                return $form;
+                            });
+                }
+                if($status=="HOD"){
+                    $employeeIds = User::where('manager_id', $employee_id)
                     ->role('Teacher')->pluck('employee_id');
                     $forms = IndustrialProjects::with([
                             'creator' => function ($q) {
@@ -69,6 +87,7 @@ class IndustrialProjectsController extends Controller
                                 }
                                 return $form;
                             });
+                }
                 
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
@@ -265,5 +284,47 @@ class IndustrialProjectsController extends Controller
     public function destroy(IndustrialProjects $industrialProjects)
     {
         //
+    }
+    public function updateIndustrialProjectsProject(Request $request, $id)
+    {
+
+        $record = IndustrialProjects::findOrFail($id);
+
+        $request->validate([
+                'record_id' => 'required',
+                'project_name' => 'required|string|max:255',
+                'contracting_industry' => 'required|string|max:255',
+                'project_duration' => 'required|integer',
+                'estimated_project_cost' => 'required|integer',
+                'estimated_complection' => 'required|date',
+                'attachment' => '',
+            
+        ]);
+
+        $data = $request->only([
+                        'project_name', 'contracting_industry', 'project_duration', 'estimated_project_cost',
+                        'estimated_complection'
+                    ]);
+                     if ($request->hasFile('attachment')) {
+
+                        // Delete old file if exists
+                        if ($record->attachment && Storage::disk('public')->exists($record->attachment)) {
+                            Storage::disk('public')->delete($record->attachment);
+                        }
+
+                        $file = $request->file('attachment');
+                        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                        $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                        $uniqueNumber = rand(1000, 9999);
+                        $extension = $file->getClientOriginalExtension();
+                        $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                        $path = $file->storeAs('industrialProject', $fileName, 'public');
+                        $data['attachment'] = $path;
+                    }    
+                    $data['updated_by'] = Auth::user()->employee_id;
+
+                    $record->update($data);
+
+                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
     }
 }

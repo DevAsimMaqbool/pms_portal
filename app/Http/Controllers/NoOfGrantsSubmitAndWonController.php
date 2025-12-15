@@ -47,8 +47,28 @@ class NoOfGrantsSubmitAndWonController extends Controller
                             });
                     }
 
-            }if ($user->hasRole('HOD')) {
-                $employeeIds = User::where('manager_id', $employee_id)
+            }if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+                $status = $request->input('status');
+                if($status=="Teacher"){
+                    $forms = NoOfGrantsSubmitAndWon::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])
+                         ->where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
+                        ->get()
+                        ->map(function ($form) {
+                                if ($form->proof) {
+                                    $form->proof = Storage::url($form->proof);
+                                }
+                                return $form;
+                            });
+
+
+                }
+                if($status=="HOD"){
+                    $employeeIds = User::where('manager_id', $employee_id)
                     ->role('Teacher')->pluck('employee_id');
                     $forms = NoOfGrantsSubmitAndWon::with([
                             'creator' => function ($q) {
@@ -66,6 +86,7 @@ class NoOfGrantsSubmitAndWonController extends Controller
                                 }
                                 return $form;
                             });
+                }
                 
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
@@ -242,5 +263,44 @@ class NoOfGrantsSubmitAndWonController extends Controller
         $target->save();
 
         return response()->json(['success' => true]);
+    }
+     public function updateNoOfGrantsSubmitAndWon(Request $request, $id)
+    {
+
+        $record = NoOfGrantsSubmitAndWon::findOrFail($id);
+
+        $request->validate([
+                'record_id' => 'required',
+                'name' => 'required|string',
+                'funding_agency' => 'required|string',
+                'volume' => 'required|string',
+                'role' => 'required|string',
+                'grant_status' => 'required|string',
+                'proof' => '',    
+        ]);
+
+        $data = $request->only([
+                        'name', 'funding_agency', 'volume', 'role', 'grant_status'
+                    ]);
+                    if ($request->hasFile('proof')) {
+                         
+                            if ($record->proof && Storage::disk('public')->exists($record->proof)) {
+                                Storage::disk('public')->delete($record->proof);
+                            }
+
+                            $file = $request->file('proof');
+                            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                            $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                            $uniqueNumber = rand(1000, 9999);
+                            $extension = $file->getClientOriginalExtension();
+                            $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                            $path = $file->storeAs('grants', $fileName, 'public');
+                            $data['proof'] = $path;
+                        }
+                    $data['updated_by'] = Auth::user()->employee_id;
+
+                    $record->update($data);
+
+                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
     }
 }
