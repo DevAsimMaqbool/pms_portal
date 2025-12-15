@@ -310,7 +310,7 @@
 
 
                             <div class="col-4 mt-3">
-                                <button class="btn btn-primary w-100">SUBMIT</button>
+                                <button class="btn btn-primary">SUBMIT</button>
                             </div>
                         </form>
                     </div>
@@ -402,8 +402,8 @@
                                     <input type="number" id="international" class="form-control" name="international">
                                 </div>
                             </div>
-                            <div class="col-4 text-center demo-vertical-spacing">
-                                <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
+                            <div class="col-4 demo-vertical-spacing">
+                                <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                             </div>
                         </form>
                         <hr>
