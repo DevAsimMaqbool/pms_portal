@@ -170,6 +170,12 @@ Route::middleware('auth')->group(function () {
 
         //form crud
         Route::put('/indicator-form/update/{id}', [AchievementOfResearchPublicationsTargetController::class, 'updateResearchPublication']) ->name('research.update');
+        Route::put('/counsultancy/update/{id}', [CommercialGainsCounsultancyResearchIncomeController::class, 'updateCommercialGainPublication']) ->name('commercialgain.update');
+        Route::put('/multidisciplinary/update/{id}',[NoAchievementOfMultidisciplinaryProjectsTargetController::class, 'updateMultidisciplinaryProject'])->name('multidisciplinary.update');
+        Route::put('/products-delivered-to-industry/update/{id}',[ProductsDeliveredToIndustryController::class, 'updateMultidisciplinaryProject'])->name('productdelivery.update');
+        Route::put('/industrial-projects/update/{id}',[IndustrialProjectsController::class, 'updateIndustrialProjectsProject'])->name('industrialprojects.update');
+        Route::put('/no-Of-GrantSubmit-And-Won/update/{id}',[NoOfGrantsSubmitAndWonController::class, 'updateNoOfGrantsSubmitAndWon'])->name('noofgrantssubmit.update');
+
 
     });
     Route::get('/faculty-target-gets', [FacultyTargetController::class, 'getTarget'])

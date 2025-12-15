@@ -281,4 +281,39 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
     {
         //
     }
+    public function updateCommercialGainPublication(Request $request, $id)
+    {
+
+        $record = CommercialGainsCounsultancyResearchIncome::findOrFail($id);
+
+        $request->validate([
+                'record_id' => 'required',
+                'title_of_consultancy' => 'required|string',
+                'duration_of_consultancy' => 'required|string',
+                'name_of_client_organization' => 'required|string',
+                'consultancy_fee' => 'required|numeric|min:0',
+                'consultancy_file' => '',
+            
+        ]);
+
+        $data = $request->only([
+                        'title_of_consultancy', 'duration_of_consultancy', 'name_of_client_organization', 'consultancy_fee'
+                    ]);
+                    if ($request->hasFile('consultancy_file')) {
+
+                            $file = $request->file('consultancy_file');
+                            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                            $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                            $uniqueNumber = rand(1000, 9999);
+                            $extension = $file->getClientOriginalExtension();
+                            $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                            $path = $file->storeAs('consultancy_file', $fileName, 'public');
+                            $data['consultancy_file'] = $path;
+                        }
+                    $data['updated_by'] = Auth::user()->employee_id;
+
+                    $record->update($data);
+
+                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+    }
 }

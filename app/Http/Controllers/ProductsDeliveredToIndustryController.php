@@ -40,8 +40,20 @@ class ProductsDeliveredToIndustryController extends Controller
                             ->get();
                     }
 
-            }if ($user->hasRole('HOD')) {
-                $employeeIds = User::where('manager_id', $employee_id)
+            }if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+                $status = $request->input('status');
+                if($status=="Teacher"){
+                    $forms = ProductsDeliveredToIndustry::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])
+                        ->where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
+                        ->get();
+                }
+                if($status=="HOD"){
+                     $employeeIds = User::where('manager_id', $employee_id)
                     ->role('Teacher')->pluck('employee_id');
                     $forms = ProductsDeliveredToIndustry::with([
                             'creator' => function ($q) {
@@ -53,6 +65,7 @@ class ProductsDeliveredToIndustryController extends Controller
                         ->where('form_status', 'RESEARCHER')
                         ->orderBy('id', 'desc')
                         ->get();
+                }
                 
             }if ($user->hasRole('ORIC')) {
                 $status = $request->input('status');
@@ -257,5 +270,34 @@ class ProductsDeliveredToIndustryController extends Controller
     public function destroy(ProductsDeliveredToIndustry $productsDeliveredToIndustry)
     {
         //
+    }
+    public function updateMultidisciplinaryProject(Request $request, $id)
+    {
+
+        $record = ProductsDeliveredToIndustry::findOrFail($id);
+
+        $request->validate([
+                'record_id' => 'required',
+                'project_name' => 'required|string',
+                'other_disciplines' => 'required|string',
+                'partner_industry' => 'required|string',
+                'identified_public_sector_entity' => 'required|string',
+                'completion_time_of_project' => 'required|string',
+                'product_developed' => 'required|in:YES,NO,NA',
+                'third_party_validation' => 'required|in:YES,NO,NA',
+                'ip_claim' => 'required|in:YES,NO',
+                'provide_details' => 'required_if:ip_claim,YES|string|nullable',
+    
+        ]);
+
+        $data = $request->only([
+                        'project_name', 'other_disciplines', 'partner_industry', 'identified_public_sector_entity','completion_time_of_project',
+                        'product_developed','third_party_validation','ip_claim','provide_details'
+                    ]);
+                    $data['updated_by'] = Auth::user()->employee_id;
+
+                    $record->update($data);
+
+                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
     }
 }

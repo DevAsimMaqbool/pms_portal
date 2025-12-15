@@ -17,7 +17,7 @@
 
         <!-- Multi Column with Form Separator -->
         <div class="card">
-             <h5 class="card-header">Intellectual Property</h5>
+             <h5 class="card-header">Industrial Projects</h5>
             <div class="card-datatable table-responsive card-body">
                     @if(auth()->user()->hasRole(['HOD', 'Teacher']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
@@ -27,8 +27,9 @@
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Created By</th>
-                                                        <th>Filing / Registration</th>
+                                                        <th>Title</th>
                                                         <th>Created Date</th>
+                                                        <th>History</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -39,7 +40,8 @@
                    
             </div>
         </div>
-         <!-- Modal -->
+        <!-- Update Intellectual Property Modal -->
+           <!-- Modal -->
        <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -81,53 +83,47 @@
 </div>
 
         <!--/ Add Permission Modal -->
-        <!-- Update Intellectual Property Modal -->
-<div class="modal fade" id="researchFormModal" tabindex="-1" aria-labelledby="researchFormModalLabel" aria-hidden="true">
+ <!-- Update commercial gain Modal -->
+<div class="modal fade" id="commercialGainFormModal" tabindex="-1" aria-labelledby="commericaGainFormModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="researchFormModalLabel">Edit Intellectual Property</h5>
+                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Industrial Projects</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="researchForm1" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="record_id" name="record_id">
+                    <input type="hidden" name="_method" value="PUT">
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="name_of_ip_filed" class="form-label">Title Of IP/Patents</label>
-                            <input type="text" id="name_of_ip_filed" name="name_of_ip_filed" class="form-control" required>
+                            <label for="project_name" class="form-label">Project Name</label>
+                            <input type="text" id="project_name" name="project_name" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="contracting_industry" class="form-label">Contracting Industry</label>
+                            <input type="text" id="contracting_industry" name="contracting_industry" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="project_duration" class="form-label">Project Duration</label>
+                            <input type="number" id="project_duration" name="project_duration" class="form-control" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Type</label>
-                            <select id="patents_ip_type" name="patents_ip_type" class="form-select" required>
-                                <option value="">-- Select --</option>
-                                <option value="copyright">Copyright</option>
-                                <option value="Trademark">Trademark</option>
-                                <option value="Design">Design</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6" id="other-type-field" style="display:none;">
-                            <label class="form-label">Please Specify Other Type</label>
-                            <input type="text" name="other_detail" id="other_detail" class="form-control" placeholder="Enter details">
+                            <label for="estimated_project_cost" class="form-label">Estimated Project Cost</label>
+                            <input type="number" id="estimated_project_cost" name="estimated_project_cost" class="form-control" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="no_of_ip_disclosed" class="form-label">Filing / Registration #</label>
-                            <input type="text" id="no_of_ip_disclosed" name="no_of_ip_disclosed" class="form-control" required>
+                            <label for="estimated_complection" class="form-label">Estimated Complection</label>
+                            <input type="date" id="estimated_complection" name="estimated_complection" class="form-control" required>
                         </div>
+                        
                         <div class="col-md-6">
-                            <label for="area_of_application" class="form-label">Area Of Application</label>
-                            <input type="text" id="area_of_application" name="area_of_application" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="date_of_filing_registration" class="form-label">Date Of Filing Registration</label>
-                            <input type="date" id="date_of_filing_registration" name="date_of_filing_registration" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="supporting_docs_as_attachment" class="form-label">Supporting Docs As Attachment</label>
-                            <input type="file" id="supporting_docs_as_attachment" name="supporting_docs_as_attachment" class="form-control">
+                            <label for="attachment" class="form-label">Attachment</label>
+                            <input type="file" id="attachment" name="attachment" class="form-control">
                             <div id="intellectual-img"></div>
                         </div>
                     </div>
@@ -141,6 +137,7 @@
         </div>
     </div>
 </div>
+
 
     </div>
     <!-- / Content -->
@@ -163,9 +160,9 @@
 @push('script')
     @if(auth()->user()->hasRole(['HOD', 'Teacher']))
         <script>
-            function fetchIntelletualForms() {
+            function fetchCommercialForms() {
                 $.ajax({
-                    url: "{{ route('intellectual-properties.index') }}",
+                    url: "{{ route('industrial-projects.index') }}",
                     method: "GET",
                     data: {
                         status: "Teacher" // you can send more values
@@ -186,15 +183,15 @@
                                         data-form='${JSON.stringify(form)}'>
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
-                            }     
+                            }       
 
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
                                 form.creator ? form.creator.name : 'N/A',
-                                form.no_of_ip_disclosed || 'N/A',
+                                form.project_name || 'N/A',
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
+                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
                                     data-history='${JSON.stringify(form.update_history)}'
                                     data-user='${form.creator ? form.creator.name : "N/A"}'
                                     data-created='${form.created_at}'>
@@ -210,7 +207,7 @@
                                 columns: [
                                     { title: "#" },
                                     { title: "Created By" },
-                                    { title: "Filing / Registration" },
+                                    { title: "Title" },
                                     { title: "Created Date" },
                                     { title: "History" },
                                     { title: "Actions" }
@@ -229,7 +226,7 @@
                 
     
             $(document).ready(function () {
-                fetchIntelletualForms();
+                fetchCommercialForms();
                 $(document).on('click', '.view-form-btn', function () {
                 // Clear modal
                 $('#modalExtraFieldsHistory').empty();
@@ -295,19 +292,17 @@
 
                 $('#viewFormModal').modal('show');
             });
-    // Open modal and populate data
-    $(document).on('click', '.edit-form-btn', function () {
+            $(document).on('click', '.edit-form-btn', function () {
         const form = $(this).data('form');
 
         $('#researchForm1 #record_id').val(form.id);
-        $('#researchForm1 #name_of_ip_filed').val(form.name_of_ip_filed);
-        $('#researchForm1 #patents_ip_type').val(form.patents_ip_type).trigger('change');
-        $('#researchForm1 #other_detail').val(form.other_detail);
-        $('#researchForm1 #no_of_ip_disclosed').val(form.no_of_ip_disclosed);
-        $('#researchForm1 #area_of_application').val(form.area_of_application);
-        $('#researchForm1 #date_of_filing_registration').val(form.date_of_filing_registration);
-        if (form.supporting_docs_as_attachment) {
-                        let fileUrl = form.supporting_docs_as_attachment;
+        $('#researchForm1 #project_name').val(form.project_name);
+        $('#researchForm1 #contracting_industry').val(form.contracting_industry);
+        $('#researchForm1 #project_duration').val(form.project_duration);
+        $('#researchForm1 #estimated_project_cost').val(form.estimated_project_cost);
+        $('#researchForm1 #estimated_complection').val(form.estimated_complection);
+        if (form.attachment) {
+                        let fileUrl = form.attachment;
                         let fileExt = fileUrl.split('.').pop().toLowerCase();
 
                         let filePreview = '';
@@ -340,28 +335,14 @@
                         $("#intellectual-img").html(filePreview);
                     }
 
-        $('#researchFormModal').modal('show');
+        $('#commercialGainFormModal').modal('show');
     });
-
-    // Show/hide other type field
-    $('#patents_ip_type').on('change', function () {
-        if ($(this).val() === 'Other') {
-            $('#other-type-field').show();
-            $('#other_detail').attr('required', true);
-        } else {
-            $('#other-type-field').hide();
-            $('#other_detail').removeAttr('required').val('');
-        }
-    });
-
-    // Submit updated data
+      // Submit updated data
     $('#researchForm1').on('submit', function (e) {
         e.preventDefault();
+        let form = $(this);
         let formData = new FormData(this);
         const recordId = $('#record_id').val();
-        formData.append('status_update_data', true);
-
-        formData.append('_method', 'PUT'); // Laravel PUT
 
         Swal.fire({
             title: 'Updating...',
@@ -370,17 +351,20 @@
         });
 
         $.ajax({
-            url: '/intellectual-properties/' + recordId,
-            type: 'POST',
+            url: "{{ route('industrialprojects.update', '') }}/" + recordId,
+            method: 'POST',
             data: formData,
             contentType: false,
             processData: false,
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function (response) {
                 Swal.close();
                 Swal.fire('Success', response.message, 'success');
-                $('#researchFormModal').modal('hide');
+                $('#commercialGainFormModal').modal('hide');
                 $('#researchForm1')[0].reset();
-                fetchIntelletualForms(); // reload table
+                form.find('.invalid-feedback').remove();
+                form.find('.is-invalid').removeClass('is-invalid');
+                fetchCommercialForms(); // reload table
             },
             error: function (xhr) {
                 Swal.close();
@@ -397,6 +381,7 @@
             }
         });
     });
+     
 
 });
 

@@ -45,7 +45,13 @@
                 <div class="tab-content">
                     @if(auth()->user()->hasRole(['HOD', 'Teacher', 'Assistant Professor','Professor']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <h5 class="mb-1">Products Delivered to Industry</h5>
+                        <div class="d-flex justify-content-between">
+                               <div>
+                                <h5 class="mb-1">Products Delivered to Industry</h5>
+                                </div>
+                                <a href="{{ route('indicators_crud.index', ['slug' => 'products-delivered-to-industry', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            </div> 
+                            <h5 class="mb-1"></h5>
                             <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
                             <form id="researchForm1" enctype="multipart/form-data" class="row">
                                 @csrf
