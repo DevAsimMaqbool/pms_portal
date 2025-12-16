@@ -78,7 +78,7 @@
             select.addEventListener('change', function () {
                 const badge = this.value;
                 const id = this.dataset.id;
-                alert(id);
+
                 if (!badge) return; // Do nothing if no selection
 
                 Swal.fire({
