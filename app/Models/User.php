@@ -94,4 +94,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(FacultyTarget::class, 'user_id');
     }
+
+    public function selfNominations()
+    {
+        return $this->hasMany(SelfNomination::class, 'employee_id', 'employee_id');
+    }
 }
