@@ -42,8 +42,10 @@
                                 <td>{{ $submission->created_at->format('Y-m-d') }}</td>
 
                                 <td>
-                                    <a href="{{ route('nomination.show', $submission->id) }}" class="btn btn-sm btn-info">
-                                        View
+                                    <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect"
+                                        href="{{ route('nomination.show', $submission->id) }}" title="View Nomination"
+                                        aria-label="View Nomination">
+                                        <i class="icon-base ti tabler-eye icon-md"></i>
                                     </a>
                                 </td>
                             </tr>
