@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\IndicatorsPercentage;
 
 class User extends Authenticatable
 {
@@ -98,4 +99,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(IndicatorsPercentage::class, 'employee_id', 'employee_id');
     }
+
+    public function selfNominations()
+    {
+        return $this->hasMany(SelfNomination::class, 'employee_id', 'employee_id');
+    }
+
+    public function indicatorsPercentage()
+    {
+        return $this->hasMany(IndicatorsPercentage::class, 'employee_id', 'employee_id');
+    }
+
 }

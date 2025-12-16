@@ -50,6 +50,7 @@ use App\Http\Controllers\LineManagerEventFeedbackController;
 use App\Http\Controllers\RatingRuleController;
 use App\Http\Controllers\PmsPolicyController;
 use App\Http\Controllers\SelfNominationController;
+use App\Http\Controllers\AssignBadgeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -179,8 +180,22 @@ Route::middleware('auth')->group(function () {
         Route::get('/carrier-chart-data', [ComparitiveAnalysisController::class, 'getCarrierChartData'])->name('carrier.chart.data');
         Route::get('/self-vs-self', [ComparitiveAnalysisController::class, 'getSelfVsSelfData'])->name('self.vs.self');
 
+        Route::put('/indicator-form/update/{id}', [AchievementOfResearchPublicationsTargetController::class, 'updateResearchPublication'])->name('research.update');
+        Route::put('/counsultancy/update/{id}', [CommercialGainsCounsultancyResearchIncomeController::class, 'updateCommercialGainPublication'])->name('commercialgain.update');
+        Route::put('/multidisciplinary/update/{id}', [NoAchievementOfMultidisciplinaryProjectsTargetController::class, 'updateMultidisciplinaryProject'])->name('multidisciplinary.update');
+        Route::put('/products-delivered-to-industry/update/{id}', [ProductsDeliveredToIndustryController::class, 'updateMultidisciplinaryProject'])->name('productdelivery.update');
+        Route::put('/industrial-projects/update/{id}', [IndustrialProjectsController::class, 'updateIndustrialProjectsProject'])->name('industrialprojects.update');
+        Route::put('/no-Of-GrantSubmit-And-Won/update/{id}', [NoOfGrantsSubmitAndWonController::class, 'updateNoOfGrantsSubmitAndWon'])->name('noofgrantssubmit.update');
 
 
+    });
+
+    Route::middleware('role:user')->group(function () {
+        Route::get('/nomination', [SelfNominationController::class, 'index'])->name('nomination.index');
+        Route::get('//nomination/show/{id}', [SelfNominationController::class, 'show'])->name('nomination.show');
+        Route::get('/nomination/{id}/download', [SelfNominationController::class, 'download'])->name('nomination.download');
+        Route::get('/badges', [AssignBadgeController::class, 'index'])->name('badges.index');
+        Route::post('/badges/update-badge/{id}', [AssignBadgeController::class, 'update'])->name('badges.updateBadge');
     });
     Route::get('/faculty-target-gets', [FacultyTargetController::class, 'getTarget'])
         ->name('faculty-target.getTarget');
@@ -270,7 +285,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/policy/update/{id}', [PmsPolicyController::class, 'update'])->name('policy.update');
     Route::delete('/policy/delete/{id}', [PmsPolicyController::class, 'destroy'])->name('policy.destroy');
 
-    Route::get('/nomination', [SelfNominationController::class, 'index'])->name('nomination.index');
     Route::get('/nomination/create', [SelfNominationController::class, 'create'])->name('nomination.create');
     Route::post('/nomination/store', [SelfNominationController::class, 'store'])->name('nomination.store');
     Route::get('/nomination/edit/{id}', [SelfNominationController::class, 'edit'])->name('nomination.edit');

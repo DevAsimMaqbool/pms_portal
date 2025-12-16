@@ -31,4 +31,9 @@ class SelfNomination extends Model
         'service_superheroes_awards' => 'array',
         'disclaimer' => 'boolean',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'employee_id', 'employee_id');
+    }
 }

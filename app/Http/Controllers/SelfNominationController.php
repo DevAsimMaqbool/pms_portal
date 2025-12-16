@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SelfNomination;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class SelfNominationController extends Controller
@@ -14,9 +15,8 @@ class SelfNominationController extends Controller
      */
     public function index()
     {
-        $employeeId = Auth::user()->employee_id;
-        $submission = SelfNomination::where('employee_id', $employeeId)->first();
-        return view('admin.self_nomination.add', compact('submission'));
+        $submissions = SelfNomination::with('user')->get();
+        return view('admin.self_nomination.index', compact('submissions'));
     }
 
     /**
@@ -92,8 +92,8 @@ class SelfNominationController extends Controller
      */
     public function show($id)
     {
-        $submission = SelfNomination::findOrFail($id);
-        return view('policy.show', compact('submission'));
+        $submission = SelfNomination::with('user')->findOrFail($id);
+        return view('admin.self_nomination.show', compact('submission'));
     }
 
     /**
@@ -158,6 +158,16 @@ class SelfNominationController extends Controller
     {
         $submission = SelfNomination::findOrFail($id);
         $submission->delete();
+    }
+
+    public function download($id)
+    {
+        $submission = SelfNomination::with('user')->findOrFail($id);
+
+        $pdf = Pdf::loadView('admin.self_nomination.print', compact('submission'))
+            ->setPaper('A4', 'portrait');
+
+        return $pdf->download('Self-Nomination-' . $submission->user->barcode . '.pdf');
     }
 }
 

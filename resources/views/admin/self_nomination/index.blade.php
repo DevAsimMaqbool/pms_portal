@@ -1,65 +1,52 @@
 @extends('layouts.app')
 
 @push('style')
-    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
     <link rel="stylesheet"
-        href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
-    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}" />
-    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+        href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
 @endpush
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="card">
-            <!-- Header with Add Policy Button -->
             <div class="d-flex justify-content-between align-items-center p-3">
-                <h5 class="card-title mb-0">Policies & SOPs</h5>
-                <a href="{{ route('policy.create') }}" class="btn btn-primary">Add Policy</a>
+                <h5 class="card-title mb-0">Self Nominations</h5>
             </div>
 
             <div class="card-datatable">
-                <table class="table" id="policyTable">
+                <table class="table" id="nominationTable">
                     <thead class="border-top">
                         <tr>
                             <th>#</th>
-                            <th>SOPs File</th>
-                            <th>Policy File</th>
-                            <th>Uploaded By</th>
-                            <th>Created At</th>
-                            <th>Actions</th>
+                            <th>Employee Code</th>
+                            <th>Employee Name</th>
+                            <th>Designation</th>
+                            <th>Department</th>
+                            <th>Submitted At</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($policies as $policy)
+                        @foreach($submissions as $submission)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>
-                                    @if($policy->sop_file)
-                                        <a href="{{ asset('storage/' . $policy->sop_file) }}" target="_blank">View File</a>
-                                    @else
-                                        N/A
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($policy->policy_file)
-                                        <a href="{{ asset('storage/' . $policy->policy_file) }}" target="_blank">View File</a>
-                                    @else
-                                        N/A
-                                    @endif
-                                </td>
-                                <td>{{ $policy->created_by ? $policy->creator->name ?? 'N/A' : 'N/A' }}</td>
-                                <td>{{ $policy->created_at->format('Y-m-d') }}</td>
-                                <td>
-                                    <a href="{{ route('policy.edit', $policy->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                <td>{{ $submission->user->barcode }}</td>
 
-                                    <!-- Delete Form -->
-                                    <form action="{{ route('policy.destroy', $policy->id) }}" method="POST"
-                                        style="display:inline-block;"
-                                        onsubmit="return confirm('Are you sure you want to delete this policy?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger" type="submit">Delete</button>
-                                    </form>
+                                <td>
+                                    {{ trim(preg_replace('/[-\s]*\d+$/', '', $submission->user->name)) }}
+                                </td>
+
+                                <td>{{ $submission->user->job_title }}</td>
+                                <td>{{ $submission->user->department }}</td>
+
+                                <td>{{ $submission->created_at->format('Y-m-d') }}</td>
+
+                                <td>
+                                    <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect"
+                                        href="{{ route('nomination.show', $submission->id) }}" title="View Nomination"
+                                        aria-label="View Nomination">
+                                        <i class="icon-base ti tabler-eye icon-md"></i>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
@@ -71,14 +58,13 @@
 @endsection
 
 @push('script')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('admin/assets/vendor/libs/datatables/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/datatables-responsive/dataTables.responsive.js') }}"></script>
 
     <script>
         $(document).ready(function () {
-            $('#policyTable').DataTable({
+            $('#nominationTable').DataTable({
                 responsive: true
             });
         });

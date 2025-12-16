@@ -1634,17 +1634,23 @@ function Research_Innovation_Commercialization($facultyId, $indicator_id)
 
 
 if (!function_exists('getIndicatorsByScore')) {
-    function getIndicatorsByScore($scoreCompare, $scoreValue, $employeeId = null, $kpaId = null)
+    function getIndicatorsByScore($scoreCompare, $scoreValue, $employeeId = null, $kpaId = null, $isBadge = null)
     {
         $query = IndicatorsPercentage::with([
             'kpa:id,short_code',
             'category:id,cat_short_code',
-            'indicator:id,indicator'
+            'indicator:id,indicator',
+            'user:employee_id,name,email,job_title,department'
         ]);
 
         // Optional filters
         if (!empty($employeeId)) {
             $query->where('employee_id', $employeeId);
+        }
+
+        // Optional filters
+        if (!empty($isBadge)) {
+            $query->where('is_badge', $isBadge);
         }
 
         if (!empty($kpaId)) {
@@ -1654,12 +1660,15 @@ if (!function_exists('getIndicatorsByScore')) {
         return $query
             ->where('score', $scoreCompare, $scoreValue)
             ->get([
+                'id',
+                'employee_id',
                 'key_performance_area_id',
                 'indicator_category_id',
                 'indicator_id',
                 'score',
                 'rating',
-                'color'
+                'color',
+                'badge_name'
             ]);
     }
 }
