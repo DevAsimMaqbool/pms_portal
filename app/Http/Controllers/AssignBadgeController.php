@@ -63,6 +63,7 @@ class AssignBadgeController extends Controller
 
         $indicator = IndicatorsPercentage::findOrFail($id);
         $indicator->badge_name = $request->badge;
+        $indicator->is_badge = 1;
         $indicator->given_by = Auth::id();
         $indicator->save();
 
