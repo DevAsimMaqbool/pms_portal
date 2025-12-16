@@ -50,6 +50,7 @@ use App\Http\Controllers\LineManagerEventFeedbackController;
 use App\Http\Controllers\RatingRuleController;
 use App\Http\Controllers\PmsPolicyController;
 use App\Http\Controllers\SelfNominationController;
+use App\Http\Controllers\AssignBadgeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -183,8 +184,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/nomination', [SelfNominationController::class, 'index'])->name('nomination.index');
         Route::get('//nomination/show/{id}', [SelfNominationController::class, 'show'])->name('nomination.show');
         Route::get('/nomination/{id}/download', [SelfNominationController::class, 'download'])->name('nomination.download');
-
-
+        Route::get('/badges', [AssignBadgeController::class, 'index'])->name('badges.index');
+        Route::post('/badges/update-badge/{id}', [AssignBadgeController::class, 'update'])->name('badges.updateBadge');
     });
     Route::get('/faculty-target-gets', [FacultyTargetController::class, 'getTarget'])
         ->name('faculty-target.getTarget');

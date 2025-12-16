@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class IndicatorsPercentage extends Model
 {
@@ -14,6 +15,8 @@ class IndicatorsPercentage extends Model
         'score',
         'rating',
         'color',
+        'badge_name',
+        'given_by',
     ];
 
     public function kpa()
@@ -29,5 +32,9 @@ class IndicatorsPercentage extends Model
     public function indicator()
     {
         return $this->belongsTo(Indicator::class, 'indicator_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'employee_id', 'employee_id');
     }
 }
