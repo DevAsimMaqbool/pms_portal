@@ -175,6 +175,10 @@ Route::middleware('auth')->group(function () {
         Route::put('/products-delivered-to-industry/update/{id}',[ProductsDeliveredToIndustryController::class, 'updateMultidisciplinaryProject'])->name('productdelivery.update');
         Route::put('/industrial-projects/update/{id}',[IndustrialProjectsController::class, 'updateIndustrialProjectsProject'])->name('industrialprojects.update');
         Route::put('/no-Of-GrantSubmit-And-Won/update/{id}',[NoOfGrantsSubmitAndWonController::class, 'updateNoOfGrantsSubmitAndWon'])->name('noofgrantssubmit.update');
+        //
+        Route::get('/carrier-chart-data', [ComparitiveAnalysisController::class, 'getCarrierChartData'])->name('carrier.chart.data');
+        Route::get('/self-vs-self', [ComparitiveAnalysisController::class, 'getSelfVsSelfData'])->name('self.vs.self');
+
 
 
     });

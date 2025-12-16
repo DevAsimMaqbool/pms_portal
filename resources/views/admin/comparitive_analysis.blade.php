@@ -46,12 +46,21 @@
       white-space: normal;
       line-height: 1.2;
     }
+    .scgrool-card-h {
+        min-height: 60px;
+    }
+    #carrierChartWrapper {
+  max-height: 400px;     /* visible area */
+  overflow-y: auto;      /* vertical scroll */
+  overflow-x: hidden;
+}
   </style>
 @endpush
 @section('content')
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Header -->
+    
     <div class="">
       <div class="row mb-3">
         <div class="col-12 col-xl-12">
@@ -140,7 +149,10 @@
 
             </div>
             <div class="card-body">
-              <div id="carrierPerformance"></div>
+              {{-- <div id="carrierPerformance"></div> --}}
+              <div id="carrierChartWrapper">
+                <div id="carrierPerformance"></div>
+              </div>
               <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
             </div>
           </div>
@@ -252,12 +264,12 @@
           <div class="card h-100">
             <div class="card-header d-flex justify-content-between">
               <div class="card-title mb-0">
-                <h5 class="mb-1">Faculty Level Toppers</h5>
+                <h5 class="m-0 me-2">Faculty Level Toppers</h5>
               </div>
             </div>
             <div class="card-body top-faculties-list">
               <ul class="p-0 m-0">
-                <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-primary"
                   data-bs-original-title="(Rashid Hussain) Faculty of Computer Science and Information Technology">
                   <div class="d-flex w-50 align-items-center me-4">
@@ -277,7 +289,7 @@
                     <span class="text-body-secondary">{{ number_format(91, 1) }}%</span>
                   </div>
                 </li>
-                <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-success"
                   data-bs-original-title="(Israr Hussain) Faculty of Business and Management Sciences">
                   <div class="d-flex w-50 align-items-center me-4">
@@ -298,7 +310,7 @@
                   </div>
                 </li>
 
-                <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-warning"
                   data-bs-original-title="(Sadia Ashraf) Faculty of Computer Science and Information Technology">
                   <div class="d-flex w-50 align-items-center me-4">
@@ -319,7 +331,7 @@
                   </div>
                 </li>
 
-                <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-warning"
                   data-bs-original-title="(Rubab Naqvi) Faculty of Allied Health Sciences">
                   <div class="d-flex w-50 align-items-center me-4">
@@ -339,7 +351,7 @@
                     <span class="text-body-secondary">{{ number_format(70, 1) }}%</span>
                   </div>
                 </li>
-                <li class="mb-4 d-flex performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-danger"
                   data-bs-original-title="(Dr Sajid Hussain) Faculty of Social Sciences">
                   <div class="d-flex w-50 align-items-center me-4">
@@ -1298,10 +1310,49 @@
         }
 
         // ✅ Initial render
-        renderCarrierPerformanceChart("carrierPerformance11", [60, 90], ['Spring 25', 'Fall 25']);
+        //renderCarrierPerformanceChart("carrierPerformance11", [60, 90], ['Spring 25', 'Fall 25']);
 
 
+        function loadCarrierChart() {
+            // Get the selected KPA ID from the dropdown
+            let keyPerformanceAreaId = $('#apkMultiple1').val(); // default selected value
 
+            $.ajax({
+                url: '/carrier-chart-data',
+                type: 'GET',
+                data: { keyPerformanceAreaId: keyPerformanceAreaId },
+                success: function(res) {
+                    renderCarrierChart(res.categories, res.values, res.highlightName);
+                    setTimeout(scrollCarrierChartToBottom, 100);
+                },
+                error: function(err) {
+                    console.error(err);
+                }
+            });
+        }
+        function selfVSself() {
+            // Get the selected KPA ID from the dropdown
+            let keyPerformanceAreaId = $('#apkMultiple1').val(); // default selected value
+
+            $.ajax({
+                url: '/self-vs-self',
+                type: 'GET',
+                data: { keyPerformanceAreaId: keyPerformanceAreaId },
+                success: function(res) {
+                    renderCarrierPerformanceChart("carrierPerformance11",res.values,res.years);
+                    setTimeout(scrollCarrierChartToBottom, 100);
+                },
+                error: function(err) {
+                    console.error(err);
+                }
+            });
+        }
+        function scrollCarrierChartToBottom() {
+            const wrapper = document.getElementById('carrierChartWrapper');
+            if (wrapper) {
+                wrapper.scrollTop = wrapper.scrollHeight;
+            }
+        }
         function renderCarrierChart(categories, values, highlightName = "Abdullah Tanveer") {
           const c = document.querySelector("#carrierPerformance");
           const legendContainer = document.getElementById("carrierCustomLegend");
@@ -1314,7 +1365,8 @@
             c.chartInstance = null;
             if (legendContainer) legendContainer.innerHTML = "";
           }
-
+          const barHeightPx = 45; // ✅ height per bar
+  const chartHeight = categories.length * barHeightPx;
           const colors = ["#FF5733", "#1F77B4", "#2CA02C", "#9467BD", "#D62728"];
 
           // Self performance data
@@ -1326,7 +1378,7 @@
 
           const options = {
             chart: {
-              height: 300,
+              height: chartHeight,
               type: "bar",
               toolbar: { show: false },
             },
@@ -1391,15 +1443,6 @@
 
           if (legendContainer) {
             categories.forEach((label, i) => {
-              const item = document.createElement("div");
-              item.className = "d-flex align-items-center mx-2 my-1";
-              item.innerHTML = `
-                                                                                      <span style="width:14px;height:14px;background:${colors[i % colors.length]};
-                                                                                      border-radius:50%;display:inline-block;margin-right:6px;"></span>
-                                                                                      <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-                                                                                    `;
-              legendContainer.appendChild(item);
-
               if (label === highlightName) {  // ✅ Only show emoji on highlighted bar
                 chart.addPointAnnotation({
                   x: values[i],
@@ -1562,10 +1605,18 @@
         }
 
         // ✅ Initial Chart Render (default data)
-        renderCarrierChart(
-          ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-          [85, 80, 75, 70, 50]
-        );
+        /*renderCarrierChart(
+          ["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain", "Rashid Hussain1", "Rashid Hussain2" ,"abc1","abc2","abc3","abc4","Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain", "Rashid Hussain1", "Rashid Hussain2" ,"abc1","abc2","abc3","abc4"],
+          [85, 80, 75, 70, 50,50,48,45,45,44,44,85, 80, 75, 70, 50,50,48,45,45,44,44]
+        );*/
+        loadCarrierChart();
+        selfVSself();
+
+        $('#apkMultiple1').on('change', function() {
+            loadCarrierChart();
+            selfVSself();
+        });
+        
 
         function shuffleElements(container) {
           const items = Array.from(container.querySelectorAll(".performer-item"));
@@ -1576,9 +1627,10 @@
           container.innerHTML = "";
           items.forEach(item => container.appendChild(item));
         }
+
         // end asim's code
         // ✅ Handle select change
-        const select = document.querySelector("#apkMultiple1");
+        const select = document.querySelector("#apkMultiple11");
         select.addEventListener("change", function () {
           const selectedValue = this.value;
           //const listContainer = document.querySelector(".top-performers-list");
@@ -1597,89 +1649,7 @@
           let newData = [];
           let newCategories = [];
 
-          switch (selectedValue) {
-            case "1":
-
-              renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [70, 60, 40, 20, 30]);
-              newData = [80, 90];
-              newCategories = ['Spring 25', 'Fall 25'];
-              break;
-            case "2":
-
-              renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [80, 70, 65, 40, 20]);
-              newData = [60, 85];
-              newCategories = ['Spring 25', 'Fall 25'];
-              break;
-            case "3":
-
-              renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [90, 85, 80, 75, 70]);
-              newData = [70, 75];
-              newCategories = ['Spring 25', 'Fall 25'];
-              break;
-            case "4":
-
-              renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [90, 85, 85, 80, 80]);
-              newData = [50, 06];
-              newCategories = ['Spring 25', 'Fall 25'];
-              break;
-            case "5":
-
-              renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [85, 80, 75, 70, 65]);
-              newData = [90, 40];
-              newCategories = ['Spring 25', 'Fall 25'];
-              break;
-            case "6":
-
-              renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [99, 77, 55, 44, 30]);
-              newData = [70, 75];
-              newCategories = ['Spring 25', 'Fall 25'];
-              break;
-            case "7":
-
-              renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [70, 40, 35, 20, 20]);
-              newData = [70, 55];
-              newCategories = ['Spring 25', 'Fall 25'];
-              break;
-            case "13":
-
-              renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [77, 66, 55, 50, 40]);
-              newData = [40, 55];
-              newCategories = ['Spring 25', 'Fall 25'];
-              break;
-            case "14":
-
-              renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [69, 68, 67, 66, 65]);
-              newData = [50, 65];
-              newCategories = ['Spring 25', 'Fall 25'];
-              break;
-            case "0":
-
-              renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [90, 88, 77, 66, 55]);
-              newData = [55, 75];
-              newCategories = ['Spring 25', 'Fall 25'];
-              break;
-            default:
-
-              renderCarrierChart(["Abdullah Tanveer", "Sadia Ashraf", "Amna Ilyas", "Muhammad Ashraf", "Rashid Hussain"],
-                [60, 60, 60, 50, 50]);
-              newData = [85, 65];
-              newCategories = ['Spring 25', 'Fall 25'];
-              break;
-          }
-
-          // ✅ Re-render chart with new data
-
-          renderCarrierPerformanceChart("carrierPerformance11", newData, newCategories);
+          
         });
       });
     </script>

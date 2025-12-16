@@ -94,4 +94,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(FacultyTarget::class, 'user_id');
     }
+    public function indicatorsPercentages()
+    {
+        return $this->hasMany(IndicatorsPercentage::class, 'employee_id', 'employee_id');
+    }
 }

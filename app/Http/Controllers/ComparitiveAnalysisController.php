@@ -8,6 +8,7 @@ use App\Models\KeyPerformanceArea;
 use App\Models\RoleKpaAssignment;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 class ComparitiveAnalysisController extends Controller
 {
@@ -19,7 +20,14 @@ class ComparitiveAnalysisController extends Controller
         try {
             $user = Auth::user();
             $role = $user->roles->first();
-
+            $roleId = $role->id;
+            $roleName = $role->name;
+            $department = $user->department;
+            $employee_id = $user->employee_id;
+            $keyPerformanceAreaId = 1;
+            
+           
+           
             // Assigned KPAs based on role
             $assignments = RoleKpaAssignment::with('kpa')
                 ->where('role_id', $role->id)
@@ -33,12 +41,13 @@ class ComparitiveAnalysisController extends Controller
             $dataset1 = [90, 100, 85, 90, 90, 90];
             $dataset2 = [80, 90, 75, 80, 80, 80];
 
+          
+
+            
+            $dataset2 = [80, 90, 75, 80, 80, 80];
+
             return view('admin.comparitive_analysis', compact(
-                'kfarea',
-                'dataset1',
-                'dataset2',
-                'averageOfAverages',
-                'labels'
+                'kfarea','labels','dataset1','dataset2'
             ));
         } catch (\Exception $e) {
             return apiResponse('Oops! Something went wrong', [], false, 500, '');
@@ -142,5 +151,126 @@ class ComparitiveAnalysisController extends Controller
 
         return response()->json($indicators);
     }
+
+public function getSelfVsSelfData(Request $request)
+{
+    $keyPerformanceAreaId = $request->input('keyPerformanceAreaId', 1);
+
+    $user = Auth::user();
+    $role = $user->roles->first();
+    $roleId = $role->id;
+    $roleName = $role->name;
+    $employeeId = $user->employee_id;
+
+    $currentYear  = Carbon::now()->year;
+    $previousYear = Carbon::now()->subYear()->year;
+
+    $kpaAvgWeightage = kpaAvgWeightage($keyPerformanceAreaId, $roleId);
+    $weight = $kpaAvgWeightage['kpa_weightage'] ?? 100;
+
+    $userRecord = User::where('employee_id', $employeeId)
+        ->role($roleName)
+        ->select('id', 'name', 'employee_id')
+        ->with(['indicatorsPercentages' => function ($q) use ($keyPerformanceAreaId, $currentYear, $previousYear) {
+            $q->select(
+                'employee_id',
+                'score',
+                'key_performance_area_id',
+                'created_at'
+            )
+            ->where('key_performance_area_id', $keyPerformanceAreaId)
+            ->where(function ($query) use ($currentYear, $previousYear) {
+                $query->whereYear('created_at', $currentYear)
+                      ->orWhereYear('created_at', $previousYear);
+            });
+        }])
+        ->first();
+
+    // Default values
+    $years  = [$previousYear, $currentYear];
+    $values = [0, 0];
+
+    if ($userRecord && $userRecord->indicatorsPercentages->isNotEmpty()) {
+
+        // Group indicators by year
+        $grouped = $userRecord->indicatorsPercentages->groupBy(function ($item) {
+            return Carbon::parse($item->created_at)->year;
+        });
+
+        foreach ($years as $index => $year) {
+            if (isset($grouped[$year])) {
+                $totalScore = $grouped[$year]->sum('score');
+                $count = $grouped[$year]->count();
+
+                $average = $count ? ($totalScore / $count) : 0;
+                $weighted = ($average * $weight) / 100;
+
+                $values[$index] = round($weighted, 2);
+            }
+        }
+    }
+
+    return response()->json([
+        'years'  => $years,
+        'values' => $values
+    ]);
+}
+
+    public function getCarrierChartData(Request $request)
+{
+    $keyPerformanceAreaId = $request->input('keyPerformanceAreaId', 1); // default 1 if not passed
+
+    $user = Auth::user();
+    $role = $user->roles->first();
+    $roleId = $role->id;
+    $roleName = $role->name;
+    $department = $user->department;
+
+    $kpaAvgWeightage = kpaAvgWeightage($keyPerformanceAreaId, $roleId);
+    $weight = $kpaAvgWeightage['kpa_weightage'] ?? 100;
+
+    // Fetch users with their indicators
+    $records = User::where('department', $department)
+        ->role($roleName)
+        ->select('id', 'name', 'employee_id')
+        ->with(['indicatorsPercentages' => function($q) use ($keyPerformanceAreaId) {
+            $q->select('employee_id', 'score', 'rating', 'key_performance_area_id','indicator_id')
+              ->where('key_performance_area_id', $keyPerformanceAreaId);
+        }])
+        ->get();
+
+    // Calculate weighted score for each user
+    $usersWithScores = $records->map(function($u) use ($weight) {
+        $indicators = $u->indicatorsPercentages;
+
+        $totalScore = $indicators->sum('score');
+        $totalIndicators = $indicators->count();
+        $averageScore = $totalIndicators ? ($totalScore / $totalIndicators) : 0;
+
+        $weightedScore = ($averageScore * $weight) / 100;
+
+        // Attach weighted score to user
+        $u->weightedScore = round($weightedScore, 2);
+        return $u;
+    });
+
+    // Sort users by weighted score descending
+    $sortedUsers = $usersWithScores->sortBy('weightedScore');
+
+    // Prepare chart data
+    $categories = $sortedUsers->pluck('name')->toArray();
+    $values = $sortedUsers->pluck('weightedScore')->toArray();
+
+    // Logged-in user to highlight
+    $highlightName = $user->name;
+
+    return response()->json([
+        'categories' => $categories,
+        'values' => $values,
+        'highlightName' => $highlightName
+    ]);
+}
+
+
 }
 

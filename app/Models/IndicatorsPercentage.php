@@ -30,4 +30,8 @@ class IndicatorsPercentage extends Model
     {
         return $this->belongsTo(Indicator::class, 'indicator_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'employee_id', 'employee_id');
+    }
 }
