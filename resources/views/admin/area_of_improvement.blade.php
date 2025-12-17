@@ -40,151 +40,40 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <div class="d-flex justify-content-start align-items-center">
-                      <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-info"><i
-                            class="icon-base ti tabler-truck icon-26px"></i></span>
-                      </div>
-                      <div class="d-flex flex-column me-4">
-                        <small class="text-body">Research Publications</small>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="dt-type-numeric">
-                    <div class="d-flex align-items-center">
-                      <div class="progress w-100 me-3" style="height: 6px;">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="50"
-                          aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </td>
+                @foreach($areaOfImprovement as $areaOfImprovements)
+                     
+                     <tr>
+                        <td>
+                          <div class="d-flex justify-content-start align-items-center">
+                            <div class="avatar flex-shrink-0 me-4">
+                              <span class="avatar-initial rounded bg-label-info"><i
+                                  class="icon-base ti tabler-truck icon-26px"></i></span>
+                            </div>
+                            <div class="d-flex flex-column me-4">
+                              <small class="text-body">{{ $areaOfImprovements->indicator->indicator }}</small>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="dt-type-numeric">
+                          <div class="d-flex align-items-center">
+                            <div class="progress w-100 me-3" style="height: 6px;">
+                              <div class="progress-bar bg-{{ $areaOfImprovements->color }}" role="progressbar" style="width: {{ $areaOfImprovements->score }}%" aria-valuenow="{{ $areaOfImprovements->score }}"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                        </td>
 
-                  <td><span class="badge bg-label-danger">BE</span></td>
-                  <td>
-                    <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
-                      {{ number_format(50, 1) }}%
-                    </p>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <div class="d-flex justify-content-start align-items-center">
-                      <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-info"><i
-                            class="icon-base ti tabler-truck icon-26px"></i></span>
-                      </div>
-                      <div class="d-flex flex-column me-4">
-                        <small class="text-body">Line Manager Satisfaction Rating</small>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="dt-type-numeric">
-                    <div class="d-flex align-items-center">
-                      <div class="progress w-100 me-3" style="height: 6px;">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 35%" aria-valuenow="53"
-                          aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td><span class="badge bg-label-danger">BE</span></td>
-                  <td>
-                    <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
-                      {{ number_format(53, 1) }}%
-                    </p>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <div class="d-flex justify-content-start align-items-center">
-                      <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-info"><i
-                            class="icon-base ti tabler-truck icon-26px"></i></span>
-                      </div>
-                      <div class="d-flex flex-column me-4">
-                        <small class="text-body">Student Pass Percentage</small>
-                      </div>
-
-                    </div>
-                  </td>
-                  <td class="dt-type-numeric">
-                    <div class="d-flex align-items-center">
-                      <div class="progress w-100 me-3" style="height: 6px;">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 59%" aria-valuenow="59"
-                          aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td><span class="badge bg-label-danger">BE</span></td>
-                  <td>
-                    <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
-                      {{ number_format(59, 1) }}%
-                    </p>
-                  </td>
-                </tr>
+                        <td><span class="badge bg-label-{{ $areaOfImprovements->color }}"> {{ $areaOfImprovements->rating }}</span></td>
+                        <td>
+                          <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
+                            {{ $areaOfImprovements->score }}%
+                          </p>
+                        </td>
+                      </tr>
 
 
-                <tr>
-                  <td class="pt-5">
-                    <div class="d-flex justify-content-start align-items-center">
-                      <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-orange"><i
-                            class="icon-base ti tabler-package icon-26px"></i></span>
-                      </div>
-                      <div class="d-flex flex-column me-4">
-                        <small class="text-body">Research productivity of PG students</small>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="dt-type-numeric">
-                    <div class="d-flex align-items-center">
-                      <div class="progress w-100 me-3" style="height: 6px;">
-                        <div class="progress-bar bg-label-orange" role="progressbar" style="width: 63%" aria-valuenow="63"
-                          aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td class="pt-5"><span class="badge bg-label-orange">NI</span></td>
-                  <td class="pt-5">
-                    <p class="text-orange fw-medium mb-0 d-flex align-items-center gap-1">
-                      {{ number_format(63, 1) }}%
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="pt-5">
-                    <div class="d-flex justify-content-start align-items-center">
-                      <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-orange"><i
-                            class="icon-base ti tabler-package icon-26px"></i></span>
-                      </div>
-                      <div class="d-flex flex-column me-4">
-                        <small class="text-body">Student Satisfaction</small>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="dt-type-numeric">
-                    <div class="d-flex align-items-center">
-                      <div class="progress w-100 me-3" style="height: 6px;">
-                        <div class="progress-bar bg-orange" role="progressbar" style="width: 65%" aria-valuenow="65"
-                          aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td class="pt-5"><span class="badge bg-label-orange">NI</span></td>
-                  <td class="pt-5">
-                    <p class="text-orange fw-medium mb-0 d-flex align-items-center gap-1">
-                      {{ number_format(65, 1) }}%
-                    </p>
-                  </td>
-                </tr>
+                @endforeach
+               
               </tbody>
             </table>
           </div>
