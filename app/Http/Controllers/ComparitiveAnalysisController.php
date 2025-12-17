@@ -165,8 +165,8 @@ public function getSelfVsSelfData(Request $request)
     $currentYear  = Carbon::now()->year;
     $previousYear = Carbon::now()->subYear()->year;
 
-    $kpaAvgWeightage = kpaAvgWeightage($keyPerformanceAreaId, $roleId);
-    $weight = $kpaAvgWeightage['kpa_weightage'] ?? 100;
+    // $kpaAvgWeightage = kpaAvgWeightage($keyPerformanceAreaId, $roleId);
+    // $weight = $kpaAvgWeightage['kpa_weightage'] ?? 100;
 
     $userRecord = User::where('employee_id', $employeeId)
         ->role($roleName)
@@ -203,9 +203,9 @@ public function getSelfVsSelfData(Request $request)
                 $count = $grouped[$year]->count();
 
                 $average = $count ? ($totalScore / $count) : 0;
-                $weighted = ($average * $weight) / 100;
+                // $weighted = ($average * $weight) / 100;
 
-                $values[$index] = round($weighted, 2);
+                $values[$index] = round($average, 1);
             }
         }
     }
@@ -226,8 +226,8 @@ public function getSelfVsSelfData(Request $request)
     $roleName = $role->name;
     $department = $user->department;
 
-    $kpaAvgWeightage = kpaAvgWeightage($keyPerformanceAreaId, $roleId);
-    $weight = $kpaAvgWeightage['kpa_weightage'] ?? 100;
+    // $kpaAvgWeightage = kpaAvgWeightage($keyPerformanceAreaId, $roleId);
+    // $weight = $kpaAvgWeightage['kpa_weightage'] ?? 100;
 
     // Fetch users with their indicators
     $records = User::where('department', $department)
@@ -239,27 +239,30 @@ public function getSelfVsSelfData(Request $request)
         }])
         ->get();
 
-    // Calculate weighted score for each user
-    $usersWithScores = $records->map(function($u) use ($weight) {
-        $indicators = $u->indicatorsPercentages;
+        // Calculate average score for each user
+        $usersWithScores = $records->map(function ($u) {
+            $indicators = $u->indicatorsPercentages;
 
-        $totalScore = $indicators->sum('score');
-        $totalIndicators = $indicators->count();
-        $averageScore = $totalIndicators ? ($totalScore / $totalIndicators) : 0;
+            $totalScore = $indicators->sum('score');
+            $totalIndicators = $indicators->count();
 
-        $weightedScore = ($averageScore * $weight) / 100;
+            $averageScore = $totalIndicators
+                ? round($totalScore / $totalIndicators, 1)
+                : 0;
 
-        // Attach weighted score to user
-        $u->weightedScore = round($weightedScore, 2);
-        return $u;
-    });
+            // Attach average score
+            $u->averageScore = min($averageScore, 100);
+
+
+            return $u;
+        });
 
     // Sort users by weighted score descending
-    $sortedUsers = $usersWithScores->sortBy('weightedScore');
+    $sortedUsers = $usersWithScores->sortBy('averageScore'); 
 
     // Prepare chart data
     $categories = $sortedUsers->pluck('name')->toArray();
-    $values = $sortedUsers->pluck('weightedScore')->toArray();
+    $values = $sortedUsers->pluck('averageScore')->toArray();
 
     // Logged-in user to highlight
     $highlightName = $user->name;

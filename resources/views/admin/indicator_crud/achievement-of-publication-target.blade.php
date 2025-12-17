@@ -110,10 +110,10 @@
                       </select>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label d-block">Journal Status</label>
+                      <label class="form-label d-block">Is there at least 1 international co-author?</label>
                       <div>
-                        <input type="radio" name="nationality" value="National"> National
-                        <input type="radio" name="nationality" value="International"> International
+                        <input type="radio" name="nationality" value="National"> No
+                        <input type="radio" name="nationality" value="International"> Yes
                       </div>
                     </div>
                     <div class="col-md-6">

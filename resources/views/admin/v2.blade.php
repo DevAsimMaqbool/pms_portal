@@ -328,7 +328,7 @@
 
                 <div class="col-lg-4 col-md-3 col-sm-6">
                   <div class="card h-100" id="rating-teachercolor" data-bs-toggle="tooltip" data-bs-placement="top"
-                    data-bs-custom-class="tooltip-" data-bs-original-title="You’re going beyond what’s asked of you.">
+                    data-bs-custom-class="tooltip-" data-bs-original-title="">
                     <div class="card-body d-flex justify-content-center align-items-center">
                       <h4 class="mb-0 text-center text-white" id="rating-teachervalue"></h4>
                     </div>
@@ -1023,7 +1023,7 @@
                   <div class="col-12 col-12" id="targetDivchart">
                     <div class="card caed-wave-bg">
 
-                      <div class="card-header d-flex justify-content-between">
+                      {{-- <div class="card-header d-flex justify-content-between">
                         <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                           <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
                           <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
@@ -1034,7 +1034,7 @@
                           <input type="radio" class="btn-check" name="termRadio" id="fall25">
                           <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
                         </div>
-                      </div>
+                      </div> --}}
 
                       <div class="card-body pt-0">
                         <div class="row justify-content-center text-center">
@@ -1098,7 +1098,7 @@
           color = '#6EA8FE';
         } else if (percentage >= 80) {
           rating = 'EE';
-          color = '#96e2b4';
+          color = '#28c76f';
         } else if (percentage >= 70) {
           rating = 'ME';
           color = '#ffcb9a';
