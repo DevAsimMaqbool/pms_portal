@@ -67,160 +67,47 @@
                 </tr>
               </thead>
               <tbody class="table-border-bottom-0">
-                <tr>
-                  <td class="sorting_1">
-                    <div class="d-flex justify-content-start align-items-center product-name">
-                      <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-warning"><i
-                            class="icon-base ti tabler-truck icon-26px"></i></span>
+                @php
+                  $indicators = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, null, 1);
+                @endphp
+                @foreach($indicators as $ind)
+                  @php
+                    $color = $ind->score >= 90 ? 'primary' : ($ind->score >= 80 ? 'success' : ($ind->score >= 70 ? 'warning' : ($ind->score >=
+                      60 ? '#fd7e13' : '#ff4c51'))); 
+                  @endphp
+                  <tr>
+                    <td class="sorting_1">
+                      <div class="d-flex justify-content-start align-items-center product-name">
+                        <div class="avatar flex-shrink-0 me-4">
+                          <span class="avatar-initial rounded bg-label-primary"><i
+                              class="icon-base ti tabler-percentage icon-26px"></i></span>
+                        </div>
+                        <div class="d-flex flex-column">
+                          <h6 class="text-nowrap mb-0">Teaching and Learning</h6>
+                          <small class="text-truncate d-none d-sm-block">{{ $ind->indicator->indicator }}</small>
+                        </div>
                       </div>
-                      <div class="d-flex flex-column">
-                        <h6 class="text-nowrap mb-0">Teaching and Learning</h6>
-                        <small class="text-truncate d-none d-sm-block">QEC - Observation / Peer review</small>
-                      </div>
-                    </div>
-                  </td>
+                    </td>
 
-                  <td>
-                    <p class="text-warning fw-medium mb-0 d-flex align-items-center gap-1">
-                      {{ number_format(70, 1) }}%
-                    </p>
-                  </td>
-                  <td><span class="badge bg-label-warning me-1">ME</span></td>
-                  <td>
-                    <div class="avatar avatar-xl">
-                    </div>
-                  </td>
-                  <td> <small class="text-break">
-                      You’re doing well and meeting your goals.Keep your consistency — it’s your strength.
-                    </small>
-                  </td>
-                  <td>08/07/2021</td>
-                </tr>
-
-                <tr>
-                  <td class="sorting_1">
-                    <div class="d-flex justify-content-start align-items-center product-name">
-                      <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-success"><i
-                            class="icon-base ti tabler-circle-check icon-26px"></i></span>
+                    <td>
+                      <p class="text-primary fw-medium mb-0 d-flex align-items-center gap-1">
+                        {{ number_format($ind->score, 1) }}%
+                      </p>
+                    </td>
+                    <td><span class="badge bg-label-{{ $color }} me-1">{{ $ind->rating }}</span></td>
+                    <td>
+                      <div class="avatar avatar-xl">
+                        <img src="{{ asset('admin/assets/img/avatars/' . $ind->badge_name . '-badge.png') }}" alt="Avatar"
+                          class="rounded-circle">
                       </div>
-                      <div class="d-flex flex-column">
-                        <h6 class="text-nowrap mb-0">Teaching and Learning</h6>
-                        <small class="text-truncate d-none d-sm-block">Completion of Course Folder in Hard</small>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      {{ number_format(82, 1) }}%
-                    </p>
-                  </td>
-                  <td><span class="badge bg-label-success me-1">EE</span></td>
-                  <td>
-                    <div class="avatar avatar-xl"></div>
-                  </td>
-                  <td> <small class="text-break">
-                      You’re going beyond what’s asked of you.Keep shining — your impact inspires others.
-                    </small>
-                  </td>
-                  <td>08/07/2021</td>
-                </tr>
-                <tr>
-                  <td class="sorting_1">
-                    <div class="d-flex justify-content-start align-items-center product-name">
-                      <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-success"><i
-                            class="icon-base ti tabler-clock  icon-26px"></i></span>
-                      </div>
-                      <div class="d-flex flex-column">
-                        <h6 class="text-nowrap mb-0">Research, Innovation and Commercialisation</h6>
-                        <small class="text-truncate d-none d-sm-block">Research productivity of PG students</small>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <p class="text-success fw-medium mb-0 d-flex align-items-center gap-1">
-                      {{ number_format(81, 1) }}%
-                    </p>
-                  </td>
-                  <td><span class="badge bg-label-success me-1">EE</span></td>
-                  <td>
-                    <div class="avatar avatar-xl"></div>
-                  </td>
-                  <td> <small class="text-break">You’re going beyond what’s asked of you.Keep shining — your impact
-                      inspires others.</small>
-                  </td>
-                  <td>08/07/2021</td>
-                </tr>
-
-                <tr>
-                  <td class="sorting_1">
-                    <div class="d-flex justify-content-start align-items-center product-name">
-                      <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-primary"><i
-                            class="icon-base ti tabler-package icon-26px"></i></span>
-                      </div>
-                      <div class="d-flex flex-column">
-                        <h6 class="text-nowrap mb-0">Teaching and Learning</h6>
-                        <small class="text-truncate d-none d-sm-block">Student Teaching Satisfaction (feedback)</small>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <p class="text-primary fw-medium mb-0 d-flex align-items-center gap-1">
-                      {{ number_format(92, 1) }}%
-                    </p>
-                  </td>
-                  <td><span class="badge bg-label-primary me-1">OS</span></td>
-                  <td>
-                    <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/gold-badge.png') }}" alt="Avatar"
-                        class="rounded-circle">
-                    </div>
-                  </td>
-                  <td> <small class="text-break">
-                      You’re achieving excellence with distinction.You set the pace for others to follow.
-                    </small>
-                  </td>
-                  <td>08/07/2021</td>
-                </tr>
-
-                <tr>
-                  <td class="sorting_1">
-                    <div class="d-flex justify-content-start align-items-center product-name">
-                      <div class="avatar flex-shrink-0 me-4">
-                        <span class="avatar-initial rounded bg-label-primary"><i
-                            class="icon-base ti tabler-percentage icon-26px"></i></span>
-                      </div>
-                      <div class="d-flex flex-column">
-                        <h6 class="text-nowrap mb-0">Teaching and Learning</h6>
-                        <small class="text-truncate d-none d-sm-block">Classes Held</small>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <p class="text-primary fw-medium mb-0 d-flex align-items-center gap-1">
-                      {{ number_format(90, 1) }}%
-                    </p>
-                  </td>
-                  <td><span class="badge bg-label-primary me-1">OS</span></td>
-                  <td>
-                    <div class="avatar avatar-xl">
-                      <img src="{{ asset('admin/assets/img/avatars/silver-badge.png') }}" alt="Avatar"
-                        class="rounded-circle">
-                    </div>
-                  </td>
-                  <td> <small class="text-break">
-                      You’re achieving excellence with distinction.You set the pace for others to follow.
-                    </small>
-                  </td>
-                  <td>08/07/2021</td>
-                </tr>
+                    </td>
+                    <td> <small class="text-break">
+                        You’re achieving excellence with distinction.You set the pace for others to follow.
+                      </small>
+                    </td>
+                    <td>08/07/2021</td>
+                  </tr>
+                @endforeach
 
 
               </tbody>
