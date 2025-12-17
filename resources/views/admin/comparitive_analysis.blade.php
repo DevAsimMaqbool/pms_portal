@@ -168,7 +168,95 @@
             </div>
             <div class="card-body top-department-list">
               <ul class="p-0 m-0">
-                <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                
+                 <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="Yet there is no top performer !">
+                  <div class="chart-progress me-3" data-color="secondary" data-series="0" data-progress_variant="true">
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-8">
+                      <div class="me-2">
+                        <small class="text-cut-hot">Yet there is no top performer !</small>
+                        <h6 class="mb-0 text-cut-one">...</h6>
+                      </div>
+                    </div>
+                    <div class="col-4 d-flex justify-content-end">
+                      <div class="badge bg-label-secondary">N/A</div>
+                    </div>
+                  </div>
+                </li>
+                 <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="Yet there is no top performer !">
+                  <div class="chart-progress me-3" data-color="secondary" data-series="0" data-progress_variant="true">
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-8">
+                      <div class="me-2">
+                        <small class="text-cut-hot">Yet there is no top performer !</small>
+                        <h6 class="mb-0 text-cut-one">...</h6>
+                      </div>
+                    </div>
+                    <div class="col-4 d-flex justify-content-end">
+                      <div class="badge bg-label-secondary">N/A</div>
+                    </div>
+                  </div>
+                </li>
+                 <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="Yet there is no top performer !">
+                  <div class="chart-progress me-3" data-color="secondary" data-series="0" data-progress_variant="true">
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-8">
+                      <div class="me-2">
+                        <small class="text-cut-hot">Yet there is no top performer !</small>
+                        <h6 class="mb-0 text-cut-one">...</h6>
+                      </div>
+                    </div>
+                    <div class="col-4 d-flex justify-content-end">
+                      <div class="badge bg-label-secondary">N/A</div>
+                    </div>
+                  </div>
+                </li>
+                 <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="Yet there is no top performer !">
+                  <div class="chart-progress me-3" data-color="secondary" data-series="0" data-progress_variant="true">
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-8">
+                      <div class="me-2">
+                        <small class="text-cut-hot">Yet there is no top performer !</small>
+                        <h6 class="mb-0 text-cut-one">...</h6>
+                      </div>
+                    </div>
+                    <div class="col-4 d-flex justify-content-end">
+                      <div class="badge bg-label-secondary">N/A</div>
+                    </div>
+                  </div>
+                </li>
+                 <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="Yet there is no top performer !">
+                  <div class="chart-progress me-3" data-color="secondary" data-series="0" data-progress_variant="true">
+                  </div>
+                  <div class="row w-100 align-items-center">
+                    <div class="col-8">
+                      <div class="me-2">
+                        <small class="text-cut-hot">Yet there is no top performer !</small>
+                        <h6 class="mb-0 text-cut-one">...</h6>
+                      </div>
+                    </div>
+                    <div class="col-4 d-flex justify-content-end">
+                      <div class="badge bg-label-secondary">N/A</div>
+                    </div>
+                  </div>
+                </li>
+
+
+                {{-- <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-primary"
                   data-bs-original-title="(Rashid Hussain) Department of Computer Science">
                   <div class="chart-progress me-3" data-color="primary" data-series="91" data-progress_variant="true">
@@ -253,7 +341,7 @@
                       <div class="badge bg-label-danger">BE</div>
                     </div>
                   </div>
-                </li>
+                </li> --}}
               </ul>
             </div>
           </div>
@@ -269,7 +357,109 @@
             </div>
             <div class="card-body top-faculties-list">
               <ul class="p-0 m-0">
+                
                 <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="Yet there is no top performer !">
+                  <div class="d-flex w-50 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-mood-smile icon-md"></i>
+                    </div>
+                    <div>
+                      <small class="text-cut-hot">Yet there is no top performer !</small>
+                      <h6 class="mb-0 text-cut-one">...</h6>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center">
+                    <div class="progress w-100 me-4" style="height:8px;">
+                      <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">N/A</span>
+                  </div>
+                </li>
+                <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="Yet there is no top performer !">
+                  <div class="d-flex w-50 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-mood-smile icon-md"></i>
+                    </div>
+                    <div>
+                      <small class="text-cut-hot">Yet there is no top performer !</small>
+                      <h6 class="mb-0 text-cut-one">...</h6>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center">
+                    <div class="progress w-100 me-4" style="height:8px;">
+                      <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">N/A</span>
+                  </div>
+                </li>
+                <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="Yet there is no top performer !">
+                  <div class="d-flex w-50 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-mood-smile icon-md"></i>
+                    </div>
+                    <div>
+                      <small class="text-cut-hot">Yet there is no top performer !</small>
+                      <h6 class="mb-0 text-cut-one">...</h6>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center">
+                    <div class="progress w-100 me-4" style="height:8px;">
+                      <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">N/A</span>
+                  </div>
+                </li>
+                <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="Yet there is no top performer !">
+                  <div class="d-flex w-50 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-mood-smile icon-md"></i>
+                    </div>
+                    <div>
+                      <small class="text-cut-hot">Yet there is no top performer !</small>
+                      <h6 class="mb-0 text-cut-one">...</h6>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center">
+                    <div class="progress w-100 me-4" style="height:8px;">
+                      <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">N/A</span>
+                  </div>
+                </li>
+                <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-secondary"
+                  data-bs-original-title="Yet there is no top performer !">
+                  <div class="d-flex w-50 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-mood-smile icon-md"></i>
+                    </div>
+                    <div>
+                      <small class="text-cut-hot">Yet there is no top performer !</small>
+                      <h6 class="mb-0 text-cut-one">...</h6>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center">
+                    <div class="progress w-100 me-4" style="height:8px;">
+                      <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">N/A</span>
+                  </div>
+                </li>
+                
+                {{-- <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-primary"
                   data-bs-original-title="(Rashid Hussain) Faculty of Computer Science and Information Technology">
                   <div class="d-flex w-50 align-items-center me-4">
@@ -370,7 +560,7 @@
                     </div>
                     <span class="text-body-secondary">{{ number_format(50, 1) }}%</span>
                   </div>
-                </li>
+                </li> --}}
               </ul>
             </div>
           </div>
