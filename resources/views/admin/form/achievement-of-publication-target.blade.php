@@ -100,17 +100,7 @@
 
 
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label d-block">Journal Status</label>
-                                                    <div>
-                                                        <input type="radio" name="nationality" id="national" value="National">
-                                                        <label for="national">National</label>
-
-                                                        <input type="radio" name="nationality" id="international"
-                                                            value="International" checked>
-                                                        <label for="international">International</label>
-                                                    </div>
-                                                </div>
+                                               
 
 
                                             </div>
@@ -125,6 +115,17 @@
                                                 <div class="col-md-6">
                                                     <label class="form-label">Your Rank (As Author)</label>
                                                     <input type="number" name="as_author_your_rank" class="form-control">
+                                                </div>
+                                                 <div class="col-md-6">
+                                                    <label class="form-label d-block">Is there at least 1 international co-author?</label>
+                                                    <div>
+                                                        <input type="radio" name="nationality" id="national" value="National">
+                                                        <label for="national">No</label>
+
+                                                        <input type="radio" name="nationality" id="international"
+                                                            value="International" checked>
+                                                        <label for="international">Yes</label>
+                                                    </div>
                                                 </div>
 
 
@@ -309,8 +310,8 @@
                             </div>
 
 
-                            <div class="col-4 mt-3">
-                                <button class="btn btn-primary">SUBMIT</button>
+                            <div class="col-8 mt-3">
+                                <button class="btn btn-primary float-end" style="margin-right: 7px;">SUBMIT</button>
                             </div>
                         </form>
                     </div>

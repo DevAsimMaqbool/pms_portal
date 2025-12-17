@@ -71,7 +71,7 @@
                 <div class="col-md-6">
                   <label for="apkMultiple" class="form-label">Key Performance Area</label>
                   <select id="apkMultiple1" name="key_performance_area_id[]" class="select2 form-select">
-                    <option value="0">Over ALL</option>
+                    {{-- <option value="0">Over ALL</option> --}}
                     @foreach($kfarea as $index => $kfa)
                       <option value="{{ $kfa->id }}" {{ $index === 0 ? 'selected' : '' }}>{{ $kfa->performance_area }}
                       </option>
@@ -178,7 +178,7 @@
                     <div class="col-8">
                       <div class="me-2">
                         <small class="text-cut-hot">Yet there is no top performer !</small>
-                        <h6 class="mb-0 text-cut-one">...</h6>
+                        <h6 class="mb-0 text-cut-one"></h6>
                       </div>
                     </div>
                     <div class="col-4 d-flex justify-content-end">
@@ -195,7 +195,7 @@
                     <div class="col-8">
                       <div class="me-2">
                         <small class="text-cut-hot">Yet there is no top performer !</small>
-                        <h6 class="mb-0 text-cut-one">...</h6>
+                        <h6 class="mb-0 text-cut-one"></h6>
                       </div>
                     </div>
                     <div class="col-4 d-flex justify-content-end">
@@ -212,7 +212,7 @@
                     <div class="col-8">
                       <div class="me-2">
                         <small class="text-cut-hot">Yet there is no top performer !</small>
-                        <h6 class="mb-0 text-cut-one">...</h6>
+                        <h6 class="mb-0 text-cut-one"></h6>
                       </div>
                     </div>
                     <div class="col-4 d-flex justify-content-end">
@@ -229,7 +229,7 @@
                     <div class="col-8">
                       <div class="me-2">
                         <small class="text-cut-hot">Yet there is no top performer !</small>
-                        <h6 class="mb-0 text-cut-one">...</h6>
+                        <h6 class="mb-0 text-cut-one"></h6>
                       </div>
                     </div>
                     <div class="col-4 d-flex justify-content-end">
@@ -246,7 +246,7 @@
                     <div class="col-8">
                       <div class="me-2">
                         <small class="text-cut-hot">Yet there is no top performer !</small>
-                        <h6 class="mb-0 text-cut-one">...</h6>
+                        <h6 class="mb-0 text-cut-one"></h6>
                       </div>
                     </div>
                     <div class="col-4 d-flex justify-content-end">
@@ -367,7 +367,7 @@
                     </div>
                     <div>
                       <small class="text-cut-hot">Yet there is no top performer !</small>
-                      <h6 class="mb-0 text-cut-one">...</h6>
+                      <h6 class="mb-0 text-cut-one"></h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -387,7 +387,7 @@
                     </div>
                     <div>
                       <small class="text-cut-hot">Yet there is no top performer !</small>
-                      <h6 class="mb-0 text-cut-one">...</h6>
+                      <h6 class="mb-0 text-cut-one"></h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -407,7 +407,7 @@
                     </div>
                     <div>
                       <small class="text-cut-hot">Yet there is no top performer !</small>
-                      <h6 class="mb-0 text-cut-one">...</h6>
+                      <h6 class="mb-0 text-cut-one"></h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -427,7 +427,7 @@
                     </div>
                     <div>
                       <small class="text-cut-hot">Yet there is no top performer !</small>
-                      <h6 class="mb-0 text-cut-one">...</h6>
+                      <h6 class="mb-0 text-cut-one"></h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
@@ -447,7 +447,7 @@
                     </div>
                     <div>
                       <small class="text-cut-hot">Yet there is no top performer !</small>
-                      <h6 class="mb-0 text-cut-one">...</h6>
+                      <h6 class="mb-0 text-cut-one"></h6>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center">
