@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class KeyPerformanceArea extends Model
 {
     use HasFactory;
-    protected $fillable = ['performance_area', 'created_by', 'updated_by'];
+    protected $fillable = ['performance_area','icon','short_code','slug','small_description', 'created_by', 'updated_by'];
 
     public function indicatorCategories()
     {

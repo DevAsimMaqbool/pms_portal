@@ -152,6 +152,7 @@ function getRoleAssignments(string $roleName, ?int $kapcid = null, $form = null)
             return [
                 'id' => $kpa->id,
                 'performance_area' => $kpa->performance_area,
+                'small_description' => $kpa->small_description,
                 'kpa_weightage' => $kpaGroup->first()->kpa_weightage,
                 'created_by' => $kpa->created_by,
                 'updated_by' => $kpa->updated_by,
@@ -330,7 +331,7 @@ function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAr
         $color = 'warning';
         $rating = 'ME';
     } elseif ($overallPercentage >= 60) {
-        $color = 'secondary';
+        $color = 'orange';
         $rating = 'NI';
     } elseif ($overallPercentage >= 50) {
         $color = 'danger';
@@ -439,6 +440,105 @@ function myClassesAttendanceData($facultyId)
         });
 }
 
+// if (!function_exists('ScopusPublications')) {
+//     function ScopusPublications($facultyId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
+//     {
+//         $facultyTargets = FacultyTarget::with([
+//             'researchPublicationTargets' => function ($query) use ($indicatorId) {
+//                 $query->where('form_status', 'RESEARCHER')
+//                     ->where('indicator_id', $indicatorId)
+//                     ->whereNotNull('journal_clasification');
+//             }
+//         ])
+//             ->where('user_id', $facultyId)
+//             ->where('form_status', 'HOD')
+//             ->where('indicator_id', $indicatorId)
+//             ->get();
+
+//         $data = [];
+
+//         $ratingColors = [
+//             'OS' => '#6EA8FE',
+//             'EE' => '#96e2b4',
+//             'ME' => '#ffcb9a',
+//             'NI' => '#fd7e13',
+//             'BE' => '#ff4c51',
+//             'NA' => '#000000',
+//         ];
+
+//         $totalTarget = 0;
+//         $totalSubmitted = 0;
+
+//         foreach ($facultyTargets as $facultyTarget) {
+//             $targetCount = $facultyTarget->target ?? 0;
+//             $submissionCount = $facultyTarget->researchPublicationTargets->count();
+
+//             $totalTarget += $targetCount;
+//             $totalSubmitted += $submissionCount;
+
+//             if ($facultyTarget->researchPublicationTargets->isEmpty())
+//                 continue;
+
+//             $grouped = $facultyTarget->researchPublicationTargets
+//                 ->groupBy(fn($t) => strtoupper($t->journal_clasification));
+
+//             foreach ($grouped as $classification => $targets) {
+//                 $value = match (strtolower($classification)) {
+//                     'q1' => $facultyTarget->scopus_q1,
+//                     'q2' => $facultyTarget->scopus_q2,
+//                     'q3' => $facultyTarget->scopus_q3,
+//                     'q4' => $facultyTarget->scopus_q4,
+//                     'w' => $facultyTarget->hec_w,
+//                     'x' => $facultyTarget->hec_x,
+//                     'y' => $facultyTarget->hec_y,
+//                     'medical' => $facultyTarget->medical_recognized,
+//                     default => 0,
+//                 };
+
+//                 $count = $targets->count();
+//                 $percentage = ($value > 0) ? round(($count / $value) * 100, 2) : 0;
+
+//                 $rating = match (true) {
+//                     $percentage >= 90 => 'OS',
+//                     $percentage >= 80 => 'EE',
+//                     $percentage >= 70 => 'ME',
+//                     $percentage >= 60 => 'NI',
+//                     $percentage > 0 => 'BE',
+//                     default => 'NA',
+//                 };
+
+//                 $firstTarget = $targets->first();
+
+//                 $data[] = [
+//                     'target_category' => $firstTarget->target_category,
+//                     'journal_clasification' => $classification,
+//                     'value' => $value,
+//                     'count' => $count,
+//                     'percentage' => $percentage,
+//                     'rating' => $rating,
+//                     'color' => $ratingColors[$rating],
+//                     'rank' => $firstTarget->rank ?? '-',
+//                     'nationality' => $firstTarget->nationality ?? '-',
+//                 ];
+//             }
+//         }
+
+//         // ✅ Correct overall percentage: total submitted / total target
+//         $avgPercentage = ($totalTarget > 0) ? round(($totalSubmitted / $totalTarget) * 100, 2) : 0;
+
+//         // ✅ Save globally
+//         saveIndicatorPercentage(
+//             $facultyId,
+//             $keyPerformanceAreaId = 2,
+//             $indicatorCategoryId = 5,
+//             $indicatorId = 128,
+//             $avgPercentage
+//         );
+
+//         return $data;
+//     }
+// }
+
 if (!function_exists('ScopusPublications')) {
     function ScopusPublications($facultyId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
     {
@@ -468,6 +568,34 @@ if (!function_exists('ScopusPublications')) {
         $totalTarget = 0;
         $totalSubmitted = 0;
 
+        // -----------------------------
+        // Helper function for rating
+        // -----------------------------
+        $getRating = function($publicationCount, $minimumRequired, $internationalCount, $primaryAuthorCount) {
+            // No publication
+            if ($publicationCount <= 0) return 'NI';
+
+            // Less than minimum OR minimum but no international
+            if ($publicationCount < $minimumRequired ||
+                ($publicationCount == $minimumRequired && $internationalCount == 0)) {
+                return 'NI';
+            }
+
+            // Minimum achieved
+            if ($publicationCount == $minimumRequired) return 'ME';
+
+            // Up to 2 publications with at least 1 primary OR international
+            if ($publicationCount <= 2 && ($primaryAuthorCount >= 1 || $internationalCount >= 1)) return 'EE';
+
+            // More than 2 publications with primary author
+            if ($publicationCount > 2 && $primaryAuthorCount >= 1) return 'EE';
+
+            // More than 2 publications internationally co-authored
+            if ($publicationCount > 2 && $internationalCount >= 1) return 'OS';
+
+            return 'NI';
+        };
+
         foreach ($facultyTargets as $facultyTarget) {
             $targetCount = $facultyTarget->target ?? 0;
             $submissionCount = $facultyTarget->researchPublicationTargets->count();
@@ -475,13 +603,13 @@ if (!function_exists('ScopusPublications')) {
             $totalTarget += $targetCount;
             $totalSubmitted += $submissionCount;
 
-            if ($facultyTarget->researchPublicationTargets->isEmpty())
-                continue;
+            if ($facultyTarget->researchPublicationTargets->isEmpty()) continue;
 
             $grouped = $facultyTarget->researchPublicationTargets
                 ->groupBy(fn($t) => strtoupper($t->journal_clasification));
 
             foreach ($grouped as $classification => $targets) {
+
                 $value = match (strtolower($classification)) {
                     'q1' => $facultyTarget->scopus_q1,
                     'q2' => $facultyTarget->scopus_q2,
@@ -495,16 +623,15 @@ if (!function_exists('ScopusPublications')) {
                 };
 
                 $count = $targets->count();
-                $percentage = ($value > 0) ? round(($count / $value) * 100, 2) : 0;
 
-                $rating = match (true) {
-                    $percentage >= 90 => 'OS',
-                    $percentage >= 80 => 'EE',
-                    $percentage >= 70 => 'ME',
-                    $percentage >= 60 => 'NI',
-                    $percentage > 0 => 'BE',
-                    default => 'NA',
-                };
+                // Count international publications
+                $internationalCount = $targets->where('nationality', 'International')->count();
+
+                // Count primary author publications
+                $primaryAuthorCount = $targets->where('as_author_your_rank', 1)->count();
+
+                // Determine rating based on custom rules
+                $rating = $getRating($count, $value, $internationalCount, $primaryAuthorCount);
 
                 $firstTarget = $targets->first();
 
@@ -513,7 +640,7 @@ if (!function_exists('ScopusPublications')) {
                     'journal_clasification' => $classification,
                     'value' => $value,
                     'count' => $count,
-                    'percentage' => $percentage,
+                    'percentage' => 0,
                     'rating' => $rating,
                     'color' => $ratingColors[$rating],
                     'rank' => $firstTarget->rank ?? '-',
@@ -522,22 +649,21 @@ if (!function_exists('ScopusPublications')) {
             }
         }
 
-        // ✅ Correct overall percentage: total submitted / total target
+        // Overall percentage: total submitted / total target
         $avgPercentage = ($totalTarget > 0) ? round(($totalSubmitted / $totalTarget) * 100, 2) : 0;
 
-        // ✅ Save globally
+        // Save globally
         saveIndicatorPercentage(
             $facultyId,
-            $keyPerformanceAreaId = 2,
-            $indicatorCategoryId = 5,
-            $indicatorId = 128,
+            $keyPerformanceAreaId,
+            $indicatorCategoryId,
+            $indicatorId,
             $avgPercentage
         );
 
         return $data;
     }
 }
-
 
 if (!function_exists('ScopusPublicationsbk')) {
     function ScopusPublicationsbk($facultyId, $indicatorId)
@@ -1133,25 +1259,46 @@ if (!function_exists('saveIndicatorPercentage')) {
     function saveIndicatorPercentage($employeeId, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score)
     {
         // Determine color and rating based on score
-        if ($score >= 90 && $score <= 100) {
+        // if ($score >= 90 && $score <= 100) {
+        //     $color = 'primary';
+        //     $rating = 'OS';
+        // } elseif ($score >= 80) {
+        //     $color = 'success';
+        //     $rating = 'EE';
+        // } elseif ($score >= 70) {
+        //     $color = 'warning';
+        //     $rating = 'ME';
+        // } elseif ($score >= 60) {
+        //     $color = 'orange';
+        //     $rating = 'NI';
+        // } elseif ($score >= 50) {
+        //     $color = 'danger';
+        //     $rating = 'BE';
+        // } else {
+        //     $color = 'secondary';
+        //     $rating = 'NA';
+        // }
+
+        // Determine rating
+        if ($score >= 90){
             $color = 'primary';
             $rating = 'OS';
-        } elseif ($score >= 80) {
+        }elseif ($score >= 80){
             $color = 'success';
             $rating = 'EE';
-        } elseif ($score >= 70) {
+        }elseif ($score >= 70){
             $color = 'warning';
             $rating = 'ME';
-        } elseif ($score >= 60) {
+        }elseif ($score >= 60){
             $color = 'orange';
             $rating = 'NI';
-        } elseif ($score >= 50) {
+        }elseif ($score > 0){
             $color = 'danger';
             $rating = 'BE';
-        } else {
+        }else {
             $color = 'secondary';
             $rating = 'NA';
-        }
+        }    
 
         IndicatorsPercentage::updateOrCreate(
             [
@@ -1221,14 +1368,35 @@ if (!function_exists('lineManagerRatingOnEvents')) {
     }
 }
 
+// function avgKpaScore($employeeId, $kpaId)
+// {
+//     $avg = IndicatorsPercentage::where('employee_id', $employeeId)
+//         ->where('key_performance_area_id', $kpaId)
+//         ->avg('score'); // Eloquent will run SQL AVG()
+
+//     return round($avg ?? 0, 2);
+// }
+
 function avgKpaScore($employeeId, $kpaId)
 {
-    $avg = IndicatorsPercentage::where('employee_id', $employeeId)
+    // Get all scores for the employee and KPA
+    $scores = IndicatorsPercentage::where('employee_id', $employeeId)
         ->where('key_performance_area_id', $kpaId)
-        ->avg('score'); // Eloquent will run SQL AVG()
+        ->pluck('score'); // get array of scores
 
-    return round($avg ?? 0, 2);
+    if ($scores->isEmpty()) {
+        return 0;
+    }
+
+    // Cap each score at 100
+    $cappedScores = $scores->map(fn($score) => min($score, 100));
+
+    // Calculate average
+    $avg = $cappedScores->avg();
+
+    return round($avg, 2);
 }
+
 if (!function_exists('ResearchProductivityofPGStudents')) {
     function ResearchProductivityofPGStudents($facultyId, $indicatorId)
     {
@@ -1406,11 +1574,50 @@ if (!function_exists('kpaAvgWeightage')) {
 
     }
 }
+// function kpaAvgScore($kpa_id, $emp_id)
+// {
+//     $avg = IndicatorsPercentage::where('employee_id', $emp_id)
+//         ->where('key_performance_area_id', $kpa_id)
+//         ->avg('score');
+
+//     $avg = $avg ? round($avg, 2) : 0.00;
+
+//     // Determine rating & color dynamically
+//     if ($avg >= 90) {
+//         $color = 'primary';
+//         $rating = 'OS';
+//     } elseif ($avg >= 80) {
+//         $color = 'success';
+//         $rating = 'EE';
+//     } elseif ($avg >= 70) {
+//         $color = 'warning';
+//         $rating = 'ME';
+//     } elseif ($avg >= 60) {
+//         $color = 'orange';
+//         $rating = 'NI';
+//     } elseif ($avg >= 0) {
+//         $color = 'danger';
+//         $rating = 'BE';
+//     } else {
+//         $color = 'secondary';
+//         $rating = 'N/A';
+//     }
+
+//     return [
+//         'avg' => $avg,
+//         'rating' => $rating,
+//         'color' => $color,
+//     ];
+// }
 function kpaAvgScore($kpa_id, $emp_id)
 {
+    // Fetch all scores and cap each at 100
     $avg = IndicatorsPercentage::where('employee_id', $emp_id)
         ->where('key_performance_area_id', $kpa_id)
-        ->avg('score');
+        ->get()
+        ->pluck('score')
+        ->map(fn($score) => min($score, 100)) // cap each score at 100
+        ->avg();
 
     $avg = $avg ? round($avg, 2) : 0.00;
 
@@ -1444,11 +1651,17 @@ function kpaAvgScore($kpa_id, $emp_id)
 
 function indicatorAvgScore($indicator_id, $emp_id)
 {
-    $avg = IndicatorsPercentage::where('employee_id', $emp_id)
-        ->where('indicator_id', $indicator_id)
-        ->avg('score');
+    // $avg = IndicatorsPercentage::where('employee_id', $emp_id)
+    //     ->where('indicator_id', $indicator_id)
+    //     ->value('score');
+    $record = IndicatorsPercentage::where('employee_id', $emp_id)
+    ->where('indicator_id', $indicator_id)
+    ->orderBy('id')
+    ->first();
 
-    $avg = $avg ? round($avg, 2) : 0.00;
+     $avg = $record ? round($record->score, 2) : 0.00;   
+
+    //$avg = $avg ? round($avg, 2) : 0.00;
 
     if ($avg >= 90) {
         $color = 'primary';
@@ -1639,7 +1852,7 @@ if (!function_exists('getIndicatorsByScore')) {
         $query = IndicatorsPercentage::with([
             'kpa:id,short_code',
             'category:id,cat_short_code',
-            'indicator:id,indicator',
+            'indicator:id,indicator,icon',
             'user:employee_id,name,email,job_title,department'
         ]);
 

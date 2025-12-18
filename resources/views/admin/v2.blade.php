@@ -522,7 +522,8 @@
                 @php
   // Get dynamic average, rating, and color
   $kpaResult = indicatorAvgScore(117, Auth::user()->employee_id);
-  $avg = $kpaResult['avg'] ?? 0;
+  //$avg = $kpaResult['avg'] ?? 0;
+  $avg = min($kpaResult['avg'] ?? 0, 100);
   $rating = $kpaResult['rating'] ?? 0;
   $color = $kpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
   $getRatingByPercentage = getRatingByPercentage($avg);
@@ -574,14 +575,16 @@
                 @php
   // Get dynamic average, rating, and color
   $kpaResult = indicatorAvgScore(128, Auth::user()->employee_id);
-  $avg = $kpaResult['avg'] ?? 0;
+  //$avg = $kpaResult['avg'] ?? 0;
+  $avg = min($kpaResult['avg'] ?? 0, 100);
   $rating = $kpaResult['rating'] ?? 0;
   $color = $kpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
   $re_getRatingByPercentage = getRatingByPercentage($avg);
   $re_rating_description = $re_getRatingByPercentage['description'];
 
   $kpaResultManager = indicatorAvgScore(188, Auth::user()->employee_id);
-  $avgManager = $kpaResultManager['avg'] ?? 0;
+  //$avgManager = $kpaResultManager['avg'] ?? 0;
+  $avgManager = min($kpaResultManager['avg'] ?? 0, 100);
   $ratingManager = $kpaResultManager['rating'] ?? 0;
   $colorManager = $kpaResultManager['color'] ?? 'secondary';
   $ms_getRatingByPercentage = getRatingByPercentage($avgManager);
@@ -634,7 +637,8 @@
                 @php
   // Get dynamic average, rating, and color
   $courseloadkpaResult = indicatorAvgScore(122, Auth::user()->employee_id);
-  $courseloadavg = $courseloadkpaResult['avg'] ?? 0;
+  //$courseloadavg = $courseloadkpaResult['avg'] ?? 0;
+  $courseloadavg = min($courseloadkpaResult['avg'] ?? 0, 100);
   $courseloadrating = $courseloadkpaResult['rating'] ?? 0;
   $courseloadcolor = $courseloadkpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
   $courseloadgetRatingByPercentage = getRatingByPercentage($courseloadavg);
