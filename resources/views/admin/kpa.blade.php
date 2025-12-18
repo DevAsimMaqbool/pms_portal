@@ -72,86 +72,12 @@
                     <div class="card-body">
                         <h5 class="card-title mb-0">{{ $area['performance_area'] }} 🎉</h5>
                         <p class="mb-2">Overall KPA Performance</p>
-                        <h4 class="text-primary mb-1">
-                            {{ number_format(avgKpaScore(Auth::user()->id, request()->segment(2)), 1) }}%</h4>
-
-                        @if ($area['id'] == 1)
-                            <p class="card-text">
-                                This KPA focuses on effective teaching delivery at undergraduate and postgraduate levels,
-                                efficient course and classroom management, and continuous enhancement of teaching outputs to
-                                ensure quality education. Excellence in teaching and learning is the foundation of student
-                                success. It shapes competent graduates, strengthens institutional reputation, and promotes
-                                lifelong learning.
-                            </p>
-                        @elseif ($area['id'] == 2)
-                            <p class="card-text">
-                                This KPA measures research productivity, quality, and supervision at the postgraduate level. It
-                                also covers the development of knowledge products and the translation of research into practical
-                                innovations and commercial outcomes. Advancing research and innovation builds intellectual
-                                capital, drives societal progress, and connects academic insights with industry applications for
-                                sustainable growth.
-                            </p>
-                        @elseif ($area['id'] == 3)
-                            <p class="card-text">
-                                This KPA focuses on ensuring the institution’s long-term financial health and operational
-                                viability through diversified revenue streams, effective resource utilization, and profitable
-                                growth. It emphasizes achieving enrollment and revenue targets, maintaining profitability across
-                                programs and centers, and strengthening financial resilience through prudent recovery and cost
-                                management. A sustainable financial model supports institutional excellence, strategic
-                                expansion, and the ability to reinvest in quality improvement.
-                            </p>
-                        @elseif ($area['id'] == 4)
-                            <p class="card-text">
-                                Evaluates the institution’s performance in meeting internationalization goals through the
-                                Superior Go Global and 1M Global Experience initiatives. It reflects progress in building global
-                                partnerships, promoting student mobility, and offering international work or learning
-                                experiences that enhance global competencies and institutional reputation.
-                            </p>
-                        @elseif ($area['id'] == 5)
-                            <p class="card-text">
-                                This KPA emphasizes the institution’s commitment to creating a positive social and environmental
-                                impact through collective engagement of faculty, staff, and students. It focuses on fostering a
-                                culture of service, sustainability, and civic responsibility both within and beyond the campus.
-                                By actively contributing to community development and sustainability initiatives, the
-                                institution demonstrates its role as a socially conscious and ethically driven organization
-                                dedicated to the betterment of society.
-                                Rating Descriptions.
-                            </p>
-                        @elseif ($area['id'] == 6)
-                            <p class="card-text">
-                                This KPA represents the institution’s collective reputation, credibility, and distinctiveness in
-                                the academic and professional landscape. It emphasizes building a strong, trusted, and
-                                recognizable brand through excellence in accreditation, affiliations, stakeholder satisfaction,
-                                and global partnerships. A strong brand identity reflects consistent quality, meaningful
-                                industry linkages, and positive perceptions among students, faculty, alumni, and employers —
-                                ultimately reinforcing the institution’s prestige and competitive advantage.
-                            </p>
-                        @elseif ($area['id'] == 7)
-                            <p class="card-text">
-                                This KPA reflects the effectiveness, integrity, and inclusiveness of leadership practices that
-                                guide academic and operational excellence. It emphasizes transparent decision-making,
-                                stakeholder satisfaction, and a culture of accountability. Through proactive planning, team
-                                development, and compliance with institutional policies, this area ensures that leadership at
-                                all levels is participative, future-oriented, and aligned with the university’s mission.
-                                Effective governance fosters engagement, builds trust, and strengthens institutional coherence
-                                across departments and campuses.
-                            </p>
-                        @elseif ($area['id'] == 13)
-                            <p class="card-text">
-                                This KPA emphasizes proactive participation in departmental tasks, institutional initiatives,
-                                and events that enhance collaboration, visibility, and collective achievement. Institutional
-                                engagement fosters teamwork, ownership, and a shared sense of purpose, strengthening the
-                                institution’s culture and external partnerships.
-                            </p>
-                        @elseif ($area['id'] == 14)
-                            <p class="card-text">
-                                This KPA embodies responsibility, accountability, empathy, humility, honesty, and inspirational
-                                leadership as guiding principles for personal and professional conduct.
-                                Character virtues create the moral compass for excellence. They nurture ethical leaders who act
-                                with integrity, compassion, and service to others.
-                            </p>
+                        <h4 class="text-primary mb-1"> 
+                        {{ min(number_format(avgKpaScore(Auth::user()->id, request()->segment(2)), 1), 100) }}%</h4>
+                        @if(!empty($area['small_description']))
+                            <p class="card-text">{{ $area['small_description'] }}</p>
                         @else
-                            <p class="card-text">Other text</p>
+                            <p class="card-text">No description available</p>
                         @endif
                     </div>
                 </div>
@@ -174,14 +100,8 @@
                             <div class="col-md-7 text-md-end text-start p-0">
                                 <div class="btn-group" role="group" aria-label="radio toggle button group">
                                     <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
-                                    <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
+                                    <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall for 2024-2025</label>
 
-                                    <input type="radio" class="btn-check" name="termRadio" id="spring25">
-                                    <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring
-                                        2025</label>
-
-                                    <input type="radio" class="btn-check" name="termRadio" id="fall25">
-                                    <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
                                 </div>
                             </div>
 

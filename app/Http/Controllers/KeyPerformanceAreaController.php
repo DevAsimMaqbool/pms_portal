@@ -152,7 +152,6 @@ class KeyPerformanceAreaController extends Controller
         if ($id == 14) {
             return view('admin.kpa_virtue', compact('area'));
         }
-
         return view('admin.kpa', compact('area'));
     }
 
@@ -194,7 +193,8 @@ class KeyPerformanceAreaController extends Controller
         $indicators = $indicators->map(function ($indicator) use ($savedPercentages) {
             if (isset($savedPercentages[$indicator->id])) {
                 $saved = $savedPercentages[$indicator->id];
-                $indicator->percentage = floor($saved->score);
+                // $indicator->percentage = floor($saved->score);
+                $indicator->percentage = min(round($saved->score, 1), 100);
                 $indicator->color = $saved->color;   // ✅ add color
                 $indicator->rating = $saved->rating; // optional
             } else {

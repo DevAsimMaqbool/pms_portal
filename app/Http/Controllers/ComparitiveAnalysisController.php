@@ -199,13 +199,15 @@ public function getSelfVsSelfData(Request $request)
 
         foreach ($years as $index => $year) {
             if (isset($grouped[$year])) {
-                $totalScore = $grouped[$year]->sum('score');
+                // $totalScore = $grouped[$year]->sum('score');
+                $totalScore = $grouped[$year]->sum(fn ($item) => min($item->score, 100));
                 $count = $grouped[$year]->count();
 
                 $average = $count ? ($totalScore / $count) : 0;
                 // $weighted = ($average * $weight) / 100;
 
-                $values[$index] = round($average, 1);
+                // $values[$index] = round($average, 1);
+                $values[$index] = min(round($average, 1), 100);
             }
         }
     }
@@ -243,7 +245,8 @@ public function getSelfVsSelfData(Request $request)
         $usersWithScores = $records->map(function ($u) {
             $indicators = $u->indicatorsPercentages;
 
-            $totalScore = $indicators->sum('score');
+            // $totalScore = $indicators->sum('score');
+            $totalScore = $indicators->sum(fn ($i) => min($i->score, 100));
             $totalIndicators = $indicators->count();
 
             $averageScore = $totalIndicators
