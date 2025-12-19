@@ -48,6 +48,8 @@
                                         </option>
                                         <option value="bronze" {{ $submission->badge_name == 'bronze' ? 'selected' : '' }}>Bronze
                                         </option>
+                                        <option value="un_assign">Remove Badge
+                                        </option>
                                     </select>
                                 </td>
 

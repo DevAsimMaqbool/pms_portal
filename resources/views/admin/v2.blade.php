@@ -976,24 +976,24 @@
                     $indicators = getIndicatorsByScore('>=', 80, null, null, 1);
                   @endphp
 
-                  @foreach($indicators as $ind)
-                    <div class="d-flex justify-content-between align-items-center mb-6">
-                      <div class="d-flex align-items-center">
-                        <div class="avatar me-4">
-                          <img src="{{ asset('admin/assets/img/avatars/' . $ind->badge_name . '-badge.png') }}" alt="Avatar"
+                  <ul class="list-unstyled mb-0">
+                    @foreach($indicators as $ind)
+                               <li class="d-flex mb-6 align-items-center">
+                                  <div class="avatar flex-shrink-0 me-4">
+                                    <img src="{{ asset('admin/assets/img/avatars/' . $ind->badge_name . '-badge.png') }}" alt="Avatar"
                             class="rounded-circle" />
-                        </div>
-                        <div>
-                          <div>
-                            <h6 class="mb-0 text-truncate">{{ $ind->indicator->indicator }}</h6>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="text-end">
-                        <h6 class="mb-0">{{ number_format($ind->score, 1) }}%</h6>
-                      </div>
-                    </div>
-                  @endforeach
+                                  </div>
+                                  <div class="row w-100 align-items-center">
+                                    <div class="col-sm-8 col-lg-12 col-xxl-9 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
+                                      <h6 class="mb-0">{{ $ind->indicator->indicator }}</h6>
+                                    </div>
+                                    <div class="col-sm-4 col-lg-12 col-xxl-3 d-flex justify-content-xxl-end">
+                                      <h6 class="mb-0">{{ number_format($ind->score, 1) }}%</h6>
+                                    </div>
+                                  </div>
+                                </li>
+                      @endforeach
+                  </ul>
 
 
                   </div>

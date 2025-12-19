@@ -58,13 +58,19 @@ class AssignBadgeController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'badge' => 'required|string|in:gold,silver,bronze',
+            'badge' => 'required|string|in:gold,silver,bronze,un_assign',
         ]);
 
         $indicator = IndicatorsPercentage::findOrFail($id);
-        $indicator->badge_name = $request->badge;
-        $indicator->is_badge = 1;
-        $indicator->given_by = Auth::id();
+        if ($request->badge == 'un_assign') {
+            $indicator->badge_name = null;
+            $indicator->is_badge = null;
+            $indicator->given_by = null;
+        } else {
+            $indicator->badge_name = $request->badge;
+            $indicator->is_badge = 1;
+            $indicator->given_by = Auth::id();
+        }
         $indicator->save();
 
         return response()->json([
