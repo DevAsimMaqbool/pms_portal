@@ -632,8 +632,8 @@
 
                                     // Role-based status mapping
                                     if (update.role === 'HOD') {
-                                        if (update.status == '1') histortText = 'Unverified';
-                                        else if (update.status == '2') histortText = 'Verified';
+                                        if (update.status == '1') histortText = 'unapproved';
+                                        else if (update.status == '2') histortText = 'Approved';
                                     } else if (update.role === 'ORIC') {
                                         if (update.status == '2') histortText = 'Unverified';
                                         else if (update.status == '3') histortText = 'Verified';
@@ -865,8 +865,8 @@
 
                                     // Role-based status mapping
                                     if (update.role === 'HOD') {
-                                        if (update.status == '1') histortText = 'Unverified';
-                                        else if (update.status == '2') histortText = 'Verified';
+                                        if (update.status == '1') histortText = 'unapproved';
+                                        else if (update.status == '2') histortText = 'Approved';
                                     } else if (update.role === 'ORIC') {
                                         if (update.status == '2') histortText = 'Unverified';
                                         else if (update.status == '3') histortText = 'Verified';
@@ -1110,8 +1110,8 @@
 
                                     // Role-based status mapping
                                     if (update.role === 'HOD') {
-                                        if (update.status == '1') histortText = 'Unverified';
-                                        else if (update.status == '2') histortText = 'Verified';
+                                        if (update.status == '1') histortText = 'unapproved';
+                                        else if (update.status == '2') histortText = 'Approved';
                                     } else if (update.role === 'ORIC') {
                                         if (update.status == '2') histortText = 'Unverified';
                                         else if (update.status == '3') histortText = 'Verified';
