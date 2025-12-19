@@ -278,6 +278,91 @@
       line-height: 1.2;
       font-size: 0.8667em;
     }
+    /* 1. Eye Rolling Animation */
+    @keyframes eyeRoll {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(3px, -5px); }
+      50% { transform: translate(0, -7px); }
+      75% { transform: translate(-3px, -5px); }
+    }
+
+    /* 2. Finger Tapping Animation */
+    @keyframes tap {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .emoji-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 100px;
+    }
+
+    .face.impatient {
+      width: 120px;
+      height: 120px;
+      background: #ffcc33;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 2px solid rgba(0,0,0,0.05);
+    }
+
+    .eyes {
+      display: flex;
+      gap: 25px;
+      margin-top: 35px;
+    }
+
+    .eye {
+      width: 12px;
+      height: 12px;
+      background: #333;
+      border-radius: 50%;
+      /* Rolling eyes effect */
+      animation: eyeRoll 3s infinite linear;
+    }
+
+    /* Straight line mouth = bored */
+    .mouth-line {
+      width: 30px;
+      height: 4px;
+      background: #333;
+      border-radius: 2px;
+      margin-top: 20px;
+    }
+
+    /* The Tapping Hand */
+    .hand {
+      display: flex;
+      gap: 4px;
+      position: absolute;
+      bottom: 10px;
+      right: 15px;
+    }
+
+    .finger {
+      width: 6px;
+      height: 12px;
+      background: #e6b82e; /* Slightly darker than face */
+      border-radius: 3px;
+      animation: tap 0.8s infinite;
+    }
+
+    .finger:nth-child(1) { animation-delay: 0.1s; }
+    .finger:nth-child(2) { animation-delay: 0.2s; }
+    .finger:nth-child(3) { animation-delay: 0.3s; }
+
+    .shadow {
+      width: 90px;
+      height: 8px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 50%;
+      margin-top: 15px;
+    }
   </style>
 @endpush
 @section('content')
@@ -974,8 +1059,11 @@
                   <div class="card-body">
                   @php
                     $indicators = getIndicatorsByScore('>=', 80, null, null, 1);
+                    $indicators=null;
+                    
                   @endphp
-
+                  @if($indicators)
+                    
                   <ul class="list-unstyled mb-0">
                     @foreach($indicators as $ind)
                                <li class="d-flex mb-6 align-items-center">
@@ -994,6 +1082,23 @@
                                 </li>
                       @endforeach
                   </ul>
+                  @else
+                    <div class="emoji-container">
+                      <div class="face impatient">
+                        <div class="eyes">
+                          <div class="eye left"></div>
+                          <div class="eye right"></div>
+                        </div>
+                        <div class="mouth-line"></div>
+                        <div class="hand">
+                          <div class="finger"></div>
+                          <div class="finger"></div>
+                          <div class="finger"></div>
+                        </div>
+                      </div>
+                      <div class="shadow"></div>
+                    </div>
+                  @endif
 
 
                   </div>
