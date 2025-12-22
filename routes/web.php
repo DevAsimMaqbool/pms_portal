@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/get-role-users', [UserController::class, 'index'])->name('userRole.index');
     Route::get('/user_report/{id}', [UserController::class, 'userReport']);
+    Route::get('/user_virtue_report/{id}', [UserController::class, 'userVirtueReport']);
     Route::resource('users', UserController::class);
     Route::resource('/faculty', FacultyController::class);
     Route::resource('/assigndepartment', DepartmentAssignmentController::class);

@@ -571,27 +571,34 @@ if (!function_exists('ScopusPublications')) {
         // -----------------------------
         // Helper function for rating
         // -----------------------------
-        $getRating = function($publicationCount, $minimumRequired, $internationalCount, $primaryAuthorCount) {
+        $getRating = function ($publicationCount, $minimumRequired, $internationalCount, $primaryAuthorCount) {
             // No publication
-            if ($publicationCount <= 0) return 'NI';
+            if ($publicationCount <= 0)
+                return 'NI';
 
             // Less than minimum OR minimum but no international
-            if ($publicationCount < $minimumRequired ||
-                ($publicationCount == $minimumRequired && $internationalCount == 0)) {
+            if (
+                $publicationCount < $minimumRequired ||
+                ($publicationCount == $minimumRequired && $internationalCount == 0)
+            ) {
                 return 'NI';
             }
 
             // Minimum achieved
-            if ($publicationCount == $minimumRequired) return 'ME';
+            if ($publicationCount == $minimumRequired)
+                return 'ME';
 
             // Up to 2 publications with at least 1 primary OR international
-            if ($publicationCount <= 2 && ($primaryAuthorCount >= 1 || $internationalCount >= 1)) return 'EE';
+            if ($publicationCount <= 2 && ($primaryAuthorCount >= 1 || $internationalCount >= 1))
+                return 'EE';
 
             // More than 2 publications with primary author
-            if ($publicationCount > 2 && $primaryAuthorCount >= 1) return 'EE';
+            if ($publicationCount > 2 && $primaryAuthorCount >= 1)
+                return 'EE';
 
             // More than 2 publications internationally co-authored
-            if ($publicationCount > 2 && $internationalCount >= 1) return 'OS';
+            if ($publicationCount > 2 && $internationalCount >= 1)
+                return 'OS';
 
             return 'NI';
         };
@@ -603,7 +610,8 @@ if (!function_exists('ScopusPublications')) {
             $totalTarget += $targetCount;
             $totalSubmitted += $submissionCount;
 
-            if ($facultyTarget->researchPublicationTargets->isEmpty()) continue;
+            if ($facultyTarget->researchPublicationTargets->isEmpty())
+                continue;
 
             $grouped = $facultyTarget->researchPublicationTargets
                 ->groupBy(fn($t) => strtoupper($t->journal_clasification));
@@ -1280,25 +1288,25 @@ if (!function_exists('saveIndicatorPercentage')) {
         // }
 
         // Determine rating
-        if ($score >= 90){
+        if ($score >= 90) {
             $color = 'primary';
             $rating = 'OS';
-        }elseif ($score >= 80){
+        } elseif ($score >= 80) {
             $color = 'success';
             $rating = 'EE';
-        }elseif ($score >= 70){
+        } elseif ($score >= 70) {
             $color = 'warning';
             $rating = 'ME';
-        }elseif ($score >= 60){
+        } elseif ($score >= 60) {
             $color = 'orange';
             $rating = 'NI';
-        }elseif ($score > 0){
+        } elseif ($score > 0) {
             $color = 'danger';
             $rating = 'BE';
-        }else {
+        } else {
             $color = 'secondary';
             $rating = 'NA';
-        }    
+        }
 
         IndicatorsPercentage::updateOrCreate(
             [
@@ -1655,11 +1663,11 @@ function indicatorAvgScore($indicator_id, $emp_id)
     //     ->where('indicator_id', $indicator_id)
     //     ->value('score');
     $record = IndicatorsPercentage::where('employee_id', $emp_id)
-    ->where('indicator_id', $indicator_id)
-    ->orderBy('id')
-    ->first();
+        ->where('indicator_id', $indicator_id)
+        ->orderBy('id')
+        ->first();
 
-     $avg = $record ? round($record->score, 2) : 0.00;   
+    $avg = $record ? round($record->score, 2) : 0.00;
 
     //$avg = $avg ? round($avg, 2) : 0.00;
 
@@ -2053,6 +2061,41 @@ if (!function_exists('activeRole')) {
         }
 
         return strtolower($role); // hod, admin, etc.
+    }
+}
+
+if (!function_exists('forVirtueReport')) {
+    function forVirtueReport($employeeId = null, $createdBy = null)
+    {
+        $query = LineManagerFeedback::query(); // Fix: use query builder
+
+        if (!empty($employeeId)) {
+            $query->where('employee_id', $employeeId);
+        }
+
+        if (!empty($createdBy)) { // Fix: check $createdBy instead of $employeeId
+            $query->where('created_by', $createdBy);
+        }
+
+        $feedbacks = $query->get();
+        $insideData = [];
+
+        if ($feedbacks->count()) {
+            // Take the first feedback or average them
+            $first = $feedbacks->first();
+
+            $res_avg = ($first->responsibility_accountability_1 + $first->responsibility_accountability_2) / 2;
+            $emp_avg = ($first->empathy_compassion_1 + $first->empathy_compassion_2) / 2;
+            $hum_avg = ($first->humility_service_1 + $first->humility_service_2) / 2;
+            $hon_avg = ($first->honesty_integrity_1 + $first->honesty_integrity_2) / 2;
+            $ins_avg = ($first->inspirational_leadership_1 + $first->inspirational_leadership_2) / 2;
+
+            $insideData = [$res_avg, $emp_avg, $hum_avg, $hon_avg, $ins_avg];
+        } else {
+            $insideData = [0, 0, 0, 0, 0]; // fallback if no data
+        }
+
+        return $insideData;
     }
 }
 

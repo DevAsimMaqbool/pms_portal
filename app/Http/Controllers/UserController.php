@@ -256,4 +256,44 @@ class UserController extends Controller
 
         return view('admin.report', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional', 'noteable', 'areaOfDevelopment'));
     }
+
+    public function userVirtueReport($id)
+    {
+        $user = User::findOrFail($id);
+
+        $kpaIds = [1, 2, 13];
+        $catIds = [3, 23, 25];
+        $researchIds = [5, 6, 8, 32];
+        $institutionalIds = [27, 28];
+
+        $dataset1 = [];
+        $datasetTeaching = [];
+        $datasetResearch = [];
+        $datasetInstitutional = [];
+
+        foreach ($kpaIds as $kpaId) {
+            $result = kpaAvgScore($kpaId, $id);
+            $dataset1[] = $result['avg'];    // only avg
+        }
+        foreach ($catIds as $catId) {
+            $teaching = indicatorCategoryAvgScore($catId, 1, $id);
+            $datasetTeaching[] = $teaching['avg'];    // only avg
+        }
+
+        foreach ($researchIds as $researchId) {
+            $research = indicatorCategoryAvgScore($researchId, 2, $id);
+            $datasetResearch[] = $research['avg'];    // only avg
+        }
+
+        foreach ($institutionalIds as $institutionalId) {
+            $institutional = indicatorCategoryAvgScore($institutionalId, 13, $id);
+            $datasetInstitutional[] = $institutional['avg'];    // only avg
+        }
+
+        $noteable = getIndicatorsByScore('>=', 80, $id);
+        $areaOfDevelopment = getIndicatorsByScore('<', 70, $id);
+
+
+        return view('admin.virtue_report', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional', 'noteable', 'areaOfDevelopment'));
+    }
 }
