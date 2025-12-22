@@ -46,17 +46,17 @@
   <div class="layout-wrapper layout-content-navbar  ">
     <div class="layout-container">
       <!-- Menu -->
-      @if(auth()->user()->hasRole('Survey'))
+      @if(activeRole() === 'survey')
         @include('layouts.survey_sidebar')
-      @elseif(auth()->user()->hasAnyRole(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor']))
+      @elseif(activeRole() === 'teacher')
         @include('layouts.teacher_sidebar')
-      @elseif(auth()->user()->hasRole('HOD'))
+      @elseif(activeRole() === 'hod')
         @include('layouts.hod_sidebar')
-      @elseif(auth()->user()->hasRole('Dean'))
+      @elseif(activeRole() === 'dean')
         @include('layouts.dean_sidebar')
-      @elseif(auth()->user()->hasRole('Rector'))
+      @elseif(activeRole() === 'rector')
         @include('layouts.rector_sidebar')
-      @elseif(auth()->user()->hasRole('ORIC'))
+      @elseif(activeRole() === 'oric')
         @include('layouts.oric_sidebar')
       @else
         @include('layouts.sidebar')

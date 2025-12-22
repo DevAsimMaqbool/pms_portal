@@ -69,8 +69,12 @@ Route::get('/v3', function () {
 //Route::middleware('pms.auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PermissionController::class, 'dashboard'])->name('dashboard');
+    Route::post('/switch-role', [PermissionController::class, 'switchRole'])->name('role.switch');
+
     Route::get('/dashboard-v1', [PermissionController::class, 'dashboardV1'])->name('dashboard_v1');
     Route::get('/teacher_dashboard/{id?}', [PermissionController::class, 'V2'])->name('teacher_dashboard');
+    Route::get('/hod/dashboard', [PermissionController::class, 'V2'])
+        ->name('hod.dashboard');
     Route::get('/my_performance/{id?}', [PermissionController::class, 'myPerformance'])->name('my_performance');
     // Route::get('/teacher_dashboard_bk/{id?}', [RectorDashboardController::class, 'teacherDashboard'])->name('teacher_dashboard_bk');
     Route::get('student/dashboard', [PermissionController::class, 'dashboard'])->name('student.dashboard');
@@ -170,12 +174,12 @@ Route::middleware('auth')->group(function () {
 
 
         //form crud
-        Route::put('/indicator-form/update/{id}', [AchievementOfResearchPublicationsTargetController::class, 'updateResearchPublication']) ->name('research.update');
-        Route::put('/counsultancy/update/{id}', [CommercialGainsCounsultancyResearchIncomeController::class, 'updateCommercialGainPublication']) ->name('commercialgain.update');
-        Route::put('/multidisciplinary/update/{id}',[NoAchievementOfMultidisciplinaryProjectsTargetController::class, 'updateMultidisciplinaryProject'])->name('multidisciplinary.update');
-        Route::put('/products-delivered-to-industry/update/{id}',[ProductsDeliveredToIndustryController::class, 'updateMultidisciplinaryProject'])->name('productdelivery.update');
-        Route::put('/industrial-projects/update/{id}',[IndustrialProjectsController::class, 'updateIndustrialProjectsProject'])->name('industrialprojects.update');
-        Route::put('/no-Of-GrantSubmit-And-Won/update/{id}',[NoOfGrantsSubmitAndWonController::class, 'updateNoOfGrantsSubmitAndWon'])->name('noofgrantssubmit.update');
+        Route::put('/indicator-form/update/{id}', [AchievementOfResearchPublicationsTargetController::class, 'updateResearchPublication'])->name('research.update');
+        Route::put('/counsultancy/update/{id}', [CommercialGainsCounsultancyResearchIncomeController::class, 'updateCommercialGainPublication'])->name('commercialgain.update');
+        Route::put('/multidisciplinary/update/{id}', [NoAchievementOfMultidisciplinaryProjectsTargetController::class, 'updateMultidisciplinaryProject'])->name('multidisciplinary.update');
+        Route::put('/products-delivered-to-industry/update/{id}', [ProductsDeliveredToIndustryController::class, 'updateMultidisciplinaryProject'])->name('productdelivery.update');
+        Route::put('/industrial-projects/update/{id}', [IndustrialProjectsController::class, 'updateIndustrialProjectsProject'])->name('industrialprojects.update');
+        Route::put('/no-Of-GrantSubmit-And-Won/update/{id}', [NoOfGrantsSubmitAndWonController::class, 'updateNoOfGrantsSubmitAndWon'])->name('noofgrantssubmit.update');
         //
         Route::get('/carrier-chart-data', [ComparitiveAnalysisController::class, 'getCarrierChartData'])->name('carrier.chart.data');
         Route::get('/self-vs-self', [ComparitiveAnalysisController::class, 'getSelfVsSelfData'])->name('self.vs.self');

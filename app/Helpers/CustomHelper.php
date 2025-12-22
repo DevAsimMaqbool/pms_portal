@@ -1812,6 +1812,37 @@ if (!function_exists('getTopIndicatorsOfEmployee')) {
     }
 }
 
+if (!function_exists('activeRole')) {
+    function activeRole()
+    {
+        if (session()->has('active_role')) {
+            return session('active_role');
+        }
+
+        if (!auth()->check()) {
+            return null;
+        }
+
+        // Fallback for old sessions
+        $role = auth()->user()->roles->first()?->name;
+
+        $teacherRoles = [
+            'Teacher',
+            'Assistant Professor',
+            'Associate Professor',
+            'Professor',
+            'HOD',
+            'Dean',
+        ];
+
+        if (in_array($role, $teacherRoles)) {
+            return 'teacher';
+        }
+
+        return strtolower($role); // hod, admin, etc.
+    }
+}
+
 
 
 

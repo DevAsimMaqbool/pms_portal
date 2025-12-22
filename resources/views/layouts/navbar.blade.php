@@ -13,8 +13,10 @@
 
       <!--/ Language -->
 
-      <li><button type="button"
-          class="btn rounded-pill btn-label-primary waves-effect">{{ Auth::user()->name }}</button></li>
+      <li><button type="button" class="btn rounded-pill btn-label-primary waves-effect">
+          {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}, As
+          {{strtoupper(activeRole())}}</button></li>
+
       <!-- Style Switcher -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill" id="nav-theme"
@@ -207,6 +209,23 @@
           <li>
             <a class="dropdown-item" href="{{ route('profile.index') }}"> <i
                 class="icon-base ti tabler-user me-3 icon-md"></i><span class="align-middle">My Profile</span> </a>
+          </li>
+          <li>
+            @php
+              $activeRole = activeRole();
+            @endphp
+            <form method="POST" action="{{ route('role.switch') }}">
+              @csrf
+              <select name="role" onchange="this.form.submit()" class="form-select">
+                <option value="">Witch Role</option>
+                @foreach(auth()->user()->roles as $role)
+                  @continue($activeRole === strtolower($role->name))
+                  <option value="{{ $role->name }}" {{ $activeRole === strtolower($role->name) ? 'selected' : '' }}>
+                    Switch To {{ $role->name }}
+                  </option>
+                @endforeach
+              </select>
+            </form>
           </li>
           {{-- <li>
             <a class="dropdown-item" href=""> <i class="icon-base ti tabler-settings me-3 icon-md"></i><span
