@@ -271,7 +271,7 @@
                     let historyHtml = '';
                     history.forEach(update => {
                         let histortText = 'N/A';
-                        if (update.role === 'HOD') histortText = update.status == '1' ? 'Unverified' : (update.status == '2' ? 'Verified' : update.status);
+                        if (update.role === 'HOD') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
                         else if (update.role === 'ORIC') histortText = update.status == '2' ? 'Unverified' : (update.status == '3' ? 'Verified' : update.status);
                         else histortText = update.status || 'N/A';
 

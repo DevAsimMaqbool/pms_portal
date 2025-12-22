@@ -40,13 +40,15 @@
                                 <td>{{ $submission->score }}%</td>
 
                                 <td>
-                                    <select class="form-select form-select-sm badge-select" data-id="{{ $submission->id }}" {{ $submission->badge_name ? 'disabled' : '' }}>
+                                    <select class="form-select form-select-sm badge-select" data-id="{{ $submission->id }}">
                                         <option value="">Select Badge</option>
                                         <option value="gold" {{ $submission->badge_name == 'gold' ? 'selected' : '' }}>Gold
                                         </option>
                                         <option value="silver" {{ $submission->badge_name == 'silver' ? 'selected' : '' }}>Silver
                                         </option>
                                         <option value="bronze" {{ $submission->badge_name == 'bronze' ? 'selected' : '' }}>Bronze
+                                        </option>
+                                        <option value="un_assign">Remove Badge
                                         </option>
                                     </select>
                                 </td>

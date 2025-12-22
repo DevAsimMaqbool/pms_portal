@@ -47,7 +47,7 @@
                           <div class="d-flex justify-content-start align-items-center">
                             <div class="avatar flex-shrink-0 me-4">
                               <span class="avatar-initial rounded bg-label-info"><i
-                                  class="icon-base ti tabler-truck icon-26px"></i></span>
+                                  class="icon-base ti tabler-{{ optional($areaOfImprovements->indicator)->icon ?? 'truck' }} icon-26px"></i></span>
                             </div>
                             <div class="d-flex flex-column me-4">
                               <small class="text-body">{{ $areaOfImprovements->indicator->indicator }}</small>
