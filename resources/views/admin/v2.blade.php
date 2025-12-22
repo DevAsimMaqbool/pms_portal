@@ -413,7 +413,7 @@
 
                 <div class="col-lg-4 col-md-3 col-sm-6">
                   <div class="card h-100" id="rating-teachercolor" data-bs-toggle="tooltip" data-bs-placement="top"
-                    data-bs-custom-class="tooltip-" data-bs-original-title="">
+                    data-bs-custom-class="tooltip-" data-bs-original-title="ppp">
                     <div class="card-body d-flex justify-content-center align-items-center">
                       <h4 class="mb-0 text-center text-white" id="rating-teachervalue"></h4>
                     </div>
@@ -1059,7 +1059,6 @@
                   <div class="card-body">
                   @php
                     $indicators = getIndicatorsByScore('>=', 80, null, null, 1);
-                    $indicators=null;
                     
                   @endphp
                   @if($indicators)
@@ -1201,28 +1200,43 @@
       function getRatingAndColor(percentage) {
         let rating = '';
         let color = '';
+        let tooltipText = '';
+        let tooltipClass = '';
+
 
         if (percentage >= 90) {
           rating = 'OS';
           color = '#6EA8FE';
+          tooltipText = 'You’re achieving excellence with distinction.You set the pace for others to follow.';
+          tooltipClass = 'tooltip-primary';
         } else if (percentage >= 80) {
           rating = 'EE';
           color = '#28c76f';
+          tooltipText = 'You’re going beyond what’s asked of you.Keep shining — your impact inspires others.';
+          tooltipClass = 'tooltip-success';
         } else if (percentage >= 70) {
           rating = 'ME';
           color = '#ffcb9a';
+          tooltipText = 'You’re doing well and meeting your goals.Keep your consistency — it’s your strength.';
+          tooltipClass = 'tooltip-warning';
         } else if (percentage >= 60) {
           rating = 'NI';
           color = '#fd7e13';
+          tooltipText = 'You’re on your way — just refine and push forward.Every effort moves you closer to success.';
+          tooltipClass = 'tooltip-orange';
         } else if (percentage > 0) {
           rating = 'BE';
           color = '#ff4c51';
+          tooltipText = 'Not quite there yet — but growth starts here.Reflect. Refocus. Rise higher.';
+          tooltipClass = 'tooltip-danger';
         } else {
           rating = 'NA';
           color = '#000000';
+          tooltipText = 'NA';
+          tooltipClass = 'tooltip-danger';
         }
 
-        return { rating, color };
+        return { rating, color,tooltipText,tooltipClass };
       }
 
       let result = getRatingAndColor(total);
@@ -1239,6 +1253,15 @@
       }
       if (ratingColor) {
         ratingColor.style.backgroundColor = result.color;
+        ratingColor.setAttribute('data-bs-original-title', result.tooltipText);
+        ratingColor.setAttribute('data-bs-custom-class', result.tooltipClass);
+        const oldTooltip = bootstrap.Tooltip.getInstance(ratingColor);
+        if (oldTooltip) {
+          oldTooltip.dispose();
+        }
+
+        // 🟢 Recreate tooltip so custom class is applied
+        new bootstrap.Tooltip(ratingColor);
       }
 
       function fitToOneLine(el) {
