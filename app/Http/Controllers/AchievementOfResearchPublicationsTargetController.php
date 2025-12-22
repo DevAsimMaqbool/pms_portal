@@ -228,8 +228,16 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'co_author.*.student_roll_no' => '',
             'co_author.*.career' => '',
         ];
+        $messages = [
+            'co_author.*.name.required_with' => 'Co-Author name is required.',
+            'co_author.*.rank.required_with' => 'Co-Author rank is required.',
+            'co_author.*.univeristy_name.required_with' => 'University name is required.',
+            'co_author.*.country.required_with' => 'Country is required.',
+            'co_author.*.your_role.required_with' => 'Co-Author role is required.',
+            'co_author.*.no_paper_past.required_with' => 'Number of past papers is required.',
+        ];
 
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             return response()->json(['status'=>'error','errors'=>$validator->errors()], 422);
         }

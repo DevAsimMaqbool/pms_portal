@@ -15,6 +15,11 @@
             color: #acaab1;
             background-color: #f3f2f3;
         }
+        .rank-error {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 4px;
+        }
     </style>
 @endpush
 @section('content')
@@ -580,7 +585,53 @@ $(document).on('click', '.remove-grant', function () {
 // Submit update form
 $('#researchForm1').submit(function(e){
     e.preventDefault();
-    let form = $(this);
+     // Clear previous errors
+                    $('.rank-error').remove();
+                    $('.is-invalid').removeClass('is-invalid');
+
+                    let form = $(this);
+                    let hasError = false;
+
+                    let mainRank = form.find('[name="as_author_your_rank"]').val();
+
+                    if (!mainRank) {
+                        form.find('[name="as_author_your_rank"]')
+                            .addClass('is-invalid')
+                            .after('<div class="rank-error">Your author rank is required.</div>');
+                        return;
+                    }
+
+                    let usedRanks = new Set();
+                    usedRanks.add(mainRank); // include main author rank
+
+                    // Loop through all co-author rank inputs
+                    form.find('input[name^="co_author"][name$="[rank]"]').each(function () {
+                        let rankInput = $(this);
+                        let rankValue = rankInput.val();
+
+                        if (!rankValue) return; // skip empty
+
+                        if (usedRanks.has(rankValue)) {
+                            hasError = true;
+
+                            rankInput
+                                .addClass('is-invalid')
+                                .after('<div class="rank-error">This rank is already used. Please choose a unique rank.</div>');
+                        } else {
+                            usedRanks.add(rankValue);
+                        }
+                    });
+
+                    // ❌ Stop submission if any conflict
+                    if (hasError) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Rank Conflict',
+                            text: 'Author and co-author ranks must all be unique.'
+                        });
+                        return;
+                    }
+
     let formData = new FormData(this);
     let indicatorId = form.find('[name="indicator_id"]').val();
 
