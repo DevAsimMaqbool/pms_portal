@@ -217,7 +217,7 @@
             <form method="POST" action="{{ route('role.switch') }}">
               @csrf
               <select name="role" onchange="this.form.submit()" class="form-select">
-                <option value="">Witch Role</option>
+                <option value="">Switch Role</option>
                 @foreach(auth()->user()->roles as $role)
                   @continue($activeRole === strtolower($role->name))
                   <option value="{{ $role->name }}" {{ $activeRole === strtolower($role->name) ? 'selected' : '' }}>
