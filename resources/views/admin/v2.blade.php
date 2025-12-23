@@ -560,33 +560,40 @@
                   <!--/ Statistics -->
                   <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
                     @php
-                      $feedbackValues = getStudentFeedbackByBarcode(Auth::user()->barcode);
+                                                                $feedbackValues = getStudentFeedbackByBarcode(Auth::user()->barcode);
 
-                      // Take only the first 4 values (the actual scores)
-                      $values = array_map(fn($v) => (float) $v, array_slice($feedbackValues, 0, 4));
+                                                                // Take only the first 4 values (the actual scores)
+                                                                $values = array_map(fn($v) => (float) $v, array_slice($feedbackValues, 0, 4));
 
-                      // Calculate the average
-                      $average = array_sum($values) / count($values);
+                                                                // Calculate the average
+                                                                $average = array_sum($values) / count($values);
 
-                      // Get rating description
-                      $getRatingByPercentage = getRatingByPercentage($average);
-                      $rating_description = $getRatingByPercentage['description'];
+                                                                // Get rating description
+                                                                $getRatingByPercentage = getRatingByPercentage($average);
+                                                                $rating_description = $getRatingByPercentage['description'];
 
-                      // Determine rating and color
-                      function ratingMeta($average)
-                      {
-                        if ($average >= 90)
-                          return ['OS', 'primary'];
-                        if ($average >= 80)
-                          return ['EE', 'success'];
-                        if ($average >= 70)
-                          return ['ME', 'warning'];
-                        if ($average >= 60)
-                          return ['NI', 'orange'];
-                        return ['BE', 'danger'];
-                      }
+                                                                // Determine rating and color
+                                                                function ratingMeta($average)
+                                                                {
+                                                                  if ($average >= 90)
+                                                                    return ['OS', 'primary'];
+                                                                  if ($average >= 80)
+                                                                    return ['EE', 'success'];
+                                                                  if ($average >= 70)
+                                                                    return ['ME', 'warning'];
+                                                                  if ($average >= 60)
+                                                                    return ['NI', 'orange'];
+                                                                  return ['BE', 'danger'];
+                                                                }
 
-                      [$rating, $color] = ratingMeta($average);
+                                                                [$rating, $color] = ratingMeta($average);
+                                          saveIndicatorPercentage(
+                      Auth::user()->employee_id,
+                                            $keyPerformanceAreaId = 1,
+                                            $indicatorCategoryId = 23,
+                                            $indicator_id=182,
+                                            $average
+                                          );
                     @endphp
 
                     <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
