@@ -176,6 +176,12 @@
           <div data-i18n="Students">Students</div>
         </a>
       </li>
+      <li class="menu-item {{ request()->routeIs('terms.index') ? 'active' : '' }}">
+        <a href="{{ route('terms.index') }}" class="menu-link">
+          <i class="menu-icon icon-base ti tabler-calendar-stats"></i>
+          <div data-i18n="Terms">Terms</div>
+        </a>
+      </li>
       <li class="menu-item {{ request()->routeIs('assign-form.index') ? 'active' : '' }}">
         <a href="{{ route('assign-form.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-message-heart"></i>
