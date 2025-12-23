@@ -809,7 +809,10 @@
         @php
             $insideMirror = forVirtueReport(null, auth()->user()->id);
             $socialMirror = forVirtueReport(auth()->user()->id);
-            $studentMirror = [75, 80, 75, 70, 80];
+
+            // Use helper to get student feedback dynamically
+            $studentMirror = getStudentFeedbackByBarcode(auth()->user()->barcode);
+
             $virtues = [
                 'Responsibility & Accountability',
                 'Empathy & Compassion',
@@ -817,6 +820,7 @@
                 'Honesty & Integrity',
                 'Inspirational Leadership',
             ];
+
             function ratingMeta($value)
             {
                 if ($value >= 90)
@@ -830,6 +834,7 @@
                 return ['BE', '#ff4c51'];
             }
         @endphp
+
         <section class="kpi">
             <table class="kpi-table">
                 <thead>
@@ -847,7 +852,7 @@
                         @php
                             $inside = $insideMirror[$index] ?? 0;
                             $social = $socialMirror[$index] ?? 0;
-                            $student = $studentMirror[$index] ?? 0;
+                            $student = $studentMirror[$index] ?? 0; // <- dynamic
 
                             $avg = ($inside + $social + $student) / 3;
 
@@ -857,7 +862,7 @@
                             <td>{{ $virtue }}</td>
                             <td>{{ number_format($inside, 1) }}%</td>
                             <td>{{ number_format($social, 1) }}%</td>
-                            <td>{{ number_format($student, 1) }}%</td>
+                            <td>{{ number_format($student, 1) }}%</td> <!-- dynamic student mirror -->
                             <td>{{ number_format($avg, 1) }}%</td>
                             <td class="achieved-cell" style="color: {{ $color }}">
                                 {{ $rating }}
@@ -867,6 +872,7 @@
                 </tbody>
             </table>
         </section>
+
 
         @php
             $notableVirtues = [];
@@ -933,7 +939,7 @@
                 }
 
                 const achievedData = @json(forVirtueReport(auth::user()->id));
-                const studentData = [75, 80, 75, 70, 80];
+                const studentData = @json(getStudentFeedbackByBarcode(auth::user()->barcode));
                 const insideData = @json(forVirtueReport(null, auth::user()->id));
 
                 const pointColorsAchieved = achievedData.map(value => getColor(value));

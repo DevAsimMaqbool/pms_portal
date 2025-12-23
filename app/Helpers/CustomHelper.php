@@ -2099,6 +2099,35 @@ if (!function_exists('forVirtueReport')) {
     }
 }
 
+if (!function_exists('getStudentFeedbackByBarcode')) {
+    function getStudentFeedbackByBarcode(string $barcode)
+    {
+        $feedback = DB::table('student_feedback')
+            ->select(
+                DB::raw("CAST(REPLACE(empathy_compassion, '%', '') AS DECIMAL(5,1)) AS empathy_compassion"),
+                DB::raw("CAST(REPLACE(honesty_integrity, '%', '') AS DECIMAL(5,1)) AS honesty_integrity"),
+                DB::raw("CAST(REPLACE(inspirational_leadership, '%', '') AS DECIMAL(5,1)) AS inspirational_leadership"),
+                DB::raw("CAST(REPLACE(responsibility_accountability, '%', '') AS DECIMAL(5,1)) AS responsibility_accountability")
+            )
+            ->where('faculty_member', 'LIKE', '%' . $barcode . '%')
+            ->first(); // only need first record
+
+        // Default fallback
+        if (!$feedback) {
+            return [0, 0, 0, 0];
+        }
+
+        return [
+            number_format($feedback->responsibility_accountability, 1),
+            number_format($feedback->empathy_compassion, 1),
+            number_format($feedback->inspirational_leadership, 1),
+            number_format($feedback->honesty_integrity, 1),
+            number_format($feedback->inspirational_leadership, 1),
+        ];
+    }
+}
+
+
 
 
 
