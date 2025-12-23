@@ -16,6 +16,7 @@ use App\Models\LineManagerFeedback;
 use App\Models\LineManagerEventFeedback;
 use App\Models\IndicatorsPercentage;
 use App\Models\RatingRule;
+use App\Models\StudentFeedbackClassWise;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -2126,6 +2127,27 @@ if (!function_exists('getStudentFeedbackByBarcode')) {
         ];
     }
 }
+
+if (!function_exists('getFacultyClassWiseFeedback')) {
+    function getFacultyClassWiseFeedback(int $facultyId)
+    {
+        return StudentFeedbackClassWise::query()
+            ->join(
+                'faculty_member_classes',
+                'faculty_member_classes.code',
+                '=',
+                'student_feedback_class_wises.component_class'
+            )
+            ->where('faculty_member_classes.faculty_id', $facultyId)
+            ->select(
+                'student_feedback_class_wises.*',
+                'faculty_member_classes.code as class_code',
+                'faculty_member_classes.faculty_id'
+            )
+            ->get();
+    }
+}
+
 
 
 
