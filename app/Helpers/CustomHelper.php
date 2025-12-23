@@ -1982,7 +1982,7 @@ if (!function_exists('lineManagerRemarksOnTasks')) {
 if (!function_exists('getTopIndicatorsOfEmployee')) {
     function getTopIndicatorsOfEmployee($employeeId)
     {
-        $indicators = IndicatorsPercentage::with('kpa:id,performance_area,short_code,icon')
+        $indicators = IndicatorsPercentage::with('kpa:id,performance_area,short_code')
             ->where('employee_id', $employeeId)
             ->get([
                 'key_performance_area_id',
@@ -1993,14 +1993,7 @@ if (!function_exists('getTopIndicatorsOfEmployee')) {
         $avgByKpa = $indicators
             ->groupBy('key_performance_area_id')
             ->map(function ($group, $kpaId) {
-               // $avg = round($group->avg('score'), 2);
-                $avg = round(
-                        $group->pluck('score')
-                            ->map(fn($score) => min($score, 100))
-                            ->avg(),
-                        2
-                    );
-
+                $avg = round($group->avg('score'), 2);
 
                 // Determine color and rating based on avg
                 if ($avg >= 90) {
@@ -2013,7 +2006,7 @@ if (!function_exists('getTopIndicatorsOfEmployee')) {
                     $color = 'warning';
                     $rating = 'ME';
                 } elseif ($avg >= 60) {
-                    $color = 'orange';
+                    $color = 'ni';
                     $rating = 'NI';
                 } elseif ($avg >= 0) {
                     $color = 'danger';
@@ -2032,8 +2025,7 @@ if (!function_exists('getTopIndicatorsOfEmployee')) {
                     'kpa_short_code' => $kpa->short_code ?? null,
                     'avg' => $avg,
                     'color' => $color,
-                    'rating' => $rating,
-                    'icon' => $kpa->icon ?? null,
+                    'rating' => $rating
                 ];
             });
 
