@@ -166,7 +166,15 @@
                 processData: false,
                 success: function (response) {
                     Swal.close();
-                    Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                   // Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                   Swal.fire({
+                        icon: 'success',
+                        html: `<div class="alert alert-success alert-dismissible" role="alert">${response.message}</div>`,
+                        background: '#ffffffff',
+                        showConfirmButton: false,
+                        timer: 3500,
+                        timerProgressBar: true,
+                    });
                     form[0].reset();
 
                     // Reset Select2 dropdowns
