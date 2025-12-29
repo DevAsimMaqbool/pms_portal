@@ -398,63 +398,63 @@
 </style>
 @endpush
 @section('content')
-            <!-- Content -->
-            <div class="container-xxl flex-grow-1 container-p-y">
-              <!-- Accordion1 -->
-              <div class="row gy-6">
+              <!-- Content -->
+              <div class="container-xxl flex-grow-1 container-p-y">
+                <!-- Accordion1 -->
+                <div class="row gy-6">
 
 
-                <!-- Sales Overview -->
-                <div class="col-lg-3 col-md-12 d-flex flex-column">
-                  <div class="row flex-fill">
+                  <!-- Sales Overview -->
+                  <div class="col-lg-3 col-md-12 d-flex flex-column">
+                    <div class="row flex-fill">
 
-                    <!-- Generated Leads -->
-                    <div class="col-lg-12 col-md-6 col-sm-12">
-                      <div class="card" style="box-shadow: none;background: none;">
-                        <div class="card-header text-center">
-                          <div class="card-title mb-0">
-                            <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', $employee->name)) }} 🎉</h5>
-                            <div class="mb-2 rounded bg-label-success p-1" data-bs-toggle="tooltip" data-bs-placement="top"
-                              data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->department }}">
-                              <span class=" bg-label-success text-cut-department">
-                                {{ Auth::user()->department }}
-                              </span>
+                      <!-- Generated Leads -->
+                      <div class="col-lg-12 col-md-6 col-sm-12">
+                        <div class="card" style="box-shadow: none;background: none;">
+                          <div class="card-header text-center">
+                            <div class="card-title mb-0">
+                              <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', $employee->name)) }} 🎉</h5>
+                              <div class="mb-2 rounded bg-label-success p-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->department }}">
+                                <span class=" bg-label-success text-cut-department">
+                                  {{ Auth::user()->department }}
+                                </span>
+                              </div>
+                              <p class="card-subtitle">Welcome to your Performance Hub</p>
+
                             </div>
-                            <p class="card-subtitle">Welcome to your Performance Hub</p>
-
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <!--/ Generated Leads -->
-                    <!-- Profit last month -->
-                    <div class="col-lg-4 col-md-3 col-sm-6">
-                      <div class="card h-100" style="background-color: #ac7cad;">
-                        <div class="card-body d-flex justify-content-center align-items-center ">
-                          <h6 class="mb-0 text-center text-white">As {{ucfirst(activeRole())}}</h6>
+                      <!--/ Generated Leads -->
+                      <!-- Profit last month -->
+                      <div class="col-lg-4 col-md-3 col-sm-6">
+                        <div class="card h-100" style="background-color: #ac7cad;">
+                          <div class="card-body d-flex justify-content-center align-items-center ">
+                            <h6 class="mb-0 text-center text-white">As {{ucfirst(activeRole())}}</h6>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="col-lg-4 col-md-3 col-sm-6">
-                      <div class="card h-100 {{overallAvgScore(Auth::user()->employee_id)['color']}}">
-                        <div class="card-body d-flex justify-content-center align-items-center">
-                          <h5 class="mb-0 text-center" id="avg-teachervalue">0%</h5>
+                      <div class="col-lg-4 col-md-3 col-sm-6">
+                        <div class="card h-100 {{overallAvgScore(Auth::user()->employee_id)['color']}}">
+                          <div class="card-body d-flex justify-content-center align-items-center">
+                            <h5 class="mb-0 text-center" id="avg-teachervalue">0%</h5>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div class="col-lg-4 col-md-3 col-sm-6">
-                      <div class="card h-100" id="rating-teachercolor" data-bs-toggle="tooltip" data-bs-placement="top"
-                        data-bs-custom-class="tooltip-" data-bs-original-title="ppp">
-                        <div class="card-body d-flex justify-content-center align-items-center">
-                          <h4 class="mb-0 text-center text-white" id="rating-teachervalue"></h4>
+                      <div class="col-lg-4 col-md-3 col-sm-6">
+                        <div class="card h-100" id="rating-teachercolor" data-bs-toggle="tooltip" data-bs-placement="top"
+                          data-bs-custom-class="tooltip-" data-bs-original-title="ppp">
+                          <div class="card-body d-flex justify-content-center align-items-center">
+                            <h4 class="mb-0 text-center text-white" id="rating-teachervalue"></h4>
+                          </div>
                         </div>
                       </div>
+                      <!--/ Expenses -->
                     </div>
-                    <!--/ Expenses -->
                   </div>
-                </div>
-                <!--/ Sales Overview -->
+                  <!--/ Sales Overview -->
 
                 <!-- Website Analytics -->
                 @php
@@ -464,10 +464,10 @@
   $static_color = ['primary', 'success', 'warning', 'orange', 'danger'];
   $index2 = 0;
   $totalWeightSS = 0;
-                @endphp
+                  @endphp
 
-                @foreach($result as $kpakey => $kpa)
-                  @php
+                  @foreach($result as $kpakey => $kpa)
+                    @php
     $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
     $iconClass = $icon1[$index2 % count($icon1)];
     $iconClasscolor = $static_color[$index2 % count($static_color)];
@@ -487,117 +487,125 @@
     $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
     $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
 
-                  @endphp
-
-                  <div class="col-lg-3 col-md-4" id="{{ $targetId }}">
-                    <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
-                      <div class="flip-card h-100">
-                        <div class="flip-card-inner">
-
-                          <!-- FRONT -->
-                          <div class="flip-card-front card bg-{{ $iconClasscolor }} text-white">
-                            <div class="card-body position-relative d-flex flex-column justify-content-between">
-                              <div>
-                                <div class="d-flex align-items-center mb-1">
-                                  <div class="avatar me-4">
-                                    <span class="avatar-initial rounded bg-label-{{ $iconClasscolor }}">
-                                      <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
-                                    </span>
-                                  </div>
-                                </div>
-                                <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
-                              </div>
-                              <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
-                                <div class="mb-1">
-                                  <span class="fw-semibold">Score </span> <span
-                                    class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
-                                </div>
-                                <div class="mb-1">
-                                  <span class="fw-semibold">Rating </span> <span
-                                    class="badge bg-label-{{ $color }}">{{ $rating }}</span>
-                                </div>
-                                <div class="mb-1">
-                                  <span class="fw-semibold">Weight </span> <span
-                                    class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
-                                </div>
-                                <div>
-                                  <span class="fw-semibold">Weighted Score </span> <span
-                                    class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
-                                </div>
-                              </div>
-
-
-                            </div>
-                          </div>
-
-                          <!-- BACK -->
-                          <div class="flip-card-back card bg-{{ $iconClasscolor }} text-dark h-100">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                              <div class="badge rounded p-2 mb-2 bg-label-{{ $iconClasscolor }}">
-                                <i class="icon-base ti {{ $iconClass }} icon-lg"></i>
-                              </div>
-                              <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] }}</h6>
-                              <p class="text-center mb-0 text-white fs-13">
-                                {{ $schroll_rating_description ?? 'Keep performing well in this area!' }}
-                              </p>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                @endforeach
-
-                <!--/ Website Analytics -->
-
-              </div>
-              <div class="row gy-6 mt-2">
-
-                <div class="col-md-6 col-lg-4">
-                  <div class="d-flex justify-content-between">
-                    <h5 class="fw-bold">Key Indicators</h5>
-                  </div>
-                  <!--/ Statistics -->
-                  <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
-                    @php
-                      $feedbackValues = getStudentFeedbackByBarcode(Auth::user()->barcode);
-
-                      // Take only the first 4 values (the actual scores)
-                      $values = array_map(fn($v) => (float) $v, array_slice($feedbackValues, 0, 4));
-
-                      // Calculate the average
-                      $average = array_sum($values) / count($values);
-
-                      // Get rating description
-                      $getRatingByPercentage = getRatingByPercentage($average);
-                      $rating_description = $getRatingByPercentage['description'];
-
-                      // Determine rating and color
-                      function ratingMeta($average)
-                      {
-                        if ($average >= 90)
-                          return ['OS', 'primary'];
-                        if ($average >= 80)
-                          return ['EE', 'success'];
-                        if ($average >= 70)
-                          return ['ME', 'warning'];
-                        if ($average >= 60)
-                          return ['NI', 'orange'];
-                        return ['BE', 'danger'];
-                      }
-
-                      [$rating, $color] = ratingMeta($average);
                     @endphp
 
-                    <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                      data-bs-custom-class="tooltip-{{$color}}" data-bs-original-title="{{ $rating_description }}">
-                      <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                          <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
-                              class="icon-base ti tabler-chalkboard icon-md"></i></div>
-                          <div>
-                            <small class="text-dark text-cut-hot">Student Satisfaction</small>
+                    <div class="col-lg-3 col-md-4" id="{{ $targetId }}">
+                      <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
+                        <div class="flip-card h-100">
+                          <div class="flip-card-inner">
+
+                            <!-- FRONT -->
+                            <div class="flip-card-front card bg-{{ $iconClasscolor }} text-white">
+                              <div class="card-body position-relative d-flex flex-column justify-content-between">
+                                <div>
+                                  <div class="d-flex align-items-center mb-1">
+                                    <div class="avatar me-4">
+                                      <span class="avatar-initial rounded bg-label-{{ $iconClasscolor }}">
+                                        <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
+                                </div>
+                                <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
+                                  <div class="mb-1">
+                                    <span class="fw-semibold">Score </span> <span
+                                      class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
+                                  </div>
+                                  <div class="mb-1">
+                                    <span class="fw-semibold">Rating </span> <span
+                                      class="badge bg-label-{{ $color }}">{{ $rating }}</span>
+                                  </div>
+                                  <div class="mb-1">
+                                    <span class="fw-semibold">Weight </span> <span
+                                      class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
+                                  </div>
+                                  <div>
+                                    <span class="fw-semibold">Weighted Score </span> <span
+                                      class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
+                                  </div>
+                                </div>
+
+
+                              </div>
+                            </div>
+
+                            <!-- BACK -->
+                            <div class="flip-card-back card bg-{{ $iconClasscolor }} text-dark h-100">
+                              <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                <div class="badge rounded p-2 mb-2 bg-label-{{ $iconClasscolor }}">
+                                  <i class="icon-base ti {{ $iconClass }} icon-lg"></i>
+                                </div>
+                                <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] }}</h6>
+                                <p class="text-center mb-0 text-white fs-13">
+                                  {{ $schroll_rating_description ?? 'Keep performing well in this area!' }}
+                                </p>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  @endforeach
+
+                  <!--/ Website Analytics -->
+
+                </div>
+                <div class="row gy-6 mt-2">
+
+                  <div class="col-md-6 col-lg-4">
+                    <div class="d-flex justify-content-between">
+                      <h5 class="fw-bold">Key Indicators</h5>
+                    </div>
+                    <!--/ Statistics -->
+                    <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
+                      @php
+  $feedbackValues = getStudentFeedbackByBarcode(Auth::user()->barcode);
+
+  // Take only the first 4 values (the actual scores)
+  $values = array_map(fn($v) => (float) $v, array_slice($feedbackValues, 0, 4));
+
+  // Calculate the average
+  $average = array_sum($values) / count($values);
+
+  // Get rating description
+  $getRatingByPercentage = getRatingByPercentage($average);
+  $rating_description = $getRatingByPercentage['description'];
+
+  // Determine rating and color
+  function ratingMeta($average)
+  {
+    if ($average >= 90)
+      return ['OS', 'primary'];
+    if ($average >= 80)
+      return ['EE', 'success'];
+    if ($average >= 70)
+      return ['ME', 'warning'];
+    if ($average >= 60)
+      return ['NI', 'orange'];
+    return ['BE', 'danger'];
+  }
+
+  [$rating, $color] = ratingMeta($average);
+  saveIndicatorPercentage(
+    Auth::user()->employee_id,
+    $keyPerformanceAreaId = 1,
+    $indicatorCategoryId = 23,
+    $indicator_id = 182,
+    $average
+  );
+                      @endphp
+
+                      <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-{{$color}}" data-bs-original-title="{{ $rating_description }}">
+                        <div class="card-body d-flex">
+                          <div class="d-flex w-50 align-items-center me-4">
+                            <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-chalkboard icon-md"></i></div>
+                            <div>
+                              <small class="text-dark text-cut-hot">Student Satisfaction</small>
+                            </div>
                           </div>
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
@@ -609,9 +617,8 @@
                           <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
                         </div>
                       </div>
-                    </div>
 
-                    @php
+                      @php
   // Get dynamic average, rating, and color
   $kpaResult = indicatorAvgScore(117, Auth::user()->employee_id);
   //$avg = $kpaResult['avg'] ?? 0;
@@ -621,28 +628,28 @@
   $getRatingByPercentage = getRatingByPercentage($avg);
   $rating_description = $getRatingByPercentage['description'];
 
-                    @endphp
-                    <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                      data-bs-custom-class="tooltip-{{$color}}" data-bs-original-title="{{ $rating_description }}">
-                      <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                          <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
-                              class="icon-base ti tabler-chalkboard icon-md"></i></div>
-                          <div>
-                            <small class="text-dark text-cut-hot">Classes Held</small>
+                      @endphp
+                      <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-{{$color}}" data-bs-original-title="{{ $rating_description }}">
+                        <div class="card-body d-flex">
+                          <div class="d-flex w-50 align-items-center me-4">
+                            <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-chalkboard icon-md"></i></div>
+                            <div>
+                              <small class="text-dark text-cut-hot">Classes Held</small>
+                            </div>
                           </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                          <div class="progress w-100 me-4" style="height:8px;">
-                            <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$avg}}%"
-                              aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
+                          <div class="d-flex flex-grow-1 align-items-center">
+                            <div class="progress w-100 me-4" style="height:8px;">
+                              <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$avg}}%"
+                                aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="text-body-secondary">{{number_format($avg, 1)}}%</span>
+                            <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
                           </div>
-                          <span class="text-body-secondary">{{number_format($avg, 1)}}%</span>
-                          <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
                         </div>
                       </div>
-                    </div>
-                    @php
+                      @php
   // Get dynamic average, rating, and color
   $kpaResult = indicatorAvgScore(128, Auth::user()->employee_id);
   //$avg = $kpaResult['avg'] ?? 0;
@@ -660,51 +667,51 @@
   $ms_getRatingByPercentage = getRatingByPercentage($avgManager);
   $ms_rating_description = $ms_getRatingByPercentage['description'];
 
-                    @endphp
-                    <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                      data-bs-custom-class="tooltip-{{$color}}" data-bs-original-title="{{ $re_rating_description }}">
-                      <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                          <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
-                              class="icon-base ti tabler-book-2 icon-md"></i>
+                      @endphp
+                      <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-{{$color}}" data-bs-original-title="{{ $re_rating_description }}">
+                        <div class="card-body d-flex">
+                          <div class="d-flex w-50 align-items-center me-4">
+                            <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-book-2 icon-md"></i>
+                            </div>
+                            <div>
+                              <small class="text-dark text-cut-hot">Research Publications</small>
+                            </div>
                           </div>
-                          <div>
-                            <small class="text-dark text-cut-hot">Research Publications</small>
+                          <div class="d-flex flex-grow-1 align-items-center">
+                            <div class="progress w-100 me-4" style="height:8px;">
+                              <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$avg}}%"
+                                aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="text-body-secondary">{{number_format($avg, 1)}}%</span>
+                            <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
                           </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                          <div class="progress w-100 me-4" style="height:8px;">
-                            <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$avg}}%"
-                              aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <span class="text-body-secondary">{{number_format($avg, 1)}}%</span>
-                          <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
                         </div>
                       </div>
-                    </div>
 
-                    <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                      data-bs-custom-class="tooltip-{{$colorManager}}" data-bs-original-title="{{ $ms_rating_description }}">
-                      <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                          <div class="badge bg-label-{{$colorManager}} rounded p-1_5 me-4"><i
-                              class="icon-base ti tabler-stars icon-md"></i>
+                      <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-{{$colorManager}}" data-bs-original-title="{{ $ms_rating_description }}">
+                        <div class="card-body d-flex">
+                          <div class="d-flex w-50 align-items-center me-4">
+                            <div class="badge bg-label-{{$colorManager}} rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-stars icon-md"></i>
+                            </div>
+                            <div>
+                              <small class="text-dark text-cut-hot">Manager Satisfaction</small>
+                            </div>
                           </div>
-                          <div>
-                            <small class="text-dark text-cut-hot">Manager Satisfaction</small>
+                          <div class="d-flex flex-grow-1 align-items-center">
+                            <div class="progress w-100 me-4" style="height:8px;">
+                              <div class="progress-bar bg-{{$colorManager}}" role="progressbar" style="width: {{$avgManager}}%"
+                                aria-valuenow="{{$avgManager}}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="text-body-secondary">{{number_format($avgManager, 1)}}%</span>
+                            <span class="badge bg-label-{{$colorManager}} ms-1">{{$ratingManager}}</span>
                           </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                          <div class="progress w-100 me-4" style="height:8px;">
-                            <div class="progress-bar bg-{{$colorManager}}" role="progressbar" style="width: {{$avgManager}}%"
-                              aria-valuenow="{{$avgManager}}" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <span class="text-body-secondary">{{number_format($avgManager, 1)}}%</span>
-                          <span class="badge bg-label-{{$colorManager}} ms-1">{{$ratingManager}}</span>
                         </div>
                       </div>
-                    </div>
-                    @php
+                      @php
   // Get dynamic average, rating, and color
   $courseloadkpaResult = indicatorAvgScore(122, Auth::user()->employee_id);
   //$courseloadavg = $courseloadkpaResult['avg'] ?? 0;
@@ -714,286 +721,286 @@
   $courseloadgetRatingByPercentage = getRatingByPercentage($courseloadavg);
   $courseload_description = $courseloadgetRatingByPercentage['description'];
 
-                    @endphp
-                    <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-                      data-bs-custom-class="tooltip-{{$courseloadcolor}}" data-bs-original-title="{{ $courseload_description }}">
-                      <div class="card-body d-flex">
-                        <div class="d-flex w-50 align-items-center me-4">
-                          <div class="badge bg-label-{{$courseloadcolor}} rounded p-1_5 me-4"><i
-                              class="icon-base ti tabler-stars icon-md"></i>
+                      @endphp
+                      <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-{{$courseloadcolor}}" data-bs-original-title="{{ $courseload_description }}">
+                        <div class="card-body d-flex">
+                          <div class="d-flex w-50 align-items-center me-4">
+                            <div class="badge bg-label-{{$courseloadcolor}} rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-stars icon-md"></i>
+                            </div>
+                            <div>
+                              <small class="text-dark text-cut-hot">Course Load</small>
+                            </div>
                           </div>
-                          <div>
-                            <small class="text-dark text-cut-hot">Course Load</small>
+                          <div class="d-flex flex-grow-1 align-items-center">
+                            <div class="progress w-100 me-4" style="height:8px;">
+                              <div class="progress-bar bg-{{$courseloadcolor}}" role="progressbar" style="width: {{$courseloadavg}}%"
+                                aria-valuenow="{{$courseloadavg}}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="text-body-secondary">{{number_format($courseloadavg, 1)}}%</span>
+                            <span class="badge bg-label-{{$courseloadcolor}} ms-1">{{$courseloadrating}}</span>
                           </div>
                         </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                          <div class="progress w-100 me-4" style="height:8px;">
-                            <div class="progress-bar bg-{{$courseloadcolor}}" role="progressbar" style="width: {{$courseloadavg}}%"
-                              aria-valuenow="{{$courseloadavg}}" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-lg-4">
+
+                    <div class=" d-flex justify-content-between">
+                      <h5 class="fw-bold">Top Performers</h5>
+                    </div>
+                    <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
+
+
+                      <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
+                        <div class="card-body d-flex">
+                          <div class="d-flex w-70 align-items-center me-4">
+                            <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-mood-empty icon-md"></i>
+                            </div>
+                            <div>
+                              <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                              <small class="text-dark fs-10 text-cut">...</small>
+                            </div>
                           </div>
-                          <span class="text-body-secondary">{{number_format($courseloadavg, 1)}}%</span>
-                          <span class="badge bg-label-{{$courseloadcolor}} ms-1">{{$courseloadrating}}</span>
+                          <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
+                        <div class="card-body d-flex">
+                          <div class="d-flex w-70 align-items-center me-4">
+                            <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-mood-empty icon-md"></i>
+                            </div>
+                            <div>
+                              <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                              <small class="text-dark fs-10 text-cut">...</small>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
+                        <div class="card-body d-flex">
+                          <div class="d-flex w-70 align-items-center me-4">
+                            <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-mood-empty icon-md"></i>
+                            </div>
+                            <div>
+                              <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                              <small class="text-dark fs-10 text-cut">...</small>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+                        data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
+                        <div class="card-body d-flex">
+                          <div class="d-flex w-70 align-items-center me-4">
+                            <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-mood-empty icon-md"></i>
+                            </div>
+                            <div>
+                              <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                              <small class="text-dark fs-10 text-cut">...</small>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+                        data-bs-original-title="Yet there is no top performer !">
+                        <div class="card-body d-flex">
+                          <div class="d-flex w-70 align-items-center me-4">
+                            <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                                class="icon-base ti tabler-mood-empty icon-md"></i>
+                            </div>
+                            <div>
+                              <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                              <small class="text-dark fs-10 text-cut">...</small>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                          </div>
                         </div>
                       </div>
                     </div>
 
                   </div>
-                </div>
 
-                <div class="col-md-6 col-lg-4">
-
-                  <div class=" d-flex justify-content-between">
-                    <h5 class="fw-bold">Top Performers</h5>
-                  </div>
-                  <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
-
-
-                    <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                      data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
-                      <div class="card-body d-flex">
-                        <div class="d-flex w-70 align-items-center me-4">
-                          <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                              class="icon-base ti tabler-mood-empty icon-md"></i>
-                          </div>
-                          <div>
-                            <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                            <small class="text-dark fs-10 text-cut">...</small>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                        </div>
-                      </div>
+                  <div class="col-md-6 col-lg-4">
+                    <div class=" d-flex justify-content-between">
+                      <h5 class="fw-bold">Overall KPA Performance</h5>
                     </div>
-
-                    <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                      data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
-                      <div class="card-body d-flex">
-                        <div class="d-flex w-70 align-items-center me-4">
-                          <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                              class="icon-base ti tabler-mood-empty icon-md"></i>
+                    <div class="row g-6">
+                      <!-- Profit last month -->
+                      <!-- Generated Leads -->
+                      <div class="col-xl-12">
+                        <div class="card caed-wave-bg ">
+                          <div class="card-header d-flex justify-content-between">
+                            <div class="card-title mb-0">
+                              <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><span
+                                  class="icon-xs icon-base ti tabler-chart-pie me-2"></span>Overall </button>
+                            </div>
+                            <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="top"
+                              data-bs-original-title="View large">
+                              <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button"
+                                data-bs-toggle="modal" data-bs-target="#fullscreenModal">
+                                <i class="icon-base ti tabler-arrows-maximize"></i>
+                              </button>
+                            </div>
                           </div>
-                          <div>
-                            <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                            <small class="text-dark fs-10 text-cut">...</small>
+                          <div class="card-body">
+                            <canvas class="chartjs" id="radarChart1"></canvas>
                           </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                      data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
-                      <div class="card-body d-flex">
-                        <div class="d-flex w-70 align-items-center me-4">
-                          <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                              class="icon-base ti tabler-mood-empty icon-md"></i>
-                          </div>
-                          <div>
-                            <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                            <small class="text-dark fs-10 text-cut">...</small>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                      data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
-                      <div class="card-body d-flex">
-                        <div class="d-flex w-70 align-items-center me-4">
-                          <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                              class="icon-base ti tabler-mood-empty icon-md"></i>
-                          </div>
-                          <div>
-                            <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                            <small class="text-dark fs-10 text-cut">...</small>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-                      data-bs-original-title="Yet there is no top performer !">
-                      <div class="card-body d-flex">
-                        <div class="d-flex w-70 align-items-center me-4">
-                          <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                              class="icon-base ti tabler-mood-empty icon-md"></i>
-                          </div>
-                          <div>
-                            <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                            <small class="text-dark fs-10 text-cut">...</small>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
                         </div>
                       </div>
                     </div>
                   </div>
+                  <!-- Website Analytics -->
+                  <div class="col-xl-4 col">
 
-                </div>
-
-                <div class="col-md-6 col-lg-4">
-                  <div class=" d-flex justify-content-between">
-                    <h5 class="fw-bold">Overall KPA Performance</h5>
-                  </div>
-                  <div class="row g-6">
-                    <!-- Profit last month -->
-                    <!-- Generated Leads -->
-                    <div class="col-xl-12">
-                      <div class="card caed-wave-bg ">
-                        <div class="card-header d-flex justify-content-between">
-                          <div class="card-title mb-0">
-                            <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><span
-                                class="icon-xs icon-base ti tabler-chart-pie me-2"></span>Overall </button>
-                          </div>
-                          <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-original-title="View large">
-                            <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button"
-                              data-bs-toggle="modal" data-bs-target="#fullscreenModal">
-                              <i class="icon-base ti tabler-arrows-maximize"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div class="card-body">
-                          <canvas class="chartjs" id="radarChart1"></canvas>
-                        </div>
+                    <div class="card h-100">
+                      <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0 me-2">Research Innovation & Commercialization</h5>
                       </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Website Analytics -->
-                <div class="col-xl-4 col">
-
-                  <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <h5 class="card-title m-0 me-2">Research Innovation & Commercialization</h5>
-                    </div>
-                    <div class="card-body">
-                      <div id="carrierPerformance"></div>
-                      <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-4 col-sm-6">
-                  <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <div class="card-title mb-0">
-                        <h5 class="m-0 me-2">Virtue Mirror</h5>
-                      </div>
-                    </div>
-                    <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
-                    <div class="card-body pt-2">
-                      <canvas class="chartjs" id="virtueChart" data-height="355"></canvas>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-4 col">
-                  <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <div class="card-title mb-0">
-                        <h5 class="m-0 me-2">Milestones Unlocked</h5>
-                        <p class="card-subtitle">Each badge tells your success story.</p>
-                      </div>
-                    </div>
-                    <div class="px-5 py-4 border border-start-0 border-end-0">
-                      <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0 text-uppercase">Achievements</p>
-                        <p class="mb-0 text-uppercase">Scores</p>
-                      </div>
-                    </div>
-                    <div id="scrollableCol">
                       <div class="card-body">
-                        @php
+                        <div id="carrierPerformance"></div>
+                        <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-4 col-sm-6">
+                    <div class="card h-100">
+                      <div class="card-header d-flex align-items-center justify-content-between">
+                        <div class="card-title mb-0">
+                          <h5 class="m-0 me-2">Virtue Mirror</h5>
+                        </div>
+                      </div>
+                      <div id="chart-legend" class="d-flex justify-content-center align-items-center mt-2"></div>
+                      <div class="card-body pt-2">
+                        <canvas class="chartjs" id="virtueChart" data-height="355"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-4 col">
+                    <div class="card h-100">
+                      <div class="card-header d-flex align-items-center justify-content-between">
+                        <div class="card-title mb-0">
+                          <h5 class="m-0 me-2">Milestones Unlocked</h5>
+                          <p class="card-subtitle">Each badge tells your success story.</p>
+                        </div>
+                      </div>
+                      <div class="px-5 py-4 border border-start-0 border-end-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <p class="mb-0 text-uppercase">Achievements</p>
+                          <p class="mb-0 text-uppercase">Scores</p>
+                        </div>
+                      </div>
+                      <div id="scrollableCol">
+                        <div class="card-body">
+                          @php
   $indicators = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, null, 1);
-                        @endphp
-                        @if($indicators->isNotEmpty())
-                          <ul class="list-unstyled mb-0">
-                            @foreach($indicators as $ind)
-                              <li class="d-flex mb-6 align-items-center">
-                                <div class="avatar flex-shrink-0 me-4">
-                                  <img src="{{ asset('admin/assets/img/avatars/' . $ind->badge_name . '-badge.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                                </div>
-                                <div class="row w-100 align-items-center">
-                                  <div class="col-sm-8 col-lg-12 col-xxl-9 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
-                                    <h6 class="mb-0">{{ $ind->indicator->indicator }}</h6>
+                          @endphp
+                          @if($indicators->isNotEmpty())
+                            <ul class="list-unstyled mb-0">
+                              @foreach($indicators as $ind)
+                                <li class="d-flex mb-6 align-items-center">
+                                  <div class="avatar flex-shrink-0 me-4">
+                                    <img src="{{ asset('admin/assets/img/avatars/' . $ind->badge_name . '-badge.png') }}" alt="Avatar"
+                                      class="rounded-circle" />
                                   </div>
-                                  <div class="col-sm-4 col-lg-12 col-xxl-3 d-flex justify-content-xxl-end">
-                                    <h6 class="mb-0">{{ number_format($ind->score, 1) }}%</h6>
+                                  <div class="row w-100 align-items-center">
+                                    <div class="col-sm-8 col-lg-12 col-xxl-9 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0">
+                                      <h6 class="mb-0">{{ $ind->indicator->indicator }}</h6>
+                                    </div>
+                                    <div class="col-sm-4 col-lg-12 col-xxl-3 d-flex justify-content-xxl-end">
+                                      <h6 class="mb-0">{{ number_format($ind->score, 1) }}%</h6>
+                                    </div>
                                   </div>
+                                </li>
+                              @endforeach
+                            </ul>
+                          @else
+                            <div class="emoji-container">
+                              <div class="face impatient">
+                                <div class="eyes">
+                                  <div class="eye left"></div>
+                                  <div class="eye right"></div>
                                 </div>
-                              </li>
-                            @endforeach
-                          </ul>
-                        @else
-                          <div class="emoji-container">
-                            <div class="face impatient">
-                              <div class="eyes">
-                                <div class="eye left"></div>
-                                <div class="eye right"></div>
+                                <div class="mouth-line"></div>
+                                <div class="hand">
+                                  <div class="finger"></div>
+                                  <div class="finger"></div>
+                                  <div class="finger"></div>
+                                </div>
                               </div>
-                              <div class="mouth-line"></div>
-                              <div class="hand">
-                                <div class="finger"></div>
-                                <div class="finger"></div>
-                                <div class="finger"></div>
-                              </div>
+                              <div class="shadow"></div>
                             </div>
-                            <div class="shadow"></div>
-                          </div>
-                        @endif
+                          @endif
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-hidden="true">
-              <div class="modal-dialog modal-fullscreen" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalFullTitle">Overall KPA Performance</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="row g-6 pt-2">
-                      <div class="col-12 col-12" id="targetDivchart">
-                        <div class="card caed-wave-bg">
-                          <div class="card-body pt-0">
-                            <div class="row justify-content-center text-center">
-                              <div class="col-md-8 d-flex justify-content-center">
-                                <canvas class="chartjs" id="radarChart"></canvas>
-                              </div>
-                              <div class="col-12 mt-2">
-                                <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0"
-                                  style="list-style:none;">
-                                </ul>
+              <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalFullTitle">Overall KPA Performance</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="row g-6 pt-2">
+                        <div class="col-12 col-12" id="targetDivchart">
+                          <div class="card caed-wave-bg">
+                            <div class="card-body pt-0">
+                              <div class="row justify-content-center text-center">
+                                <div class="col-md-8 d-flex justify-content-center">
+                                  <canvas class="chartjs" id="radarChart"></canvas>
+                                </div>
+                                <div class="col-12 mt-2">
+                                  <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0"
+                                    style="list-style:none;">
+                                  </ul>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            </div>
-            <!-- / Content -->
+              </div>
+              <!-- / Content -->
 @endsection
 @push('script')
 <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>

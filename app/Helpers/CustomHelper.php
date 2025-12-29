@@ -16,6 +16,7 @@ use App\Models\LineManagerFeedback;
 use App\Models\LineManagerEventFeedback;
 use App\Models\IndicatorsPercentage;
 use App\Models\RatingRule;
+use App\Models\StudentFeedbackClassWise;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
