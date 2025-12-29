@@ -164,6 +164,8 @@
 
                                 $avg = $kpa['avg'];
                                 $weight_ss = ($avg * $weight) / 100;
+                                $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
+                                $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
                             @endphp
                             <div class="col-lg-4 col-md-4" id="">
                                 <a href="" class="text-decoration-none">
@@ -215,7 +217,7 @@
                                         </div>
                                         <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] ?? $kpa['kpa_short_code'] }}</h6>
                                         <p class="text-center mb-0 text-white fs-13">
-                                            
+                                            {{ $schroll_rating_description ?? 'Keep performing well in this area!' }}
                                         </p>
                                         </div>
                                     </div>
