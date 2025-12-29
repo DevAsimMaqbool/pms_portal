@@ -458,7 +458,8 @@
 
                 <!-- Website Analytics -->
                 @php
-  $result = getRoleAssignments($employee->roles->first()->name);
+  $activeRoleId = getRoleIdByName(activeRole());
+  $result = getRoleAssignments(activeRole());
   $icon1 = ['tabler-book', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
   $static_color = ['primary', 'success', 'warning', 'orange', 'danger'];
   $index2 = 0;
@@ -474,7 +475,7 @@
 
     // Get dynamic average, rating, and color
     $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
-    $kpaAvgWeightage = kpaAvgWeightage($kpa['id'], 21);
+    $kpaAvgWeightage = kpaAvgWeightage($kpa['id'], $activeRoleId);
     $weight = $kpaAvgWeightage['kpa_weightage'];
 
     $avg = $kpaResult['avg'];
@@ -601,10 +602,10 @@
                         </div>
                         <div class="d-flex flex-grow-1 align-items-center">
                           <div class="progress w-100 me-4" style="height:8px;">
-                            <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$avg}}%"
-                              aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$average}}%"
+                              aria-valuenow="{{$average}}" aria-valuemin="0" aria-valuemax="100"></div>
                           </div>
-                          <span class="text-body-secondary">{{number_format($avg, 1)}}%</span>
+                          <span class="text-body-secondary">{{number_format($average, 1)}}%</span>
                           <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
                         </div>
                       </div>

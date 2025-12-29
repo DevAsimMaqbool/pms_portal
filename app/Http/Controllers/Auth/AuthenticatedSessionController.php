@@ -69,6 +69,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+         $user = Auth::user();
+         indicatorsPercentageStatus($user);
+
         try {
             $userStatus = decrypt($request->input('user_status'));
             session()->flash('login_success', true);
