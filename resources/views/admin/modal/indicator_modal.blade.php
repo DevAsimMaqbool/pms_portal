@@ -112,7 +112,75 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <td colspan="8">no record found</td>
+                                        @php
+                                            $classFeedback = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
+                                            function ratingMeta($average)
+                                            {
+                                                if ($average >= 90)
+                                                    return ['OS', 'primary'];
+                                                if ($average >= 80)
+                                                    return ['EE', 'success'];
+                                                if ($average >= 70)
+                                                    return ['ME', 'warning'];
+                                                if ($average >= 60)
+                                                    return ['NI', 'orange'];
+                                                return ['BE', 'danger'];
+                                            }
+                                        @endphp
+
+                                        @forelse ($classFeedback as $index => $feedback)
+
+                                            @php
+                                                /*
+                                                👉 Decide how you calculate average
+                                                Example: if you already have percentage stored
+                                                */
+                                                $average = (float) $feedback->feedback;
+                                                // OR calculate from multiple columns if needed
+
+                                                [$rating, $color] = ratingMeta($average);
+                                            @endphp
+
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+
+                                                {{-- Class Code --}}
+                                                <td>{{ $feedback->class_code }}</td>
+
+                                                {{-- Program --}}
+                                                <td>{{ $feedback->program ?? '—' }}</td>
+
+                                                {{-- Career --}}
+                                                <td>{{ $feedback->career_code ?? 'UG' }}</td>
+
+                                                {{-- Strength --}}
+                                                <td>{{ $feedback->registered_students ?? 0 }}</td>
+
+                                                {{-- Respondent --}}
+                                                <td>{{ $feedback->attempts ?? 0 }}</td>
+
+                                                {{-- Score --}}
+                                                <td>
+                                                    <span class="badge bg-label-{{ $color }}">
+                                                        {{ number_format($average, 1) }}%
+                                                    </span>
+                                                </td>
+
+                                                {{-- Rating --}}
+                                                <td>
+                                                    <span class="badge bg-label-{{ $color }}">
+                                                        {{ $rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+
+                                        @empty
+                                            <tr>
+                                                <td colspan="8" class="text-center text-muted">
+                                                    No class-wise feedback found
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
