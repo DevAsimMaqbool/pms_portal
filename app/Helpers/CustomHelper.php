@@ -1982,7 +1982,7 @@ if (!function_exists('lineManagerRemarksOnTasks')) {
 if (!function_exists('getTopIndicatorsOfEmployee')) {
     function getTopIndicatorsOfEmployee($employeeId)
     {
-        $indicators = IndicatorsPercentage::with('kpa:id,performance_area,short_code')
+        $indicators = IndicatorsPercentage::with('kpa:id,performance_area,short_code,icon')
             ->where('employee_id', $employeeId)
             ->get([
                 'key_performance_area_id',
@@ -2023,6 +2023,7 @@ if (!function_exists('getTopIndicatorsOfEmployee')) {
                     'kpa_id' => $kpaId,
                     'performance_area' => $kpa->performance_area ?? null,
                     'kpa_short_code' => $kpa->short_code ?? null,
+                    'icon' => $kpa->icon ?? null,
                     'avg' => $avg,
                     'color' => $color,
                     'rating' => $rating
