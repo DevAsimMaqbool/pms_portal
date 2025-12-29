@@ -9,6 +9,7 @@ class IndicatorsPercentage extends Model
 {
     protected $fillable = [
         'employee_id',
+        'role_id',
         'key_performance_area_id',
         'indicator_category_id',
         'indicator_id',
@@ -17,6 +18,7 @@ class IndicatorsPercentage extends Model
         'color',
         'badge_name',
         'given_by',
+        'status',
     ];
 
     public function kpa()
