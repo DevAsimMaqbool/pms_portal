@@ -2127,6 +2127,26 @@ if (!function_exists('getStudentFeedbackByBarcode')) {
         }
     }
 }
+if (!function_exists('getFacultyClassWiseFeedback')) {
+    function getFacultyClassWiseFeedback(int $facultyId)
+    {
+        return StudentFeedbackClassWise::query()
+            ->join(
+                'faculty_member_classes',
+                'faculty_member_classes.code',
+                '=',
+                'student_feedback_class_wises.component_class'
+            )
+            ->where('faculty_member_classes.faculty_id', $facultyId)
+            ->select(
+                'student_feedback_class_wises.*',
+                'faculty_member_classes.code as class_code',
+                'faculty_member_classes.faculty_id'
+            )
+            ->get();
+    }
+}
+
 if (!function_exists('indicatorsPercentageStatus')) {
     function indicatorsPercentageStatus($user)
     {
@@ -2151,8 +2171,8 @@ if (!function_exists('indicatorsPercentageStatus')) {
         // Fetch all existing indicators for this user and these roles in ONE query
         $existing = IndicatorsPercentage::where('employee_id', $user->id)
             ->whereIn('role_id', $roleIds)
-            ->get(['role_id','key_performance_area_id','indicator_category_id','indicator_id'])
-            ->map(function($i) {
+            ->get(['role_id', 'key_performance_area_id', 'indicator_category_id', 'indicator_id'])
+            ->map(function ($i) {
                 return $i->role_id . '-' . $i->key_performance_area_id . '-' . $i->indicator_category_id . '-' . $i->indicator_id;
             })
             ->toArray();
