@@ -440,6 +440,129 @@ function myClassesAttendanceData($facultyId)
             return $class;
         });
 }
+if (!function_exists('ScopusPublications')) {
+    function ScopusPublications($facultyId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
+    {
+        $facultyTargets = FacultyTarget::with([
+            'researchPublicationTargets' => function ($query) use ($indicatorId) {
+                $query->where('form_status', 'RESEARCHER')
+                    ->where('indicator_id', $indicatorId)
+                    ->whereNotNull('journal_clasification');
+            }
+        ])
+            ->where('user_id', $facultyId)
+            ->where('form_status', 'HOD')
+            ->where('indicator_id', $indicatorId)
+            ->get();
+
+        $data = [];
+
+        $ratingColors = [
+            'OS' => '#6EA8FE',
+            'EE' => '#96e2b4',
+            'ME' => '#ffcb9a',
+            'NI' => '#fd7e13',
+            'BE' => '#ff4c51',
+            'NA' => '#000000',
+        ];
+
+        $totalTarget = 0;
+        $totalSubmitted = 0;
+
+        foreach ($facultyTargets as $facultyTarget) {
+
+            $targetCount = $facultyTarget->target ?? 0;
+            $submissionCount = $facultyTarget->researchPublicationTargets->count();
+
+            $totalTarget += $targetCount;
+            $totalSubmitted += $submissionCount;
+
+            if ($facultyTarget->researchPublicationTargets->isEmpty()) {
+                continue;
+            }
+
+            $grouped = $facultyTarget->researchPublicationTargets
+                ->groupBy(fn($t) => strtoupper($t->journal_clasification));
+
+            foreach ($grouped as $classification => $targets) {
+
+                // 🎯 TARGET from FacultyTarget columns
+                $value = match (strtolower($classification)) {
+                    'q1' => $facultyTarget->scopus_q1,
+                    'q2' => $facultyTarget->scopus_q2,
+                    'q3' => $facultyTarget->scopus_q3,
+                    'q4' => $facultyTarget->scopus_q4,
+                    'w' => $facultyTarget->hec_w,
+                    'x' => $facultyTarget->hec_x,
+                    'y' => $facultyTarget->hec_y,
+                    'medical' => $facultyTarget->medical_recognized,
+                    default => 0,
+                };
+
+                $count = $targets->count();
+
+                // 🌍 International co-authored count (normalized)
+                $internationalCount = $targets->filter(fn($t) => strtolower(trim($t->nationality)) === 'international')->count();
+
+                // 🔢 Percentage (for display)
+                $percentage = ($value > 0) ? round(($count / $value) * 100, 2) : 0;
+
+                // ⭐ IMAGE-BASED RATING
+                if ($count === 0) {
+                    $rating = 'BE'; // No publications
+                } elseif ($count < $value) {
+                    $rating = 'NI'; // Below target
+                } elseif ($count === $value) {
+                    // Exactly target, consider international co-authors
+                    $rating = match ($internationalCount) {
+                        0 => 'NI',
+                        1 => 'ME',
+                        2 => 'EE',
+                        default => 'OS', // 3 or more
+                    };
+                } elseif ($count > $value && $count < ($value * 2)) {
+                    $rating = 'EE'; // Slightly above target
+                } elseif ($count >= ($value * 2)) {
+                    $rating = 'OS'; // Double or more
+                } else {
+                    $rating = 'NA'; // fallback
+                }
+
+                $firstTarget = $targets->first();
+
+                $data[] = [
+                    'target_category' => $firstTarget->target_category,
+                    'journal_clasification' => $classification,
+                    'value' => $value,
+                    'count' => $count,
+                    'percentage' => $percentage,
+                    'rating' => $rating,
+                    'color' => $ratingColors[$rating],
+                    'rank' => $firstTarget->rank ?? '-',
+                    'nationality' => $firstTarget->nationality ?? '-',
+                    'international_count' => $internationalCount, // useful for debugging
+                ];
+            }
+        }
+
+        // ✅ Overall percentage
+        $avgPercentage = ($totalTarget > 0)
+            ? round(($totalSubmitted / $totalTarget) * 100, 2)
+            : 0;
+
+        saveIndicatorPercentage(
+            $facultyId,
+            $keyPerformanceAreaId,
+            $indicatorCategoryId,
+            $indicatorId,
+            $avgPercentage
+        );
+
+        return $data;
+    }
+}
+
+
 
 // if (!function_exists('ScopusPublications')) {
 //     function ScopusPublications($facultyId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
@@ -539,140 +662,6 @@ function myClassesAttendanceData($facultyId)
 //         return $data;
 //     }
 // }
-
-if (!function_exists('ScopusPublications')) {
-    function ScopusPublications($facultyId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
-    {
-        $facultyTargets = FacultyTarget::with([
-            'researchPublicationTargets' => function ($query) use ($indicatorId) {
-                $query->where('form_status', 'RESEARCHER')
-                    ->where('indicator_id', $indicatorId)
-                    ->whereNotNull('journal_clasification');
-            }
-        ])
-            ->where('user_id', $facultyId)
-            ->where('form_status', 'HOD')
-            ->where('indicator_id', $indicatorId)
-            ->get();
-
-        $data = [];
-
-        $ratingColors = [
-            'OS' => '#6EA8FE',
-            'EE' => '#96e2b4',
-            'ME' => '#ffcb9a',
-            'NI' => '#fd7e13',
-            'BE' => '#ff4c51',
-            'NA' => '#000000',
-        ];
-
-        $totalTarget = 0;
-        $totalSubmitted = 0;
-
-        // -----------------------------
-        // Helper function for rating
-        // -----------------------------
-        $getRating = function ($publicationCount, $minimumRequired, $internationalCount, $primaryAuthorCount) {
-            // No publication
-            if ($publicationCount <= 0)
-                return 'NI';
-
-            // Less than minimum OR minimum but no international
-            if (
-                $publicationCount < $minimumRequired ||
-                ($publicationCount == $minimumRequired && $internationalCount == 0)
-            ) {
-                return 'NI';
-            }
-
-            // Minimum achieved
-            if ($publicationCount == $minimumRequired)
-                return 'ME';
-
-            // Up to 2 publications with at least 1 primary OR international
-            if ($publicationCount <= 2 && ($primaryAuthorCount >= 1 || $internationalCount >= 1))
-                return 'EE';
-
-            // More than 2 publications with primary author
-            if ($publicationCount > 2 && $primaryAuthorCount >= 1)
-                return 'EE';
-
-            // More than 2 publications internationally co-authored
-            if ($publicationCount > 2 && $internationalCount >= 1)
-                return 'OS';
-
-            return 'NI';
-        };
-
-        foreach ($facultyTargets as $facultyTarget) {
-            $targetCount = $facultyTarget->target ?? 0;
-            $submissionCount = $facultyTarget->researchPublicationTargets->count();
-
-            $totalTarget += $targetCount;
-            $totalSubmitted += $submissionCount;
-
-            if ($facultyTarget->researchPublicationTargets->isEmpty())
-                continue;
-
-            $grouped = $facultyTarget->researchPublicationTargets
-                ->groupBy(fn($t) => strtoupper($t->journal_clasification));
-
-            foreach ($grouped as $classification => $targets) {
-
-                $value = match (strtolower($classification)) {
-                    'q1' => $facultyTarget->scopus_q1,
-                    'q2' => $facultyTarget->scopus_q2,
-                    'q3' => $facultyTarget->scopus_q3,
-                    'q4' => $facultyTarget->scopus_q4,
-                    'w' => $facultyTarget->hec_w,
-                    'x' => $facultyTarget->hec_x,
-                    'y' => $facultyTarget->hec_y,
-                    'medical' => $facultyTarget->medical_recognized,
-                    default => 0,
-                };
-
-                $count = $targets->count();
-
-                // Count international publications
-                $internationalCount = $targets->where('nationality', 'International')->count();
-
-                // Count primary author publications
-                $primaryAuthorCount = $targets->where('as_author_your_rank', 1)->count();
-
-                // Determine rating based on custom rules
-                $rating = $getRating($count, $value, $internationalCount, $primaryAuthorCount);
-
-                $firstTarget = $targets->first();
-
-                $data[] = [
-                    'target_category' => $firstTarget->target_category,
-                    'journal_clasification' => $classification,
-                    'value' => $value,
-                    'count' => $count,
-                    'percentage' => 0,
-                    'rating' => $rating,
-                    'color' => $ratingColors[$rating],
-                    'rank' => $firstTarget->rank ?? '-',
-                    'nationality' => $firstTarget->nationality ?? '-',
-                ];
-            }
-        }
-
-        // Overall percentage: total submitted / total target
-        $avgPercentage = ($totalTarget > 0) ? round(($totalSubmitted / $totalTarget) * 100, 2) : 0;
-
-        // Save globally
-        saveIndicatorPercentage(
-            $facultyId,
-            $keyPerformanceAreaId,
-            $indicatorCategoryId,
-            $indicatorId,
-            $avgPercentage
-        );
-
-        return $data;
-    }
-}
 
 if (!function_exists('ScopusPublicationsbk')) {
     function ScopusPublicationsbk($facultyId, $indicatorId)
