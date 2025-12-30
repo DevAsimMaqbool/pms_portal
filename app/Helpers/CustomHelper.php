@@ -1972,7 +1972,7 @@ if (!function_exists('lineManagerRemarksOnTasks')) {
 if (!function_exists('getTopIndicatorsOfEmployee')) {
     function getTopIndicatorsOfEmployee($employeeId)
     {
-        $indicators = IndicatorsPercentage::with('kpa:id,performance_area,short_code')
+        $indicators = IndicatorsPercentage::with('kpa:id,performance_area,short_code,icon')
             ->where('employee_id', $employeeId)
             ->get([
                 'key_performance_area_id',
@@ -2013,6 +2013,7 @@ if (!function_exists('getTopIndicatorsOfEmployee')) {
                     'kpa_id' => $kpaId,
                     'performance_area' => $kpa->performance_area ?? null,
                     'kpa_short_code' => $kpa->short_code ?? null,
+                    'icon' => $kpa->icon ?? null,
                     'avg' => $avg,
                     'color' => $color,
                     'rating' => $rating
@@ -2115,33 +2116,77 @@ if (!function_exists('getStudentFeedbackByBarcode')) {
             number_format($feedback->inspirational_leadership, 1),
         ];
     }
-}
+    if (!function_exists('getRoleIdByName')) {
+        function getRoleIdByName(?string $roleName = null)
+        {
+            if (empty($roleName)) {
+                return null;
+            }
 
-if (!function_exists('getFacultyClassWiseFeedback')) {
-    function getFacultyClassWiseFeedback(int $facultyId)
-    {
-        return StudentFeedbackClassWise::query()
-            ->join(
-                'faculty_member_classes',
-                'faculty_member_classes.code',
-                '=',
-                'student_feedback_class_wises.component_class'
-            )
-            ->where('faculty_member_classes.faculty_id', $facultyId)
-            ->select(
-                'student_feedback_class_wises.*',
-                'faculty_member_classes.code as class_code',
-                'faculty_member_classes.faculty_id'
-            )
-            ->get();
+            return Role::where('name', $roleName)->value('id') ?? null;
+        }
     }
 }
+if (!function_exists('indicatorsPercentageStatus')) {
+    function indicatorsPercentageStatus($user)
+    {
+        if ($user->indicators_percentage_status) {
+            return; // Already initialized
+        }
 
+        // Get all roles of the user
+        $roleIds = $user->roles->pluck('id')->toArray();
+        if (empty($roleIds)) {
+            $user->update(['indicators_percentage_status' => false]);
+            return;
+        }
 
+        // Get all assignments for these roles
+        $assignments = RoleKpaAssignment::whereIn('role_id', $roleIds)->get();
+        if ($assignments->isEmpty()) {
+            $user->update(['indicators_percentage_status' => false]);
+            return;
+        }
 
+        // Fetch all existing indicators for this user and these roles in ONE query
+        $existing = IndicatorsPercentage::where('employee_id', $user->id)
+            ->whereIn('role_id', $roleIds)
+            ->get(['role_id','key_performance_area_id','indicator_category_id','indicator_id'])
+            ->map(function($i) {
+                return $i->role_id . '-' . $i->key_performance_area_id . '-' . $i->indicator_category_id . '-' . $i->indicator_id;
+            })
+            ->toArray();
 
+        // Prepare missing rows
+        $insert = [];
+        foreach ($assignments as $row) {
+            $key = $row->role_id . '-' . $row->key_performance_area_id . '-' . $row->indicator_category_id . '-' . $row->indicator_id;
 
+            if (!in_array($key, $existing)) {
+                $insert[] = [
+                    'employee_id' => $user->id,
+                    'role_id' => $row->role_id,
+                    'key_performance_area_id' => $row->key_performance_area_id,
+                    'indicator_category_id' => $row->indicator_category_id,
+                    'indicator_id' => $row->indicator_id,
+                    'score' => 0,
+                    'rating' => 'NA',
+                    'color' => 'secondary',
+                    'badge_name' => null,
+                    'given_by' => null,
+                    'status' => '1',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
 
+        // Insert all missing rows at once
+        if (!empty($insert)) {
+            IndicatorsPercentage::insert($insert);
+        }
 
-
-
+        // Mark user as initialized
+        $user->update(['indicators_percentage_status' => true]);
+    }
+}

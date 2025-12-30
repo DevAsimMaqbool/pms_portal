@@ -22,7 +22,11 @@
       font-size: 13px !important;
     }
 
-    .bg-orange,
+    
+    .bg-orange {
+      background-color: #fd7e13 !important;
+      color: #fd7e13 !important
+    }
     .bg-label-orange {
 
       background-color: color-mix(in sRGB, var(--bs-paper-bg) var(--bs-bg-label-tint-amount), var(--bs-orange)) !important;
@@ -295,36 +299,36 @@
                                           </div>
                       <p class="card-subtitle">Welcome to your Performance Hub</p>
 
-                    </div>
                   </div>
                 </div>
               </div>
-              <!--/ Generated Leads -->
-              <!-- Profit last month -->
-              <div class="col-lg-4 col-md-3 col-sm-6">
-                <div class="card h-100" style="background-color: #ac7cad;">
-                  <div class="card-body d-flex justify-content-center align-items-center ">
-                    <h6 class="mb-0 text-center text-white">As {{ucfirst(activeRole())}}</h6>
+            </div>
+            <!--/ Generated Leads -->
+            <!-- Profit last month -->
+            <div class="col-lg-4 col-md-3 col-sm-6">
+              <div class="card h-100" style="background-color: #ac7cad;">
+                <div class="card-body d-flex justify-content-center align-items-center ">
+                  <h6 class="mb-0 text-center text-white">As {{ucfirst(activeRole())}}</h6>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-3 col-sm-6">
+              <div class="card h-100 {{overallAvgScore(Auth::user()->employee_id)['color']}}">
+
+                <div class="card-body d-flex justify-content-center align-items-center">
+                  <h5 class="mb-0 text-center" id="avg-teachervalue">0%</h5>
+
+
                   </div>
                 </div>
               </div>
 
-              <div class="col-lg-4 col-md-3 col-sm-6">
-                <div class="card h-100">
-
-                  <div class="card-body d-flex justify-content-center align-items-center">
-                    <h4 class="mb-0 text-center">82%</h4>
-
-
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-3 col-sm-6">
-                <div class="card bg-success h-100" data-bs-toggle="tooltip" data-bs-placement="top"
-                  data-bs-custom-class="tooltip-success" data-bs-original-title="You’re going beyond what’s asked of you.">
-                  <div class="card-body d-flex justify-content-center align-items-center">
-                    <h4 class="mb-0 text-center text-white">EE</h4>
+            <div class="col-lg-4 col-md-3 col-sm-6">
+              <div class="card h-100" id="rating-teachercolor" data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-custom-class="tooltip-" data-bs-original-title="You’re going beyond what’s asked of you.">
+                <div class="card-body d-flex justify-content-center align-items-center">
+                  <h4 class="mb-0 text-center text-white" id="rating-teachervalue"></h4>
 
 
                   </div>
@@ -335,29 +339,44 @@
           </div>
           <!--/ Sales Overview -->
 
-          <!-- Website Analytics -->
-          <div class="col-lg-9 col-md-12">
-            <div class="swiper-reviews-carousel overflow-hidden">
-              <div class="swiper" id="swiper-reviews">
-                <div class="swiper-wrapper">
-                  @php
-  $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
-  $icon1 = ['tabler-book ', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
-  $colors1 = ['primary', 'success', 'warning', 'orange', 'danger'];
-  //$colors2 = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#0dcaf0'];
-  $colors2 = ['#0d6efd', '#198754', '#FFA500', '#FFF200', '#dc3545'];
-  $series1 = [90, 85, 70, 65, 50];
-  $index1 = 0;
+        <!-- Website Analytics -->
+        <div class="col-lg-9 col-md-12">
+          <div class="swiper-reviews-carousel overflow-hidden">
+            <div class="swiper" id="swiper-reviews">
+              <div class="swiper-wrapper">
+                @php
+  
+  $activeRoleId = getRoleIdByName(activeRole());
+  $result = getRoleAssignments(activeRole());
+  $icon1 = ['tabler-book', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
+  $static_color = ['primary', 'success', 'warning', 'orange', 'danger'];
   $index2 = 0;
-                  @endphp
-                  @foreach($result as $kpakey => $kpa)
-                    @php
+  $totalWeightSS = 0;
+                @endphp
+
+                @foreach($result as $kpakey => $kpa)
+                  @php
     $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
     $iconClass = $icon1[$index2 % count($icon1)];
-    $color1 = $colors1[$index2 % count($colors1)];
+    $iconClasscolor = $static_color[$index2 % count($static_color)];
     $index2++;
-                    @endphp
-                    {{-- <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
+
+    // Get dynamic average, rating, and color
+    $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
+    $kpaAvgWeightage = kpaAvgWeightage($kpa['id'], $activeRoleId);
+    $weight = $kpaAvgWeightage['kpa_weightage'];
+
+    $avg = $kpaResult['avg'];
+    $weight_ss = ($avg * $weight) / 100;
+    $totalWeightSS += $weight_ss;
+    $rating = $kpaResult['rating'];
+    $color = $kpaResult['color']; // this will be used for bg and bg-label
+
+    $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
+    $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
+
+                  @endphp
+                  {{-- <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
 
                       <!-- FRONT SIDE -->
                       <div class="card bg-{{ $color1 }} text-white h-100">
@@ -379,106 +398,129 @@
                         <div class="flip-card h-100">
                           <div class="flip-card-inner">
 
-                            <!-- FRONT -->
-                            <div class="flip-card-front card bg-{{ $color1 }} text-white">
+                          <!-- FRONT -->
+                          <div class="flip-card-front card bg-{{ $iconClasscolor }} text-white">
 
-                              <div class="card-body position-relative d-flex flex-column justify-content-between">
-                                <div>
-                                  <div class="d-flex align-items-center mb-1">
-                                    <div class="avatar me-4">
-                                      <span class="avatar-initial rounded bg-label-{{ $color1 }}">
-                                        <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
-                                      </span>
-                                    </div>
+                            <div class="card-body position-relative d-flex flex-column justify-content-between">
+                              <div>
+                                <div class="d-flex align-items-center mb-1">
+                                  <div class="avatar me-4">
+                                    <span class="avatar-initial rounded bg-label-{{ $iconClasscolor }}">
+                                      <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
+                                    </span>
                                   </div>
-                                  <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
                                 </div>
-                                <!-- Metrics bottom right -->
-                                <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
-                                  @if ($kpa['id'] == 1)
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
-                                  @elseif ($kpa['id'] == 2)
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
-                                  @elseif ($kpa['id'] == 3)
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
-                                  @elseif ($kpa['id'] == 4)
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
-                                  @elseif ($kpa['id'] == 5)
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
-                                  @elseif ($kpa['id'] == 6)
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
-                                  @elseif ($kpa['id'] == 7)
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
-                                    <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
-                                  @endif
-                                </div>
+                                <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
                               </div>
-
-                            </div>
-
-                            <!-- BACK -->
-                            <div class="flip-card-back card bg-info text-dark h-100">
-                              <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                                <div class="badge rounded p-2 bg-label-info mb-2"><i
-                                    class="icon-base ti {{ $iconClass }} icon-lg"></i>
-                                </div>
-                                <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
+                              <!-- Metrics bottom right -->
+                              {{-- <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
                                 @if ($kpa['id'] == 1)
-                                  <p class=" text-center mb-0 text-white fs-13">
-                                    Focuses on teaching quality, classroom management, and continuous improvement to enhance
-                                    student learning outcomes.
-                                  </p>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
                                 @elseif ($kpa['id'] == 2)
-                                  <p class="text-center mb-0 text-white fs-13">
-                                    Measures research output, quality, and supervision, emphasizing innovation and practical
-                                    application of research for societal and industry impact.
-                                  </p>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
                                 @elseif ($kpa['id'] == 3)
-                                  <p class="text-center mb-0 text-white fs-13">
-                                    Ensures financial health through diversified revenue, cost efficiency, strategic growth, and
-                                    reinvestment in institutional excellence.
-                                  </p>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
                                 @elseif ($kpa['id'] == 4)
-                                  <p class="text-center mb-0 text-white fs-13">
-                                    Tracks institutional success in achieving global engagement targets and providing students
-                                    with international exposure opportunities.
-                                  </p>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
                                 @elseif ($kpa['id'] == 5)
-                                  <p class="text-center mb-0 text-white fs-13">
-                                    Advances social and environmental impact through service, sustainability, civic engagement,
-                                    and community development initiatives.
-                                  </p>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
                                 @elseif ($kpa['id'] == 6)
-                                  <p class="text-center mb-0 text-white fs-13">
-                                    Builds institutional reputation and distinctiveness through excellence, stakeholder trust,
-                                    global linkages, and consistent quality.
-                                  </p>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
                                 @elseif ($kpa['id'] == 7)
-                                  <p class="text-center mb-0 text-white fs-13">
-                                    Promotes transparent, accountable, participative leadership ensuring alignment, trust,
-                                    compliance, and mission-driven institutional effectiveness.
-                                  </p>
-                                @elseif ($kpa['id'] == 13)
-                                  <p class="text-center mb-0 text-white fs-13">
-                                    Focuses on active involvement in departmental and institutional activities to promote
-                                    collaboration, visibility, and shared success.
-                                  </p>
-                                @elseif ($kpa['id'] == 14)
-                                  <p class="text-center mb-0 text-white fs-13">
-                                    Represents ethical conduct and leadership grounded in integrity, empathy, humility, and
-                                    accountability.
-                                  </p>
-                                @else
-                                  <p class="text-center mb-0 text-white fs-13">Other text</p>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
+                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
                                 @endif
+                              </div> --}}
+                                
+                                <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
+                                <div class="mb-1">
+                                  <span class="fw-semibold">Score </span> <span
+                                    class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
+                                </div>
+                                <div class="mb-1">
+                                  <span class="fw-semibold">Rating </span> <span
+                                    class="badge bg-label-{{ $color }}">{{ $rating }}</span>
+                                </div>
+                                <div class="mb-1">
+                                  <span class="fw-semibold">Weight </span> <span
+                                    class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
+                                </div>
+                                <div>
+                                  <span class="fw-semibold">Weighted Score </span> <span
+                                    class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
+                                </div>
                               </div>
+                              <!-- /matrics-->
+
+
+
                             </div>
+
+                            </div>
+
+                          <!-- BACK -->
+                          <div class="flip-card-back card bg-{{ $iconClasscolor }} text-dark h-100">
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                              <div class="badge rounded p-2 bg-label-{{ $iconClasscolor }} mb-2"><i
+                                  class="icon-base ti {{ $iconClass }} icon-lg"></i>
+                              </div>
+                              <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
+                              @if ($kpa['id'] == 1)
+                                <p class=" text-center mb-0 text-white fs-13">
+                                  Focuses on teaching quality, classroom management, and continuous improvement to enhance
+                                  student learning outcomes.
+                                </p>
+                              @elseif ($kpa['id'] == 2)
+                                <p class="text-center mb-0 text-white fs-13">
+                                  Measures research output, quality, and supervision, emphasizing innovation and practical
+                                  application of research for societal and industry impact.
+                                </p>
+                              @elseif ($kpa['id'] == 3)
+                                <p class="text-center mb-0 text-white fs-13">
+                                  Ensures financial health through diversified revenue, cost efficiency, strategic growth, and
+                                  reinvestment in institutional excellence.
+                                </p>
+                              @elseif ($kpa['id'] == 4)
+                                <p class="text-center mb-0 text-white fs-13">
+                                  Tracks institutional success in achieving global engagement targets and providing students
+                                  with international exposure opportunities.
+                                </p>
+                              @elseif ($kpa['id'] == 5)
+                                <p class="text-center mb-0 text-white fs-13">
+                                  Advances social and environmental impact through service, sustainability, civic engagement,
+                                  and community development initiatives.
+                                </p>
+                              @elseif ($kpa['id'] == 6)
+                                <p class="text-center mb-0 text-white fs-13">
+                                  Builds institutional reputation and distinctiveness through excellence, stakeholder trust,
+                                  global linkages, and consistent quality.
+                                </p>
+                              @elseif ($kpa['id'] == 7)
+                                <p class="text-center mb-0 text-white fs-13">
+                                  Promotes transparent, accountable, participative leadership ensuring alignment, trust,
+                                  compliance, and mission-driven institutional effectiveness.
+                                </p>
+                              @elseif ($kpa['id'] == 13)
+                                <p class="text-center mb-0 text-white fs-13">
+                                  Focuses on active involvement in departmental and institutional activities to promote
+                                  collaboration, visibility, and shared success.
+                                </p>
+                              @elseif ($kpa['id'] == 14)
+                                <p class="text-center mb-0 text-white fs-13">
+                                  Represents ethical conduct and leadership grounded in integrity, empathy, humility, and
+                                  accountability.
+                                </p>
+                              @else
+                                <p class="text-center mb-0 text-white fs-13">Other text</p>
+                              @endif
+                            </div>
+                          </div>
 
                           </div>
                         </div>
@@ -973,6 +1015,72 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      let total = {{ $totalWeightSS }};
+      total = parseFloat(total.toFixed(1));
+      function getRatingAndColor(percentage) {
+      let rating = '';
+      let color = '';
+      let tooltipText = '';
+      let tooltipClass = '';
+      if (percentage >= 90) {
+        rating = 'OS';
+        color = '#6EA8FE';
+        tooltipText = 'You’re achieving excellence with distinction.You set the pace for others to follow.';
+        tooltipClass = 'tooltip-primary';
+      } else if (percentage >= 80) {
+        rating = 'EE';
+        color = '#28c76f';
+        tooltipText = 'You’re going beyond what’s asked of you.Keep shining — your impact inspires others.';
+        tooltipClass = 'tooltip-success';
+      } else if (percentage >= 70) {
+        rating = 'ME';
+        color = '#ffcb9a';
+        tooltipText = 'You’re doing well and meeting your goals.Keep your consistency — it’s your strength.';
+        tooltipClass = 'tooltip-warning';
+      } else if (percentage >= 60) {
+        rating = 'NI';
+        color = '#fd7e13';
+        tooltipText = 'You’re on your way — just refine and push forward.Every effort moves you closer to success.';
+        tooltipClass = 'tooltip-orange';
+      } else if (percentage > 0) {
+        rating = 'BE';
+        color = '#ff4c51';
+        tooltipText = 'Not quite there yet — but growth starts here.Reflect. Refocus. Rise higher.';
+        tooltipClass = 'tooltip-danger';
+      } else {
+        rating = 'NA';
+        color = '#000000';
+        tooltipText = 'NA';
+        tooltipClass = 'tooltip-danger';
+      }
+      return { rating, color, tooltipText, tooltipClass };
+    }
+
+    let result = getRatingAndColor(total);
+    let avgElement = document.getElementById('avg-teachervalue');
+    let ratingElement = document.getElementById('rating-teachervalue');
+    let ratingColor = document.getElementById('rating-teachercolor');
+
+    if (avgElement) {
+
+      avgElement.innerText = total.toFixed(1) + '%';
+    }
+    if (ratingElement) {
+      ratingElement.innerText = result.rating;
+    }
+    if (ratingColor) {
+      ratingColor.style.backgroundColor = result.color;
+      ratingColor.setAttribute('data-bs-original-title', result.tooltipText);
+      ratingColor.setAttribute('data-bs-custom-class', result.tooltipClass);
+      const oldTooltip = bootstrap.Tooltip.getInstance(ratingColor);
+      if (oldTooltip) {
+        oldTooltip.dispose();
+      }
+
+      // 🟢 Recreate tooltip so custom class is applied
+      new bootstrap.Tooltip(ratingColor);
+    }
+
       const elements = document.querySelectorAll('.text-cut');
 
       function fitToOneLine(el) {
