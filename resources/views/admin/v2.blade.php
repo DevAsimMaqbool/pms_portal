@@ -607,14 +607,14 @@
                               <small class="text-dark text-cut-hot">Student Satisfaction</small>
                             </div>
                           </div>
-                        </div>
-                        <div class="d-flex flex-grow-1 align-items-center">
-                          <div class="progress w-100 me-4" style="height:8px;">
-                            <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$average}}%"
-                              aria-valuenow="{{$average}}" aria-valuemin="0" aria-valuemax="100"></div>
+                          <div class="d-flex flex-grow-1 align-items-center">
+                            <div class="progress w-100 me-4" style="height:8px;">
+                              <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$average}}%"
+                                aria-valuenow="{{$average}}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="text-body-secondary">{{number_format($average, 1)}}%</span>
+                            <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
                           </div>
-                          <span class="text-body-secondary">{{number_format($average, 1)}}%</span>
-                          <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
                         </div>
                       </div>
 
