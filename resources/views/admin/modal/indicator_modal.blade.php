@@ -36,6 +36,9 @@
         vertical-align: middle;
     }
 </style>
+ @php
+ $activeRoleId = getRoleIdByName(activeRole());                                           
+ @endphp
 <!--  Payment Methods modal -->
 <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -622,7 +625,7 @@
                                     <tbody>
 
                                         @php
-                                            $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, 120);
+                                            $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, $activeRoleId, 120);
 
                                         @endphp
                                         @foreach ($CompletionofCourseFolders as $CompletionofCourser)
@@ -740,7 +743,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $ComplianceandUsageofLMS = ComplianceandUsageofLMS(Auth::user()->employee_id, 121);
+                                            $ComplianceandUsageofLMS = ComplianceandUsageofLMS(Auth::user()->employee_id, $activeRoleId, 121);
 
                                         @endphp
                                         @foreach ($ComplianceandUsageofLMS as $ComplianceandUsageofLMSData)
@@ -1103,7 +1106,7 @@
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-                                            $att = myClasses(Auth::user()->faculty_id);
+                                            $att = myClasses(Auth::user()->faculty_id,$activeRoleId);
                                             $sr = 1;
                                         @endphp
 
@@ -1600,7 +1603,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $facultyData = ScopusPublications(Auth::user()->employee_id, 128);
+                                            $facultyData = ScopusPublications(Auth::user()->employee_id, $activeRoleId, 128);
                                             $sr = 1;
                                         @endphp
                                         @foreach ($facultyData as $row)
@@ -1673,7 +1676,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $ResearchProductivityofPGStudents = ResearchProductivityofPGStudents(Auth::user()->employee_id, 128);
+                                            $ResearchProductivityofPGStudents = ResearchProductivityofPGStudents(Auth::user()->employee_id, $activeRoleId, 128);
                                         @endphp
                                         @foreach ($ResearchProductivityofPGStudents as $ResearchProductivityofPGStudent)
                                             <tr>
@@ -2011,7 +2014,7 @@
                         <div class="tab-pane fade" id="LineManagersReview&RatingonTasks-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 @php
-                                    $feedback = lineManagerRatingOnTasks(Auth::user()->employee_id)->first();
+                                    $feedback = lineManagerRatingOnTasks(Auth::user()->employee_id, $activeRoleId)->first();
                                 @endphp
 
                                 <table class="table table-hover align-middle custom-table">
@@ -2171,7 +2174,7 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             @php
-                                $feedbacks = lineManagerRatingOnEvents(Auth::user()->employee_id);
+                                $feedbacks = lineManagerRatingOnEvents(Auth::user()->employee_id,$activeRoleId);
                             @endphp
 
                             <table class="table table-striped align-middle custom-table">
@@ -2439,7 +2442,7 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $data = MultidisciplinaryProjects(Auth::user()->employee_id, 136);
+                                        $data = MultidisciplinaryProjects(Auth::user()->employee_id, $activeRoleId, 136);
 
                                     @endphp
                                     @foreach ($data as $row)
@@ -2499,7 +2502,7 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $ResearchIncomes = CommercialGainsCounsultancyResearchIncome(Auth::user()->employee_id, 137);
+                                        $ResearchIncomes = CommercialGainsCounsultancyResearchIncome(Auth::user()->employee_id, $activeRoleId, 137);
 
                                     @endphp
                                     @foreach ($ResearchIncomes as $ResearchIncome)
@@ -2559,7 +2562,7 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $data = PatentsIntellectualProperty(Auth::user()->employee_id, 138);
+                                        $data = PatentsIntellectualProperty(Auth::user()->employee_id, $activeRoleId, 138);
 
                                     @endphp
                                     @foreach ($data as $row)

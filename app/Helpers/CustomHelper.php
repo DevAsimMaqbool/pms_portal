@@ -230,7 +230,7 @@ function myClassesAttendance($facultyId)
         ->get();
 }
 
-function myClasses($facultyId)
+function myClasses($facultyId,$activeRoleId)
 {
     $classes = FacultyMemberClass::with([
         'attendances' => function ($query) {
@@ -252,6 +252,7 @@ function myClasses($facultyId)
     }
     saveIndicatorPercentage(
         $facultyId = getUserID($facultyId),
+        $role_id=$activeRoleId,
         $keyPerformanceAreaId = 1,
         $indicatorCategoryId = 3,
         $indicatorId = 122,
@@ -441,7 +442,7 @@ function myClassesAttendanceData($facultyId)
         });
 }
 if (!function_exists('ScopusPublications')) {
-    function ScopusPublications($facultyId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
+    function ScopusPublications($facultyId,$activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
     {
         $facultyTargets = FacultyTarget::with([
             'researchPublicationTargets' => function ($query) use ($indicatorId) {
@@ -552,6 +553,7 @@ if (!function_exists('ScopusPublications')) {
 
         saveIndicatorPercentage(
             $facultyId,
+            $role_id=$activeRoleId,
             $keyPerformanceAreaId,
             $indicatorCategoryId,
             $indicatorId,
@@ -750,7 +752,7 @@ if (!function_exists('ScopusPublicationsbk')) {
     }
 }
 
-function PatentsIntellectualProperty($facultyId, $indicator_id)
+function PatentsIntellectualProperty($facultyId, $activeRoleId, $indicator_id)
 {
     $facultyTargets = FacultyTarget::with([
         'intellectualPropertyTargets' => function ($query) use ($indicator_id) {
@@ -810,6 +812,7 @@ function PatentsIntellectualProperty($facultyId, $indicator_id)
     // ✅ Save globally
     saveIndicatorPercentage(
         $facultyId,
+        $role_id=$activeRoleId,
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
@@ -819,7 +822,7 @@ function PatentsIntellectualProperty($facultyId, $indicator_id)
     return $facultyTargets;
 }
 
-function CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
+function CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, $indicator_id)
 {
     $commercial = FacultyTarget::with([
         'commercialGainsCounsultancyTargets' => function ($query) use ($indicator_id) {
@@ -882,6 +885,7 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
     // ✅ Save globally
     saveIndicatorPercentage(
         $facultyId,
+        $role_id=$activeRoleId,
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
@@ -890,7 +894,7 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $indicator_id)
 
     return $commercial;
 }
-function MultidisciplinaryProjects($facultyId, $indicatorId)
+function MultidisciplinaryProjects($facultyId, $activeRoleId, $indicatorId)
 {
     $facultyTargets = FacultyTarget::with([
         'achievementOfMultidisciplinaryProjectsTarget' => function ($query) use ($indicatorId) {
@@ -961,6 +965,7 @@ function MultidisciplinaryProjects($facultyId, $indicatorId)
     // -------------------------
     saveIndicatorPercentage(
         $facultyId,
+        $role_id=$activeRoleId,
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicatorId = 136,
@@ -1025,7 +1030,7 @@ function noofGrantsWon($facultyId, $indicator_id)
     }
     return $facultyTargets;
 }
-function CompletionofCourseFolder($facultyId, $indicator_id)
+function CompletionofCourseFolder($facultyId, $activeRoleId, $indicator_id)
 {
     $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember', 'facultyClass'])
         ->where('faculty_member_id', $facultyId)
@@ -1073,6 +1078,7 @@ function CompletionofCourseFolder($facultyId, $indicator_id)
     // Save to IndicatorsPercentage table
     saveIndicatorPercentage(
         $facultyId,
+        $role_id=$activeRoleId,
         $keyPerformanceAreaId = 1,
         $indicatorCategoryId = 3,
         $indicator_id,
@@ -1082,7 +1088,7 @@ function CompletionofCourseFolder($facultyId, $indicator_id)
     return $CompletionOfCourseFolder;
 }
 
-function ComplianceandUsageofLMS($facultyId, $indicator_id)
+function ComplianceandUsageofLMS($facultyId, $activeRoleId, $indicator_id)
 {
     $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember', 'facultyClass'])
         ->where('faculty_member_id', $facultyId)
@@ -1130,6 +1136,7 @@ function ComplianceandUsageofLMS($facultyId, $indicator_id)
     // ✅ Save globally (corrected)
     saveIndicatorPercentage(
         $facultyId,
+        $role_id=$activeRoleId,
         $keyPerformanceAreaId = 1,
         $indicatorCategoryId = 3,
         $indicator_id,
@@ -1207,7 +1214,7 @@ if (!function_exists('lineManagerRatingOnTasksbk')) {
 }
 
 if (!function_exists('lineManagerRatingOnTasks')) {
-    function lineManagerRatingOnTasks($facultyId)
+    function lineManagerRatingOnTasks($facultyId, $activeRoleId)
     {
         $feedbacks = LineManagerFeedback::where('employee_id', $facultyId)->get();
 
@@ -1243,6 +1250,7 @@ if (!function_exists('lineManagerRatingOnTasks')) {
         // Save overall average to database
         saveIndicatorPercentage(
             $faculty_id = $facultyId,
+            $role_id=$activeRoleId,
             $keyPerformanceAreaId = 13,  // set appropriate KPA ID
             $indicatorCategoryId = 27,   // set appropriate category ID
             $indicatorId = 188,         // set appropriate indicator ID
@@ -1254,7 +1262,7 @@ if (!function_exists('lineManagerRatingOnTasks')) {
 }
 
 if (!function_exists('saveIndicatorPercentage')) {
-    function saveIndicatorPercentage($employeeId, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score)
+    function saveIndicatorPercentage($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score)
     {
         // Determine color and rating based on score
         // if ($score >= 90 && $score <= 100) {
@@ -1301,6 +1309,7 @@ if (!function_exists('saveIndicatorPercentage')) {
         IndicatorsPercentage::updateOrCreate(
             [
                 'employee_id' => $employeeId,
+                'role_id' => $role_id,
                 'key_performance_area_id' => $keyPerformanceAreaId,
                 'indicator_category_id' => $indicatorCategoryId,
                 'indicator_id' => $indicatorId,
@@ -1316,7 +1325,7 @@ if (!function_exists('saveIndicatorPercentage')) {
 
 
 if (!function_exists('lineManagerRatingOnEvents')) {
-    function lineManagerRatingOnEvents($facultyId)
+    function lineManagerRatingOnEvents($facultyId,$activeRoleId)
     {
         $feedbacks = LineManagerEventFeedback::where('employee_id', $facultyId)->get();
 
@@ -1355,6 +1364,7 @@ if (!function_exists('lineManagerRatingOnEvents')) {
             // Save to indicators_percentages table automatically
             saveIndicatorPercentage(
                 $faculty_id = $facultyId,
+                $role_id=$activeRoleId,
                 $keyPerformanceAreaId = 13,   // set appropriate KPA ID
                 $indicatorCategoryId = 28,    // set appropriate category ID
                 $indicatorId = 189,           // set appropriate indicator ID
@@ -1396,7 +1406,7 @@ function avgKpaScore($employeeId, $kpaId)
 }
 
 if (!function_exists('ResearchProductivityofPGStudents')) {
-    function ResearchProductivityofPGStudents($facultyId, $indicatorId)
+    function ResearchProductivityofPGStudents($facultyId, $activeRoleId, $indicatorId)
     {
         $facultyTargets = FacultyTarget::with([
             'researchPublicationTargets' => function ($query) use ($indicatorId) {
@@ -1503,6 +1513,7 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
 
         saveIndicatorPercentage(
             $facultyId,
+            $role_id=$activeRoleId,
             $keyPerformanceAreaId = 2,
             $indicatorCategoryId = 6,
             $indicatorId = 133,
@@ -1798,11 +1809,11 @@ function Research_publication_count($facultyId, $indicator_id)
 
     return $facultyTargets;
 }
-function Research_Innovation_Commercialization($facultyId, $indicator_id)
+function Research_Innovation_Commercialization($facultyId, $activeRoleId, $indicator_id)
 {
-    $PIP = PatentsIntellectualProperty($facultyId, 138)->first();
-    $CG = CommercialGainsCounsultancyResearchIncome($facultyId, 137)->first();
-    $MP = MultidisciplinaryProjects($facultyId, 136)->first();
+    $PIP = PatentsIntellectualProperty($facultyId, $activeRoleId, 138)->first();
+    $CG = CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, 137)->first();
+    $MP = MultidisciplinaryProjects($facultyId, $activeRoleId, 136)->first();
     $RP = Research_publication_count($facultyId, 128)->first();
 
 

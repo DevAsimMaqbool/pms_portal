@@ -590,6 +590,7 @@
   [$rating, $color] = ratingMeta($average);
   saveIndicatorPercentage(
     Auth::user()->employee_id,
+    $activeRoleId,
     $keyPerformanceAreaId = 1,
     $indicatorCategoryId = 23,
     $indicator_id = 182,
