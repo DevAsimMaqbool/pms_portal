@@ -174,6 +174,7 @@ class PermissionController extends Controller
 
         // Determine role based on ACTIVE ROLE (role switching)
         $activeRole = activeRole(); // use session active role
+        $activeRoleId = getRoleIdByName($activeRole);
 
         $role = match ($activeRole) {
             'teacher' => $user->roles->firstWhere('name', 'Teacher')
@@ -238,7 +239,7 @@ class PermissionController extends Controller
         // Return views based on active role context
         switch ($activeRole) {
             case 'teacher':
-                $researchData = Research_Innovation_Commercialization($employee->employee_id, 0);
+                $researchData = Research_Innovation_Commercialization($employee->employee_id,$activeRoleId, 0);
                 return view('admin.v2', compact('employee', 'dataset1', 'researchData'));
             case 'hod':
                 return view('admin.hod-v2', compact('employee'));
