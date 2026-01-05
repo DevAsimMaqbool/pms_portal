@@ -172,7 +172,8 @@ class KeyPerformanceAreaController extends Controller
     public function getIndicators(Request $request)
     {
         $employeeId = Auth::user()->employee_id; // logged-in employee
-        $userRoleId = Auth::user()->roles->firstWhere('name', Auth::user()->getRoleNames()->first())->id;
+        //$activeRoleId = Auth::user()->roles->firstWhere('name', Auth::user()->getRoleNames()->first())->id;
+        $userRoleId = getRoleIdByName(activeRole());
 
         // Fetch indicators assigned to this category & role
         $indicators = Indicator::whereIn('id', function ($query) use ($request, $userRoleId) {
@@ -186,6 +187,7 @@ class KeyPerformanceAreaController extends Controller
         // Fetch saved percentages for this employee
         $savedPercentages = \App\Models\IndicatorsPercentage::where('employee_id', $employeeId)
             ->whereIn('indicator_id', $indicators->pluck('id'))
+            ->where('role_id', $userRoleId)
             ->get()
             ->keyBy('indicator_id'); // keyed by indicator_id for fast lookup
 
