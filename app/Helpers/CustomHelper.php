@@ -1387,9 +1387,11 @@ if (!function_exists('lineManagerRatingOnEvents')) {
 
 function avgKpaScore($employeeId, $kpaId)
 {
+    $userRoleId = getRoleIdByName(activeRole());
     // Get all scores for the employee and KPA
     $scores = IndicatorsPercentage::where('employee_id', $employeeId)
         ->where('key_performance_area_id', $kpaId)
+        ->where('role_id', $userRoleId)
         ->pluck('score'); // get array of scores
 
     if ($scores->isEmpty()) {
@@ -1401,7 +1403,6 @@ function avgKpaScore($employeeId, $kpaId)
 
     // Calculate average
     $avg = $cappedScores->avg();
-
     return round($avg, 2);
 }
 
