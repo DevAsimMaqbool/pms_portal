@@ -126,9 +126,13 @@ class KeyPerformanceAreaController extends Controller
     }
     public function kpa($id)
     {
-        $result = getRoleAssignments(Auth::user()->getRoleNames()->first());
+        $userRole = activeRole();
+        $displayRole = match (strtolower($userRole)) {
+            'hod' => 'HOD',
+            default => ucfirst($userRole),
+        };
+        $result = getRoleAssignments($displayRole);
         $area = collect($result)->firstWhere('id', $id); // pick one KPA
-
         if (!$area) {
             return view("admin.error");
         }

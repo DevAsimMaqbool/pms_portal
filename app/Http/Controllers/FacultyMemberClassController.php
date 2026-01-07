@@ -147,10 +147,12 @@ class FacultyMemberClassController extends Controller
                 ->leftJoin('odoocms_class as c', 'c.id', '=', 'cf.class_id')
                 ->leftJoin('odoocms_academic_term as oat', 'oat.id', '=', 'cf.term_id')
                 ->leftJoin('odoocms_career as cr', 'cr.id', '=', 'c.career_id')
-                ->where('cf.faculty_staff_id', $faculty_id)
+                ->where('oat.id', 51)
                 ->where('oat.active_for_roll', 'true')
-                ->limit(100)
+                ->limit(500)
+                ->offset(8000)
                 ->select([
+                    'cf.faculty_staff_id as faculty_id',
                     'c.id as class_id',
                     'c.name as class_name',
                     'c.code',
@@ -161,12 +163,12 @@ class FacultyMemberClassController extends Controller
                     'cr.code as career_code',
                 ])
                 ->get();
-
+            //dd($records);
             foreach ($records as $record) {
 
                 FacultyMemberClass::updateOrCreate(
                     [
-                        'faculty_id' => $faculty_id,
+                        'faculty_id' => $record->faculty_id,
                         'class_id' => $record->class_id,
                         'term_id' => $record->term_id,
                     ],
@@ -312,25 +314,8 @@ class FacultyMemberClassController extends Controller
 
     public function classesAttendance()
     {
-        // $attendanceSummary = DB::connection('pgsql')
-        //     ->table('odoocms_class_attendance as ca')
-        //     ->leftJoin('odoocms_class_attendance_line as cal', 'cal.attendance_id', '=', 'ca.id')
-        //     ->leftJoin('odoocms_program as p', 'p.id', '=', 'ca.program_id')
-        //     ->select([
-        //         DB::raw('MAX(ca.class_id) as class_id'),
-        //         DB::raw('MAX(cal.faculty_updated_id) as faculty_id'),
-        //         DB::raw('MAX(p.name) as program_name'),
-        //         DB::raw('MAX(cal.state) as state'),
-        //         DB::raw('BOOL_OR(ca.att_marked) as att_marked'),
-        //         DB::raw('COUNT(cal.student_id) as total_no_of_students'),
-        //         DB::raw("COUNT(cal.student_id) FILTER (WHERE cal.present = 'true') as present_students_count"),
-        //         DB::raw("COUNT(cal.student_id) FILTER (WHERE cal.present = 'false') as absent_students_count")
-        //     ])
-        //     ->where('ca.date_class', $date)
-        //     ->groupBy('ca.id')
-        //     ->get();
-
-        $date = '2025-12-01';
+        $from_date = '2025-12-01';
+        $to_date = '2025-12-28';
 
         $attendanceSummary = DB::connection('pgsql')
             ->table('odoocms_class_attendance as ca')
@@ -343,20 +328,22 @@ class FacultyMemberClassController extends Controller
                 DB::raw('MAX(p.name) as program_name'),
                 DB::raw('MAX(cal.state) as state'),
                 DB::raw('MAX(cal.term_id) as term_id'),
+                DB::raw('MAX(cal.create_date) as class_date'),
                 DB::raw('MAX(oat.name) as term'),
                 DB::raw('BOOL_OR(ca.att_marked) as att_marked'),
                 DB::raw('COUNT(cal.student_id) as total_no_of_students'),
                 DB::raw("COUNT(cal.student_id) FILTER (WHERE cal.present = 'true') as present_students_count"),
                 DB::raw("COUNT(cal.student_id) FILTER (WHERE cal.present = 'false') as absent_students_count")
             ])
-            ->where('ca.date_class', $date)
+            ->where('cal.term_id', 51)
+            //->whereDate('ca.date_class', $from_date)
+            ->whereBetween('ca.date_class', [$from_date, $to_date])
             ->groupBy('ca.id')
             ->get();
-        // dd($attendanceSummary);
         foreach ($attendanceSummary as $item) {
             FacultyClassAttendance::updateOrCreate(
                 [
-                    'class_date' => $date,
+                    'class_date' => $item->class_date,
                     'class_id' => $item->class_id,
                     'faculty_id' => $item->faculty_id,
                 ],
