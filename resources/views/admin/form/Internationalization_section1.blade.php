@@ -130,14 +130,14 @@
                                         <h5 class="card-header">Title of Activity / Program</h5>
                                         <div class="card-body"><textarea class="form-control" id="TitleOfActivity"
                                                 name="title_of_activity"
-                                                rows="1">{{ $submission->title_of_activity ?? '' }}</textarea></div>
+                                                rows="2">{{ $submission->title_of_activity ?? '' }}</textarea></div>
                                     </div>
 
                                     <div class="form-row-block">
                                         <h5 class="card-header">Brief Description of Activity</h5>
                                         <div class="card-body"><textarea class="form-control" id="BriefDescription"
                                                 name="brief_description_of_activity"
-                                                rows="1">{{ $submission->sitara_qiyadat_why ?? '' }}</textarea></div>
+                                                rows="2">{{ $submission->sitara_qiyadat_why ?? '' }}</textarea></div>
                                     </div>
 
                                     <div class="form-row-block">
