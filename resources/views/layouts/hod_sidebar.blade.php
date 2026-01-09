@@ -58,7 +58,12 @@
         </li>
 
         @php
-            $result = getRoleAssignments(Auth::user()->getRoleNames()->first(), null, 1);
+            $userRole = activeRole();
+            $displayRole = match (strtolower($userRole)) {
+                'hod' => 'HOD',
+                default => ucfirst($userRole),
+            };
+            $result = getRoleAssignments($displayRole, null, 1);
             $icons = icons();
           @endphp
 
