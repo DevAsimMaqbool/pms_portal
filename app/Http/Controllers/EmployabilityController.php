@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Employability;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class EmployabilityController extends Controller
 {
@@ -39,27 +42,57 @@ class EmployabilityController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'student_id' => 'required',
-            'secure_job' => 'required',
-        ]);
+        try { 
+            
+            if($request->form_status=='HOD'){
+                 $rules = [
+                    'indicator_id' => 'required',
+                    'student_id' => 'required|integer',
+                    'faculty_id' => 'required|integer',
+                    'program_id' => 'required|integer',
+                    'batch' => 'required',
+                    'passing_year' => 'required|digits:4',
+                    'employer_name' => 'required|string',
+                    'sector' => 'required|string',
+                    'salary' => 'required|integer|min:1',
+                    'market_competitive_salary' => 'required|in:Above,At Par,Low',
+                    'job_relevancy' => 'required|in:yes,no',
+                    'employer_satisfaction' => 'nullable|numeric|min:0|max:5',
+                    'graduate_satisfaction' => 'nullable|numeric|min:0|max:5',
+                    'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                ];
 
-        $userId = session('user_id');
-        $data = new Employability();
-        $data->student_id = $request->student_id;
-        $data->secure_job = $request->secure_job;
-        $data->job_relevancy = $request->job_relevancy;
-        $data->salary = $request->salary;
-        $data->job_nature = $request->job_nature;
-        $data->joining_date = $request->joining_date;
-        $data->created_by = '1338';
-        $data->updated_by = '1338';
-        $data->save();
-        return redirect()->route('forms.show', [
-            'id' => $request->student_id,
-            'slug' => 'Employability'
-        ])->with('message', 'Employability added successfully');
 
+                    $validator = Validator::make($request->all(), $rules);
+                    if ($validator->fails()) {
+                            return response()->json([
+                                'status' => 'error',
+                                'errors' => $validator->errors()
+                            ], 422);
+                        }
+                    $data = $validator->validated();    
+
+                        
+
+            }
+            $employeeId = Auth::user()->employee_id;
+            DB::beginTransaction();
+            $data['created_by'] = $employeeId;
+            $data['updated_by'] = $employeeId;
+
+            $record = Employability::create($data);
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Record saved successfully',
+                'data' => $record
+            ]);
+
+        } catch (\Exception $e) {
+             DB::rollBack();
+             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+        }
     }
 
     /**
