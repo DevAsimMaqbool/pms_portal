@@ -4,16 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Recovery extends Model
+class AdmissionTargetAchieved extends Model
 {
+
     protected $fillable = [
-        'indicator_id',
         'faculty_id',
         'department_id',
-        'period',
-        'recovery_target',
+        'admissions_campaign_id',
+        'admissions_target',
         'achieved_target',
         'form_status',
+        'indicator_id',
         'status',
         'update_history',
         'created_by',

@@ -42,6 +42,7 @@ use App\Http\Controllers\IndustrialProjectsController;
 use App\Http\Controllers\NoOfGrantsSubmitAndWonController;
 use App\Http\Controllers\ProductsDeliveredToIndustryController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdmissionTargetAchievedController;
 use App\Http\Controllers\CompletionOfCourseFolderController;
 use App\Http\Controllers\FacultyMemberClassController;
 use App\Http\Controllers\IndicatorCrudController;
@@ -51,6 +52,8 @@ use App\Http\Controllers\RatingRuleController;
 use App\Http\Controllers\PmsPolicyController;
 use App\Http\Controllers\SelfNominationController;
 use App\Http\Controllers\AssignBadgeController;
+use App\Http\Controllers\InternationalizationSectionController;
+use App\Http\Controllers\RecoveryController;
 use App\Http\Controllers\TermController;
 use Illuminate\Support\Facades\Route;
 
@@ -143,7 +146,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/assigned-forms', [AssignFormToUserController::class, 'showAssignedFormDropdown'])->name('forms.assigned');
     Route::get('/assigned-forms/view/{userId}/{title}', [AssignFormToUserController::class, 'view'])
         ->name('forms.assigned.view');
-    Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
+    //Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
+    
 
 
 
@@ -168,7 +172,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('achievement-ofmultidisciplinary', NoAchievementOfMultidisciplinaryProjectsTargetController::class);
         Route::resource('products-delivered-to-industry', ProductsDeliveredToIndustryController::class);
         Route::resource('industrial-projects', IndustrialProjectsController::class);
+        Route::resource('employability', EmployabilityController::class);
         Route::resource('faculty-target', FacultyTargetController::class);
+        Route::resource('admission-targets', AdmissionTargetAchievedController::class);
+        Route::resource('recovery', RecoveryController::class);
+        Route::resource('internationalization-section', InternationalizationSectionController::class);
         // routes/web.php
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
         Route::resource('completion-of-course-folder', CompletionOfCourseFolderController::class);

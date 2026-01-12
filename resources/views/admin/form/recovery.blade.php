@@ -27,7 +27,7 @@
                             <form id="researchForm" enctype="multipart/form-data" class="row">
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
-                                <input type="hidden" id="indicator_id" name="employability_id" value="103">
+                                <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
                                 <div class="row g-6 mt-0">
                                     <div id="grant-details-container">
                                         <div class="grant-group row g-3 mb-3 p-3 border border-primary">
@@ -142,3 +142,84 @@
     <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
 @endpush
+@push('script')
+    @if(auth()->user()->hasRole(['HOD']))
+        <script>
+            $(document).ready(function () {
+              
+              
+
+                 $('#researchForm').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
+                     // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                     
+                    $.ajax({
+                        url: "{{ route('recovery.store') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                            form[0].reset();
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            $('.select2').val(null).trigger('change');
+                              // Remove all extra grant groups and keep only the first one
+                            $('#grant-details-container .grant-group:not(:first)').remove();
+
+                            // Reset the proof container of the first group
+                            $('#grant-details-container .grant-group:first .proof-container').hide();
+
+                            // Reset index to 1
+                            grantIndex = 1;
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            // Clear previous errors before showing new ones
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                             if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+
+                            // Loop through all validation errors
+                            $.each(errors, function (field, messages) {
+                                let input = form.find('[name="' + field + '"]');
+
+                                if (input.length) {
+                                    input.addClass('is-invalid');
+
+                                    // Show error message under input
+                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                }
+                            });
+
+                        } else if (xhr.status === 409) {
+                            // 🔥 Duplicate record message
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Duplicate Entry',
+                                text: xhr.responseJSON.message
+                            });
+
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
+                        }
+                        }
+                    });
+                });
+
+            });
+        </script>
+    @endif
+    @endpush
