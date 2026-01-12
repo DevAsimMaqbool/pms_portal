@@ -13,9 +13,34 @@ class AdmissionTargetAchievedController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+         try {
+            $user = Auth::user();
+            $userId = Auth::id();
+            $employee_id = $user->employee_id;
+
+         if ($user->hasRole('HOD')) {
+                $status = $request->input('status');
+                if($status=="HOD"){
+                    $forms = AdmissionTargetAchieved::where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
+                        ->get();
+                }       
+            }
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'forms' => $forms
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Oops! Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -96,9 +121,28 @@ class AdmissionTargetAchievedController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+       $record = AdmissionTargetAchieved::findOrFail($id);
+
+        $request->validate([
+                'record_id' => 'required',
+                'faculty_id' => 'required|integer',
+                'department_id' => 'required|integer',
+                'admissions_campaign_id' => 'required|integer',
+                'admissions_target' => 'required|integer|min:0',
+                'achieved_target' => 'required|integer|min:0',
+    
+        ]);
+
+        $data = $request->only([
+                        'faculty_id', 'department_id', 'admissions_campaign_id', 'admissions_target','achieved_target'
+                    ]);
+                    $data['updated_by'] = Auth::user()->employee_id;
+
+                    $record->update($data);
+
+                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
     }
 
     /**

@@ -23,7 +23,12 @@
                 <div class="tab-content">
                     @if(auth()->user()->hasRole(['HOD']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <h5 class="mb-1">% Employability</h5>
+                             <div class="d-flex justify-content-between">
+                               <div>
+                                <h5 class="mb-1">% Employability</h5>
+                                </div>
+                                <a href="{{ route('indicators_crud.index', ['slug' => 'employability', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            </div> 
                             <form id="researchForm" enctype="multipart/form-data" class="row">
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="HOD" required>

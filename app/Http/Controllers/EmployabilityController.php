@@ -10,22 +10,52 @@ use Illuminate\Support\Facades\Validator;
 
 class EmployabilityController extends Controller
 {
+    // public function index(Request $request)
+    // {
+    //     try {
+    //         $data = Employability::all();
+    //         if ($request->ajax()) {
+    //             return response()->json($data);
+    //         }
+    //         return view('indicator_forms.employability');
+    //     } catch (\Exception $e) {
+    //         return apiResponse(
+    //             'Oops! Something went wrong',
+    //             [],
+    //             false,
+    //             500,
+    //             ''
+    //         );
+    //     }
+    // }
+
     public function index(Request $request)
     {
-        try {
-            $data = Employability::all();
-            if ($request->ajax()) {
-                return response()->json($data);
+         try {
+            $user = Auth::user();
+            $userId = Auth::id();
+            $employee_id = $user->employee_id;
+
+         if ($user->hasRole('HOD')) {
+                $status = $request->input('status');
+                if($status=="HOD"){
+                    $forms = Employability::where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
+                        ->get();
+                }       
             }
-            return view('indicator_forms.employability');
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'forms' => $forms
+                ]);
+            }
+
         } catch (\Exception $e) {
-            return apiResponse(
-                'Oops! Something went wrong',
-                [],
-                false,
-                500,
-                ''
-            );
+            return response()->json([
+                'message' => 'Oops! Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -116,15 +146,35 @@ class EmployabilityController extends Controller
      */
     public function update(Request $request, $id)
     {
+       $record = Employability::findOrFail($id);
+
         $request->validate([
-            'key_performance_area' => 'required',
+                'record_id' => 'required',
+                'student_id' => 'required|integer',
+                'faculty_id' => 'required|integer',
+                'program_id' => 'required|integer',
+                'batch' => 'required',
+                'passing_year' => 'required|digits:4',
+                'employer_name' => 'required|string',
+                'sector' => 'required|string',
+                'salary' => 'required|integer|min:1',
+                'market_competitive_salary' => 'required|in:Above,At Par,Low',
+                'job_relevancy' => 'required|in:yes,no',
+                'employer_satisfaction' => 'nullable|numeric|min:0|max:5',
+                'graduate_satisfaction' => 'nullable|numeric|min:0|max:5',
+    
         ]);
-        $userId = session('user_id');
-        $data = Employability::findOrFail($id);
-        $data->performance_area = $request->key_performance_area;
-        $data->updated_by = $userId;
-        $data->save();
-        return response()->json(['message' => 'data update successfully']);
+
+        $data = $request->only([
+                        'student_id', 'faculty_id', 'program_id', 'batch','passing_year',
+                        'employer_name','sector','salary','market_competitive_salary','job_relevancy','employer_satisfaction',
+                        'graduate_satisfaction'
+                    ]);
+                    $data['updated_by'] = Auth::user()->employee_id;
+
+                    $record->update($data);
+
+                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
     }
 
     /**
