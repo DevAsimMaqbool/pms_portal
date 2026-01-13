@@ -10,7 +10,6 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
 
 <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
 <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
 @endpush
 @section('content')
 <!-- Content -->
@@ -23,7 +22,12 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
 <div class="tab-content">
 @if(auth()->user()->hasRole(['HOD']))
 <div class="tab-pane fade show active" id="form1" role="tabpanel">
-<h5 class="mb-1">No of Professional Memberships attained vs targets</h5>
+<div class="d-flex justify-content-between">
+    <div>
+    <h5 class="mb-1">No of Professional Memberships attained vs targets</h5>
+    </div>
+    <a href="{{ route('indicators_crud.index', ['slug' => 'no_of_professional_memberships_attained_vs_targets', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+</div> 
 <form id="researchForm" enctype="multipart/form-data" class="row">
 @csrf
 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
@@ -33,7 +37,7 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
 <div class="grant-group row g-3 mb-3 p-3 border border-primary">
 <div class="col-md-6">
 <label for="type_of_membership" class="form-label">Type of Membership</label>
-<select name="type_of_membership" class="select2 form-select faculty-member"
+<select name="type_of_membership" id="type_of_membership" class="select2 form-select faculty-member"
 required>
 <option value="">-- Select Type --</option>
 <option value="individual_faculty">Individual Faculty</option>
@@ -44,13 +48,13 @@ required>
 <div class="col-md-6">
 <label for="name_of_professional_body" class="form-label">Name of Professional
 Body</label>
-<input type="text" name="name_of_professional_body" class="form-control"
+<input type="text" name="name_of_professional_body" id="name_of_professional_body" class="form-control"
 required>
 </div>
 
 <div class="col-md-6">
 <label for="category_of_body" class="form-label">Category of Body</label>
-<select name="category_of_body" class="select2 form-select faculty-member"
+<select name="category_of_body" id="category_of_body" class="select2 form-select faculty-member"
 required>
 <option value="">-- Select Program --</option>
 <option value="academic">Academic</option>
@@ -62,7 +66,7 @@ required>
 
 <div class="col-md-6">
 <label for="discipline" class="form-label">Discipline / Area</label>
-<select name="discipline" class="select2 form-select faculty-member" required>
+<select name="discipline" id="discipline" class="select2 form-select faculty-member" required>
 <option value="">-- Select Level --</option>
 <option value="business_management">Business & Management</option>
 <option value="economics_finance">Economics & Finance</option>
@@ -96,7 +100,7 @@ Accreditation</option>
 
 <div class="col-md-6">
 <label for="level" class="form-label">Level</label>
-<select name="level" class="select2 form-select faculty-member" required>
+<select name="level" id="level" class="select2 form-select faculty-member" required>
 <option value="">-- Select Level--</option>
 <option value="national">National</option>
 <option value="international">International</option>
@@ -105,7 +109,7 @@ Accreditation</option>
 
 <div class="col-md-6">
 <label for="country" class="form-label">Country (If International)</label>
-<select name="country[0][country]"
+<select name="country" id="country"
 class="country-dropdown select2 form-select">
 <option value="">Select Country</option>
 @foreach(getAllCountries() as $con)
@@ -118,7 +122,7 @@ class="country-dropdown select2 form-select">
 
 <div class="col-md-6">
 <label for="membership_status" class="form-label">Membership Status</label>
-<select name="membership_status" class="select2 form-select faculty-member" required>
+<select name="membership_status" id="membership_status" class="select2 form-select faculty-member" required>
 <option value="">-- Select Scope --</option>
 <option value="new">New</option>
 <option value="renewed">Renewed</option>
@@ -127,29 +131,29 @@ class="country-dropdown select2 form-select">
 
 <div class="col-md-6">
 <label class="form-label">Membership Start Date</label>
-<input type="date" name="membership_start_date" class="form-control" required>
+<input type="date" name="membership_start_date" id="membership_start_date" class="form-control" required>
 </div>
 <div class="col-md-6">
 <label class="form-label">Membership Valid Until</label>
-<input type="date" name="membership_valid_until" class="form-control" required>
+<input type="date" name="membership_valid_until" id="membership_valid_until" class="form-control" required>
 </div>
 
 <div class="col-md-6">
 <label class="fw-medium d-block form-label">Evidence Type</label>
 <div class="form-check form-check-inline mt-4">
-<input class="form-check-input" type="checkbox" id="certificate" value="certificate">
+<input class="form-check-input" type="checkbox" id="evidence_type" name="evidence_type[]" value="certificate" checked>
 <label for="certificate">Certificate</label>
 </div>
 <div class="form-check form-check-inline">
-<input class="form-check-input" type="checkbox" id="email_confirmation" value="email_confirmation">
+<input class="form-check-input" type="checkbox" id="evidence_type" name="evidence_type[]" value="email_confirmation">
 <label for="email_confirmation">Email Confirmation</label>
 </div>
 <div class="form-check form-check-inline">
-<input class="form-check-input" type="checkbox" id="invoice" value="invoice">
+<input class="form-check-input" type="checkbox" id="evidence_type" name="evidence_type[]" value="invoice">
 <label for="invoice">Invoice</label>
 </div>
 <div class="form-check form-check-inline">
-<input class="form-check-input" type="checkbox" id="mou" value="mou">
+<input class="form-check-input" type="checkbox" id="evidence_type" name="evidence_type[]" value="mou">
 <label for="mou">MOU</label>
 </div>
 </div>
@@ -157,14 +161,14 @@ class="country-dropdown select2 form-select">
 <div class="col-md-12">
 <label class="form-label d-block">Upload Supporting Document</label>
 <div>
-<input class="form-control" name="document_link" type="file" id="formFile">
+<input class="form-control" name="document_link" type="file" id="document_link">
 </div>
 </div>
 
 <div class="col-12 mt-4">
 <h6>Declaration</h6>
 <div class="form-check">
-<input class="form-check-input" type="checkbox" name="declaration" value="1">
+<input class="form-check-input" type="checkbox" name="declaration"  id="declaration"  value="1">
 <label class="form-check-label">I confirm that the information provided is accurate and supported by valid evidence.</label>
 </div>
 </div>
@@ -197,133 +201,83 @@ class="country-dropdown select2 form-select">
 <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
 <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
 <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
-<script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
-<script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
 @endpush
 @push('script')
-<script>
+    @if(auth()->user()->hasRole(['HOD']))
+        <script>
+            $(document).ready(function () {
 
-document.addEventListener("DOMContentLoaded", function () {
+                $('#researchForm').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
+                    // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
 
-// SVG stars
-const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-const starHalf = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='halfStarGradient'%3E%3Cstop offset='50%25' style='stop-color:%23FFD700' /%3E%3Cstop offset='50%25' style='stop-color:%239e9e9e' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23halfStarGradient)' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-const starOff = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%239e9e9e' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
+                    $.ajax({
+                        url: "{{ route('professional-membership.store') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                            form[0].reset();
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            $('.select2').val(null).trigger('change');
+                            // Remove all extra grant groups and keep only the first one
+                            $('#grant-details-container .grant-group:not(:first)').remove();
 
-// Employer Rating
-const employerRaty = new Raty(document.getElementById("employerRating"), {
-number: 5,
-half: true,
-starOn: starOn,
-starHalf: starHalf,
-starOff: starOff,
-click: function (score) {
-document.getElementById("employer_satisfaction").value = score;
-}
-}).init();
+                            // Reset the proof container of the first group
+                            $('#grant-details-container .grant-group:first .proof-container').hide();
 
-// Graduate Rating
-const graduateRaty = new Raty(document.getElementById("graduateRating"), {
-number: 5,
-half: true,
-starOn: starOn,
-starHalf: starHalf,
-starOff: starOff,
-click: function (score) {
-document.getElementById("graduate_satisfaction").value = score;
-}
-}).init();
+                            // Reset index to 1
+                            grantIndex = 1;
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            // Clear previous errors before showing new ones
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
 
-});
+                                // Loop through all validation errors
+                                $.each(errors, function (field, messages) {
+                                    let input = form.find('[name="' + field + '"]');
 
+                                    if (input.length) {
+                                        input.addClass('is-invalid');
 
+                                        // Show error message under input
+                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                    }
+                                });
 
+                            } else if (xhr.status === 409) {
+                                // 🔥 Duplicate record message
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Duplicate Entry',
+                                    text: xhr.responseJSON.message
+                                });
 
-</script>
-@if(auth()->user()->hasRole(['HOD']))
-<script>
-$(document).ready(function () {
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
+                        }
+                    });
+                });
 
-
-
-$('#researchForm').on('submit', function (e) {
-e.preventDefault();
-let form = $(this);
-let formData = new FormData(this);
-// Show loading indicator
-Swal.fire({
-title: 'Please wait...',
-allowOutsideClick: false,
-didOpen: () => {
-Swal.showLoading();
-}
-});
-
-$.ajax({
-url: "{{ route('employability.store') }}",
-type: "POST",
-data: formData,
-contentType: false,
-processData: false,
-success: function (response) {
-Swal.close();
-Swal.fire({ icon: 'success', title: 'Success', text: response.message });
-form[0].reset();
-form.find('.invalid-feedback').remove();
-form.find('.is-invalid').removeClass('is-invalid');
-$('.select2').val(null).trigger('change');
-// Remove all extra grant groups and keep only the first one
-$('#grant-details-container .grant-group:not(:first)').remove();
-
-// Reset the proof container of the first group
-$('#grant-details-container .grant-group:first .proof-container').hide();
-
-// Reset index to 1
-grantIndex = 1;
-
-document.getElementById("employer_satisfaction").value = "";
-document.getElementById("graduate_satisfaction").value = "";
-
-// Reset stars
-employerRaty.setScore(0);
-graduateRaty.setScore(0);
-},
-error: function (xhr) {
-Swal.close();
-// Clear previous errors before showing new ones
-form.find('.invalid-feedback').remove();
-form.find('.is-invalid').removeClass('is-invalid');
-if (xhr.status === 422) {
-let errors = xhr.responseJSON.errors;
-
-// Loop through all validation errors
-$.each(errors, function (field, messages) {
-let input = form.find('[name="' + field + '"]');
-
-if (input.length) {
-input.addClass('is-invalid');
-
-// Show error message under input
-input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-}
-});
-
-} else if (xhr.status === 409) {
-// 🔥 Duplicate record message
-Swal.fire({
-icon: 'error',
-title: 'Duplicate Entry',
-text: xhr.responseJSON.message
-});
-
-} else {
-Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
-}
-}
-});
-});
-
-});
-</script>
-@endif
+            });
+        </script>
+    @endif
 @endpush

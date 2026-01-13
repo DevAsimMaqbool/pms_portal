@@ -23,7 +23,12 @@
                 <div class="tab-content">
                     @if(auth()->user()->hasRole(['HOD']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <h5 class="mb-1">% of Alumni giving back to the institute</h5>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                <h5 class="mb-1">% of Alumni giving back to the institute</h5>
+                                </div>
+                                <a href="{{ route('indicators_crud.index', ['slug' => 'no_of_professional_memberships_attained_vs_targets', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            </div> 
                             <form id="researchForm" enctype="multipart/form-data" class="row">
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
@@ -33,7 +38,7 @@
                                         <div class="grant-group row g-3 mb-3 p-3 border border-primary">
                                             <div class="col-md-6">
                                                 <label for="academic_year" class="form-label">Academic Year</label>
-                                                <select name="academic_year" class="select2 form-select faculty-member"
+                                                <select name="academic_year" id="academic_year" class="select2 form-select faculty-member"
                                                     required>
                                                     <option value="">-- Select Year --</option>
                                                     <option value="2024-25">2024-25</option>
@@ -47,12 +52,12 @@
 
                                             <div class="col-md-6">
                                                 <label for="faculty_id" class="form-label">Alumni Name / ID</label>
-                                                <input type="text" name="alumni_name" value="" class="form-control" required>
+                                                <input type="text" name="alumni_name" id="alumni_name" value="" class="form-control" required>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label for="graduation_year" class="form-label">Graduation Year</label>
-                                                <select name="graduation_year" class="select2 form-select faculty-member"
+                                                <select name="graduation_year" id="graduation_year" class="select2 form-select faculty-member"
                                                     required>
                                                     <option value="">-- Select Level --</option>
                                                     <option value="2025">2025</option>
@@ -76,7 +81,7 @@
 
                                             <div class="col-md-6">
                                                 <label for="faculty_id" class="form-label">Faculty / Program</label>
-                                                <select name="faculty_id" class="select2 form-select faculty-member" required>
+                                                <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-member" required>
                                                     <option value="">-- Select Faculty --</option>
                                                     <option value="cs">CS</option>
                                                     <option value="it">IT</option>
@@ -87,7 +92,7 @@
                                                 <label for="type_of_contribution" class="form-label">Type of
                                                     Contribution</label>
 
-                                                <select name="type_of_contribution" id="select2Multiple"
+                                                <select name="type_of_contribution[]" id="type_of_contribution" id="select2Multiple"
                                                     class="select2 form-select select2-hidden-accessible" multiple=""
                                                     data-select2-id="select2Multiple" tabindex="-1" aria-hidden="true">
                                                     <option value="">-- Select Type --</option>
@@ -101,27 +106,27 @@
                                             <div class="col-md-6">
                                                 <label class="form-label d-block">Description of Contribution</label>
                                                 <div>
-                                                    <textarea class="form-control" id="TitleOfActivity"
+                                                    <textarea class="form-control" id="description_of_contribution"
                                                         name="description_of_contribution" rows="1"></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="date_of_contribution" class="form-label">Date of
                                                     Contribution</label>
-                                                <input type="date" name="date_of_contribution" class="form-control" required>
+                                                <input type="date" name="date_of_contribution" id="date_of_contribution" class="form-control" required>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label class="form-label d-block">Evidence (if applicable)</label>
                                                 <div>
                                                     <input class="form-control" name="evidence_upload" type="file"
-                                                        id="formFile">
+                                                        id="evidence_upload">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="contribution_verified_by" class="form-label">Contribution Verified
                                                     By</label>
-                                                <select name="contribution_verified_by" class="select2 form-select">
+                                                <select name="contribution_verified_by" id="contribution_verified_by" class="select2 form-select">
                                                     <option value="">-- Select--</option>
                                                     <option value="alumni_office">Alumni Office</option>
                                                     <option value="finance">Finance </option>
@@ -131,7 +136,7 @@
                                             <div class="col-md-6">
                                                 <label for="verification_status" class="form-label">Verification
                                                     Status</label>
-                                                <select name="verification_status" class="select2 form-select">
+                                                <select name="verification_status" id="verification_status" class="select2 form-select">
                                                     <option value="">-- Select--</option>
                                                     <option value="pending">Pending</option>
                                                     <option value="verified">Verified</option>
@@ -164,49 +169,8 @@
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
 @endpush
 @push('script')
-    <script>
-
-        document.addEventListener("DOMContentLoaded", function () {
-
-            // SVG stars
-            const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-            const starHalf = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='halfStarGradient'%3E%3Cstop offset='50%25' style='stop-color:%23FFD700' /%3E%3Cstop offset='50%25' style='stop-color:%239e9e9e' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23halfStarGradient)' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-            const starOff = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%239e9e9e' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-
-            // Employer Rating
-            const employerRaty = new Raty(document.getElementById("employerRating"), {
-                number: 5,
-                half: true,
-                starOn: starOn,
-                starHalf: starHalf,
-                starOff: starOff,
-                click: function (score) {
-                    document.getElementById("employer_satisfaction").value = score;
-                }
-            }).init();
-
-            // Graduate Rating
-            const graduateRaty = new Raty(document.getElementById("graduateRating"), {
-                number: 5,
-                half: true,
-                starOn: starOn,
-                starHalf: starHalf,
-                starOff: starOff,
-                click: function (score) {
-                    document.getElementById("graduate_satisfaction").value = score;
-                }
-            }).init();
-
-        });
-
-
-
-
-    </script>
     @if(auth()->user()->hasRole(['HOD']))
         <script>
             $(document).ready(function () {
@@ -227,7 +191,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('employability.store') }}",
+                        url: "{{ route('alumni-contribution.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,
@@ -247,13 +211,6 @@
 
                             // Reset index to 1
                             grantIndex = 1;
-
-                            document.getElementById("employer_satisfaction").value = "";
-                            document.getElementById("graduate_satisfaction").value = "";
-
-                            // Reset stars
-                            employerRaty.setScore(0);
-                            graduateRaty.setScore(0);
                         },
                         error: function (xhr) {
                             Swal.close();

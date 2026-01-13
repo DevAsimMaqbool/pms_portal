@@ -43,8 +43,9 @@ class ProfessionalMembershipController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validate form
-            $request->validate([
+            if($request->form_status=='HOD'){
+                 $rules = [
+                'indicator_id' => 'required',
                 'type_of_membership' => 'required|string',
                 'name_of_professional_body' => 'required|string|max:255',
                 'category_of_body' => 'required|string',
@@ -57,39 +58,63 @@ class ProfessionalMembershipController extends Controller
                 'evidence_type' => 'nullable|array',
                 'document_link' => 'nullable|file|mimes:pdf,doc,docx,jpg,png,zip',
                 'declaration' => 'accepted',
-            ]);
+                'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                 ];
+                 
+                $messages = [
+                    'document_link.mimes' => 'Upload JPG / PNG / PDF only.',
+                ];
+                 $validator = Validator::make($request->all(), $rules, $messages);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                $data = $request->only([
+                    'indicator_id',
+                    'type_of_membership',
+                    'name_of_professional_body',
+                    'category_of_body',
+                    'discipline',
+                    'level',
+                    'country',
+                    'membership_status',
+                    'membership_start_date',
+                    'membership_valid_until',
+                    'declaration',
+                    'form_status'
+                ]); 
+                 if ($request->hasFile('document_link')) {
 
-            // Handle file upload
-            $documentPath = null;
-            if ($request->hasFile('document_link')) {
-                $documentPath = $request->file('document_link')->store('professional_memberships', 'public');
+                        $file = $request->file('document_link');
+                        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                        $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                        $uniqueNumber = rand(1000, 9999);
+                        $extension = $file->getClientOriginalExtension();
+                        $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                        $path = $file->storeAs('professional_memberships', $fileName, 'public');
+                        $data['document_link'] = $path;
+                    }            
+
             }
+            $employeeId = Auth::user()->employee_id;
+            DB::beginTransaction();
+            $data['evidence_type'] = json_encode($request->evidence_type);
+            $data['created_by'] = $employeeId;
+            $data['updated_by'] = $employeeId;
 
-            // Save to database
-            $membership = ProfessionalMembership::create([
-                'form_status' => $request->form_status,
-                'indicator_id' => $request->indicator_id,
-                'type_of_membership' => $request->type_of_membership,
-                'name_of_professional_body' => $request->name_of_professional_body,
-                'category_of_body' => $request->category_of_body,
-                'discipline' => $request->discipline,
-                'level' => $request->level,
-                'country' => $request->country,
-                'membership_status' => $request->membership_status,
-                'membership_start_date' => $request->membership_start_date,
-                'membership_valid_until' => $request->membership_valid_until,
-                'evidence_type' => $request->input('evidence_type', []),
-                'document_link' => $documentPath,
-                'declaration' => $request->has('declaration'),
-            ]);
+            $record = ProfessionalMembership::create($data);
+            DB::commit();
 
             return response()->json([
-                'message' => 'Professional Membership saved successfully',
-                'data' => $membership
+                'status' => 'success',
+                'message' => 'Record saved successfully',
+                'data' => $record
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Oops! Something went wrong'], 500);
+            return response()->json(['message' => 'oops some thing wrong'], 500);
         }
     }
 
