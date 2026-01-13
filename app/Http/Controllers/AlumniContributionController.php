@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\AlumniContribution;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class AlumniContributionController extends Controller
 {
@@ -41,7 +43,9 @@ class AlumniContributionController extends Controller
     public function store(Request $request)
     {
         try {
-            $validated = $request->validate([
+            if($request->form_status=='HOD'){
+                 $rules = [
+                'indicator_id' => 'required',
                 'academic_year' => 'required|string',
                 'alumni_name' => 'required|string',
                 'graduation_year' => 'required|digits:4',
@@ -53,37 +57,64 @@ class AlumniContributionController extends Controller
                 'evidence_upload' => 'nullable|file|mimes:pdf,doc,docx,jpg,png',
                 'contribution_verified_by' => 'nullable|string',
                 'verification_status' => 'nullable|in:pending,verified',
-            ]);
+                'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                 ];
+                 
+                $messages = [
+                    'evidence_upload.mimes' => 'Upload JPG / PNG / PDF only.',
+                    'type_of_contribution.array' => 'Type of contribution must be a valid list.',
+                ];
+                 $validator = Validator::make($request->all(), $rules, $messages);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                $data = $request->only([
+                    'indicator_id',
+                    'academic_year',
+                    'alumni_name',
+                    'graduation_year',
+                    'faculty_id',
+                    'description_of_contribution',
+                    'date_of_contribution',
+                    'contribution_verified_by',
+                    'verification_status',
+                    'form_status'
+                ]); 
+                 if ($request->hasFile('evidence_upload')) {
 
-            $filePath = null;
-            if ($request->hasFile('evidence_upload')) {
-                $filePath = $request->file('evidence_upload')
-                    ->store('alumni_contributions', 'public');
+                        $file = $request->file('evidence_upload');
+                        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                        $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                        $uniqueNumber = rand(1000, 9999);
+                        $extension = $file->getClientOriginalExtension();
+                        $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                        $path = $file->storeAs('alumni_contributions', $fileName, 'public');
+                        $data['evidence_upload'] = $path;
+                    }    
+                if ($request->filled('type_of_contribution')) {
+                    $data['type_of_contribution'] = json_encode($request->type_of_contribution);
+                }            
+
             }
+            $employeeId = Auth::user()->employee_id;
+            DB::beginTransaction();
+            $data['created_by'] = $employeeId;
+            $data['updated_by'] = $employeeId;
 
-            $record = AlumniContribution::create([
-                'form_status' => $request->form_status,
-                'indicator_id' => $request->indicator_id,
-                'academic_year' => $request->academic_year,
-                'alumni_name' => $request->alumni_name,
-                'graduation_year' => $request->graduation_year,
-                'faculty_id' => $request->faculty_id,
-                'type_of_contribution' => $request->type_of_contribution,
-                'description_of_contribution' => $request->description_of_contribution,
-                'date_of_contribution' => $request->date_of_contribution,
-                'evidence_upload' => $filePath,
-                'contribution_verified_by' => $request->contribution_verified_by,
-                'verification_status' => $request->verification_status,
-            ]);
+            $record = AlumniContribution::create($data);
+            DB::commit();
 
             return response()->json([
-                'status' => true,
-                'message' => 'Alumni contribution record saved successfully',
+                'status' => 'success',
+                'message' => 'Record saved successfully',
                 'data' => $record
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Oops! Something went wrong'], 500);
+            return response()->json(['message' => 'oops something wrong'], 500);
         }
     }
 

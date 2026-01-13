@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\FacultyRetention;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class FacultyRetentionController extends Controller
 {
@@ -41,7 +43,9 @@ class FacultyRetentionController extends Controller
     public function store(Request $request)
     {
         try {
-            $validated = $request->validate([
+            if($request->form_status=='HOD'){
+                 $rules = [
+                'indicator_id' => 'required',
                 'academic_year' => 'required|string',
                 'faculty_id' => 'required|string',
                 'department_id' => 'required|string',
@@ -52,31 +56,48 @@ class FacultyRetentionController extends Controller
                 'retention_rate' => 'required|numeric|min:0|max:100',
                 'retention_status' => 'required|in:excellent,satisfactory,needs_attention',
                 'remarks' => 'nullable|string',
-            ]);
+                'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                 ];
+               
+                 $validator = Validator::make($request->all(), $rules);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                $data = $request->only([
+                    'indicator_id',
+                    'academic_year',
+                    'faculty_id',
+                    'department_id',
+                    'strength_at_start_of_month',
+                    'join_during_month',
+                    'left_during_month',
+                    'strength_end_month',
+                    'retention_rate',
+                    'retention_status',
+                    'remarks',
+                    'form_status'
+                ]);            
 
-            $record = FacultyRetention::create([
-                'form_status' => $request->form_status,
-                'indicator_id' => $request->indicator_id,
-                'academic_year' => $request->academic_year,
-                'faculty_id' => $request->faculty_id,
-                'department_id' => $request->department_id,
-                'strength_at_start_of_month' => $request->strength_at_start_of_month,
-                'join_during_month' => $request->join_during_month,
-                'left_during_month' => $request->left_during_month,
-                'strength_end_month' => $request->strength_end_month,
-                'retention_rate' => $request->retention_rate,
-                'retention_status' => $request->retention_status,
-                'remarks' => $request->remarks,
-            ]);
+            }
+            $employeeId = Auth::user()->employee_id;
+            DB::beginTransaction();
+            $data['created_by'] = $employeeId;
+            $data['updated_by'] = $employeeId;
+
+            $record = FacultyRetention::create($data);
+            DB::commit();
 
             return response()->json([
-                'status' => true,
-                'message' => 'Faculty retention record saved successfully.',
+                'status' => 'success',
+                'message' => 'Record saved successfully',
                 'data' => $record
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Oops! Something went wrong'], 500);
+            return response()->json(['message' => 'oops some thing wrong'], 500);
         }
     }
 

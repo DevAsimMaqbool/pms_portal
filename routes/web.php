@@ -43,6 +43,7 @@ use App\Http\Controllers\NoOfGrantsSubmitAndWonController;
 use App\Http\Controllers\ProductsDeliveredToIndustryController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdmissionTargetAchievedController;
+use App\Http\Controllers\AlumniContributionController;
 use App\Http\Controllers\CompletionOfCourseFolderController;
 use App\Http\Controllers\FacultyMemberClassController;
 use App\Http\Controllers\IndicatorCrudController;
@@ -52,10 +53,14 @@ use App\Http\Controllers\RatingRuleController;
 use App\Http\Controllers\PmsPolicyController;
 use App\Http\Controllers\SelfNominationController;
 use App\Http\Controllers\AssignBadgeController;
+use App\Http\Controllers\FacultyRetentionController;
 use App\Http\Controllers\InternationalizationSectionController;
 use App\Http\Controllers\NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingController;
+use App\Http\Controllers\ProfessionalMembershipController;
 use App\Http\Controllers\RecoveryController;
+use App\Http\Controllers\SubjectRankingTargetController;
 use App\Http\Controllers\TermController;
+use App\Models\ProfessionalMembership;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -179,6 +184,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('recovery', RecoveryController::class);
         Route::resource('internationalization-section', InternationalizationSectionController::class);
         Route::resource('no-of-programs-accredited', NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingController::class);
+        Route::resource('professional-membership', ProfessionalMembershipController::class);
+        Route::resource('subject-ranking-target', SubjectRankingTargetController::class);
+        Route::resource('faculty-retention', FacultyRetentionController::class);
+        Route::resource('alumni-contribution', AlumniContributionController::class);
         // routes/web.php
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
         Route::resource('completion-of-course-folder', CompletionOfCourseFolderController::class);

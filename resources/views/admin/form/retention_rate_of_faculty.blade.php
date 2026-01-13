@@ -10,7 +10,6 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
-    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
@@ -33,7 +32,7 @@
                                         <div class="grant-group row g-3 mb-3 p-3 border border-primary">
                                             <div class="col-md-6">
                                                 <label for="academic_year" class="form-label">Academic Year</label>
-                                                <select name="academic_year" class="select2 form-select faculty-member"
+                                                <select name="academic_year" id="academic_year" class="select2 form-select faculty-member"
                                                     required>
                                                     <option value="">-- Select Year --</option>
                                                     <option value="2024-25">2024-25</option>
@@ -47,7 +46,7 @@
 
                                             <div class="col-md-6">
                                                 <label for="faculty_id" class="form-label">Faculty / School</label>
-                                                <select name="faculty_id" class="select2 form-select faculty-member" required>
+                                                <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-member" required>
                                                     <option value="">-- Select Faculty --</option>
                                                     <option value="cs">CS</option>
                                                     <option value="it">IT</option>
@@ -57,7 +56,7 @@
 
                                             <div class="col-md-6">
                                                 <label for="department" class="form-label">Department</label>
-                                                <select name="department_id" class="select2 form-select faculty-member"
+                                                <select name="department_id" id="department_id" class="select2 form-select faculty-member"
                                                     required>
                                                     <option value="">-- Select Level --</option>
                                                     <option value="cs">CS</option>
@@ -70,36 +69,36 @@
                                                 <label for="strength_at_start_of_month" class="form-label">Faculty Strength at
                                                     Start of
                                                     Month</label>
-                                                <input type="number" name="strength_at_start_of_month" class="form-control"
+                                                <input type="number" name="strength_at_start_of_month" id="strength_at_start_of_month" class="form-control"
                                                     required>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label for="join_during_month" class="form-label">New Faculty Joined During
                                                     Month</label>
-                                                <input type="number" name="join_during_month" class="form-control" required>
+                                                <input type="number" name="join_during_month" id="join_during_month" class="form-control" required>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label for="left_during_month" class="form-label">Faculty Left During
                                                     Month</label>
-                                                <input type="number" name="left_during_month" class="form-control" required>
+                                                <input type="number" name="left_during_month" id="left_during_month" class="form-control" required>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label for="strength_end_month" class="form-label">Faculty Strength at End of
                                                     Month</label>
-                                                <input type="number" name="strength_end_month" class="form-control" required>
+                                                <input type="number" name="strength_end_month" id="strength_end_month"  class="form-control" required>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label for="retention_rate" class="form-label">Retention Rate (%)</label>
-                                                <input type="number" name="retention_rate" class="form-control" required>
+                                                <input type="number" name="retention_rate" id="retention_rate" class="form-control" required>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label for="retention_status" class="form-label">Retention Status</label>
-                                                <select name="retention_status" class="select2 form-select">
+                                                <select name="retention_status" id="retention_status" class="select2 form-select">
                                                     <option value="">-- Select Ranking--</option>
                                                     <option value="excellent">Excellent</option>
                                                     <option value="satisfactory ">Satisfactory</option>
@@ -109,7 +108,7 @@
                                             <div class="col-md-12">
                                                 <label class="form-label d-block">Remarks</label>
                                                 <div>
-                                                    <textarea class="form-control" id="TitleOfActivity" name="remarks"
+                                                    <textarea class="form-control" id="remarks" name="remarks"
                                                         rows="4"></textarea>
                                                 </div>
                                             </div>
@@ -142,49 +141,8 @@
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
 @endpush
 @push('script')
-    <script>
-
-        document.addEventListener("DOMContentLoaded", function () {
-
-            // SVG stars
-            const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-            const starHalf = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='halfStarGradient'%3E%3Cstop offset='50%25' style='stop-color:%23FFD700' /%3E%3Cstop offset='50%25' style='stop-color:%239e9e9e' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23halfStarGradient)' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-            const starOff = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%239e9e9e' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-
-            // Employer Rating
-            const employerRaty = new Raty(document.getElementById("employerRating"), {
-                number: 5,
-                half: true,
-                starOn: starOn,
-                starHalf: starHalf,
-                starOff: starOff,
-                click: function (score) {
-                    document.getElementById("employer_satisfaction").value = score;
-                }
-            }).init();
-
-            // Graduate Rating
-            const graduateRaty = new Raty(document.getElementById("graduateRating"), {
-                number: 5,
-                half: true,
-                starOn: starOn,
-                starHalf: starHalf,
-                starOff: starOff,
-                click: function (score) {
-                    document.getElementById("graduate_satisfaction").value = score;
-                }
-            }).init();
-
-        });
-
-
-
-
-    </script>
     @if(auth()->user()->hasRole(['HOD']))
         <script>
             $(document).ready(function () {
@@ -205,7 +163,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('employability.store') }}",
+                        url: "{{ route('faculty-retention.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,
@@ -225,13 +183,6 @@
 
                             // Reset index to 1
                             grantIndex = 1;
-
-                            document.getElementById("employer_satisfaction").value = "";
-                            document.getElementById("graduate_satisfaction").value = "";
-
-                            // Reset stars
-                            employerRaty.setScore(0);
-                            graduateRaty.setScore(0);
                         },
                         error: function (xhr) {
                             Swal.close();

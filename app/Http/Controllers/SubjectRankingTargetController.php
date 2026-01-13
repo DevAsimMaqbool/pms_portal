@@ -43,52 +43,74 @@ class SubjectRankingTargetController extends Controller
     public function store(Request $request)
     {
         try {
-            $validated = $request->validate([
+            if($request->form_status=='HOD'){
+                 $rules = [
+                'indicator_id' => 'required',
                 'academic_year' => 'required|string',
                 'faculty_id' => 'required|string',
                 'department_id' => 'required|string',
                 'subject_id' => 'required|string',
-
                 'ranking_body' => 'nullable|string',
-
                 'targeted_ranking_range' => 'required|integer|min:1',
                 'actual_ranking_achieved' => 'required|in:numeric,not_ranked',
                 'ranking_status' => 'required|in:achieved,partially_achieved,not_achieved',
-
                 'evidence_upload' => 'nullable|file|mimes:pdf,doc,docx,jpg,png',
                 'remarks' => 'nullable|string',
-            ]);
+                'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                 ];
+                 
+                $messages = [
+                    'evidence_upload.mimes' => 'Upload JPG / PNG / PDF only.',
+                ];
+                 $validator = Validator::make($request->all(), $rules, $messages);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                $data = $request->only([
+                    'indicator_id',
+                    'academic_year',
+                    'faculty_id',
+                    'department_id',
+                    'subject_id',
+                    'ranking_body',
+                    'targeted_ranking_range',
+                    'actual_ranking_achieved',
+                    'ranking_status',
+                    'remarks',
+                    'form_status'
+                ]); 
+                 if ($request->hasFile('evidence_upload')) {
 
-            // File upload
-            $filePath = null;
-            if ($request->hasFile('evidence_upload')) {
-                $filePath = $request->file('evidence_upload')
-                    ->store('subject_ranking_evidence', 'public');
+                        $file = $request->file('evidence_upload');
+                        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                        $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                        $uniqueNumber = rand(1000, 9999);
+                        $extension = $file->getClientOriginalExtension();
+                        $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                        $path = $file->storeAs('subject_ranking_evidence', $fileName, 'public');
+                        $data['evidence_upload'] = $path;
+                    }            
+
             }
+            $employeeId = Auth::user()->employee_id;
+            DB::beginTransaction();
+            $data['created_by'] = $employeeId;
+            $data['updated_by'] = $employeeId;
 
-            $record = SubjectRankingTarget::create([
-                'form_status' => $request->form_status,
-                'indicator_id' => $request->indicator_id,
-                'academic_year' => $request->academic_year,
-                'faculty_id' => $request->faculty_id,
-                'department_id' => $request->department_id,
-                'subject_id' => $request->subject_id,
-                'ranking_body' => $request->ranking_body,
-                'targeted_ranking_range' => $request->targeted_ranking_range,
-                'actual_ranking_achieved' => $request->actual_ranking_achieved,
-                'ranking_status' => $request->ranking_status,
-                'evidence_upload' => $filePath,
-                'remarks' => $request->remarks,
-            ]);
+            $record = SubjectRankingTarget::create($data);
+            DB::commit();
 
             return response()->json([
-                'status' => true,
-                'message' => 'Subject ranking target saved successfully',
+                'status' => 'success',
+                'message' => 'Record saved successfully',
                 'data' => $record
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Oops! Something went wrong'], 500);
+            return response()->json(['message' => 'oops some thing wrong'], 500);
         }
     }
 
