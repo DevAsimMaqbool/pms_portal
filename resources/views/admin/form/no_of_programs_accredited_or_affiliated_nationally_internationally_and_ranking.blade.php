@@ -34,7 +34,7 @@
                                                                 <div class="grant-group row g-3 mb-3 p-3 border border-primary">
                                                                     <div class="col-md-6">
                                                                         <label for="faculty" class="form-label">Faculty</label>
-                                                                        <select name="faculty_id" class="select2 form-select faculty-member" required>
+                                                                        <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-member" required>
                                                                             <option value="">-- Select Faculty --</option>
                                                                             <option value="11"> Faculty of Business and Management Sciences-KCF</option>
                                                                             <option value="171">Faculty of Computer Science and Information
@@ -45,7 +45,7 @@
 
                                                                     <div class="col-md-6">
                                                                         <label for="department_id" class="form-label">Department</label>
-                                                                        <select name="department_id" class="select2 form-select faculty-member"
+                                                                        <select name="department_id" id="department_id" class="select2 form-select faculty-member"
                                                                             required>
                                                                             <option value="">-- Select Department --</option>
                                                                             <option value="11">CS</option>
@@ -57,7 +57,7 @@
 
                                                                     <div class="col-md-6">
                                                                         <label for="program" class="form-label">Program</label>
-                                                                        <select name="program_id" class="select2 form-select faculty-member" required>
+                                                                        <select name="program_id" id="program_id" class="select2 form-select faculty-member" required>
                                                                             <option value="">-- Select Program --</option>
                                                                             <option value="1"> BS Robotics</option>
                                                                             <option value="2">BS Gaming And Multimedia</option>
@@ -67,8 +67,8 @@
 
                                                                     <div class="col-md-6">
                                                                         <label for="program_level" class="form-label">Program Level</label>
-                                                                        <select name="program_level" class="select2 form-select faculty-member"
-                                                                            required>
+                                                                        <select name="program_level" id="program_level" class="select2 form-select faculty-member"
+                                                                           required >
                                                                             <option value="">-- Select Level --</option>
                                                                             <option value="ug">UG</option>
                                                                             <option value="grad">Grad</option>
@@ -78,8 +78,8 @@
 
                                                                     <div class="col-md-6">
                                                                         <label for="recognition_type" class="form-label">Recognition Type</label>
-                                                                        <select name="recognition_type" class="select2 form-select faculty-member"
-                                                                            required>
+                                                                        <select name="recognition_type" id="recognition_type" class="select2 form-select faculty-member"
+                                                                           required >
                                                                             <option value="">-- Select Type --</option>
                                                                             <option value="accreditation">Accreditation</option>
                                                                             <option value="affiliation">Affiliation</option>
@@ -90,7 +90,7 @@
 
                                                                     <div class="col-md-6">
                                                                         <label for="ranking_body" class="form-label">Accrediting / Ranking Body</label>
-                                                                        <select name="ranking_body" class="select2 form-select faculty-member" required>
+                                                                        <select name="ranking_body" id="ranking_body" class="select2 form-select faculty-member" required>
                                                                             <option value="">-- Select Body --</option>
                                                                             <option value="PBC">Pakistan Bar Council (PBC)</option>
                                                                             <option value="PCATP">Pakistan Council for Architects and Town Planners
@@ -117,34 +117,27 @@
 
                                                                     <div class="col-md-6">
                                                                         <label for="scope" class="form-label">Scope (Nat./Int.)</label>
-                                                                        <select name="scope" class="select2 form-select faculty-member" required>
+                                                                        <select name="scope" id="scope" class="select2 form-select faculty-member" required>
                                                                             <option value="">-- Select Scope --</option>
                                                                             <option value="national">National</option>
                                                                             <option value="international">International</option>
                                                                         </select>
                                                                     </div>
 
-                                                                    <div class="col-md-6">
-                                                                        <label for="status" class="form-label">Status</label>
-                                                                        <select name="status" class="select2 form-select faculty-member" required>
-                                                                            <option value="">-- Select Status --</option>
-                                                                            <option value="granted">Granted</option>
-                                                                            <option value="renewed">Renewed</option>
-                                                                        </select>
-                                                                    </div>
+                                                                    
 
                                                                     <div class="col-md-6">
                                                                         <label class="form-label">Validity From</label>
-                                                                        <input type="date" name="validity_from" class="form-control" required>
+                                                                        <input type="date" name="validity_from" id="validity_from" class="form-control" required>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <label class="form-label">Validity To</label>
-                                                                        <input type="date" name="validity_to" class="form-control" required>
+                                                                        <input type="date" name="validity_to" id="validity_to" class="form-control" required>
                                                                     </div>
 
                                                                     <div class="col-md-6">
-                                                                        <label for="ranking_system" class="form-label">Ranking System (if any)</label>
-                                                                            <select class="select2 form-select faculty-member" id="ranking_system" name="university_ranking">
+                                                                        <label for="university_ranking" class="form-label">Ranking System (if any)</label>
+                                                                            <select class="select2 form-select faculty-member" id="university_ranking" name="university_ranking" required>
                                                                             <option value="">-- Select Ranking --</option>    
                                                                             <option value="qs_world">QS World University Rankings</option>
                                                                                 <option value="the">Times Higher Education (THE)</option>
@@ -166,14 +159,14 @@
 
                                                                     <div class="col-md-6">
                                                                         <label class="form-label">Ranking Position / Band</label>
-                                                                        <input type="ranking_position" name="ranking_position" class="form-control"
+                                                                        <input type="ranking_position" name="ranking_position" id="ranking_position" class="form-control"
                                                                             min="1" step="1" required>
                                                                     </div>
 
                                                                     <div class="col-md-6">
                                                                         <label for="evidence_available" class="form-label">Evidence Available
                                                                             (Y/N)</label>
-                                                                        <select name="evidence_available"
+                                                                        <select name="evidence_available" id="evidence_available"
                                                                             class="select2 form-select evidence_available" required>
                                                                             <option value="">-- Select Evidence --</option>
                                                                             <option value="yes">Y</option>
@@ -184,14 +177,14 @@
                                                                     <div class="col-md-6">
                                                                         <label class="form-label d-block">Document Link / Ref</label>
                                                                         <div>
-                                                                            <input class="form-control" name="document_link" type="file" id="formFile">
+                                                                            <input class="form-control" name="document_link" type="file" id="document_link">
                                                                         </div>
                                                                     </div>
 
                         <div class="col-md-12">
                             <label class="form-label d-block">Remarks</label>
                             <div>
-                                <textarea class="form-control" id="TitleOfActivity"
+                                <textarea class="form-control" id="remarks"
                                                 name="remarks"
                                                 rows="4"></textarea>
                             </div>
@@ -230,45 +223,6 @@
     <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
 @endpush
 @push('script')
-    <script>
-
-        document.addEventListener("DOMContentLoaded", function () {
-
-            // SVG stars
-            const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-            const starHalf = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='halfStarGradient'%3E%3Cstop offset='50%25' style='stop-color:%23FFD700' /%3E%3Cstop offset='50%25' style='stop-color:%239e9e9e' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23halfStarGradient)' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-            const starOff = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%239e9e9e' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-
-            // Employer Rating
-            const employerRaty = new Raty(document.getElementById("employerRating"), {
-                number: 5,
-                half: true,
-                starOn: starOn,
-                starHalf: starHalf,
-                starOff: starOff,
-                click: function (score) {
-                    document.getElementById("employer_satisfaction").value = score;
-                }
-            }).init();
-
-            // Graduate Rating
-            const graduateRaty = new Raty(document.getElementById("graduateRating"), {
-                number: 5,
-                half: true,
-                starOn: starOn,
-                starHalf: starHalf,
-                starOff: starOff,
-                click: function (score) {
-                    document.getElementById("graduate_satisfaction").value = score;
-                }
-            }).init();
-
-        });
-
-
-
-
-    </script>
     @if(auth()->user()->hasRole(['HOD']))
         <script>
             $(document).ready(function () {
@@ -289,7 +243,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('employability.store') }}",
+                        url: "{{ route('no-of-programs-accredited.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,
@@ -309,13 +263,6 @@
 
                             // Reset index to 1
                             grantIndex = 1;
-
-                            document.getElementById("employer_satisfaction").value = "";
-                            document.getElementById("graduate_satisfaction").value = "";
-
-                            // Reset stars
-                            employerRaty.setScore(0);
-                            graduateRaty.setScore(0);
                         },
                         error: function (xhr) {
                             Swal.close();

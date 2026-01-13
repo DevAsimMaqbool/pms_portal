@@ -43,8 +43,9 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
     public function store(Request $request)
     {
         try {
-
-            $request->validate([
+            if($request->form_status=='HOD'){
+                 $rules = [
+                'indicator_id' => 'required',
                 'faculty_id' => 'required|integer',
                 'department_id' => 'required|integer',
                 'program_id' => 'required|integer',
@@ -52,7 +53,6 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
                 'recognition_type' => 'required|string',
                 'ranking_body' => 'required|string',
                 'scope' => 'required|string',
-                'status' => 'required|string',
                 'validity_from' => 'required|date',
                 'validity_to' => 'required|date|after_or_equal:validity_from',
                 'university_ranking' => 'nullable|string',
@@ -60,42 +60,74 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
                 'evidence_available' => 'required|string',
                 'document_link' => 'nullable|file|mimes:pdf,doc,docx,zip,jpg,png',
                 'remarks' => 'nullable|string',
-            ]);
+                'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                 ];
+                 
+                $messages = [
+                    'document_link.mimes' => 'Upload JPG / PNG / PDF only.',
+                ];
+                 $validator = Validator::make($request->all(), $rules, $messages);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                $data = $request->only([
+                    'indicator_id',
+                    'faculty_id',
+                    'contracting_industry',
+                    'project_duration',
+                    'estimated_project_cost',
+                    'estimated_complection',
+                    'form_status',
+                    'faculty_id',
+                    'department_id',
+                    'program_id',
+                    'program_level',
+                    'recognition_type',
+                    'ranking_body',
+                    'scope',
+                    'status',
+                    'validity_from',
+                    'validity_to',
+                    'university_ranking',
+                    'ranking_position',
+                    'evidence_available',
+                    'remarks',
+                    'form_status'
+                ]); 
+                 if ($request->hasFile('document_link')) {
 
-            // Handle file upload
-            $documentPath = null;
-            if ($request->hasFile('document_link')) {
-                $documentPath = $request->file('document_link')->store('program_accreditation_doc', 'public');
+                        $file = $request->file('document_link');
+                        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                        $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                        $uniqueNumber = rand(1000, 9999);
+                        $extension = $file->getClientOriginalExtension();
+                        $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                        $path = $file->storeAs('program_accreditation_doc', $fileName, 'public');
+                        $data['document_link'] = $path;
+                    }   
+
+                        
+
             }
+            $employeeId = Auth::user()->employee_id;
+            DB::beginTransaction();
+            $data['created_by'] = $employeeId;
+            $data['updated_by'] = $employeeId;
 
-            // Save form data
-            $researchForm = ProgramAccreditation::create([
-                'form_status' => $request->form_status,
-                'indicator_id' => $request->indicator_id,
-                'faculty_id' => $request->faculty_id,
-                'department_id' => $request->department_id,
-                'program_id' => $request->program_id,
-                'program_level' => $request->program_level,
-                'recognition_type' => $request->recognition_type,
-                'ranking_body' => $request->ranking_body,
-                'scope' => $request->scope,
-                'status' => $request->status,
-                'validity_from' => $request->validity_from,
-                'validity_to' => $request->validity_to,
-                'university_ranking' => $request->university_ranking,
-                'ranking_position' => $request->ranking_position,
-                'market_competitive_salary' => $request->market_competitive_salary,
-                'document_link' => $documentPath,
-                'remarks' => $request->remarks,
-            ]);
+            $record = ProgramAccreditation::create($data);
+            DB::commit();
 
             return response()->json([
-                'message' => 'Form submitted successfully',
-                'data' => $researchForm
+                'status' => 'success',
+                'message' => 'Record saved successfully',
+                'data' => $record
             ]);
         } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['message' => 'Oops! Something went wrong'], 500);
+           // DB::rollBack();
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
