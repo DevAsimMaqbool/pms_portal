@@ -184,10 +184,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('recovery', RecoveryController::class);
         Route::resource('internationalization-section', InternationalizationSectionController::class);
         Route::resource('no-of-programs-accredited', NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingController::class);
-        Route::resource('professional-membership', ProfessionalMembershipController::class);
-        Route::resource('subject-ranking-target', SubjectRankingTargetController::class);
-        Route::resource('faculty-retention', FacultyRetentionController::class);
-        Route::resource('alumni-contribution', AlumniContributionController::class);
         // routes/web.php
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
         Route::resource('completion-of-course-folder', CompletionOfCourseFolderController::class);
