@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('no_of_programs_accredited_or_affiliated_nationally_internationally_and_ranking', function (Blueprint $table) {
+        Schema::create('no_of_programs_accredited', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('indicator_id');
             $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER', 'ORIC', 'HR'])->default('RESEARCHER');
@@ -21,7 +21,6 @@ return new class extends Migration {
             $table->string('recognition_type');
             $table->string('ranking_body');
             $table->string('scope');
-            $table->string('status');
             $table->date('validity_from');
             $table->date('validity_to');
             $table->string('university_ranking')->nullable();
