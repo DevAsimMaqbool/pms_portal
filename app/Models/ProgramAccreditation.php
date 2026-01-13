@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProgramAccreditation extends Model
 {
-    protected $table = 'no_of_programs_accredited_or_affiliated_nationally_internationally_and_ranking';
+    protected $table = 'no_of_programs_accredited';
     protected $fillable = [
         'indicator_id',
         'form_status',
