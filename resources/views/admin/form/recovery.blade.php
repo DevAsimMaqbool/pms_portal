@@ -23,7 +23,12 @@
                 <div class="tab-content">
                     @if(auth()->user()->hasRole(['HOD']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <h5 class="mb-1">Recovery %</h5>
+                            <div class="d-flex justify-content-between">
+                               <div>
+                                <h5 class="mb-1">Recovery %</h5>
+                                </div>
+                                <a href="{{ route('indicators_crud.index', ['slug' => 'recovery', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            </div> 
                             <form id="researchForm" enctype="multipart/form-data" class="row">
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
@@ -33,44 +38,29 @@
                                         <div class="grant-group row g-3 mb-3 p-3 border border-primary">
                                             <div class="col-md-6">
                                                 <label for="faculty" class="form-label">Faculty</label>
-                                                <select name="faculty_id" class="select2 form-select faculty-member" required>
+                                                <select name="faculty_id"  class="select2 form-select faculty-member" required>
                                                     <option value="">-- Select Faculty Member --</option>
-                                                    @foreach($facultyMembers as $member)
-                                                        <option value="{{ $member->id }}"
-                                                            data-faculty_id="{{ $member->faculty_id }}"
-                                                            data-department="{{ $member->department }}"
-                                                            data-job_title="{{ $member->job_title }}">
-                                                            {{ $member->name }}
-                                                        </option>
-                                                    @endforeach
+                                                    <option value="11"> Faculty of Business and Management Sciences-KCF</option>
+                                                    <option value="171">Faculty of Computer Science and Information Technology-CCL</option>
+                                                    <option value="158"> Faculty of  Arts and Humanities-CCL</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="department_id" class="form-label">Department</label>
                                                 <select name="department_id" class="select2 form-select department" required>
                                                     <option value="">-- Select Faculty Member --</option>
-                                                    @foreach($facultyMembers as $member)
-                                                        <option value="{{ $member->id }}"
-                                                            data-faculty_id="{{ $member->faculty_id }}"
-                                                            data-department="{{ $member->department }}"
-                                                            data-job_title="{{ $member->job_title }}">
-                                                            {{ $member->name }}
-                                                        </option>
-                                                    @endforeach
+                                                    <option value="11"> Faculty of Business and Management Sciences-KCF</option>
+                                                    <option value="171">Faculty of Computer Science and Information Technology-CCL</option>
+                                                    <option value="158"> Faculty of  Arts and Humanities-CCL</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="period" class="form-label">Period</label>
                                                 <select name="period" class="select2 form-select period" required>
                                                     <option value="">-- Select Faculty Member --</option>
-                                                    @foreach($facultyMembers as $member)
-                                                        <option value="{{ $member->id }}"
-                                                            data-faculty_id="{{ $member->faculty_id }}"
-                                                            data-department="{{ $member->department }}"
-                                                            data-job_title="{{ $member->job_title }}">
-                                                            {{ $member->name }}
-                                                        </option>
-                                                    @endforeach
+                                                    <option value="11"> Faculty of Business and Management Sciences-KCF</option>
+                                                    <option value="171">Faculty of Computer Science and Information Technology-CCL</option>
+                                                    <option value="158"> Faculty of  Arts and Humanities-CCL</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">

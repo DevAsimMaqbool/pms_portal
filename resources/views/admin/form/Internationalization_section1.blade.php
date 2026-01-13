@@ -53,6 +53,12 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="card p-3">
             <div class="card-datatable table-responsive card-body">
+            <div class="d-flex justify-content-between">
+                               <div>
+                                <h5 class="mb-1"></h5>
+                                </div>
+                                <a href="{{ route('indicators_crud.index', ['slug' => 'Internationalization_section1', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            </div> 
                 <form id="researchForm" class="row" method="POST" action="{{ route('nomination.store') }}"
                     enctype="multipart/form-data">
                     @csrf
