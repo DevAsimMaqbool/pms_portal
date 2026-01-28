@@ -230,7 +230,7 @@ function myClassesAttendance($facultyId)
         ->get();
 }
 
-function myClasses($facultyId,$activeRoleId)
+function myClasses($facultyId, $activeRoleId)
 {
     $classes = FacultyMemberClass::with([
         'attendances' => function ($query) {
@@ -252,7 +252,7 @@ function myClasses($facultyId,$activeRoleId)
     }
     saveIndicatorPercentage(
         $facultyId = getUserID($facultyId),
-        $role_id=$activeRoleId,
+        $role_id = $activeRoleId,
         $keyPerformanceAreaId = 1,
         $indicatorCategoryId = 3,
         $indicatorId = 122,
@@ -364,85 +364,108 @@ function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAr
 
 function myClassesAttendanceData($facultyId)
 {
-    return FacultyMemberClass::with([
+    // Fetch classes with attendances first
+    $classes = FacultyMemberClass::with([
         'attendances' => function ($query) {
             $query->orderBy('class_date', 'desc');
         }
     ])
         ->where('faculty_id', $facultyId)
-        ->get()
-        ->map(function ($class) {
+        ->get();
 
-            $latestAttendance = $class->attendances->first();
-            $class->program = $latestAttendance->program_name ?? null;
+    // Calculate overall present percentage across all classes
+    $totalPresent = $classes->flatMap->attendances->sum('present_count');
+    $totalStudents = $classes->flatMap->attendances->sum('total_students');
 
-            // Count only attendances where att_marked = 1
-            $class->class_held_count = $class->attendances->where('att_marked', 1)->count();
+    $overallPresentPercentage = $totalStudents
+        ? round(($totalPresent / $totalStudents) * 100, 2)
+        : 0;
 
-            // Total attendances
-            $class->total_rows = $class->attendances->count();
+    // Now map each class (existing logic unchanged)
+    return $classes->map(function ($class) use ($facultyId, $overallPresentPercentage) {
 
-            // Calculate class-level percentage of classes held
-            $class->held_percentage = $class->total_rows
-                ? round(($class->class_held_count / $class->total_rows) * 100, 2)
-                : 0;
+        $latestAttendance = $class->attendances->first();
+        $class->program = $latestAttendance->program_name ?? null;
 
-            // Calculate **average present and absent per class**
-            $attendanceCount = $class->attendances->count();
-            if ($attendanceCount > 0) {
-                $class->avg_present_count = round($class->attendances->sum('present_count') / $attendanceCount, 2);
-                $class->avg_absent_count = round($class->attendances->sum('absent_count') / $attendanceCount, 2);
+        // Count only attendances where att_marked = 1
+        $class->class_held_count = $class->attendances->where('att_marked', 1)->count();
+
+        // Total attendances
+        $class->total_rows = $class->attendances->count();
+
+        // Calculate class-level percentage of classes held
+        $class->held_percentage = $class->total_rows
+            ? round(($class->class_held_count / $class->total_rows) * 100, 2)
+            : 0;
+
+        // Calculate average present and absent per class
+        $attendanceCount = $class->attendances->count();
+        if ($attendanceCount > 0) {
+            $class->avg_present_count = round($class->attendances->sum('present_count') / $attendanceCount, 2);
+            $class->avg_absent_count = round($class->attendances->sum('absent_count') / $attendanceCount, 2);
+        } else {
+            $class->avg_present_count = 0;
+            $class->avg_absent_count = 0;
+        }
+
+        // Calculate avg_present_percentage
+        $totalStudentsClass = $class->attendances->sum('total_students');
+        $totalPresentClass = $class->attendances->sum('present_count');
+        $class->avg_present_percentage = $totalStudentsClass
+            ? round(($totalPresentClass / $totalStudentsClass) * 100, 2)
+            : 0;
+
+        // Determine color and rating based on avg_present_percentage
+        if ($class->avg_present_percentage >= 90) {
+            $class->color = '#6EA8FE';
+            $class->rating = 'OS';
+        } elseif ($class->avg_present_percentage >= 80) {
+            $class->color = '#96e2b4';
+            $class->rating = 'EE';
+        } elseif ($class->avg_present_percentage >= 70) {
+            $class->color = '#ffcb9a';
+            $class->rating = 'ME';
+        } elseif ($class->avg_present_percentage >= 60) {
+            $class->color = '#fd7e13';
+            $class->rating = 'NI';
+        } elseif ($class->avg_present_percentage >= 50) {
+            $class->color = '#ff4c51';
+            $class->rating = 'BE';
+        } else {
+            $class->color = '#d3d3d3';
+            $class->rating = 'NA';
+        }
+
+        // Assign color/rating to each attendance record for Blade
+        foreach ($class->attendances as $att) {
+            $att->color = $class->color;
+            $att->rating = $class->rating;
+
+            // Individual attendance percentage
+            if ($att->total_students > 0) {
+                $att->present_percentage = round(($att->present_count / $att->total_students) * 100, 2);
             } else {
-                $class->avg_present_count = 0;
-                $class->avg_absent_count = 0;
+                $att->present_percentage = 0;
             }
+        }
 
-            // Calculate avg_present_percentage
-            $totalStudents = $class->attendances->sum('total_students');
-            $totalPresent = $class->attendances->sum('present_count');
-            $class->avg_present_percentage = $totalStudents
-                ? round(($totalPresent / $totalStudents) * 100, 2)
-                : 0;
+        $activeRoleId = getRoleIdByName(activeRole());
+        $employeeId = getUserID($facultyId);
+        saveIndicatorPercentage(
+            $employeeId,
+            $activeRoleId,
+            1,
+            3,
+            113,
+            $overallPresentPercentage
+        );
 
-            // Determine color and rating based on avg_present_percentage
-            if ($class->avg_present_percentage >= 90) {
-                $class->color = '#6EA8FE';
-                $class->rating = 'OS';
-            } elseif ($class->avg_present_percentage >= 80) {
-                $class->color = '#96e2b4';
-                $class->rating = 'EE';
-            } elseif ($class->avg_present_percentage >= 70) {
-                $class->color = '#ffcb9a';
-                $class->rating = 'ME';
-            } elseif ($class->avg_present_percentage >= 60) {
-                $class->color = '#fd7e13';
-                $class->rating = 'NI';
-            } elseif ($class->avg_present_percentage >= 50) {
-                $class->color = '#ff4c51';
-                $class->rating = 'BE';
-            } else {
-                $class->color = '#d3d3d3';
-                $class->rating = 'NA';
-            }
-
-            // Assign color/rating to each attendance record for Blade
-            foreach ($class->attendances as $att) {
-                $att->color = $class->color;
-                $att->rating = $class->rating;
-
-                // Individual attendance percentage
-                if ($att->total_students > 0) {
-                    $att->present_percentage = round(($att->present_count / $att->total_students) * 100, 2);
-                } else {
-                    $att->present_percentage = 0;
-                }
-            }
-
-            return $class;
-        });
+        return $class;
+    });
 }
+
 if (!function_exists('ScopusPublications')) {
-    function ScopusPublications($facultyId,$activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
+    function ScopusPublications($facultyId, $activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
     {
         $facultyTargets = FacultyTarget::with([
             'researchPublicationTargets' => function ($query) use ($indicatorId) {
@@ -553,7 +576,7 @@ if (!function_exists('ScopusPublications')) {
 
         saveIndicatorPercentage(
             $facultyId,
-            $role_id=$activeRoleId,
+            $role_id = $activeRoleId,
             $keyPerformanceAreaId,
             $indicatorCategoryId,
             $indicatorId,
@@ -812,7 +835,7 @@ function PatentsIntellectualProperty($facultyId, $activeRoleId, $indicator_id)
     // ✅ Save globally
     saveIndicatorPercentage(
         $facultyId,
-        $role_id=$activeRoleId,
+        $role_id = $activeRoleId,
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
@@ -885,7 +908,7 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, $i
     // ✅ Save globally
     saveIndicatorPercentage(
         $facultyId,
-        $role_id=$activeRoleId,
+        $role_id = $activeRoleId,
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
@@ -965,7 +988,7 @@ function MultidisciplinaryProjects($facultyId, $activeRoleId, $indicatorId)
     // -------------------------
     saveIndicatorPercentage(
         $facultyId,
-        $role_id=$activeRoleId,
+        $role_id = $activeRoleId,
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicatorId = 136,
@@ -1078,7 +1101,7 @@ function CompletionofCourseFolder($facultyId, $activeRoleId, $indicator_id)
     // Save to IndicatorsPercentage table
     saveIndicatorPercentage(
         $facultyId,
-        $role_id=$activeRoleId,
+        $role_id = $activeRoleId,
         $keyPerformanceAreaId = 1,
         $indicatorCategoryId = 3,
         $indicator_id,
@@ -1136,7 +1159,7 @@ function ComplianceandUsageofLMS($facultyId, $activeRoleId, $indicator_id)
     // ✅ Save globally (corrected)
     saveIndicatorPercentage(
         $facultyId,
-        $role_id=$activeRoleId,
+        $role_id = $activeRoleId,
         $keyPerformanceAreaId = 1,
         $indicatorCategoryId = 3,
         $indicator_id,
@@ -1250,7 +1273,7 @@ if (!function_exists('lineManagerRatingOnTasks')) {
         // Save overall average to database
         saveIndicatorPercentage(
             $faculty_id = $facultyId,
-            $role_id=$activeRoleId,
+            $role_id = $activeRoleId,
             $keyPerformanceAreaId = 13,  // set appropriate KPA ID
             $indicatorCategoryId = 27,   // set appropriate category ID
             $indicatorId = 188,         // set appropriate indicator ID
@@ -1325,7 +1348,7 @@ if (!function_exists('saveIndicatorPercentage')) {
 
 
 if (!function_exists('lineManagerRatingOnEvents')) {
-    function lineManagerRatingOnEvents($facultyId,$activeRoleId)
+    function lineManagerRatingOnEvents($facultyId, $activeRoleId)
     {
         $feedbacks = LineManagerEventFeedback::where('employee_id', $facultyId)->get();
 
@@ -1364,7 +1387,7 @@ if (!function_exists('lineManagerRatingOnEvents')) {
             // Save to indicators_percentages table automatically
             saveIndicatorPercentage(
                 $faculty_id = $facultyId,
-                $role_id=$activeRoleId,
+                $role_id = $activeRoleId,
                 $keyPerformanceAreaId = 13,   // set appropriate KPA ID
                 $indicatorCategoryId = 28,    // set appropriate category ID
                 $indicatorId = 189,           // set appropriate indicator ID
@@ -1514,7 +1537,7 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
 
         saveIndicatorPercentage(
             $facultyId,
-            $role_id=$activeRoleId,
+            $role_id = $activeRoleId,
             $keyPerformanceAreaId = 2,
             $indicatorCategoryId = 6,
             $indicatorId = 133,

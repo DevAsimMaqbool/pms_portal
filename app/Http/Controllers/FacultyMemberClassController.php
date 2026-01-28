@@ -133,64 +133,54 @@ class FacultyMemberClassController extends Controller
     public function odooClasses(Request $request)
     {
         try {
-            $faculty_id = Auth::user()->faculty_id;
-            // $users = DB::connection('pgsql')
-            //     ->table('res_users')
-            //     ->select('id', 'login AS username', 'company_id', 'partner_id')
-            //     ->where('user_type', 'faculty')
-            //     ->where('active', 'true')
-            //     ->limit(10)
-            //     ->get();
-            $records = DB::connection('pgsql')
-                ->table('odoocms_class_faculty as cf')
-                ->leftJoin('odoocms_faculty_staff as fs', 'fs.id', '=', 'cf.faculty_staff_id')
-                ->leftJoin('odoocms_class as c', 'c.id', '=', 'cf.class_id')
-                ->leftJoin('odoocms_academic_term as oat', 'oat.id', '=', 'cf.term_id')
-                ->leftJoin('odoocms_career as cr', 'cr.id', '=', 'c.career_id')
-                ->where('oat.id', 51)
-                ->where('oat.active_for_roll', 'true')
-                ->limit(500)
-                ->offset(8000)
-                ->select([
-                    'cf.faculty_staff_id as faculty_id',
-                    'c.id as class_id',
-                    'c.name as class_name',
-                    'c.code',
-                    'oat.id as term_id',
-                    'oat.name as term',
-                    'cr.id as career_id',
-                    'cr.name as career',
-                    'cr.code as career_code',
-                ])
-                ->get();
-            //dd($records);
-            foreach ($records as $record) {
+            set_time_limit(300);
 
-                FacultyMemberClass::updateOrCreate(
-                    [
-                        'faculty_id' => $record->faculty_id,
-                        'class_id' => $record->class_id,
-                        'term_id' => $record->term_id,
-                    ],
-                    [
-                        'class_name' => $record->class_name,
-                        'code' => $record->code,
-                        'term' => $record->term,
-                        'career_id' => $record->career_id,
-                        'career' => $record->career,
-                        'career_code' => $record->career_code,
-                    ]
-                );
-            }
+            DB::transaction(function () {
+                DB::connection('pgsql')
+                    ->table('odoocms_class_faculty as cf')
+                    ->join('odoocms_faculty_staff as fs', 'fs.id', '=', 'cf.faculty_staff_id')
+                    ->join('odoocms_class as c', 'c.id', '=', 'cf.class_id')
+                    ->join('odoocms_academic_term as oat', 'oat.id', '=', 'cf.term_id')
+                    ->leftJoin('odoocms_career as cr', 'cr.id', '=', 'c.career_id')
+                    ->where('oat.id', 51)
+                    ->where('oat.active_for_roll', true)
+                    ->select([
+                        'cf.faculty_staff_id as faculty_id',
+                        'c.id as class_id',
+                        'c.name as class_name',
+                        'c.code',
+                        'oat.id as term_id',
+                        'oat.name as term',
+                        'cr.id as career_id',
+                        'cr.name as career',
+                        'cr.code as career_code',
+                    ])
+                    // Pass the alias 'cf_id' as the 3rd parameter
+                    ->chunkById(1000, function ($records) {
+                        foreach ($records as $record) {
+                            FacultyMemberClass::updateOrCreate(
+                                [
+                                    'faculty_id' => $record->faculty_id,
+                                    'class_id' => $record->class_id,
+                                    'term_id' => $record->term_id,
+                                ],
+                                [
+                                    'class_name' => $record->class_name,
+                                    'code' => $record->code,
+                                    'term' => $record->term,
+                                    'career_id' => $record->career_id,
+                                    'career' => $record->career,
+                                    'career_code' => $record->career_code,
+                                ]
+                            );
+                        }
+                    }, 'class_id'); // Match the alias used in select
+            });
 
-        } catch (Exception $e) {
-            return apiResponse(
-                $e->getMessage(),
-                [],
-                false,
-                500,
-                ''
-            );
+            return apiResponse("Classes imported successfully", [], true);
+
+        } catch (\Exception $e) {
+            return apiResponse($e->getMessage(), [], false, 500, '');
         }
     }
 
@@ -314,52 +304,69 @@ class FacultyMemberClassController extends Controller
 
     public function classesAttendance()
     {
-        $from_date = '2025-12-01';
-        $to_date = '2025-12-28';
+        try {
+            $from_date = '2025-12-21';
+            $to_date = '2025-12-27';
+            $sql = "
+        SELECT 
+            max(ca.class_id) as class_id,
+            MAX(cal.faculty_updated_id) as faculty_id,
+            MAX(p.name) as program_name,
+            max(cal.state) as state,
+            max(cal.term_id) as term_id,
+            max(oat.name) as term,
+            BOOL_OR(ca.att_marked) AS att_marked,
+            COUNT(cal.student_id) AS total_no_of_students,
+            COUNT(cal.student_id) FILTER (WHERE cal.present = 'true') AS present_students_count,
+            COUNT(cal.student_id) FILTER (WHERE cal.present = 'false') AS absent_students_count
+        FROM public.odoocms_class_attendance ca 
+        left join public.odoocms_class_attendance_line cal on ca.id = cal.attendance_id
+        left join public.odoocms_program p on p.id = ca.program_id
+        left join public.odoocms_academic_term oat on oat.id = ca.term_id
+        where cal.term_id = 51
+        and ca.date_class BETWEEN '{$from_date}' AND '{$to_date}'
+        group by ca.id
+        ";
 
-        $attendanceSummary = DB::connection('pgsql')
-            ->table('odoocms_class_attendance as ca')
-            ->leftJoin('odoocms_class_attendance_line as cal', 'cal.attendance_id', '=', 'ca.id')
-            ->leftJoin('odoocms_program as p', 'p.id', '=', 'ca.program_id')
-            ->leftJoin('odoocms_academic_term as oat', 'oat.id', '=', 'ca.term_id')
-            ->select([
-                DB::raw('MAX(ca.class_id) as class_id'),
-                DB::raw('MAX(cal.faculty_updated_id) as faculty_id'),
-                DB::raw('MAX(p.name) as program_name'),
-                DB::raw('MAX(cal.state) as state'),
-                DB::raw('MAX(cal.term_id) as term_id'),
-                DB::raw('MAX(cal.create_date) as class_date'),
-                DB::raw('MAX(oat.name) as term'),
-                DB::raw('BOOL_OR(ca.att_marked) as att_marked'),
-                DB::raw('COUNT(cal.student_id) as total_no_of_students'),
-                DB::raw("COUNT(cal.student_id) FILTER (WHERE cal.present = 'true') as present_students_count"),
-                DB::raw("COUNT(cal.student_id) FILTER (WHERE cal.present = 'false') as absent_students_count")
-            ])
-            ->where('cal.term_id', 51)
-            //->whereDate('ca.date_class', $from_date)
-            ->whereBetween('ca.date_class', [$from_date, $to_date])
-            ->groupBy('ca.id')
-            ->get();
-        foreach ($attendanceSummary as $item) {
-            FacultyClassAttendance::updateOrCreate(
-                [
-                    'class_date' => $item->class_date,
-                    'class_id' => $item->class_id,
-                    'faculty_id' => $item->faculty_id,
-                ],
-                [
-                    'program_name' => $item->program_name,
-                    'state' => $item->state,
-                    'term_id' => $item->term_id,
-                    'term' => $item->term,
-                    'att_marked' => $item->att_marked,
-                    'total_students' => $item->total_no_of_students,
-                    'present_count' => $item->present_students_count,
-                    'absent_count' => $item->absent_students_count,
-                ]
-            );
+            DB::connection('pgsql')
+                ->table(DB::raw("({$sql}) as attendance_summary"))
+                ->orderByRaw('class_id')   // ✅ REQUIRED by chunk()
+                ->chunk(1200, function ($attendanceSummary) {
+
+                    foreach ($attendanceSummary as $item) {
+
+                        // if (!$item->class_id || !$item->faculty_id) {
+                        //     continue;
+                        // }
+    
+                        FacultyClassAttendance::create([
+                            'class_date' => '2025-08-18',
+                            'class_id' => $item->class_id,
+                            'faculty_id' => $item->faculty_id,
+                            'program_name' => $item->program_name,
+                            'state' => $item->state,
+                            'term_id' => $item->term_id,
+                            'term' => $item->term,
+                            'att_marked' => $item->att_marked,
+                            'total_students' => $item->total_no_of_students,
+                            'present_count' => $item->present_students_count,
+                            'absent_count' => $item->absent_students_count,
+                        ]);
+                    }
+                });
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Attendance summary saved successfully.'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
         }
-        return response()->json(['message' => 'Attendance summary saved successfully.']);
     }
+
 
 }
