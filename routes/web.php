@@ -189,6 +189,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('subject-ranking-target', SubjectRankingTargetController::class);
         Route::resource('faculty-retention', FacultyRetentionController::class);
         Route::resource('alumni-contribution', AlumniContributionController::class);
+        
+        // routes/import excel file
+        Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');
+
         // routes/web.php
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
         Route::resource('completion-of-course-folder', CompletionOfCourseFolderController::class);
