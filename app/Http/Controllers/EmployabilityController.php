@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Imports\EmployabilityImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployabilityController extends Controller
 {
@@ -200,6 +202,26 @@ class EmployabilityController extends Controller
     {
         $area = Employability::with('indicatorCategories.indicators')->findOrFail($id);
         return view('admin.performance', compact('area'));
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+            'indicator_id' => 'required',
+            'form_status' => 'required',
+        ]);
+
+        Excel::import(
+            new EmployabilityImport(
+                $request->indicator_id,
+                $request->form_status
+            ),
+            $request->file
+        );
+
+        return response()->json([
+            'message' => 'Employability data imported successfully'
+        ]);
     }
 }
 
