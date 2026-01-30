@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AchievementOfResearchPublicationsTargetController;
+use App\Http\Controllers\ActiveInternationalResearchPartnerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AssignUserKpaController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -189,6 +190,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('subject-ranking-target', SubjectRankingTargetController::class);
         Route::resource('faculty-retention', FacultyRetentionController::class);
         Route::resource('alumni-contribution', AlumniContributionController::class);
+        Route::resource('/active-international-research-partners',ActiveInternationalResearchPartnerController::class, 'store');
         
         // routes/import excel file
         Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');
