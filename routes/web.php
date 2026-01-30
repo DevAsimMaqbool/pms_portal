@@ -58,6 +58,7 @@ use App\Http\Controllers\InternationalizationSectionController;
 use App\Http\Controllers\NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingController;
 use App\Http\Controllers\ProfessionalMembershipController;
 use App\Http\Controllers\RecoveryController;
+use App\Http\Controllers\RoleFeedbackController;
 use App\Http\Controllers\SubjectRankingTargetController;
 use App\Http\Controllers\TermController;
 use App\Models\ProfessionalMembership;
@@ -184,6 +185,14 @@ Route::middleware('auth')->group(function () {
         Route::resource('recovery', RecoveryController::class);
         Route::resource('internationalization-section', InternationalizationSectionController::class);
         Route::resource('no-of-programs-accredited', NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingController::class);
+        Route::resource('professional-membership', ProfessionalMembershipController::class);
+        Route::resource('subject-ranking-target', SubjectRankingTargetController::class);
+        Route::resource('faculty-retention', FacultyRetentionController::class);
+        Route::resource('alumni-contribution', AlumniContributionController::class);
+        
+        // routes/import excel file
+        Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');
+
         // routes/web.php
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
         Route::resource('completion-of-course-folder', CompletionOfCourseFolderController::class);
@@ -242,6 +251,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('pip', PipController::class);
     Route::post('pip/{id}/update-status', [PipController::class, 'updateStatus'])->name('pip.updateStatus');
     Route::resource('/self-assessment', SelfAssessmentWorkingController::class);
+    Route::resource('/feedback', RoleFeedbackController::class);
     // web.php
     Route::post('self-assessment/term-data', [SelfAssessmentWorkingController::class, 'termData'])->name('self-assessment.termData');
 
