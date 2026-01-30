@@ -155,7 +155,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/assigned-forms/view/{userId}/{title}', [AssignFormToUserController::class, 'view'])
         ->name('forms.assigned.view');
     //Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
-    
+
 
 
 
@@ -190,8 +190,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('subject-ranking-target', SubjectRankingTargetController::class);
         Route::resource('faculty-retention', FacultyRetentionController::class);
         Route::resource('alumni-contribution', AlumniContributionController::class);
-        Route::resource('/active-international-research-partners',ActiveInternationalResearchPartnerController::class, 'store');
-        
+        Route::resource('/active-international-research-partners', ActiveInternationalResearchPartnerController::class);
+
         // routes/import excel file
         Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');
 
