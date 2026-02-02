@@ -75,6 +75,10 @@
                                         <label class="form-label" for="remarks">Remarks</label>
                                         <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
                                     </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label" for="compliance_percentage">Compliance Percentage (%)</label>
+                                        <input type="number" class="form-control" id="compliance_percentage" placeholder="Compliance Percentage (%)" name="compliance_percentage" aria-label="Compliance Percentage (%)" disabled>
+                                    </div>
 
 
 

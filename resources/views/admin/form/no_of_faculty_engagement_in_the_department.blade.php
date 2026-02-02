@@ -84,6 +84,11 @@
                                         <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
                                     </div>
 
+                                    <div class="col-md-12">
+                                        <label class="form-label" for="faculty_engagement_percentage">Faculty Engagement Percentage (%)</label>
+                                        <input type="number" class="form-control" id="faculty_engagement_percentage" placeholder="Faculty Engagement Percentage (%)" name="faculty_engagement_percentage" aria-label="Faculty Engagement Percentage (%)" disabled>
+                                    </div>
+
 
 
 
