@@ -108,8 +108,8 @@
                             </div>
 
                         </div>
-                        <div class="col-4 text-center demo-vertical-spacing">
-                            <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
+                        <div class="mt-3 text-end">
+                            <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                         </div>
                     </form>
                     </div>
