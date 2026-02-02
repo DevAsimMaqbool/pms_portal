@@ -108,7 +108,7 @@
                             </div>
 
                         </div>
-                        <div class="mt-3 text-end">
+                        <div class="mt-3 text-end" style="margin-left: -16px !important;">
                             <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                         </div>
                     </form>
