@@ -108,6 +108,46 @@
                     </div>
                     </div>
                     <!-- /Product Information -->
+
+
+                     <!-- Product Information -->
+                    <div class="card mb-6">
+                    <div class="card-header">
+                        <h5 class="card-tile mb-0">System Calculations (Auto)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                            <label class="form-label" for="total_cost_of_delivery">Total Cost of Delivery</label>
+                            <input type="number" class="form-control" id="total_cost_of_delivery" placeholder="Total Cost of Delivery" name="total_cost_of_delivery" aria-label="Total Cost of Delivery" disabled>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                            <label class="form-label" for="net_program_surplus_deficit">Net Program Surplus / Deficit</label>
+                            <input type="number" class="form-control" id="net_program_surplus_deficit" placeholder="Net Program Surplus / Deficit" name="net_program_surplus_deficit" aria-label="Net Program Surplus / Deficit" disabled>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                            <label class="form-label" for="program_profitability_status">Program Profitability Status</label>
+                            <select name="program_profitability_status" class="select2 form-select program_profitability_status" required disabled>
+                                <option value="">-- Select Profitability --</option>
+                                <option value="Profitable"> Profitable </option>
+                                <option value="not_profitable">Not Profitable</option>
+                            </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                            <label class="form-label" for="profitability_percentage">Profitability Percentage</label>
+                            <input type="number" class="form-control" id="profitability_percentage" placeholder="Profitability Percentage" name="profitability_percentage" aria-label="Profitability Percentage" disabled>
+                            </div>
+
+                               
+                        </div>
+                        <!-- Description -->
+                        
+                    </div>
+                    </div>
+                    <!-- /Product Information -->
                     
                     
                 </div>
@@ -155,6 +195,37 @@
                                 <option value="PG">PG</option>
                                 <option value="UG">UG</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="indicator">Indicator</label>
+                            <input type="text" class="form-control" id="indicator" name="indicator" disabled>
+                        </div>
+                        
+                        
+                    </div>
+                    </div>
+                    <!-- /Pricing Card -->
+                     <!-- Pricing Card -->
+                    <div class="card mb-6">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Aggregation (Auto – Program Portfolio)</h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        
+                        <div class="mb-3">
+                            <label class="form-label" for="total_programs_assessed">Total Programs Assessed</label>
+                            <input type="number" class="form-control" id="total_programs_assessed" name="total_programs_assessed" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="number_of_profitable_programs" class="form-label">Number of Profitable Programs</label>
+                            <input type="number" class="form-control" id="number_of_profitable_programs" name="number_of_profitable_programs" disabled>
+                        </div>
+
+                         <div class="mb-3">
+                            <label for="proportion_of_profitable_programs" class="form-label">Proportion of Profitable Programs (%)</label>
+                            <input type="number" class="form-control" id="proportion_of_profitable_programs" name="proportion_of_profitable_programs" disabled>
                         </div>
                         
                         
