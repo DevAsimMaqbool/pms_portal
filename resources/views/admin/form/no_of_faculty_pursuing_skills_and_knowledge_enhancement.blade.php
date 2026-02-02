@@ -82,6 +82,11 @@
                                         <label class="form-label" for="remarks">Remarks</label>
                                         <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
                                     </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label" for="faculty_cpd_percentage">Faculty CPD Percentage (%)</label>
+                                        <input type="number" class="form-control" id="faculty_cpd_percentage" placeholder="Faculty CPD Percentage (%)" name="faculty_cpd_percentage" aria-label="Faculty CPD Percentage (%)" disabled>
+                                    </div>
+
 
 
 

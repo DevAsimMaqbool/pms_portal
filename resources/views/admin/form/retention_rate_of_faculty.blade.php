@@ -29,7 +29,48 @@
                                 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
                                 <div class="row g-6 mt-0">
                                     <div id="grant-details-container">
-                                        <div class="grant-group row g-3 mb-3 p-3 border border-primary">
+
+                                       <div class="grant-group row g-3 p-3 border border-primary">
+                                
+
+                                            <div class="col-md-6">
+                                                <label for="faculty_at_start_of_year" class="form-label">Faculty at Start of Year</label>
+                                                <input type="date" name="faculty_at_start_of_year" id="Faculty at Start of Year" class="form-control"
+                                                    required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="faculty_at_end_of_year" class="form-label">Faculty at End of Year</label>
+                                                <input type="date" name="faculty_at_end_of_year" id="faculty_at_end_of_year" class="form-control" required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="faculty_joined_during_year" class="form-label">Faculty Joined During Year</label>
+                                                <input type="date" name="faculty_joined_during_year" id="faculty_joined_during_year" class="form-control" required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="faculty_left_during_year" class="form-label">Faculty Left During Year</label>
+                                                <input type="date" name="faculty_left_during_year" id="faculty_left_during_year"  class="form-control" required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="evidence_reference" class="form-label">Evidence Reference</label>
+                                                <input type="text" name="evidence_reference" id="evidence_reference" class="form-control" required>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label class="form-label d-block">Remarks</label>
+                                                <div>
+                                                    <textarea class="form-control" id="remarks" name="remarks"
+                                                        rows="4"></textarea>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="grant-group row g-3 mt-3 p-3 border border-primary">
                                             <div class="col-md-6">
                                                 <label for="academic_year" class="form-label">Academic Year</label>
                                                 <select name="academic_year" id="academic_year" class="select2 form-select faculty-member"
