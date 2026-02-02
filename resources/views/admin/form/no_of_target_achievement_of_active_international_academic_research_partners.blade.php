@@ -144,7 +144,7 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
                     });
 
                     $.ajax({
-                        url: "{{ route('active-international-research-partners.store') }}",
+                        url: "{{ route('international-research-partners.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,
