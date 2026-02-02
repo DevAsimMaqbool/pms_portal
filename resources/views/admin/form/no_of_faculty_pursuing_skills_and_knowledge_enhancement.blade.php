@@ -93,7 +93,7 @@
 
                                 </div>
                                 <div class="col-12 demo-vertical-spacing">
-                                    <button class="btn btn-primary waves-effect waves-light float-end" style="margin-right: 24px;">SUBMIT</button>
+                                    <button class="btn btn-primary waves-effect waves-light float-end" style="margin-right: 0px;">SUBMIT</button>
                                 </div>
                             </form>
                     </div>
