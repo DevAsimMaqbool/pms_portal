@@ -68,7 +68,7 @@
             <div class="card-datatable table-responsive card-body">
             <div class="d-flex justify-content-between">
                                <div>
-                                <h5 class="mb-1"></h5>
+                                <h5 class="mb-1">Student Satisfaction Rate / Happiness of students</h5>
                                 </div>
                                 <a href="{{ route('indicators_crud.index', ['slug' => 'Internationalization_section', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
                             </div> 
