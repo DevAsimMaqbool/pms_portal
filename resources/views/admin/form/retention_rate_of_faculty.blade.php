@@ -114,6 +114,21 @@
                                             </div>
 
                                         </div>
+                                        <div class="grant-group row g-3 mb-3 mt-3 p-3 border border-primary">
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="retained_faculty_count">Retained Faculty Count</label>
+                                                <input type="number" class="form-control" id="retained_faculty_count" placeholder="Retained Faculty Count" name="retained_faculty_count" aria-label="Retained Faculty Count" disabled>
+                                            </div>
+                                            <div class="col-md-6">
+                                                 <label class="form-label" for="retention_rate">Retention Rate (%)</label>
+                                                <input type="number" class="form-control" id="retention_rate" placeholder="Retention Rate (%)" name="retention_rate" aria-label="Retention Rate (%)" disabled>
+                                            </div>
+                                            
+                                        </div>
+
+
+
+
                                     </div>
                                 </div>
                                 <div class="mt-3 text-end" style="margin-left: -16px !important;">

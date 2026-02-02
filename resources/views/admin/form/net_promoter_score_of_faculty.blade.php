@@ -46,8 +46,8 @@
                                 <input type="hidden"  id="form_status" name="form_status" value="HOD">
 
                                 <div class="row g-6 mt-0">
-
-                                        <div class="row g-3">
+                                         
+                                        <div class="row g-3 pb-3 border border-primary">
                                             <div class="col-md-6">
                                                 <label class="form-label" for="total_faculty_surveyed">Total Faculty Surveyed</label>
                                                 <input type="number" class="form-control" id="total_faculty_surveyed" placeholder="Total Faculty Surveyed" name="total_faculty_surveyed" aria-label="Total Faculty Surveyed">
@@ -71,6 +71,21 @@
                                             <div class="col-md-12">
                                                 <label class="form-label" for="remarks">Remarks</label>
                                                 <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="row g-3 pb-3 border border-primary">
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="promoters_percentage">Promoters Percentage (%)</label>
+                                                <input type="number" class="form-control" id="promoters_percentage" placeholder="Promoters Percentage (%)" name="promoters_percentage" aria-label="Promoters Percentage (%)" disabled>
+                                            </div>
+                                            <div class="col-md-6">
+                                                 <label class="form-label" for="detractors_percentage">Detractors Percentage (%)</label>
+                                                <input type="number" class="form-control" id="detractors_percentage" placeholder="Detractors Percentage (%)" name="detractors_percentage" aria-label="Detractors Percentage (%)" disabled>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="net_promoter_score">Net Promoter Score (NPS)</label>
+                                                <input type="number" class="form-control" id="net_promoter_score" placeholder="Net Promoter Score (NPS)" name="net_promoter_score" disabled>
                                             </div>
                                         </div>
                                    
