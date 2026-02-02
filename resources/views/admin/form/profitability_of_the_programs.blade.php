@@ -62,42 +62,42 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6 mb-6">
+                            <div class="col-md-6 mb-3">
                             <label class="form-label" for="total_program_income">Total Program Income</label>
                             <input type="number" class="form-control" id="total_program_income" placeholder="Total Program Income" name="total_program_income" aria-label="Total Program Income">
                             </div>
 
-                            <div class="col-md-6 mb-6">
+                            <div class="col-md-6 mb-3">
                             <label class="form-label" for="faculty_cost">Faculty Cost</label>
                             <input type="number" class="form-control" id="faculty_cost" placeholder="Faculty Cost" name="faculty_cost" aria-label="Faculty Cost">
                             </div>
 
-                            <div class="col-md-6 mb-6">
+                            <div class="col-md-6 mb-3">
                             <label class="form-label" for="facilities_cost">Facilities Cost</label>
                             <input type="number" class="form-control" id="facilities_cost" placeholder="Facilities Cost" name="facilities_cost" aria-label="Facilities Cost">
                             </div>
 
-                            <div class="col-md-6 mb-6">
+                            <div class="col-md-6 mb-3">
                             <label class="form-label" for="materials_cost">Materials Cost</label>
                             <input type="number" class="form-control" id="materials_cost" placeholder="Materials Cost" name="materials_cost" aria-label="Materials Cost">
                             </div>
 
-                            <div class="col-md-6 mb-6">
+                            <div class="col-md-6 mb-3">
                             <label class="form-label" for="support_services_cost">Support Services Cost</label>
                             <input type="number" class="form-control" id="support_services_cost" placeholder="Support Services Cost" name="support_services_cost" aria-label="Support Services Cost">
                             </div>
 
-                            <div class="col-md-6 mb-6">
+                            <div class="col-md-6 mb-3">
                             <label class="form-label" for="other_costs">Other Costs</label>
                             <input type="number" class="form-control" id="other_costs" placeholder="Other Costs" name="other_costs" aria-label="Other Costs">
                             </div>
 
-                            <div class="col-md-12 mb-6">
+                            <div class="col-md-12 mb-3">
                             <label class="form-label" for="evidence_reference">Evidence Reference</label>
                             <input type="text" class="form-control" id="evidence_reference" placeholder="Evidence Reference" name="evidence_reference" aria-label="Evidence Reference">
                             </div>
 
-                            <div class="col-md-12 mb-6">
+                            <div class="col-md-12 mb-3">
                             <label class="form-label" for="remarks">Remarks</label>
                             <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
                             </div>
@@ -123,12 +123,12 @@
                     <div class="card-body">
                         
                         
-                        <div class="mb-6">
+                        <div class="mb-3">
                             <label class="form-label" for="financial_year">Academic / Financial Year</label>
                             <input type="date" class="form-control" id="financial_year" name="financial_year">
                         </div>
 
-                        <div class="mb-6">
+                        <div class="mb-3">
                             <label for="faculty" class="form-label">Faculty / Department</label>
                             <select name="faculty_id" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Faculty --</option>
@@ -138,7 +138,7 @@
                             </select>
                         </div>
 
-                         <div class="mb-6">
+                         <div class="mb-3">
                             <label for="program" class="form-label">Program Name</label>
                             <select name="program_id" class="select2 form-select program_id" required>
                                 <option value="">-- Select Program --</option>
@@ -148,7 +148,7 @@
                             </select>
                         </div>
 
-                        <div class="mb-6">
+                        <div class="mb-3">
                             <label for="program" class="form-label">Program Level</label>
                             <select name="program_level" class="select2 form-select program_level" required>
                                 <option value="">-- Select Program --</option>

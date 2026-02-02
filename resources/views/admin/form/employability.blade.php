@@ -238,7 +238,16 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-6 mb-3">
+                            <label for="faculty" class="form-label">Please select period</label>
+                            <select name="faculty_id" class="select2 form-select faculty-member" required>
+                                <option value="">-- Select Period --</option>
+                                <option value="11"> 2024-2025</option>
+                                <option value="171">2025-2026<</option>
+                                <option value="158">2026-2027<</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label for="student_name" class="form-label">Student Name</label>
                             <select name="student_id" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Student --</option>
@@ -248,7 +257,7 @@
                                 
                             </select>
                         </div>
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-6 mb-3">
                             <label for="faculty" class="form-label">Faculty</label>
                             <select name="faculty_id" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Faculty --</option>
@@ -257,7 +266,7 @@
                                 <option value="158"> Faculty of  Arts and Humanities-CCL</option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-6 mb-3">
                             <label for="program" class="form-label">Program</label>
                             <select name="program_id" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Program --</option>
@@ -267,7 +276,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-6 mb-3">
                             <label for="batch" class="form-label">Batch</label>
                             <select name="batch" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Batch --</option>
@@ -278,7 +287,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-6 mb-3">
                             <label for="passing_year" class="form-label">Passing Year</label>
                             <select name="passing_year" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Year --</option>
@@ -291,12 +300,12 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label">Employer Name</label>
                             <input type="text" name="employer_name" class="form-control" required>
                         </div>
 
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-6 mb-3">
                             <label for="sector" class="form-label">Sector</label>
                             <select name="sector" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Sector --</option>
@@ -309,13 +318,13 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label">Salary</label>
                             <input type="number" name="salary" class="form-control" min="1" step="1"
                                 required>
                         </div>
 
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-6 mb-3">
                             <label for="market_competitive_salary" class="form-label">Market Competitive
                                 Salary</label>
                             <select name="market_competitive_salary"
@@ -327,7 +336,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6 mb-6">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label d-block">Job Relevancy</label>
                             <div>
                                 <input type="radio" name="job_relevancy" id="job_relevancy" value="yes">
@@ -353,20 +362,20 @@
                 <!-- Second column -->
                 <div class="col-12 col-lg-4">
                     <!-- Pricing Card -->
-                    <div class="card mb-6">
+                    <div class="card mb-3">
                     <div class="card-header">
                         <h5 class="card-title mb-0">Rating</h5>
                     </div>
                     <div class="card-body">
                         
                         
-                        <div class="mb-6">
+                        <div class="mb-3">
                             <label class="form-label">Employer Satisfaction</label>
                             <div id="employerRating" class="raty"></div>
                             <input type="hidden" name="employer_satisfaction" id="employer_satisfaction" value="">
                         </div>
 
-                        <div class="mb-6">
+                        <div class="mb-3">
                             <label class="form-label">Graduate Satisfaction</label>
                             <div id="graduateRating" class="raty"></div>
                             <input type="hidden" name="graduate_satisfaction" id="graduate_satisfaction" value="">

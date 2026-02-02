@@ -48,7 +48,7 @@
                                 <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden"  id="form_status" name="form_status" value="HOD" required>
                                 
-                                <div class="row g-6 mt-0">
+                                <div class="row g-3 mt-0">
                                     
 
                                     <div class="col-md-6">
