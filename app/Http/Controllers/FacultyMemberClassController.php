@@ -368,5 +368,61 @@ class FacultyMemberClassController extends Controller
         }
     }
 
+    function updateFacultyClassDetails()
+    {
+        // 1. faculty_member_classes se saari classes le lo
+        //$facultyClasses = DB::table('faculty_member_classes')->get();
+
+        //foreach ($facultyClasses as $fc) {
+        $classId = 146434;
+
+        // 2. exam_date
+        $exam = DB::table('odoocms_class as ocp')
+            ->join('odoocms_datesheet_line as dsl', function ($join) {
+                $join->on('dsl.course_id', '=', 'ocp.course_id')
+                    ->on('dsl.term_id', '=', 'ocp.term_id')
+                    ->on('dsl.batch_id', '=', 'ocp.batch_id');
+            })
+            ->where('ocp.id', $classId)
+            ->select('dsl.date as exam_date')
+            ->first();
+
+        // 3. result_submit_date
+        $result = DB::table('odoocms_class as oc')
+            ->leftJoin('odoocms_class_primary as ocp', 'ocp.id', '=', 'oc.primary_class_id')
+            ->leftJoin('odoocms_class_grade as ocg', 'ocg.id', '=', 'ocp.grade_class_id')
+            ->where('oc.id', $classId)
+            ->select('ocg.submit_to_hod_date as result_submit_date')
+            ->first();
+
+        // 4. average_marks
+        $average = DB::table('odoocms_student_course as osc')
+            ->leftJoin('odoocms_class_primary as ocp', 'ocp.id', '=', 'osc.primaryclass_id')
+            ->where('ocp.id', $classId)
+            ->select(DB::raw('AVG(osc.total_marks) as average_marks'))
+            ->groupBy('ocp.id')
+            ->first();
+
+        // 5. ek hi update array me prepare kar lo
+        $updateData = [];
+
+        if ($exam && $exam->exam_date) {
+            $updateData['exam_date'] = $exam->exam_date;
+        }
+        if ($result && $result->result_submit_date) {
+            $updateData['result_submit_date'] = $result->result_submit_date;
+        }
+        if ($average && $average->average_marks) {
+            $updateData['average_marks'] = $average->average_marks;
+        }
+
+        // 6. agar data hai to update kar do
+        if (!empty($updateData)) {
+            DB::table('faculty_member_classes')
+                ->where('class_id', $classId)
+                ->update($updateData);
+        }
+        //}
+    }
 
 }

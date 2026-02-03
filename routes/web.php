@@ -282,6 +282,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/odoo-classes', [FacultyMemberClassController::class, 'odooClasses'])->name('odoo.classes');
     Route::get('/classes-attendance', [FacultyMemberClassController::class, 'classesAttendance'])->name('classes.attendance');
+    Route::get('/classes-details', [FacultyMemberClassController::class, 'updateFacultyClassDetails'])->name('classes.details');
 
     Route::post('/employee-rating/store', [LineManagerFeedbackController::class, 'store'])->name('employee.rating.store');
     Route::get('/linemanager-form', [FormBuilderController::class, 'lineManagerForm'])->name('linemanager.form');
