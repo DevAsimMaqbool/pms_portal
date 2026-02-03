@@ -58,8 +58,9 @@
                         </div>
                     </div>
 
-                    <div class="col-4 text-center mb-3">
-                        <button class="btn btn-primary w-100 waves-effect waves-light">UPDATE</button>
+
+                    <div class="text-end" style="margin-left: -20px;">
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">UPDATE</button>
                     </div>
                 </form>
 

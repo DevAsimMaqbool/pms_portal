@@ -30,19 +30,19 @@
                         <input type="hidden" name="student_id" value="{{ $id }}">
                             @foreach($form->fields as $field)
                                 @php
-        $required = $field->required ? 'required' : '';
-        $name = $field->name;
-        $options = [];
+    $required = $field->required ? 'required' : '';
+    $name = $field->name;
+    $options = [];
 
-        if (in_array($field->type, ['select', 'radio', 'checkbox'])) {
-            $decoded = json_decode($field->options, true);
-            $options = is_array($decoded)
-                ? $decoded
-                : explode(',', $field->options);
+    if (in_array($field->type, ['select', 'radio', 'checkbox'])) {
+        $decoded = json_decode($field->options, true);
+        $options = is_array($decoded)
+            ? $decoded
+            : explode(',', $field->options);
 
-            // Trim whitespace and remove surrounding quotes from options
-            $options = array_map(fn($opt) => trim(trim($opt, '"')), $options);
-        }
+        // Trim whitespace and remove surrounding quotes from options
+        $options = array_map(fn($opt) => trim(trim($opt, '"')), $options);
+    }
                                 @endphp
                                 <div class="col-md-6">
                                     <label class="d-block form-label">
@@ -93,8 +93,8 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div class="col-4 text-center demo-vertical-spacing">
-                            <button class="btn btn-primary w-100 waves-effect waves-light">Submit</button>
+                        <div class="mt-5">
+                            <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                         </div>
                     </form>
                 </div>

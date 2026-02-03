@@ -36,13 +36,16 @@
                     <div class="col-md-6 mt-2">
                         <button type="button" onclick="addField()" class="btn btn-primary me-4">+ Add Field</button>
                     </div>
-                    <div class="d-flex mt-5">
-                        <!-- <button class="btn btn-primary ms-auto">Submit</button> -->
-                        <button class="btn btn-primary w-100 waves-effect waves-light">Submit</button>
-                    </div>
-                </form>
+                    <!-- <div class="d-flex mt-5">
+                            <!-- <button class="btn btn-primary ms-auto">Submit</button> -->
+                    <button class="btn btn-primary w-100 waves-effect waves-light">Submit</button>
+            </div> -->
+            <div class="mt-3" style="margin-left: -20px;">
+                <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
             </div>
+            </form>
         </div>
+    </div>
     </div>
     <!-- / Content -->
 @endsection

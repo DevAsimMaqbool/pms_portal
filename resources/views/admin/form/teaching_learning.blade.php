@@ -51,13 +51,16 @@
                             </select>
                         </div>
                         <!-- <div class="col-md-6">
-                                <label for="userMultiple" class="form-label">User </label>
-                                <select id="userMultiple" name="user[]" class="select2 form-select" multiple>
-                                </select>
-                            </div> -->
+                                                    <label for="userMultiple" class="form-label">User </label>
+                                                    <select id="userMultiple" name="user[]" class="select2 form-select" multiple>
+                                                    </select>
+                                                </div> -->
                     </div>
-                    <div class="col-4 text-center demo-vertical-spacing">
-                        <button class="btn btn-primary w-100 waves-effect waves-light">Assign</button>
+                    <!-- <div class="col-4 text-center demo-vertical-spacing">
+                                    <button class="btn btn-primary w-100 waves-effect waves-light">Assign</button>
+                                </div> -->
+                    <div class="mt-5 text-end" style="margin-left: -23px;">
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                     </div>
                 </form>
             </div>
