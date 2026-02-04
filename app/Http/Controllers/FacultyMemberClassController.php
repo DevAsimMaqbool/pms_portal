@@ -377,8 +377,8 @@ class FacultyMemberClassController extends Controller
         $classId = 146434;
 
         // 2. exam_date
-        $exam = DB::connection('pgsql')->
-            table('odoocms_class as ocp')
+        $exam = DB::connection('pgsql')
+            ->table('odoocms_class as ocp')
             ->join('odoocms_datesheet_line as dsl', function ($join) {
                 $join->on('dsl.course_id', '=', 'ocp.course_id')
                     ->on('dsl.term_id', '=', 'ocp.term_id')
@@ -389,7 +389,8 @@ class FacultyMemberClassController extends Controller
             ->first();
 
         // 3. result_submit_date
-        $result = DB::table('odoocms_class as oc')
+        $result = DB::connection('pgsql')
+            ->table('odoocms_class as oc')
             ->leftJoin('odoocms_class_primary as ocp', 'ocp.id', '=', 'oc.primary_class_id')
             ->leftJoin('odoocms_class_grade as ocg', 'ocg.id', '=', 'ocp.grade_class_id')
             ->where('oc.id', $classId)
@@ -397,7 +398,8 @@ class FacultyMemberClassController extends Controller
             ->first();
 
         // 4. average_marks
-        $average = DB::table('odoocms_student_course as osc')
+        $average = DB::connection('pgsql')
+            ->table('odoocms_student_course as osc')
             ->leftJoin('odoocms_class_primary as ocp', 'ocp.id', '=', 'osc.primaryclass_id')
             ->where('ocp.id', $classId)
             ->select(DB::raw('AVG(osc.total_marks) as average_marks'))
