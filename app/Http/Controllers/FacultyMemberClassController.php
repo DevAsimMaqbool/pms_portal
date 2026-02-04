@@ -416,7 +416,7 @@ class FacultyMemberClassController extends Controller
         if ($result && $result->result_submit_date) {
             $updateData['result_submit_date'] = $result->result_submit_date;
         }
-        if ($average && $average->average_marks) {
+        if ($average && $average->average_marks !== null) {
             $updateData['average_marks'] = $average->average_marks;
         }
 
