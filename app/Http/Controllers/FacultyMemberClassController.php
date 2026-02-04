@@ -400,7 +400,7 @@ class FacultyMemberClassController extends Controller
         // 4. average_marks
         $average = DB::connection('pgsql')
             ->table('odoocms_student_course as osc')
-            ->leftJoin('odoocms_class_primary as ocp', 'ocp.id', '=', 'osc.primaryclass_id')
+            ->leftJoin('odoocms_class_primary as ocp', 'ocp.id', '=', 'osc.primary_class_id')
             ->where('ocp.id', $classId)
             ->select(DB::raw('AVG(osc.total_marks) as average_marks'))
             ->groupBy('ocp.id')
