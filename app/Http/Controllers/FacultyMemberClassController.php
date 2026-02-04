@@ -377,7 +377,8 @@ class FacultyMemberClassController extends Controller
         $classId = 146434;
 
         // 2. exam_date
-        $exam = DB::table('odoocms_class as ocp')
+        $exam = DB::connection('pgsql')->
+            table('odoocms_class as ocp')
             ->join('odoocms_datesheet_line as dsl', function ($join) {
                 $join->on('dsl.course_id', '=', 'ocp.course_id')
                     ->on('dsl.term_id', '=', 'ocp.term_id')
