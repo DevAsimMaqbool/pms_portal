@@ -371,62 +371,62 @@ class FacultyMemberClassController extends Controller
     function updateFacultyClassDetails()
     {
         // 1. faculty_member_classes se saari classes le lo
-        //$facultyClasses = DB::table('faculty_member_classes')->get();
+        $facultyClasses = DB::table('faculty_member_classes')->get();
 
-        //foreach ($facultyClasses as $fc) {
-        $classId = 146434;
+        foreach ($facultyClasses as $fc) {
+            $classId = $fc->class_id;
 
-        // 2. exam_date
-        $exam = DB::connection('pgsql')
-            ->table('odoocms_class as ocp')
-            ->join('odoocms_datesheet_line as dsl', function ($join) {
-                $join->on('dsl.course_id', '=', 'ocp.course_id')
-                    ->on('dsl.term_id', '=', 'ocp.term_id')
-                    ->on('dsl.batch_id', '=', 'ocp.batch_id');
-            })
-            ->where('ocp.id', $classId)
-            ->select('dsl.date as exam_date')
-            ->first();
+            // 2. exam_date
+            $exam = DB::connection('pgsql')
+                ->table('odoocms_class as ocp')
+                ->join('odoocms_datesheet_line as dsl', function ($join) {
+                    $join->on('dsl.course_id', '=', 'ocp.course_id')
+                        ->on('dsl.term_id', '=', 'ocp.term_id')
+                        ->on('dsl.batch_id', '=', 'ocp.batch_id');
+                })
+                ->where('ocp.id', $classId)
+                ->select('dsl.date as exam_date')
+                ->first();
 
-        // 3. result_submit_date
-        $result = DB::connection('pgsql')
-            ->table('odoocms_class as oc')
-            ->leftJoin('odoocms_class_primary as ocp', 'ocp.id', '=', 'oc.primary_class_id')
-            ->leftJoin('odoocms_class_grade as ocg', 'ocg.id', '=', 'ocp.grade_class_id')
-            ->where('oc.id', $classId)
-            ->select('ocg.submit_to_hod_date as result_submit_date')
-            ->first();
+            // 3. result_submit_date
+            $result = DB::connection('pgsql')
+                ->table('odoocms_class as oc')
+                ->leftJoin('odoocms_class_primary as ocp', 'ocp.id', '=', 'oc.primary_class_id')
+                ->leftJoin('odoocms_class_grade as ocg', 'ocg.id', '=', 'ocp.grade_class_id')
+                ->where('oc.id', $classId)
+                ->select('ocg.submit_to_hod_date as result_submit_date')
+                ->first();
 
-        // 4. average_marks
-        $average = DB::connection('pgsql')
-            ->table('odoocms_student_course as osc')
-            ->leftJoin('odoocms_class_primary as ocp', 'ocp.id', '=', 'osc.primary_class_id')
-            ->leftJoin('odoocms_student as os', 'os.id', '=', 'osc.student_id')
-            ->where('ocp.id', $classId) // pass class_id here
-            ->select(DB::raw('AVG(osc.total_marks) as average_marks'))
-            ->groupBy('ocp.id')
-            ->first();
+            // 4. average_marks
+            $average = DB::connection('pgsql')
+                ->table('odoocms_student_course as osc')
+                ->leftJoin('odoocms_class_primary as ocp', 'ocp.id', '=', 'osc.primary_class_id')
+                ->leftJoin('odoocms_student as os', 'os.id', '=', 'osc.student_id')
+                ->where('ocp.id', $classId) // pass class_id here
+                ->select(DB::raw('AVG(osc.total_marks) as average_marks'))
+                ->groupBy('ocp.id')
+                ->first();
 
-        // 5. ek hi update array me prepare kar lo
-        $updateData = [];
+            // 5. ek hi update array me prepare kar lo
+            $updateData = [];
 
-        if ($exam && $exam->exam_date) {
-            $updateData['exam_date'] = $exam->exam_date;
+            if ($exam && $exam->exam_date) {
+                $updateData['exam_date'] = $exam->exam_date;
+            }
+            if ($result && $result->result_submit_date) {
+                $updateData['result_submit_date'] = $result->result_submit_date;
+            }
+            if ($average && $average->average_marks !== null) {
+                $updateData['average_marks'] = $average->average_marks;
+            }
+
+            // 6. agar data hai to update kar do
+            if (!empty($updateData)) {
+                DB::table('faculty_member_classes')
+                    ->where('class_id', $classId)
+                    ->update($updateData);
+            }
         }
-        if ($result && $result->result_submit_date) {
-            $updateData['result_submit_date'] = $result->result_submit_date;
-        }
-        if ($average && $average->average_marks !== null) {
-            $updateData['average_marks'] = $average->average_marks;
-        }
-
-        // 6. agar data hai to update kar do
-        if (!empty($updateData)) {
-            DB::table('faculty_member_classes')
-                ->where('class_id', $classId)
-                ->update($updateData);
-        }
-        //}
     }
 
 }
