@@ -372,7 +372,8 @@ class FacultyMemberClassController extends Controller
     {
         // 1. faculty_member_classes se saari classes le lo
         DB::table('faculty_member_classes')
-            ->select('class_id')
+            ->select('id', 'class_id')
+            ->orderBy('id')
             ->chunk(1000, function ($facultyClasses) {
 
                 foreach ($facultyClasses as $fc) {
