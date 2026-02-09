@@ -147,5 +147,125 @@
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 @endpush
+@push('script')
+     
+    @if(auth()->user()->hasRole(['HOD']))
+        <script>
+            $(document).ready(function () {
+              
+              
+
+                 $('#researchForm').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
+                     // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                     
+                    $.ajax({
+                        url: "{{ route('faculty-pursuing-skills.store') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                            form[0].reset();
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            $('.select2').val(null).trigger('change');
+                              // Remove all extra grant groups and keep only the first one
+                            $('#grant-details-container .grant-group:not(:first)').remove();
+
+                            // Reset the proof container of the first group
+                            $('#grant-details-container .grant-group:first .proof-container').hide();
+
+                            // Reset index to 1
+                            grantIndex = 1;
+
+                            document.getElementById("employer_satisfaction").value = "";
+                            document.getElementById("graduate_satisfaction").value = "";
+
+                            // Reset stars
+                            employerRaty.setScore(0);
+                            graduateRaty.setScore(0);
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            // Clear previous errors before showing new ones
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                             if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+
+                            // Loop through all validation errors
+                            $.each(errors, function (field, messages) {
+                                let input = form.find('[name="' + field + '"]');
+
+                                if (input.length) {
+                                    input.addClass('is-invalid');
+
+                                    // Show error message under input
+                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                }
+                            });
+
+                        } else if (xhr.status === 409) {
+                            // 🔥 Duplicate record message
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Duplicate Entry',
+                                text: xhr.responseJSON.message
+                            });
+
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
+                        }
+                        }
+                    });
+                });
+
+                $('#importForm').on('submit', function (e) {
+                    e.preventDefault();
+
+                    let formData = new FormData(this);
+
+                    Swal.fire({
+                        title: 'Importing...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+
+                    $.ajax({
+                        url: "{{ route('employability.import') }}",
+                        method: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (res) {
+                            Swal.close();
+                            Swal.fire('Success', res.message, 'success');
+                            $('#importModal').modal('hide');
+                            $('#importForm')[0].reset();
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            Swal.fire('Error', xhr.responseJSON.message ?? 'Import failed', 'error');
+                        }
+                    });
+                });
+
+
+            });
+        </script>
+    @endif
+    @endpush
 
  

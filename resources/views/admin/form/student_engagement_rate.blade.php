@@ -417,7 +417,7 @@
                     });
                      
                     $.ajax({
-                        url: "{{ route('internationalization-section.store') }}",
+                        url: "{{ route('student-engagement-rate.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,
