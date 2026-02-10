@@ -130,7 +130,7 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
                     });
 
                     $.ajax({
-                        url: "{{ route('professional-membership.store') }}",
+                        url: "{{ route('students-global-experience.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,

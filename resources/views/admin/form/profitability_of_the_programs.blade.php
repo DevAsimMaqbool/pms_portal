@@ -367,7 +367,7 @@
                     });
                      
                     $.ajax({
-                        url: "{{ route('employability.store') }}",
+                        url: "{{ route('program-profitability.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,

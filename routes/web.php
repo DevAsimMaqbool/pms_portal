@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcademicGovernanceComplianceController;
 use App\Http\Controllers\AchievementOfResearchPublicationsTargetController;
 use App\Http\Controllers\ActiveInternationalResearchPartnerController;
 use App\Http\Controllers\UserController;
@@ -54,12 +55,21 @@ use App\Http\Controllers\RatingRuleController;
 use App\Http\Controllers\PmsPolicyController;
 use App\Http\Controllers\SelfNominationController;
 use App\Http\Controllers\AssignBadgeController;
+use App\Http\Controllers\FacultyEngagementDepartmentController;
+use App\Http\Controllers\FacultyNetPromoterScoreController;
+use App\Http\Controllers\FacultyPursuingSkillController;
 use App\Http\Controllers\FacultyRetentionController;
+use App\Http\Controllers\GoGlobalStreamTargetController;
 use App\Http\Controllers\InternationalizationSectionController;
 use App\Http\Controllers\NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingController;
 use App\Http\Controllers\ProfessionalMembershipController;
+use App\Http\Controllers\ProgramProfitabilityController;
 use App\Http\Controllers\RecoveryController;
+use App\Http\Controllers\ReportedIncidentComplianceController;
 use App\Http\Controllers\RoleFeedbackController;
+use App\Http\Controllers\StudentEngagementRateController;
+use App\Http\Controllers\StudentSatisfactionSubmissionController;
+use App\Http\Controllers\StudentsGlobalExperienceController;
 use App\Http\Controllers\SubjectRankingTargetController;
 use App\Http\Controllers\TermController;
 use App\Models\ProfessionalMembership;
@@ -191,6 +201,16 @@ Route::middleware('auth')->group(function () {
         Route::resource('faculty-retention', FacultyRetentionController::class);
         Route::resource('alumni-contribution', AlumniContributionController::class);
         Route::resource('/international-research-partners', ActiveInternationalResearchPartnerController::class);
+        Route::resource('/go-global-stream-target', GoGlobalStreamTargetController::class);
+        Route::resource('/students-global-experience', StudentsGlobalExperienceController::class);
+        Route::resource('/program-profitability', ProgramProfitabilityController::class);
+        Route::resource('/faculty-netpromoter-score', FacultyNetPromoterScoreController::class);
+        Route::resource('/faculty-engagement-department', FacultyEngagementDepartmentController::class);
+        Route::resource('/faculty-pursuing-skills', FacultyPursuingSkillController::class);
+        Route::resource('/academic-governance-compliance', AcademicGovernanceComplianceController::class);
+        Route::resource('/reported-incident-compliance', ReportedIncidentComplianceController::class);
+        Route::resource('/student-satisfaction', StudentSatisfactionSubmissionController::class);
+        Route::resource('/student-engagement-rate', StudentEngagementRateController::class);
 
         // routes/import excel file
         Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');
