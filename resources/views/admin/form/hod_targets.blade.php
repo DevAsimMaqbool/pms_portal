@@ -31,6 +31,7 @@
                             <option value="138">Patents/Intellectual Property (IPR)</option>
                             <option value="198">Industrial Projects</option>
                             <option value="199">Products Delivered to Industry</option>
+                            <option value="194">Number of Knowledge Products</option>
                         </select>
                         <div class="invalid-feedback" id="indicatorError"></div>
                     </div>
