@@ -51,31 +51,33 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-4">
-                                                <label class="form-label">Program Name</label>
-                                                <select name="audits[0][program_name]" class="form-select">
-                                                    <option value="">Select Program</option>
-                                                    <option value="BS Computer Science">BS Computer Science</option>
-                                                    <option value="BS Software Engineering">BS Software Engineering</option>
-                                                    <option value="MS Computer Science">MS Computer Science</option>
-                                                </select>
-                                            </div>
 
                                             <div class="col-md-4">
                                                 <label class="form-label">Faculty</label>
-                                                <select name="audits[0][faculty]" class="form-select">
+                                                <select name="audits[0][faculty]" class="select2 form-select faculty-select">
                                                     <option value="">Select Faculty</option>
-                                                    <option value="Computer Science">Computer Science</option>
-                                                    <option value="Engineering">Engineering</option>
+                                                    @foreach(get_faculties() as $faculty)
+                                                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <label class="form-label">Department</label>
-                                                <select name="audits[0][department]" class="form-select">
+                                                <select name="audits[0][department]" class="select2 form-select department-select">
                                                     <option value="">Select Department</option>
                                                     <option value="Software Engineering">Software Engineering</option>
                                                     <option value="Computer Science">Computer Science</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Program Name</label>
+                                                <select name="audits[0][program_name]" class="select2 form-select program-select">
+                                                    <option value="">Select Program</option>
+                                                    <option value="BS Computer Science">BS Computer Science</option>
+                                                    <option value="BS Software Engineering">BS Software Engineering</option>
+                                                    <option value="MS Computer Science">MS Computer Science</option>
                                                 </select>
                                             </div>
 
@@ -155,11 +157,23 @@
 @push('script')
     @if(auth()->user()->hasRole(['HOD']))
         <script>
+            
             $(document).ready(function () {
+                $('#author-past-container').find('select.select2').select2({
+                    placeholder: 'Select an option',
+                    width: '100%'
+                });
+                let faculties = @json(get_faculties());
                 let pastIndex = 1;
 
                 // Add new author group
                 $('#add-coauthor').click(function () {
+                    
+
+                     let facultyOptions = '<option value="">Select Faculty</option>';
+                        faculties.forEach(function(fac) {
+                            facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
+                        });
                     let newGroup = `
             <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
@@ -175,31 +189,25 @@
                     </select>
                 </div>
 
-                <div class="col-md-4">
-                    <label class="form-label">Program Name</label>
-                    <select name="audits[${pastIndex}][program_name]" class="form-select">
-                        <option value="">Select Program</option>
-                        <option value="BS Computer Science">BS Computer Science</option>
-                        <option value="BS Software Engineering">BS Software Engineering</option>
-                        <option value="MS Computer Science">MS Computer Science</option>
-                    </select>
-                </div>
 
                 <div class="col-md-4">
                     <label class="form-label">Faculty</label>
-                    <select name="audits[${pastIndex}][faculty]" class="form-select">
-                        <option value="">Select Faculty</option>
-                        <option value="Computer Science">Computer Science</option>
-                        <option value="Engineering">Engineering</option>
+                    <select name="audits[${pastIndex}][faculty]" class="select2 form-select faculty-select">
+                        ${facultyOptions}
                     </select>
                 </div>
 
                 <div class="col-md-4">
                     <label class="form-label">Department</label>
-                    <select name="audits[${pastIndex}][department]" class="form-select">
+                     <select name="audits[${pastIndex}][department]" class="select2 form-select department-select">
                         <option value="">Select Department</option>
-                        <option value="Software Engineering">Software Engineering</option>
-                        <option value="Computer Science">Computer Science</option>
+                    </select>
+                </div>
+
+                 <div class="col-md-4">
+                    <label class="form-label">Program Name</label>
+                    <select name="audits[${pastIndex}][program_name]" class="select2 form-select program-select">
+                        <option value="">Select Program</option>
                     </select>
                 </div>
 
@@ -228,6 +236,10 @@
             </div>`;
 
                     $('#author-past-container').append(newGroup);
+                    $('#author-past-container').find('select.select2').last().select2({
+                        placeholder: 'Select an option',
+                        width: '100%'
+                    });
                     pastIndex++;
                 });
 
@@ -279,6 +291,68 @@
                         }
                     });
                 });
+
+                // 3️⃣ Faculty → Department
+                $(document).on('change', '.faculty-select', function () {
+                    let facultyId = $(this).val();
+                    let departmentSelect = $(this).closest('.past-group').find('.department-select');
+                    let programSelect = $(this).closest('.past-group').find('.program-select');
+
+                    // Reset dependent dropdowns
+                    departmentSelect.html('<option value="">Loading...</option>');
+                    programSelect.html('<option value="">Select Program</option>');
+
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (departments) {
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">Select Department</option>');
+                                $.each(departments, function (key, department) {
+                                    departmentSelect.append(`<option value="${department.id}">${department.name}</option>`);
+                                });
+                                // Refresh Select2
+                                departmentSelect.select2({ placeholder: 'Select Department', width: '100%' });
+                            },
+                            error: function () {
+                                departmentSelect.html('<option value="">Error loading departments</option>');
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">Select Department</option>');
+                    }
+                });
+
+                // 4️⃣ Department → Program
+                $(document).on('change', '.department-select', function () {
+                    let departmentId = $(this).val();
+                    let programSelect = $(this).closest('.past-group').find('.program-select');
+
+                    programSelect.html('<option value="">Loading...</option>');
+
+                    if (departmentId) {
+                        $.ajax({
+                            url: "/get-programs/" + departmentId,
+                            type: "GET",
+                            success: function (programs) {
+                                programSelect.empty();
+                                programSelect.append('<option value="">Select Program</option>');
+                                $.each(programs, function (key, program) {
+                                    programSelect.append(`<option value="${program.id}">${program.program_name}</option>`);
+                                });
+                                // Refresh Select2
+                                programSelect.select2({ placeholder: 'Select Program', width: '100%' });
+                            },
+                            error: function () {
+                                programSelect.html('<option value="">Error loading programs</option>');
+                            }
+                        });
+                    } else {
+                        programSelect.html('<option value="">Select Program</option>');
+                    }
+                });
+
 
             });
         </script>

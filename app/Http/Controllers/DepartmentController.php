@@ -73,4 +73,20 @@ class DepartmentController extends Controller
     {
         //
     }
+    public function getDepartments($facultyId)
+    {
+        try {
+
+            $departments = get_departments($facultyId);
+
+            return response()->json($departments);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'error' => 'Something went wrong'
+            ], 500);
+        }
+    }
+
 }
