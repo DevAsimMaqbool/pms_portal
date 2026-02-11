@@ -237,7 +237,7 @@
                     }
 
                     $.ajax({
-                        url: "{{ route('    ') }}",
+                        url: "{{ route('faculty-target.getTarget') }}",
                         type: "GET",
                         data: {
                             indicator_id: indicatorId
