@@ -34,34 +34,27 @@
                                                                 <div class="grant-group row g-3 mb-3 p-3 border border-primary">
                                                                     <div class="col-md-6">
                                                                         <label for="faculty" class="form-label">Faculty</label>
-                                                                        <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-member" required>
+                                                                        <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
                                                                             <option value="">-- Select Faculty --</option>
-                                                                            <option value="11"> Faculty of Business and Management Sciences-KCF</option>
-                                                                            <option value="171">Faculty of Computer Science and Information
-                                                                                Technology-CCL</option>
-                                                                            <option value="158"> Faculty of  Arts and Humanities-CCL</option>
+                                                                                @foreach(get_faculties() as $faculty)
+                                                                                    <option value="{{ $faculty->id }}">
+                                                                                        {{ $faculty->name }}
+                                                                                    </option>
+                                                                                @endforeach
                                                                         </select>
                                                                     </div>
 
                                                                     <div class="col-md-6">
                                                                         <label for="department_id" class="form-label">Department</label>
-                                                                        <select name="department_id" id="department_id" class="select2 form-select faculty-member"
-                                                                            required>
+                                                                        <select name="department_id" id="department_id" class="select2 form-select" required>
                                                                             <option value="">-- Select Department --</option>
-                                                                            <option value="11">CS</option>
-                                                                            <option value="12">IT</option>
-                                                                            <option value="13">SE</option>
-
                                                                         </select>
                                                                     </div>
 
                                                                     <div class="col-md-6">
                                                                         <label for="program" class="form-label">Program</label>
-                                                                        <select name="program_id" id="program_id" class="select2 form-select faculty-member" required>
+                                                                        <select name="program_id" id="program_id" class="select2 form-select program_id" required>
                                                                             <option value="">-- Select Program --</option>
-                                                                            <option value="1"> BS Robotics</option>
-                                                                            <option value="2">BS Gaming And Multimedia</option>
-                                                                            <option value="3"> BS Cyber Security</option>
                                                                         </select>
                                                                     </div>
 
@@ -297,6 +290,75 @@
                             }
                         }
                     });
+                });
+
+                $('#faculty_id').on('change', function () {
+
+                    let facultyId = $(this).val();
+                    let departmentSelect = $('#department_id');
+                    let programSelect = $('#program_id');
+
+                    departmentSelect.html('<option value="">Loading...</option>');
+                    programSelect.html('<option value="">-- Select Program --</option>');
+                    
+
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (response) {
+
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">-- Select Department --</option>');
+
+                                $.each(response, function (key, department) {
+                                    departmentSelect.append(
+                                        `<option value="${department.id}">
+                                            ${department.name}
+                                        </option>`
+                                    );
+                                });
+
+                                departmentSelect.trigger('change'); // refresh select2
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">-- Select Department --</option>');
+                    }
+                });
+                $('#department_id').on('change', function () {
+
+                    let departmentId = $(this).val();
+                    let programSelect = $('#program_id');
+
+                    programSelect.html('<option value="">Loading...</option>');
+
+                    if (departmentId) {
+                        $.ajax({
+                            url: "/get-programs/" + departmentId,
+                            type: "GET",
+                            success: function (response) {
+
+                                programSelect.empty();
+                                programSelect.append('<option value="">-- Select Program --</option>');
+
+                                $.each(response, function (key, program) {
+                                    programSelect.append(
+                                        `<option value="${program.id}">
+                                            ${program.program_name}
+                                        </option>`
+                                    );
+                                });
+
+                                programSelect.trigger('change'); // refresh select2
+                            },
+                            error: function () {
+                                programSelect.html('<option value="">Error loading programs</option>');
+                            }
+                        });
+                    } else {
+                        programSelect.html('<option value="">-- Select Program --</option>');
+                    }
                 });
 
             });
