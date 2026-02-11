@@ -4,6 +4,8 @@
 
 use App\Models\AchievementOfResearchPublicationsTarget;
 use App\Models\CompletionOfCourseFolder;
+use App\Models\Department;
+use App\Models\Faculty;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\User;
 use App\Models\RoleKpaAssignment;
@@ -15,6 +17,7 @@ use App\Models\FacultyTarget;
 use App\Models\LineManagerFeedback;
 use App\Models\LineManagerEventFeedback;
 use App\Models\IndicatorsPercentage;
+use App\Models\Program;
 use App\Models\RatingRule;
 use App\Models\StudentFeedbackClassWise;
 use Illuminate\Support\Facades\DB;
@@ -2243,5 +2246,37 @@ if (!function_exists('indicatorsPercentageStatus')) {
 
         // Mark user as initialized
         $user->update(['indicators_percentage_status' => true]);
+    }
+}
+if (!function_exists('get_faculties')) {
+    function get_faculties($id = null)
+    {
+        if ($id) {
+            return Faculty::find($id);
+        }
+
+        return Faculty::all();
+    }
+}
+if (!function_exists('get_departments')) {
+
+    function get_departments($faculty_id = null)
+    {
+        if ($faculty_id) {
+            return Department::where('faculty_id', $faculty_id)->get();
+        }
+
+        return Department::all();
+    }
+}
+if (!function_exists('get_programs')) {
+
+    function get_programs($department_id = null)
+    {
+        if ($department_id) {
+            return Program::where('department_id', $department_id)->get();
+        }
+
+        return Program::all();
     }
 }

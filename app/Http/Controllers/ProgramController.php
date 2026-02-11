@@ -62,4 +62,20 @@ class ProgramController extends Controller
     {
         //
     }
+    public function getPrograms($departmentId)
+    {
+        try {
+
+            $programs = get_programs($departmentId);
+
+            return response()->json($programs);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'error' => 'Something went wrong'
+            ], 500);
+        }
+    }
+
 }

@@ -63,6 +63,7 @@ use App\Http\Controllers\GoGlobalStreamTargetController;
 use App\Http\Controllers\InternationalizationSectionController;
 use App\Http\Controllers\NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingController;
 use App\Http\Controllers\ProfessionalMembershipController;
+use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\ProgramProfitabilityController;
 use App\Http\Controllers\RecoveryController;
 use App\Http\Controllers\ReportedIncidentComplianceController;
@@ -72,6 +73,7 @@ use App\Http\Controllers\StudentSatisfactionSubmissionController;
 use App\Http\Controllers\StudentsGlobalExperienceController;
 use App\Http\Controllers\SubjectRankingTargetController;
 use App\Http\Controllers\TermController;
+use App\Models\Department;
 use App\Models\ProfessionalMembership;
 use Illuminate\Support\Facades\Route;
 
@@ -286,6 +288,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/faculty-feedback', [SurveyController::class, 'feedbackReport'])->name('feedback.report');
     Route::get('downloads', [DownloadsController::class, 'index'])->name('pms.downloads');
     Route::get('awards', [AwardController::class, 'index'])->name('pms.awards');
+    Route::get('/get-departments/{facultyId}', [DepartmentController::class, 'getDepartments'])->name('get.departments');
+    Route::get('/get-programs/{departmentId}',  [ProgramController::class, 'getPrograms'])->name('get.programs');
+
 
     Route::middleware('role:HOD')->group(function () {
         Route::get('/hod-target', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');

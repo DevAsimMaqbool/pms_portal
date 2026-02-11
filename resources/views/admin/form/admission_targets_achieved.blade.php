@@ -38,20 +38,19 @@
                                         <div class="grant-group row g-3 mb-3 p-3 border border-primary">
                                             <div class="col-md-6">
                                                 <label for="faculty" class="form-label">Faculty</label>
-                                                <select name="faculty_id" class="select2 form-select faculty-member" required>
-                                                    <option value="">-- Select Faculty Member --</option>
-                                                    <option value="11"> Faculty of Business and Management Sciences-KCF</option>
-                                                    <option value="171">Faculty of Computer Science and Information Technology-CCL</option>
-                                                    <option value="158"> Faculty of  Arts and Humanities-CCL</option>
+                                                 <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
+                                                    <option value="">-- Select Faculty --</option>
+                                                    @foreach(get_faculties() as $faculty)
+                                                        <option value="{{ $faculty->id }}">
+                                                            {{ $faculty->name }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="department_id" class="form-label">Department</label>
-                                                <select name="department_id" class="select2 form-select department" required>
-                                                    <option value="">-- Select Faculty Member --</option>
-                                                    <option value="11"> Faculty of Business and Management Sciences-KCF</option>
-                                                    <option value="171">Faculty of Computer Science and Information Technology-CCL</option>
-                                                    <option value="158"> Faculty of  Arts and Humanities-CCL</option>
+                                                <select name="department_id" id="department_id" class="select2 form-select" required>
+                                                    <option value="">-- Select Department --</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
@@ -215,6 +214,38 @@
                         }
                         }
                     });
+                });
+
+                $('#faculty_id').on('change', function () {
+
+                    let facultyId = $(this).val();
+                    let departmentSelect = $('#department_id');
+
+                    departmentSelect.html('<option value="">Loading...</option>');
+
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (response) {
+
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">-- Select Department --</option>');
+
+                                $.each(response, function (key, department) {
+                                    departmentSelect.append(
+                                        `<option value="${department.id}">
+                                            ${department.name}
+                                        </option>`
+                                    );
+                                });
+
+                                departmentSelect.trigger('change'); // refresh select2
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">-- Select Department --</option>');
+                    }
                 });
 
             });

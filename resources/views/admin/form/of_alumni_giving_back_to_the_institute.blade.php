@@ -79,14 +79,23 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-6">
-                                                <label for="faculty_id" class="form-label">Faculty / Program</label>
-                                                <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-member" required>
+                                                <div class="col-md-6">
+                                                <label for="faculty" class="form-label">Faculty</label>
+                                                <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
                                                     <option value="">-- Select Faculty --</option>
-                                                    <option value="cs">CS</option>
-                                                    <option value="it">IT</option>
-                                                    <option value="se">SE</option>
+                                                    @foreach(get_faculties() as $faculty)
+                                                        <option value="{{ $faculty->id }}">
+                                                            {{ $faculty->name }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="department" class="form-label">Department</label>
+                                                <select name="department_id" id="department_id" class="select2 form-select" required>
+                                                    <option value="">-- Select Department --</option>
+                                                </select>
+                                                
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="type_of_contribution" class="form-label">Type of
@@ -245,6 +254,38 @@
                             }
                         }
                     });
+                });
+
+                $('#faculty_id').on('change', function () {
+
+                    let facultyId = $(this).val();
+                    let departmentSelect = $('#department_id');
+
+                    departmentSelect.html('<option value="">Loading...</option>');
+
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (response) {
+
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">-- Select Department --</option>');
+
+                                $.each(response, function (key, department) {
+                                    departmentSelect.append(
+                                        `<option value="${department.id}">
+                                            ${department.name}
+                                        </option>`
+                                    );
+                                });
+
+                                departmentSelect.trigger('change'); // refresh select2
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">-- Select Department --</option>');
+                    }
                 });
 
             });
