@@ -10,6 +10,9 @@ class Program extends Model
         'id',
         'department_id',
         'program_name',
+        'code',
+        'short_code',
+        'faculty_id'
     ];
 
     public function department()

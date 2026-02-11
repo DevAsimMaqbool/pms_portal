@@ -4,33 +4,33 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
-use App\Models\Department;
+use App\Models\Campus;
 
-class ImportDepartments extends Command
+class ImportCampuses extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:import-departments';
+    protected $signature = 'app:import-campuses';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Import departments from remote API and save into database';
+    protected $description = 'Import campuses from remote API and save into database';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info('Fetching departments...');
+        $this->info('Fetching campuses...');
 
         // HTTP call
-        $response = Http::get('http://10.25.25.108:8000/pms/get-department-list');
+        $response = Http::get('http://10.25.25.108:8000/pms/get-campus-list');
 
         if (!$response->ok()) {
             $this->error('Failed to fetch data. HTTP Status: ' . $response->status());
@@ -45,16 +45,18 @@ class ImportDepartments extends Command
         }
 
         foreach ($departments as $dept) {
-            Department::updateOrCreate(
+            Campus::updateOrCreate(
                 ['id' => $dept['id']],
                 [
                     'name' => $dept['name'],
                     'code' => $dept['code'],
-                    'faculty_id' => $dept['faculty_id']
+                    'city' => $dept['city'],
+                    'effective_date' => $dept['effective_date'],
+                    'status' => !empty($dept['status']) ? 1 : 0,
                 ]
             );
         }
 
-        $this->info('Departments imported successfully!');
+        $this->info('Campuses imported successfully!');
     }
 }

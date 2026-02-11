@@ -10,8 +10,7 @@ class Department extends Model
         'id',
         'faculty_id',
         'name',
-        'complete_name',
-        'parent_id'
+        'code'
     ];
 
     public $incrementing = false;
