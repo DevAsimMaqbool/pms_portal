@@ -78,8 +78,7 @@
                                 </div>
                                 <a href="{{ route('indicators_crud.index', ['slug' => 'scholars_satisfaction_in_thesis_stage', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
                             </div> 
-                            <form id="selfAssessment" method="POST" action=""
-                                enctype="multipart/form-data">
+                            <form id="researchForm" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" id="assessmentType" name="assessment_type" value="self"
                                     class="form-control" />
@@ -101,18 +100,18 @@
                                         </label>
                                         <div style="margin-top:8px;">
                                             <label style="margin-right:15px;">
-                                                <input type="radio" name="responsibility_accountability_1" value="20">
+                                                <input type="radio" name="empathy_and_compassion" value="20">
                                                 Strongly Disagree</label>
                                             <label style="margin-right:15px;"><input type="radio"
-                                                    name="responsibility_accountability_1" value="40">
+                                                    name="empathy_and_compassion" value="40">
                                                 Disagree</label>
                                             <label style="margin-right:15px;"><input type="radio"
-                                                    name="responsibility_accountability_1" value="60">
+                                                    name="empathy_and_compassion" value="60">
                                                 Neutral</label>
                                             <label style="margin-right:15px;"><input type="radio"
-                                                    name="responsibility_accountability_1" value="80">
+                                                    name="empathy_and_compassion" value="80">
                                                 Agree</label>
-                                            <label><input type="radio" name="responsibility_accountability_1" value="100">
+                                            <label><input type="radio" name="empathy_and_compassion" value="100">
                                                 Strongly
                                                 Agree</label>
                                         </div>
@@ -133,19 +132,19 @@
                                         </label>
                                         <div style="margin-top:8px;">
                                             <label style="margin-right:15px;"><input type="radio"
-                                                    name="empathy_compassion_1" value="20">
+                                                    name="inspirational_leadership" value="20">
                                                 Strongly
                                                 Disagree</label>
                                             <label style="margin-right:15px;"><input type="radio"
-                                                    name="empathy_compassion_1" value="40">
+                                                    name="inspirational_leadership" value="40">
                                                 Disagree</label>
                                             <label style="margin-right:15px;"><input type="radio"
-                                                    name="empathy_compassion_1" value="60">
+                                                    name="inspirational_leadership" value="60">
                                                 Neutral</label>
                                             <label style="margin-right:15px;"><input type="radio"
-                                                    name="empathy_compassion_1" value="80">
+                                                    name="inspirational_leadership" value="80">
                                                 Agree</label>
-                                            <label><input type="radio" name="empathy_compassion_1" value="100">
+                                            <label><input type="radio" name="inspirational_leadership" value="100">
                                                 Strongly
                                                 Agree</label>
                                         </div>
@@ -165,20 +164,20 @@
                                             My supervisor gives honest, fair, and helpful feedback and promotes ethical research practices.
                                         </label>
                                         <div style="margin-top:8px;">
-                                            <label style="margin-right:15px;"><input type="radio" name="humility_service_1"
+                                            <label style="margin-right:15px;"><input type="radio" name="honesty_and_integrity"
                                                     value="20">
                                                 Strongly
                                                 Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="humility_service_1"
+                                            <label style="margin-right:15px;"><input type="radio" name="honesty_and_integrity"
                                                     value="40">
                                                 Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="humility_service_1"
+                                            <label style="margin-right:15px;"><input type="radio" name="honesty_and_integrity"
                                                     value="60">
                                                 Neutral</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="humility_service_1"
+                                            <label style="margin-right:15px;"><input type="radio" name="honesty_and_integrity"
                                                     value="80">
                                                 Agree</label>
-                                            <label><input type="radio" name="humility_service_1" value="100"> Strongly
+                                            <label><input type="radio" name="honesty_and_integrity" value="100"> Strongly
                                                 Agree</label>
                                         </div>
                                     </div>
@@ -197,20 +196,20 @@
                                             My supervisor respects my ideas and guides me with patience and a spirit of service.
                                         </label>
                                         <div style="margin-top:8px;">
-                                            <label style="margin-right:15px;"><input type="radio" name="honesty_integrity_1"
+                                            <label style="margin-right:15px;"><input type="radio" name="responsibility_and_accountability"
                                                     value="20">
                                                 Strongly
                                                 Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="honesty_integrity_1"
+                                            <label style="margin-right:15px;"><input type="radio" name="responsibility_and_accountability"
                                                     value="40">
                                                 Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="honesty_integrity_1"
+                                            <label style="margin-right:15px;"><input type="radio" name="responsibility_and_accountability"
                                                     value="60">
                                                 Neutral</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="honesty_integrity_1"
+                                            <label style="margin-right:15px;"><input type="radio" name="responsibility_and_accountability"
                                                     value="80">
                                                 Agree</label>
-                                            <label><input type="radio" name="honesty_integrity_1" value="100">
+                                            <label><input type="radio" name="responsibility_and_accountability" value="100">
                                                 Strongly
                                                 Agree</label>
                                         </div>
@@ -231,33 +230,11 @@
 (This will be open ended question, which will bring feedback about how students experience their academic journey. Themes for area of improvement will be made from the input of students on this question). 
                                         </label>
                                         <div style="margin-top:8px;">
-                                            <label style="margin-right:15px;"><input type="radio"
-                                                    name="inspirational_leadership_1" value="20">
-                                                Strongly
-                                                Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio"
-                                                    name="inspirational_leadership_1" value="40">
-                                                Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio"
-                                                    name="inspirational_leadership_1" value="60">
-                                                Neutral</label>
-                                            <label style="margin-right:15px;"><input type="radio"
-                                                    name="inspirational_leadership_1" value="80">
-                                                Agree</label>
-                                            <label><input type="radio" name="inspirational_leadership_1" value="100">
-                                                Strongly
-                                                Agree</label>
+                                            <textarea class="form-control" id="humility_and_service_at_institutional_level" name="humility_and_service_at_institutional_level" rows="4"></textarea>
+                                           
                                         </div>
                                     </div>
 
-                                    
-
-                                    <div class="col-md-12 mt-1">
-                                        <label style="font-weight:bold; margin-bottom:8px; display:block;">
-                                           Remarks
-                                        </label>
-                                        <textarea class="form-control" id="remarks" name="remarks" rows="4"></textarea>
-                                    </div>
 
                                 </div>
                                 <div class="mt-3 text-end" style="margin-right: 10px;">
@@ -316,3 +293,123 @@
         }); 
     </script>
 @endpush
+@push('script')
+    @if(auth()->user()->hasRole(['HOD']))
+        <script>
+            $(document).ready(function () {
+              
+              
+
+                 $('#researchForm').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
+                     // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                     
+                    $.ajax({
+                        url: "{{ route('scholars-satisfaction.store') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                            form[0].reset();
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            $('.select2').val(null).trigger('change');
+                              // Remove all extra grant groups and keep only the first one
+                            $('#grant-details-container .grant-group:not(:first)').remove();
+
+                            // Reset the proof container of the first group
+                            $('#grant-details-container .grant-group:first .proof-container').hide();
+
+                            // Reset index to 1
+                            grantIndex = 1;
+
+                            document.getElementById("employer_satisfaction").value = "";
+                            document.getElementById("graduate_satisfaction").value = "";
+
+                            // Reset stars
+                            employerRaty.setScore(0);
+                            graduateRaty.setScore(0);
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            // Clear previous errors before showing new ones
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                             if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+
+                            // Loop through all validation errors
+                            $.each(errors, function (field, messages) {
+                                let input = form.find('[name="' + field + '"]');
+
+                                if (input.length) {
+                                    input.addClass('is-invalid');
+
+                                    // Show error message under input
+                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                }
+                            });
+
+                        } else if (xhr.status === 409) {
+                            // 🔥 Duplicate record message
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Duplicate Entry',
+                                text: xhr.responseJSON.message
+                            });
+
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
+                        }
+                        }
+                    });
+                });
+
+                $('#importForm').on('submit', function (e) {
+                    e.preventDefault();
+
+                    let formData = new FormData(this);
+
+                    Swal.fire({
+                        title: 'Importing...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+
+                    $.ajax({
+                        url: "{{ route('employability.import') }}",
+                        method: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (res) {
+                            Swal.close();
+                            Swal.fire('Success', res.message, 'success');
+                            $('#importModal').modal('hide');
+                            $('#importForm')[0].reset();
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            Swal.fire('Error', xhr.responseJSON.message ?? 'Import failed', 'error');
+                        }
+                    });
+                });
+                 
+               
+
+            });
+        </script>
+    @endif
+    @endpush
