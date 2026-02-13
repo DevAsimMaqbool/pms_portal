@@ -55,6 +55,7 @@ use App\Http\Controllers\RatingRuleController;
 use App\Http\Controllers\PmsPolicyController;
 use App\Http\Controllers\SelfNominationController;
 use App\Http\Controllers\AssignBadgeController;
+use App\Http\Controllers\CommencementOfClassesOnTimeController;
 use App\Http\Controllers\FacultyEngagementDepartmentController;
 use App\Http\Controllers\FacultyNetPromoterScoreController;
 use App\Http\Controllers\FacultyPursuingSkillController;
@@ -62,12 +63,16 @@ use App\Http\Controllers\FacultyRetentionController;
 use App\Http\Controllers\GoGlobalStreamTargetController;
 use App\Http\Controllers\InternationalizationSectionController;
 use App\Http\Controllers\NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingController;
+use App\Http\Controllers\NumberOfKnowledgeProductController;
 use App\Http\Controllers\ProfessionalMembershipController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\ProgramProfitabilityController;
+use App\Http\Controllers\QecAuditRatingController;
 use App\Http\Controllers\RecoveryController;
 use App\Http\Controllers\ReportedIncidentComplianceController;
 use App\Http\Controllers\RoleFeedbackController;
+use App\Http\Controllers\SatisfactionOfInternationalStudentController;
+use App\Http\Controllers\ScholarsSatisfactionInThesisStageController;
 use App\Http\Controllers\StudentEngagementRateController;
 use App\Http\Controllers\StudentSatisfactionSubmissionController;
 use App\Http\Controllers\StudentsGlobalExperienceController;
@@ -213,6 +218,15 @@ Route::middleware('auth')->group(function () {
         Route::resource('/reported-incident-compliance', ReportedIncidentComplianceController::class);
         Route::resource('/student-satisfaction', StudentSatisfactionSubmissionController::class);
         Route::resource('/student-engagement-rate', StudentEngagementRateController::class);
+        Route::resource('/qec-audit-rating', QecAuditRatingController::class);
+        Route::resource('/scholars-satisfaction', ScholarsSatisfactionInThesisStageController::class);
+        Route::resource('/knowledge-products', NumberOfKnowledgeProductController::class);
+        Route::resource('/commencement-classes', CommencementOfClassesOnTimeController::class);
+        Route::resource('/international-student-satisfaction', SatisfactionOfInternationalStudentController::class);
+
+
+
+
 
         // routes/import excel file
         Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');

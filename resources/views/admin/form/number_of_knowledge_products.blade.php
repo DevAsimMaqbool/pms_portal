@@ -284,7 +284,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('achievement-ofmultidisciplinary.store') }}",
+                        url: "{{ route('knowledge-products.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,

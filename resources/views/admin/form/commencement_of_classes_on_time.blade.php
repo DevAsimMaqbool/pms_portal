@@ -80,20 +80,7 @@
                                             <label class="form-label">Classes On Time</label>
                                             <input type="number" name="classes_on_time" class="form-control">
                                         </div>
-                                        <!-- <div class="col-md-4">
-                                                    <label class="form-label">Class Date</label>
-                                                    <input type="date" name="classes_date" class="form-control">
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label class="form-label">Delay Duration</label>
-                                                    <input type="number" name="classes_date" class="form-control">
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <label class="form-label">Comments</label>
-                                                    <textarea name="comments" class="form-control" rows="2"
-                                                        placeholder="Optional"></textarea>
-                                                </div> -->
+                                        
                                     </div>
                                 </div>
 
@@ -157,7 +144,7 @@
                     let formData = new FormData(this);
 
                     $.ajax({
-                        url: "{{ route('international-Coauthored-Paper.store') }}",
+                        url: "{{ route('commencement-classes.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,
