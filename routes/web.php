@@ -222,7 +222,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('/scholars-satisfaction', ScholarsSatisfactionInThesisStageController::class);
         Route::resource('/knowledge-products', NumberOfKnowledgeProductController::class);
         Route::resource('/commencement-classes', CommencementOfClassesOnTimeController::class);
-        Route::resource('/international-student-satisfaction', SatisfactionOfInternationalStudentController::class);
+        Route::resource('/international-st-satisfaction', SatisfactionOfInternationalStudentController::class);
 
 
 
@@ -230,6 +230,7 @@ Route::middleware('auth')->group(function () {
 
         // routes/import excel file
         Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');
+        Route::post('/student-engagement-rate/import', [StudentEngagementRateController::class, 'import'])->name('student-engagement-rate.import');
 
         // routes/web.php
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');

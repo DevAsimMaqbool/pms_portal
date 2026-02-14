@@ -53,16 +53,121 @@
                 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
                 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
                 <div class="row">
+                <!-- First column-->
+                <div class="col-12 col-lg-8">
+                    <!-- Product Information -->
+                    <div class="card mb-6">
+                    <div class="card-header">
+                        <h5 class="card-tile mb-0">Financial Data (Program Level)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                            <label class="form-label" for="total_program_income">Total Program Income</label>
+                            <input type="number" class="form-control" id="total_program_income" placeholder="Total Program Income" name="total_program_income" aria-label="Total Program Income">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                            <label class="form-label" for="faculty_cost">Faculty Cost</label>
+                            <input type="number" class="form-control" id="faculty_cost" placeholder="Faculty Cost" name="faculty_cost" aria-label="Faculty Cost">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                            <label class="form-label" for="facilities_cost">Facilities Cost</label>
+                            <input type="number" class="form-control" id="facilities_cost" placeholder="Facilities Cost" name="facilities_cost" aria-label="Facilities Cost">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                            <label class="form-label" for="materials_cost">Materials Cost</label>
+                            <input type="number" class="form-control" id="materials_cost" placeholder="Materials Cost" name="materials_cost" aria-label="Materials Cost">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                            <label class="form-label" for="support_services_cost">Support Services Cost</label>
+                            <input type="number" class="form-control" id="support_services_cost" placeholder="Support Services Cost" name="support_services_cost" aria-label="Support Services Cost">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                            <label class="form-label" for="other_costs">Other Costs</label>
+                            <input type="number" class="form-control" id="other_costs" placeholder="Other Costs" name="other_costs" aria-label="Other Costs">
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                            <label class="form-label" for="evidence_reference">Evidence Reference</label>
+                            <input type="text" class="form-control" id="evidence_reference" placeholder="Evidence Reference" name="evidence_reference" aria-label="Evidence Reference">
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                            <label class="form-label" for="remarks">Remarks</label>
+                            <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
+                            </div>
+                               
+                        </div>
+                        <!-- Description -->
+                        
+                    </div>
+                    </div>
+                    <!-- /Product Information -->
+
+
+                     <!-- Product Information -->
+                    <div class="card mb-6">
+                    <div class="card-header">
+                        <h5 class="card-tile mb-0">System Calculations (Auto)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                            <label class="form-label" for="total_cost_of_delivery">Total Cost of Delivery</label>
+                            <input type="number" class="form-control" id="total_cost_of_delivery" placeholder="Total Cost of Delivery" name="total_cost_of_delivery" aria-label="Total Cost of Delivery" disabled>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                            <label class="form-label" for="net_program_surplus_deficit">Net Program Surplus / Deficit</label>
+                            <input type="number" class="form-control" id="net_program_surplus_deficit" placeholder="Net Program Surplus / Deficit" name="net_program_surplus_deficit" aria-label="Net Program Surplus / Deficit" disabled>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                            <label class="form-label" for="program_profitability_status">Program Profitability Status</label>
+                            <select name="program_profitability_status" class="select2 form-select program_profitability_status" required disabled>
+                                <option value="">-- Select Profitability --</option>
+                                <option value="Profitable"> Profitable </option>
+                                <option value="not_profitable">Not Profitable</option>
+                            </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                            <label class="form-label" for="profitability_percentage">Profitability Percentage</label>
+                            <input type="number" class="form-control" id="profitability_percentage" placeholder="Profitability Percentage" name="profitability_percentage" aria-label="Profitability Percentage" disabled>
+                            </div>
+
+                               
+                        </div>
+                        <!-- Description -->
+                        
+                    </div>
+                    </div>
+                    <!-- /Product Information -->
+                    
+                    
+                </div>
                 <!-- /Second column -->
 
                 <!-- Second column -->
-                <div class="col-12 col-lg-12">
+                <div class="col-12 col-lg-4">
                     <!-- Pricing Card -->
                     <div class="card mb-6">
                     <div class="card-header">
                         <h5 class="card-title mb-0">Program Information</h5>
                     </div>
                     <div class="card-body">
+                        
+                        
+                        <div class="mb-3">
+                            <label class="form-label" for="financial_year">Academic / Financial Year</label>
+                            <input type="date" class="form-control" id="financial_year" name="financial_year">
+                        </div>
+
                         <div class="mb-3">
                             <label for="faculty" class="form-label">Faculty</label>
                             <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
@@ -98,16 +203,44 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="profitability">Profitability</label>
-                            <input type="number" class="form-control" id="profitability" name="profitability" required placeholder="Profitability">
+                            <label class="form-label" for="indicator">Indicator</label>
+                            <input type="text" class="form-control" id="indicator" name="indicator" disabled>
                         </div>
-                        <div class="">
-                        <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
-                    </div>
+                        
                         
                     </div>
                     </div>
                     <!-- /Pricing Card -->
+                     <!-- Pricing Card -->
+                    <div class="card mb-6">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Aggregation (Auto – Program Portfolio)</h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        
+                        <div class="mb-3">
+                            <label class="form-label" for="total_programs_assessed">Total Programs Assessed</label>
+                            <input type="number" class="form-control" id="total_programs_assessed" name="total_programs_assessed" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="number_of_profitable_programs" class="form-label">Number of Profitable Programs</label>
+                            <input type="number" class="form-control" id="number_of_profitable_programs" name="number_of_profitable_programs" disabled>
+                        </div>
+
+                         <div class="mb-3">
+                            <label for="proportion_of_profitable_programs" class="form-label">Proportion of Profitable Programs (%)</label>
+                            <input type="number" class="form-control" id="proportion_of_profitable_programs" name="proportion_of_profitable_programs" disabled>
+                        </div>
+                        
+                        
+                    </div>
+                    </div>
+                    <!-- /Pricing Card -->
+                    <div class="">
+                        <button type="submit" class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
+                    </div>
                 
                 </div>
                 <!-- /Second column -->
@@ -181,7 +314,45 @@
     <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
 @endpush
 @push('script')
-      
+       <script>
+       
+ document.addEventListener("DOMContentLoaded", function () {
+
+    // SVG stars
+    const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
+    const starHalf = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='halfStarGradient'%3E%3Cstop offset='50%25' style='stop-color:%23FFD700' /%3E%3Cstop offset='50%25' style='stop-color:%239e9e9e' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23halfStarGradient)' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
+    const starOff = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%239e9e9e' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
+
+    // Employer Rating
+    const employerRaty = new Raty(document.getElementById("employerRating"), {
+        number: 5,
+        half: true,
+        starOn: starOn,
+        starHalf: starHalf,
+        starOff: starOff,
+        click: function(score) {
+            document.getElementById("employer_satisfaction").value = score;
+        }
+    }).init();
+
+    // Graduate Rating
+    const graduateRaty = new Raty(document.getElementById("graduateRating"), {
+        number: 5,
+        half: true,
+        starOn: starOn,
+        starHalf: starHalf,
+        starOff: starOff,
+        click: function(score) {
+            document.getElementById("graduate_satisfaction").value = score;
+        }
+    }).init();
+
+});
+
+
+
+
+       </script>
     @if(auth()->user()->hasRole(['HOD']))
         <script>
             $(document).ready(function () {

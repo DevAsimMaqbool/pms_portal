@@ -141,7 +141,7 @@ let form = $(this);
 let formData = new FormData(this);
 
 $.ajax({
-url: "{{ route('international-student-satisfaction.store') }}",
+url: "{{ route('international-st-satisfaction.store') }}",
 type: "POST",
 data: formData,
 contentType: false,
