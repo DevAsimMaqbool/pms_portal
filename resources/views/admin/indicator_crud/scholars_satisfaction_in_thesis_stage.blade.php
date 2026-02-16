@@ -17,7 +17,7 @@
 
         <!-- Multi Column with Form Separator -->
         <div class="card">
-             <h5 class="card-header">Recovery%</h5>
+             <h5 class="card-header">Scholar's Satisfaction (In Thesis Stage)</h5>
             <div class="card-datatable table-responsive card-body">
                     @if(auth()->user()->hasRole(['HOD']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
@@ -26,9 +26,9 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Recovert Target</th>
-                                                        <th>Target Achieved</th>
-                                                        <th>Actions</th>
+                                                        <th>Term</th>
+                                                        <th>Career</th>
+                                                        <th>Score</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -45,7 +45,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Recovery%</h5>
+                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Scholar's Satisfaction (In Thesis Stage)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -56,7 +56,20 @@
 
                     <div class="row g-3">
                        
-                        
+                        <div class="col-md-4">
+                            <label for="term" class="form-label">Terms</label>
+                            <select name="term" id="term" class="select2 form-select term" required>
+                                <option value="">Select Term</option>
+
+                                <?php
+                                $currentYear = date('Y');
+                                for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
+                                    echo "<option value='Spring $year'>Spring $year</option>";
+                                    echo "<option value='Fall $year'>Fall $year</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
                         <div class="col-md-4">
                                                 <label class="form-label">Faculty</label>
                                                 <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-select">
@@ -80,20 +93,17 @@
                                                     <option value="">Select Program</option>
                                                 </select>
                                             </div>
-
-                                
                                             <div class="col-md-4">
-                                                <label class="form-label">Target Month/Year</label>
-                                                <input type="date" name="target_month_year" id="target_month_year" class="form-control" required>
+                                                <label  class="form-label">Career</label>
+                                                <select name="career" id="career" class="select2 form-select career" required>
+                                                    <option value="">-- Select Career --</option>
+                                                    <option value="PG">PG</option>
+                                                    <option value="UG">UG</option>
+                                                </select>
                                             </div>
                                             <div class="col-md-4">
-                                                <label class="form-label">Recovery Target</label>
-                                                <input type="number" name="recovery_target" id="recovery_target" class="form-control" min="1"
-                                                    step="1" required>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Target Achieved</label>
-                                                <input type="number" name="achieved_target" id="achieved_target" class="form-control" min="1"
+                                                <label class="form-label">Satisfaction Score</label>
+                                                <input type="number" name="satisfaction_score" id="satisfaction_score" class="form-control" min="1"
                                                     step="1" required>
                                             </div>
                         
@@ -136,7 +146,7 @@
         <script>
             function fetchCommercialForms() {
                 $.ajax({
-                    url: "{{ route('recovery.index') }}",
+                    url: "{{ route('scholars-satisfaction.index') }}",
                     method: "GET",
                     data: {
                         status: "HOD" // you can send more values
@@ -162,8 +172,9 @@
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
-                                form.recovery_target || 'N/A',
-                                form.achieved_target || 'N/A',
+                                form.term || 'N/A',
+                                form.career || 'N/A',
+                                form.satisfaction_score || 'N/A',
                                 editButton+ ' ' + deleteBtn
                             ];
                         });
@@ -173,8 +184,9 @@
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
-                                    { title: "Recovery Target" },
-                                    { title: "Target Achieved" },
+                                    { title: "Term" },
+                                    { title: "Career" },
+                                    { title: "Score" },
                                     { title: "Actions" }
                                 ]
                             });
@@ -197,9 +209,9 @@
         const form = $(this).data('form');
         $('#researchForm1 #record_id').val(form.id);
         populateFacultyDepartmentProgram(form);
-        $('#researchForm1 #target_month_year').val(form.target_month_year);
-        $('#researchForm1 #recovery_target').val(form.recovery_target)
-        $('#researchForm1 #achieved_target').val(form.achieved_target);
+         $('#researchForm1 #term').val(form.term).trigger('change');
+        $('#researchForm1 #career').val(form.career).trigger('change');
+        $('#researchForm1 #satisfaction_score').val(form.satisfaction_score);
         
 
         $('#employabilityFormModal').modal('show');
@@ -218,7 +230,7 @@
 
 
         $.ajax({
-            url: "{{ route('recovery.update', '') }}/" + recordId,
+            url: "{{ route('scholars-satisfaction.update', '') }}/" + recordId,
             method: 'POST',
             data: formData,
             contentType: false,
@@ -372,7 +384,7 @@
     if(!confirm('Are you sure you want to delete this record?')) return;
 
     $.ajax({
-        url: `/recovery/${id}`,
+        url: `/scholars-satisfaction/${id}`,
         type: 'DELETE',
         headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
         success: function(res) {

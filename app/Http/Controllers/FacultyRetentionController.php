@@ -10,22 +10,36 @@ use Illuminate\Support\Facades\Validator;
 
 class FacultyRetentionController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        try {
-            $data = FacultyRetention::all();
-            if ($request->ajax()) {
-                return response()->json($data);
+         try {
+            $user = Auth::user();
+            $userId = Auth::id();
+            $employee_id = $user->employee_id;
+
+         if ($user->hasRole('HOD')) {
+                $status = $request->input('status');
+                if($status=="HOD"){
+                    $forms = FacultyRetention::where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
+                        ->get();
+                }       
             }
-            return view('indicator_forms.employability');
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'forms' => $forms
+                ]);
+            }
+
         } catch (\Exception $e) {
-            return apiResponse(
-                'Oops! Something went wrong',
-                [],
-                false,
-                500,
-                ''
-            );
+            return response()->json([
+                'message' => 'Oops! Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -42,120 +56,90 @@ class FacultyRetentionController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            if($request->form_status=='HOD'){
-                 $rules = [
-                'indicator_id' => 'required',
-                'academic_year' => 'required|string',
-                'faculty_id' => 'required|string',
-                'department_id' => 'required|string',
-                'strength_at_start_of_month' => 'required|integer|min:0',
-                'join_during_month' => 'required|integer|min:0',
-                'left_during_month' => 'required|integer|min:0',
-                'strength_end_month' => 'required|integer|min:0',
-                'retention_rate' => 'required|numeric|min:0|max:100',
-                'retention_status' => 'required|in:excellent,satisfactory,needs_attention',
-                'remarks' => 'nullable|string',
-                'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-                 ];
-               
-                 $validator = Validator::make($request->all(), $rules);
-                if ($validator->fails()) {
-                    return response()->json([
-                        'status' => 'error',
-                        'errors' => $validator->errors()
-                    ], 422);
-                }
-                $data = $request->only([
-                    'indicator_id',
-                    'academic_year',
-                    'faculty_id',
-                    'department_id',
-                    'strength_at_start_of_month',
-                    'join_during_month',
-                    'left_during_month',
-                    'strength_end_month',
-                    'retention_rate',
-                    'retention_status',
-                    'remarks',
-                    'form_status'
-                ]);            
+        try { 
+            
+                 $employeeId = Auth::user()->employee_id;
+               $rules = [
+                        'indicator_id' => 'required|integer',
+                        'retention_rate' => 'required|array|min:1',
+                        'retention_rate.*.faculty_id' => 'required|integer',
+                        'retention_rate.*.no_retention_rate' => 'required|numeric|min:0|max:100',
+                        'retention_rate.*.remarks' => 'nullable|string',
+                        'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                    ];
 
-            }
-            $employeeId = Auth::user()->employee_id;
-            DB::beginTransaction();
-            $data['created_by'] = $employeeId;
-            $data['updated_by'] = $employeeId;
+                    $messages = [
+                        'retention_rate.*.faculty_id.required' => 'Faculty is required',
+                        'retention_rate.*.no_retention_rate.required' => 'Rate is required',
+                    ];
+                
 
-            $record = FacultyRetention::create($data);
-            DB::commit();
+                    $validator = Validator::make($request->all(), $rules, $messages);
+                    if ($validator->fails()) {
+                            return response()->json([
+                                'status' => 'error',
+                                'errors' => $validator->errors()
+                            ], 422);
+                        }
+
+                        $savedRecords = [];
+                    foreach ($request->retention_rate as $retention_rates) {
+                        $retention_rates['indicator_id'] = $request->indicator_id;
+                        $retention_rates['form_status'] = $request->form_status ?? 'HOD';
+                        $retention_rates['created_by'] = $employeeId;
+                        $retention_rates['updated_by'] = $employeeId;
+
+                        $savedRecords[] = FacultyRetention::create($retention_rates);
+                    } 
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Record saved successfully',
-                'data' => $record
+                'data' => $savedRecords
             ]);
+
         } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['message' => 'oops some thing wrong'], 500);
+             DB::rollBack();
+             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show()
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $data = FacultyRetention::findOrFail($id);
-        return response()->json($data);
-    }
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
+       $record = FacultyRetention::findOrFail($id);
+
         $request->validate([
-            'key_performance_area' => 'required',
+                'record_id' => 'required',
+                'faculty_id' => 'required|integer',
+                'no_retention_rate' => 'required|integer',
+                'remarks' => '',
+    
         ]);
-        $userId = session('user_id');
-        $data = FacultyRetention::findOrFail($id);
-        $data->performance_area = $request->key_performance_area;
-        $data->updated_by = $userId;
-        $data->save();
-        return response()->json(['message' => 'data update successfully']);
+
+        $data = $request->only([
+                        'faculty_id', 'no_retention_rate', 'remarks'
+                    ]);
+                    $data['updated_by'] = Auth::user()->employee_id;
+
+                    $record->update($data);
+
+                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, Request $request)
+     public function destroy($id)
     {
-        try {
-            $kfa = FacultyRetention::findOrFail($id);
-            $kfa->delete();
-            return response()->json(['status' => 'success', 'message' => 'Survey deleted successfully']);
-        } catch (\Exception $e) {
-            return apiResponse(
-                'Oops! Something went wrong',
-                [],
-                false,
-                500,
-                ''
-            );
-        }
-    }
-    public function report($id)
-    {
-        $area = FacultyRetention::with('indicatorCategories.indicators')->findOrFail($id);
-        return view('admin.performance', compact('area'));
+        $record = FacultyRetention::findOrFail($id);
+        $record->delete();
+
+        return response()->json([
+            'message' => 'Deleted successfully'
+        ]);
     }
 }
 

@@ -16,19 +16,14 @@ return new class extends Migration
             $table->unsignedBigInteger('indicator_id');
             $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER', 'ORIC', 'HR'])->default('RESEARCHER');
               
-            // CPD Data
-            $table->integer('total_faculty')->nullable();
-            $table->integer('faculty_in_cpd_activities')->nullable();
 
             // Multi-select CPD types
-            $table->json('cpd_type')->nullable();
+            $table->string('cpd_type')->nullable();
+            $table->string('cpd_other_detail')->nullable();
 
             // Evidence
             $table->string('evidence_reference')->nullable();
             $table->text('remarks')->nullable();
-
-            // Auto Calculation
-            $table->decimal('faculty_cpd_percentage', 6, 2)->nullable();
 
            
             $table->enum('status', ['1', '2', '3', '4', '5', '6'])->default('1');

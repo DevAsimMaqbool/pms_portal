@@ -58,47 +58,56 @@ class AdmissionTargetAchievedController extends Controller
     {
         try { 
             
-            if($request->form_status=='HOD'){
-                 $rules = [
-                    'indicator_id' => 'required',
-                    'faculty_id' => 'required|integer',
-                    'department_id' => 'required|integer',
-                    'admissions_campaign_id' => 'required|integer',
-                    'admissions_target' => 'required|integer|min:0',
-                    'achieved_target' => 'required|integer|min:0',
-                    'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-                ];
+                 $employeeId = Auth::user()->employee_id;
+               $rules = [
+                        'indicator_id' => 'required|integer',
+                        'admission' => 'required|array|min:1',
+                        'admission.*.faculty_id' => 'required|integer',
+                        'admission.*.department_id' => 'required|integer',
+                        'admission.*.program_id' => 'required|integer',
+                        'admission.*.admissions_campaign' => 'required|string',
+                        'admission.*.admissions_target' => 'required',
+                        'admission.*.achieved_target' => 'required',
+                        'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                    ];
 
+                    $messages = [
+                        'admission.*.faculty_id.required' => 'Faculty is required',
+                        'admission.*.department_id.required' => 'Department is required',
+                        'admission.*.program_id.required' => 'Program is required',
+                        'admission.*.admissions_campaign.required' => 'Campaign is required.',
+                        'admission.*.admissions_target.required' => 'Target is required.',
+                        'admission.*.achieved_target.required' => 'Achieved Target is required.',
+                    ];
+                
 
-                    $validator = Validator::make($request->all(), $rules);
+                    $validator = Validator::make($request->all(), $rules, $messages);
                     if ($validator->fails()) {
                             return response()->json([
                                 'status' => 'error',
                                 'errors' => $validator->errors()
                             ], 422);
                         }
-                    $data = $validator->validated();    
 
-                        
+                        $savedRecords = [];
+                    foreach ($request->admission as $admissions) {
+                        $admissions['indicator_id'] = $request->indicator_id;
+                        $admissions['form_status'] = $request->form_status ?? 'HOD';
+                        $admissions['created_by'] = $employeeId;
+                        $admissions['updated_by'] = $employeeId;
 
-            }
-            $employeeId = Auth::user()->employee_id;
-            DB::beginTransaction();
-            $data['created_by'] = $employeeId;
-            $data['updated_by'] = $employeeId;
-
-            $record = AdmissionTargetAchieved::create($data);
-            DB::commit();
+                        $savedRecords[] = AdmissionTargetAchieved::create($admissions);
+                    } 
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Record saved successfully',
-                'data' => $record
+                'data' => $savedRecords
             ]);
 
         } catch (\Exception $e) {
              DB::rollBack();
-             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
@@ -129,14 +138,15 @@ class AdmissionTargetAchievedController extends Controller
                 'record_id' => 'required',
                 'faculty_id' => 'required|integer',
                 'department_id' => 'required|integer',
-                'admissions_campaign_id' => 'required|integer',
+                'program_id' => 'required|integer',
+                'admissions_campaign' => 'required',
                 'admissions_target' => 'required|integer|min:0',
                 'achieved_target' => 'required|integer|min:0',
     
         ]);
 
         $data = $request->only([
-                        'faculty_id', 'department_id', 'admissions_campaign_id', 'admissions_target','achieved_target'
+                        'faculty_id', 'department_id', 'program_id', 'admissions_campaign', 'admissions_target','achieved_target'
                     ]);
                     $data['updated_by'] = Auth::user()->employee_id;
 
@@ -148,8 +158,13 @@ class AdmissionTargetAchievedController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+     public function destroy($id)
     {
-        //
+        $record = AdmissionTargetAchieved::findOrFail($id);
+        $record->delete();
+
+        return response()->json([
+            'message' => 'Deleted successfully'
+        ]);
     }
 }

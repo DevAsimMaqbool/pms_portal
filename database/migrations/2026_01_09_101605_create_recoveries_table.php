@@ -13,10 +13,12 @@ return new class extends Migration {
         Schema::create('recoveries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('indicator_id');
-            $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER', 'ORIC', 'HR'])->default('RESEARCHER');
+            $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER', 'ORIC', 'HR'])->default('HOD');
             $table->unsignedBigInteger('faculty_id');
             $table->unsignedBigInteger('department_id');
-            $table->string('period');
+            $table->unsignedBigInteger('program_id');
+            $table->date('target_month_year');
+            
             $table->integer('recovery_target')->default(0);
             $table->integer('achieved_target')->default(0);
             $table->enum('status', ['1', '2', '3', '4', '5', '6'])->default('1');

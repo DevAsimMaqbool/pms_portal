@@ -23,7 +23,7 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs mb-3" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Faculty pursuing skills and knowledge enhancement</a>
+                        <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">% of Faculty pursuing skills and knowledge enhancement</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
@@ -39,39 +39,41 @@
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
                     <div class="d-flex justify-content-between">
                                <div>
-                                <h5 class="mb-1">Faculty pursuing skills and knowledge enhancement</h5>
+                                <h5 class="mb-1">% of Faculty pursuing skills and knowledge enhancement</h5>
                                 </div>
                                 <a href="{{ route('indicators_crud.index', ['slug' => 'no_of_faculty_pursuing_skills_and_knowledge_enhancement', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
                             </div>
-                          <form id="researchForm" enctype="multipart/form-data">
+                          <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden"  id="form_status" name="form_status" value="HOD" required>
                                 
                                 <div class="row g-3 mt-0">
+                                    
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="total_faculty">Total Faculty</label>
+                                        <input type="number" class="form-control" id="total_faculty" placeholder="Total Faculty" name="total_faculty" aria-label="Total Faculty">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="faculty_in_cpd_activities">Faculty in CPD Activities</label>
+                                        <input type="number" class="form-control" id="faculty_in_cpd_activities" placeholder="Faculty in CPD Activities" name="faculty_in_cpd_activities" aria-label="Faculty in CPD Activities">
+                                    </div>
+
+                                    <div class="col-md-6">
                                         <label for="cpd_type" class="form-label">CPD Type</label>
-                                        <select name="cpd_type" class="select2 form-select cpd_type" required>
-                                            <option value="">-- Select --</option>
+                                        <select name="cpd_type" class="select2 form-select types_of_engagement" required multiple>
+                                            <option value="">-- Select Faculty --</option>
                                             <option value="Training"> Training</option>
                                             <option value="Certification">Certification</option>
                                             <option value="Workshop"> Workshop</option>
                                             <option value="Higher Education">Higher Education </option>
                                             <option value="Industry Exposure">Industry Exposure</option>
-                                            <option value="Other">Other</option>
                                         </select>
                                     </div>
-                                    <!-- Hidden Other Field -->
-                                    <div class="col-md-12 d-none" id="other_cpd_box">
-                                        <label class="form-label">Other Detail</label>
-                                        <input type="text"
-                                            name="cpd_other_detail" id="cpd_other_detail"
-                                            class="form-control"
-                                            placeholder="Enter other detail">
-                                    </div>
                                     
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                         
                                         <label for="evidence_reference" class="form-label">Evidence Reference</label>
                                         <input class="form-control" type="file" id="evidence_reference" name="evidence_reference" required>
@@ -80,7 +82,15 @@
                                         <label class="form-label" for="remarks">Remarks</label>
                                         <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
                                     </div>
-                                    
+                                    <div class="col-md-12">
+                                        <label class="form-label" for="faculty_cpd_percentage">Faculty CPD Percentage (%)</label>
+                                        <input type="number" class="form-control" id="faculty_cpd_percentage" placeholder="Faculty CPD Percentage (%)" name="faculty_cpd_percentage" aria-label="Faculty CPD Percentage (%)" disabled>
+                                    </div>
+
+
+
+
+
                                 </div>
                                 <div class="col-12 demo-vertical-spacing">
                                     <button class="btn btn-primary waves-effect waves-light float-end" style="margin-right: 0px;">SUBMIT</button>
@@ -142,25 +152,6 @@
     @if(auth()->user()->hasRole(['HOD']))
         <script>
             $(document).ready(function () {
-                //------------------------------------
-            // Show/Hide OTHER input
-            //------------------------------------
-            $(document).on('change', '.cpd_type', function () {
-
-                let selected = $(this).val() || [];
-
-                if (selected.includes("Other")) {
-
-                    $('#other_cpd_box').removeClass('d-none');
-
-                } else {
-
-                    $('#other_cpd_box').addClass('d-none');
-                    $('input[name="cpd_other_detail"]').val('');
-
-                }
-            });
-
               
               
 

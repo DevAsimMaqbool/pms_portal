@@ -8,12 +8,11 @@ class StudentsGlobalExperience extends Model
 {
     protected $fillable = [
         'indicator_id',
-        'programs_offered',
-        'total_enrolled_students',
-        'target',
-        'timeline',
-        'registered_students',
-        'process_stage',
+        'faculty_id',
+        'department_id',
+        'program_id',
+        'experience_target',
+        'achieved_target',
         'form_status',
         'status',
         'update_history',

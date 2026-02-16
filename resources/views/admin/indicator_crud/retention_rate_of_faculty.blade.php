@@ -17,7 +17,7 @@
 
         <!-- Multi Column with Form Separator -->
         <div class="card">
-             <h5 class="card-header">Recovery%</h5>
+             <h5 class="card-header">Retention Rate of Faculty</h5>
             <div class="card-datatable table-responsive card-body">
                     @if(auth()->user()->hasRole(['HOD']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
@@ -26,9 +26,9 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Recovert Target</th>
-                                                        <th>Target Achieved</th>
-                                                        <th>Actions</th>
+                                                        <th>Retention Rate</th>
+                                                        <th>Remarks</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -45,7 +45,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Recovery%</h5>
+                <h5 class="modal-title" id="commericaGainFormModalLabel">Retention Rate of Faculty</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -56,8 +56,7 @@
 
                     <div class="row g-3">
                        
-                        
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                                                 <label class="form-label">Faculty</label>
                                                 <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-select">
                                                     <option value="">Select Faculty</option>
@@ -67,34 +66,14 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-4">
-                                                <label class="form-label">Department</label>
-                                                <select name="department_id" id="department_id" class="select2 form-select department-select">
-                                                    <option value="">Select Department</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Program Name</label>
-                                                <select name="program_id" id="program_id" class="select2 form-select program-select">
-                                                    <option value="">Select Program</option>
-                                                </select>
-                                            </div>
-
-                                
-                                            <div class="col-md-4">
-                                                <label class="form-label">Target Month/Year</label>
-                                                <input type="date" name="target_month_year" id="target_month_year" class="form-control" required>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Recovery Target</label>
-                                                <input type="number" name="recovery_target" id="recovery_target" class="form-control" min="1"
+                                            <div class="col-md-6">
+                                                <label class="form-label">Retention Rate</label>
+                                                <input type="number" name="no_retention_rate" id="no_retention_rate" class="form-control" min="1"
                                                     step="1" required>
                                             </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Target Achieved</label>
-                                                <input type="number" name="achieved_target" id="achieved_target" class="form-control" min="1"
-                                                    step="1" required>
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="remarks">Remarks</label>
+                                                <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
                                             </div>
                         
                         
@@ -136,7 +115,7 @@
         <script>
             function fetchCommercialForms() {
                 $.ajax({
-                    url: "{{ route('recovery.index') }}",
+                    url: "{{ route('faculty-retention.index') }}",
                     method: "GET",
                     data: {
                         status: "HOD" // you can send more values
@@ -162,8 +141,8 @@
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
-                                form.recovery_target || 'N/A',
-                                form.achieved_target || 'N/A',
+                                form.no_retention_rate || 'N/A',
+                                form.remarks || 'N/A',
                                 editButton+ ' ' + deleteBtn
                             ];
                         });
@@ -173,8 +152,8 @@
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
-                                    { title: "Recovery Target" },
-                                    { title: "Target Achieved" },
+                                    { title: "Retention Rate" },
+                                    { title: "Remarks" },
                                     { title: "Actions" }
                                 ]
                             });
@@ -196,10 +175,9 @@
             $(document).on('click', '.edit-form-btn', function () {
         const form = $(this).data('form');
         $('#researchForm1 #record_id').val(form.id);
-        populateFacultyDepartmentProgram(form);
-        $('#researchForm1 #target_month_year').val(form.target_month_year);
-        $('#researchForm1 #recovery_target').val(form.recovery_target)
-        $('#researchForm1 #achieved_target').val(form.achieved_target);
+         $('#researchForm1 #faculty_id').val(form.faculty_id).trigger('change');
+        $('#researchForm1 #no_retention_rate').val(form.no_retention_rate);
+        $('#researchForm1 #remarks').val(form.remarks);
         
 
         $('#employabilityFormModal').modal('show');
@@ -218,7 +196,7 @@
 
 
         $.ajax({
-            url: "{{ route('recovery.update', '') }}/" + recordId,
+            url: "{{ route('faculty-retention.update', '') }}/" + recordId,
             method: 'POST',
             data: formData,
             contentType: false,
@@ -248,131 +226,14 @@
             }
         });
     });
-    function populateFacultyDepartmentProgram(form) {
-    const facultySelect = $('#faculty_id');
-    const departmentSelect = $('#department_id');
-    const programSelect = $('#program_id');
-
-    // Set faculty and trigger change
-    facultySelect.val(form.faculty_id).trigger('change');
-
-    if (!form.faculty_id) return;
-
-    // Load Departments
-    $.ajax({
-        url: "/get-departments/" + form.faculty_id,
-        type: "GET",
-        success: function (departments) {
-            departmentSelect.empty().append('<option value="">-- Select Department --</option>');
-
-            $.each(departments, function (key, department) {
-                departmentSelect.append(`<option value="${department.id}">${department.name}</option>`);
-            });
-
-            // Set department
-            departmentSelect.val(form.department_id).trigger('change');
-
-            if (!form.department_id) return;
-
-            // Load Programs
-            $.ajax({
-                url: "/get-programs/" + form.department_id,
-                type: "GET",
-                success: function (programs) {
-                    programSelect.empty().append('<option value="">-- Select Program --</option>');
-
-                    $.each(programs, function (key, program) {
-                        programSelect.append(`<option value="${program.id}">${program.program_name}</option>`);
-                    });
-
-                    // Set program
-                    programSelect.val(form.program_id).trigger('change');
-                },
-                error: function () {
-                    programSelect.html('<option value="">Error loading programs</option>');
-                }
-            });
-        },
-        error: function () {
-            departmentSelect.html('<option value="">Error loading departments</option>');
-        }
-    });
-}
-    $('#faculty_id').on('change', function () {
-
-                    let facultyId = $(this).val();
-                    let departmentSelect = $('#department_id');
-                    let programSelect = $('#program_id');
-
-                    departmentSelect.html('<option value="">Loading...</option>');
-                    programSelect.html('<option value="">-- Select Program --</option>');
-                    
-
-                    if (facultyId) {
-                        $.ajax({
-                            url: "/get-departments/" + facultyId,
-                            type: "GET",
-                            success: function (response) {
-
-                                departmentSelect.empty();
-                                departmentSelect.append('<option value="">-- Select Department --</option>');
-
-                                $.each(response, function (key, department) {
-                                    departmentSelect.append(
-                                        `<option value="${department.id}">
-                                            ${department.name}
-                                        </option>`
-                                    );
-                                });
-
-                                departmentSelect.trigger('change'); // refresh select2
-                            }
-                        });
-                    } else {
-                        departmentSelect.html('<option value="">-- Select Department --</option>');
-                    }
-                });
-                $('#department_id').on('change', function () {
-
-                    let departmentId = $(this).val();
-                    let programSelect = $('#program_id');
-
-                    programSelect.html('<option value="">Loading...</option>');
-
-                    if (departmentId) {
-                        $.ajax({
-                            url: "/get-programs/" + departmentId,
-                            type: "GET",
-                            success: function (response) {
-
-                                programSelect.empty();
-                                programSelect.append('<option value="">-- Select Program --</option>');
-
-                                $.each(response, function (key, program) {
-                                    programSelect.append(
-                                        `<option value="${program.id}">
-                                            ${program.program_name}
-                                        </option>`
-                                    );
-                                });
-
-                                programSelect.trigger('change'); // refresh select2
-                            },
-                            error: function () {
-                                programSelect.html('<option value="">Error loading programs</option>');
-                            }
-                        });
-                    } else {
-                        programSelect.html('<option value="">-- Select Program --</option>');
-                    }
-                });
+    
                 $(document).on('click', '.delete-btn', function() {
     let id = $(this).data('id');
 
     if(!confirm('Are you sure you want to delete this record?')) return;
 
     $.ajax({
-        url: `/recovery/${id}`,
+        url: `/faculty-retention/${id}`,
         type: 'DELETE',
         headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
         success: function(res) {
