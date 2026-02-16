@@ -131,12 +131,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/assignments', [RoleKpaAssignmentController::class, 'create'])->name('assignments.create');
     Route::post('/assignments', [RoleKpaAssignmentController::class, 'store'])->name('assignments.store');
 
+    Route::post('/role-kpa/get-assigned', [RoleKpaAssignmentController::class, 'getAssigned'])
+        ->name('assignments.getAssigned');
+
+    Route::post('/assignments/update', [RoleKpaAssignmentController::class, 'update'])
+        ->name('assignments.update');
+    Route::get('/assignments/edit', [RoleKpaAssignmentController::class, 'edit'])
+        ->name('assignments.edit');
+
+
     // For dependent dropdowns
     Route::get('/categories/{kpaId}', [RoleKpaAssignmentController::class, 'getCategories']);
     Route::get('/indicators/{categoryId}', [RoleKpaAssignmentController::class, 'getIndicators']);
 
     // To show data for logged-in user
     Route::get('/my-kpa-data', [UserKPAController::class, 'index'])->name('user.kpa');
+    Route::get('/my-kpa-edit', [UserKPAController::class, 'show'])->name('user.kpa_edit');
 
     Route::resource('/departments', DepartmentController::class);
     Route::resource('/rector-dashboard', RectorDashboardController::class);
@@ -222,7 +232,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('/scholars-satisfaction', ScholarsSatisfactionInThesisStageController::class);
         Route::resource('/knowledge-products', NumberOfKnowledgeProductController::class);
         Route::resource('/commencement-classes', CommencementOfClassesOnTimeController::class);
-        Route::resource('/international-student-satisfaction', SatisfactionOfInternationalStudentController::class);
+        Route::resource('/international-st-satisfaction', SatisfactionOfInternationalStudentController::class);
 
 
 
@@ -303,7 +313,7 @@ Route::middleware('auth')->group(function () {
     Route::get('downloads', [DownloadsController::class, 'index'])->name('pms.downloads');
     Route::get('awards', [AwardController::class, 'index'])->name('pms.awards');
     Route::get('/get-departments/{facultyId}', [DepartmentController::class, 'getDepartments'])->name('get.departments');
-    Route::get('/get-programs/{departmentId}',  [ProgramController::class, 'getPrograms'])->name('get.programs');
+    Route::get('/get-programs/{departmentId}', [ProgramController::class, 'getPrograms'])->name('get.programs');
 
 
     Route::middleware('role:HOD')->group(function () {

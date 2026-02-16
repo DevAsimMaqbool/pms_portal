@@ -126,18 +126,78 @@ class RoleKpaAssignmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(RoleKpaAssignment $roleKpaAssignment)
+    public function edit()
     {
-        //
+        $roles = Role::select('id', 'name')->get();
+        $kfarea = KeyPerformanceArea::all();
+
+        return view('assignments.kpa_edit', compact('kfarea', 'roles'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, RoleKpaAssignment $roleKpaAssignment)
+    public function update(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'key_performance_area_id' => 'required|array',
+            'indicator_category_id' => 'required|array',
+            'indicators' => 'required|array',
+            'user_role' => 'required|exists:roles,id',
+        ]);
+
+        $roleId = $validated['user_role'];
+
+        // 1. Remove assignments for KPAs that are no longer selected
+        RoleKpaAssignment::where('role_id', $roleId)
+            ->whereNotIn('key_performance_area_id', $validated['key_performance_area_id'])
+            ->delete();
+
+        // 2. Remove assignments for Categories that are no longer selected
+        RoleKpaAssignment::where('role_id', $roleId)
+            ->whereIn('key_performance_area_id', $validated['key_performance_area_id'])
+            ->whereNotIn('indicator_category_id', $validated['indicator_category_id'])
+            ->delete();
+
+        // 3. Remove assignments for Indicators that are no longer selected
+        RoleKpaAssignment::where('role_id', $roleId)
+            ->whereIn('indicator_category_id', $validated['indicator_category_id'])
+            ->whereNotIn('indicator_id', $validated['indicators'])
+            ->delete();
+
+        // 4. Insert or update current selections
+        foreach ($validated['key_performance_area_id'] as $kpaId) {
+
+            $categories = IndicatorCategory::whereIn('id', $validated['indicator_category_id'])
+                ->where('key_performance_area_id', $kpaId)
+                ->get();
+
+            foreach ($categories as $category) {
+
+                $indicators = Indicator::whereIn('id', $validated['indicators'])
+                    ->where('indicator_category_id', $category->id)
+                    ->get();
+
+                foreach ($indicators as $indicator) {
+
+                    RoleKpaAssignment::updateOrCreate(
+                        [
+                            'role_id' => $roleId,
+                            'user_id' => 0,
+                            'key_performance_area_id' => $kpaId,
+                            'indicator_category_id' => $category->id,
+                            'indicator_id' => $indicator->id,
+                        ],
+                        [] // No additional fields for update
+                    );
+                }
+            }
+        }
+
+        return back()->with('success', 'Assignments updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -179,5 +239,22 @@ class RoleKpaAssignmentController extends Controller
 
         return redirect()->back()->with('success', 'Weightages updated successfully!');
     }
+
+    public function getAssigned(Request $request)
+    {
+        $request->validate([
+            'role_id' => 'required|exists:roles,id'
+        ]);
+
+        $assignments = RoleKpaAssignment::where('role_id', $request->role_id)
+            ->get();
+
+        return response()->json([
+            'kpas' => $assignments->pluck('key_performance_area_id')->unique()->values(),
+            'categories' => $assignments->pluck('indicator_category_id')->unique()->values(),
+            'indicators' => $assignments->pluck('indicator_id')->unique()->values(),
+        ]);
+    }
+
 
 }

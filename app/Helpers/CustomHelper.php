@@ -2081,13 +2081,15 @@ if (!function_exists('activeRole')) {
             'Assistant Professor',
             'Associate Professor',
             'Professor',
+            'Program Leader UG',
+            'Program Leader PG',
             'HOD',
             'Dean',
         ];
 
-        if (in_array($role, $teacherRoles)) {
-            return 'teacher';
-        }
+        // if (in_array($role, $teacherRoles)) {
+        //     return 'teacher';
+        // }
 
         return strtolower($role); // hod, admin, etc.
     }

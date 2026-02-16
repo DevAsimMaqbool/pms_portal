@@ -27,6 +27,8 @@ class SetDefaultActiveRole
             'Assistant Professor',
             'Associate Professor',
             'Professor',
+            'Program Leader UG',
+            'Program Leader PG'
         ];
 
         if (in_array($role, $teacherRoles)) {

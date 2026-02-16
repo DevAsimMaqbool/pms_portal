@@ -50,7 +50,18 @@ class UserKPAController extends Controller
      */
     public function show(RoleKpaAssignment $roleKpaAssignment)
     {
-        //
+        $roles = Role::all();
+
+        $roleId = Auth::user()->getRoleNames()->first(); // Assuming you get this from the login API and store in DB
+        $roleName = 'Dean';
+
+        $role = Role::where('name', $roleName)->firstOrFail();
+
+        $roleId = $role->id;
+        $assignments = RoleKpaAssignment::with(['kpa', 'category', 'indicator'])
+            ->where('role_id', $roleId)
+            ->get();
+        return view('user.kpa_edit', compact('assignments', 'roles'));
     }
 
     /**

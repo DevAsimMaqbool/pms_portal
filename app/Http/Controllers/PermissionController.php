@@ -79,7 +79,7 @@ class PermissionController extends Controller
         if ($role->name == 'Rector') {
             return redirect()->route('rector-dashboard.index');
         }
-        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor') {
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG') {
             return view('admin.teacher_dashbord', compact('employee'));
         } elseif ($role->name == 'Survey') {
             return view('admin.survey_dashbord', compact('employee'));
@@ -156,7 +156,7 @@ class PermissionController extends Controller
         $data = [100, 40, 50, 60, 70, 80, 90, 85];
 
 
-        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor') {
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG') {
             return view('admin.teacher_dashbord_bk', compact('employee'));
         } else {
             return view('admin.teacher_dashbord', compact('employee'));
@@ -175,18 +175,19 @@ class PermissionController extends Controller
         // Determine role based on ACTIVE ROLE (role switching)
         $activeRole = activeRole(); // use session active role
         $activeRoleId = getRoleIdByName($activeRole);
-
         $role = match ($activeRole) {
             'teacher' => $user->roles->firstWhere('name', 'Teacher')
             ?? $user->roles->firstWhere('name', 'Assistant Professor')
             ?? $user->roles->firstWhere('name', 'Associate Professor')
+            ?? $user->roles->firstWhere('name', 'Program Leader UG')
+            ?? $user->roles->firstWhere('name', 'Program Leader PG')
             ?? $user->roles->firstWhere('name', 'Professor')
             ?? $user->roles->first(),
             'hod' => $user->roles->firstWhere('name', 'HOD'),
             'dean' => $user->roles->firstWhere('name', 'Dean'),
             default => $user->roles->first(),
         };
-
+        //dd($activeRole);
         // Fetch assignments
         $assignments = RoleKpaAssignment::with(['kpa', 'category', 'indicator'])
             ->where('role_id', $role->id)
@@ -239,7 +240,17 @@ class PermissionController extends Controller
         // Return views based on active role context
         switch ($activeRole) {
             case 'teacher':
-                $researchData = Research_Innovation_Commercialization($employee->employee_id,$activeRoleId, 0);
+                $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
+                return view('admin.v2', compact('employee', 'dataset1', 'researchData'));
+            case 'assistant professor':
+                $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
+                return view('admin.v2', compact('employee', 'dataset1', 'researchData'));
+            case 'professor':
+                $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
+                return view('admin.v2', compact('employee', 'dataset1', 'researchData'));
+            case 'program leader ug':
+                return view('admin.hod-v2', compact('employee'));
+            case 'program leader pg':
                 return view('admin.v2', compact('employee', 'dataset1', 'researchData'));
             case 'hod':
                 return view('admin.hod-v2', compact('employee'));
@@ -316,7 +327,7 @@ class PermissionController extends Controller
             abort(403);
         }
 
-        $teacherRoles = ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor'];
+        $teacherRoles = ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG'];
         if (in_array($request->role, $teacherRoles)) {
             session(['active_role' => 'teacher']);
         } elseif ($request->role === 'HOD') {
