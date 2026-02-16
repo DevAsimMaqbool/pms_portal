@@ -1,9 +1,5 @@
 @extends('layouts.app')
-
 @push('style')
-    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/dropzone/dropzone.css') }}" />
-    
-
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
     <link rel="stylesheet"
         href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
@@ -15,48 +11,76 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <style>
+        .form-disabled {
+            color: #acaab1;
+            background-color: #f3f2f3;
+        }
+        .rank-error {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+    </style>
 @endpush
-
-
 @section('content')
-    <div class="container-xxl flex-grow-1 container-p-y">  
-<!-- new design -->
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
 
-<div class="app-ecommerce">
-    <!-- tab open-->
-    <div class="nav-align-top">
+        <!-- Multi Column with Form Separator -->
+        <div class="card">
+             <div class="card-header d-flex align-items-center justify-content-between">
+                <div class="card-title mb-0">
+                    <h5 class="mb-1">Student Engagement Rate</h5>
+                </div>
+                <div>
+                    
+                </div>
+             </div>
 
-        <ul class="nav nav-pills mb-4" role="tablist">
-            <li class="nav-item">
-                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-top-home" aria-controls="navs-pills-top-home" aria-selected="true">Form</button>
-            </li>
-            <li class="nav-item">
-                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-top-profile" aria-controls="navs-pills-top-profile" aria-selected="false">Table</button>
-            </li>
-            
-        </ul>
-        <!-- main tab-->
-        <div class="tab-content" style="padding:0;background: none;border: none;box-shadow: none;">
-             @if(auth()->user()->hasRole(['HOD']))
-            <!-- first tab-->
-            <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
 
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
-            <div class="d-flex flex-column justify-content-center">
-                <h4 class="mb-1">Student Engagement Rate</h4>
+
+
+
+            <div class="card-datatable table-responsive card-body">
+                    @if(auth()->user()->hasRole(['HOD']))
+                        <div class="tab-pane fade show" id="form2" role="tabpanel">
+                           <div class="table-responsive text-nowrap">
+                                <table id="achievementTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nature of the Event</th>
+                                            <th>Title of the Event</th>
+                                            <th>Date(s) of the Event</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>    
+                        </div>
+                    @endif
+                   
             </div>
-            <div class="d-flex align-content-center flex-wrap gap-4">
-                <div class="d-flex gap-4">
-                <a class="btn btn-label-primary" href="{{ route('indicators_crud.index', ['slug' => 'student_engagement_rate', 'id' => $indicatorId]) }}">View</a></div>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                            <i class="bx bx-upload"></i> Import Excel / CSV</button>
-            </div>
-            </div>
-            <form id="researchForm" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" id="form_status" name="form_status" value="HOD" required>
-                <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-                <div class="row">
+        </div>
+        <!-- Update Intellectual Property Modal -->
+    <!-- Update Form Modal -->
+<div class="modal fade" id="updateFormModal" tabindex="-1" aria-labelledby="updateFormModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header text-white">
+        <h5 class="modal-title" id="updateFormModalLabel">Edit Student Engagement Rate</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Form -->
+        <form id="researchForm1" enctype="multipart/form-data">
+          @csrf
+          <input type="hidden" id="record_id" name="record_id">
+
+          <!--start-->
+           <div class="row">
                 <!-- First column-->
                 <div class="col-12 col-lg-8">
                     <!-- Product Information -->
@@ -158,12 +182,12 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                             <label class="form-label" for="title_of_the_event">Title of the Event</label>
-                            <textarea class="form-control" id="title_of_the_event" name="title_of_the_event"rows="2" placeholder="Enter your message here..."></textarea>
+                            <textarea class="form-control" id="title_of_the_event" name="title_of_the_event"rows="2"></textarea>
                             </div>
 
                             <div class="col-md-6 mb-3">
                             <label class="form-label" for="brief_description_of_activity">Brief Description of the Event</label>
-                            <textarea class="form-control" id="BriefDescription" name="brief_description_of_activity" rows="2" placeholder="Enter your message here..."></textarea>
+                            <textarea class="form-control" id="BriefDescription" name="brief_description_of_activity" rows="2"></textarea>
                             </div>
 
                             <div class="col-md-12 mb-3">
@@ -242,14 +266,14 @@
                             <label class="form-label" for="total_programs_assessed">Participation Target</label>
                             <input type="number" class="form-control"
                                                 name="participation_target"
-                                                value="" placeholder="Enter Participation Target...">
+                                                value="">
                         </div>
 
                         <div class="mb-3">
                             <label for="number_of_students_participated" class="form-label">Number of Students Participated</label>
                             <input type="number" class="form-control"
                                                 name="number_of_students_participated"
-                                                value="{{ $submission->number_of_students_participated ?? '' }}" placeholder="add..">
+                                                value="{{ $submission->number_of_students_participated ?? '' }}">
                         </div>
 
                          <div class="mb-3">
@@ -262,74 +286,37 @@
                     </div>
                     </div>
                     <!-- /Pricing Card -->
-                    <div class="mt-3 text-end" style="margin-left: -16px !important;">
-                        <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
-                    </div>
                 
                 </div>
                 <!-- /Second column -->
                 </div>
-            </form>
 
-            </div>
-            <!-- /first tab-->
-            @endif
-            <!-- /second tab-->
-            <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
-            </div>
-            <!-- /second tab-->
+          <!--/end-->
 
-        </div>
-        <!-- /main tab-->
-
-    </div>
-    <!-- tab open-->
-  </div>
-
-
-
-<!-- / close new design -->
-        <!-- Import Modal -->
-<div class="modal fade" id="importModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form id="importForm" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-            <input type="hidden" name="form_status" value="HOD">
-
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Import Student Engagement Rate Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <label class="form-label">Upload Excel / CSV</label>
-                    <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
-
-                    <small class="text-muted d-block mt-2">
-                        Allowed: xlsx, xls, csv
-                    </small>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                </div>
-            </div>
+          <div class="mt-3 text-end">
+            <button type="submit" class="btn btn-success">Update</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
         </form>
+      </div>
     </div>
+  </div>
 </div>
+
+
+        <!-- / model -->
+ 
+
+
+
+
+
+
     </div>
+    <!-- / Content -->
 @endsection
-
 @push('script')
-    <script src="{{ asset('admin/assets/vendor/libs/dropzone/dropzone.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/forms-file-upload.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
-   
-
-     <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/popular.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/bootstrap5.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/auto-focus.js') }}"></script>
@@ -341,48 +328,49 @@
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
     <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
+    <script>
+        window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+    </script>
 @endpush
 @push('script')
+<script>
+    
 
-    <script>
-     document.addEventListener("DOMContentLoaded", function () {
+    let employerRaty;   // GLOBAL
+    let graduateRaty;
 
-        // SVG stars
-        const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
         const starHalf = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='halfStarGradient'%3E%3Cstop offset='50%25' style='stop-color:%23FFD700' /%3E%3Cstop offset='50%25' style='stop-color:%239e9e9e' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23halfStarGradient)' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
         const starOff = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%239e9e9e' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
 
-        // Employer Rating
-        const employerRaty = new Raty(document.getElementById("employerRating"), {
-            number: 5,
-            half: true,
-            starOn: starOn,
-            starHalf: starHalf,
-            starOff: starOff,
-            click: function(score) {
-                document.getElementById("employer_satisfaction").value = score;
-            }
-        }).init();
+    // Employer Rating
+    employerRaty = new Raty(document.getElementById("employerRating"), {
+        number: 5,
+        half: true,
+        starOn: starOn,
+        starHalf: starHalf,
+        starOff: starOff,
+        click: function(score) {
+            document.getElementById("employer_satisfaction").value = score;
+        }
+    }).init();
 
-        // Graduate Rating
-        const graduateRaty = new Raty(document.getElementById("graduateRating"), {
-            number: 5,
-            half: true,
-            starOn: starOn,
-            starHalf: starHalf,
-            starOff: starOff,
-            click: function(score) {
-                document.getElementById("graduate_satisfaction").value = score;
-            }
-        }).init();
-
-    });
-
-    </script>
-    @if(auth()->user()->hasRole(['HOD']))
-        <script>
-            $(document).ready(function () {
-              function toggleOtherField() {
+    // Graduate Rating
+    graduateRaty = new Raty(document.getElementById("graduateRating"), {
+        number: 5,
+        half: true,
+        starOn: starOn,
+        starHalf: starHalf,
+        starOff: starOff,
+        click: function(score) {
+            document.getElementById("graduate_satisfaction").value = score;
+        }
+    }).init();
+});
+function toggleOtherField() {
                 let selected = $('#nature_of_event').val();
 
                 if (selected === 'Other') {
@@ -401,79 +389,270 @@
 
             // Run on page load (important for edit forms)
             toggleOtherField();
-              
 
-                 $('#researchForm').on('submit', function (e) {
-                    e.preventDefault();
-                    let form = $(this);
-                    let formData = new FormData(this);
-                     // Show loading indicator
-                    Swal.fire({
-                        title: 'Please wait...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-                     
-                    $.ajax({
-                        url: "{{ route('student-engagement-rate.store') }}",
-                        type: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            Swal.close();
-                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
-                            form[0].reset();
-                            form.find('.invalid-feedback').remove();
-                            form.find('.is-invalid').removeClass('is-invalid');
-                            $('.select2').val(null).trigger('change');
-                              // Remove all extra grant groups and keep only the first one
-                            $('#grant-details-container .grant-group:not(:first)').remove();
 
-                            // Reset the proof container of the first group
-                            $('#grant-details-container .grant-group:first .proof-container').hide();
+    </script>
+    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+        <script>
+            function fetchAchievementForms() {
+                $.ajax({
+                    url: "{{ route('student-engagement-rate.index') }}",
+                    method: "GET",
+                    data: {
+                        status: "HOD" // you can send more values
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
 
-                            // Reset index to 1
-                            grantIndex = 1;
-                        },
-                        error: function (xhr) {
-                            Swal.close();
-                            // Clear previous errors before showing new ones
-                            form.find('.invalid-feedback').remove();
-                            form.find('.is-invalid').removeClass('is-invalid');
-                             if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
+                            let editButton = '';
+                            if (parseInt(form.status) === 1) {
+                                editButton = `
+                                    <button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" 
+                                        data-form='${JSON.stringify(form)}'>Edit
+                                    </button>`;
+                            }    
+                             const deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
 
-                            // Loop through all validation errors
-                            $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                i + 1,
+                                form.nature_of_event || 'N/A',
+                                form.title_of_the_event || 'N/A',
+                                form.event_start_date || 'N/A',
+                                editButton+ ' ' + deleteBtn
+                            ];
+                        });
 
-                                if (input.length) {
-                                    input.addClass('is-invalid');
-
-                                    // Show error message under input
-                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                }
+                        if (!$.fn.DataTable.isDataTable('#achievementTable')) {
+                            $('#achievementTable').DataTable({
+                                data: rowData,
+                                columns: [
+                                    { title: "#" },
+                                    { title: "Nature of the Event" },
+                                    { title: "Title of the Event" },
+                                    { title: "Date(s) of the Event" },
+                                    { title: "Actions" }
+                                ]
                             });
-
-                        } else if (xhr.status === 409) {
-                            // 🔥 Duplicate record message
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Duplicate Entry',
-                                text: xhr.responseJSON.message
-                            });
-
                         } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
+                            $('#achievementTable').DataTable().clear().rows.add(rowData).draw();
                         }
-                        }
-                    });
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
                 });
+            }
+                
+    function populateFacultyDepartmentProgram(form) {
+    const facultySelect = $('#faculty_id');
+    const departmentSelect = $('#department_id');
+    const programSelect = $('#program_id');
 
-                $('#faculty_id').on('change', function () {
+    // Set faculty and trigger change
+    facultySelect.val(form.faculty_id).trigger('change');
+
+    if (!form.faculty_id) return;
+
+    // Load Departments
+    $.ajax({
+        url: "/get-departments/" + form.faculty_id,
+        type: "GET",
+        success: function (departments) {
+            departmentSelect.empty().append('<option value="">-- Select Department --</option>');
+
+            $.each(departments, function (key, department) {
+                departmentSelect.append(`<option value="${department.id}">${department.name}</option>`);
+            });
+
+            // Set department
+            departmentSelect.val(form.department_id).trigger('change');
+
+            if (!form.department_id) return;
+
+            // Load Programs
+            $.ajax({
+                url: "/get-programs/" + form.department_id,
+                type: "GET",
+                success: function (programs) {
+                    programSelect.empty().append('<option value="">-- Select Program --</option>');
+
+                    $.each(programs, function (key, program) {
+                        programSelect.append(`<option value="${program.id}">${program.program_name}</option>`);
+                    });
+
+                    // Set program
+                    programSelect.val(form.program_id).trigger('change');
+                },
+                error: function () {
+                    programSelect.html('<option value="">Error loading programs</option>');
+                }
+            });
+        },
+        error: function () {
+            departmentSelect.html('<option value="">Error loading departments</option>');
+        }
+    });
+}
+            $(document).ready(function () {
+                fetchAchievementForms();
+                let grantIndex = 0; // dynamic co-author counter
+
+
+$(document).on('click', '.edit-form-btn', function () {
+    let form = $(this).data('form');
+    let $f = $('#researchForm1');
+
+    // Reset form
+    $f[0].reset();
+
+    // ---------------------------
+    // Hidden / Basic Fields
+    // ---------------------------
+    $f.find('[name="record_id"]').val(form.id);
+
+    // ---------------------------
+    // Nature of Event (Select2)
+    // ---------------------------
+    $f.find('[name="nature_of_event"]')
+        .val(form.nature_of_event)
+        .trigger('change');
+
+    // Show other field if needed
+    if (form.other_event_detail) {
+        $('#other_event_div').show();
+        $('#other_event_detail').val(form.other_event_detail);
+    } else {
+        $('#other_event_div').hide();
+    }
+
+    // ---------------------------
+    // Event Location Checkboxes
+    // ---------------------------
+    $('input[name="event_location[]"]').prop('checked', false);
+
+    if (form.event_location) {
+        let locations = typeof form.event_location === "string"
+            ? JSON.parse(form.event_location)
+            : form.event_location;
+
+        locations.forEach(function (val) {
+            $('input[name="event_location[]"][value="'+val+'"]')
+                .prop('checked', true);
+        });
+    }
+
+    // ---------------------------
+    // Scope Radio
+    // ---------------------------
+    $('input[name="scope_of_the_event"][value="'+form.scope_of_the_event+'"]')
+        .prop('checked', true);
+
+    // ---------------------------
+    // Text Fields
+    // ---------------------------
+    $f.find('[name="title_of_the_event"]').val(form.title_of_the_event);
+    $f.find('[name="brief_description_of_activity"]').val(form.brief_description_of_activity);
+
+    // ---------------------------
+    // Dates
+    // ---------------------------
+    $f.find('[name="event_start_date"]').val(form.event_start_date);
+    $f.find('[name="event_end_date"]').val(form.event_start_date);
+
+    // ---------------------------
+    // Program Info (Select2)
+    // ---------------------------
+    populateFacultyDepartmentProgram(form);
+    // ---------------------------
+    // Participation
+    // ---------------------------
+    $f.find('[name="participation_target"]').val(form.participation_target);
+    $f.find('[name="number_of_students_participated"]').val(form.number_of_students_participated);
+
+     // ---------------------------
+    // Rating (Raty)
+    // ---------------------------
+    if(form.employer_satisfaction){
+        $('#employer_satisfaction').val(form.employer_satisfaction);
+
+        if(employerRaty){
+            employerRaty.score(form.employer_satisfaction);
+        }
+    }
+
+
+   
+
+
+
+    // Show modal
+    $('#updateFormModal').modal('show');
+});
+
+
+
+
+
+
+
+
+// Submit update form
+$('#researchForm1').on('submit', function (e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        let form = $(this);
+        const recordId = $('#record_id').val();
+        formData.append('status_update_data', true);
+
+        formData.append('_method', 'PUT'); // Laravel PUT
+
+        Swal.fire({
+            title: 'Updating...',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        $.ajax({
+            url: '/student-engagement-rate/' + recordId,
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                Swal.close();
+                Swal.fire('Success', response.message, 'success');
+                
+
+                form.find('.invalid-feedback').remove();
+                form.find('.is-invalid').removeClass('is-invalid');
+                $('#updateFormModal').modal('hide');
+                fetchAchievementForms(); // refresh table
+            },
+            error: function (xhr) {
+                Swal.close();
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    $.each(errors, function (field, messages) {
+                        let input = $('#researchForm1').find('[name="' + field + '"]');
+                        input.addClass('is-invalid');
+                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                    });
+                } else {
+                    Swal.fire('Error', 'Something went wrong!', 'error');
+                }
+            }
+        });
+    });
+
+$('#faculty_id').on('change', function () {
 
                     let facultyId = $(this).val();
                     let departmentSelect = $('#department_id');
@@ -541,37 +720,39 @@
                         programSelect.html('<option value="">-- Select Program --</option>');
                     }
                 });
-                $('#importForm').on('submit', function (e) {
-                    e.preventDefault();
 
-                    let formData = new FormData(this);
 
-                    Swal.fire({
-                        title: 'Importing...',
-                        allowOutsideClick: false,
-                        didOpen: () => Swal.showLoading()
-                    });
+                // SINGLE DELETE
+$(document).on('click', '.delete-btn', function() {
+    let id = $(this).data('id');
 
-                    $.ajax({
-                        url: "{{ route('student-engagement-rate.import') }}",
-                        method: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (res) {
-                            Swal.close();
-                            Swal.fire('Success', res.message, 'success');
-                            $('#importModal').modal('hide');
-                            $('#importForm')[0].reset();
-                        },
-                        error: function (xhr) {
-                            Swal.close();
-                            Swal.fire('Error', xhr.responseJSON.message ?? 'Import failed', 'error');
-                        }
-                    });
-                });
+    if(!confirm('Are you sure you want to delete this record?')) return;
 
-            });
+    $.ajax({
+        url: `/student-engagement-rate/${id}`,
+        type: 'DELETE',
+        headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
+        success: function(res) {
+            alert(res.message);
+            fetchAchievementForms();
+        },
+        error: function(xhr) {
+            console.error(xhr.responseText);
+            alert('Failed to delete record.');
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+});
+
         </script>
     @endif
-    @endpush
+@endpush

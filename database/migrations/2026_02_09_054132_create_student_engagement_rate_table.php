@@ -17,31 +17,31 @@ return new class extends Migration
             $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER', 'ORIC', 'HR'])->default('RESEARCHER');
               
             // Engagement
-            $table->json('stakeholder_category')->nullable();
-            $table->string('nature_of_activity')->nullable();
-            $table->json('activity_location')->nullable();
+            $table->string('nature_of_event')->nullable();
+            $table->string('other_event_detail')->nullable();
 
-            // Activity details
-            $table->string('title_of_activity')->nullable();
+            // Checkbox (store as JSON)
+            $table->json('event_location')->nullable();
+
+            // Radio
+            $table->string('scope_of_the_event')->nullable();
+
+            // Event Details
+            $table->text('title_of_the_event')->nullable();
             $table->text('brief_description_of_activity')->nullable();
-            $table->date('date_of_activity')->nullable();
-            $table->string('partner_organization')->nullable();
 
-            // Participation data
-            $table->integer('total_number_of_faculty_in_department')->nullable();
-            $table->integer('number_of_faculty_participated')->nullable();
-            $table->integer('total_number_of_staff_in_office')->nullable();
-            $table->integer('number_of_staff_participated')->nullable();
-            $table->integer('total_number_of_students_in_program')->nullable();
+            $table->date('event_start_date')->nullable();
+            $table->date('event_end_date')->nullable();
+
+            // Program Info (Relations)
+            $table->unsignedBigInteger('faculty_id')->nullable();
+            $table->unsignedBigInteger('department_id')->nullable();
+            $table->unsignedBigInteger('program_id')->nullable();
+
+            // Participation
+            $table->integer('participation_target')->nullable();
             $table->integer('number_of_students_participated')->nullable();
-
-            // Impact measurement
-            $table->json('typ_of_impact_achieved')->nullable();
-            $table->json('evidence_of_impact_available')->nullable();
-
-            // Verification
-            $table->boolean('declaration')->default(false);
-            $table->tinyInteger('employer_satisfaction')->nullable(); // rating (1–5)
+            $table->integer('employer_satisfaction')->nullable(); // rating value
 
            
             $table->enum('status', ['1', '2', '3', '4', '5', '6'])->default('1');
