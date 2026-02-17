@@ -16,6 +16,182 @@
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
 
+        <!-- Multi Column with Form Separator -->
+        {{-- <div class="card">
+            <div class="card-datatable table-responsive card-body">
+                <div class="tab-content">
+                    @if(auth()->user()->hasRole(['HOD']))
+                        <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                             <div class="d-flex justify-content-between">
+                               <div>
+                                <h5 class="mb-1">% Employability</h5>
+                                </div>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                    <i class="bx bx-upload"></i> Import Excel / CSV
+                                </button>
+                                <a href="{{ route('indicators_crud.index', ['slug' => 'employability', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            </div> 
+                            <form id="researchForm" enctype="multipart/form-data" class="row">
+                                @csrf
+                                <input type="hidden" id="form_status" name="form_status" value="HOD" required>
+                                <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                                <div class="row g-6 mt-0">
+                                    <div id="grant-details-container">
+                                        <div class="grant-group row g-3 mb-3 p-3 border border-primary">
+                                            <div class="col-md-6">
+                                                <label for="student_name" class="form-label">Student Name</label>
+                                                <select name="student_id" class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Student --</option>
+                                                    <option value="11"> Muhammad Ahmad</option>
+                                                    <option value="12">MalikMubasharAhmadZafar</option>
+                                                    <option value="13"> Muhammad Umar</option>
+                                                    
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="faculty" class="form-label">Faculty</label>
+                                                <select name="faculty_id" class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Faculty --</option>
+                                                    <option value="11"> Faculty of Business and Management Sciences-KCF</option>
+                                                    <option value="171">Faculty of Computer Science and Information Technology-CCL</option>
+                                                    <option value="158"> Faculty of  Arts and Humanities-CCL</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="program" class="form-label">Program</label>
+                                                <select name="program_id" class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Program --</option>
+                                                    <option value="1"> BS Robotics</option>
+                                                    <option value="2">BS Gaming And Multimedia</option>
+                                                    <option value="3"> BS Cyber Security</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="batch" class="form-label">Batch</label>
+                                                <select name="batch" class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Batch --</option>
+                                                    <option value="2014-2018">2014-2018</option>
+                                                    <option value="2014-2019">2014-2019</option>
+                                                    <option value="2014-2020">2014-2018</option>
+                                                   
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="passing_year" class="form-label">Passing Year</label>
+                                                <select name="passing_year" class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Year --</option>
+                                                    <option value="2021">2021</option>
+                                                    <option value="2022">2022</option>
+                                                    <option value="2023">2023</option>
+                                                    <option value="2024">2024</option>
+                                                    <option value="2025">2025</option>
+                                                    <option value="2026">2026</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-label">Employer Name</label>
+                                                <input type="text" name="employer_name" class="form-control" required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="sector" class="form-label">Sector</label>
+                                                <select name="sector" class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Sector --</option>
+                                                    <option value="a">a</option>
+                                                    <option value="b">b</option>
+                                                    <option value="c">c</option>
+                                                    <option value="d">d</option>
+                                                    <option value="e">e</option>
+                                                 
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-label">Salary</label>
+                                                <input type="number" name="salary" class="form-control" min="1" step="1"
+                                                    required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="market_competitive_salary" class="form-label">Market Competitive
+                                                    Salary</label>
+                                                <select name="market_competitive_salary"
+                                                    class="select2 form-select market_competitive_salary" required>
+                                                    <option value="">-- Select --</option>
+                                                    <option value="Above">Above</option>
+                                                    <option value="At Par">At Par</option>
+                                                    <option value="Low">Low</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-label d-block">Job Relevancy</label>
+                                                <div>
+                                                    <input type="radio" name="job_relevancy" id="job_relevancy" value="yes">
+                                                    <label for="yes">Yes</label>
+
+                                                    <input type="radio" name="job_relevancy" id="job_relevancy" value="no"
+                                                        checked>
+                                                    <label for="job_relevancy">No</label>
+                                                </div>
+                                            </div>
+                                            
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-end" style="margin-left: -16px !important;">
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    @endif
+                    @if(auth()->user()->hasRole(['HOD']))
+                        <div class="tab-pane fade" id="form3" role="tabpanel">
+                            @if(auth()->user()->hasRole(['HOD']))
+                                <div class="d-flex">
+                                    <select id="bulkAction" class="form-select w-auto me-2">
+                                        <option value="">-- Select Action --</option>
+                                        <option value="2">Verified</option>
+                                        <option value="1">UnVerified</option>
+                                    </select>
+                                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                                </div>
+                            @endif
+                            <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAll"></th>
+                                        <th>#</th>
+                                        <th>Created By</th>
+                                        <th>Name</th>
+                                        <th>Funding Agency</th>
+                                        <th>Created Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
+        </div> --}}
+
+
+
+
+
+
+
+
+
 <!-- new design -->
 
 <div class="app-ecommerce">
@@ -64,11 +240,11 @@
                         <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="faculty" class="form-label">Please select period</label>
-                            <select name="period" id="period" class="select2 form-select faculty-member" required>
+                            <select name="faculty_id" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Period --</option>
                                 <option value="11"> 2024-2025</option>
-                                <option value="171">2025-2026</option>
-                                <option value="158">2026-2027</option>
+                                <option value="171">2025-2026<</option>
+                                <option value="158">2026-2027<</option>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -110,24 +286,24 @@
                             <label for="batch" class="form-label">Batch</label>
                             <select name="batch" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Batch --</option>
-                                <?php
-                                $currentYear = date('Y');
-                                for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
-                                    echo "<option value='Spring $year'>Spring $year</option>";
-                                    echo "<option value='Fall $year'>Fall $year</option>";
-                                }
-                                ?>
+                                <option value="2014-2018">2014-2018</option>
+                                <option value="2014-2019">2014-2019</option>
+                                <option value="2014-2020">2014-2018</option>
                                 
                             </select>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="passing_year" class="form-label">Passing Year</label>
-                            <input type="date" name="passing_year" class="form-control" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="passing_year" class="form-label">Date of Appointment</label>
-                            <input type="date" name="date_of_appointment" id="date_of_appointment" class="form-control" required>
+                            <select name="passing_year" class="select2 form-select faculty-member" required>
+                                <option value="">-- Select Year --</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                            </select>
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -139,30 +315,11 @@
                             <label for="sector" class="form-label">Sector</label>
                             <select name="sector" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Sector --</option>
-                                <option value="Manufacturing">Manufacturing</option>
-                                <option value="Services">Services</option>
-                                <option value="Information Technology (IT)">Information Technology (IT)</option>
-                                <option value="Banking & Finance">Banking & Finance</option>
-                                <option value="Insurance">Insurance</option>
-                                <option value="FMCG & Consumer Goods">FMCG & Consumer Goods</option>
-                                <option value="Retail & E-Commerce">Retail & E-Commerce</option>
-                                <option value="Energy & Utilities">Energy & Utilities</option>
-                                <option value="Oil & Gas">Oil & Gas</option>
-                                <option value="Construction & Real Estate">Construction & Real Estate</option>
-                                <option value="Healthcare & Pharmaceuticals">Healthcare & Pharmaceuticals</option>
-                                <option value="Agriculture & Agribusiness">Agriculture & Agribusiness</option>
-                                <option value="Education & Training">Education & Training</option>
-                                <option value="Media & Communications">Media & Communications</option>
-                                <option value="Logistics & Transportation">Logistics & Transportation</option>
-                                <option value="Hospitality & Tourism">Hospitality & Tourism</option>
-                                <option value="Telecommunications">Telecommunications</option>
-                                <option value="Engineering & Industrial Services">Engineering & Industrial Services</option>
-                                <option value="Government / Public Sector">Government / Public Sector</option>
-                                <option value="Development Sector / NGO">Development Sector / NGO</option>
-                                <option value="Research & Development">Research & Development</option>
-                                <option value="Startups & Entrepreneurship">Startups & Entrepreneurship</option>
-                                <option value="Environmental & Sustainability">Environmental & Sustainability</option>
-                                <option value="Other">Other (Specify)</option>
+                                <option value="a">a</option>
+                                <option value="b">b</option>
+                                <option value="c">c</option>
+                                <option value="d">d</option>
+                                <option value="e">e</option>
                                 
                             </select>
                         </div>
@@ -195,10 +352,6 @@
                                     checked>
                                 <label for="job_relevancy">No</label>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="passing_year" class="form-label">Proof of Salary and appointment</label>
-                            <input type="url" name="proof_salary_and_appointment" id="proof_salary_and_appointment" class="form-control" required>
                         </div>
                         
                         </div>

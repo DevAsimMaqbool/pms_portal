@@ -1,133 +1,227 @@
 @extends('layouts.app')
 @push('style')
-<link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
-<link rel="stylesheet"
-href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/%40form-validation/form-validation.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/animate-css/animate.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
+    <link rel="stylesheet"
+        href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/%40form-validation/form-validation.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/animate-css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 
-<link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
-<link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
 @endpush
 @section('content')
-<!-- Content -->
-<div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
 
-<!-- Multi Column with Form Separator -->
-<div class="card">
-<div class="card-datatable table-responsive card-body">
-<!-- Tab panes -->
-<div class="tab-content">
-@if(auth()->user()->hasRole(['HOD']))
-<div class="tab-pane fade show active" id="form1" role="tabpanel">
-<div class="d-flex justify-content-between">
-    <div>
-    <h5 class="mb-1">Percentage of targets achieved for superior go global stream (Higher Education) (if applicable)</h5>
-    </div>
-    <a href="{{ route('indicators_crud.index', ['slug' => 'percentage_of_targets_achieved_for_superior_go_global_stream', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
-</div> 
-<form id="researchForm" enctype="multipart/form-data" class="row">
-@csrf
-<input type="hidden" id="form_status" name="form_status" value="HOD" required>
-<input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-<div class="row g-6 mt-0">
-<div id="grant-details-container">
-<div class="grant-group row g-3 mb-3 p-3 border border-primary">
+        <!-- Multi Column with Form Separator -->
+        <div class="card">
+            <div class="card-datatable table-responsive card-body">
+                @if(auth()->user()->hasRole(['HOD']))
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">No. of students enrolled in 1M with global experience (work experience) (if applicable)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
+                        </li>
+                    </ul>
+                @endif
+                <div class="tab-content">
+                    @if(auth()->user()->hasRole(['HOD']))
+                        <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                            
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h4 class="mb-1">Percentage of targets achieved for superior go global stream (Higher Education) (if applicable)</h4>
+                                </div>
+                                <div class="d-flex align-content-center flex-wrap gap-4">
+                                    <div class="d-flex gap-4">
+                                    <a class="btn btn-label-primary" href="{{ route('indicators_crud.index', ['slug' => 'percentage_of_targets_achieved_for_superior_go_global_stream', 'id' => $indicatorId]) }}">View</a></div>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                                                <i class="bx bx-upload"></i> Import Excel / CSV</button>
+                                </div>
+                            </div>
+                            <form id="researchForm1" enctype="multipart/form-data" class="row">
+                                @csrf
+                                <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                                <input type="hidden" id="form_status" name="form_status" value="HOD">
 
- 
-    <div class="col-md-6">
-        <label class="form-label">Programs Being Offered in Faculty</label>
-        <input type="text" class="form-control" placeholder="e.g. BS, MS, PhD Programs">
-    </div>
+                                <div class="row">
+                                    <div id="author-past-container">
+                                        <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
-    <!-- Enrolled Students -->
-    <div class="col-md-6">
-        <label class="form-label">
-            Total Number of Enrolled Students (Last Two Semesters)
-        </label>
-        <input type="number" class="form-control" placeholder="Enter total enrolled students">
-    </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Faculty</label>
+                                                <select name="student_enroll_1m[0][faculty_id]" class="select2 form-select faculty-select">
+                                                    <option value="">Select Faculty</option>
+                                                    @foreach(get_faculties() as $faculty)
+                                                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
 
-    <!-- Target & Timeline -->
-        <div class="col-md-6">
-            <label class="form-label">Target</label>
-            <input type="number" class="form-control" placeholder="Enter target value">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Department</label>
+                                                <select name="student_enroll_1m[0][department_id]" class="select2 form-select department-select">
+                                                    <option value="">Select Department</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Program Name</label>
+                                                <select name="student_enroll_1m[0][program_id]" class="select2 form-select program-select">
+                                                    <option value="">Select Program</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Target</label>
+                                                <input type="number" name="student_enroll_1m[0][experience_target]" class="form-control" min="1"
+                                                    step="1" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Target Achieved</label>
+                                                <input type="number" name="student_enroll_1m[0][achieved_target]" class="form-control" min="1"
+                                                    step="1" required>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                            id="add-coauthor"><i class="icon-base ti tabler-plus me-1"></i> <span
+                                                class="align-middle">Add</span></button>
+                                    </div>
+
+                                </div>
+                                <div class="mt-3 text-end" style="margin-left: -19px !important;">
+                                    <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
+                                </div>
+                            </form>
+                        </div>
+                    @endif
+                    @if(auth()->user()->hasRole(['Dean', 'HOD', 'ORIC']))
+                        <div class="tab-pane fade show {{ auth()->user()->hasRole(['Dean', 'ORIC']) ? 'active' : '' }}"
+                            id="form2" role="tabpanel">
+                            <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAll"></th>
+                                        <th>#</th>
+                                        <th>Created By</th>
+                                        <th>Co Authers</th>
+                                        <th>Author Rank</th>
+                                        <th>Created Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
 
-        <div class="col-md-6">
-            <label class="form-label">Timeline</label>
-            <input type="text" class="form-control" placeholder="e.g. Jan 2025 – Dec 2025">
-        </div>
 
-    <!-- Registered Students -->
-    <div class="col-md-6">
-        <label class="form-label">Number of Registered Students</label>
-        <input type="number" class="form-control" placeholder="Enter registered students">
     </div>
-
-    <!-- Process Stage -->
-    <div class="col-md-6">
-        <label class="form-label">Process Stage</label>
-        <select class="form-select">
-            <option selected disabled>Select process stage</option>
-            <option>Inquiry</option>
-            <option>Application Submitted</option>
-            <option>Admission Offered</option>
-            <option>Visa Processing</option>
-            <option>Enrolled</option>
-        </select>
-    </div>
-
-
-
-</div>
-</div>
-</div>
-<div class="mt-3 text-end" style="margin-left: -16px !important;">
-<button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
-</div>
-</form>
-
-</div>
-@endif
-</div>
-</div>
-</div>
-
-</div>
-<!-- / Content -->
+    <!-- / Content -->
 @endsection
 @push('script')
-<script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-<script src="{{ asset('admin/assets/vendor/libs/%40form-validation/popular.js') }}"></script>
-<script src="{{ asset('admin/assets/vendor/libs/%40form-validation/bootstrap5.js') }}"></script>
-<script src="{{ asset('admin/assets/vendor/libs/%40form-validation/auto-focus.js') }}"></script>
-<script src="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-<script src="{{ asset('admin/assets/js/extended-ui-sweetalert2.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/popular.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/bootstrap5.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/auto-focus.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/extended-ui-sweetalert2.js') }}"></script>
 
-<script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
-<script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
-<script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 @endpush
 @push('script')
     @if(auth()->user()->hasRole(['HOD']))
         <script>
+            
             $(document).ready(function () {
+                
+                let faculties = @json(get_faculties());
+                let pastIndex = 1;
 
-                $('#researchForm').on('submit', function (e) {
+                // Add new author group
+                $('#add-coauthor').click(function () {
+                    
+
+                     let facultyOptions = '<option value="">Select Faculty</option>';
+                        faculties.forEach(function(fac) {
+                            facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
+                        });
+                    let newGroup = `
+            <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+
+
+                <div class="col-md-4">
+                    <label class="form-label">Faculty</label>
+                    <select name="student_enroll_1m[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
+                        ${facultyOptions}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Department</label>
+                     <select name="student_enroll_1m[${pastIndex}][department_id]" class="select2 form-select department-select">
+                        <option value="">Select Department</option>
+                    </select>
+                </div>
+
+                 <div class="col-md-4">
+                    <label class="form-label">Program Name</label>
+                    <select name="student_enroll_1m[${pastIndex}][program_id]" class="select2 form-select program-select">
+                        <option value="">Select Program</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Target</label>
+                    <input type="number" name="student_enroll_1m[${pastIndex}][experience_target]" class="form-control" min="1"
+                        step="1" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Target Achieved</label>
+                    <input type="number" name="student_enroll_1m[${pastIndex}][achieved_target]" class="form-control" min="1"
+                        step="1" required>
+                </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+            <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
+            </div>
+            </div>`;
+
+                    // Convert string → jQuery object
+                    let $newBlock = $(newGroup);
+
+                    // Append
+                    $('#author-past-container').append($newBlock);
+
+                    // ⭐⭐⭐ IMPORTANT ⭐⭐⭐
+                    // Initialize Select2 on ALL selects inside this block
+                    $newBlock.find('select.select2').select2({
+                        placeholder: 'Select an option',
+                        width: '100%'
+                    });
+                    pastIndex++;
+                });
+
+                // Remove a past group
+                $(document).on('click', '.remove-past', function () {
+                    $(this).closest('.past-group').remove();
+                });
+                $('#researchForm1').on('submit', function (e) {
                     e.preventDefault();
                     let form = $(this);
                     let formData = new FormData(this);
-                    // Show loading indicator
-                    Swal.fire({
-                        title: 'Please wait...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
 
                     $.ajax({
                         url: "{{ route('go-global-stream-target.store') }}",
@@ -139,17 +233,20 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
                             Swal.close();
                             Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                             form[0].reset();
-                            form.find('.invalid-feedback').remove();
-                            form.find('.is-invalid').removeClass('is-invalid');
-                            $('.select2').val(null).trigger('change');
-                            // Remove all extra grant groups and keep only the first one
-                            $('#grant-details-container .grant-group:not(:first)').remove();
+                            // Remove added groups
+                            $('#author-past-container .past-group').not(':first').remove();
 
-                            // Reset the proof container of the first group
-                            $('#grant-details-container .grant-group:first .proof-container').hide();
+                            // Reset Select2
+                            $('#author-past-container select.select2')
+                                .val(null)
+                                .trigger('change');
 
-                            // Reset index to 1
-                            grantIndex = 1;
+                            // Reset dependent dropdowns
+                            $('.department-select').html('<option value="">Select Department</option>');
+                            $('.program-select').html('<option value="">Select Program</option>');
+
+                            // Reset index
+                            pastIndex = 1;
                         },
                         error: function (xhr) {
                             Swal.close();
@@ -161,7 +258,9 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
 
                                 // Loop through all validation errors
                                 $.each(errors, function (field, messages) {
-                                    let input = form.find('[name="' + field + '"]');
+                                    let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                    fieldName = fieldName.replace('[]]', ']');
+                                    let input = form.find('[name="' + fieldName + '"]');
 
                                     if (input.length) {
                                         input.addClass('is-invalid');
@@ -171,20 +270,74 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
                                     }
                                 });
 
-                            } else if (xhr.status === 409) {
-                                // 🔥 Duplicate record message
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Duplicate Entry',
-                                    text: xhr.responseJSON.message
-                                });
-
                             } else {
                                 Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
                             }
                         }
                     });
                 });
+
+                // 3️⃣ Faculty → Department
+                $(document).on('change', '.faculty-select', function () {
+                    let facultyId = $(this).val();
+                    let departmentSelect = $(this).closest('.past-group').find('.department-select');
+                    let programSelect = $(this).closest('.past-group').find('.program-select');
+
+                    // Reset dependent dropdowns
+                    departmentSelect.html('<option value="">Loading...</option>');
+                    programSelect.html('<option value="">Select Program</option>');
+
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (departments) {
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">Select Department</option>');
+                                $.each(departments, function (key, department) {
+                                    departmentSelect.append(`<option value="${department.id}">${department.name}</option>`);
+                                });
+                                // Refresh Select2
+                                departmentSelect.select2({ placeholder: 'Select Department', width: '100%' });
+                            },
+                            error: function () {
+                                departmentSelect.html('<option value="">Error loading departments</option>');
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">Select Department</option>');
+                    }
+                });
+
+                // 4️⃣ Department → Program
+                $(document).on('change', '.department-select', function () {
+                    let departmentId = $(this).val();
+                    let programSelect = $(this).closest('.past-group').find('.program-select');
+
+                    programSelect.html('<option value="">Loading...</option>');
+
+                    if (departmentId) {
+                        $.ajax({
+                            url: "/get-programs/" + departmentId,
+                            type: "GET",
+                            success: function (programs) {
+                                programSelect.empty();
+                                programSelect.append('<option value="">Select Program</option>');
+                                $.each(programs, function (key, program) {
+                                    programSelect.append(`<option value="${program.id}">${program.program_name}</option>`);
+                                });
+                                // Refresh Select2
+                                programSelect.select2({ placeholder: 'Select Program', width: '100%' });
+                            },
+                            error: function () {
+                                programSelect.html('<option value="">Error loading programs</option>');
+                            }
+                        });
+                    } else {
+                        programSelect.html('<option value="">Select Program</option>');
+                    }
+                });
+
 
             });
         </script>

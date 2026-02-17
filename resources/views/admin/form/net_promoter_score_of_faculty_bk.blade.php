@@ -48,38 +48,44 @@
                                 <div class="row g-6 mt-0">
                                          
                                         <div class="row g-3 pb-3 border border-primary">
-                                            <div class="col-md-4">
-                                                <label for="batch" class="form-label">Select Year</label>
-                                                <select name="year" id="year" class="select2 form-select faculty-member" required>
-                                                    <option value="">-- Select Batch --</option>
-                                                     <?php
-                                                        $currentYear = date('Y');
-
-                                                        // Show range from past 2 to next 3 academic years
-                                                        for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
-                                                            $nextYear = $year + 1;
-                                                            $range = $year . '-' . $nextYear;
-                                                            echo "<option value='{$range}'>{$range}</option>";
-                                                        }
-                                                        ?>
-                                                    
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <label class="form-label" for="total_faculty_surveyed">Total Faculty Surveyed</label>
                                                 <input type="number" class="form-control" id="total_faculty_surveyed" placeholder="Total Faculty Surveyed" name="total_faculty_surveyed" aria-label="Total Faculty Surveyed">
                                             </div>
-                                            <div class="col-md-4">
-                                                 <label class="form-label" for="number_of_promoters">Number of Promoters</label>
-                                                <input type="number" class="form-control" id="number_of_promoters" placeholder="Number of Promoters" name="number_of_promoters" aria-label="Number of Promoters (Score 9–10)">
+                                            <div class="col-md-6">
+                                                 <label class="form-label" for="number_of_promoters">Number of Promoters (Score 9–10)</label>
+                                                <input type="number" class="form-control" id="number_of_promoters" placeholder="Number of Promoters (Score 9–10)" name="number_of_promoters" aria-label="Number of Promoters (Score 9–10)">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="number_of_passives">Number of Passives (Score 7–8)</label>
+                                                <input type="number" class="form-control" id="number_of_passives" placeholder="Number of Passives (Score 7–8)" name="number_of_passives">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="number_of_detractors">Number of Detractors (Score 0–6)</label>
+                                                <input type="number" class="form-control" id="number_of_detractors" placeholder="Number of Detractors (Score 0–6)" name="number_of_detractors" aria-label="Number of Detractors (Score 0–6)">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="evidence_reference">Evidence Reference</label>
+                                                <input type="text" class="form-control" id="evidence_reference" placeholder="Evidence Reference" name="evidence_reference" aria-label="Evidence Reference">
                                             </div>
                                             <div class="col-md-12">
                                                 <label class="form-label" for="remarks">Remarks</label>
                                                 <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
                                             </div>
-                                            <div class="col-md-12">
-                                                 <label class="form-label" for="promoters_percentage">Promoters Percentage (%)</label>
-                                                <input type="number" class="form-control" id="promoters_percentage" placeholder="Number of Promoters" name="promoters_percentage" aria-label="Number of Promoters (Score 9–10)">
+                                        </div>
+
+                                        <div class="row g-3 pb-3 border border-primary">
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="promoters_percentage">Promoters Percentage (%)</label>
+                                                <input type="number" class="form-control" id="promoters_percentage" placeholder="Promoters Percentage (%)" name="promoters_percentage" aria-label="Promoters Percentage (%)" disabled>
+                                            </div>
+                                            <div class="col-md-6">
+                                                 <label class="form-label" for="detractors_percentage">Detractors Percentage (%)</label>
+                                                <input type="number" class="form-control" id="detractors_percentage" placeholder="Detractors Percentage (%)" name="detractors_percentage" aria-label="Detractors Percentage (%)" disabled>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="net_promoter_score">Net Promoter Score (NPS)</label>
+                                                <input type="number" class="form-control" id="net_promoter_score" placeholder="Net Promoter Score (NPS)" name="net_promoter_score" disabled>
                                             </div>
                                         </div>
                                    

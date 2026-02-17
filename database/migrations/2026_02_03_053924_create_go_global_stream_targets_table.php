@@ -16,12 +16,13 @@ return new class extends Migration
             $table->unsignedBigInteger('indicator_id');
             $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER', 'ORIC', 'HR'])->default('RESEARCHER');
               
-            $table->string('programs_offered');
-            $table->integer('total_enrolled_students');
-            $table->integer('target');
-            $table->string('timeline');
-            $table->integer('registered_students');
-            $table->string('process_stage');
+            $table->unsignedBigInteger('faculty_id');
+            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('program_id');
+
+            
+            $table->integer('experience_target')->default(0);
+            $table->integer('achieved_target')->default(0);
 
            
             $table->enum('status', ['1', '2', '3', '4', '5', '6'])->default('1');
