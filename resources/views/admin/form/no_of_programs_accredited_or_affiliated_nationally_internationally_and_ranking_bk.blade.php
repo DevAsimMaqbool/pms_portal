@@ -78,14 +78,15 @@
                                                     <option value="">-- Select Type --</option>
                                                     <option value="accreditation">Accreditation</option>
                                                     <option value="affiliation">Affiliation</option>
+                                                    <option value="membership">Membership</option>
                                                     <option value="ranking">Ranking</option>
                                                 </select>
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="ranking_body" class="form-label ">Accrediting</label>
-                                                <select name="accrediting" id="accrediting"
-                                                    class="select2 form-select faculty-member accrediting" required>
+                                                <label for="ranking_body" class="form-label">Accrediting / Ranking Body</label>
+                                                <select name="ranking_body" id="ranking_body"
+                                                    class="select2 form-select faculty-member" required>
                                                     <option value="">-- Select Body --</option>
                                                     <option value="PBC">Pakistan Bar Council (PBC)</option>
                                                     <option value="PCATP">Pakistan Council for Architects and Town Planners
@@ -107,16 +108,7 @@
                                                     <option value="NBEAC">National Business Education Accreditation Council
                                                         (NBEAC)</option>
                                                     <option value="NTC">National Technology Council (NTC)</option>
-                                                    <option value="Other">Other</option>
                                                 </select>
-                                            </div>
-                                             <!-- Hidden Other Field -->
-                                            <div class="col-md-6 d-none" id="other_cpd_box">
-                                                <label class="form-label">Other Detail</label>
-                                                <input type="text"
-                                                    name="ranking_body_other_detail" id="ranking_body_other_detail"
-                                                    class="form-control"
-                                                    placeholder="Enter other detail">
                                             </div>
 
                                             <div class="col-md-6">
@@ -234,24 +226,7 @@
     @if(auth()->user()->hasRole(['HOD']))
         <script>
             $(document).ready(function () {
-                 //------------------------------------
-            // Show/Hide OTHER input
-            //------------------------------------
-            $(document).on('change', '.ranking_body', function () {
 
-                let selected = $(this).val() || [];
-
-                if (selected.includes("Other")) {
-
-                    $('#other_cpd_box').removeClass('d-none');
-
-                } else {
-
-                    $('#other_cpd_box').addClass('d-none');
-                    $('input[name="ranking_body_other_detail"]').val('');
-
-                }
-            });
 
 
                 $('#researchForm').on('submit', function (e) {

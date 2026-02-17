@@ -17,20 +17,11 @@ return new class extends Migration
             $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER', 'ORIC', 'HR'])->default('RESEARCHER');
               
             // Survey Counts
+            $table->string('year')->nullable();
             $table->integer('total_faculty_surveyed')->nullable();
             $table->integer('number_of_promoters')->nullable();
-            $table->integer('number_of_passives')->nullable();
-            $table->integer('number_of_detractors')->nullable();
-
-            // Evidence
-            $table->string('evidence_reference')->nullable();
+            $table->decimal('promoters_percentage', 5, 2)->nullable();
             $table->text('remarks')->nullable();
-
-            // Calculations (Auto)
-            $table->decimal('promoters_percentage', 6, 2)->nullable();
-            $table->decimal('detractors_percentage', 6, 2)->nullable();
-            $table->decimal('net_promoter_score', 6, 2)->nullable();
-
            
             $table->enum('status', ['1', '2', '3', '4', '5', '6'])->default('1');
             $table->json('update_history')->nullable();

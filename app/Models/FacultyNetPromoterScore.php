@@ -8,17 +8,11 @@ class FacultyNetPromoterScore extends Model
 {
     protected $fillable = [
         'indicator_id',
+        'year',
         'total_faculty_surveyed',
         'number_of_promoters',
-        'number_of_passives',
-        'number_of_detractors',
-
-        'evidence_reference',
-        'remarks',
-
         'promoters_percentage',
-        'detractors_percentage',
-        'net_promoter_score',
+        'remarks',
         'form_status',
         'status',
         'update_history',

@@ -20,7 +20,7 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
 <div class="card-datatable table-responsive card-body">
 <!-- Tab panes -->
 <div class="tab-content">
-@if(auth()->user()->hasRole(['HOD','Teacher']))
+@if(auth()->user()->hasRole(['HOD']))
 <div class="tab-pane fade show active" id="form1" role="tabpanel">
 <div class="d-flex justify-content-between">
     <div>
@@ -28,7 +28,6 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
     </div>
     <a href="{{ route('indicators_crud.index', ['slug' => 'no_of_professional_memberships_attained_vs_targets', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
 </div> 
-<h5 class="text-primary" id="indicatorTarget">Target 0</h5>
 <form id="researchForm" enctype="multipart/form-data" class="row">
 @csrf
 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
@@ -41,6 +40,7 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
 <select name="type_of_membership" id="type_of_membership" class="select2 form-select faculty-member"
 required>
 <option value="">-- Select Type --</option>
+<option value="individual_faculty">Individual Faculty</option>
 <option value="institutional">Institutional</option>
 </select>
 </div>
@@ -59,6 +59,7 @@ required>
 <option value="">-- Select Program --</option>
 <option value="academic">Academic</option>
 <option value="professional">Professional</option>
+<option value="accreditation">Accreditation</option>
 <option value="research">Research</option>
 </select>
 </div>
@@ -109,7 +110,7 @@ Accreditation</option>
 <div class="col-md-6">
 <label for="country" class="form-label">Country (If International)</label>
 <select name="country" id="country"
-class="country-dropdown select2 form-select" required>
+class="country-dropdown select2 form-select">
 <option value="">Select Country</option>
 @foreach(getAllCountries() as $con)
 <option value="{{ $con['code'] }}">
@@ -202,37 +203,9 @@ class="country-dropdown select2 form-select" required>
 <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD','Teacher']))
+    @if(auth()->user()->hasRole(['HOD']))
         <script>
             $(document).ready(function () {
-                function fetchTarget(indicatorId) {
-
-                    if (!indicatorId) {
-                        $('#indicatorTarget').text('Target: N/A');
-                        return;
-                    }
-
-                    $.ajax({
-                        url: "{{ route('faculty-target.getTarget') }}",
-                        type: "GET",
-                        data: {
-                            indicator_id: indicatorId
-                        },
-                        success: function(res) {
-                            if (res.target) {
-                                $('#indicatorTarget').text('Target: ' + res.target);
-                            } else {
-                                $('#indicatorTarget').text('Target: N/A');
-                            }
-                        },
-                        error: function() {
-                            $('#indicatorTarget').text('Target: N/A');
-                        }
-                    });
-                }
-
-                // ✅ Pass PHP variable safely
-                fetchTarget({{ $indicatorId }});
 
                 $('#researchForm').on('submit', function (e) {
                     e.preventDefault();

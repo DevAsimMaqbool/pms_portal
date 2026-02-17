@@ -15,20 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('indicator_id');
             $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER', 'ORIC', 'HR'])->default('RESEARCHER');
-              
-            $table->string('university_name');
-            $table->string('country', 10)->nullable();
-            $table->string('city')->nullable();
-
-            // Agreement Details
-            $table->string('signing_authorities')->nullable();
-            $table->string('duration_of_agreement')->nullable();
-            $table->string('outcome_timeline')->nullable();
-
-            // Collaboration Info
-            $table->text('collaboration_scope')->nullable();
-            $table->text('contact_details')->nullable();
-            $table->text('projects_activities_planned')->nullable();
+            $table->string('deliverables')->nullable();
+            $table->integer('target')->default(0);
+            $table->integer('achieved_target')->default(0);
 
             $table->enum('status', ['1', '2', '3', '4', '5', '6'])->default('1');
             $table->json('update_history')->nullable();

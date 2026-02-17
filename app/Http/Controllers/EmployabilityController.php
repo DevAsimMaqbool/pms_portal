@@ -79,11 +79,15 @@ class EmployabilityController extends Controller
             if($request->form_status=='HOD'){
                  $rules = [
                     'indicator_id' => 'required',
+                    'period' => 'required|string',
                     'student_id' => 'required|integer',
                     'faculty_id' => 'required|integer',
+                    'department_id' => 'required|integer',
                     'program_id' => 'required|integer',
                     'batch' => 'required',
-                    'passing_year' => 'required|digits:4',
+                    'date_of_appointment' => 'required',
+                    'proof_salary_and_appointment' => 'required',
+                    'passing_year' => 'required',
                     'employer_name' => 'required|string',
                     'sector' => 'required|string',
                     'salary' => 'required|integer|min:1',
@@ -152,11 +156,15 @@ class EmployabilityController extends Controller
 
         $request->validate([
                 'record_id' => 'required',
+                'period' => 'required|string',
                 'student_id' => 'required|integer',
                 'faculty_id' => 'required|integer',
+                'department_id' => 'required|integer',
                 'program_id' => 'required|integer',
                 'batch' => 'required',
-                'passing_year' => 'required|digits:4',
+                'date_of_appointment' => 'required',
+                'proof_salary_and_appointment' => 'required',
+                'passing_year' => 'required',
                 'employer_name' => 'required|string',
                 'sector' => 'required|string',
                 'salary' => 'required|integer|min:1',
@@ -168,7 +176,7 @@ class EmployabilityController extends Controller
         ]);
 
         $data = $request->only([
-                        'student_id', 'faculty_id', 'program_id', 'batch','passing_year',
+                        'period', 'student_id', 'faculty_id', 'program_id', 'batch','passing_year',
                         'employer_name','sector','salary','market_competitive_salary','job_relevancy','employer_satisfaction',
                         'graduate_satisfaction'
                     ]);
@@ -182,21 +190,15 @@ class EmployabilityController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, Request $request)
+       public function destroy($id)
     {
-        try {
-            $kfa = Employability::findOrFail($id);
-            $kfa->delete();
-            return response()->json(['status' => 'success', 'message' => 'Survey deleted successfully']);
-        } catch (\Exception $e) {
-            return apiResponse(
-                'Oops! Something went wrong',
-                [],
-                false,
-                500,
-                ''
-            );
-        }
+        $record = Employability::findOrFail($id);
+
+        $record->delete();
+
+        return response()->json([
+            'message' => 'Deleted successfully'
+        ]);
     }
     public function report($id)
     {
