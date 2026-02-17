@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class NumberOfKnowledgeProduct extends Model
 {
-     protected $fillable = [
+    protected $fillable = [
         'indicator_id',
         'product_type',
-        'total_products',
+        'url',
+        'attach_evidence',
         'form_status',
         'status',
         'update_history',

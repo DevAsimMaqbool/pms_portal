@@ -78,6 +78,9 @@ use App\Http\Controllers\StudentSatisfactionSubmissionController;
 use App\Http\Controllers\StudentsGlobalExperienceController;
 use App\Http\Controllers\SubjectRankingTargetController;
 use App\Http\Controllers\TermController;
+
+Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
+
 use App\Models\Department;
 use App\Models\ProfessionalMembership;
 use Illuminate\Support\Facades\Route;
