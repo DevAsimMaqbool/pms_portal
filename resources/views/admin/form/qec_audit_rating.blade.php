@@ -32,6 +32,13 @@
                 <div class="tab-content">
                     @if(auth()->user()->hasRole(['HOD']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="mb-1">Satisfaction of International Students</h5>
+                                </div>
+                                <a href="{{ route('indicators_crud.index', ['slug' => 'qec_audit_rating', 'id' => $indicatorId]) }}"
+                                    class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            </div>
                             <form id="researchForm1" enctype="multipart/form-data" class="row">
                                 @csrf
                                 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
@@ -54,7 +61,7 @@
 
                                             <div class="col-md-4">
                                                 <label class="form-label">Faculty</label>
-                                                <select name="audits[0][faculty]" class="select2 form-select faculty-select">
+                                                <select name="audits[0][faculty_id]" class="select2 form-select faculty-select">
                                                     <option value="">Select Faculty</option>
                                                     @foreach(get_faculties() as $faculty)
                                                         <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
@@ -64,7 +71,8 @@
 
                                             <div class="col-md-4">
                                                 <label class="form-label">Department</label>
-                                                <select name="audits[0][department]" class="select2 form-select department-select">
+                                                <select name="audits[0][department_id]"
+                                                    class="select2 form-select department-select">
                                                     <option value="">Select Department</option>
                                                     <option value="Software Engineering">Software Engineering</option>
                                                     <option value="Computer Science">Computer Science</option>
@@ -73,7 +81,7 @@
 
                                             <div class="col-md-4">
                                                 <label class="form-label">Program Name</label>
-                                                <select name="audits[0][program_name]" class="select2 form-select program-select">
+                                                <select name="audits[0][program_id]" class="select2 form-select program-select">
                                                     <option value="">Select Program</option>
                                                     <option value="BS Computer Science">BS Computer Science</option>
                                                     <option value="BS Software Engineering">BS Software Engineering</option>
@@ -100,6 +108,16 @@
                                                 <input type="number" name="audits[0][obtained_score]" class="form-control">
                                             </div>
 
+                                            <div class="col-md-4">
+                                                <label class="form-label">Strenght</label>
+                                                <input type="text" name="audits[0][strenght]" class="form-control">
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Area of Improvement</label>
+                                                <input type="text" name="audits[0][area_of_improvement]" class="form-control">
+                                            </div>
+
 
                                         </div>
                                     </div>
@@ -108,7 +126,11 @@
                                             id="add-coauthor"><i class="icon-base ti tabler-plus me-1"></i> <span
                                                 class="align-middle">Add</span></button>
                                     </div>
-
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">Remarks*</label>
+                                        <textarea name="remarks" class="form-control" style="height:120px; resize:none;"
+                                            required placeholder=""></textarea>
+                                    </div>
                                 </div>
                                 <div class="mt-3 text-end" style="margin-left: -19px !important;">
                                     <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
@@ -122,11 +144,17 @@
                             <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAll"></th>
                                         <th>#</th>
                                         <th>Created By</th>
-                                        <th>Co Authers</th>
-                                        <th>Author Rank</th>
+                                        <th>Audit Term</th>
+                                        <th>Faculty</th>
+                                        <th>Department</th>
+                                        <th>Program</th>
+                                        <th>Program Level</th>
+                                        <th>Total Score</th>
+                                        <th>Obtained Score</th>
+                                        <th>Strength</th>
+                                        <th>Area of Improvement</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -155,394 +183,318 @@
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD']))
-        <script>
-            
-            $(document).ready(function () {
-                $('#author-past-container').find('select.select2').select2({
-                    placeholder: 'Select an option',
-                    width: '100%'
-                });
-                let faculties = @json(get_faculties());
-                let pastIndex = 1;
+    <script>
+        let pastIndex = 1;
+        let faculties = @json(get_faculties());
 
-                // Add new author group
-                $('#add-coauthor').click(function () {
-                    
+        $(document).ready(function () {
 
-                     let facultyOptions = '<option value="">Select Faculty</option>';
-                        faculties.forEach(function(fac) {
-                            facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
-                        });
-                    let newGroup = `
-            <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+            initSelect2();
 
+            fetchIndicatorForms();
 
+            // ===============================
+            // CREATE / UPDATE SUBMIT
+            // ===============================
+            $('#researchForm1').on('submit', function (e) {
+                e.preventDefault();
 
-            <div class="col-md-4">
-                    <label class="form-label">Audit Term</label>
-                    <select name="audits[${pastIndex}][audit_term]" class="form-select">
-                        <option value="">Select Audit Term</option>
-                        <option value="2021-2022">2021-2022</option>
-                        <option value="2022-2023">2022-2023</option>
-                        <option value="2023-2024">2023-2024</option>
-                    </select>
-                </div>
+                let form = $(this);
+                let formData = new FormData(this);
+                let formId = $('#form_id').val();
 
+                let url = formId
+                    ? `/qec-audit-rating/${formId}`
+                    : "{{ route('qec-audit-rating.store') }}";
 
-                <div class="col-md-4">
-                    <label class="form-label">Faculty</label>
-                    <select name="audits[${pastIndex}][faculty]" class="select2 form-select faculty-select">
-                        ${facultyOptions}
-                    </select>
-                </div>
+                if (formId) {
+                    formData.append('_method', 'PUT');
+                }
 
-                <div class="col-md-4">
-                    <label class="form-label">Department</label>
-                     <select name="audits[${pastIndex}][department]" class="select2 form-select department-select">
-                        <option value="">Select Department</option>
-                    </select>
-                </div>
-
-                 <div class="col-md-4">
-                    <label class="form-label">Program Name</label>
-                    <select name="audits[${pastIndex}][program_name]" class="select2 form-select program-select">
-                        <option value="">Select Program</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Program Level</label>
-                    <select name="audits[${pastIndex}][program_level]" class="form-select">
-                        <option value="">Select Level</option>
-                        <option value="UG">UG</option>
-                        <option value="PG">PG</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Total QEC Audit Rating Score</label>
-                    <input type="number" name="audits[${pastIndex}][total_score]" class="form-control">
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Score Obtained</label>
-                    <input type="number" name="audits[${pastIndex}][obtained_score]" class="form-control">
-                </div>
-
-            <div class="col-md-2 d-flex align-items-end">
-            <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
-            </div>
-            </div>`;
-
-                    $('#author-past-container').append(newGroup);
-                    $('#author-past-container').find('select.select2').last().select2({
-                        placeholder: 'Select an option',
-                        width: '100%'
-                    });
-                    pastIndex++;
-                });
-
-                // Remove a past group
-                $(document).on('click', '.remove-past', function () {
-                    $(this).closest('.past-group').remove();
-                });
-                $('#researchForm1').on('submit', function (e) {
-                    e.preventDefault();
-                    let form = $(this);
-                    let formData = new FormData(this);
-
-                    $.ajax({
-                        url: "{{ route('international-Coauthored-Paper.store') }}",
-                        type: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            Swal.close();
-                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
-                            form[0].reset();
-                        },
-                        error: function (xhr) {
-                            Swal.close();
-                            // Clear previous errors before showing new ones
-                            form.find('.invalid-feedback').remove();
-                            form.find('.is-invalid').removeClass('is-invalid');
-                            if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
-
-                                // Loop through all validation errors
-                                $.each(errors, function (field, messages) {
-                                    let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
-                                    fieldName = fieldName.replace('[]]', ']');
-                                    let input = form.find('[name="' + fieldName + '"]');
-
-                                    if (input.length) {
-                                        input.addClass('is-invalid');
-
-                                        // Show error message under input
-                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                    }
-                                });
-
-                            } else {
-                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
-                            }
-                        }
-                    });
-                });
-
-                // 3️⃣ Faculty → Department
-                $(document).on('change', '.faculty-select', function () {
-                    let facultyId = $(this).val();
-                    let departmentSelect = $(this).closest('.past-group').find('.department-select');
-                    let programSelect = $(this).closest('.past-group').find('.program-select');
-
-                    // Reset dependent dropdowns
-                    departmentSelect.html('<option value="">Loading...</option>');
-                    programSelect.html('<option value="">Select Program</option>');
-
-                    if (facultyId) {
-                        $.ajax({
-                            url: "/get-departments/" + facultyId,
-                            type: "GET",
-                            success: function (departments) {
-                                departmentSelect.empty();
-                                departmentSelect.append('<option value="">Select Department</option>');
-                                $.each(departments, function (key, department) {
-                                    departmentSelect.append(`<option value="${department.id}">${department.name}</option>`);
-                                });
-                                // Refresh Select2
-                                departmentSelect.select2({ placeholder: 'Select Department', width: '100%' });
-                            },
-                            error: function () {
-                                departmentSelect.html('<option value="">Error loading departments</option>');
-                            }
-                        });
-                    } else {
-                        departmentSelect.html('<option value="">Select Department</option>');
-                    }
-                });
-
-                // 4️⃣ Department → Program
-                $(document).on('change', '.department-select', function () {
-                    let departmentId = $(this).val();
-                    let programSelect = $(this).closest('.past-group').find('.program-select');
-
-                    programSelect.html('<option value="">Loading...</option>');
-
-                    if (departmentId) {
-                        $.ajax({
-                            url: "/get-programs/" + departmentId,
-                            type: "GET",
-                            success: function (programs) {
-                                programSelect.empty();
-                                programSelect.append('<option value="">Select Program</option>');
-                                $.each(programs, function (key, program) {
-                                    programSelect.append(`<option value="${program.id}">${program.program_name}</option>`);
-                                });
-                                // Refresh Select2
-                                programSelect.select2({ placeholder: 'Select Program', width: '100%' });
-                            },
-                            error: function () {
-                                programSelect.html('<option value="">Error loading programs</option>');
-                            }
-                        });
-                    } else {
-                        programSelect.html('<option value="">Select Program</option>');
-                    }
-                });
-
-
-            });
-        </script>
-    @endif
-    @if(auth()->user()->hasRole(['Dean', 'HOD', 'ORIC']))
-        <script>
-            window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
-        </script>
-        <script>
-            function fetchIndicatorForms() {
                 $.ajax({
-                    url: "{{ route('international-Coauthored-Paper.index') }}",
-                    method: "GET",
-                    data: {
-                        status: "RESEARCHER" // you can send more values
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        //alert(data.forms);
-                        const forms = data.forms || [];
+                    url: url,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
 
-                        const rowData = forms.map((form, i) => {
-                            const createdAt = form.created_at
-                                ? new Date(form.created_at).toISOString().split('T')[0]
-                                : 'N/A';
+                        Swal.fire('Success', response.message, 'success');
 
-                            // Pass entire form as JSON in button's data attribute
-                            return [
-                                `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
-                                i + 1,
-                                form.creator ? form.creator.name : 'N/A',
-                                form.name_of_co_authers || 'N/A',
-                                form.author_rank || 'N/A',
-                                createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
-                            ];
-                        });
-
-                        if (!$.fn.DataTable.isDataTable('#complaintTable2')) {
-                            $('#complaintTable2').DataTable({
-                                data: rowData,
-                                columns: [
-                                    { title: "<input type='checkbox' id='selectAll'>" },
-                                    { title: "#" },
-                                    { title: "Created By" },
-                                    { title: "Co Authers" },
-                                    { title: "Author Rank" },
-                                    { title: "Created Date" },
-                                    { title: "Actions" }
-                                ]
-                            });
-                        } else {
-                            $('#complaintTable2').DataTable().clear().rows.add(rowData).draw();
-                        }
+                        resetForm();
+                        fetchIndicatorForms();
+                        $('.nav-tabs a[href="#form2"]').tab('show');
                     },
                     error: function (xhr) {
-                        console.error('Error fetching data:', xhr.responseText);
-                        alert('Unable to load data.');
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            $('.is-invalid').removeClass('is-invalid');
+                            $('.invalid-feedback').remove();
+
+                            $.each(errors, function (field, messages) {
+                                let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                let input = $('[name="' + fieldName + '"]');
+                                input.addClass('is-invalid');
+                                input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                            });
+                        } else {
+                            Swal.fire('Error', 'Something went wrong', 'error');
+                        }
                     }
                 });
-            }
-            $(document).ready(function () {
-
-                fetchIndicatorForms();
-                // Handle click on View button
-                $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
-                    $('#modalExtraFields').find('.optional-field').remove();
-
-                    $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
-                    $('#modalCoAuthers').text(form.name_of_co_authers || 'N/A');
-                    $('#modalAuthorRank').text(form.author_rank || 'N/A');
-                    $('#modalStatus').text(form.status || 'Pending');
-                    $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-
-                    if (window.currentUserRole === 'HOD') {
-                        let statusLabel = "Review";
-                        if (form.form_status == 'RESEARCHER') {
-                            $('#approveCheckbox').prop('checked', form.status == 2);
-                            $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-                            // Label text for HOD
-                            if (form.status == 1) {
-                                statusLabel = "Verified";
-                            } else if (form.status == 2) {
-                                statusLabel = "Verified";
-                            }
-                        }
-
-                        $('label[for="approveCheckbox"]').text(statusLabel);
-                    }
-                    else if (window.currentUserRole === 'Dean') {
-                        let statusLabel = "Review";
-                        if (form.form_status == 'RESEARCHER') {
-                            $('#approveCheckbox').closest('.form-check-input').show();
-                            $('#approveCheckbox').prop('checked', form.status == 3);
-                            $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-                            // Label text for HOD
-                            if (form.status == 2) {
-                                statusLabel = "Review";
-                            } else if (form.status == 3) {
-                                statusLabel = "Review";
-                            }
-                        }
-
-                        $('label[for="approveCheckbox"]').text(statusLabel);
-                    } else if (window.currentUserRole === 'ORIC') {
-
-                        $('#approveCheckbox').prop('checked', form.status == 4);
-                        $('#approveCheckbox').data('id', form.id);
-                        let statusLabel = "Pending";
-                        if (form.status == 1) {
-                            statusLabel = "Verified";
-                        } else if (form.status == 3) {
-                            statusLabel = "Verified";
-                        } else if (form.status == 4) {
-                            statusLabel = "Verified";
-                        }
-                        $('label[for="approveCheckbox"]').text(statusLabel);
-                    } else {
-                        $('#approveCheckbox').closest('.form-check-input').hide();
-
-                        let statusLabel = "Pending"; // default
-                        if (form.status == 1) {
-                            statusLabel = "Not Verified";
-                        } else if (form.status == 2) {
-                            statusLabel = "Verified";
-                        } else if (form.status == 3) {
-                            statusLabel = "Approved";
-                        }
-
-                        // update the label text
-                        $('label[for="approveCheckbox"]').text(statusLabel);
-                    }
-                    if (form.name_of_university_country) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Name of University & Country</th><td>${form.name_of_university_country}</td></tr>`);
-                    }
-
-                    if (form.designation) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Designation</th><td>${form.designation}</td></tr>`);
-                    }
-                    if (form.no_of_papers_past) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>No of Papers Past</th><td>${form.no_of_papers_past}</td></tr>`);
-                    }
-                    $('#viewFormModal').modal('show');
-                });
-
-                $(document).on('change', '#approveCheckbox', function () {
-                    let id = $(this).data('id');
-                    let table_status = $(this).data('table_status');
-                    let status;
-                    if (window.currentUserRole === "Dean") {
-                        if (table_status == "RESEARCHER") {
-                            status = $(this).is(':checked') ? 3 : 2;
-                        }
-                    }
-                    if (window.currentUserRole === "HOD") {
-                        if (table_status == "RESEARCHER") {
-                            status = $(this).is(':checked') ? 2 : 1;
-                        }
-                    }
-                    if (window.currentUserRole === "ORIC") {
-                        if (table_status == "RESEARCHER") {
-                            status = $(this).is(':checked') ? 4 : 3;
-                        }
-                    }
-
-                    $.ajax({
-                        url: `/international-Coauthored-Paper/${id}`,
-                        type: 'POST',
-                        data: {
-                            _method: 'PUT',
-                            _token: $('meta[name="csrf-token"]').attr('content'),
-                            status: status
-                        },
-                        success: function (response) {
-                            if (response.success) {
-                                alert('Status updated successfully!');
-                                fetchIndicatorForms();
-                            } else {
-                                alert('Failed to update status.');
-                            }
-                        },
-                        error: function () {
-                            alert('Error updating status.');
-                        }
-                    });
-                });
-
-
             });
-        </script>
-    @endif
+
+            // ===============================
+            // ADD AUDIT GROUP
+            // ===============================
+            $('#add-coauthor').click(function () {
+                addAuditGroup();
+            });
+
+            // Remove group
+            $(document).on('click', '.remove-past', function () {
+                $(this).closest('.past-group').remove();
+            });
+
+            // ===============================
+            // EDIT
+            // ===============================
+            $(document).on('click', '.edit-form-btn', function () {
+
+                let form = $(this).data('form');
+
+                resetForm();
+                $('#form_id').val(form.id);
+                $('textarea[name="remarks"]').val(form.remarks);
+
+                $('#author-past-container').html('');
+                pastIndex = 0;
+
+                if (form.details && form.details.length) {
+
+                    form.details.forEach(function (audit, index) {
+
+                        addAuditGroup(audit);
+                        pastIndex++;
+                    });
+                }
+
+                $('.nav-tabs a[href="#form1"]').tab('show');
+            });
+
+            // ===============================
+            // DELETE
+            // ===============================
+            $(document).on('click', '.delete-form-btn', function () {
+
+                let id = $(this).data('id');
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    confirmButtonText: "Yes delete it"
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url: `/qec-audit-rating/${id}`,
+                            type: "POST",
+                            data: {
+                                _method: "DELETE",
+                                _token: $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function (response) {
+
+                                Swal.fire('Deleted!', response.message, 'success');
+                                fetchIndicatorForms();
+                            }
+                        });
+                    }
+                });
+            });
+
+        });
+    </script>
+
+    <script>
+        // ===============================
+        // FETCH TABLE DATA
+        // ===============================
+        function fetchIndicatorForms() {
+
+            $.ajax({
+                url: "{{ route('qec-audit-rating.index') }}",
+                type: "GET",
+                success: function (data) {
+
+                    const forms = data.forms || [];
+
+                    const rowData = forms.map((form, i) => {
+
+                        let firstDetail = form.details.length ? form.details[0] : {};
+
+                        return [
+                            i + 1,
+                            form.creator ? form.creator.name : 'N/A',
+                            firstDetail.audit_term ?? 'N/A',
+                            firstDetail.faculty ? firstDetail.faculty.name : 'N/A',
+                            firstDetail.department ? firstDetail.department.name : 'N/A',
+                            firstDetail.program ? firstDetail.program.name : 'N/A',
+                            firstDetail.program_level ?? 'N/A',
+                            firstDetail.total_score ?? 'N/A',
+                            firstDetail.obtained_score ?? 'N/A',
+                            firstDetail.strenght ?? 'N/A',
+                            firstDetail.area_of_improvement ?? 'N/A',
+                            form.created_at ? new Date(form.created_at).toISOString().split('T')[0] : 'N/A',
+                            `<div class="d-flex gap-1"><button class="btn btn-sm btn-outline-warning edit-form-btn" data-form='${encodeURIComponent(JSON.stringify(form))}'> Edit </button>
+                  <button class="btn btn-sm btn-outline-danger delete-form-btn" data-id="${form.id}"> Delete </button> </div>`
+                        ];
+                    });
+
+
+                    if (!$.fn.DataTable.isDataTable('#complaintTable2')) {
+
+                        $('#complaintTable2').DataTable({
+                            data: rowData,
+                            columns: [
+                                { title: "#" },
+                                { title: "Audit Term" },
+                                { title: "Faculty" },
+                                { title: "Department" },
+                                { title: "Program" },
+                                { title: "Program Level" },
+                                { title: "Total Score" },
+                                { title: "Obtained Score" },
+                                { title: "Strength" },
+                                { title: "Area of Improvement" },
+                                { title: "Actions" }
+                            ]
+                        });
+
+                    } else {
+
+                        $('#complaintTable2').DataTable().clear().rows.add(rowData).draw();
+                    }
+                }
+            });
+        }
+    </script>
+
+    <script>
+        // ===============================
+        // ADD AUDIT GROUP FUNCTION
+        // ===============================
+        function addAuditGroup(audit = null) {
+
+            let facultyOptions = '<option value="">Select Faculty</option>';
+            faculties.forEach(function (fac) {
+                facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
+            });
+
+            let group = `
+                                        <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+
+                                            <div class="col-md-4">
+                                                <label>Audit Term</label>
+                                                <select name="audits[${pastIndex}][audit_term]" class="form-select">
+                                                    <option value="">Select</option>
+                                                    <option value="2021-2022">2021-2022</option>
+                                                    <option value="2022-2023">2022-2023</option>
+                                                    <option value="2023-2024">2023-2024</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label>Faculty</label>
+                                                <select name="audits[${pastIndex}][faculty_id]" 
+                                                    class="select2 form-select faculty-select">
+                                                    ${facultyOptions}
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label>Department</label>
+                                                <select name="audits[${pastIndex}][department_id]" 
+                                                    class="select2 form-select department-select">
+                                                    <option value="">Select Department</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label>Program</label>
+                                                <select name="audits[${pastIndex}][program_id]" 
+                                                    class="select2 form-select program-select">
+                                                    <option value="">Select Program</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label>Total Score</label>
+                                                <input type="number" name="audits[${pastIndex}][total_score]" 
+                                                    class="form-control" value="${audit?.total_score ?? ''}">
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label>Obtained Score</label>
+                                                <input type="number" name="audits[${pastIndex}][obtained_score]" 
+                                                    class="form-control" value="${audit?.obtained_score ?? ''}">
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <button type="button" class="btn btn-danger remove-past">Remove</button>
+                                            </div>
+                                        </div>`;
+
+            $('#author-past-container').append(group);
+
+            initSelect2();
+
+            if (audit) {
+
+                $(`[name="audits[${pastIndex}][audit_term]"]`)
+                    .val(audit.audit_term);
+
+                $(`[name="audits[${pastIndex}][faculty_id]"]`)
+                    .val(audit.faculty_id).trigger('change');
+
+                setTimeout(function () {
+
+                    $(`[name="audits[${pastIndex}][department_id]"]`)
+                        .val(audit.department_id).trigger('change');
+
+                    setTimeout(function () {
+
+                        $(`[name="audits[${pastIndex}][program_id]"]`)
+                            .val(audit.program_id).trigger('change');
+
+                    }, 500);
+
+                }, 500);
+            }
+
+            pastIndex++;
+        }
+    </script>
+
+    <script>
+        // ===============================
+        // SELECT2 INIT
+        // ===============================
+        function initSelect2() {
+            $('.select2').select2({
+                width: '100%'
+            });
+        }
+
+        // RESET FORM
+        function resetForm() {
+            $('#researchForm1')[0].reset();
+            $('#form_id').val('');
+            $('#author-past-container').html('');
+            pastIndex = 0;
+        }
+    </script>
 @endpush

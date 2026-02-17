@@ -7,87 +7,115 @@
 @endpush
 
 @section('content')
-    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="container-xxl flex-grow-1 container-p-y">
 
-        <div class="card">
-            <div class="card-datatable table-responsive card-body">
-                @if ($errors->any())
-                    <div id="errorAlert" class="alert alert-danger">
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-                    <script>
-                        setTimeout(function () {
-                            const alert = document.getElementById('errorAlert');
-                            if (alert) alert.style.display = 'none';
-                        }, 2000); // 2000ms = 2 seconds
-                    </script>
-                @endif
-
-                <form id="researchForm" class="row" method="POST"
-                    action="{{ route('employee.feedback.update', $feedback->id) }}">
-                    @csrf
-
-                    <div class="row g-3" style="padding:20px; font-family:Arial;">
-
-                        <!-- Name of Faculty Member -->
-                        <div class="col-md-6">
-                            <label class="fw-bold mb-2 d-block">Name of Faculty Member</label>
-                            <select name="employee_id" class="select2 form-select" required>
-                                <option value="">-- Select Faculty Member --</option>
-                                @foreach($facultyMembers as $member)
-                                    <option value="{{ $member->id }}" data-department="{{ $member->department }}"
-                                        data-job_title="{{ $member->job_title }}" {{ isset($feedback) && $feedback->employee_id == $member->id ? 'selected' : '' }}>
-                                        {{ $member->name }}
-                                    </option>
+            <div class="card">
+                <div class="card-datatable table-responsive card-body">
+                    @if ($errors->any())
+                        <div id="errorAlert" class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
                                 @endforeach
-                            </select>
+                            </ul>
                         </div>
 
-                        <!-- Event -->
-                        <div class="col-md-6">
-                            <label class="fw-bold mb-2 d-block">Event</label>
-                            <select name="event_name" class="select2 form-select" required>
-                                <option value="">-- Select Event --</option>
-                                @foreach(['Sports Festival', 'Alumni Reunion', 'Canvocation', "Rector's Conference", 'SEE Pakistan', 'Society Fair'] as $event)
-                                    <option value="{{ $event }}" {{ isset($feedback) && $feedback->event_name == $event ? 'selected' : '' }}>
-                                        {{ $event }}
+                        <script>
+                            setTimeout(function () {
+                                const alert = document.getElementById('errorAlert');
+                                if (alert) alert.style.display = 'none';
+                            }, 2000); // 2000ms = 2 seconds
+                        </script>
+                    @endif
+
+                    <form id="researchForm" class="row" method="POST"
+                        action="{{ route('employee.feedback.update', $feedback->id) }}">
+                        @csrf
+
+                        <div class="row g-3" style="padding:20px; font-family:Arial;">
+
+                            <!-- Name of Faculty Member -->
+                            <div class="col-md-6">
+                                <label class="fw-bold mb-2 d-block">Name of Faculty Member</label>
+                                <select name="employee_id" class="select2 form-select" required>
+                                    <option value="">-- Select Faculty Member --</option>
+                                    @foreach($facultyMembers as $member)
+                                        <option value="{{ $member->id }}" data-department="{{ $member->department }}"
+                                            data-job_title="{{ $member->job_title }}" {{ isset($feedback) && $feedback->employee_id == $member->id ? 'selected' : '' }}>
+                                            {{ $member->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Event -->
+                            @php
+    $predefinedEvents = [
+        'Sports Festival',
+        'Alumni Reunion',
+        'Canvocation',
+        "Rector's Conference",
+        'SEE Pakistan',
+        'Society Fair'
+    ];
+
+    $isCustomEvent = !in_array($feedback->event_name, $predefinedEvents);
+                            @endphp
+
+                            <!-- Event -->
+                            <div class="col-md-6">
+                                <label class="fw-bold mb-2 d-block">Event</label>
+                                <select name="event_name" id="eventSelect" class="select2 form-select" required>
+                                    <option value="">-- Select Event --</option>
+
+                                    @foreach($predefinedEvents as $event)
+                                        <option value="{{ $event }}" {{ !$isCustomEvent && $feedback->event_name == $event ? 'selected' : '' }}>
+                                            {{ $event }}
+                                        </option>
+                                    @endforeach
+
+                                    <!-- Other Option -->
+                                    <option value="Other" {{ $isCustomEvent ? 'selected' : '' }}>
+                                        Other
                                     </option>
-                                @endforeach
-                            </select>
+                                </select>
+                            </div>
+
+                            <!-- Other Event Input -->
+                            <div class="col-md-6 {{ $isCustomEvent ? '' : 'd-none' }}" id="otherEventBox">
+                                <label class="fw-bold mb-2 d-block">Please Specify Other Event</label>
+                                <input type="text" name="other_event" id="otherEventInput" class="form-control"
+                                    value="{{ $feedback->event_name ?? '' }}" placeholder="Enter event name">
+                            </div>
+
+
+                            <!-- Event Feedback Rating -->
+                            <div class="col-md-6 mt-7">
+                                <label class="fw-bold mb-2 d-block">Event Feedback Rating</label>
+                                <div id="ratingBox" class="half-star-ratings raty" data-half="true"
+                                    data-score="{{ $starScore }}" data-number="5"></div>
+                                <input type="hidden" name="rating" id="rating" value="{{ $starScore }}">
+                            </div>
+
+                            <!-- Remarks -->
+                            <div class="mt-7 mb-3 w-100">
+                                <label class="fw-bold mb-2 d-block">Remarks*</label>
+                                <textarea name="remarks" class="form-control" style="height:120px; resize:none;" required
+                                    placeholder="Please provide details of the assigned task(s) and the employee’s designated role and responsibilities during the event.">{{ $feedback->remarks ?? '' }}</textarea>
+                            </div>
+
                         </div>
 
-                        <!-- Event Feedback Rating -->
-                        <div class="col-md-6 mt-7">
-                            <label class="fw-bold mb-2 d-block">Event Feedback Rating</label>
-                            <div id="ratingBox" class="half-star-ratings raty" data-half="true"
-                                data-score="{{ $starScore }}" data-number="5"></div>
-                            <input type="hidden" name="rating" id="rating" value="{{ $starScore }}">
+                        <div class="col-4 text-center mb-3">
+                            <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                         </div>
 
-                        <!-- Remarks -->
-                        <div class="mt-7 mb-3 w-100">
-                            <label class="fw-bold mb-2 d-block">Remarks*</label>
-                            <textarea name="remarks" class="form-control" style="height:120px; resize:none;" required
-                                placeholder="Please provide details of the assigned task(s) and the employee’s designated role and responsibilities during the event.">{{ $feedback->remarks ?? '' }}</textarea>
-                        </div>
+                    </form>
 
-                    </div>
-
-                    <div class="col-4 text-center mb-3">
-                        <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
-                    </div>
-
-                </form>
-
+                </div>
             </div>
-        </div>
 
-    </div>
+        </div>
 @endsection
 
 @push('script')
@@ -96,4 +124,26 @@
     <!-- Page JS -->
     <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('.select2').select2();
+
+            // Show/Hide Other Event Field
+            $('#eventSelect').on('change', function () {
+                let selectedValue = $(this).val();
+
+                if (selectedValue === 'Other') {
+                    $('#otherEventBox').removeClass('d-none');
+                    $('#otherEventInput').attr('required', true);
+                } else {
+                    $('#otherEventBox').addClass('d-none');
+                    $('#otherEventInput').removeAttr('required').val('');
+                }
+            });
+
+        });
+    </script>
+
 @endpush

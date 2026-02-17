@@ -34,7 +34,7 @@
                         <!-- Event -->
                         <div class="col-md-6">
                             <label class="fw-bold mb-2 d-block">Event</label>
-                            <select name="event_name[]" class="select2 form-select" multiple required>
+                            <select name="event_name[]" id="eventSelect" class="select2 form-select" multiple required>
                                 <option value="" disabled>-- Select Event --</option>
                                 <option value="Sports Festival">Sports Festival</option>
                                 <option value="Alumni Reunion">Alumni Reunion</option>
@@ -42,7 +42,15 @@
                                 <option value="Rector's Conference">Rector's Conference</option>
                                 <option value="SEE Pakistan">SEE Pakistan</option>
                                 <option value="Society Fair">Society Fair</option>
+                                <option value="Other">Other</option>
                             </select>
+                        </div>
+
+                        <!-- Other Event Input (Hidden by Default) -->
+                        <div class="col-md-6 d-none" id="otherEventBox">
+                            <label class="fw-bold mb-2 d-block">Please Specify Other Event</label>
+                            <input type="text" name="other_event" id="otherEventInput" class="form-control"
+                                placeholder="Enter event name">
                         </div>
 
                         <!-- Event Feedback Rating -->
@@ -132,6 +140,18 @@
                     }
                 });
             });
+        });
+
+        $('#eventSelect').on('change', function () {
+            let selectedValues = $(this).val();
+
+            if (selectedValues && selectedValues.includes('Other')) {
+                $('#otherEventBox').removeClass('d-none');
+                $('#otherEventInput').attr('required', true);
+            } else {
+                $('#otherEventBox').addClass('d-none');
+                $('#otherEventInput').removeAttr('required').val('');
+            }
         });
     </script>
 @endpush

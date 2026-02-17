@@ -78,6 +78,8 @@ use App\Http\Controllers\StudentSatisfactionSubmissionController;
 use App\Http\Controllers\StudentsGlobalExperienceController;
 use App\Http\Controllers\SubjectRankingTargetController;
 use App\Http\Controllers\TermController;
+use App\Http\Controllers\DropoutRateController;
+use App\Http\Controllers\AlumniSatisfactionRateController;
 
 Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
 
@@ -236,6 +238,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('/knowledge-products', NumberOfKnowledgeProductController::class);
         Route::resource('/commencement-classes', CommencementOfClassesOnTimeController::class);
         Route::resource('/international-st-satisfaction', SatisfactionOfInternationalStudentController::class);
+        Route::resource('/dropout-rate', DropoutRateController::class);
+        Route::resource('/alumni-satisfaction-rate', AlumniSatisfactionRateController::class);
 
 
 

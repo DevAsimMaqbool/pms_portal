@@ -55,8 +55,9 @@ class LineManagerEventFeedbackController extends Controller
     {
         $request->validate([
             'employee_id' => 'required|exists:users,id',
-            'event_name' => 'required|array|min:1', // must be an array
-            'event_name.*' => 'required|string|max:255', // each selected event
+            'event_name' => 'required|array|min:1',
+            'event_name.*' => 'required|string|max:255',
+            'other_event' => 'nullable|string|max:255',
             'score' => 'required|numeric|min:0|max:5',
             'remarks' => 'nullable|string',
         ]);
@@ -64,7 +65,26 @@ class LineManagerEventFeedbackController extends Controller
         // Convert rating (1-5 stars to 20-100)
         $convertedRating = $request->score * 20;
 
-        foreach ($request->event_name as $event) {
+        $events = $request->event_name;
+
+        // ✅ If "Other" selected, replace it with custom value
+        if (in_array('Other', $events)) {
+
+            if (!$request->other_event) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Please specify the other event.'
+                ], 422);
+            }
+
+            // Remove "Other"
+            $events = array_diff($events, ['Other']);
+
+            // Add custom event
+            $events[] = $request->other_event;
+        }
+
+        foreach ($events as $event) {
             LineManagerEventFeedback::updateOrCreate(
                 [
                     'employee_id' => $request->employee_id,
@@ -77,13 +97,13 @@ class LineManagerEventFeedbackController extends Controller
             );
         }
 
-        // Return JSON for AJAX
         return response()->json([
             'status' => 'success',
             'message' => 'Feedback saved successfully.',
-            'redirect' => route('employee.feedback.index'), // optional, if you want to redirect via JS
+            'redirect' => route('employee.feedback.index'),
         ]);
     }
+
 
     /**
      * Display the specified resource.
@@ -121,29 +141,44 @@ class LineManagerEventFeedbackController extends Controller
     {
         $request->validate([
             'employee_id' => 'required|exists:users,id',
-            'event_name' => [
-                'required',
-                'string',
-                'max:255',
-                function ($attribute, $value, $fail) use ($request, $id) {
-                    $exists = LineManagerEventFeedback::where('employee_id', $request->employee_id)
-                        ->where('event_name', $value)
-                        ->where('id', '<>', $id) // exclude current record
-                        ->exists();
-                    if ($exists) {
-                        $fail('Feedback for this employee and event already exists.');
-                    }
-                }
-            ],
+            'event_name' => 'required|string|max:255',
+            'other_event' => 'nullable|string|max:255',
             'score' => 'required|numeric|min:0|max:5',
             'remarks' => 'nullable|string',
         ]);
 
+        // ✅ Replace "Other" with custom event
+        $eventName = $request->event_name;
+
+        if ($eventName === 'Other') {
+
+            if (!$request->other_event) {
+                return back()->withErrors([
+                    'other_event' => 'Please specify the other event.'
+                ])->withInput();
+            }
+
+            $eventName = $request->other_event;
+        }
+
+        // ✅ Check duplicate (exclude current record)
+        $exists = LineManagerEventFeedback::where('employee_id', $request->employee_id)
+            ->where('event_name', $eventName)
+            ->where('id', '<>', $id)
+            ->exists();
+
+        if ($exists) {
+            return back()->withErrors([
+                'event_name' => 'Feedback for this employee and event already exists.'
+            ])->withInput();
+        }
+
         $feedback = LineManagerEventFeedback::findOrFail($id);
+
         $feedback->update([
             'employee_id' => $request->employee_id,
-            'event_name' => $request->event_name,
-            'rating' => $request->score * 20, // convert to 20–100 scale
+            'event_name' => $eventName,
+            'rating' => $request->score * 20,
             'remarks' => $request->remarks,
         ]);
 
