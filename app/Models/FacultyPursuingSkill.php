@@ -13,20 +13,14 @@ class FacultyPursuingSkill extends Model
 
     protected $fillable = [
         'indicator_id',
-        'total_faculty',
-        'faculty_in_cpd_activities',
         'cpd_type',
+        'cpd_other_detail',
         'evidence_reference',
         'remarks',
-        'faculty_cpd_percentage',
         'form_status',
         'status',
         'update_history',
         'created_by',
         'updated_by'
-    ];
-
-    protected $casts = [
-        'cpd_type' => 'array',
     ];
 }

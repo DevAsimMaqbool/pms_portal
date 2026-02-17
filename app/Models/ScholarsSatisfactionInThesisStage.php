@@ -8,11 +8,12 @@ class ScholarsSatisfactionInThesisStage extends Model
 {
     protected $fillable = [
         'indicator_id',
-        'empathy_and_compassion',
-        'inspirational_leadership',
-        'honesty_and_integrity',
-        'responsibility_and_accountability',
-        'humility_and_service_at_institutional_level',
+        'faculty_id',
+        'department_id',
+        'program_id',
+        'term',
+        'career',
+        'satisfaction_score',
         'form_status',
         'status',
         'update_history',

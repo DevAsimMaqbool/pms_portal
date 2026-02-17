@@ -1,318 +1,270 @@
 @extends('layouts.app')
 @push('style')
-    <style>
-        .avatar-xl {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
+    <link rel="stylesheet"
+        href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/%40form-validation/form-validation.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/animate-css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 
-        .metric {
-            font-size: .9rem;
-            color: #6c757d;
-        }
-
-        .mini-tile {
-            border: 1px solid var(--bs-border-color);
-            border-radius: .75rem;
-            padding: 1rem;
-            background: #fff;
-            height: 100%;
-        }
-
-        .mini-tile .label {
-            color: #6e6b7b;
-            font-size: .8rem;
-        }
-
-        .mini-tile .value {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .spark-holder {
-            height: 120px;
-        }
-
-        .kpa-card h6 {
-            margin-bottom: .25rem;
-        }
-
-        .indicator-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: .5rem 0;
-            border-bottom: 1px dashed var(--bs-border-color);
-        }
-
-        .indicator-row:last-child {
-            border-bottom: none;
-        }
-
-        .status-badge {
-            padding: .35rem .5rem;
-        }
-
-        .filter-row .form-select {
-            min-width: 220px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
 @endpush
-@php use Illuminate\Support\Str; @endphp
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-        
-        <div class="row g-6">
 
-            <div class="col-12 col-md-12">
-                <div class="card">
-
-                    <div class="card-body">
-                        <div class="card-datatable table-responsive">
-                        <div class="d-flex justify-content-between">
-                               <div>
-                                <h5 class="mb-1">Scholar's Satisfaction (In Thesis Stage)</h5>
+        <!-- Multi Column with Form Separator -->
+        <div class="card">
+            <div class="card-datatable table-responsive card-body">
+                @if(auth()->user()->hasRole(['HOD']))
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Scholar's Satisfaction (In Thesis Stage)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
+                        </li>
+                    </ul>
+                @endif
+                <div class="tab-content">
+                    @if(auth()->user()->hasRole(['HOD']))
+                        <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                            
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h4 class="mb-1">Scholar's Satisfaction (In Thesis Stage)</h4>
                                 </div>
-                                <a href="{{ route('indicators_crud.index', ['slug' => 'scholars_satisfaction_in_thesis_stage', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
-                            </div> 
-                            <form id="researchForm" enctype="multipart/form-data">
+                                <div class="d-flex align-content-center flex-wrap gap-4">
+                                    <div class="d-flex gap-4">
+                                    <a class="btn btn-label-primary" href="{{ route('indicators_crud.index', ['slug' => 'scholars_satisfaction_in_thesis_stage', 'id' => $indicatorId]) }}">View</a></div>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                                                <i class="bx bx-upload"></i> Import Excel / CSV</button>
+                                </div>
+                            </div>
+                            <form id="researchForm1" enctype="multipart/form-data" class="row">
                                 @csrf
-                                <input type="hidden" id="assessmentType" name="assessment_type" value="self"
-                                    class="form-control" />
-                                <input type="hidden" id="employeeId" name="employee_id"
-                                    value="{{ Auth::user()->employee_id }}" class="form-control" />
-                                <div class="row"
-                                    style="padding:20px; font-family:Arial; display:flex; flex-wrap:wrap; gap:15px;">
+                                <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                                <input type="hidden" id="form_status" name="form_status" value="HOD">
 
-                                    <!-- Section 1 -->
-                                    <h6
-                                        style="width:100%; margin-top:20px; margin-bottom:10px; font-weight:bold; font-size:18px;">
-                                        1- Empathy and Compassion
-                                    </h6>
+                                <div class="row">
+                                    <div id="author-past-container">
+                                        <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+                                            
+                                            <div class="col-md-4">
+                                                <label for="term" class="form-label">Terms</label>
+                                                <select name="scholar_satisfaction[0][term]"
+                                                    class="select2 form-select term" required>
+                                                    <option value="">Select Term</option>
 
-                                    <div class="col-md-6 mt-1"
-                                        style="flex:1 1 calc(50% - 15px); padding:15px; border:1px solid #ddd; border-radius:6px;background: #f9f9f9;">
-                                        <label style="font-weight:bold; margin-bottom:8px; display:block;">
-                                            My supervisor is kind, understanding, and supportive when I face challenges in my research.
-                                        </label>
-                                        <div style="margin-top:8px;">
-                                            <label style="margin-right:15px;">
-                                                <input type="radio" name="empathy_and_compassion" value="20">
-                                                Strongly Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio"
-                                                    name="empathy_and_compassion" value="40">
-                                                Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio"
-                                                    name="empathy_and_compassion" value="60">
-                                                Neutral</label>
-                                            <label style="margin-right:15px;"><input type="radio"
-                                                    name="empathy_and_compassion" value="80">
-                                                Agree</label>
-                                            <label><input type="radio" name="empathy_and_compassion" value="100">
-                                                Strongly
-                                                Agree</label>
+                                                    <?php
+                                                    $currentYear = date('Y');
+                                                    for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
+                                                        echo "<option value='Spring $year'>Spring $year</option>";
+                                                        echo "<option value='Fall $year'>Fall $year</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Faculty</label>
+                                                <select name="scholar_satisfaction[0][faculty_id]" class="select2 form-select faculty-select">
+                                                    <option value="">Select Faculty</option>
+                                                    @foreach(get_faculties() as $faculty)
+                                                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Department</label>
+                                                <select name="scholar_satisfaction[0][department_id]" class="select2 form-select department-select">
+                                                    <option value="">Select Department</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Program Name</label>
+                                                <select name="scholar_satisfaction[0][program_id]" class="select2 form-select program-select">
+                                                    <option value="">Select Program</option>
+                                                </select>
+                                            </div>
+
+                                
+                                            <div class="col-md-4">
+                                                <label  class="form-label">Career</label>
+                                                <select name="scholar_satisfaction[0][career]" class="select2 form-select career" required>
+                                                    <option value="">-- Select Career --</option>
+                                                    <option value="PG">PG</option>
+                                                    <option value="UG">UG</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Satisfaction Score</label>
+                                                <input type="number" name="scholar_satisfaction[0][satisfaction_score]" class="form-control" min="1"
+                                                    step="1" required>
+                                            </div>
+                                            
+
+
                                         </div>
                                     </div>
-
-                                    
-
-                                    <!-- Section 2 -->
-                                    <h6
-                                        style="width:100%; margin-top:30px; margin-bottom:10px; font-weight:bold; font-size:18px;">
-                                        2- Inspirational Leadership
-                                    </h6>
-
-                                    <div class="col-md-6 mt-1"
-                                        style="flex:1 1 calc(50% - 15px); padding:15px; border:1px solid #ddd; border-radius:6px;background: #f9f9f9;">
-                                        <label style="font-weight:bold; margin-bottom:8px; display:block;">
-                                            My supervisor motivates me to do my best and helps me see how my research can make a difference.
-                                        </label>
-                                        <div style="margin-top:8px;">
-                                            <label style="margin-right:15px;"><input type="radio"
-                                                    name="inspirational_leadership" value="20">
-                                                Strongly
-                                                Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio"
-                                                    name="inspirational_leadership" value="40">
-                                                Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio"
-                                                    name="inspirational_leadership" value="60">
-                                                Neutral</label>
-                                            <label style="margin-right:15px;"><input type="radio"
-                                                    name="inspirational_leadership" value="80">
-                                                Agree</label>
-                                            <label><input type="radio" name="inspirational_leadership" value="100">
-                                                Strongly
-                                                Agree</label>
-                                        </div>
+                                    <div class="col-12 mb-3">
+                                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                            id="add-coauthor"><i class="icon-base ti tabler-plus me-1"></i> <span
+                                                class="align-middle">Add</span></button>
                                     </div>
-
-
-
-                                    <!-- Section 3 -->
-                                    <h6
-                                        style="width:100%; margin-top:30px; margin-bottom:10px; font-weight:bold; font-size:18px;">
-                                        3- Honesty and Integrity
-                                    </h6>
-
-                                    <div class="col-md-6 mt-1"
-                                        style="flex:1 1 calc(50% - 15px); padding:15px; border:1px solid #ddd; border-radius:6px;background: #f9f9f9;">
-                                        <label style="font-weight:bold; margin-bottom:8px; display:block;">
-                                            My supervisor gives honest, fair, and helpful feedback and promotes ethical research practices.
-                                        </label>
-                                        <div style="margin-top:8px;">
-                                            <label style="margin-right:15px;"><input type="radio" name="honesty_and_integrity"
-                                                    value="20">
-                                                Strongly
-                                                Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="honesty_and_integrity"
-                                                    value="40">
-                                                Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="honesty_and_integrity"
-                                                    value="60">
-                                                Neutral</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="honesty_and_integrity"
-                                                    value="80">
-                                                Agree</label>
-                                            <label><input type="radio" name="honesty_and_integrity" value="100"> Strongly
-                                                Agree</label>
-                                        </div>
-                                    </div>
-
-                                   
-
-                                    <!-- Section 4 -->
-                                    <h6
-                                        style="width:100%; margin-top:30px; margin-bottom:10px; font-weight:bold; font-size:18px;">
-                                        4- Responsibility and Accountability
-                                    </h6>
-
-                                    <div class="col-md-6 mt-1"
-                                        style="flex:1 1 calc(50% - 15px); padding:15px; border:1px solid #ddd; border-radius:6px;background: #f9f9f9;">
-                                        <label style="font-weight:bold; margin-bottom:8px; display:block;">
-                                            My supervisor respects my ideas and guides me with patience and a spirit of service.
-                                        </label>
-                                        <div style="margin-top:8px;">
-                                            <label style="margin-right:15px;"><input type="radio" name="responsibility_and_accountability"
-                                                    value="20">
-                                                Strongly
-                                                Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="responsibility_and_accountability"
-                                                    value="40">
-                                                Disagree</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="responsibility_and_accountability"
-                                                    value="60">
-                                                Neutral</label>
-                                            <label style="margin-right:15px;"><input type="radio" name="responsibility_and_accountability"
-                                                    value="80">
-                                                Agree</label>
-                                            <label><input type="radio" name="responsibility_and_accountability" value="100">
-                                                Strongly
-                                                Agree</label>
-                                        </div>
-                                    </div>
-
-                                    
-
-                                    <!-- Section 5 -->
-                                    <h6
-                                        style="width:100%; margin-top:30px; margin-bottom:10px; font-weight:bold; font-size:18px;">
-                                        5- Humility and Service (At Institutional level) 
-                                    </h6>
-
-                                    <div class="col-md-6 mt-1"
-                                        style="flex:1 1 calc(50% - 15px); padding:15px; border:1px solid #ddd; border-radius:6px;background: #f9f9f9;">
-                                        <label style="font-weight:bold; margin-bottom:8px; display:block;">
-                                           5.Please share your suggestions or areas where the University can improve your thesis experience and help you do applied and commercial research.
-(This will be open ended question, which will bring feedback about how students experience their academic journey. Themes for area of improvement will be made from the input of students on this question). 
-                                        </label>
-                                        <div style="margin-top:8px;">
-                                            <textarea class="form-control" id="humility_and_service_at_institutional_level" name="humility_and_service_at_institutional_level" rows="4"></textarea>
-                                           
-                                        </div>
-                                    </div>
-
 
                                 </div>
-                                <div class="mt-3 text-end" style="margin-right: 10px;">
+                                <div class="mt-3 text-end" style="margin-left: -19px !important;">
                                     <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                 </div>
                             </form>
                         </div>
-                    </div>
+                    @endif
+                    @if(auth()->user()->hasRole(['Dean', 'HOD', 'ORIC']))
+                        <div class="tab-pane fade show {{ auth()->user()->hasRole(['Dean', 'ORIC']) ? 'active' : '' }}"
+                            id="form2" role="tabpanel">
+                            <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAll"></th>
+                                        <th>#</th>
+                                        <th>Created By</th>
+                                        <th>Co Authers</th>
+                                        <th>Author Rank</th>
+                                        <th>Created Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    @endif
                 </div>
             </div>
-
         </div>
+
+
     </div>
     <!-- / Content -->
 @endsection
 @push('script')
-    <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/app-logistics-dashboard.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/cards-analytics.js')}}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/popular.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/bootstrap5.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/auto-focus.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/extended-ui-sweetalert2.js') }}"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('#term').on('change', function () {
-                var kfaId = $(this).val();
-
-                $.ajax({
-                    url: '{{ route("self-assessment.termData") }}',
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        term: kfaId
-                    },
-                    success: function (data) {
-                        console.log(data);
-                        var kpas = [
-                            'Teaching and Learning',
-                            'Research, Innovation and Commercialisation',
-                            'Institutional Engagement (Core only)',
-                            'Institutional Engagement (Operational+ Character Strengths)'
-                        ];
-
-                        kpas.forEach(function (kpa, index) {
-                            var record = data[kpa] || {};
-                            $('textarea[name="data[' + index + '][general_comments]"]').val(record.general_comments || '');
-                            $('textarea[name="data[' + index + '][challenge]"]').val(record.challenge || '');
-                            $('textarea[name="data[' + index + '][strength]"]').val(record.strength || '');
-                            $('textarea[name="data[' + index + '][working]"]').val(record.working || '');
-                        });
-                    },
-                    error: function (xhr) {
-                        console.error('Error fetching term data', xhr);
-                    }
-                });
-            });
-        }); 
-    </script>
+    <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 @endpush
 @push('script')
     @if(auth()->user()->hasRole(['HOD']))
         <script>
+            
             $(document).ready(function () {
-              
-              
+                
+                let faculties = @json(get_faculties());
+                let pastIndex = 1;
+                
 
-                 $('#researchForm').on('submit', function (e) {
+                // Add new author group
+                $('#add-coauthor').click(function () {
+                    
+
+                     let facultyOptions = '<option value="">Select Faculty</option>';
+                        faculties.forEach(function(fac) {
+                            facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
+                        });
+                         // Generate Spring/Fall options dynamically
+                    let currentYear = new Date().getFullYear();
+                    let termOptions = '<option value="">-- Select Term --</option>';
+
+                    for (let year = currentYear - 2; year <= currentYear + 3; year++) {
+                        termOptions += `<option value="Spring ${year}">Spring ${year}</option>`;
+                        termOptions += `<option value="Fall ${year}">Fall ${year}</option>`;
+                    }
+                    let newGroup = `
+            <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+
+
+               <div class="col-md-4">
+                    <label for="term" class="form-label">Terms</label>
+                    <select name="scholar_satisfaction[${pastIndex}][term]"
+                        class="select2 form-select term" required>
+                        ${termOptions}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Faculty</label>
+                    <select name="scholar_satisfaction[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
+                        ${facultyOptions}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Department</label>
+                     <select name="scholar_satisfaction[${pastIndex}][department_id]" class="select2 form-select department-select">
+                        <option value="">Select Department</option>
+                    </select>
+                </div>
+
+                 <div class="col-md-4">
+                    <label class="form-label">Program Name</label>
+                    <select name="scholar_satisfaction[${pastIndex}][program_id]" class="select2 form-select program-select">
+                        <option value="">Select Program</option>
+                    </select>
+                </div>
+
+               
+
+                  <div class="col-md-4">
+                    <label  class="form-label">Career</label>
+                    <select name="scholar_satisfaction[${pastIndex}][career]" class="select2 form-select career" required>
+                        <option value="">-- Select Career --</option>
+                        <option value="PG">PG</option>
+                        <option value="UG">UG</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Satisfaction Score</label>
+                    <input type="number" name="scholar_satisfaction[${pastIndex}][satisfaction_score]" class="form-control" min="1"
+                        step="1" required>
+                </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+            <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
+            </div>
+            </div>`;
+
+                    // Convert string → jQuery object
+                    let $newBlock = $(newGroup);
+
+                    // Append
+                    $('#author-past-container').append($newBlock);
+
+                    // ⭐⭐⭐ IMPORTANT ⭐⭐⭐
+                    // Initialize Select2 on ALL selects inside this block
+                    $newBlock.find('select.select2').select2({
+                        placeholder: 'Select an option',
+                        width: '100%'
+                    });
+                    pastIndex++;
+                });
+
+                // Remove a past group
+                $(document).on('click', '.remove-past', function () {
+                    $(this).closest('.past-group').remove();
+                });
+                $('#researchForm1').on('submit', function (e) {
                     e.preventDefault();
                     let form = $(this);
                     let formData = new FormData(this);
-                     // Show loading indicator
-                    Swal.fire({
-                        title: 'Please wait...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-                     
+
                     $.ajax({
                         url: "{{ route('scholars-satisfaction.store') }}",
                         type: "POST",
@@ -323,93 +275,113 @@
                             Swal.close();
                             Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                             form[0].reset();
-                            form.find('.invalid-feedback').remove();
-                            form.find('.is-invalid').removeClass('is-invalid');
-                            $('.select2').val(null).trigger('change');
-                              // Remove all extra grant groups and keep only the first one
-                            $('#grant-details-container .grant-group:not(:first)').remove();
+                            // Remove added groups
+                            $('#author-past-container .past-group').not(':first').remove();
 
-                            // Reset the proof container of the first group
-                            $('#grant-details-container .grant-group:first .proof-container').hide();
+                            // Reset Select2
+                            $('#author-past-container select.select2')
+                                .val(null)
+                                .trigger('change');
 
-                            // Reset index to 1
-                            grantIndex = 1;
+                            // Reset dependent dropdowns
+                            $('.department-select').html('<option value="">Select Department</option>');
+                            $('.program-select').html('<option value="">Select Program</option>');
 
-                            document.getElementById("employer_satisfaction").value = "";
-                            document.getElementById("graduate_satisfaction").value = "";
-
-                            // Reset stars
-                            employerRaty.setScore(0);
-                            graduateRaty.setScore(0);
+                            // Reset index
+                            pastIndex = 1;
                         },
                         error: function (xhr) {
                             Swal.close();
                             // Clear previous errors before showing new ones
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
-                             if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
 
-                            // Loop through all validation errors
-                            $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
+                                // Loop through all validation errors
+                                $.each(errors, function (field, messages) {
+                                    let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                    fieldName = fieldName.replace('[]]', ']');
+                                    let input = form.find('[name="' + fieldName + '"]');
 
-                                if (input.length) {
-                                    input.addClass('is-invalid');
+                                    if (input.length) {
+                                        input.addClass('is-invalid');
 
-                                    // Show error message under input
-                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                }
-                            });
+                                        // Show error message under input
+                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                    }
+                                });
 
-                        } else if (xhr.status === 409) {
-                            // 🔥 Duplicate record message
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Duplicate Entry',
-                                text: xhr.responseJSON.message
-                            });
-
-                        } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
-                        }
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
                         }
                     });
                 });
 
-                $('#importForm').on('submit', function (e) {
-                    e.preventDefault();
+                // 3️⃣ Faculty → Department
+                $(document).on('change', '.faculty-select', function () {
+                    let facultyId = $(this).val();
+                    let departmentSelect = $(this).closest('.past-group').find('.department-select');
+                    let programSelect = $(this).closest('.past-group').find('.program-select');
 
-                    let formData = new FormData(this);
+                    // Reset dependent dropdowns
+                    departmentSelect.html('<option value="">Loading...</option>');
+                    programSelect.html('<option value="">Select Program</option>');
 
-                    Swal.fire({
-                        title: 'Importing...',
-                        allowOutsideClick: false,
-                        didOpen: () => Swal.showLoading()
-                    });
-
-                    $.ajax({
-                        url: "{{ route('employability.import') }}",
-                        method: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (res) {
-                            Swal.close();
-                            Swal.fire('Success', res.message, 'success');
-                            $('#importModal').modal('hide');
-                            $('#importForm')[0].reset();
-                        },
-                        error: function (xhr) {
-                            Swal.close();
-                            Swal.fire('Error', xhr.responseJSON.message ?? 'Import failed', 'error');
-                        }
-                    });
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (departments) {
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">Select Department</option>');
+                                $.each(departments, function (key, department) {
+                                    departmentSelect.append(`<option value="${department.id}">${department.name}</option>`);
+                                });
+                                // Refresh Select2
+                                departmentSelect.select2({ placeholder: 'Select Department', width: '100%' });
+                            },
+                            error: function () {
+                                departmentSelect.html('<option value="">Error loading departments</option>');
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">Select Department</option>');
+                    }
                 });
-                 
-               
+
+                // 4️⃣ Department → Program
+                $(document).on('change', '.department-select', function () {
+                    let departmentId = $(this).val();
+                    let programSelect = $(this).closest('.past-group').find('.program-select');
+
+                    programSelect.html('<option value="">Loading...</option>');
+
+                    if (departmentId) {
+                        $.ajax({
+                            url: "/get-programs/" + departmentId,
+                            type: "GET",
+                            success: function (programs) {
+                                programSelect.empty();
+                                programSelect.append('<option value="">Select Program</option>');
+                                $.each(programs, function (key, program) {
+                                    programSelect.append(`<option value="${program.id}">${program.program_name}</option>`);
+                                });
+                                // Refresh Select2
+                                programSelect.select2({ placeholder: 'Select Program', width: '100%' });
+                            },
+                            error: function () {
+                                programSelect.html('<option value="">Error loading programs</option>');
+                            }
+                        });
+                    } else {
+                        programSelect.html('<option value="">Select Program</option>');
+                    }
+                });
+
 
             });
         </script>
     @endif
-    @endpush
+@endpush

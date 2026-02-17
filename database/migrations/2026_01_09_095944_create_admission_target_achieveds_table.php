@@ -18,7 +18,9 @@ return new class extends Migration
 
             $table->unsignedBigInteger('faculty_id');
             $table->unsignedBigInteger('department_id');
-            $table->unsignedBigInteger('admissions_campaign_id');
+            $table->unsignedBigInteger('program_id');
+            $table->string('admissions_campaign')->nullable();
+
             
             $table->integer('admissions_target')->default(0);
             $table->integer('achieved_target')->default(0);

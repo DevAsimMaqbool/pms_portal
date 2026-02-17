@@ -16,12 +16,14 @@ return new class extends Migration
             $table->unsignedBigInteger('indicator_id');
             $table->enum('form_status', ['HOD', 'RESEARCHER', 'DEAN', 'OTHER', 'ORIC', 'HR'])->default('RESEARCHER');
 
-            $table->integer('empathy_and_compassion')->nullable();
-            $table->integer('inspirational_leadership')->nullable();
-            $table->integer('honesty_and_integrity')->nullable();
-            $table->integer('responsibility_and_accountability')->nullable();
+            $table->string('career')->nullable();
 
-            $table->text('humility_and_service_at_institutional_level')->nullable();
+            $table->unsignedBigInteger('faculty_id');
+            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('program_id');
+
+            $table->string('term')->nullable();
+            $table->decimal('satisfaction_score', 5, 2)->default(0);
             
             $table->enum('status', ['1', '2', '3', '4', '5', '6'])->default('1');
             $table->json('update_history')->nullable();
