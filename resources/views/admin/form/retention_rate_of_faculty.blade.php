@@ -18,168 +18,99 @@
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                <!-- Tab panes -->
+                @if(auth()->user()->hasRole(['HOD']))
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Retention Rate of Faculty</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
+                        </li>
+                    </ul>
+                @endif
                 <div class="tab-content">
                     @if(auth()->user()->hasRole(['HOD']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <h5 class="mb-1">Retention Rate of Faculty</h5>
-                            <form id="researchForm" enctype="multipart/form-data" class="row">
+                            
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h4 class="mb-1">Retention Rate of Faculty</h4>
+                                </div>
+                                <div class="d-flex align-content-center flex-wrap gap-4">
+                                    <div class="d-flex gap-4">
+                                    <a class="btn btn-label-primary" href="{{ route('indicators_crud.index', ['slug' => 'retention_rate_of_faculty', 'id' => $indicatorId]) }}">View</a></div>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                                                <i class="bx bx-upload"></i> Import Excel / CSV</button>
+                                </div>
+                            </div>
+                            <form id="researchForm1" enctype="multipart/form-data" class="row">
                                 @csrf
-                                <input type="hidden" id="form_status" name="form_status" value="HOD" required>
                                 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-                                <div class="row g-6 mt-0">
-                                    <div id="grant-details-container">
+                                <input type="hidden" id="form_status" name="form_status" value="HOD">
 
-                                       <div class="grant-group row g-3 p-3 border border-primary">
-                                
-
-                                            <div class="col-md-6">
-                                                <label for="faculty_at_start_of_year" class="form-label">Faculty at Start of Year</label>
-                                                <input type="date" name="faculty_at_start_of_year" id="Faculty at Start of Year" class="form-control"
-                                                    required>
-                                            </div>
+                                <div class="row">
+                                    <div id="author-past-container">
+                                        <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
                                             <div class="col-md-6">
-                                                <label for="faculty_at_end_of_year" class="form-label">Faculty at End of Year</label>
-                                                <input type="date" name="faculty_at_end_of_year" id="faculty_at_end_of_year" class="form-control" required>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label for="faculty_joined_during_year" class="form-label">Faculty Joined During Year</label>
-                                                <input type="date" name="faculty_joined_during_year" id="faculty_joined_during_year" class="form-control" required>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label for="faculty_left_during_year" class="form-label">Faculty Left During Year</label>
-                                                <input type="date" name="faculty_left_during_year" id="faculty_left_during_year"  class="form-control" required>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label for="evidence_reference" class="form-label">Evidence Reference</label>
-                                                <input type="text" name="evidence_reference" id="evidence_reference" class="form-control" required>
-                                            </div>
-
-                                            <div class="col-md-12">
-                                                <label class="form-label d-block">Remarks</label>
-                                                <div>
-                                                    <textarea class="form-control" id="remarks" name="remarks"
-                                                        rows="4"></textarea>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-
-                                        <div class="grant-group row g-3 mt-3 p-3 border border-primary">
-                                            <div class="col-md-6">
-                                                <label for="academic_year" class="form-label">Academic Year</label>
-                                                <select name="academic_year" id="academic_year" class="select2 form-select faculty-member"
-                                                    required>
-                                                    <option value="">-- Select Year --</option>
-                                                    <option value="2024-25">2024-25</option>
-                                                    <option value="2023-24">2023-24</option>
-                                                    <option value="2022-23">2022-23</option>
-                                                    <option value="2021-22">2021-22</option>
-                                                    <option value="2020-21">2020-21</option>
-                                                    <option value="2019-20">2019-20</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label for="faculty" class="form-label">Faculty</label>
-                                                <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
-                                                    <option value="">-- Select Faculty --</option>
+                                                <label class="form-label">Faculty</label>
+                                                <select name="retention_rate[0][faculty_id]" class="select2 form-select faculty-select">
+                                                    <option value="">Select Faculty</option>
                                                     @foreach(get_faculties() as $faculty)
-                                                        <option value="{{ $faculty->id }}">
-                                                            {{ $faculty->name }}
-                                                        </option>
+                                                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
 
                                             <div class="col-md-6">
-                                                 <label for="department" class="form-label">Department</label>
-                                                    <select name="department_id" id="department_id" class="select2 form-select" required>
-                                                        <option value="">-- Select Department --</option>
-                                                    </select>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label for="strength_at_start_of_month" class="form-label">Faculty Strength at
-                                                    Start of
-                                                    Month</label>
-                                                <input type="number" name="strength_at_start_of_month" id="strength_at_start_of_month" class="form-control"
-                                                    required>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label for="join_during_month" class="form-label">New Faculty Joined During
-                                                    Month</label>
-                                                <input type="number" name="join_during_month" id="join_during_month" class="form-control" required>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label for="left_during_month" class="form-label">Faculty Left During
-                                                    Month</label>
-                                                <input type="number" name="left_during_month" id="left_during_month" class="form-control" required>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label for="strength_end_month" class="form-label">Faculty Strength at End of
-                                                    Month</label>
-                                                <input type="number" name="strength_end_month" id="strength_end_month"  class="form-control" required>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label for="retention_rate" class="form-label">Retention Rate (%)</label>
-                                                <input type="number" name="retention_rate" id="retention_rate" class="form-control" required>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label for="retention_status" class="form-label">Retention Status</label>
-                                                <select name="retention_status" id="retention_status" class="select2 form-select">
-                                                    <option value="">-- Select Ranking--</option>
-                                                    <option value="excellent">Excellent</option>
-                                                    <option value="satisfactory ">Satisfactory</option>
-                                                    <option value="needs_attention">Needs Attention</option>
-                                                </select>
+                                                <label class="form-label">Retention Rate</label>
+                                                <input type="number" name="retention_rate[0][no_retention_rate]" class="form-control" min="1"
+                                                    step="1" required>
                                             </div>
                                             <div class="col-md-12">
-                                                <label class="form-label d-block">Remarks</label>
-                                                <div>
-                                                    <textarea class="form-control" id="remarks" name="remarks"
-                                                        rows="4"></textarea>
-                                                </div>
+                                                <label class="form-label" for="remarks">Remarks</label>
+                                                <textarea class="form-control" id="remarks" name="retention_rate[0][remarks]" rows="3"></textarea>
                                             </div>
+
 
                                         </div>
-                                        <div class="grant-group row g-3 mb-3 mt-3 p-3 border border-primary">
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="retained_faculty_count">Retained Faculty Count</label>
-                                                <input type="number" class="form-control" id="retained_faculty_count" placeholder="Retained Faculty Count" name="retained_faculty_count" aria-label="Retained Faculty Count" disabled>
-                                            </div>
-                                            <div class="col-md-6">
-                                                 <label class="form-label" for="retention_rate">Retention Rate (%)</label>
-                                                <input type="number" class="form-control" id="retention_rate" placeholder="Retention Rate (%)" name="retention_rate" aria-label="Retention Rate (%)" disabled>
-                                            </div>
-                                            
-                                        </div>
-
-
-
-
                                     </div>
+                                    <div class="col-12 mb-3">
+                                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                            id="add-coauthor"><i class="icon-base ti tabler-plus me-1"></i> <span
+                                                class="align-middle">Add</span></button>
+                                    </div>
+
                                 </div>
-                                <div class="mt-3 text-end" style="margin-left: -16px !important;">
-                                    <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
+                                <div class="mt-3 text-end" style="margin-left: -19px !important;">
+                                    <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                 </div>
                             </form>
-
+                        </div>
+                    @endif
+                    @if(auth()->user()->hasRole(['Dean', 'HOD', 'ORIC']))
+                        <div class="tab-pane fade show {{ auth()->user()->hasRole(['Dean', 'ORIC']) ? 'active' : '' }}"
+                            id="form2" role="tabpanel">
+                            <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAll"></th>
+                                        <th>#</th>
+                                        <th>Created By</th>
+                                        <th>Co Authers</th>
+                                        <th>Author Rank</th>
+                                        <th>Created Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
+
 
     </div>
     <!-- / Content -->
@@ -199,22 +130,68 @@
 @push('script')
     @if(auth()->user()->hasRole(['HOD']))
         <script>
+            
             $(document).ready(function () {
+                
+                let faculties = @json(get_faculties());
+                let pastIndex = 1;
+
+                // Add new author group
+                $('#add-coauthor').click(function () {
+                    
+
+                     let facultyOptions = '<option value="">Select Faculty</option>';
+                        faculties.forEach(function(fac) {
+                            facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
+                        });
+                    let newGroup = `
+            <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
 
+                <div class="col-md-6">
+                    <label class="form-label">Faculty</label>
+                    <select name="retention_rate[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
+                        ${facultyOptions}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Retention Rate</label>
+                    <input type="number" name="retention_rate[${pastIndex}][no_retention_rate]" class="form-control" min="1"
+                        step="1" required>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label" for="remarks">Remarks</label>
+                    <textarea class="form-control" id="remarks" name="retention_rate[${pastIndex}][remarks]" rows="3"></textarea>
+                </div>
 
-                $('#researchForm').on('submit', function (e) {
+            <div class="col-md-2 d-flex align-items-end">
+            <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
+            </div>
+            </div>`;
+
+                    // Convert string → jQuery object
+                    let $newBlock = $(newGroup);
+
+                    // Append
+                    $('#author-past-container').append($newBlock);
+
+                    // ⭐⭐⭐ IMPORTANT ⭐⭐⭐
+                    // Initialize Select2 on ALL selects inside this block
+                    $newBlock.find('select.select2').select2({
+                        placeholder: 'Select an option',
+                        width: '100%'
+                    });
+                    pastIndex++;
+                });
+
+                // Remove a past group
+                $(document).on('click', '.remove-past', function () {
+                    $(this).closest('.past-group').remove();
+                });
+                $('#researchForm1').on('submit', function (e) {
                     e.preventDefault();
                     let form = $(this);
                     let formData = new FormData(this);
-                    // Show loading indicator
-                    Swal.fire({
-                        title: 'Please wait...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
 
                     $.ajax({
                         url: "{{ route('faculty-retention.store') }}",
@@ -226,17 +203,20 @@
                             Swal.close();
                             Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                             form[0].reset();
-                            form.find('.invalid-feedback').remove();
-                            form.find('.is-invalid').removeClass('is-invalid');
-                            $('.select2').val(null).trigger('change');
-                            // Remove all extra grant groups and keep only the first one
-                            $('#grant-details-container .grant-group:not(:first)').remove();
+                            // Remove added groups
+                            $('#author-past-container .past-group').not(':first').remove();
 
-                            // Reset the proof container of the first group
-                            $('#grant-details-container .grant-group:first .proof-container').hide();
+                            // Reset Select2
+                            $('#author-past-container select.select2')
+                                .val(null)
+                                .trigger('change');
 
-                            // Reset index to 1
-                            grantIndex = 1;
+                            // Reset dependent dropdowns
+                            $('.department-select').html('<option value="">Select Department</option>');
+                            $('.program-select').html('<option value="">Select Program</option>');
+
+                            // Reset index
+                            pastIndex = 1;
                         },
                         error: function (xhr) {
                             Swal.close();
@@ -248,7 +228,9 @@
 
                                 // Loop through all validation errors
                                 $.each(errors, function (field, messages) {
-                                    let input = form.find('[name="' + field + '"]');
+                                    let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                    fieldName = fieldName.replace('[]]', ']');
+                                    let input = form.find('[name="' + fieldName + '"]');
 
                                     if (input.length) {
                                         input.addClass('is-invalid');
@@ -258,14 +240,6 @@
                                     }
                                 });
 
-                            } else if (xhr.status === 409) {
-                                // 🔥 Duplicate record message
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Duplicate Entry',
-                                    text: xhr.responseJSON.message
-                                });
-
                             } else {
                                 Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
                             }
@@ -273,37 +247,8 @@
                     });
                 });
 
-                 $('#faculty_id').on('change', function () {
+                
 
-                    let facultyId = $(this).val();
-                    let departmentSelect = $('#department_id');
-
-                    departmentSelect.html('<option value="">Loading...</option>');
-
-                    if (facultyId) {
-                        $.ajax({
-                            url: "/get-departments/" + facultyId,
-                            type: "GET",
-                            success: function (response) {
-
-                                departmentSelect.empty();
-                                departmentSelect.append('<option value="">-- Select Department --</option>');
-
-                                $.each(response, function (key, department) {
-                                    departmentSelect.append(
-                                        `<option value="${department.id}">
-                                            ${department.name}
-                                        </option>`
-                                    );
-                                });
-
-                                departmentSelect.trigger('change'); // refresh select2
-                            }
-                        });
-                    } else {
-                        departmentSelect.html('<option value="">-- Select Department --</option>');
-                    }
-                });
 
             });
         </script>

@@ -54,51 +54,60 @@ class RecoveryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+        public function store(Request $request)
     {
         try { 
             
-            if($request->form_status=='HOD'){
-                 $rules = [
-                    'indicator_id' => 'required',
-                    'faculty_id' => 'required|integer',
-                    'department_id' => 'required|integer',
-                    'period' => 'required',
-                    'recovery_target' => 'required|integer|min:0',
-                    'achieved_target' => 'required|integer|min:0',
-                    'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-                ];
+                 $employeeId = Auth::user()->employee_id;
+               $rules = [
+                        'indicator_id' => 'required|integer',
+                        'recovery' => 'required|array|min:1',
+                        'recovery.*.faculty_id' => 'required|integer',
+                        'recovery.*.department_id' => 'required|integer',
+                        'recovery.*.program_id' => 'required|integer',
+                        'recovery.*.target_month_year' => 'required',
+                        'recovery.*.recovery_target' => 'required',
+                        'recovery.*.achieved_target' => 'required',
+                        'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                    ];
 
+                    $messages = [
+                        'recovery.*.faculty_id.required' => 'Faculty is required',
+                        'recovery.*.department_id.required' => 'Department is required',
+                        'recovery.*.program_id.required' => 'Program is required',
+                        'recovery.*.target_month_year.required' => 'Date is required.',
+                        'recovery.*.recovery_target.required' => 'Target is required.',
+                        'recovery.*.achieved_target.required' => 'Achieved Target is required.',
+                    ];
+                
 
-                    $validator = Validator::make($request->all(), $rules);
+                    $validator = Validator::make($request->all(), $rules, $messages);
                     if ($validator->fails()) {
                             return response()->json([
                                 'status' => 'error',
                                 'errors' => $validator->errors()
                             ], 422);
                         }
-                    $data = $validator->validated();    
 
-                        
+                        $savedRecords = [];
+                    foreach ($request->recovery as $recoverys) {
+                        $recoverys['indicator_id'] = $request->indicator_id;
+                        $recoverys['form_status'] = $request->form_status ?? 'HOD';
+                        $recoverys['created_by'] = $employeeId;
+                        $recoverys['updated_by'] = $employeeId;
 
-            }
-            $employeeId = Auth::user()->employee_id;
-            DB::beginTransaction();
-            $data['created_by'] = $employeeId;
-            $data['updated_by'] = $employeeId;
-
-            $record = Recovery::create($data);
-            DB::commit();
+                        $savedRecords[] = Recovery::create($recoverys);
+                    } 
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Record saved successfully',
-                'data' => $record
+                'data' => $savedRecords
             ]);
 
         } catch (\Exception $e) {
              DB::rollBack();
-             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
@@ -129,14 +138,15 @@ class RecoveryController extends Controller
                 'record_id' => 'required',
                 'faculty_id' => 'required|integer',
                 'department_id' => 'required|integer',
-                'period' => 'required',
+                'program_id' => 'required|integer',
+                'target_month_year' => 'required',
                 'recovery_target' => 'required|integer|min:0',
                 'achieved_target' => 'required|integer|min:0',
     
         ]);
 
         $data = $request->only([
-                        'faculty_id', 'department_id', 'period', 'recovery_target','achieved_target'
+                        'faculty_id', 'department_id', 'program_id', 'target_month_year', 'recovery_target','achieved_target'
                     ]);
                     $data['updated_by'] = Auth::user()->employee_id;
 
@@ -148,8 +158,13 @@ class RecoveryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+     public function destroy($id)
     {
-        //
+        $record = Recovery::findOrFail($id);
+        $record->delete();
+
+        return response()->json([
+            'message' => 'Deleted successfully'
+        ]);
     }
 }

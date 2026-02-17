@@ -10,7 +10,8 @@ class AdmissionTargetAchieved extends Model
     protected $fillable = [
         'faculty_id',
         'department_id',
-        'admissions_campaign_id',
+        'program_id',
+        'admissions_campaign',
         'admissions_target',
         'achieved_target',
         'form_status',

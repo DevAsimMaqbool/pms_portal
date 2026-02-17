@@ -26,8 +26,6 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Faculty</th>
-                                                        <th>Department</th>
                                                         <th>Admissions Target</th>
                                                         <th>Target Achieved</th>
                                                         <th>Actions</th>
@@ -59,40 +57,46 @@
                     <div class="row g-3">
                        
                         
-                        <div class="col-md-6">
-                                                <label for="faculty" class="form-label">Faculty</label>
-                                                <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-member" required>
-                                                    <option value="">-- Select Faculty Member --</option>
-                                                    <option value="11"> Faculty of Business and Management Sciences-KCF</option>
-                                                    <option value="171">Faculty of Computer Science and Information Technology-CCL</option>
-                                                    <option value="158"> Faculty of  Arts and Humanities-CCL</option>
+                        <div class="col-md-4">
+                                                <label class="form-label">Faculty</label>
+                                                <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-select">
+                                                    <option value="">Select Faculty</option>
+                                                    @foreach(get_faculties() as $faculty)
+                                                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label for="department_id" class="form-label">Department</label>
-                                                <select name="department_id" id="department_id" class="select2 form-select department" required>
-                                                    <option value="">-- Select Faculty Member --</option>
-                                                    <option value="11"> Faculty of Business and Management Sciences-KCF</option>
-                                                    <option value="171">Faculty of Computer Science and Information Technology-CCL</option>
-                                                    <option value="158"> Faculty of  Arts and Humanities-CCL</option>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Department</label>
+                                                <select name="department_id" id="department_id" class="select2 form-select department-select">
+                                                    <option value="">Select Department</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6">
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Program Name</label>
+                                                <select name="program_id" id="program_id" class="select2 form-select program-select">
+                                                    <option value="">Select Program</option>
+                                                </select>
+                                            </div>
+
+                                
+                                            <div class="col-md-4">
                                                 <label for="admissions_campaign_id" class="form-label">Admissions Campaign</label>
-                                                <select name="admissions_campaign_id" id="admissions_campaign_id"
+                                                <select name="admissions_campaign" id="admissions_campaign"
                                                     class="select2 form-select admissions-campaign" required>
                                                     <option value="">-- Select Faculty Member --</option>
-                                                    <option value="11"> Faculty of Business and Management Sciences-KCF</option>
-                                                    <option value="171">Faculty of Computer Science and Information Technology-CCL</option>
-                                                    <option value="158"> Faculty of  Arts and Humanities-CCL</option>
+                                                    <option value="Fall"> Fall</option>
+                                                    <option value="Spring">Spring</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <label class="form-label">Admissions Target</label>
                                                 <input type="number" name="admissions_target" id="admissions_target" class="form-control" min="1"
                                                     step="1" required>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <label class="form-label">Target Achieved</label>
                                                 <input type="number" name="achieved_target" id="achieved_target" class="form-control" min="1"
                                                     step="1" required>
@@ -157,16 +161,15 @@
                                         data-form='${JSON.stringify(form)}'>
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
-                            }       
+                            }  
+                             const deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;     
 
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
-                                form.faculty_id || 'N/A',
-                                form.department_id || 'N/A',
                                 form.admissions_target || 'N/A',
                                 form.achieved_target || 'N/A',
-                                editButton
+                                editButton+ ' ' + deleteBtn
                             ];
                         });
 
@@ -175,8 +178,6 @@
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
-                                    { title: "Faculty" },
-                                    { title: "Department" },
                                     { title: "Admissions Target" },
                                     { title: "Target Achieved" },
                                     { title: "Actions" }
@@ -200,9 +201,8 @@
             $(document).on('click', '.edit-form-btn', function () {
         const form = $(this).data('form');
         $('#researchForm1 #record_id').val(form.id);
-        $('#researchForm1 #faculty_id').val(form.faculty_id).trigger('change');
-        $('#researchForm1 #department_id').val(form.department_id).trigger('change');
-        $('#researchForm1 #admissions_campaign_id').val(form.admissions_campaign_id).trigger('change');
+        populateFacultyDepartmentProgram(form);
+        $('#researchForm1 #admissions_campaign').val(form.admissions_campaign).trigger('change');
         $('#researchForm1 #admissions_target').val(form.admissions_target)
         $('#researchForm1 #achieved_target').val(form.achieved_target);
         
@@ -253,6 +253,143 @@
             }
         });
     });
+    function populateFacultyDepartmentProgram(form) {
+    const facultySelect = $('#faculty_id');
+    const departmentSelect = $('#department_id');
+    const programSelect = $('#program_id');
+
+    // Set faculty and trigger change
+    facultySelect.val(form.faculty_id).trigger('change');
+
+    if (!form.faculty_id) return;
+
+    // Load Departments
+    $.ajax({
+        url: "/get-departments/" + form.faculty_id,
+        type: "GET",
+        success: function (departments) {
+            departmentSelect.empty().append('<option value="">-- Select Department --</option>');
+
+            $.each(departments, function (key, department) {
+                departmentSelect.append(`<option value="${department.id}">${department.name}</option>`);
+            });
+
+            // Set department
+            departmentSelect.val(form.department_id).trigger('change');
+
+            if (!form.department_id) return;
+
+            // Load Programs
+            $.ajax({
+                url: "/get-programs/" + form.department_id,
+                type: "GET",
+                success: function (programs) {
+                    programSelect.empty().append('<option value="">-- Select Program --</option>');
+
+                    $.each(programs, function (key, program) {
+                        programSelect.append(`<option value="${program.id}">${program.program_name}</option>`);
+                    });
+
+                    // Set program
+                    programSelect.val(form.program_id).trigger('change');
+                },
+                error: function () {
+                    programSelect.html('<option value="">Error loading programs</option>');
+                }
+            });
+        },
+        error: function () {
+            departmentSelect.html('<option value="">Error loading departments</option>');
+        }
+    });
+}
+    $('#faculty_id').on('change', function () {
+
+                    let facultyId = $(this).val();
+                    let departmentSelect = $('#department_id');
+                    let programSelect = $('#program_id');
+
+                    departmentSelect.html('<option value="">Loading...</option>');
+                    programSelect.html('<option value="">-- Select Program --</option>');
+                    
+
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (response) {
+
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">-- Select Department --</option>');
+
+                                $.each(response, function (key, department) {
+                                    departmentSelect.append(
+                                        `<option value="${department.id}">
+                                            ${department.name}
+                                        </option>`
+                                    );
+                                });
+
+                                departmentSelect.trigger('change'); // refresh select2
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">-- Select Department --</option>');
+                    }
+                });
+                $('#department_id').on('change', function () {
+
+                    let departmentId = $(this).val();
+                    let programSelect = $('#program_id');
+
+                    programSelect.html('<option value="">Loading...</option>');
+
+                    if (departmentId) {
+                        $.ajax({
+                            url: "/get-programs/" + departmentId,
+                            type: "GET",
+                            success: function (response) {
+
+                                programSelect.empty();
+                                programSelect.append('<option value="">-- Select Program --</option>');
+
+                                $.each(response, function (key, program) {
+                                    programSelect.append(
+                                        `<option value="${program.id}">
+                                            ${program.program_name}
+                                        </option>`
+                                    );
+                                });
+
+                                programSelect.trigger('change'); // refresh select2
+                            },
+                            error: function () {
+                                programSelect.html('<option value="">Error loading programs</option>');
+                            }
+                        });
+                    } else {
+                        programSelect.html('<option value="">-- Select Program --</option>');
+                    }
+                });
+                $(document).on('click', '.delete-btn', function() {
+    let id = $(this).data('id');
+
+    if(!confirm('Are you sure you want to delete this record?')) return;
+
+    $.ajax({
+        url: `/admission-targets/${id}`,
+        type: 'DELETE',
+        headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
+        success: function(res) {
+            alert(res.message);
+            fetchCommercialForms();
+        },
+        error: function(xhr) {
+            console.error(xhr.responseText);
+            alert('Failed to delete record.');
+        }
+    });
+});
      
 
 });

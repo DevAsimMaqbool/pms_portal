@@ -17,7 +17,7 @@
 
         <!-- Multi Column with Form Separator -->
         <div class="card">
-             <h5 class="card-header">Recovery%</h5>
+             <h5 class="card-header">No. of students enrolled in 1M with global experience (work experience) (if applicable)</h5>
             <div class="card-datatable table-responsive card-body">
                     @if(auth()->user()->hasRole(['HOD']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
@@ -26,7 +26,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Recovert Target</th>
+                                                        <th>Target</th>
                                                         <th>Target Achieved</th>
                                                         <th>Actions</th>
                                                     </tr>
@@ -45,7 +45,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Recovery%</h5>
+                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit No. of students enrolled in 1M with global experience (work experience) (if applicable)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -82,13 +82,10 @@
                                             </div>
 
                                 
+                                            
                                             <div class="col-md-4">
-                                                <label class="form-label">Target Month/Year</label>
-                                                <input type="date" name="target_month_year" id="target_month_year" class="form-control" required>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Recovery Target</label>
-                                                <input type="number" name="recovery_target" id="recovery_target" class="form-control" min="1"
+                                                <label class="form-label">Target</label>
+                                                <input type="number" name="experience_target" id="experience_target" class="form-control" min="1"
                                                     step="1" required>
                                             </div>
                                             <div class="col-md-4">
@@ -136,7 +133,7 @@
         <script>
             function fetchCommercialForms() {
                 $.ajax({
-                    url: "{{ route('recovery.index') }}",
+                    url: "{{ route('students-global-experience.index') }}",
                     method: "GET",
                     data: {
                         status: "HOD" // you can send more values
@@ -162,7 +159,7 @@
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
-                                form.recovery_target || 'N/A',
+                                form.experience_target || 'N/A',
                                 form.achieved_target || 'N/A',
                                 editButton+ ' ' + deleteBtn
                             ];
@@ -173,7 +170,7 @@
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
-                                    { title: "Recovery Target" },
+                                    { title: "Target" },
                                     { title: "Target Achieved" },
                                     { title: "Actions" }
                                 ]
@@ -197,8 +194,7 @@
         const form = $(this).data('form');
         $('#researchForm1 #record_id').val(form.id);
         populateFacultyDepartmentProgram(form);
-        $('#researchForm1 #target_month_year').val(form.target_month_year);
-        $('#researchForm1 #recovery_target').val(form.recovery_target)
+        $('#researchForm1 #experience_target').val(form.experience_target)
         $('#researchForm1 #achieved_target').val(form.achieved_target);
         
 
@@ -218,7 +214,7 @@
 
 
         $.ajax({
-            url: "{{ route('recovery.update', '') }}/" + recordId,
+            url: "{{ route('students-global-experience.update', '') }}/" + recordId,
             method: 'POST',
             data: formData,
             contentType: false,
@@ -372,7 +368,7 @@
     if(!confirm('Are you sure you want to delete this record?')) return;
 
     $.ajax({
-        url: `/recovery/${id}`,
+        url: `/students-global-experience/${id}`,
         type: 'DELETE',
         headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
         success: function(res) {
