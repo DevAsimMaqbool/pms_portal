@@ -27,10 +27,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Student Name</th>
-                                                        <th>Faculty</th>
-                                                        <th>Program</th>
-                                                        <th>Sector</th>
+                                                        <th>Batch</th>
+                                                        <th>Passing Year</th>
+                                                        <th>Salary</th>
+                                                        <th>Employer Name</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -101,108 +101,144 @@
                     <div class="row g-3">
                        
                         
-                        <div class="col-md-6">
-                                                <label for="student_name" class="form-label">Student Name</label>
-                                                <select name="student_id" id="student_id" class="select2 form-select faculty-member" required>
-                                                    <option value="">-- Select Student --</option>
-                                                    <option value="11"> Muhammad Ahmad</option>
-                                                    <option value="12">MalikMubasharAhmadZafar</option>
-                                                    <option value="13"> Muhammad Umar</option>
-                                                    
-                                                </select>
-                                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="faculty" class="form-label">Please select period</label>
+                            <select name="period" id="period" class="select2 form-select faculty-member" required>
+                                <option value="">-- Select Period --</option>
+                                <option value="11"> 2024-2025</option>
+                                <option value="171">2025-2026</option>
+                                <option value="158">2026-2027</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="student_name" class="form-label">Student Name</label>
+                            <select name="student_id" id="student_id" class="select2 form-select faculty-member" required>
+                                <option value="">-- Select Student --</option>
+                                <option value="11"> Muhammad Ahmad</option>
+                                <option value="12">MalikMubasharAhmadZafar</option>
+                                <option value="13"> Muhammad Umar</option>
+                                
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="faculty" class="form-label">Faculty</label>
+                            <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
+                                <option value="">-- Select Faculty --</option>
+                                @foreach(get_faculties() as $faculty)
+                                    <option value="{{ $faculty->id }}">
+                                        {{ $faculty->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="department" class="form-label">Department</label>
+                            <select name="department_id" id="department_id" class="select2 form-select" required>
+                                <option value="">-- Select Department --</option>
+                            </select>
+                            
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="program" class="form-label">Program</label>
+                                <select name="program_id" id="program_id" class="select2 form-select program_id" required>
+                                    <option value="">-- Select Program --</option>
+                                </select>
+                        </div>
 
-                                            <div class="col-md-6">
-                                                <label for="faculty" class="form-label">Faculty</label>
-                                                <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-member" required>
-                                                    <option value="">-- Select Faculty --</option>
-                                                    <option value="11"> Faculty of Business and Management Sciences-KCF</option>
-                                                    <option value="171">Faculty of Computer Science and Information Technology-CCL</option>
-                                                    <option value="158"> Faculty of  Arts and Humanities-CCL</option>
-                                                </select>
-                                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="batch" class="form-label">Batch</label>
+                            <select name="batch" id="batch" class="select2 form-select faculty-member" required>
+                                <option value="">-- Select Batch --</option>
+                                <?php
+                                $currentYear = date('Y');
+                                for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
+                                    echo "<option value='Spring $year'>Spring $year</option>";
+                                    echo "<option value='Fall $year'>Fall $year</option>";
+                                }
+                                ?>
+                                
+                            </select>
+                        </div>
 
-                                            <div class="col-md-6">
-                                                <label for="program" class="form-label">Program</label>
-                                                <select name="program_id" id="program_id" class="select2 form-select faculty-member" required>
-                                                    <option value="">-- Select Program --</option>
-                                                    <option value="1"> BS Robotics</option>
-                                                    <option value="2">BS Gaming And Multimedia</option>
-                                                    <option value="3"> BS Cyber Security</option>
-                                                </select>
-                                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="passing_year" class="form-label">Passing Year</label>
+                            <input type="date" name="passing_year" id="passing_year" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="passing_year" class="form-label">Date of Appointment</label>
+                            <input type="date" name="date_of_appointment" id="date_of_appointment" class="form-control" required>
+                        </div>
 
-                                            <div class="col-md-6">
-                                                <label for="batch" class="form-label">Batch</label>
-                                                <select name="batch" id="batch" class="select2 form-select faculty-member" required>
-                                                    <option value="">-- Select Batch --</option>
-                                                    <option value="2014-2018">2014-2018</option>
-                                                    <option value="2014-2019">2014-2019</option>
-                                                    <option value="2014-2020">2014-2018</option>
-                                                   
-                                                </select>
-                                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Employer Name</label>
+                            <input type="text" name="employer_name" id="employer_name" class="form-control" required>
+                        </div>
 
-                                            <div class="col-md-6">
-                                                <label for="passing_year" class="form-label">Passing Year</label>
-                                                <select name="passing_year" id="passing_year" class="select2 form-select faculty-member" required>
-                                                    <option value="">-- Select Year --</option>
-                                                    <option value="2021">2021</option>
-                                                    <option value="2022">2022</option>
-                                                    <option value="2023">2023</option>
-                                                    <option value="2024">2024</option>
-                                                    <option value="2025">2025</option>
-                                                    <option value="2026">2026</option>
-                                                </select>
-                                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="sector" class="form-label">Sector</label>
+                            <select name="sector" id="sector"  class="select2 form-select faculty-member" required>
+                                <option value="">-- Select Sector --</option>
+                                <option value="Manufacturing">Manufacturing</option>
+                                <option value="Services">Services</option>
+                                <option value="Information Technology (IT)">Information Technology (IT)</option>
+                                <option value="Banking & Finance">Banking & Finance</option>
+                                <option value="Insurance">Insurance</option>
+                                <option value="FMCG & Consumer Goods">FMCG & Consumer Goods</option>
+                                <option value="Retail & E-Commerce">Retail & E-Commerce</option>
+                                <option value="Energy & Utilities">Energy & Utilities</option>
+                                <option value="Oil & Gas">Oil & Gas</option>
+                                <option value="Construction & Real Estate">Construction & Real Estate</option>
+                                <option value="Healthcare & Pharmaceuticals">Healthcare & Pharmaceuticals</option>
+                                <option value="Agriculture & Agribusiness">Agriculture & Agribusiness</option>
+                                <option value="Education & Training">Education & Training</option>
+                                <option value="Media & Communications">Media & Communications</option>
+                                <option value="Logistics & Transportation">Logistics & Transportation</option>
+                                <option value="Hospitality & Tourism">Hospitality & Tourism</option>
+                                <option value="Telecommunications">Telecommunications</option>
+                                <option value="Engineering & Industrial Services">Engineering & Industrial Services</option>
+                                <option value="Government / Public Sector">Government / Public Sector</option>
+                                <option value="Development Sector / NGO">Development Sector / NGO</option>
+                                <option value="Research & Development">Research & Development</option>
+                                <option value="Startups & Entrepreneurship">Startups & Entrepreneurship</option>
+                                <option value="Environmental & Sustainability">Environmental & Sustainability</option>
+                                <option value="Other">Other (Specify)</option>
+                                
+                            </select>
+                        </div>
 
-                                            <div class="col-md-6">
-                                                <label class="form-label">Employer Name</label>
-                                                <input type="text" name="employer_name" id="employer_name" class="form-control" required>
-                                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Salary</label>
+                            <input type="number" name="salary" id="salary" class="form-control" min="1" step="1"
+                                required>
+                        </div>
 
-                                            <div class="col-md-6">
-                                                <label for="sector" class="form-label">Sector</label>
-                                                <select name="sector" id="sector" class="select2 form-select faculty-member" required>
-                                                    <option value="">-- Select Sector --</option>
-                                                    <option value="a">a</option>
-                                                    <option value="b">b</option>
-                                                    <option value="c">c</option>
-                                                    <option value="d">d</option>
-                                                    <option value="e">e</option>
-                                                 
-                                                </select>
-                                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="market_competitive_salary" class="form-label">Market Competitive
+                                Salary</label>
+                            <select name="market_competitive_salary" id="market_competitive_salary"
+                                class="select2 form-select market_competitive_salary" required>
+                                <option value="">-- Select --</option>
+                                <option value="Above">Above</option>
+                                <option value="At Par">At Par</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
 
-                                            <div class="col-md-6">
-                                                <label class="form-label">Salary</label>
-                                                <input type="number" name="salary" id="salary" class="form-control" min="1" step="1"
-                                                    required>
-                                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label d-block">Job Relevancy</label>
+                            <div>
+                                <input type="radio" name="job_relevancy" id="job_relevancy" value="yes">
+                                <label for="yes">Yes</label>
 
-                                            <div class="col-md-6">
-                                                <label for="market_competitive_salary" class="form-label">Market Competitive
-                                                    Salary</label>
-                                                <select id="market_competitive_salary" name="market_competitive_salary"
-                                                    class="select2 form-select market_competitive_salary" required>
-                                                    <option value="">-- Select --</option>
-                                                    <option value="Above">Above</option>
-                                                    <option value="At Par">At Par</option>
-                                                    <option value="Low">Low</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label class="form-label d-block">Job Relevancy</label>
-                                                <div>
-                                                    <input type="radio" name="job_relevancy" id="job_relevancy" value="yes">
-                                                    <label for="yes">Yes</label>
-
-                                                    <input type="radio" name="job_relevancy" id="job_relevancy" value="no"
-                                                        checked>
-                                                    <label for="job_relevancy">No</label>
-                                                </div>
-                                            </div>
+                                <input type="radio" name="job_relevancy" id="job_relevancy" value="no"
+                                    checked>
+                                <label for="job_relevancy">No</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="passing_year" class="form-label">Proof of Salary and appointment</label>
+                            <input type="url" name="proof_salary_and_appointment" id="proof_salary_and_appointment" class="form-control" required>
+                        </div>
                                             <div class="col-md-6">
                                                 <label class="fw-bold mb-2 d-block">Employer Satisfaction</label>
                                                 <div id="employerRating" class="raty"></div>
@@ -315,28 +351,30 @@
                                         data-form='${JSON.stringify(form)}'>
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
-                            }       
+                            } 
+                            const deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;      
 
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
-                                form.student_id || 'N/A',
-                                form.faculty_id || 'N/A',
-                                form.program_id || 'N/A',
-                                form.sector || 'N/A',
-                                editButton
+                                form.batch || 'N/A',
+                                form.passing_year || 'N/A',
+                                form.salary || 'N/A',
+                                form.employer_name || 'N/A',
+                                editButton+ ' ' + deleteBtn
                             ];
                         });
 
+ 
                         if (!$.fn.DataTable.isDataTable('#employabilityTable')) {
                             $('#employabilityTable').DataTable({
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
-                                    { title: "Student Name" },
-                                    { title: "Faculty" },
-                                    { title: "Program" },
-                                    { title: "Sector" },
+                                    { title: "Batch" },
+                                    { title: "Passing Year" },
+                                    { title: "Salary" },
+                                    { title: "Employer Name" },
                                     { title: "Actions" }
                                 ]
                             });
@@ -419,14 +457,66 @@
 
                 $('#viewFormModal').modal('show');
             });
+            function populateFacultyDepartmentProgram(form) {
+    const facultySelect = $('#faculty_id');
+    const departmentSelect = $('#department_id');
+    const programSelect = $('#program_id');
+
+    // Set faculty and trigger change
+    facultySelect.val(form.faculty_id).trigger('change');
+
+    if (!form.faculty_id) return;
+
+    // Load Departments
+    $.ajax({
+        url: "/get-departments/" + form.faculty_id,
+        type: "GET",
+        success: function (departments) {
+            departmentSelect.empty().append('<option value="">-- Select Department --</option>');
+
+            $.each(departments, function (key, department) {
+                departmentSelect.append(`<option value="${department.id}">${department.name}</option>`);
+            });
+
+            // Set department
+            departmentSelect.val(form.department_id).trigger('change');
+
+            if (!form.department_id) return;
+
+            // Load Programs
+            $.ajax({
+                url: "/get-programs/" + form.department_id,
+                type: "GET",
+                success: function (programs) {
+                    programSelect.empty().append('<option value="">-- Select Program --</option>');
+
+                    $.each(programs, function (key, program) {
+                        programSelect.append(`<option value="${program.id}">${program.program_name}</option>`);
+                    });
+
+                    // Set program
+                    programSelect.val(form.program_id).trigger('change');
+                },
+                error: function () {
+                    programSelect.html('<option value="">Error loading programs</option>');
+                }
+            });
+        },
+        error: function () {
+            departmentSelect.html('<option value="">Error loading departments</option>');
+        }
+    });
+}
             $(document).on('click', '.edit-form-btn', function () {
         const form = $(this).data('form');
         $('#researchForm1 #record_id').val(form.id);
         $('#researchForm1 #student_id').val(form.student_id).trigger('change');
-        $('#researchForm1 #faculty_id').val(form.faculty_id).trigger('change');
-        $('#researchForm1 #program_id').val(form.program_id).trigger('change');
+        populateFacultyDepartmentProgram(form);
         $('#researchForm1 #batch').val(form.batch).trigger('change');
-        $('#researchForm1 #passing_year').val(form.passing_year).trigger('change');
+        $('#researchForm1 #period').val(form.period).trigger('change');
+        $('#researchForm1 #passing_year').val(form.passing_year);
+        $('#researchForm1 #date_of_appointment').val(form.date_of_appointment);
+        $('#researchForm1 #proof_salary_and_appointment').val(form.proof_salary_and_appointment);
         $('#researchForm1 #employer_name').val(form.employer_name);
         $('#researchForm1 #sector').val(form.sector).trigger('change');
         $('#researchForm1 #salary').val(form.salary);
@@ -489,6 +579,93 @@
             }
         });
     });
+    $('#faculty_id').on('change', function () {
+
+                    let facultyId = $(this).val();
+                    let departmentSelect = $('#department_id');
+                    let programSelect = $('#program_id');
+
+                    departmentSelect.html('<option value="">Loading...</option>');
+                    programSelect.html('<option value="">-- Select Program --</option>');
+                    
+
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (response) {
+
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">-- Select Department --</option>');
+
+                                $.each(response, function (key, department) {
+                                    departmentSelect.append(
+                                        `<option value="${department.id}">
+                                            ${department.name}
+                                        </option>`
+                                    );
+                                });
+
+                                departmentSelect.trigger('change'); // refresh select2
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">-- Select Department --</option>');
+                    }
+                });
+                $('#department_id').on('change', function () {
+
+                    let departmentId = $(this).val();
+                    let programSelect = $('#program_id');
+
+                    programSelect.html('<option value="">Loading...</option>');
+
+                    if (departmentId) {
+                        $.ajax({
+                            url: "/get-programs/" + departmentId,
+                            type: "GET",
+                            success: function (response) {
+
+                                programSelect.empty();
+                                programSelect.append('<option value="">-- Select Program --</option>');
+
+                                $.each(response, function (key, program) {
+                                    programSelect.append(
+                                        `<option value="${program.id}">
+                                            ${program.program_name}
+                                        </option>`
+                                    );
+                                });
+
+                                programSelect.trigger('change'); // refresh select2
+                            },
+                            error: function () {
+                                programSelect.html('<option value="">Error loading programs</option>');
+                            }
+                        });
+                    } else {
+                        programSelect.html('<option value="">-- Select Program --</option>');
+                    }
+                });
+                $(document).on('click', '.delete-btn', function() {
+    let id = $(this).data('id');
+
+    if(!confirm('Are you sure you want to delete this record?')) return;
+
+    $.ajax({
+        url: `/employability/${id}`,
+        type: 'DELETE',
+        headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
+        success: function(res) {
+            alert(res.message);
+            fetchCommercialForms();
+        },
+        error: function(xhr) {
+            console.error(xhr.responseText);
+            alert('Failed to delete record.');
+        }
+    });
+});
      
 
 });

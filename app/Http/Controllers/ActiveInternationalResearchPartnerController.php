@@ -10,55 +10,152 @@ use Illuminate\Support\Facades\Validator;
 
 class ActiveInternationalResearchPartnerController extends Controller
 {
-    public function store(Request $request)
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+         try {
+            $user = Auth::user();
+            $userId = Auth::id();
+            $employee_id = $user->employee_id;
+
+         if ($user->hasRole('HOD')) {
+                $status = $request->input('status');
+                if($status=="HOD"){
+                    $forms = ActiveInternationalResearchPartner::where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
+                        ->get();
+                }       
+            }
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'forms' => $forms
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Oops! Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+        public function store(Request $request)
     {
         try { 
             
-            if($request->form_status=='HOD'){
-                 $rules = [
-                    'indicator_id' => 'required',
-                    'university_name' => 'required|string',
-                    'country' => 'required|string',
-                    'city' => 'required|city',
-                    'signing_authorities' => 'required',
-                    'duration_of_agreement' => 'required',
-                    'outcome_timeline' => 'required',
-                    'collaboration_scope' => 'required',
-                    'contact_details' => 'required',
-                    'projects_activities_planned' => '',
-                    'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-                ];
+                 $employeeId = Auth::user()->employee_id;
+               $rules = [
+                        'indicator_id' => 'required|integer',
+                        'research_partners' => 'required|array|min:1',
+                        'research_partners.*.deliverables' => 'required|string',
+                        'research_partners.*.target' => 'required|integer',
+                        'research_partners.*.achieved_target' => 'required|integer',
+                        'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                    ];
 
+                    $messages = [
+                        'research_partners.*.deliverables.required' => 'Deliverables is required',
+                        'research_partners.*.target.required' => 'Target is required',
+                        'research_partners.*.achieved_target.required' => 'Achieved Target is required.',
+                    ];
+                
 
-                    $validator = Validator::make($request->all(), $rules);
+                    $validator = Validator::make($request->all(), $rules, $messages);
                     if ($validator->fails()) {
                             return response()->json([
                                 'status' => 'error',
                                 'errors' => $validator->errors()
                             ], 422);
                         }
-                    $data = $validator->validated();    
 
-                        
+                        $savedRecords = [];
+                    foreach ($request->research_partners as $research_partnerss) {
+                        $research_partnerss['indicator_id'] = $request->indicator_id;
+                        $research_partnerss['form_status'] = $request->form_status ?? 'HOD';
+                        $research_partnerss['created_by'] = $employeeId;
+                        $research_partnerss['updated_by'] = $employeeId;
 
-            }
-            $employeeId = Auth::user()->employee_id;
-            DB::beginTransaction();
-            $data['created_by'] = $employeeId;
-            $data['updated_by'] = $employeeId;
-
-            $record = ActiveInternationalResearchPartner::create($data);
-            DB::commit();
+                        $savedRecords[] = ActiveInternationalResearchPartner::create($research_partnerss);
+                    } 
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Record saved successfully',
-                'data' => $record
+                'data' => $savedRecords
             ]);
 
         } catch (\Exception $e) {
              DB::rollBack();
-             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+             return response()->json(['message' => $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
+    {
+       $record = ActiveInternationalResearchPartner::findOrFail($id);
+
+        $request->validate([
+                'record_id' => 'required',
+                'deliverables' => 'required|string',
+                'target' => 'required|integer|min:0',
+                'achieved_target' => 'required|integer|min:0',
+    
+        ]);
+
+        $data = $request->only([
+                        'deliverables', 'target', 'achieved_target'
+                    ]);
+                    $data['updated_by'] = Auth::user()->employee_id;
+
+                    $record->update($data);
+
+                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+     public function destroy($id)
+    {
+        $record = ActiveInternationalResearchPartner::findOrFail($id);
+        $record->delete();
+
+        return response()->json([
+            'message' => 'Deleted successfully'
+        ]);
     }
 }
