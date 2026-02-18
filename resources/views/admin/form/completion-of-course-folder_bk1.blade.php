@@ -21,7 +21,7 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    @if(auth()->user()->hasRole(['HOD','Teacher']))
+                    @if(auth()->user()->hasRole(['HOD']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             <h5 class="mb-1">Completion of Course Folder / Compliance and Usage of LMS</h5>
                             <form id="researchForm" enctype="multipart/form-data" class="row">
@@ -36,10 +36,21 @@
                                         <div class="grant-group row g-3 mb-3 p-3 border border-primary">
                                             
     
-                                            <div class="col-md-6 d-none" >
+                                            <div class="col-md-6">
                                                 <label for="faculty_member" class="form-label">Name of Faculty Member</label>
-                                                
-                                                <input type="hidden"  id="faculty_member_id" name="faculty_member_id" value="{{ auth()->user()->faculty_id }}">
+                                                <select  name="faculty_member_id" class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Faculty Member --</option>
+                                                    @foreach($facultyMembers as $member)
+                                                    
+                                                        <option 
+                                                            value="{{ $member->id }}" 
+                                                            data-faculty_id="{{ $member->faculty_id }}" 
+                                                            data-department="{{ $member->department }}" 
+                                                            data-job_title="{{ $member->job_title }}">
+                                                            {{ $member->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             
 
@@ -146,65 +157,65 @@
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
     <script>
         window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
-        const CURRENT_FACULTY_ID = @json(auth()->user()->faculty_id);
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD','Teacher']))
+    @if(auth()->user()->hasRole(['HOD']))
         <script>
             $(document).ready(function () {
 
 
-function loadFacultyClasses() {
-    // Use the current logged-in user's faculty_id
-    let facultyId = CURRENT_FACULTY_ID;
+               
 
-    // Select all class dropdowns
-    let classSelect = $('.faculty-class');
-       
-    // Show loading message
-    classSelect.empty().append('<option value="">Loading...</option>');
 
-    // If no faculty ID, show default and stop
-    if (!facultyId) {
-        classSelect.empty().append('<option value="">-- Select classes --</option>');
-        return;
-    }
 
-    // Make AJAX request to get classes
-    $.ajax({
-        url: `/get-faculty-classes/${facultyId}`,
-        type: 'GET',
-        success: function (data) {
-            // Clear and add default option
-            classSelect.empty().append('<option value="">-- Select classes --</option>');
+                // Show/hide proof field based on status
+                $(document).on('change', '.grant-status', function () {
+                    let status = $(this).val();
+                    let container = $(this).closest('.grant-group').find('.proof-container');
+                    let label = container.find('.proof-label');
 
-            // Add classes from response
-            if (data.length > 0) {
-                data.forEach(function (cls) {
-                    classSelect.append(`<option value="${cls.class_id}">${cls.code}</option>`);
+                    if (status === 'Submitted') {
+                        label.text('Provide Attachment (Approval)');
+                        container.show();
+                    } else if (status === 'Won') {
+                        label.text('Proof (Award Letter)');
+                        container.show();
+                    } else {
+                        container.hide();
+                        container.find('input[type="file"]').val('');
+                    }
                 });
-            } else {
-                classSelect.append('<option value="">-- No classes found --</option>');
-            }
 
-            // Initialize/refresh select2
-            classSelect.select2();
-        },
-        error: function () {
-            alert('ssp');
-            classSelect.empty().append('<option value="">-- Error loading classes --</option>');
-        }
-    });
-}
+                $(document).on('change', '.faculty-member', function () {
 
-// Call the function directly
-loadFacultyClasses();
+                    let facultyId = $(this).find('option:selected').attr('data-faculty_id');
+                   // let facultyId = $(this).val();
+                    let classSelect = $(this).closest('.grant-group').find('.faculty-class');
+                    classSelect.empty().append('<option value="">Loading...</option>');
+                     
+                    if (facultyId) {
+                        $.ajax({
+                            url: `/get-faculty-classes/${facultyId}`,
+                            type: 'GET',
+                            success: function (data) {
+                                
+                                classSelect.empty().append('<option value="">-- Select classes --</option>');
+                                data.forEach(function (cls) {
+                                    classSelect.append(`<option value="${cls.class_id}">${cls.code}</option>`);
+                                });
 
-
-
-
-
+                                // Re-initialize select2 for the updated select
+                                classSelect.select2();
+                            },
+                            error: function () {
+                                classSelect.empty().append('<option value="">-- No classes found --</option>');
+                            }
+                        });
+                    } else {
+                        classSelect.empty().append('<option value="">-- Select classes --</option>');
+                    }
+                });
                 
 
                  $('#researchForm').on('submit', function (e) {

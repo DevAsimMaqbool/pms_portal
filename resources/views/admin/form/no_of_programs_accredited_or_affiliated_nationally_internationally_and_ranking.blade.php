@@ -23,8 +23,12 @@
                 <div class="tab-content">
                     @if(auth()->user()->hasRole(['HOD']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <h5 class="mb-1">No of Programs accredited or affiliated nationally/ Internationally and ranking
-                            </h5>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                  <h5 class="mb-1">No of Programs accredited or affiliated nationally/ Internationally and ranking</h5>
+                                </div>
+                                <a href="{{ route('indicators_crud.index', ['slug' => 'no_of_programs_accredited_or_affiliated_nationally_internationally_and_ranking', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            </div> 
                             <form id="researchForm" enctype="multipart/form-data" class="row">
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
@@ -114,9 +118,23 @@
                                             <div class="col-md-6 d-none" id="other_cpd_box">
                                                 <label class="form-label">Other Detail</label>
                                                 <input type="text"
-                                                    name="ranking_body_other_detail" id="ranking_body_other_detail"
+                                                    name="accrediting_other_detail" id="accrediting_other_detail"
                                                     class="form-control"
                                                     placeholder="Enter other detail">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Affiliated Body Name</label>
+                                                <input type="text"
+                                                    name="affiliated_body_name" id="affiliated_body_name"
+                                                    class="form-control"
+                                                    placeholder="Affiliated Body Name">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Affiliated for</label>
+                                                <input type="text"
+                                                    name="affiliated_for" id="affiliated_for"
+                                                    class="form-control"
+                                                    placeholder="Application for">
                                             </div>
 
                                             <div class="col-md-6">
@@ -168,7 +186,7 @@
 
                                             <div class="col-md-6">
                                                 <label class="form-label">Ranking Position / Band</label>
-                                                <input type="ranking_position" name="ranking_position" id="ranking_position"
+                                                <input type="number" name="ranking_position" id="ranking_position"
                                                     class="form-control" min="1" step="1" required>
                                             </div>
 
@@ -234,24 +252,59 @@
     @if(auth()->user()->hasRole(['HOD']))
         <script>
             $(document).ready(function () {
-                 //------------------------------------
-            // Show/Hide OTHER input
-            //------------------------------------
-            $(document).on('change', '.ranking_body', function () {
+            
+            function toggleRecognitionFields() {
 
-                let selected = $(this).val() || [];
+                    let type = $('#recognition_type').val();
 
-                if (selected.includes("Other")) {
+                    // Wrap groups (closest col-md-6)
+                    let rankingFields = $('#university_ranking').closest('.col-md-6')
+                                        .add($('#ranking_position').closest('.col-md-6'));
 
-                    $('#other_cpd_box').removeClass('d-none');
+                    let accreditationFields = $('#accrediting').closest('.col-md-6')
+                                            .add($('#other_cpd_box'));
 
-                } else {
+                    let affiliationFields = $('#affiliated_body_name').closest('.col-md-6')
+                                            .add($('#affiliated_for').closest('.col-md-6'));
 
-                    $('#other_cpd_box').addClass('d-none');
-                    $('input[name="ranking_body_other_detail"]').val('');
+                    // Hide all first
+                    rankingFields.add(accreditationFields).add(affiliationFields).hide();
+                    $('#university_ranking, #ranking_position, #accrediting, #affiliated_body_name, #affiliated_for')
+                        .prop('required', false);
 
+                    // Show based on selection
+                    if (type === 'ranking') {
+                        rankingFields.show();
+                        $('#university_ranking, #ranking_position').prop('required', true);
+                    }
+
+                    if (type === 'accreditation') {
+                        accreditationFields.show();
+                        $('#accrediting').prop('required', true);
+                    }
+
+                    if (type === 'affiliation') {
+                        affiliationFields.show();
+                        $('#affiliated_body_name, #affiliated_for').prop('required', true);
+                    }
                 }
-            });
+
+                // Trigger on change
+                $('#recognition_type').on('change', toggleRecognitionFields);
+
+                // Run once on load
+                toggleRecognitionFields();
+
+
+                // ✅ Show Other textbox when accrediting = Other
+                $('#accrediting').on('change', function () {
+                    if ($(this).val() === 'Other') {
+                        $('#other_cpd_box').removeClass('d-none');
+                    } else {
+                        $('#other_cpd_box').addClass('d-none');
+                        $('#accrediting_other_detail').val('');
+                    }
+                });
 
 
                 $('#researchForm').on('submit', function (e) {

@@ -41,7 +41,6 @@ class CompletionOfCourseFolderController extends Controller
             // Validation rules
             $rules = [
                 'faculty_member_id' => 'required|integer',
-                'faculty_member_id' => 'integer|exists:users,id',
                 'class_name' => 'required|array',
                 'class_name.*' => 'string',
                 'completion_of_Course_folder' => 'required|integer',

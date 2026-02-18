@@ -2282,3 +2282,22 @@ if (!function_exists('get_programs')) {
         return Program::all();
     }
 }
+if (!function_exists('get_faculty_members')) {
+    /**
+     * Get faculty members for the logged-in user.
+     *
+     * @param int|null $employeeId Optional employee ID, defaults to logged-in user.
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    function get_faculty_members($employeeId = null)
+    {
+        $user = Auth::user();
+
+        // Use provided employeeId or logged-in user's employee_id
+        $employeeId = $employeeId ?? $user->employee_id;
+
+        return User::where('manager_id', $employeeId)
+            ->orWhere('employee_id', $employeeId)
+            ->get(['id','name','department','job_title','faculty_id']);
+    }
+}
