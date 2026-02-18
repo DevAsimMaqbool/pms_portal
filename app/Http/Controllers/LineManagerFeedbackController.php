@@ -14,11 +14,16 @@ class LineManagerFeedbackController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $employee_id = $user->employee_id;
+        $authUser = Auth::user();
 
-        $facultyMembers = User::where('manager_id', $employee_id)
-            ->get(['id', 'name', 'department', 'job_title']);
+        // Upward: get manager if exists
+        $manager = $authUser->manager ? collect([$authUser->manager]) : collect();
+
+        // Downward: get subordinates if any
+        $subordinates = $authUser->subordinates ?? collect();
+
+        // Combine both into a single collection
+        $facultyMembers = $manager->merge($subordinates);
 
         // Feedback mapped by employee_id
         $ratings = LineManagerFeedback::whereIn('employee_id', $facultyMembers->pluck('id'))
@@ -63,9 +68,12 @@ class LineManagerFeedbackController extends Controller
             'honesty_integrity_2' => 'nullable|integer',
             'inspirational_leadership_1' => 'nullable|integer',
             'inspirational_leadership_2' => 'nullable|integer',
+            'strength' => 'nullable|string',
+            'area_of_improvement' => 'nullable|string',
             'remarks' => 'nullable|string',
 
         ]);
+
         $employeeId = $request->employee_id;
         $year = $request->year;
 
@@ -81,9 +89,15 @@ class LineManagerFeedbackController extends Controller
         if ($request->assessment_type) {
             unset($data['employee_id']);
             $data['assessment_type'] = $request->assessment_type;
-            $data['created_by'] = $request->employee_id;
-            $data['updated_by'] = $request->employee_id;
+            if ($request->has('strength')) {
+                $data['strength'] = $request->strength ? json_encode(explode(',', $request->strength)) : null;
+            }
+            if ($request->has('area_of_improvement')) {
+                $data['area_of_improvement'] = $request->area_of_improvement ? json_encode(explode(',', $request->area_of_improvement)) : null;
+            }
         }
+        $data['created_by'] = Auth::id();
+        $data['updated_by'] = Auth::id();
         $rating = LineManagerFeedback::create($data);
         if ($request->assessment_type) {
             return redirect()->route('self-assessment.index')
@@ -107,9 +121,16 @@ class LineManagerFeedbackController extends Controller
     public function edit(Request $request, $id)
     {
         $rating = LineManagerFeedback::findOrFail($id);
-        $user = Auth::user();
-        $employee_id = $user->employee_id;
-        $facultyMembers = User::where('manager_id', $employee_id)->get(['id', 'name', 'department', 'job_title']);
+        $authUser = Auth::user();
+
+        // Upward: get manager if exists
+        $manager = $authUser->manager ? collect([$authUser->manager]) : collect();
+
+        // Downward: get subordinates if any
+        $subordinates = $authUser->subordinates ?? collect();
+
+        // Combine both into a single collection
+        $facultyMembers = $manager->merge($subordinates);
         return view('admin.form.line_manager_satisfaction_feedback_edit', compact('rating', 'facultyMembers'));
     }
 

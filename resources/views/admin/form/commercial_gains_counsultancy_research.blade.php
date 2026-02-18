@@ -98,7 +98,7 @@
 
 
                     </div>
-                    <div class="col-4 text-center demo-vertical-spacing">
+                    <div class="col-1 text-center demo-vertical-spacing">
                         <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                     </div>
                 </form>
@@ -126,41 +126,41 @@
 
             $('#addProject').on('click', function () {
                 let newGroup = `
-                <div class="industrial-project-group border p-3 mt-3 rounded">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">No of industrial projects</label>
-                            <input type="text" name="industrial_projects[${projectIndex}][no]" class="form-control">
-                        </div>
+                    <div class="industrial-project-group border p-3 mt-3 rounded">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">No of industrial projects</label>
+                                <input type="text" name="industrial_projects[${projectIndex}][no]" class="form-control">
+                            </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label">Name of industrial projects</label>
-                            <input type="text" name="industrial_projects[${projectIndex}][name]" class="form-control">
-                        </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Name of industrial projects</label>
+                                <input type="text" name="industrial_projects[${projectIndex}][name]" class="form-control">
+                            </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label">Name of contracting industry</label>
-                            <input type="text" name="industrial_projects[${projectIndex}][contracting_industry]" class="form-control">
-                        </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Name of contracting industry</label>
+                                <input type="text" name="industrial_projects[${projectIndex}][contracting_industry]" class="form-control">
+                            </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label">Total duration of the project</label>
-                            <input type="text" name="industrial_projects[${projectIndex}][duration]" class="form-control">
-                        </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Total duration of the project</label>
+                                <input type="text" name="industrial_projects[${projectIndex}][duration]" class="form-control">
+                            </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label">Estimated project cost</label>
-                            <input type="text" name="industrial_projects[${projectIndex}][cost]" class="form-control">
-                        </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Estimated project cost</label>
+                                <input type="text" name="industrial_projects[${projectIndex}][cost]" class="form-control">
+                            </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label">Estimated completion month/year</label>
-                            <input type="text" name="industrial_projects[${projectIndex}][completion]" class="form-control">
+                            <div class="col-md-6">
+                                <label class="form-label">Estimated completion month/year</label>
+                                <input type="text" name="industrial_projects[${projectIndex}][completion]" class="form-control">
+                            </div>
                         </div>
+                        <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect removeProject"><i class="icon-base ti tabler-x me-1"></i> <span class="align-middle">Delete</span></button>
                     </div>
-                    <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect removeProject"><i class="icon-base ti tabler-x me-1"></i> <span class="align-middle">Delete</span></button>
-                </div>
-            `;
+                `;
                 $('#industrialProjectsWrapper').append(newGroup);
                 projectIndex++;
             });

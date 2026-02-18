@@ -292,7 +292,7 @@
                         </div>
 
                     </div>
-                    <div class="col-4 text-center demo-vertical-spacing">
+                    <div class="col-1 text-center demo-vertical-spacing">
                         <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                     </div>
                 </form>

@@ -19,92 +19,105 @@
         <div class="card">
             <div class="card-datatable table-responsive card-body">
                 @if(auth()->user()->hasRole(['HOD', 'Teacher']))
-                <form id="researchForm1" enctype="multipart/form-data"class="row">
-                    @csrf
-                    <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
-                    <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
-                    <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
-                    <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER" required>
-                    
-                    <div class="row g-6">
-                        <div class="col-md-6">
-                            <label for="name_of_faculty_member" class="form-label">Name of faculty member</label>
-                            <input type="text" id="name_of_faculty_member" name="name_of_faculty_member" class="form-control" >
-                        </div>
-                       
-                        <div class="col-md-6">
-                            <label for="spin_off_form_submission" class="form-label">Spin off form submission</label>
-                            <input type="text" id="spin_off_form_submission" name="spin_off_form_submission" class="form-control" >
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="status_of_spin_off_feasibility" class="form-label">Status of Spin off feasibility</label>
-                            <input type="text" id="status_of_spin_off_feasibility" name="status_of_spin_off_feasibility" class="form-control" >
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="work_plan_for_the_spin_off" class="form-label">Work plan for the spin off</label>
-                            <input type="text" id="work_plan_for_the_spin_off" name="work_plan_for_the_spin_off" class="form-control" >
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="name_of_pre_spin_off" class="form-label">Name of pre-spin off</label>
-                            <input type="text" id="name_of_pre_spin_off" name="name_of_pre_spin_off" class="form-control" >
-                        </div>
-
-                         <div class="col-md-6">
-                            <label for="total_revenue_generated" class="form-label">Total revenue generated so far</label>
-                            <input type="text" id="total_revenue_generated" name="total_revenue_generated" class="form-control" >
-                        </div>
-
-                         <div class="col-md-6">
-                            <label for="annual_revenue_generated" class="form-label">Annual revenue generated</label>
-                            <input type="text" id="annual_revenue_generated" name="annual_revenue_generated" class="form-control" >
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="rev_current_financial_year" class="form-label">Revenue target for current financial year</label>
-                            <input type="text" id="rev_current_financial_year" name="rev_current_financial_year" class="form-control" >
-                        </div>
-
-                       
-                    </div>
-                    <div class="col-4 text-center demo-vertical-spacing">
-                        <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
-                    </div>
-                </form>
-                @endif
-                @if(auth()->user()->hasRole(['Dean']))
-                 <form id="researchForm2" enctype="multipart/form-data"class="row">
-                    @csrf
+                    <form id="researchForm1" enctype="multipart/form-data" class="row">
+                        @csrf
                         <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
                         <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
-                        <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
-                        <input type="hidden"  id="form_status" name="form_status" value="Dean" required>
-                        
+                        <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
+                        <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
+
                         <div class="row g-6">
                             <div class="col-md-6">
-                                <label for="target_of_new_spin_offs" class="form-label">Target of new Spin Offs</label>
-                                <input type="text" id="target_of_new_spin_offs" name="target_of_new_spin_offs" class="form-control" >
+                                <label for="name_of_faculty_member" class="form-label">Name of faculty member</label>
+                                <input type="text" id="name_of_faculty_member" name="name_of_faculty_member"
+                                    class="form-control">
                             </div>
 
                             <div class="col-md-6">
-                                <label for="target_of_pre_spin_offs" class="form-label">Target of  Pre-Spin Offs</label>
-                                <input type="text" id="target_of_pre_spin_offs" name="target_of_pre_spin_offs" class="form-control" >
+                                <label for="spin_off_form_submission" class="form-label">Spin off form submission</label>
+                                <input type="text" id="spin_off_form_submission" name="spin_off_form_submission"
+                                    class="form-control">
                             </div>
 
                             <div class="col-md-6">
-                                <label for="name_of_lead_faculty_member" class="form-label">Name of lead faculty members for Spin Offs</label>
-                                <input type="text" id="name_of_lead_faculty_member" name="name_of_lead_faculty_member" class="form-control" >
+                                <label for="status_of_spin_off_feasibility" class="form-label">Status of Spin off
+                                    feasibility</label>
+                                <input type="text" id="status_of_spin_off_feasibility" name="status_of_spin_off_feasibility"
+                                    class="form-control">
                             </div>
 
-                        
+                            <div class="col-md-6">
+                                <label for="work_plan_for_the_spin_off" class="form-label">Work plan for the spin off</label>
+                                <input type="text" id="work_plan_for_the_spin_off" name="work_plan_for_the_spin_off"
+                                    class="form-control">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="name_of_pre_spin_off" class="form-label">Name of pre-spin off</label>
+                                <input type="text" id="name_of_pre_spin_off" name="name_of_pre_spin_off" class="form-control">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="total_revenue_generated" class="form-label">Total revenue generated so far</label>
+                                <input type="text" id="total_revenue_generated" name="total_revenue_generated"
+                                    class="form-control">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="annual_revenue_generated" class="form-label">Annual revenue generated</label>
+                                <input type="text" id="annual_revenue_generated" name="annual_revenue_generated"
+                                    class="form-control">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="rev_current_financial_year" class="form-label">Revenue target for current financial
+                                    year</label>
+                                <input type="text" id="rev_current_financial_year" name="rev_current_financial_year"
+                                    class="form-control">
+                            </div>
+
+
                         </div>
                         <div class="col-4 text-center demo-vertical-spacing">
                             <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                         </div>
-                </form>
-                       
+                    </form>
+                @endif
+                @if(auth()->user()->hasRole(['Dean']))
+                    <form id="researchForm2" enctype="multipart/form-data" class="row">
+                        @csrf
+                        <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
+                        <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
+                        <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
+                        <input type="hidden" id="form_status" name="form_status" value="Dean" required>
+
+                        <div class="row g-6">
+                            <div class="col-md-6">
+                                <label for="target_of_new_spin_offs" class="form-label">Target of new Spin Offs</label>
+                                <input type="text" id="target_of_new_spin_offs" name="target_of_new_spin_offs"
+                                    class="form-control">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="target_of_pre_spin_offs" class="form-label">Target of Pre-Spin Offs</label>
+                                <input type="text" id="target_of_pre_spin_offs" name="target_of_pre_spin_offs"
+                                    class="form-control">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="name_of_lead_faculty_member" class="form-label">Name of lead faculty members for
+                                    Spin Offs</label>
+                                <input type="text" id="name_of_lead_faculty_member" name="name_of_lead_faculty_member"
+                                    class="form-control">
+                            </div>
+
+
+                        </div>
+                        <div class="col-1 text-center demo-vertical-spacing">
+                            <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
+                        </div>
+                    </form>
+
                 @endif
             </div>
         </div>
@@ -122,106 +135,106 @@
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
-     @if(auth()->user()->hasRole(['HOD','Teacher']))
-    <script>
-    $(document).ready(function () {
+    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+        <script>
+            $(document).ready(function () {
 
-        // Extra fields for Form 1
+                // Extra fields for Form 1
 
-        $('#researchForm1').on('submit', function (e) {
-            e.preventDefault();
-            let form = $(this);
-            let formData = new FormData(this);
+                $('#researchForm1').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
 
-            $.ajax({
-                url: "{{ route('spin-offs.store') }}",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    Swal.close();
-                    Swal.fire({ icon: 'success', title: 'Success', text: response.message });
-                    form[0].reset();
-                },
-                error: function (xhr) {
-                    Swal.close();
-                     // Clear previous errors before showing new ones
-                        form.find('.invalid-feedback').remove();
-                        form.find('.is-invalid').removeClass('is-invalid');
-                     if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
+                    $.ajax({
+                        url: "{{ route('spin-offs.store') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                            form[0].reset();
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            // Clear previous errors before showing new ones
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
 
-                            // Loop through all validation errors
-                            $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
+                                // Loop through all validation errors
+                                $.each(errors, function (field, messages) {
+                                    let input = form.find('[name="' + field + '"]');
 
-                                if (input.length) {
-                                    input.addClass('is-invalid');
+                                    if (input.length) {
+                                        input.addClass('is-invalid');
 
-                                    // Show error message under input
-                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                }
-                            });
+                                        // Show error message under input
+                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                    }
+                                });
 
-                        } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
                         }
-                }
+                    });
+                });
             });
-        });
-    });
-    </script>
+        </script>
     @endif
     @if(auth()->user()->hasRole(['Dean']))
-    <script>
-    $(document).ready(function () {
+        <script>
+            $(document).ready(function () {
 
-        // Extra fields for Form 2
-       
-         $('#researchForm2').on('submit', function (e) {
-            e.preventDefault();
-            let form = $(this);
-            let formData = new FormData(this);
+                // Extra fields for Form 2
 
-            $.ajax({
-                url: "{{ route('spin-offs.store') }}",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    Swal.close();
-                    Swal.fire({ icon: 'success', title: 'Success', text: response.message });
-                    form[0].reset();
-                },
-                error: function (xhr) {
-                    Swal.close();
-                     // Clear previous errors before showing new ones
-                    form.find('.invalid-feedback').remove();
-                    form.find('.is-invalid').removeClass('is-invalid');
-                     if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
+                $('#researchForm2').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
 
-                            // Loop through all validation errors
-                            $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
+                    $.ajax({
+                        url: "{{ route('spin-offs.store') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                            form[0].reset();
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            // Clear previous errors before showing new ones
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
 
-                                if (input.length) {
-                                    input.addClass('is-invalid');
+                                // Loop through all validation errors
+                                $.each(errors, function (field, messages) {
+                                    let input = form.find('[name="' + field + '"]');
 
-                                    // Show error message under input
-                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                }
-                            });
+                                    if (input.length) {
+                                        input.addClass('is-invalid');
 
-                        } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
+                                        // Show error message under input
+                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                    }
+                                });
+
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
                         }
-                }
+                    });
+                });
             });
-        });
-    });
-    </script>
+        </script>
     @endif
 @endpush

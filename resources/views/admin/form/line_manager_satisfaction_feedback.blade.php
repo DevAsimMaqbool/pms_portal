@@ -10,7 +10,6 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
-    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
@@ -23,6 +22,17 @@
                 <form id="researchForm" enctype="multipart/form-data" class="row">
                     @csrf
                     <div class="row g-3 mb-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="multicol-language">PMS Cycle</label>
+                            <select name="year" id="select2Year" class="select2 form-select" required>
+                                <option value="">-- Select --</option>$rating->
+                                <option value="2025-2026">2025-2026</option>
+                                <option value="2027-2028">2027-2028</option>
+                                <option value="2028-2029">2028-2029</option>
+
+                            </select>
+                        </div>
                         <div class="col-md-6">
                             <label class="form-label" for="multicol-language">Name of Faculty Member</label>
                             <select name="employee_id" id="select2Success" class="select2 form-select" required>
@@ -33,14 +43,6 @@
                                         {{ $member->name }}
                                     </option>
                                 @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label" for="multicol-language">Year</label>
-                            <select name="year" id="select2Year" class="select2 form-select" required>
-                                <option value="">-- Select Year --</option>
-                                <option value="2025-2026">2025-2026</option>
                             </select>
                         </div>
                     </div>
@@ -282,6 +284,32 @@
                             </div>
                         </div>
 
+                        <!-- Section 6 -->
+                        <h6 style="width:100%; margin-top:30px; margin-bottom:10px; font-weight:bold; font-size:18px;">
+                            6- Performance Highlights & Development Needs
+                        </h6>
+
+                        <div class="col-md-6 mt-1"
+                            style="flex:1 1 calc(50% - 15px); padding:15px; border:1px solid #ddd; border-radius:6px;background: #f9f9f9;">
+                            <label style="font-weight:bold; margin-bottom:8px; display:block;">
+                                Strength
+                            </label>
+                            <div style="margin-top:8px;">
+                                <input id="TagifyBasic" class="form-control" name="strength" value="Tag1, Tag2, Tag3" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mt-1"
+                            style="flex:1 1 calc(50% - 15px); padding:15px; border:1px solid #ddd; border-radius:6px;background: #f9f9f9;">
+                            <label style="font-weight:bold; margin-bottom:8px; display:block;">
+                                Area of Improvement
+                            </label>
+                            <div style="margin-top:8px;">
+                                <input id="TagifyBasic1" class="form-control" name="area_of_improvement"
+                                    value="Tag1, Tag2, Tag3" />
+                            </div>
+                        </div>
+
                         <!-- Remarks -->
                         <div style="width:100%; margin-top:30px; margin-bottom:20px;">
                             <label style="font-weight:bold; margin-bottom:8px; display:block;">Remarks*</label>
@@ -292,7 +320,7 @@
                         </div>
 
                     </div>
-                    <div class="col-4 text-center demo-vertical-spacing">
+                    <div class="col-1 text-center demo-vertical-spacing">
                         <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                     </div>
                 </form>
@@ -311,10 +339,9 @@
 
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
     <!-- Page JS -->
-    <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js')}}"></script>
+    <script src="{{ asset('admin/assets/js/forms-tagify.js')}}"></script>
 @endpush
 @push('script')
     <script>

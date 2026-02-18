@@ -86,7 +86,7 @@
                         </div>
 
                     </div>
-                    <div class="col-4 text-center demo-vertical-spacing">
+                    <div class="col-1 text-center demo-vertical-spacing">
                         <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                     </div>
                 </form>
@@ -115,32 +115,32 @@
             // Add new author group
             $('#add-coauthor').click(function () {
                 let newGroup = `
-    <div class="past-group row g-3 mb-3">
+                                    <div class="past-group row g-3 mb-3">
 
-    <div class="col-md-4">
-    <label class="form-label">No of papers co-authored with this person in the past</label>
-    <input type="text" name="past[${pastIndex}][no_of_papers_past]" class="form-control" required>
-    </div>
-    <div class="col-md-4">
+                                    <div class="col-md-4">
+                                    <label class="form-label">No of papers co-authored with this person in the past</label>
+                                    <input type="text" name="past[${pastIndex}][no_of_papers_past]" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-4">
 
-    <label for="name_of_coauthers" class="form-label">Names of co-authers</label>
-    <input type="text" id="past[${pastIndex}][name_of_coauthers_past]" class="form-control"
-    name="name_of_coauthers">
-    </div>
-    <div class="col-md-4">
-    <label class="form-label">Author Rank</label>
-    <input type="text" name="past[${pastIndex}][author_rank_past]" class="form-control" required>
-    </div>
+                                    <label for="name_of_coauthers" class="form-label">Names of co-authers</label>
+                                    <input type="text" id="past[${pastIndex}][name_of_coauthers_past]" class="form-control"
+                                    name="name_of_coauthers">
+                                    </div>
+                                    <div class="col-md-4">
+                                    <label class="form-label">Author Rank</label>
+                                    <input type="text" name="past[${pastIndex}][author_rank_past]" class="form-control" required>
+                                    </div>
 
-    <div class="col-md-4">
-    <label class="form-label">Name of University & Country</label>
-    <input type="text" name="past[${pastIndex}][name_of_university_country_past]" class="form-control"
-    required>
-    </div>
-    <div class="col-md-2 d-flex align-items-end">
-    <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
-    </div>
-    </div>`;
+                                    <div class="col-md-4">
+                                    <label class="form-label">Name of University & Country</label>
+                                    <input type="text" name="past[${pastIndex}][name_of_university_country_past]" class="form-control"
+                                    required>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                    <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
+                                    </div>
+                                    </div>`;
 
                 $('#author-past-container').append(newGroup);
                 pastIndex++;

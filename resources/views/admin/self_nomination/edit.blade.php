@@ -58,7 +58,7 @@
                         </div>
                     </div>
 
-                    <div class="col-4 text-center mb-3">
+                    <div class="col-1 text-center mb-3">
                         <button class="btn btn-primary w-100 waves-effect waves-light">UPDATE</button>
                     </div>
                 </form>

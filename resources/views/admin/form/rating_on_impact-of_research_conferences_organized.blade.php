@@ -19,30 +19,33 @@
         <div class="card">
             <div class="card-datatable table-responsive card-body">
                 {{-- <h5>KPA to role</h5> --}}
-                <form id="researchForm" enctype="multipart/form-data"class="row">
+                <form id="researchForm" enctype="multipart/form-data" class="row">
                     @csrf
                     <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
                     <input type="hidden" id="sp_category_id" name="sp_category_id" value="{{ $categoryId }}">
-                    <input type="hidden"  id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
-                    
+                    <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
+
                     <div class="row g-6">
                         <div class="col-md-6">
                             <label for="conference_target" class="form-label">Conference Target</label>
-                            <input type="text" id="conference_target" name="conference_target" class="form-control" >
+                            <input type="text" id="conference_target" name="conference_target" class="form-control">
                         </div>
-                       
+
                         <div class="col-md-6">
-                            <label for="event_proposal_form_submission" class="form-label">Event proposal form submission</label>
-                            <input type="text" id="event_proposal_form_submission" name="event_proposal_form_submission" class="form-control" >
+                            <label for="event_proposal_form_submission" class="form-label">Event proposal form
+                                submission</label>
+                            <input type="text" id="event_proposal_form_submission" name="event_proposal_form_submission"
+                                class="form-control">
                         </div>
 
                         <div class="col-md-6">
                             <label for="scopus_indexed_confirmation" class="form-label">Scopus indexed confirmation</label>
-                            <input type="text" id="scopus_indexed_confirmation" name="scopus_indexed_confirmation" class="form-control" >
+                            <input type="text" id="scopus_indexed_confirmation" name="scopus_indexed_confirmation"
+                                class="form-control">
                         </div>
-                       
+
                     </div>
-                    <div class="col-4 text-center demo-vertical-spacing">
+                    <div class="col-1 text-center demo-vertical-spacing">
                         <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                     </div>
                 </form>

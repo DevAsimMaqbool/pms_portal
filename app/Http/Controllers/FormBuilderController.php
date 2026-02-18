@@ -133,9 +133,16 @@ class FormBuilderController extends Controller
     }
     public function lineManagerForm()
     {
-        $user = Auth::user();
-        $employee_id = $user->employee_id;
-        $facultyMembers = User::where('manager_id', $employee_id)->get(['id', 'name', 'department', 'job_title']);
+        $authUser = Auth::user();
+
+        // Upward: get manager if exists
+        $manager = $authUser->manager ? collect([$authUser->manager]) : collect();
+
+        // Downward: get subordinates if any
+        $subordinates = $authUser->subordinates ?? collect();
+
+        // Combine both into a single collection
+        $facultyMembers = $manager->merge($subordinates);
         return view('admin.form.line_manager_satisfaction_feedback', compact('facultyMembers'));
     }
 
@@ -144,6 +151,6 @@ class FormBuilderController extends Controller
         $user = Auth::user();
         $employee_id = $user->employee_id;
         $facultyMembers = User::where('manager_id', $employee_id)->get(['id', 'name', 'department', 'job_title']);
-        return view('admin.form.line_manager_event_feedback', compact('facultyMembers'));
+        return view('admin.form.event_performance_feedback', compact('facultyMembers'));
     }
 }

@@ -110,4 +110,15 @@ class User extends Authenticatable
         return $this->hasMany(IndicatorsPercentage::class, 'employee_id', 'employee_id');
     }
 
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
+
+    // Downward
+    public function subordinates()
+    {
+        return $this->hasMany(User::class, 'manager_id');
+    }
+
 }
