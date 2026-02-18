@@ -36,7 +36,7 @@
                                 <div>
                                     <h5 class="mb-1">Satisfaction of International Students</h5>
                                 </div>
-                                <a href="{{ route('indicators_crud.index', ['slug' => 'qec_audit_rating', 'id' => $indicatorId]) }}"
+                                <a href="{{ route('qec-audit-rating.index') }}"
                                     class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
                             </div>
                             <form id="researchForm1" enctype="multipart/form-data" class="row">
@@ -350,7 +350,7 @@
                             firstDetail.area_of_improvement ?? 'N/A',
                             form.created_at ? new Date(form.created_at).toISOString().split('T')[0] : 'N/A',
                             `<div class="d-flex gap-1"><button class="btn btn-sm btn-outline-warning edit-form-btn" data-form='${encodeURIComponent(JSON.stringify(form))}'> Edit </button>
-                  <button class="btn btn-sm btn-outline-danger delete-form-btn" data-id="${form.id}"> Delete </button> </div>`
+                                      <button class="btn btn-sm btn-outline-danger delete-form-btn" data-id="${form.id}"> Delete </button> </div>`
                         ];
                     });
 
@@ -395,58 +395,58 @@
             });
 
             let group = `
-                                        <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+                                                            <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
-                                            <div class="col-md-4">
-                                                <label>Audit Term</label>
-                                                <select name="audits[${pastIndex}][audit_term]" class="form-select">
-                                                    <option value="">Select</option>
-                                                    <option value="2021-2022">2021-2022</option>
-                                                    <option value="2022-2023">2022-2023</option>
-                                                    <option value="2023-2024">2023-2024</option>
-                                                </select>
-                                            </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Audit Term</label>
+                                                                    <select name="audits[${pastIndex}][audit_term]" class="form-select">
+                                                                        <option value="">Select</option>
+                                                                        <option value="2021-2022">2021-2022</option>
+                                                                        <option value="2022-2023">2022-2023</option>
+                                                                        <option value="2023-2024">2023-2024</option>
+                                                                    </select>
+                                                                </div>
 
-                                            <div class="col-md-4">
-                                                <label>Faculty</label>
-                                                <select name="audits[${pastIndex}][faculty_id]" 
-                                                    class="select2 form-select faculty-select">
-                                                    ${facultyOptions}
-                                                </select>
-                                            </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Faculty</label>
+                                                                    <select name="audits[${pastIndex}][faculty_id]" 
+                                                                        class="select2 form-select faculty-select">
+                                                                        ${facultyOptions}
+                                                                    </select>
+                                                                </div>
 
-                                            <div class="col-md-4">
-                                                <label>Department</label>
-                                                <select name="audits[${pastIndex}][department_id]" 
-                                                    class="select2 form-select department-select">
-                                                    <option value="">Select Department</option>
-                                                </select>
-                                            </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Department</label>
+                                                                    <select name="audits[${pastIndex}][department_id]" 
+                                                                        class="select2 form-select department-select">
+                                                                        <option value="">Select Department</option>
+                                                                    </select>
+                                                                </div>
 
-                                            <div class="col-md-4">
-                                                <label>Program</label>
-                                                <select name="audits[${pastIndex}][program_id]" 
-                                                    class="select2 form-select program-select">
-                                                    <option value="">Select Program</option>
-                                                </select>
-                                            </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Program</label>
+                                                                    <select name="audits[${pastIndex}][program_id]" 
+                                                                        class="select2 form-select program-select">
+                                                                        <option value="">Select Program</option>
+                                                                    </select>
+                                                                </div>
 
-                                            <div class="col-md-4">
-                                                <label>Total Score</label>
-                                                <input type="number" name="audits[${pastIndex}][total_score]" 
-                                                    class="form-control" value="${audit?.total_score ?? ''}">
-                                            </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Total Score</label>
+                                                                    <input type="number" name="audits[${pastIndex}][total_score]" 
+                                                                        class="form-control" value="${audit?.total_score ?? ''}">
+                                                                </div>
 
-                                            <div class="col-md-4">
-                                                <label>Obtained Score</label>
-                                                <input type="number" name="audits[${pastIndex}][obtained_score]" 
-                                                    class="form-control" value="${audit?.obtained_score ?? ''}">
-                                            </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Obtained Score</label>
+                                                                    <input type="number" name="audits[${pastIndex}][obtained_score]" 
+                                                                        class="form-control" value="${audit?.obtained_score ?? ''}">
+                                                                </div>
 
-                                            <div class="col-md-12">
-                                                <button type="button" class="btn btn-danger remove-past">Remove</button>
-                                            </div>
-                                        </div>`;
+                                                                <div class="col-md-12">
+                                                                    <button type="button" class="btn btn-danger remove-past">Remove</button>
+                                                                </div>
+                                                            </div>`;
 
             $('#author-past-container').append(group);
 

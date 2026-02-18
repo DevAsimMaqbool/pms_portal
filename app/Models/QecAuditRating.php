@@ -8,17 +8,23 @@ class QecAuditRating extends Model
 {
     protected $fillable = [
         'indicator_id',
-        'audit_term',
-        'faculty_id',
-        'department_id',
-        'program_id',
-        'program_level',
-        'total_score',
-        'obtained_score',
+        'user_id',
         'form_status',
         'status',
+        'remarks',
         'update_history',
         'created_by',
         'updated_by'
     ];
+
+    public function details()
+    {
+        return $this->hasMany(QecAuditRatingDetail::class, 'qec_audit_rating_id');
+    }
+
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
