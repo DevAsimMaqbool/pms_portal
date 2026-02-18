@@ -19,7 +19,13 @@ return new class extends Migration {
             $table->unsignedBigInteger('program_id');
             $table->string('program_level');
             $table->string('recognition_type');
-            $table->string('ranking_body');
+            
+            // Accreditation
+            $table->string('accrediting')->nullable();
+            $table->string('accrediting_other_detail')->nullable();
+            // Affiliation
+            $table->string('affiliated_body_name')->nullable();
+            $table->string('affiliated_for')->nullable();
             $table->string('scope');
             $table->date('validity_from');
             $table->date('validity_to');

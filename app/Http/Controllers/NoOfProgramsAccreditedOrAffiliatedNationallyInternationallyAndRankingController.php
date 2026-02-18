@@ -7,25 +7,40 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingController extends Controller
 {
     public function index(Request $request)
     {
-        try {
-            $data = ProgramAccreditation::all();
+         try {
+            $user = Auth::user();
+            $userId = Auth::id();
+            $employee_id = $user->employee_id;
+
+                $status = $request->input('status');
+                if($status=="HOD"){
+                        $forms = ProgramAccreditation::where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
+                        ->get()
+                        ->map(function ($form) {
+                                if ($form->document_link) {
+                                    $form->document_link = Storage::url($form->document_link);
+                                }
+                                return $form;
+                            });
+                }
             if ($request->ajax()) {
-                return response()->json($data);
+                return response()->json([
+                    'forms' => $forms
+                ]);
             }
-            return view('indicator_forms.employability');
+
         } catch (\Exception $e) {
-            return apiResponse(
-                'Oops! Something went wrong',
-                [],
-                false,
-                500,
-                ''
-            );
+            return response()->json([
+                'message' => 'Oops! Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -50,18 +65,34 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
                 'department_id' => 'required|integer',
                 'program_id' => 'required|integer',
                 'program_level' => 'required|string',
-                'recognition_type' => 'required|string',
-                'ranking_body' => 'required|string',
+                'recognition_type' => 'required|in:accreditation,affiliation,ranking',
+                
                 'scope' => 'required|string',
                 'validity_from' => 'required|date',
                 'validity_to' => 'required|date|after_or_equal:validity_from',
-                'university_ranking' => 'nullable|string',
-                'ranking_position' => 'nullable|integer|min:1',
                 'evidence_available' => 'required|string',
                 'document_link' => 'nullable|file|mimes:pdf,doc,docx,zip,jpg,png',
                 'remarks' => 'nullable|string',
                 'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                  ];
+                 // ✅ Conditional Rules
+                if ($request->recognition_type == 'ranking') {
+                    $rules['university_ranking'] = 'required|string';
+                    $rules['ranking_position'] = 'required|integer|min:1';
+                }
+
+                if ($request->recognition_type == 'accreditation') {
+                    $rules['accrediting'] = 'required|string';
+
+                    if ($request->accrediting == 'Other') {
+                        $rules['accrediting_other_detail'] = 'required|string|max:255';
+                    }
+                }
+
+                if ($request->recognition_type == 'affiliation') {
+                    $rules['affiliated_body_name'] = 'required|string|max:255';
+                    $rules['affiliated_for'] = 'required|string|max:255';
+                }
                  
                 $messages = [
                     'document_link.mimes' => 'Upload JPG / PNG / PDF only.',
@@ -73,30 +104,7 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
                         'errors' => $validator->errors()
                     ], 422);
                 }
-                $data = $request->only([
-                    'indicator_id',
-                    'faculty_id',
-                    'contracting_industry',
-                    'project_duration',
-                    'estimated_project_cost',
-                    'estimated_complection',
-                    'form_status',
-                    'faculty_id',
-                    'department_id',
-                    'program_id',
-                    'program_level',
-                    'recognition_type',
-                    'ranking_body',
-                    'scope',
-                    'status',
-                    'validity_from',
-                    'validity_to',
-                    'university_ranking',
-                    'ranking_position',
-                    'evidence_available',
-                    'remarks',
-                    'form_status'
-                ]); 
+                 $data = $validator->validated();
                  if ($request->hasFile('document_link')) {
 
                         $file = $request->file('document_link');
@@ -150,37 +158,100 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'key_performance_area' => 'required',
-        ]);
-        $userId = session('user_id');
-        $data = ProgramAccreditation::findOrFail($id);
-        $data->performance_area = $request->key_performance_area;
-        $data->updated_by = $userId;
-        $data->save();
-        return response()->json(['message' => 'data update successfully']);
+    // public function update(Request $request, $id)
+    // {
+    //      $request->validate([
+    //          'key_performance_area' => 'required',
+    //      ]);
+    //      $userId = session('user_id');
+    //      $data = ProgramAccreditation::findOrFail($id);
+    //      $data->performance_area = $request->key_performance_area;
+    //      $data->updated_by = $userId;
+    //      $data->save();
+    //      return response()->json(['message' => 'data update successfully']);
+    // }
+     public function update(Request $request, $id)
+    {   
+        $record = ProgramAccreditation::findOrFail($id);
+
+        $rules =[
+                'faculty_id' => 'required|integer',
+                'department_id' => 'required|integer',
+                'program_id' => 'required|integer',
+                'program_level' => 'required|string',
+
+                'recognition_type' => 'required|in:accreditation,affiliation,ranking',
+
+                'scope' => 'required|string',
+                'validity_from' => 'required|date',
+                'validity_to' => 'required|date|after_or_equal:validity_from',
+
+                'evidence_available' => 'required|string',
+
+                'document_link' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                'remarks' => 'nullable|string',    
+        ];
+        // ✅ Conditional Rules
+    if ($request->recognition_type == 'ranking') {
+        $rules['university_ranking'] = 'required|string';
+        $rules['ranking_position'] = 'required|integer|min:1';
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id, Request $request)
-    {
-        try {
-            $kfa = ProgramAccreditation::findOrFail($id);
-            $kfa->delete();
-            return response()->json(['status' => 'success', 'message' => 'Survey deleted successfully']);
-        } catch (\Exception $e) {
-            return apiResponse(
-                'Oops! Something went wrong',
-                [],
-                false,
-                500,
-                ''
-            );
+    if ($request->recognition_type == 'accreditation') {
+        $rules['accrediting'] = 'required|string';
+
+        if ($request->accrediting == 'Other') {
+            $rules['accrediting_other_detail'] = 'required|string|max:255';
         }
+    }
+
+    if ($request->recognition_type == 'affiliation') {
+        $rules['affiliated_body_name'] = 'required|string|max:255';
+        $rules['affiliated_for'] = 'required|string|max:255';
+    }
+    // ✅ Validate
+    $validated = $request->validate($rules);
+        
+
+       
+                    if ($request->hasFile('document_link')) {
+                         
+                            if ($record->document_link && Storage::disk('public')->exists($record->document_link)) {
+                                Storage::disk('public')->delete($record->document_link);
+                            }
+
+                            $file = $request->file('document_link');
+                            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                            $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                            $uniqueNumber = rand(1000, 9999);
+                            $extension = $file->getClientOriginalExtension();
+                            $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                            $path = $file->storeAs('program_accreditation_doc', $fileName, 'public');
+                            $data['document_link'] = $path;
+                        }
+                    $data['updated_by'] = Auth::user()->employee_id;
+
+                    $record->update($validated);
+
+                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+    }
+
+    
+      public function destroy($id)
+    {
+        $record = ProgramAccreditation::findOrFail($id);
+        // ✅ Delete file from storage if exists
+        if ($record->document_link &&
+            Storage::disk('public')->exists($record->document_link)) {
+
+            Storage::disk('public')->delete($record->document_link);
+        }
+
+        $record->delete();
+
+        return response()->json([
+            'message' => 'Deleted successfully'
+        ]);
     }
     public function report($id)
     {
