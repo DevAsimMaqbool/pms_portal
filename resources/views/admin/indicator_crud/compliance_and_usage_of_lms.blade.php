@@ -15,7 +15,7 @@
             <!-- Header with Add Feedback Button -->
             <div class="d-flex justify-content-between align-items-center p-3">
                 <h5 class="card-title mb-0">Compliance and Usage of LMS</h5>
-                <a href="{{ url('kpa/1/category/3/indicator/120') }}" class="btn btn-primary">Add</a>
+                <a href="{{ url('kpa/1/category/3/indicator/121') }}" class="btn btn-primary">Add</a>
             </div>
 
             <div class="card-datatable">
