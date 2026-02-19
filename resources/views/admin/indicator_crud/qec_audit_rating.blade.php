@@ -79,9 +79,27 @@
 
     <script>
         $(document).ready(function () {
-            $('#userTable').DataTable({
-                responsive: true
+            $(function () {
+
+                let table = $('#userTable');
+
+                if (table.length) {
+
+                    if ($.fn.DataTable.isDataTable('#userTable')) {
+                        table.DataTable().destroy();
+                    }
+
+                    table.DataTable({
+                        responsive: true,
+                        ordering: true,
+                        paging: true,
+                        searching: true,
+                        info: true,
+                        autoWidth: false
+                    });
+
+                }
+
             });
-        });
     </script>
 @endpush
