@@ -21,81 +21,92 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    @if(auth()->user()->hasRole(['HOD','Teacher']))
+                    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <h5 class="mb-1">Completion of Course Folder / Compliance and Usage of LMS</h5>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="mb-1">Completion of Course Folder</h5>
+                                </div>
+                                <a href="{{ route('completion-of-course-folder.index') }}"
+                                    class="btn rounded-pill btn-outline-primary waves-effect" style="margin-right: 17px;">
+                                    View</a>
+                            </div>
                             <form id="researchForm" enctype="multipart/form-data" class="row">
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
-                                <input type="hidden"  id="indicator_id" name="completion_of_Course_folder_indicator_id" value="120">
-                                <input type="hidden"  id="indicator_id" name="compliance_and_usage_of_lms_indicator_id" value="121">
+                                <input type="hidden" id="indicator_id" name="completion_of_Course_folder_indicator_id"
+                                    value="120">
+                                <input type="hidden" id="indicator_id" name="compliance_and_usage_of_lms_indicator_id"
+                                    value="121">
 
                                 <div class="row g-6 mt-0">
 
                                     <div id="grant-details-container">
                                         <div class="grant-group row g-3 mb-3 p-3 border border-primary">
-                                            
-    
-                                            <div class="col-md-6 d-none" >
+
+
+                                            <div class="col-md-6 d-none">
                                                 <label for="faculty_member" class="form-label">Name of Faculty Member</label>
-                                                
-                                                <input type="hidden"  id="faculty_member_id" name="faculty_member_id" value="{{ auth()->user()->faculty_id }}">
+
+                                                <input type="hidden" id="faculty_member_id" name="faculty_member_id"
+                                                    value="{{ auth()->id() }}">
                                             </div>
-                                            
+
 
                                             <div class="col-md-6">
                                                 <label for="faculty_member" class="form-label">Class</label>
-                                                <select  name="class_name[]" id="select2Success" class="select2 form-select  faculty-class" multiple required>
+                                                <select name="class_name[]" id="select2Success"
+                                                    class="select2 form-select  faculty-class" multiple required>
                                                     <option value="">-- Select classes --</option>
                                                 </select>
                                             </div>
 
 
                                             <div class="col-md-12">
-                                                    <label class="form-label d-block">1- Course Folder Status as per QCH</label>
-                                                    <div>
-                                                        <input type="radio" name="completion_of_Course_folder" id="completed"
-                                                            value="100">
-                                                        <label for="completed">Completed</label>
-
-                                                        <input type="radio" name="completion_of_Course_folder" id="partially_completed"
-                                                            value="70" checked>
-                                                        <label for="partially_completed">Partially Completed</label>
-
-                                                        <input type="radio" name="completion_of_Course_folder" id="not_Completed"
-                                                            value="25">
-                                                        <label for="not_Completed">Not Completed</label>
-                                                    </div>
-                                            </div>
-
-
-                                            <div class="col-md-12">
-                                                <label class="form-label d-block">2- LMS Compliance Status</label>
+                                                <label class="form-label d-block">1- Course Folder Status as per QCH</label>
                                                 <div>
-                                                <input type="radio" name="compliance_and_usage_of_lms" id="lms_completed"
+                                                    <input type="radio" name="completion_of_Course_folder" id="completed"
                                                         value="100">
-                                                    <label for="lms_completed">Completed</label>
+                                                    <label for="completed">Completed</label>
 
-                                                    <input type="radio" name="compliance_and_usage_of_lms" id="lms_partially_completed"
-                                                        value="70" checked>
-                                                    <label for="lms_partially_completed">Partially Completed</label>
+                                                    <input type="radio" name="completion_of_Course_folder"
+                                                        id="partially_completed" value="70" checked>
+                                                    <label for="partially_completed">Partially Completed</label>
 
-                                                    <input type="radio" name="compliance_and_usage_of_lms" id="lms_not_Completed"
+                                                    <input type="radio" name="completion_of_Course_folder" id="not_Completed"
                                                         value="25">
-                                                    <label for="lms_not_Completed">Not Completed</label>
+                                                    <label for="not_Completed">Not Completed</label>
                                                 </div>
                                             </div>
-                                                        
+
+
+                                            <!-- <div class="col-md-12">
+                                                                                        <label class="form-label d-block">2- LMS Compliance Status</label>
+                                                                                        <div>
+                                                                                            <input type="radio" name="compliance_and_usage_of_lms" id="lms_completed"
+                                                                                                value="100">
+                                                                                            <label for="lms_completed">Completed</label>
+
+                                                                                            <input type="radio" name="compliance_and_usage_of_lms"
+                                                                                                id="lms_partially_completed" value="70" checked>
+                                                                                            <label for="lms_partially_completed">Partially Completed</label>
+
+                                                                                            <input type="radio" name="compliance_and_usage_of_lms"
+                                                                                                id="lms_not_Completed" value="25">
+                                                                                            <label for="lms_not_Completed">Not Completed</label>
+                                                                                        </div>
+                                                                                    </div> -->
+
 
 
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-4 text-center demo-vertical-spacing">
+                                <div class="col-1 text-center demo-vertical-spacing">
                                     <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                                 </div>
                             </form>
-                            
+
                         </div>
                     @endif
                     @if(auth()->user()->hasRole(['HOD']))
@@ -125,11 +136,11 @@
                             </table>
                         </div>
                     @endif
-                
+
                 </div>
             </div>
         </div>
-        
+
     </div>
     <!-- / Content -->
 @endsection
@@ -150,68 +161,68 @@
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD','Teacher']))
+    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
         <script>
             $(document).ready(function () {
 
 
-function loadFacultyClasses() {
-    // Use the current logged-in user's faculty_id
-    let facultyId = CURRENT_FACULTY_ID;
+                function loadFacultyClasses() {
+                    // Use the current logged-in user's faculty_id
+                    let facultyId = CURRENT_FACULTY_ID;
 
-    // Select all class dropdowns
-    let classSelect = $('.faculty-class');
-       
-    // Show loading message
-    classSelect.empty().append('<option value="">Loading...</option>');
+                    // Select all class dropdowns
+                    let classSelect = $('.faculty-class');
 
-    // If no faculty ID, show default and stop
-    if (!facultyId) {
-        classSelect.empty().append('<option value="">-- Select classes --</option>');
-        return;
-    }
+                    // Show loading message
+                    classSelect.empty().append('<option value="">Loading...</option>');
 
-    // Make AJAX request to get classes
-    $.ajax({
-        url: `/get-faculty-classes/${facultyId}`,
-        type: 'GET',
-        success: function (data) {
-            // Clear and add default option
-            classSelect.empty().append('<option value="">-- Select classes --</option>');
+                    // If no faculty ID, show default and stop
+                    if (!facultyId) {
+                        classSelect.empty().append('<option value="">-- Select classes --</option>');
+                        return;
+                    }
 
-            // Add classes from response
-            if (data.length > 0) {
-                data.forEach(function (cls) {
-                    classSelect.append(`<option value="${cls.class_id}">${cls.code}</option>`);
-                });
-            } else {
-                classSelect.append('<option value="">-- No classes found --</option>');
-            }
+                    // Make AJAX request to get classes
+                    $.ajax({
+                        url: `/get-faculty-classes/${facultyId}`,
+                        type: 'GET',
+                        success: function (data) {
+                            // Clear and add default option
+                            classSelect.empty().append('<option value="">-- Select classes --</option>');
 
-            // Initialize/refresh select2
-            classSelect.select2();
-        },
-        error: function () {
-            alert('ssp');
-            classSelect.empty().append('<option value="">-- Error loading classes --</option>');
-        }
-    });
-}
+                            // Add classes from response
+                            if (data.length > 0) {
+                                data.forEach(function (cls) {
+                                    classSelect.append(`<option value="${cls.class_id}">${cls.code}</option>`);
+                                });
+                            } else {
+                                classSelect.append('<option value="">-- No classes found --</option>');
+                            }
 
-// Call the function directly
-loadFacultyClasses();
+                            // Initialize/refresh select2
+                            classSelect.select2();
+                        },
+                        error: function () {
+                            alert('ssp');
+                            classSelect.empty().append('<option value="">-- Error loading classes --</option>');
+                        }
+                    });
+                }
 
-
+                // Call the function directly
+                loadFacultyClasses();
 
 
 
-                
 
-                 $('#researchForm').on('submit', function (e) {
+
+
+
+                $('#researchForm').on('submit', function (e) {
                     e.preventDefault();
                     let form = $(this);
                     let formData = new FormData(this);
-                     // Show loading indicator
+                    // Show loading indicator
                     Swal.fire({
                         title: 'Please wait...',
                         allowOutsideClick: false,
@@ -219,7 +230,7 @@ loadFacultyClasses();
                             Swal.showLoading();
                         }
                     });
-                     
+
                     $.ajax({
                         url: "{{ route('completion-of-course-folder.store') }}",
                         type: "POST",
@@ -233,7 +244,7 @@ loadFacultyClasses();
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
                             $('.select2').val(null).trigger('change');
-                              // Remove all extra grant groups and keep only the first one
+                            // Remove all extra grant groups and keep only the first one
                             $('#grant-details-container .grant-group:not(:first)').remove();
 
                             // Reset the proof container of the first group
@@ -247,32 +258,32 @@ loadFacultyClasses();
                             // Clear previous errors before showing new ones
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
-                             if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
 
-                            // Loop through all validation errors
-                            $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
+                                // Loop through all validation errors
+                                $.each(errors, function (field, messages) {
+                                    let input = form.find('[name="' + field + '"]');
 
-                                if (input.length) {
-                                    input.addClass('is-invalid');
+                                    if (input.length) {
+                                        input.addClass('is-invalid');
 
-                                    // Show error message under input
-                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                }
-                            });
+                                        // Show error message under input
+                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                    }
+                                });
 
-                        } else if (xhr.status === 409) {
-                            // 🔥 Duplicate record message
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Duplicate Entry',
-                                text: xhr.responseJSON.message
-                            });
+                            } else if (xhr.status === 409) {
+                                // 🔥 Duplicate record message
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Duplicate Entry',
+                                    text: xhr.responseJSON.message
+                                });
 
-                        } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
-                        }
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
                         }
                     });
                 });
@@ -280,7 +291,7 @@ loadFacultyClasses();
             });
         </script>
     @endif
-     @if(auth()->user()->hasRole(['HOD']))
+    @if(auth()->user()->hasRole(['HOD']))
         <script>
             function fetchIndicatorForms3() {
                 $.ajax({
@@ -350,7 +361,7 @@ loadFacultyClasses();
                             title: 'Updated',
                             text: res.message || 'Status updated successfully!'
                         });
-                        
+
                         fetchIndicatorForms3();
                     },
                     error: function (xhr) {
@@ -413,11 +424,11 @@ loadFacultyClasses();
                     if (form.grant_status) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Grant Status</th><td>${form.grant_status}</td></tr>`);
                     }
-                    
-                     
 
 
-                     if (form.proof) {
+
+
+                    if (form.proof) {
                         let fileUrl = form.proof;
                         let fileExt = fileUrl.split('.').pop().toLowerCase();
 
@@ -426,35 +437,35 @@ loadFacultyClasses();
                         // ✅ If Image → show preview
                         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)) {
                             filePreview = `
-                                <a href="${fileUrl}" target="_blank">
-                                    <img src="${fileUrl}" alt="Screenshot" 
-                                        style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
-                                </a>
-                            `;
+                                                                                        <a href="${fileUrl}" target="_blank">
+                                                                                            <img src="${fileUrl}" alt="Screenshot" 
+                                                                                                style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
+                                                                                        </a>
+                                                                                    `;
                         }
                         // ✅ If PDF → show download button
                         else if (fileExt === 'pdf') {
                             filePreview = `
-                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
-                                    Download PDF
-                                </a>
-                            `;
+                                                                                        <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
+                                                                                            Download PDF
+                                                                                        </a>
+                                                                                    `;
                         }
                         // ✅ Other files → show generic download link
                         else {
                             filePreview = `
-                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
-                                    Download File
-                                </a>
-                            `;
+                                                                                        <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
+                                                                                            Download File
+                                                                                        </a>
+                                                                                    `;
                         }
 
                         $('#modalExtraFields').append(`
-                            <tr class="optional-field">
-                                <th>Supporting Document</th>
-                                <td>${filePreview}</td>
-                            </tr>
-                        `);
+                                                                                    <tr class="optional-field">
+                                                                                        <th>Supporting Document</th>
+                                                                                        <td>${filePreview}</td>
+                                                                                    </tr>
+                                                                                `);
                     }
 
                     $('#viewFormModal').modal('show');
@@ -462,7 +473,7 @@ loadFacultyClasses();
 
 
 
-                 // ✅ Single checkbox status change
+                // ✅ Single checkbox status change
                 $(document).on('change', '#approveCheckbox', function () {
                     const id = $(this).data('id');
                     const status = $(this).is(':checked') ? 2 : 1;
@@ -508,7 +519,7 @@ loadFacultyClasses();
         </script>
     @endif
     @if(auth()->user()->hasRole(['Dean']))
-       <script>
+        <script>
             function fetchIndicatorForms3() {
                 $.ajax({
                     url: "{{ route('no-Of-GrantSubmit-And-Won.index') }}",
@@ -577,7 +588,7 @@ loadFacultyClasses();
                             title: 'Updated',
                             text: res.message || 'Status updated successfully!'
                         });
-                        
+
                         fetchIndicatorForms3();
                     },
                     error: function (xhr) {
@@ -609,7 +620,7 @@ loadFacultyClasses();
                             statusLabel = "Verified";
                         }
                         $('label[for="approveCheckbox"]').text(statusLabel);
-                    }  else {
+                    } else {
                         $('#approveCheckbox').closest('.form-check-input').hide();
 
                         let statusLabel = "Pending"; // default
@@ -624,7 +635,7 @@ loadFacultyClasses();
                         // update the label text
                         $('label[for="approveCheckbox"]').text(statusLabel);
                     }
-                    
+
                     if (form.name) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Name</th><td>${form.name}</td></tr>`);
                     }
@@ -641,11 +652,11 @@ loadFacultyClasses();
                     if (form.grant_status) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Grant Status</th><td>${form.grant_status}</td></tr>`);
                     }
-                    
-                     
 
 
-                     if (form.proof) {
+
+
+                    if (form.proof) {
                         let fileUrl = form.proof;
                         let fileExt = fileUrl.split('.').pop().toLowerCase();
 
@@ -654,44 +665,44 @@ loadFacultyClasses();
                         // ✅ If Image → show preview
                         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)) {
                             filePreview = `
-                                <a href="${fileUrl}" target="_blank">
-                                    <img src="${fileUrl}" alt="Screenshot" 
-                                        style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
-                                </a>
-                            `;
+                                                                                        <a href="${fileUrl}" target="_blank">
+                                                                                            <img src="${fileUrl}" alt="Screenshot" 
+                                                                                                style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
+                                                                                        </a>
+                                                                                    `;
                         }
                         // ✅ If PDF → show download button
                         else if (fileExt === 'pdf') {
                             filePreview = `
-                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
-                                    Download PDF
-                                </a>
-                            `;
+                                                                                        <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
+                                                                                            Download PDF
+                                                                                        </a>
+                                                                                    `;
                         }
                         // ✅ Other files → show generic download link
                         else {
                             filePreview = `
-                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
-                                    Download File
-                                </a>
-                            `;
+                                                                                        <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
+                                                                                            Download File
+                                                                                        </a>
+                                                                                    `;
                         }
 
                         $('#modalExtraFields').append(`
-                            <tr class="optional-field">
-                                <th>Supporting Document</th>
-                                <td>${filePreview}</td>
-                            </tr>
-                        `);
+                                                                                    <tr class="optional-field">
+                                                                                        <th>Supporting Document</th>
+                                                                                        <td>${filePreview}</td>
+                                                                                    </tr>
+                                                                                `);
                     }
-                    
+
 
                     $('#viewFormModal').modal('show');
                 });
 
 
 
-                 // ✅ Single checkbox status change
+                // ✅ Single checkbox status change
                 $(document).on('change', '#approveCheckbox', function () {
                     const id = $(this).data('id');
                     const status = $(this).is(':checked') ? 3 : 2;
@@ -736,8 +747,8 @@ loadFacultyClasses();
             });
         </script>
     @endif
-     @if(auth()->user()->hasRole(['ORIC']))
-       <script>
+    @if(auth()->user()->hasRole(['ORIC']))
+        <script>
             function fetchIndicatorForms3() {
                 $.ajax({
                     url: "{{ route('no-Of-GrantSubmit-And-Won.index') }}",
@@ -806,7 +817,7 @@ loadFacultyClasses();
                             title: 'Updated',
                             text: res.message || 'Status updated successfully!'
                         });
-                        
+
                         fetchIndicatorForms3();
                     },
                     error: function (xhr) {
@@ -838,7 +849,7 @@ loadFacultyClasses();
                             statusLabel = "Verified";
                         }
                         $('label[for="approveCheckbox"]').text(statusLabel);
-                    }  else {
+                    } else {
                         $('#approveCheckbox').closest('.form-check-input').hide();
 
                         let statusLabel = "Pending"; // default
@@ -853,9 +864,9 @@ loadFacultyClasses();
                         // update the label text
                         $('label[for="approveCheckbox"]').text(statusLabel);
                     }
-                   
-                     
-                     if (form.name) {
+
+
+                    if (form.name) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Name</th><td>${form.name}</td></tr>`);
                     }
 
@@ -871,11 +882,11 @@ loadFacultyClasses();
                     if (form.grant_status) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Grant Status</th><td>${form.grant_status}</td></tr>`);
                     }
-                    
-                     
 
 
-                     if (form.proof) {
+
+
+                    if (form.proof) {
                         let fileUrl = form.proof;
                         let fileExt = fileUrl.split('.').pop().toLowerCase();
 
@@ -884,35 +895,35 @@ loadFacultyClasses();
                         // ✅ If Image → show preview
                         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)) {
                             filePreview = `
-                                <a href="${fileUrl}" target="_blank">
-                                    <img src="${fileUrl}" alt="Screenshot" 
-                                        style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
-                                </a>
-                            `;
+                                                                                        <a href="${fileUrl}" target="_blank">
+                                                                                            <img src="${fileUrl}" alt="Screenshot" 
+                                                                                                style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
+                                                                                        </a>
+                                                                                    `;
                         }
                         // ✅ If PDF → show download button
                         else if (fileExt === 'pdf') {
                             filePreview = `
-                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
-                                    Download PDF
-                                </a>
-                            `;
+                                                                                        <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
+                                                                                            Download PDF
+                                                                                        </a>
+                                                                                    `;
                         }
                         // ✅ Other files → show generic download link
                         else {
                             filePreview = `
-                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
-                                    Download File
-                                </a>
-                            `;
+                                                                                        <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
+                                                                                            Download File
+                                                                                        </a>
+                                                                                    `;
                         }
 
                         $('#modalExtraFields').append(`
-                            <tr class="optional-field">
-                                <th>Supporting Document</th>
-                                <td>${filePreview}</td>
-                            </tr>
-                        `);
+                                                                                    <tr class="optional-field">
+                                                                                        <th>Supporting Document</th>
+                                                                                        <td>${filePreview}</td>
+                                                                                    </tr>
+                                                                                `);
                     }
 
                     $('#viewFormModal').modal('show');
@@ -920,7 +931,7 @@ loadFacultyClasses();
 
 
 
-                 // ✅ Single checkbox status change
+                // ✅ Single checkbox status change
                 $(document).on('change', '#approveCheckbox', function () {
                     const id = $(this).data('id');
                     const status = $(this).is(':checked') ? 4 : 3;

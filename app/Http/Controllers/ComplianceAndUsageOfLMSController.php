@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class CompletionOfCourseFolderController extends Controller
+class ComplianceAndUsageOfLMSController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,10 +19,10 @@ class CompletionOfCourseFolderController extends Controller
         $employeeId = Auth::id();
         $data = CompletionOfCourseFolder::with('facultyClass') // eager load classes
             ->where('faculty_member_id', $employeeId)
-            ->where('completion_of_Course_folder_indicator_id', 120)
+            ->where('compliance_and_usage_of_lms_indicator_id', 121)
             ->get(); // make sure you call get() here, not just a query builder
         // dd($data);
-        return view('admin.indicator_crud.completion_of_course_folder', compact('data'));
+        return view('admin.indicator_crud.compliance_and_usage_of_lms', compact('data'));
 
     }
 
@@ -152,7 +152,7 @@ class CompletionOfCourseFolderController extends Controller
     {
         $data = CompletionOfCourseFolder::findOrFail($id);
 
-        return view('admin.indicator_crud.completion-of-course-folder-edit', compact('data'));
+        return view('admin.indicator_crud.compliance_and_usage_of_lms_edit', compact('data'));
     }
 
     /**

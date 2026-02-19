@@ -81,6 +81,7 @@ use App\Http\Controllers\TermController;
 use App\Http\Controllers\DropoutRateController;
 use App\Http\Controllers\AlumniSatisfactionRateController;
 use App\Http\Controllers\LineManagerReviewRatingController;
+use App\Http\Controllers\ComplianceAndUsageOfLMSController;
 
 Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
 
@@ -242,7 +243,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('/dropout-rate', DropoutRateController::class);
 
         Route::resource('/alumni-satisfaction-rate', AlumniSatisfactionRateController::class);
-         Route::resource('/line-manager-review-rating', LineManagerReviewRatingController::class);
+        Route::resource('/line-manager-review-rating', LineManagerReviewRatingController::class);
 
 
 
@@ -257,6 +258,7 @@ Route::middleware('auth')->group(function () {
         // routes/web.php
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
         Route::resource('completion-of-course-folder', CompletionOfCourseFolderController::class);
+        Route::resource('compliance-usage-of-lms', ComplianceAndUsageOfLMSController::class);
         Route::get('/get-faculty-classes/{faculty_id}', [CompletionOfCourseFolderController::class, 'getFacultyClasses']);
 
 
