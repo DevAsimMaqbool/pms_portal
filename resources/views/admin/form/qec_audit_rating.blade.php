@@ -24,9 +24,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">QEC Audit Rating</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
-                        </li>
+                        <!-- <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
+                                        </li> -->
                     </ul>
                 @endif
                 <div class="tab-content">
@@ -34,7 +34,7 @@
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h5 class="mb-1">Satisfaction of International Students</h5>
+                                    <h5 class="mb-1">QEC Audit Rating</h5>
                                 </div>
                                 <a href="{{ route('qec-audit-rating.index') }}"
                                     class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
@@ -74,8 +74,6 @@
                                                 <select name="audits[0][department_id]"
                                                     class="select2 form-select department-select">
                                                     <option value="">Select Department</option>
-                                                    <option value="Software Engineering">Software Engineering</option>
-                                                    <option value="Computer Science">Computer Science</option>
                                                 </select>
                                             </div>
 
@@ -83,9 +81,6 @@
                                                 <label class="form-label">Program Name</label>
                                                 <select name="audits[0][program_id]" class="select2 form-select program-select">
                                                     <option value="">Select Program</option>
-                                                    <option value="BS Computer Science">BS Computer Science</option>
-                                                    <option value="BS Software Engineering">BS Software Engineering</option>
-                                                    <option value="MS Computer Science">MS Computer Science</option>
                                                 </select>
                                             </div>
 
@@ -219,11 +214,20 @@
                     processData: false,
                     success: function (response) {
 
-                        Swal.fire('Success', response.message, 'success');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message,
+                            confirmButtonText: 'OK'
+                        }).then(() => {
 
-                        resetForm();
-                        fetchIndicatorForms();
-                        $('.nav-tabs a[href="#form2"]').tab('show');
+                            // Redirect to index page
+                            window.location.href = "{{ route('qec-audit-rating.index') }}";
+
+                            // OR if you prefer direct URL:
+                            // window.location.href = "/qec-audit-rating";
+                        });
+
                     },
                     error: function (xhr) {
                         if (xhr.status === 422) {
@@ -316,6 +320,82 @@
                 });
             });
 
+
+            // ===============================
+            // FACULTY → DEPARTMENT
+            // ===============================
+            $(document).on('change', '.faculty-select', function () {
+
+                let facultyId = $(this).val();
+                let parentGroup = $(this).closest('.past-group');
+
+                let departmentSelect = parentGroup.find('.department-select');
+                let programSelect = parentGroup.find('.program-select');
+
+                // Reset dependent dropdowns
+                departmentSelect.html('<option value="">Loading...</option>').trigger('change');
+                programSelect.html('<option value="">Select Program</option>').trigger('change');
+
+                if (facultyId) {
+                    $.ajax({
+                        url: "/get-departments/" + facultyId,
+                        type: "GET",
+                        success: function (departments) {
+
+                            let options = '<option value="">Select Department</option>';
+
+                            $.each(departments, function (i, dept) {
+                                options += `<option value="${dept.id}">${dept.name}</option>`;
+                            });
+
+                            departmentSelect.html(options).trigger('change');
+                        },
+                        error: function () {
+                            departmentSelect.html('<option value="">Error loading departments</option>');
+                        }
+                    });
+                } else {
+                    departmentSelect.html('<option value="">Select Department</option>').trigger('change');
+                }
+            });
+
+
+            // ===============================
+            // DEPARTMENT → PROGRAM
+            // ===============================
+            $(document).on('change', '.department-select', function () {
+
+                let departmentId = $(this).val();
+                let parentGroup = $(this).closest('.past-group');
+
+                let programSelect = parentGroup.find('.program-select');
+
+                programSelect.html('<option value="">Loading...</option>').trigger('change');
+
+                if (departmentId) {
+                    $.ajax({
+                        url: "/get-programs/" + departmentId,
+                        type: "GET",
+                        success: function (programs) {
+
+                            let options = '<option value="">Select Program</option>';
+
+                            $.each(programs, function (i, program) {
+                                options += `<option value="${program.id}">${program.program_name}</option>`;
+                            });
+
+                            programSelect.html(options).trigger('change');
+                        },
+                        error: function () {
+                            programSelect.html('<option value="">Error loading programs</option>');
+                        }
+                    });
+                } else {
+                    programSelect.html('<option value="">Select Program</option>').trigger('change');
+                }
+            });
+
+
         });
     </script>
 
@@ -350,7 +430,7 @@
                             firstDetail.area_of_improvement ?? 'N/A',
                             form.created_at ? new Date(form.created_at).toISOString().split('T')[0] : 'N/A',
                             `<div class="d-flex gap-1"><button class="btn btn-sm btn-outline-warning edit-form-btn" data-form='${encodeURIComponent(JSON.stringify(form))}'> Edit </button>
-                                      <button class="btn btn-sm btn-outline-danger delete-form-btn" data-id="${form.id}"> Delete </button> </div>`
+                                                                                                                              <button class="btn btn-sm btn-outline-danger delete-form-btn" data-id="${form.id}"> Delete </button> </div>`
                         ];
                     });
 
@@ -395,58 +475,77 @@
             });
 
             let group = `
-                                                            <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+                        <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
-                                                                <div class="col-md-4">
-                                                                    <label>Audit Term</label>
-                                                                    <select name="audits[${pastIndex}][audit_term]" class="form-select">
-                                                                        <option value="">Select</option>
-                                                                        <option value="2021-2022">2021-2022</option>
-                                                                        <option value="2022-2023">2022-2023</option>
-                                                                        <option value="2023-2024">2023-2024</option>
-                                                                    </select>
-                                                                </div>
+                        <div class="col-md-4">
+                        <label class="form-label">Audit Term</label>
+                        <select name="audits[${pastIndex}][audit_term]" class="form-select">
+                        <option value="">Select</option>
+                        <option value="2021-2022">2021-2022</option>
+                        <option value="2022-2023">2022-2023</option>
+                        <option value="2023-2024">2023-2024</option>
+                        </select>
+                        </div>
 
-                                                                <div class="col-md-4">
-                                                                    <label>Faculty</label>
-                                                                    <select name="audits[${pastIndex}][faculty_id]" 
-                                                                        class="select2 form-select faculty-select">
-                                                                        ${facultyOptions}
-                                                                    </select>
-                                                                </div>
+                        <div class="col-md-4">
+                        <label class="form-label">Faculty</label>
+                        <select name="audits[${pastIndex}][faculty_id]" 
+                        class="select2 form-select faculty-select">
+                        ${facultyOptions}
+                        </select>
+                        </div>
 
-                                                                <div class="col-md-4">
-                                                                    <label>Department</label>
-                                                                    <select name="audits[${pastIndex}][department_id]" 
-                                                                        class="select2 form-select department-select">
-                                                                        <option value="">Select Department</option>
-                                                                    </select>
-                                                                </div>
+                        <div class="col-md-4">
+                        <label class="form-label">Department</label>
+                        <select name="audits[${pastIndex}][department_id]" 
+                        class="select2 form-select department-select">
+                        <option value="">Select Department</option>
+                        </select>
+                        </div>
 
-                                                                <div class="col-md-4">
-                                                                    <label>Program</label>
-                                                                    <select name="audits[${pastIndex}][program_id]" 
-                                                                        class="select2 form-select program-select">
-                                                                        <option value="">Select Program</option>
-                                                                    </select>
-                                                                </div>
+                        <div class="col-md-4">
+                        <label class="form-label">Program</label>
+                        <select name="audits[${pastIndex}][program_id]" 
+                        class="select2 form-select program-select">
+                        <option value="">Select Program</option>
+                        </select>
+                        </div>
 
-                                                                <div class="col-md-4">
-                                                                    <label>Total Score</label>
-                                                                    <input type="number" name="audits[${pastIndex}][total_score]" 
-                                                                        class="form-control" value="${audit?.total_score ?? ''}">
-                                                                </div>
+                        <div class="col-md-4">
+                        <label class="form-label">Program Level</label>
+                        <select name="audits[${pastIndex}][program_level]" class="form-select">
+                        <option value="">Select Level</option>
+                        <option value="UG">UG</option>
+                        <option value="PG">PG</option>
+                        </select>
+                        </div>
 
-                                                                <div class="col-md-4">
-                                                                    <label>Obtained Score</label>
-                                                                    <input type="number" name="audits[${pastIndex}][obtained_score]" 
-                                                                        class="form-control" value="${audit?.obtained_score ?? ''}">
-                                                                </div>
+                        <div class="col-md-4">
+                        <label class="form-label">Total QEC Audit Rating Score</label>
+                        <input type="number" name="audits[${pastIndex}][total_score]" 
+                        class="form-control" value="${audit?.total_score ?? ''}">
+                        </div>
 
-                                                                <div class="col-md-12">
-                                                                    <button type="button" class="btn btn-danger remove-past">Remove</button>
-                                                                </div>
-                                                            </div>`;
+                        <div class="col-md-4">
+                        <label class="form-label">Score Obtained</label>
+                        <input type="number" name="audits[${pastIndex}][obtained_score]" 
+                        class="form-control" value="${audit?.obtained_score ?? ''}">
+                        </div>
+
+                        <div class="col-md-4">
+                        <label class="form-label">Strenght</label>
+                        <input type="text" name="audits[${pastIndex}][strenght]" value="${audit?.strenght ?? ''}" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                        <label class="form-label">Area of Improvement</label>
+                        <input type="text" name="audits[${pastIndex}][area_of_improvement]" value="${audit?.area_of_improvement ?? ''}" class="form-control">
+                        </div>
+
+                        <div class="col-md-12">
+                        <button type="button" class="btn btn-danger remove-past">Remove</button>
+                        </div>
+                        </div>`;
 
             $('#author-past-container').append(group);
 

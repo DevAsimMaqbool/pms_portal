@@ -89,28 +89,28 @@
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label>Total Score</label>
+                                    <label class="form-label">Total QEC Audit Rating Score</label>
                                     <input type="number" name="audits[{{ $index }}][total_score]" 
                                            class="form-control"
                                            value="{{ $detail->total_score }}">
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label>Obtained Score</label>
+                                    <label class="form-label">Score Obtained</label>
                                     <input type="number" name="audits[{{ $index }}][obtained_score]" 
                                            class="form-control"
                                            value="{{ $detail->obtained_score }}">
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label>Strength</label>
+                                    <label class="form-label">Strength</label>
                                     <input type="text" name="audits[{{ $index }}][strenght]" 
                                            class="form-control"
                                            value="{{ $detail->strenght }}">
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label>Area of Improvement</label>
+                                    <label class="form-label">Area of Improvement</label>
                                     <input type="text" name="audits[{{ $index }}][area_of_improvement]" 
                                            class="form-control"
                                            value="{{ $detail->area_of_improvement }}">
@@ -257,72 +257,72 @@
         });
 
         let group = `
-        <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+<div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
-            <div class="col-md-4">
-                <label>Audit Term</label>
-                <select name="audits[${index}][audit_term]" class="form-select">
-                    <option value="">Select</option>
-                    <option value="2021-2022">2021-2022</option>
-                    <option value="2022-2023">2022-2023</option>
-                    <option value="2023-2024">2023-2024</option>
-                </select>
-            </div>
+<div class="col-md-4">
+<label class="form-label">Audit Term</label>
+<select name="audits[${index}][audit_term]" class="form-select">
+<option value="">Select</option>
+<option value="2021-2022">2021-2022</option>
+<option value="2022-2023">2022-2023</option>
+<option value="2023-2024">2023-2024</option>
+</select>
+</div>
 
-            <div class="col-md-4">
-                <label>Faculty</label>
-                <select name="audits[${index}][faculty_id]" class="select2 form-select faculty-select">
-                    ${facultyOptions}
-                </select>
-            </div>
+<div class="col-md-4">
+<label class="form-label">Faculty</label>
+<select name="audits[${index}][faculty_id]" class="select2 form-select faculty-select">
+${facultyOptions}
+</select>
+</div>
 
-            <div class="col-md-4">
-                <label>Department</label>
-                <select name="audits[${index}][department_id]" class="select2 form-select department-select">
-                    <option value="">Select Department</option>
-                </select>
-            </div>
+<div class="col-md-4">
+<label class="form-label">Department</label>
+<select name="audits[${index}][department_id]" class="select2 form-select department-select">
+<option value="">Select Department</option>
+</select>
+</div>
 
-            <div class="col-md-4">
-                <label>Program</label>
-                <select name="audits[${index}][program_id]" class="select2 form-select program-select">
-                    <option value="">Select Program</option>
-                </select>
-            </div>
+<div class="col-md-4">
+<label class="form-label">Program</label>
+<select name="audits[${index}][program_id]" class="select2 form-select program-select">
+<option value="">Select Program</option>
+</select>
+</div>
 
-            <div class="col-md-4">
-                <label>Program Level</label>
-                <select name="audits[${index}][program_level]" class="form-select">
-                    <option value="">Select Level</option>
-                    <option value="UG">UG</option>
-                    <option value="PG">PG</option>
-                </select>
-            </div>
+<div class="col-md-4">
+<label class="form-label">Program Level</label>
+<select name="audits[${index}][program_level]" class="form-select">
+<option value="">Select Level</option>
+<option value="UG">UG</option>
+<option value="PG">PG</option>
+</select>
+</div>
 
-            <div class="col-md-4">
-                <label>Total Score</label>
-                <input type="number" name="audits[${index}][total_score]" class="form-control" value="${audit?.total_score ?? ''}">
-            </div>
+<div class="col-md-4">
+<label class="form-label">Total QEC Audit Rating Score</label>
+<input type="number" name="audits[${index}][total_score]" class="form-control" value="${audit?.total_score ?? ''}">
+</div>
 
-            <div class="col-md-4">
-                <label>Obtained Score</label>
-                <input type="number" name="audits[${index}][obtained_score]" class="form-control" value="${audit?.obtained_score ?? ''}">
-            </div>
+<div class="col-md-4">
+<label class="form-label">Score Obtained</label>
+<input type="number" name="audits[${index}][obtained_score]" class="form-control" value="${audit?.obtained_score ?? ''}">
+</div>
 
-            <div class="col-md-4">
-                <label>Strength</label>
-                <input type="text" name="audits[${index}][strenght]" class="form-control" value="${audit?.strenght ?? ''}">
-            </div>
+<div class="col-md-4">
+<label class="form-label">Strength</label>
+<input type="text" name="audits[${index}][strenght]" class="form-control" value="${audit?.strenght ?? ''}">
+</div>
 
-            <div class="col-md-4">
-                <label>Area of Improvement</label>
-                <input type="text" name="audits[${index}][area_of_improvement]" class="form-control" value="${audit?.area_of_improvement ?? ''}">
-            </div>
+<div class="col-md-4">
+<label class="form-label">Area of Improvement</label>
+<input type="text" name="audits[${index}][area_of_improvement]" class="form-control" value="${audit?.area_of_improvement ?? ''}">
+</div>
 
-            <div class="col-md-12">
-                <button type="button" class="btn btn-danger remove-group">Remove</button>
-            </div>
-        </div>`;
+<div class="col-md-12">
+<button type="button" class="btn btn-danger remove-group">Remove</button>
+</div>
+</div>`;
 
         $('#author-past-container').append(group);
 
