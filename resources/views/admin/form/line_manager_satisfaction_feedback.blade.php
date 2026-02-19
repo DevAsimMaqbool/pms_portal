@@ -295,7 +295,7 @@
                                 Strength
                             </label>
                             <div style="margin-top:8px;">
-                                <input id="TagifyBasic" class="form-control" name="strength" value="Tag1, Tag2, Tag3" />
+                                <input id="TagifyBasic" class="form-control" name="strength" value="" />
                             </div>
                         </div>
 
@@ -305,8 +305,7 @@
                                 Area of Improvement
                             </label>
                             <div style="margin-top:8px;">
-                                <input id="TagifyBasic1" class="form-control" name="area_of_improvement"
-                                    value="Tag1, Tag2, Tag3" />
+                                <input id="TagifyBasic1" class="form-control" name="area_of_improvement" value="" />
                             </div>
                         </div>
 
