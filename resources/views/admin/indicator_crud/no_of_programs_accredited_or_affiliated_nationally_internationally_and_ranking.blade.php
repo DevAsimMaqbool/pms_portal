@@ -19,7 +19,7 @@
         <div class="card">
              <h5 class="card-header">No of Programs accredited or affiliated nationally/ Internationally and ranking</h5>
             <div class="card-datatable table-responsive card-body">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(auth()->user()->hasRole(['Dean']) == activeRole())
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="intellectualTable" class="table table-bordered">
@@ -30,6 +30,7 @@
                                                         <th>Scope</th>
                                                         <th>Validity From</th>
                                                         <th>Validity To</th>
+                                                        <th>History</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -317,7 +318,7 @@
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(auth()->user()->hasRole(['Dean']) == activeRole())
         <script>
             function fetchCommercialForms() {
                 $.ajax({
@@ -349,6 +350,12 @@
                                 form.scope|| 'N/A',
                                 form.validity_from|| 'N/A',
                                 form.validity_to|| 'N/A',
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
+                                    data-history='${JSON.stringify(form.update_history)}'
+                                    data-user='${form.creator ? form.creator.name : "N/A"}'
+                                    data-created='${form.created_at}'>
+                                    <span class="icon-xs icon-base ti tabler-history me-2"></span>History
+                                </button>`,
                                 editButton+ ' ' + deleteBtn
                             ];
                         });
@@ -362,6 +369,7 @@
                                     { title: "Scope" },
                                     { title: "Validity From" },
                                     { title: "Validity To" },
+                                    { title: "History" },
                                     { title: "Actions" }
                                 ]
                             });
@@ -466,8 +474,7 @@
                     let historyHtml = '';
                     history.forEach(update => {
                         let histortText = 'N/A';
-                        if (update.role === 'HOD') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
-                        else if (update.role === 'ORIC') histortText = update.status == '2' ? 'Unverified' : (update.status == '3' ? 'Verified' : update.status);
+                        if (update.role === 'qec') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
                         else histortText = update.status || 'N/A';
 
                         historyHtml += `
@@ -656,6 +663,7 @@
         let form = $(this);
         let formData = new FormData(this);
         const recordId = $('#record_id').val();
+        formData.append('status_update_data', true);
         Swal.fire({
             title: 'Updating...',
             allowOutsideClick: false,

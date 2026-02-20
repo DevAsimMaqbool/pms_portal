@@ -36,4 +36,8 @@ class ProfessionalMembership extends Model
         'membership_start_date' => 'date',
         'membership_valid_until' => 'date',
     ];
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'employee_id');
+    }
 }

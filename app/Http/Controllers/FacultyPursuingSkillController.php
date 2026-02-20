@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FacultyPursuingSkill;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,19 +19,86 @@ class FacultyPursuingSkillController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-         if ($user->hasRole('HOD')) {
-                $status = $request->input('status');
-                if($status=="HOD"){
-                    $forms = FacultyPursuingSkill::where('created_by', $employee_id)
-                        ->orderBy('id', 'desc')
-                        ->get()
-                        ->map(function ($form) {
+        //  if ($user->hasRole('HOD')) {
+        //         $status = $request->input('status');
+        //         if($status=="HOD"){
+        //             $forms = FacultyPursuingSkill::where('created_by', $employee_id)
+        //                 ->orderBy('id', 'desc')
+        //                 ->get()
+        //                 ->map(function ($form) {
+        //                         if ($form->evidence_reference) {
+        //                             $form->evidence_reference = Storage::url($form->evidence_reference);
+        //                         }
+        //                         return $form;
+        //                     });
+        //         }       
+        //     }
+
+
+
+
+
+            if ($user->hasRole('Dean')) {
+                   $status = $request->input('status');
+                   $hod_ids = User::where('manager_id', $employee_id)
+                   ->role('HOD')->pluck('employee_id');
+                    if($status=="RESEARCHER"){
+                        $teacher_id = User::whereIn('manager_id', $hod_ids)
+                        ->role('Teacher')->pluck('employee_id');
+                          $all_ids = $teacher_id->merge($hod_ids);
+                          $forms = FacultyPursuingSkill::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])
+                            ->whereIn('created_by', $all_ids)
+                            ->where('form_status', $status)
+                            ->orderBy('id', 'desc')
+                            ->get()->map(function ($form) {
                                 if ($form->evidence_reference) {
                                     $form->evidence_reference = Storage::url($form->evidence_reference);
                                 }
                                 return $form;
                             });
-                }       
+                    }
+
+            }if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+                $status = $request->input('status');
+                if($status=="Teacher"){
+                    $forms = FacultyPursuingSkill::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])
+                        ->where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
+                        ->get()->map(function ($form) {
+                                if ($form->evidence_reference) {
+                                    $form->evidence_reference = Storage::url($form->evidence_reference);
+                                }
+                                return $form;
+                            });
+                }
+                if($status=="HOD"){
+                    $employeeIds = User::where('manager_id', $employee_id)
+                        ->role('Teacher')->pluck('employee_id');
+                        $forms = FacultyPursuingSkill::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])
+                            ->whereIn('created_by', $employeeIds)
+                            ->whereIn('status', [1, 2])
+                            ->where('form_status', 'RESEARCHER')
+                            ->orderBy('id', 'desc')
+                            ->get()->map(function ($form) {
+                                if ($form->evidence_reference) {
+                                    $form->evidence_reference = Storage::url($form->evidence_reference);
+                                }
+                                return $form;
+                            });
+                }        
+                
             }
 
             if ($request->ajax()) {
@@ -50,7 +118,7 @@ class FacultyPursuingSkillController extends Controller
      public function store(Request $request)
     {
         try { 
-            if($request->form_status=='HOD'){
+            if($request->form_status=='RESEARCHER'){
                  $rules = [
                         'indicator_id' => 'required',
                         'cpd_type.*' => 'required|string',
@@ -113,39 +181,84 @@ class FacultyPursuingSkillController extends Controller
     }
     public function update(Request $request, $id)
     {   
-        $record = FacultyPursuingSkill::findOrFail($id);
+        try { 
+            if ($request->has('status_update_data')) {
+                    $record = FacultyPursuingSkill::findOrFail($id);
 
-        $request->validate([
-                'record_id' => 'required',
-                'cpd_type.*' => 'required|string',
-                'cpd_other_detail' => 'required_if:cpd_type.*,Other|nullable|string|max:255',
-                'evidence_reference' => '',
-                'remarks'            => 'nullable|string',    
-        ]);
-
-        $data = $request->only([
-                        'cpd_type', 'cpd_other_detail', 'evidence_reference', 'remarks'
+                    $request->validate([
+                            'record_id' => 'required',
+                            'cpd_type.*' => 'required|string',
+                            'cpd_other_detail' => 'required_if:cpd_type.*,Other|nullable|string|max:255',
+                            'evidence_reference' => '',
+                            'remarks'            => 'nullable|string',    
                     ]);
-                    if ($request->hasFile('evidence_reference')) {
-                         
-                            if ($record->evidence_reference && Storage::disk('public')->exists($record->evidence_reference)) {
-                                Storage::disk('public')->delete($record->evidence_reference);
-                            }
 
-                            $file = $request->file('evidence_reference');
-                            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                            $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
-                            $uniqueNumber = rand(1000, 9999);
-                            $extension = $file->getClientOriginalExtension();
-                            $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
-                            $path = $file->storeAs('facultyPursuingSkill', $fileName, 'public');
-                            $data['evidence_reference'] = $path;
-                        }
-                    $data['updated_by'] = Auth::user()->employee_id;
+                    $data = $request->only([
+                                    'cpd_type', 'cpd_other_detail', 'evidence_reference', 'remarks'
+                                ]);
+                                if ($request->hasFile('evidence_reference')) {
+                                    
+                                        if ($record->evidence_reference && Storage::disk('public')->exists($record->evidence_reference)) {
+                                            Storage::disk('public')->delete($record->evidence_reference);
+                                        }
 
-                    $record->update($data);
+                                        $file = $request->file('evidence_reference');
+                                        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                                        $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                                        $uniqueNumber = rand(1000, 9999);
+                                        $extension = $file->getClientOriginalExtension();
+                                        $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                                        $path = $file->storeAs('facultyPursuingSkill', $fileName, 'public');
+                                        $data['evidence_reference'] = $path;
+                                    }
+                                $data['updated_by'] = Auth::user()->employee_id;
 
-                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+                                $record->update($data);
+
+                                return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+            }
+            if ($request->has('status_update')) {
+                $request->validate([
+                    'status' => 'required|in:1,2,3,4,5,6'
+                ]);
+
+                $target = FacultyPursuingSkill::findOrFail($id);
+
+                // Get current update history
+                $history = $target->update_history ? json_decode($target->update_history, true) : [];
+
+                // Get current user info
+                $currentUserId = Auth::id();
+                $currentUserName = Auth::user()->name;
+                $userRoll = getRoleName(activeRole()) ?? 'N/A';
+
+                // Avoid duplicate consecutive updates by the same user with the same status
+                $lastUpdate = end($history);
+                if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+                    $history[] = [
+                        'user_id'    => $currentUserId,
+                        'user_name'  => $currentUserName,
+                        'status'     => $request->status,
+                        'role'     => $userRoll,
+                        'updated_at' => now()->toDateTimeString(),
+                    ];
+                }
+
+
+
+
+
+                $target->status = $request->status;
+                $target->update_history = json_encode($history);
+                $target->updated_by = $currentUserId;
+                $target->save();
+
+                return response()->json(['success' => true]);
+            }
+        } catch (\Exception $e) {
+             DB::rollBack();
+             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+        }
     }
        public function destroy($id)
     {

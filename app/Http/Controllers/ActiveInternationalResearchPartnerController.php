@@ -15,16 +15,31 @@ class ActiveInternationalResearchPartnerController extends Controller
      */
     public function index(Request $request)
     {
-         try {
+        try {
             $user = Auth::user();
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-         if ($user->hasRole('HOD')) {
+            if ($user->hasRole('Dean') == activeRole()) {
                 $status = $request->input('status');
                 if($status=="HOD"){
-                    $forms = ActiveInternationalResearchPartner::where('created_by', $employee_id)
+                    $forms = ActiveInternationalResearchPartner::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
+                        ->get();
+                }       
+            }
+            if ($user->hasRole('International Office') == activeRole()) {
+                $status = $request->input('status');
+                if($status=="HOD"){
+                    $forms = ActiveInternationalResearchPartner::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])->orderBy('id', 'desc')
                         ->get();
                 }       
             }
@@ -126,24 +141,68 @@ class ActiveInternationalResearchPartnerController extends Controller
      */
     public function update(Request $request, $id)
     {
-       $record = ActiveInternationalResearchPartner::findOrFail($id);
+        try { 
+            if ($request->has('status_update_data')) {
+                $record = ActiveInternationalResearchPartner::findOrFail($id);
 
-        $request->validate([
-                'record_id' => 'required',
-                'deliverables' => 'required|string',
-                'target' => 'required|integer|min:0',
-                'achieved_target' => 'required|integer|min:0',
-    
-        ]);
+                $request->validate([
+                        'record_id' => 'required',
+                        'deliverables' => 'required|string',
+                        'target' => 'required|integer|min:0',
+                        'achieved_target' => 'required|integer|min:0',
+                ]);
 
-        $data = $request->only([
-                        'deliverables', 'target', 'achieved_target'
-                    ]);
-                    $data['updated_by'] = Auth::user()->employee_id;
+                $data = $request->only([
+                    'deliverables', 'target', 'achieved_target'
+                ]);
+                $data['updated_by'] = Auth::user()->employee_id;
 
-                    $record->update($data);
+                $record->update($data);
 
-                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+                 return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+            }
+            if ($request->has('status_update')) {
+                $request->validate([
+                    'status' => 'required|in:1,2,3,4,5,6'
+                ]);
+
+                $target = ActiveInternationalResearchPartner::findOrFail($id);
+
+                // Get current update history
+                $history = $target->update_history ? json_decode($target->update_history, true) : [];
+
+                // Get current user info
+                $currentUserId = Auth::id();
+                $currentUserName = Auth::user()->name;
+                $userRoll = activeRole() ?? 'N/A';
+
+                // Avoid duplicate consecutive updates by the same user with the same status
+                $lastUpdate = end($history);
+                if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+                    $history[] = [
+                        'user_id'    => $currentUserId,
+                        'user_name'  => $currentUserName,
+                        'status'     => $request->status,
+                        'role'     => $userRoll,
+                        'updated_at' => now()->toDateTimeString(),
+                    ];
+                }
+
+
+
+
+
+                $target->status = $request->status;
+                $target->update_history = json_encode($history);
+                $target->updated_by = $currentUserId;
+                $target->save();
+
+                return response()->json(['success' => true]);
+            }
+        } catch (\Exception $e) {
+             DB::rollBack();
+             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+        }
     }
 
     /**

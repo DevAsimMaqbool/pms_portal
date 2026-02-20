@@ -19,7 +19,7 @@
         <div class="card">
              <h5 class="card-header">Faculty pursuing skills and knowledge enhancement</h5>
             <div class="card-datatable table-responsive card-body">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="intellectualTable" class="table table-bordered">
@@ -162,14 +162,14 @@
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
         <script>
             function fetchCommercialForms() {
                 $.ajax({
                     url: "{{ route('faculty-pursuing-skills.index') }}",
                     method: "GET",
                     data: {
-                        status: "HOD" // you can send more values
+                        status: "Teacher" // you can send more values
                     },
                     dataType: "json",
                     success: function (data) {
@@ -376,6 +376,7 @@
         let form = $(this);
         let formData = new FormData(this);
         const recordId = $('#record_id').val();
+        formData.append('status_update_data', true);
         Swal.fire({
             title: 'Updating...',
             allowOutsideClick: false,

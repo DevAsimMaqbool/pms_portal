@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\NumberOfKnowledgeProduct;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class NumberOfKnowledgeProductController extends Controller
 {
@@ -15,16 +17,61 @@ class NumberOfKnowledgeProductController extends Controller
         try {
             $user = Auth::user();
             $employee_id = $user->employee_id;
+            if ($user->hasRole('ORIC')) {
+                   $status = $request->input('status');
+                    if($status=="RESEARCHER"){
+                          $forms = NumberOfKnowledgeProduct::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])->orderBy('id', 'desc')
+                    ->get()->map(function ($form) {
+                                if ($form->attach_evidence) {
+                                    $form->attach_evidence = Storage::url($form->attach_evidence);
+                                }
+                                return $form;
+                            });
+                    }
 
-            $status = $request->input('status');
+            }
 
-            // Default empty collection
-            $forms = collect();
-
-            if ($status == "HOD") {
-                $forms = NumberOfKnowledgeProduct::where('created_by', $employee_id)
-                    ->orderBy('id', 'desc')
-                    ->get();
+            if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+                $status = $request->input('status');
+                if($status=="Teacher"){
+                    $forms = NumberOfKnowledgeProduct::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])
+                        ->where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
+                        ->get()->map(function ($form) {
+                                if ($form->attach_evidence) {
+                                    $form->attach_evidence = Storage::url($form->attach_evidence);
+                                }
+                                return $form;
+                            });
+                }
+                if($status=="HOD"){
+                    $employeeIds = User::where('manager_id', $employee_id)
+                        ->role('Teacher')->pluck('employee_id');
+                        $forms = NumberOfKnowledgeProduct::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                }
+                            ])
+                            ->whereIn('created_by', $employeeIds)
+                            ->whereIn('status', [1, 2])
+                            ->where('form_status', 'RESEARCHER')
+                            ->orderBy('id', 'desc')
+                            ->get()->map(function ($form) {
+                                if ($form->attach_evidence) {
+                                    $form->attach_evidence = Storage::url($form->attach_evidence);
+                                }
+                                return $form;
+                            });
+                }        
+                
             }
 
             // Always return JSON if AJAX
@@ -89,41 +136,87 @@ class NumberOfKnowledgeProductController extends Controller
     // 🔹 Update (Check ownership)
     public function update(Request $request, $id)
     {
-        $product = NumberOfKnowledgeProduct::findOrFail($id);
+        try {
+            if ($request->has('status_update_data')) {
+                $product = NumberOfKnowledgeProduct::findOrFail($id);
 
-        if ($product->created_by !== Auth::id()) {
-            abort(403, 'Unauthorized Action');
+                if ($product->created_by !== Auth::id()) {
+                    abort(403, 'Unauthorized Action');
+                }
+
+                $request->validate([
+                    'product_type' => 'required|string',
+                    'url' => 'required|url',
+                    'attach_evidence' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                ]);
+
+                $data = [
+                    'product_type' => $request->product_type,
+                    'url' => $request->url,
+                    'updated_by' => Auth::id(),
+                ];
+
+                if ($request->hasFile('attach_evidence')) {
+
+                    if (
+                        $product->attach_evidence &&
+                        Storage::disk('public')->exists($product->attach_evidence)
+                    ) {
+                        Storage::disk('public')->delete($product->attach_evidence);
+                    }
+
+                    $data['attach_evidence'] = $request->file('attach_evidence')
+                        ->store('knowledge_products', 'public');
+                }
+
+                $product->update($data);
+
+                return response()->json([
+                    'message' => 'Updated successfully'
+                ]);
+            } 
+            if ($request->has('status_update')) {
+                $request->validate([
+                    'status' => 'required|in:1,2,3,4,5,6'
+                ]);
+
+                $target = NumberOfKnowledgeProduct::findOrFail($id);
+
+                // Get current update history
+                $history = $target->update_history ? json_decode($target->update_history, true) : [];
+
+                // Get current user info
+                $currentUserId = Auth::id();
+                $currentUserName = Auth::user()->name;
+                $userRoll = getRoleName(activeRole()) ?? 'N/A';
+
+                // Avoid duplicate consecutive updates by the same user with the same status
+                $lastUpdate = end($history);
+                if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+                    $history[] = [
+                        'user_id'    => $currentUserId,
+                        'user_name'  => $currentUserName,
+                        'status'     => $request->status,
+                        'role'     => $userRoll,
+                        'updated_at' => now()->toDateTimeString(),
+                    ];
+                }
+
+
+
+
+
+                $target->status = $request->status;
+                $target->update_history = json_encode($history);
+                $target->updated_by = $currentUserId;
+                $target->save();
+
+                return response()->json(['success' => true]);
+            }   
+        } catch (\Exception $e) {
+             DB::rollBack();
+             return response()->json(['message' => 'Oops! Something went wrong'], 500);
         }
-
-        $request->validate([
-            'product_type' => 'required|string',
-            'url' => 'required|url',
-            'attach_evidence' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        ]);
-
-        $data = [
-            'product_type' => $request->product_type,
-            'url' => $request->url,
-            'updated_by' => Auth::id(),
-        ];
-
-        if ($request->hasFile('attach_evidence')) {
-
-            if (
-                $product->attach_evidence &&
-                Storage::disk('public')->exists($product->attach_evidence)
-            ) {
-                Storage::disk('public')->delete($product->attach_evidence);
-            }
-
-            $data['attach_evidence'] = $request->file('attach_evidence')
-                ->store('knowledge_products', 'public');
-        }
-
-        $product->update($data);
-
-        return redirect()->route('number-of-knowledge-products.index')
-            ->with('success', 'Updated Successfully');
     }
 
     // 🔹 Destroy (Check ownership)
