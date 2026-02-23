@@ -82,6 +82,7 @@ use App\Http\Controllers\DropoutRateController;
 use App\Http\Controllers\AlumniSatisfactionRateController;
 use App\Http\Controllers\LineManagerReviewRatingController;
 use App\Http\Controllers\ComplianceAndUsageOfLMSController;
+use App\Http\Controllers\ResearchProductivityOfPGStudentsController;
 
 Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
 
@@ -201,6 +202,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/kpa/{area}/category/{category}/indicator/{indicator}', [IndicatorController::class, 'indicator_form'])->name('indicator.form');
         Route::resource('indicator-form', AchievementOfResearchPublicationsTargetController::class);
         Route::get('indicator-forms/target', [AchievementOfResearchPublicationsTargetController::class, 'getPublicationTarget'])->name('indicator-form.target');
+        Route::resource('indicator-form-pg', ResearchProductivityOfPGStudentsController::class);
+        Route::put('/indicator-form-pg/update/{id}', [ResearchProductivityOfPGStudentsController::class, 'updateResearchPublication'])->name('research-pg.update');
 
         Route::get('/load-forms/{form}', [IndicatorController::class, 'loadForm']);
         Route::resource('publication-of-hecRecognized', PublicationOfHecRecognizedJournalController::class);

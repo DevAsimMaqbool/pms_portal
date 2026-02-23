@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AchievementOfResearchPublicationsTarget;
-use App\Models\AchievementOfResearchPublicationTargetCoAuthor;
+use App\Models\ResearchProductivityOfPgStudentTarget;
+use App\Models\ResearchProductivityOfPgStudent;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class AchievementOfResearchPublicationsTargetController extends Controller
+class ResearchProductivityOfPGStudentsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 $hod_ids = User::where('manager_id', $employee_id)
                     ->role('HOD')->pluck('employee_id');
                 if ($status == "HOD") {
-                    $forms = AchievementOfResearchPublicationsTarget::with([
+                    $forms = ResearchProductivityOfPgStudentTarget::with([
                         'creator' => function ($q) {
                             $q->select('employee_id', 'name');
                         }
@@ -47,7 +47,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                     $teacher_id = User::whereIn('manager_id', $hod_ids)
                         ->role('Teacher')->pluck('employee_id');
                     $all_ids = $teacher_id->merge($hod_ids);
-                    $forms = AchievementOfResearchPublicationsTarget::with([
+                    $forms = ResearchProductivityOfPgStudentTarget::with([
                         'creator' => function ($q) {
                             $q->select('employee_id', 'name');
                         },
@@ -64,7 +64,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
                 $status = $request->input('status');
                 if ($status == "Teacher") {
-                    $forms = AchievementOfResearchPublicationsTarget::with([
+                    $forms = ResearchProductivityOfPgStudentTarget::with([
                         'creator' => function ($q) {
                             $q->select('employee_id', 'name');
                         },
@@ -78,7 +78,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 if ($status == "HOD") {
                     $employeeIds = User::where('manager_id', $employee_id)
                         ->role('Teacher')->pluck('employee_id');
-                    $forms = AchievementOfResearchPublicationsTarget::with([
+                    $forms = ResearchProductivityOfPgStudentTarget::with([
                         'creator' => function ($q) {
                             $q->select('employee_id', 'name');
                         },
@@ -93,7 +93,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
             }
             if ($user->hasRole('ORIC')) {
-                $forms = AchievementOfResearchPublicationsTarget::with([
+                $forms = ResearchProductivityOfPgStudentTarget::with([
                     'creator' => function ($q) {
                         $q->select('employee_id', 'name');
                     },
@@ -108,7 +108,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             if ($user->hasRole('Human Resources')) {
                 $status = $request->input('status');
                 if ($status == "HOD") {
-                    $forms = AchievementOfResearchPublicationsTarget::with([
+                    $forms = ResearchProductivityOfPgStudentTarget::with([
                         'creator' => function ($q) {
                             $q->select('employee_id', 'name');
                         }
@@ -193,7 +193,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             $data['created_by'] = $employeeId;
             $data['updated_by'] = $employeeId;
 
-            $record = AchievementOfResearchPublicationsTarget::create($data);
+            $record = ResearchProductivityOfPgStudentTarget::create($data);
 
             return response()->json([
                 'status' => 'success',
@@ -213,8 +213,13 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 'target_category' => 'required|string|max:255',
                 'link_of_publications' => 'required|url|max:500',
                 'journal_clasification' => 'required',
-                'nationality' => 'required|string|max:255',
+                'student_name' => 'required|string|max:255',
+                'roll_no' => 'required|string|max:255',
                 'as_author_your_rank' => 'required|integer|min:0',
+                'faculty_id' => 'required|integer',
+                'department_id' => 'required|integer',
+                'program_id' => 'required|integer',
+                'nationality' => 'required|string|max:255',
                 'scopus_q1' => 'nullable|integer|min:0',
                 'scopus_q2' => 'nullable|integer|min:0',
                 'scopus_q3' => 'nullable|integer|min:0',
@@ -256,8 +261,13 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 'target_category',
                 'link_of_publications',
                 'journal_clasification',
-                'nationality',
+                'student_name',
+                'roll_no',
                 'as_author_your_rank',
+                'faculty_id',
+                'department_id',
+                'program_id',
+                'nationality',
                 'scopus_q1',
                 'scopus_q2',
                 'scopus_q3',
@@ -272,14 +282,14 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             $targetData['created_by'] = $employeeId;
             $targetData['updated_by'] = $employeeId;
 
-            $target = AchievementOfResearchPublicationsTarget::create($targetData);
+            $target = ResearchProductivityOfPgStudentTarget::create($targetData);
 
             if ($request->has('co_author')) {
                 foreach ($request->co_author as $co) {
                     $co['target_id'] = $target->id;
                     $co['created_by'] = $employeeId;
                     $co['updated_by'] = $employeeId;
-                    AchievementOfResearchPublicationTargetCoAuthor::create($co);
+                    ResearchProductivityOfPgStudent::create($co);
                 }
             }
 
@@ -312,12 +322,11 @@ class AchievementOfResearchPublicationsTargetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd('yaha');
         $request->validate([
             'status' => 'required|in:1,2,3,4,5,6'
         ]);
 
-        $target = AchievementOfResearchPublicationsTarget::findOrFail($id);
+        $target = ResearchProductivityOfPgStudentTarget::findOrFail($id);
 
 
         // Get current update history
@@ -339,9 +348,6 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 'updated_at' => now()->toDateTimeString(),
             ];
         }
-
-
-
         $target->status = $request->status;
         $target->update_history = json_encode($history);
         $target->updated_by = $currentUserId;
@@ -362,7 +368,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         try {
             $userId = Auth::id();
 
-            $query = AchievementOfResearchPublicationsTarget::where('faculty_member_id', $userId)
+            $query = ResearchProductivityOfPgStudentTarget::where('faculty_member_id', $userId)
                 ->where('form_status', 'HOD');
 
             if ($request->has('target_category')) {
@@ -390,18 +396,22 @@ class AchievementOfResearchPublicationsTargetController extends Controller
     }
     public function updateResearchPublication(Request $request, $id)
     {
-        dd('yaha');
         $userId = Auth::id(); // current logged-in user
 
-        $form = AchievementOfResearchPublicationsTarget::with('coAuthors')->findOrFail($id);
+        $form = ResearchProductivityOfPgStudentTarget::with('coAuthors')->findOrFail($id);
 
         $request->validate([
             'target_category' => 'required|string|max:255',
             'link_of_publications' => 'required|url|max:500',
             'journal_clasification' => 'required',
-            'nationality' => 'required|string|max:255',
+            'student_name' => 'required|string|max:255',
+            'roll_no' => 'required|string|max:255',
             'as_author_your_rank' => 'required|integer|min:0',
-            'co_author.*.id' => 'nullable|exists:achievement_of_research_publications_target_co_author,id',
+            'faculty_id' => 'required|integer',
+            'department_id' => 'required|integer',
+            'program_id' => 'required|integer',
+            'nationality' => 'required|string|max:255',
+            'co_author.*.id' => 'nullable|exists:research_productivity_of_pg_students,id',
             'co_author.*.name' => 'required_with:co_author|string|max:255',
             'co_author.*.rank' => 'required_with:co_author|integer|min:0',
             'co_author.*.univeristy_name' => 'required_with:co_author|string|max:255',
@@ -420,8 +430,13 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'target_category',
             'link_of_publications',
             'journal_clasification',
+            'student_name',
+            'roll_no',
+            'as_author_your_rank',
+            'faculty_id',
+            'department_id',
+            'program_id',
             'nationality',
-            'as_author_your_rank'
         ]));
 
         // Keep track of co-author IDs
@@ -456,8 +471,4 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'message' => 'Research publication updated successfully.'
         ]);
     }
-
-
-
-
 }

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\LineManagerFeedback;
+use Illuminate\Support\Facades\Auth;
 
 class RoleFeedbackController extends Controller
 {
@@ -12,17 +15,21 @@ class RoleFeedbackController extends Controller
     public function index(Request $request)
     {
         try {
-            // $authUser = auth()->user();
-            // $records = SelfAssessmentWorking::orderBy('created_at', 'asc')
-            //     ->where('created_by', $authUser->id)
-            //     ->get()
-            //     ->keyBy(function ($item) {
-            //         return $item->kpa;
-            //     });
-            // $rating = LineManagerFeedback::where('created_by', $authUser->id)
-            //     ->where('status', 1)
-            //     ->first();
-            return view('admin.form.role-feedback');
+            $authUser = Auth::user();
+
+            // Upward: get manager if exists
+            $manager = $authUser->manager ? collect([$authUser->manager]) : collect();
+
+            // Downward: get subordinates if any
+            $subordinates = $authUser->subordinates ?? collect();
+
+            // Combine both into a single collection
+            $facultyMembers = $manager->merge($subordinates);
+
+            return view(
+                'admin.form.role-feedback',
+                compact('facultyMembers')
+            );
         } catch (\Exception $e) {
             return apiResponse(
                 'Oops! Something went wrong',
@@ -63,7 +70,18 @@ class RoleFeedbackController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $rating = LineManagerFeedback::findOrFail($id);
+        $authUser = Auth::user();
+
+        // Upward: get manager if exists
+        $manager = $authUser->manager ? collect([$authUser->manager]) : collect();
+
+        // Downward: get subordinates if any
+        $subordinates = $authUser->subordinates ?? collect();
+
+        // Combine both into a single collection
+        $facultyMembers = $manager->merge($subordinates);
+        return view('admin.form.role-feedback_edit', compact('rating', 'facultyMembers'));
     }
 
     /**

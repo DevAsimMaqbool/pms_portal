@@ -2298,6 +2298,6 @@ if (!function_exists('get_faculty_members')) {
 
         return User::where('manager_id', $employeeId)
             ->orWhere('employee_id', $employeeId)
-            ->get(['id','name','department','job_title','faculty_id']);
+            ->get(['id', 'name', 'department', 'job_title', 'faculty_id']);
     }
 }
