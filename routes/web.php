@@ -194,7 +194,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-    Route::middleware('role:Teacher|HOD|ORIC|Dean|Human Resources|Assistant Professor|Professor|International Office|QEC')->group(function () {
+    Route::middleware('role:Teacher|HOD|ORIC|Dean|Human Resources|Assistant Professor|Professor|International Office|QEC|Finance')->group(function () {
         Route::get('/view-forms', [IndicatorController::class, 'indicator_form_show'])->name('indicatorForm.show');
         Route::post('/achievement-of-research-publications-target/{id}/update-status', [IndicatorController::class, 'updateStatus']);
         Route::post('/achievement-of-research-publications-target/bulk-update-status', [IndicatorController::class, 'bulkUpdateStatus'])->name('indicatorForm.bulkUpdateStatus');
@@ -262,6 +262,7 @@ Route::middleware('auth')->group(function () {
         // routes/import excel file
         Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');
         Route::post('/student-engagement-rate/import', [StudentEngagementRateController::class, 'import'])->name('student-engagement-rate.import');
+        Route::post('/program-profitability/import', [ProgramProfitabilityController::class, 'import'])->name('program-profitability.import');
 
         // routes/web.php
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
