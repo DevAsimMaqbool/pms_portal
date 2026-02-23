@@ -262,6 +262,7 @@ Route::middleware('auth')->group(function () {
         // routes/import excel file
         Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');
         Route::post('/student-engagement-rate/import', [StudentEngagementRateController::class, 'import'])->name('student-engagement-rate.import');
+        Route::post('/program-profitability/import', [ProgramProfitabilityController::class, 'import'])->name('program-profitability.import');
 
         // routes/web.php
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
