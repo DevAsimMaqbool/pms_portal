@@ -29,7 +29,15 @@
     <div class="container-xxl flex-grow-1 container-p-y">
 
         <div class="nav-align-top">
-            
+            @if(auth()->user()->hasRole(['Dean']))
+                <!-- Nav tabs -->
+                <ul class="nav nav-pills mb-4" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Research Productivity of PG
+                            Students (MS/MPhil/PhD)</a>
+                    </li>
+                </ul>
+            @endif
             @if(auth()->user()->hasRole(['HOD']))
                 <!-- Nav tabs -->
                 <ul class="nav nav-pills mb-4" role="tablist">
@@ -39,6 +47,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
                     </li>
                 </ul>
             @endif
@@ -406,9 +417,64 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <div class="tab-pane fade" id="form3" role="tabpanel">
+                        @if(auth()->user()->hasRole(['HOD']))
+                            <div class="d-flex">
+                                <select id="bulkAction" class="form-select w-auto me-2">
+                                    <option value="">-- Select Action --</option>
+                                    <option value="2">Verified</option>
+                                    <option value="1">UnVerified</option>
+                                </select>
+                                <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                            </div>
+                        @endif
+                        <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll"></th>
+                                    <th>#</th>
+                                    <th>Created By</th>
+                                    <th>Indicator Category</th>
+                                    <th>Classification</th>
+                                    <th>Status</th>
+                                    <th>Created Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 @endif
-               
+                @if(auth()->user()->hasRole(['Dean']))
+                    <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                        <table id="complaintTable1" class="table table-bordered table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Created By</th>
+                                    <th>Indicator Category</th>
+                                    <th>Classification</th>
+                                    <th>Created Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="form2" role="tabpanel">
+
+                        {{-- <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll"></th>
+                                    <th>#</th>
+                                    <th>Created By</th>
+                                    <th>Indicator Category</th>
+                                    <th>Created Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                        </table> --}}
+                    </div>
+                @endif
                 @if(auth()->user()->hasRole(['ORIC']))
                     <div>
                         <div class="d-flex">
@@ -1439,6 +1505,210 @@
             });
         </script>
     @endif
+    @if(auth()->user()->hasRole(['Dean']))
+        <script>
+
+            function fetchIndicatorForms1() {
+                $.ajax({
+                    url: "{{ route('indicator-form-pg.index') }}",
+                    method: "GET",
+                    data: {
+                        status: "RESEARCHER" // you can send more values
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
+
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
+
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                i + 1,
+                                form.creator ? form.creator.name : 'N/A',
+                                form.target_category || 'N/A',
+                                form.journal_clasification || 'N/A',
+                                createdAt,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                            ];
+                        });
+
+                        if (!$.fn.DataTable.isDataTable('#complaintTable1')) {
+                            $('#complaintTable1').DataTable({
+                                data: rowData,
+                                columns: [
+                                    { title: "#" },
+                                    { title: "Created By" },
+                                    { title: "Indicator Category" },
+                                    { title: "Classification" },
+                                    { title: "Created Date" },
+                                    { title: "Actions" }
+                                ]
+                            });
+                        } else {
+                            $('#complaintTable1').DataTable().clear().rows.add(rowData).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                fetchIndicatorForms1();
+
+                // Handle click on View button
+                $(document).on('click', '.view-form-btn', function () {
+                    const form = $(this).data('form');
+                    $('#modalExtraFields').find('.optional-field').remove();
+                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
+
+                    $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
+                    $('#modalTargetCategory').text(form.target_category || 'N/A');
+                    $('#modalStatus').text(form.status || 'Pending');
+                    $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+                    if (window.currentUserRole === 'Dean') {
+                        $('#status-approval').hide();
+                        $('label[for="approveCheckbox"]').hide();
+                        $('#approveCheckbox').closest('.form-check-input').hide();
+                    } else {
+
+                    }
+
+
+                    if (form.link_of_publications) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Publications Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                    }
+                    if (form.rank) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
+                    }
+                    if (form.nationality) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality</th><td>${form.nationality}</td></tr>`);
+                    }
+                    if (form.scopus_q1) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q1</th><td>${form.scopus_q1}</td></tr>`);
+                    }
+                    if (form.scopus_q2) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q2</th><td>${form.scopus_q2}</td></tr>`);
+                    }
+                    if (form.scopus_q3) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q3</th><td>${form.scopus_q3}</td></tr>`);
+                    }
+                    if (form.scopus_q4) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q4</th><td>${form.scopus_q4}</td></tr>`);
+                    }
+                    if (form.hec_w) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>W</th><td>${form.hec_w}</td></tr>`);
+                    }
+                    if (form.hec_x) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>X</th><td>${form.hec_x}</td></tr>`);
+                    }
+                    if (form.hec_y) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Y</th><td>${form.hec_y}</td></tr>`);
+                    }
+                    if (form.medical_recognized) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Medical Recognized</th><td>${form.medical_recognized}</td></tr>`);
+                    }
+                    if (form.as_author_your_rank) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Your Rank (As Author)</th><td>${form.as_author_your_rank}</td></tr>`);
+                    }
+                    // ✅ append co Author dynamically
+                    //alert(JSON.stringify(form));
+                    if (form.co_authors && form.co_authors.length > 0) {
+
+                        form.co_authors.forEach((coAuthor, index) => {
+                            $('#modalExtraFields').append(`
+                                                                                                                                                                                                                                                                                                                                                        <tr class="optional-field">
+                                                                                                                                                                                                                                                                                                                                                            <th>co Author ${index + 1}</th>
+                                                                                                                                                                                                                                                                                                                                                            <td>
+                                                                                                                                                                                                                                                                                                                                                                <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
+                                                                                                                                                                                                                                                                                                                                                                <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
+                                                                                                                                                                                                                                                                                                                                                                <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
+                                                                                                                                                                                                                                                                                                                                                                <strong>country:</strong> ${coAuthor.country || 'N/A'}<br>
+                                                                                                                                                                                                                                                                                                                                                                <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
+                                                                                                                                                                                                                                                                                                                                                                ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                                                                                                                                                                                                                                                                                                                                                ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
+                                                                                                                                                                                                                                                                                                                                                                ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
+                                                                                                                                                                                                                                                                                                                                                            </td>
+                                                                                                                                                                                                                                                                                                                                                        </tr>
+                                                                                                                                                                                                                                                                                                                                                    `);
+                        });
+                    } else {
+                        $('#modalExtraFields').append(`
+                                                                                                                                                                                                                                                                                                                                                    <tr class="optional-field">
+                                                                                                                                                                                                                                                                                                                                                        <th>co Author</th>
+                                                                                                                                                                                                                                                                                                                                                        <td>No co Author available</td>
+                                                                                                                                                                                                                                                                                                                                                    </tr>
+                                                                                                                                                                                                                                                                                                                                                `);
+                    }
+                    if (form.update_history) {
+                        // Parse JSON string if it's a string
+                        let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                        if (history.length > 0) {
+
+                            let historyHtml = '';
+
+                            history.forEach(update => {
+                                let histortText = 'N/A';
+
+                                // Role-based status mapping
+                                if (update.role === 'HOD') {
+                                    if (update.status == '1') histortText = 'unapproved';
+                                    else if (update.status == '2') histortText = 'Approved';
+                                } else if (update.role === 'ORIC') {
+                                    if (update.status == '2') histortText = 'Unverified';
+                                    else if (update.status == '3') histortText = 'Verified';
+                                } else {
+                                    histortText = update.status; // fallback
+                                }
+                                historyHtml += `
+                                                                                                                                                                                                                                                                                                                                                                <li class="timeline-item timeline-item-transparent optional-field">
+                                                                                                                                                                                                                                                                                                                                                                    <span class="timeline-point timeline-point-primary"></span>
+                                                                                                                                                                                                                                                                                                                                                                    <div class="timeline-event">
+                                                                                                                                                                                                                                                                                                                                                                        <div class="timeline-header mb-3">
+                                                                                                                                                                                                                                                                                                                                                                            <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                        <div class="d-flex align-items-center mb-1">
+                                                                                                                                                                                                                                                                                                                                                                            <div class="badge bg-lighter rounded-3">
+                                                                                                                                                                                                                                                                                                                                                                             <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                            <div class="badge bg-lighter rounded-3 ms-2">
+                                                                                                                                                                                                                                                                                                                                                                             <span class="h6 mb-0 text-body">${histortText}</span>
+                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                </li>
+                                                                                                                                                                                                                                                                                                                                                            `;
+                            });
+
+                            $('#modalExtraFieldsHistory').append(historyHtml);
+                        }
+                    }
+                    else {
+                        $('#modalExtraFieldsHistory').append(`
+                                                                                                                                                                                                                                                                                                                                                        <li class="optional-field">
+                                                                                                                                                                                                                                                                                                                                                            <th>No History Avalable</th>
+                                                                                                                                                                                                                                                                                                                                                        </li>
+                                                                                                                                                                                                                                                                                                                                                    `);
+                    }
+
+
+                    $('#viewFormModal').modal('show');
+                });
+
+
+
+
+
+            });
+        </script>
+    @endif
     @if(auth()->user()->hasRole(['ORIC']))
         <script>
             function fetchIndicatorForms3() {
@@ -1458,8 +1728,8 @@
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
                             let statusText = 'N/A';
-                            if (form.status == 1) statusText = 'Unapprove';
-                            else if (form.status == 2) statusText = 'Approve';
+                            if (form.status == 2) statusText = 'Unapprove';
+                            else if (form.status == 3) statusText = 'Approve';
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -1538,13 +1808,13 @@
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
                     if (window.currentUserRole === 'ORIC') {
-                        $('#approveCheckbox').prop('checked', form.status == 2);
+                        $('#approveCheckbox').prop('checked', form.status == 3);
                         $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
                         // Label text for Dean
                         let statusLabel = "Pending";
-                        if (form.status == 1) {
+                        if (form.status == 2) {
                             statusLabel = "Verified";
-                        } else if (form.status == 2) {
+                        } else if (form.status == 3) {
                             statusLabel = "Verified";
                         }
                         $('label[for="approveCheckbox"]').text(statusLabel);
@@ -1643,10 +1913,10 @@
                                 let histortText = 'N/A';
 
                                 // Role-based status mapping
-                                if (update.role === 'ORIC') {
+                                if (update.role === 'HOD') {
                                     if (update.status == '1') histortText = 'unapproved';
                                     else if (update.status == '2') histortText = 'Approved';
-                                } else if (update.role === 'other') {
+                                } else if (update.role === 'ORIC') {
                                     if (update.status == '2') histortText = 'Unverified';
                                     else if (update.status == '3') histortText = 'Verified';
                                 } else {
@@ -1693,7 +1963,7 @@
                 // ✅ Single checkbox status change
                 $(document).on('change', '#approveCheckbox', function () {
                     const id = $(this).data('id');
-                    const status = $(this).is(':checked') ? 2 : 1;
+                    const status = $(this).is(':checked') ? 3 : 2;
                     updateSingleStatus(id, status);
                 });
 
