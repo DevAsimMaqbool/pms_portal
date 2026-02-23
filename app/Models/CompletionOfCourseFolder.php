@@ -31,4 +31,8 @@ class CompletionOfCourseFolder extends Model
     {
         return $this->belongsTo(FacultyMemberClass::class, 'class_cod', 'class_id');
     }
+     public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'employee_id');
+    }
 }

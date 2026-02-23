@@ -248,6 +248,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('/alumni-satisfaction-rate', AlumniSatisfactionRateController::class);
         Route::resource('/line-manager-review-rating', LineManagerReviewRatingController::class);
 
+        Route::put(
+    '/completion-of-course-folder-verification/{id}',
+    [CompletionOfCourseFolderController::class, 'updatestatusverification']
+)->name('completion.folder.verification');
+
 
 
 

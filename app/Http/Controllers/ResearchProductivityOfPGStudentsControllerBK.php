@@ -61,10 +61,30 @@ class ResearchProductivityOfPGStudentsController extends Controller
                     },
                     'coAuthors'
                 ])
+                    ->whereIn('status', [2, 3])
                     ->where('form_status', 'RESEARCHER')
                     ->orderBy('id', 'desc')
                     ->get();
 
+            }
+            if ($user->hasRole('Human Resources')) {
+                $status = $request->input('status');
+                if ($status == "HOD") {
+                    $forms = ResearchProductivityOfPgStudentTarget::with([
+                        'creator' => function ($q) {
+                            $q->select('employee_id', 'name');
+                        }
+                    ])
+                        ->whereIn('status', [3, 4])
+                        ->where('form_status', $status)
+                        ->get()
+                        ->map(function ($form) {
+                            if ($form->email_screenshot) {
+                                $form->email_screenshot_url = Storage::url($form->email_screenshot);
+                            }
+                            return $form;
+                        });
+                }
             }
 
             if ($request->ajax()) {
