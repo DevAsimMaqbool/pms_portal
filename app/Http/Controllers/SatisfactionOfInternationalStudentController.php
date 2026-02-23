@@ -16,27 +16,35 @@ class SatisfactionOfInternationalStudentController extends Controller
         try {
             $user = Auth::user();
             $employee_id = $user->employee_id;
-
-            $status = $request->input('status');
-
-            // Default empty collection
-            $forms = collect();
-
-            if ($status == "HOD") {
-                $forms = SatisfactionOfInternationalStudent::where('created_by', $employee_id)
-                    ->orderBy('id', 'desc')
-                    ->get();
+            if(in_array(getRoleName(activeRole()), ['International Office'])){
+                $status = $request->input('status');
+                if($status=="HOD"){
+                    $forms = SatisfactionOfInternationalStudent::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])->where('created_by', $employee_id)
+                        ->orderBy('id', 'desc')
+                        ->get();
+                }       
+            }
+            if(in_array(getRoleName(activeRole()), ['QEC'])) {
+                $status = $request->input('status');
+                if($status=="HOD"){
+                    $forms = SatisfactionOfInternationalStudent::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            }
+                        ])->orderBy('id', 'desc')
+                        ->get();
+                }       
             }
 
-            // Always return JSON if AJAX
             if ($request->ajax()) {
                 return response()->json([
                     'forms' => $forms
                 ]);
             }
-
-            // Optionally, return Blade view for non-AJAX request
-            return view('satisfaction_of_international_students.index', compact('forms'));
 
         } catch (\Exception $e) {
             return response()->json([
@@ -93,37 +101,78 @@ class SatisfactionOfInternationalStudentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $product = SatisfactionOfInternationalStudent::findOrFail($id);
+        try {
+            if ($request->has('status_update_data')) {
+                $product = SatisfactionOfInternationalStudent::findOrFail($id);
 
-        if ($product->created_by !== Auth::id()) {
-            abort(403, 'Unauthorized Action');
+                $request->validate([
+                    'student_name' => 'required|string|max:255',
+                    'student_roll_no' => 'required|string|max:255',
+                    'student_program' => 'required|string|max:255',
+                    'student_country' => 'required|string|max:255',
+                    'student_semester' => 'required|string|max:255',
+                    'score' => 'required|numeric|min:0|max:5',
+                    'student_comments' => '',
+                ]);
+
+                $data = [
+                    'student_name' => $request->student_name,
+                    'student_roll_no' => $request->student_roll_no,
+                    'student_program' => $request->student_program,
+                    'student_country' => $request->student_country,
+                    'student_semester' => $request->student_semester,
+                    'student_rating' => $request->score * 20,
+                    'student_comments' => $request->student_comments,
+                    'updated_by' => Auth::id(),
+                ];
+
+                $product->update($data);
+
+                
+                return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $product]);
+            }
+            if ($request->has('status_update')) {
+                $request->validate([
+                    'status' => 'required|in:1,2,3,4,5,6'
+                ]);
+
+                $target = SatisfactionOfInternationalStudent::findOrFail($id);
+
+                // Get current update history
+                $history = $target->update_history ? json_decode($target->update_history, true) : [];
+
+                // Get current user info
+                $currentUserId = Auth::id();
+                $currentUserName = Auth::user()->name;
+                $userRoll = getRoleName(activeRole()) ?? 'N/A';
+
+                // Avoid duplicate consecutive updates by the same user with the same status
+                $lastUpdate = end($history);
+                if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+                    $history[] = [
+                        'user_id'    => $currentUserId,
+                        'user_name'  => $currentUserName,
+                        'status'     => $request->status,
+                        'role'     => $userRoll,
+                        'updated_at' => now()->toDateTimeString(),
+                    ];
+                }
+
+
+
+
+
+                $target->status = $request->status;
+                $target->update_history = json_encode($history);
+                $target->updated_by = $currentUserId;
+                $target->save();
+
+                return response()->json(['success' => true]);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => $e->getMessage()], 500);
         }
-
-        $request->validate([
-            'student_name' => 'required|string|max:255',
-            'student_roll_no' => 'required|string|max:255',
-            'student_program' => 'required|string|max:255',
-            'student_country' => 'required|string|max:255',
-            'student_semester' => 'required|string|max:255',
-            'score' => 'required|numeric|min:0|max:5',
-            'student_comments' => '',
-        ]);
-
-        $data = [
-            'student_name' => $request->student_name,
-            'student_roll_no' => $request->student_roll_no,
-            'student_program' => $request->student_program,
-            'student_country' => $request->student_country,
-            'student_semester' => $request->student_semester,
-            'student_rating' => $request->score * 20,
-            'student_comments' => $request->student_comments,
-            'updated_by' => Auth::id(),
-        ];
-
-        $product->update($data);
-
-        return redirect()->route('international-st-satisfaction.index')
-            ->with('success', 'Updated Successfully');
     }
 
     // 🔹 Destroy (Check ownership)
