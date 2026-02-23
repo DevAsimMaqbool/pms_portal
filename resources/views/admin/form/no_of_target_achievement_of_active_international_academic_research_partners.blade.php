@@ -18,19 +18,8 @@
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['HOD']))
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs mb-3" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">% of target achievement of Active International Academic / Research Partners</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
-                        </li>
-                    </ul>
-                @endif
                 <div class="tab-content">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(auth()->user()->hasRole(['Dean']) == activeRole())
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             
                             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
@@ -88,17 +77,25 @@
                             </form>
                         </div>
                     @endif
-                    @if(auth()->user()->hasRole(['Dean', 'HOD', 'ORIC']))
-                        <div class="tab-pane fade show {{ auth()->user()->hasRole(['Dean', 'ORIC']) ? 'active' : '' }}"
+                    @if(auth()->user()->hasRole(['International Office']) == activeRole())
+                        <div class="tab-pane fade show {{ auth()->user()->hasRole(['International Office']) ? 'active' : '' }}"
                             id="form2" role="tabpanel">
-                            <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
+                               <div class="d-flex">
+                                    <select id="bulkAction" class="form-select w-auto me-2">
+                                        <option value="">-- Select Action --</option>
+                                        <option value="2">Verified</option>
+                                        <option value="1">UnVerified</option>
+                                    </select>
+                                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                                </div>
+                            <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox" id="selectAll"></th>
                                         <th>#</th>
                                         <th>Created By</th>
-                                        <th>Co Authers</th>
-                                        <th>Author Rank</th>
+                                        <th>Deliverables</th>
+                                        <th>Status</th>
                                         <th>Created Date</th>
                                         <th>Actions</th>
                                     </tr>
@@ -110,6 +107,48 @@
             </div>
         </div>
 
+
+
+<!-- Modal -->
+        <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewFormModalLabel">Form Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Created By</th>
+                                <td id="modalCreatedBy"></td>
+                            </tr>
+                            <tr id="status-approval">
+                                <th>Status</th>
+                                <td>
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" id="approveCheckbox">
+                                        <label class="form-check-label" for="approveCheckbox">Approved</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Created Date</th>
+                                <td id="modalCreatedDate"></td>
+                            </tr>
+                            <tbody id="modalExtraFields"></tbody>
+                        </table>
+                        <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center"><i class="icon-base ti tabler-history me-3"></i>History</h5>
+                        <ul class="timeline mb-0" id="modalExtraFieldsHistory">
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ Add Permission Modal -->
 
     </div>
     <!-- / Content -->
@@ -125,9 +164,13 @@
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
+    <script>
+        window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+        window.activeUserRole = "{{ activeRole() }}";
+    </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(auth()->user()->hasRole(['Dean']) == activeRole())
         <script>
             
             $(document).ready(function () {
@@ -240,6 +283,240 @@
                 });
 
 
+            });
+        </script>
+    @endif
+
+    @if(auth()->user()->hasRole(['International Office']) == activeRole())
+        <script>
+            function fetchIndicatorForms3() {
+                $.ajax({
+                    url: "{{ route('international-research-partners.index') }}",
+                    method: "GET",
+                    data: {
+                        status: "HOD" // you can send more values
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
+
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
+                            let statusText = 'N/A';
+                            if (form.status == 1) statusText = 'Unverified';
+                            else if (form.status == 2) statusText = 'Verified';    
+
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
+                                i + 1,
+                                form.creator ? form.creator.name : 'N/A',
+                                form.deliverables || 'N/A',
+                                `<span class="badge bg-label-primary">${statusText}</span>`,
+                                createdAt,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                            ];
+                        });
+
+                        if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
+                            $('#complaintTable3').DataTable({
+                                data: rowData,
+                                columns: [
+                                    { title: "<input type='checkbox' id='selectAll'>" },
+                                    { title: "#" },
+                                    { title: "Created By" },
+                                    { title: "Deliverables" },
+                                    { title: "Status" },
+                                    { title: "Created Date" },
+                                    { title: "Actions" }
+                                ]
+                            });
+                        } else {
+                            $('#complaintTable3').DataTable().clear().rows.add(rowData).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
+                });
+            }
+            // ✅ Reusable function for single update
+            function updateSingleStatus(id, status) {
+                $.ajax({
+                    url: `/international-research-partners/${id}`,
+                    type: 'POST',                            // POST with _method PUT
+                    data: {
+                        _method: 'PUT',
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: status,
+                        status_update: true
+                    },
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Updated',
+                            text: res.message || 'Status updated successfully!'
+                        });
+                        
+                        fetchIndicatorForms3();
+                    },
+                    error: function (xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Something went wrong!'
+                        });
+                    }
+                });
+            }
+            $(document).ready(function () {
+                fetchIndicatorForms3();
+                // Extra fields for Form 2
+               
+                $(document).on('click', '.view-form-btn', function () {
+                    const form = $(this).data('form');
+                    $('#modalExtraFields').find('.optional-field').remove();
+                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
+
+                    $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
+                    $('#modalStatus').text(form.status || 'Pending');
+                    $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+                    if (window.activeUserRole === 'international office') {
+                        $('#approveCheckbox').prop('checked', form.status == 2);
+                        $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                        // Label text for HOD
+                        let statusLabel = "Pending";
+                        if (form.status == 1) {
+                            statusLabel = "Verified";
+                        } else if (form.status == 2) {
+                            statusLabel = "Verified";
+                        }
+                        $('label[for="approveCheckbox"]').text(statusLabel);
+                    }  else {
+                        $('#approveCheckbox').closest('.form-check-input').hide();
+
+                        let statusLabel = "Pending"; // default
+                        if (form.status == 1) {
+                            statusLabel = "Not Verified";
+                        } else if (form.status == 2) {
+                            statusLabel = "Verified";
+                        } else if (form.status == 3) {
+                            statusLabel = "Approved";
+                        }
+
+                        // update the label text
+                        $('label[for="approveCheckbox"]').text(statusLabel);
+                    }
+                    if (form.deliverables) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Deliverables</th><td>${form.deliverables}</td></tr>`);
+                    }
+
+                    if (form.target) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.target}</td></tr>`);
+                    }
+                    if (form.achieved_target) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Achieved Target</th><td>${form.achieved_target}</td></tr>`);
+                    }
+                    
+                    
+                    
+                    if (form.update_history) {
+                            // Parse JSON string if it's a string
+                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                            if (history.length > 0) {
+                                
+                                let historyHtml = '';
+
+                                history.forEach(update => {
+                                    let histortText = 'N/A';
+
+                                    // Role-based status mapping
+                                    if (update.role === 'international office') {
+                                        if (update.status == '1') histortText = 'unapproved';
+                                        else if (update.status == '2') histortText = 'Approved';
+                                    } else {
+                                        histortText = update.status; // fallback
+                                    }
+                                    historyHtml += `
+                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                            <span class="timeline-point timeline-point-primary"></span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header mb-3">
+                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-lighter rounded-3">
+                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `;
+                                });
+
+                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            }
+                        }
+                        else {
+                            $('#modalExtraFieldsHistory').append(`
+                                <li class="optional-field">
+                                    <th>No History Avalable</th>
+                                </li>
+                            `);
+                        }
+                    $('#viewFormModal').modal('show');
+                });
+                
+                // ✅ Single checkbox status change
+                $(document).on('change', '#approveCheckbox', function () {
+                    const id = $(this).data('id');
+                    const status = $(this).is(':checked') ? 2 : 1;
+                    updateSingleStatus(id, status);
+                });
+
+                // ✅ Bulk submit button
+                $('#bulkSubmit').on('click', function () {
+                    const status = $('#bulkAction').val();
+                    let selectedIds = [];
+
+                    $('#complaintTable3 .rowCheckbox:checked').each(function () {
+                        selectedIds.push($(this).val());
+                    });
+
+                    if (!status) {
+                        Swal.fire({ icon: 'warning', title: 'Select Action', text: 'Please select a status to update.' });
+                        return;
+                    }
+                    if (!selectedIds.length) {
+                        Swal.fire({ icon: 'warning', title: 'No Selection', text: 'Please select at least one row.' });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to change status for ${selectedIds.length} item(s).`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, update it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            selectedIds.forEach(id => updateSingleStatus(id, status));
+                        }
+                    });
+                });
+
+                // ✅ Select / Deselect all checkboxes
+                $(document).on('change', '#selectAll', function () {
+                    $('.rowCheckbox').prop('checked', $(this).is(':checked'));
+                });
             });
         </script>
     @endif

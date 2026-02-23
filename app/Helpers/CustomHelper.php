@@ -2301,3 +2301,13 @@ if (!function_exists('get_faculty_members')) {
             ->get(['id', 'name', 'department', 'job_title', 'faculty_id']);
     }
 }
+
+if (!function_exists('getRoleName')) {
+
+    function getRoleName($roleName = null)
+    {
+        if ($roleName) {
+            return Role::where('name', $roleName)->value('name') ?? null;
+        }
+    }
+}

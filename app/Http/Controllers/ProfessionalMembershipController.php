@@ -18,9 +18,13 @@ class ProfessionalMembershipController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
+
+            if ($user->hasRole(['Dean','HOD']) == activeRole()) {
                 $status = $request->input('status');
                 if($status=="HOD"){
-                        $forms = ProfessionalMembership::where('created_by', $employee_id)
+                        $forms = ProfessionalMembership::with([
+                            'creator:employee_id,name',
+                        ])->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get()
                         ->map(function ($form) {
@@ -30,6 +34,21 @@ class ProfessionalMembershipController extends Controller
                                 return $form;
                             });;
                 }
+            }
+            if ($user->hasRole('QEC') == activeRole()) {
+                $status = $request->input('status');
+                if($status=="HOD"){
+                    $forms = ProfessionalMembership::with([
+                            'creator:employee_id,name',
+                        ])->orderBy('id', 'desc')
+                        ->get()->map(function ($form) {
+                                if ($form->document_link) {
+                                    $form->document_link = Storage::url($form->document_link);
+                                }
+                                return $form;
+                            });
+                }       
+            }
             if ($request->ajax()) {
                 return response()->json([
                     'forms' => $forms
@@ -150,49 +169,94 @@ class ProfessionalMembershipController extends Controller
         return response()->json($data);
     }
    public function update(Request $request, $id)
-    {   
-        $record = ProfessionalMembership::findOrFail($id);
+    {  
+        try {  
+            if ($request->has('status_update_data')) {
+                $record = ProfessionalMembership::findOrFail($id);
 
-        $request->validate([
-                'record_id' => 'required',
-                'type_of_membership' => 'required|string',
-                'name_of_professional_body' => 'required|string|max:255',
-                'category_of_body' => 'required|string',
-                'discipline' => 'required|string',
-                'level' => 'required|string',
-                'country' => 'nullable|string|max:100',
-                'membership_status' => 'required|string',
-                'membership_start_date' => 'required|date',
-                'membership_valid_until' => 'required|date|after_or_equal:membership_start_date',
-                'evidence_type' => 'nullable|array',
-                'document_link' => '',
-                'declaration' => 'accepted',    
-        ]);
+                $request->validate([
+                        'record_id' => 'required',
+                        'type_of_membership' => 'required|string',
+                        'name_of_professional_body' => 'required|string|max:255',
+                        'category_of_body' => 'required|string',
+                        'discipline' => 'required|string',
+                        'level' => 'required|string',
+                        'country' => 'nullable|string|max:100',
+                        'membership_status' => 'required|string',
+                        'membership_start_date' => 'required|date',
+                        'membership_valid_until' => 'required|date|after_or_equal:membership_start_date',
+                        'evidence_type' => 'nullable|array',
+                        'document_link' => '',
+                        'declaration' => 'accepted',    
+                ]);
 
-        $data = $request->only([
-                        'type_of_membership', 'name_of_professional_body', 'category_of_body', 'discipline','level','country','membership_status','membership_start_date','membership_valid_until','evidence_type'
-                        ,'document_link','declaration'
-                    ]);
-                    if ($request->hasFile('document_link')) {
-                         
-                            if ($record->document_link && Storage::disk('public')->exists($record->document_link)) {
-                                Storage::disk('public')->delete($record->document_link);
-                            }
+                $data = $request->only([
+                                'type_of_membership', 'name_of_professional_body', 'category_of_body', 'discipline','level','country','membership_status','membership_start_date','membership_valid_until','evidence_type'
+                                ,'document_link','declaration'
+                            ]);
+                            if ($request->hasFile('document_link')) {
+                                
+                                    if ($record->document_link && Storage::disk('public')->exists($record->document_link)) {
+                                        Storage::disk('public')->delete($record->document_link);
+                                    }
 
-                            $file = $request->file('document_link');
-                            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                            $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
-                            $uniqueNumber = rand(1000, 9999);
-                            $extension = $file->getClientOriginalExtension();
-                            $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
-                            $path = $file->storeAs('professional_memberships', $fileName, 'public');
-                            $data['document_link'] = $path;
-                        }
-                    $data['updated_by'] = Auth::user()->employee_id;
+                                    $file = $request->file('document_link');
+                                    $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                                    $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
+                                    $uniqueNumber = rand(1000, 9999);
+                                    $extension = $file->getClientOriginalExtension();
+                                    $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
+                                    $path = $file->storeAs('professional_memberships', $fileName, 'public');
+                                    $data['document_link'] = $path;
+                                }
+                            $data['updated_by'] = Auth::user()->employee_id;
 
-                    $record->update($data);
+                            $record->update($data);
 
                     return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+                 }
+                 if ($request->has('status_update')) {
+                        $request->validate([
+                            'status' => 'required|in:1,2,3,4,5,6'
+                        ]);
+
+                        $target = ProfessionalMembership::findOrFail($id);
+
+                        // Get current update history
+                        $history = $target->update_history ? json_decode($target->update_history, true) : [];
+
+                        // Get current user info
+                        $currentUserId = Auth::id();
+                        $currentUserName = Auth::user()->name;
+                        $userRoll = activeRole() ?? 'N/A';
+
+                        // Avoid duplicate consecutive updates by the same user with the same status
+                        $lastUpdate = end($history);
+                        if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+                            $history[] = [
+                                'user_id'    => $currentUserId,
+                                'user_name'  => $currentUserName,
+                                'status'     => $request->status,
+                                'role'     => $userRoll,
+                                'updated_at' => now()->toDateTimeString(),
+                            ];
+                        }
+
+
+
+
+
+                        $target->status = $request->status;
+                        $target->update_history = json_encode($history);
+                        $target->updated_by = $currentUserId;
+                        $target->save();
+
+                        return response()->json(['success' => true]);
+                    }
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return response()->json(['message' => 'Oops! Something went wrong'], 500);
+            }
     }
        public function destroy($id)
     {

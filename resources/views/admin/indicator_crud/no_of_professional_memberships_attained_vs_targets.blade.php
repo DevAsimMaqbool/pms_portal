@@ -19,7 +19,7 @@
         <div class="card">
              <h5 class="card-header">No of Professional Memberships attained vs targets</h5>
             <div class="card-datatable table-responsive card-body">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(auth()->user()->hasRole(['Dean','HOD']) == activeRole())
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="intellectualTable" class="table table-bordered">
@@ -268,7 +268,7 @@
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(auth()->user()->hasRole(['Dean','HOD']) == activeRole())
         <script>
             function fetchCommercialForms() {
                 $.ajax({
@@ -370,8 +370,7 @@
                     let historyHtml = '';
                     history.forEach(update => {
                         let histortText = 'N/A';
-                        if (update.role === 'HOD') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
-                        else if (update.role === 'ORIC') histortText = update.status == '2' ? 'Unverified' : (update.status == '3' ? 'Verified' : update.status);
+                        if (update.role === 'qec') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
                         else histortText = update.status || 'N/A';
 
                         historyHtml += `
@@ -493,6 +492,7 @@
         let form = $(this);
         let formData = new FormData(this);
         const recordId = $('#record_id').val();
+        formData.append('status_update_data', true);
         Swal.fire({
             title: 'Updating...',
             allowOutsideClick: false,
