@@ -15,6 +15,7 @@ class RoleKpaAssignment extends Model
         'indicator_category_weightage',
         'indicator_id',
         'indicator_weightage',
+        'form_status',
     ];
 
     public function kpa()

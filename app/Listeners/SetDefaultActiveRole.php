@@ -28,7 +28,15 @@ class SetDefaultActiveRole
             'Associate Professor',
             'Professor',
             'Program Leader UG',
-            'Program Leader PG'
+            'Program Leader PG',
+            'Finance',
+            'International Office',
+            'HR',
+            'QCE',
+            'OEC',
+            'DOPS',
+            'Alumni Office',
+            'Employability Center'
         ];
 
         if (in_array($role, $teacherRoles)) {

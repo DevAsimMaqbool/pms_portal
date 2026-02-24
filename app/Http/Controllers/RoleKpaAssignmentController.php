@@ -237,6 +237,17 @@ class RoleKpaAssignmentController extends Controller
             }
         }
 
+        // ✅ Form Status
+        if ($request->has('form_status')) {
+            foreach ($request->form_status as $indicatorId => $status) {
+                RoleKpaAssignment::where('role_id', $roleId)
+                    ->where('indicator_id', $indicatorId)
+                    ->update([
+                        'form_status' => $status
+                    ]);
+            }
+        }
+
         return redirect()->back()->with('success', 'Weightages updated successfully!');
     }
 

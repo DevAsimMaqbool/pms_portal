@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\RoleKpaAssignment;
+use App\Models\KeyPerformanceArea;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -54,14 +55,14 @@ class UserKPAController extends Controller
 
         $roleId = Auth::user()->getRoleNames()->first(); // Assuming you get this from the login API and store in DB
         $roleName = 'Dean';
-
+        $kfarea = KeyPerformanceArea::all();
         $role = Role::where('name', $roleName)->firstOrFail();
 
         $roleId = $role->id;
         $assignments = RoleKpaAssignment::with(['kpa', 'category', 'indicator'])
             ->where('role_id', $roleId)
             ->get();
-        return view('user.kpa_edit', compact('assignments', 'roles'));
+        return view('user.kpa_edit', compact('assignments', 'roles', 'kfarea'));
     }
 
     /**

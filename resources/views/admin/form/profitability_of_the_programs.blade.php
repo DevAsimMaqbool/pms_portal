@@ -86,11 +86,6 @@
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="department" class="form-label">Department</label>
-                            <select name="department_id" id="department_id" class="select2 form-select" required>
-                                <option value="">-- Select Department --</option>
-                            </select>
                         </div>
 
                          <div class="mb-3">
@@ -120,13 +115,10 @@
                     </div>
                         
                     </div>
-                    </div>
-                    <!-- /Pricing Card -->
-                
+                    <!-- /second tab-->
+
                 </div>
-                <!-- /Second column -->
-                </div>
-            </form>
+                <!-- /main tab-->
 
             </div>
             <!-- /first tab-->
@@ -137,45 +129,40 @@
             <!-- /second tab-->
 
         </div>
-        <!-- /main tab-->
-
-    </div>
-    <!-- tab open-->
-  </div>
 
 
 
-<!-- / close new design -->
+        <!-- / close new design -->
         <!-- Import Modal -->
-<div class="modal fade" id="importModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form id="importForm" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-            <input type="hidden" name="form_status" value="HOD">
+        <div class="modal fade" id="importModal" tabindex="-1">
+            <div class="modal-dialog">
+                <form id="importForm" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                    <input type="hidden" name="form_status" value="HOD">
 
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Import Employability Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import Employability Data</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
 
-                <div class="modal-body">
-                    <label class="form-label">Upload Excel / CSV</label>
-                    <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
+                        <div class="modal-body">
+                            <label class="form-label">Upload Excel / CSV</label>
+                            <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
 
-                    <small class="text-muted d-block mt-2">
-                        Allowed: xlsx, xls, csv
-                    </small>
-                </div>
+                            <small class="text-muted d-block mt-2">
+                                Allowed: xlsx, xls, csv
+                            </small>
+                        </div>
 
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
 
     </div>
     <!-- / Content -->
@@ -199,14 +186,14 @@
     @if(in_array(getRoleName(activeRole()), ['Finance']))
         <script>
             $(document).ready(function () {
-              
-              
 
-                 $('#researchForm').on('submit', function (e) {
+
+
+                $('#researchForm').on('submit', function (e) {
                     e.preventDefault();
                     let form = $(this);
                     let formData = new FormData(this);
-                     // Show loading indicator
+                    // Show loading indicator
                     Swal.fire({
                         title: 'Please wait...',
                         allowOutsideClick: false,
@@ -214,7 +201,7 @@
                             Swal.showLoading();
                         }
                     });
-                     
+
                     $.ajax({
                         url: "{{ route('program-profitability.store') }}",
                         type: "POST",
@@ -228,7 +215,7 @@
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
                             $('.select2').val(null).trigger('change');
-                              // Remove all extra grant groups and keep only the first one
+                            // Remove all extra grant groups and keep only the first one
                             $('#grant-details-container .grant-group:not(:first)').remove();
 
                             // Reset the proof container of the first group
@@ -249,32 +236,32 @@
                             // Clear previous errors before showing new ones
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
-                             if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
 
-                            // Loop through all validation errors
-                            $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
+                                // Loop through all validation errors
+                                $.each(errors, function (field, messages) {
+                                    let input = form.find('[name="' + field + '"]');
 
-                                if (input.length) {
-                                    input.addClass('is-invalid');
+                                    if (input.length) {
+                                        input.addClass('is-invalid');
 
-                                    // Show error message under input
-                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                }
-                            });
+                                        // Show error message under input
+                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                    }
+                                });
 
-                        } else if (xhr.status === 409) {
-                            // 🔥 Duplicate record message
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Duplicate Entry',
-                                text: xhr.responseJSON.message
-                            });
+                            } else if (xhr.status === 409) {
+                                // 🔥 Duplicate record message
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Duplicate Entry',
+                                    text: xhr.responseJSON.message
+                                });
 
-                        } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
-                        }
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
                         }
                     });
                 });
@@ -318,7 +305,7 @@
 
                     departmentSelect.html('<option value="">Loading...</option>');
                     programSelect.html('<option value="">-- Select Program --</option>');
-                    
+
 
                     if (facultyId) {
                         $.ajax({
@@ -332,8 +319,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                                            ${department.name}
-                                        </option>`
+                                                            ${department.name}
+                                                        </option>`
                                     );
                                 });
 
@@ -363,8 +350,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                                            ${program.program_name}
-                                        </option>`
+                                                            ${program.program_name}
+                                                        </option>`
                                     );
                                 });
 
@@ -384,4 +371,4 @@
             });
         </script>
     @endif
-    @endpush
+@endpush

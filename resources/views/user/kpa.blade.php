@@ -60,7 +60,9 @@
                                 <th>Indicator Category</th>
                                 <th>Indicator Category Weightage</th>
                                 <th>Indicator</th>
+                                <th>Indicator ID</th>
                                 <th>Indicator Weightage</th>
+                                <th>Is Form</th>
                             </tr>
                         </thead>
                         <tbody id="assignmentTableBody">
@@ -120,9 +122,9 @@
                                         let kpaRowspan = kpa.category.reduce((sum, c) => sum + c.indicator.length, 0);
                                         tr += `<td rowspan="${kpaRowspan}">${kpa.performance_area}</td>`;
                                         tr += `<td rowspan="${kpaRowspan}">
-                            <input type="text" name="kpa_weightage[]" class="form-control" value="${kpa.kpa_weightage ?? ''}" required>
-                            <input type="hidden" name="kpa_id[]" value="${kpa.id}">
-                            </td>`;
+                                                                    <input type="text" name="kpa_weightage[]" class="form-control" value="${kpa.kpa_weightage ?? ''}">
+                                                                    <input type="hidden" name="kpa_id[]" value="${kpa.id}">
+                                                                    </td>`;
                                     }
 
                                     // Indicator Category & Weightage rowspan
@@ -130,17 +132,26 @@
                                         let catRowspan = category.indicator.length;
                                         tr += `<td rowspan="${catRowspan}">${category.indicator_category}</td>`;
                                         tr += `<td rowspan="${catRowspan}">
-                            <input type="text" name="indicator_category_weightage[]" class="form-control" value="${category.indicator_category_weightage ?? ''}" required>
-                            <input type="hidden" name="indicator_category_id[]" value="${category.id}">
-                            </td>`;
+                                                                    <input type="text" name="indicator_category_weightage[]" class="form-control" value="${category.indicator_category_weightage ?? ''}">
+                                                                    <input type="hidden" name="indicator_category_id[]" value="${category.id}">
+                                                                    </td>`;
                                     }
 
                                     // Indicator & Weightage
                                     tr += `<td>${indicator.indicator}</td>`;
+                                    tr += `<td>${indicator.id}</td>`;
                                     tr += `<td>
-                            <input type="text" name="indicator_weightage[]" class="form-control" value="${indicator.indicator_weightage ?? ''}" required>
-                            <input type="hidden" name="indicator_id[]" value="${indicator.id}">
-                            </td>`;
+                                                                    <input type="text" name="indicator_weightage[]" class="form-control" value="${indicator.indicator_weightage ?? ''}">
+                                                                    <input type="hidden" name="indicator_id[]" value="${indicator.id}">
+                                                                    </td>`;
+
+                                    tr += `<td>
+                    <input type="hidden" name="form_status[${indicator.id}]" value="0">
+                    <input type="checkbox" 
+                        name="form_status[${indicator.id}]" 
+                        value="1"
+                        ${indicator.form_status == 1 ? 'checked' : ''}>
+                </td>`;
 
                                     tr += '</tr>';
 
