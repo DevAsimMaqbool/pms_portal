@@ -10,16 +10,17 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
+         @if(in_array(getRoleName(activeRole()), ['Dean','International Office']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
                 <div class="tab-content">
-                    @if(auth()->user()->hasRole(['Dean']) == activeRole())
+                    @if(in_array(getRoleName(activeRole()), ['Dean']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             
                             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
@@ -77,8 +78,8 @@
                             </form>
                         </div>
                     @endif
-                    @if(auth()->user()->hasRole(['International Office']) == activeRole())
-                        <div class="tab-pane fade show {{ auth()->user()->hasRole(['International Office']) ? 'active' : '' }}"
+                     @if(in_array(getRoleName(activeRole()), ['International Office']))
+                        <div class="tab-pane fade show {{ in_array(getRoleName(activeRole()), ['International Office']) ? 'active' : '' }}"
                             id="form2" role="tabpanel">
                                <div class="d-flex">
                                     <select id="bulkAction" class="form-select w-auto me-2">
@@ -149,7 +150,16 @@
             </div>
         </div>
         <!--/ Add Permission Modal -->
-
+        @else
+             <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
     </div>
     <!-- / Content -->
 @endsection
@@ -166,11 +176,11 @@
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
     <script>
         window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
-        window.activeUserRole = "{{ activeRole() }}";
+        window.activeUserRole = "{{ getRoleName(activeRole()) }}";
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['Dean']) == activeRole())
+    @if(in_array(getRoleName(activeRole()), ['Dean']))
         <script>
             
             $(document).ready(function () {
@@ -287,7 +297,7 @@
         </script>
     @endif
 
-    @if(auth()->user()->hasRole(['International Office']) == activeRole())
+    @if(in_array(getRoleName(activeRole()), ['International Office']))
         <script>
             function fetchIndicatorForms3() {
                 $.ajax({
@@ -385,7 +395,7 @@
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                    if (window.activeUserRole === 'international office') {
+                    if (window.activeUserRole === 'International Office') {
                         $('#approveCheckbox').prop('checked', form.status == 2);
                         $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
                         // Label text for HOD
@@ -436,7 +446,7 @@
                                     let histortText = 'N/A';
 
                                     // Role-based status mapping
-                                    if (update.role === 'international office') {
+                                    if (update.role === 'International Office') {
                                         if (update.status == '1') histortText = 'unapproved';
                                         else if (update.status == '2') histortText = 'Approved';
                                     } else {

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ProgramProfitabilityImport;
 use App\Models\ProgramProfitability;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProgramProfitabilityController extends Controller
 {
@@ -19,7 +21,8 @@ class ProgramProfitabilityController extends Controller
 
                 $status = $request->input('status');
                 if($status=="HOD"){
-                        $forms = ProgramProfitability::where('created_by', $employee_id)
+                        $forms = ProgramProfitability::with(['faculty', 'department', 'program'])
+                        ->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get();
                 }
@@ -138,6 +141,26 @@ class ProgramProfitabilityController extends Controller
 
         return response()->json([
             'message' => 'Deleted successfully'
+        ]);
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+            'indicator_id' => 'required',
+            'form_status' => 'required',
+        ]);
+
+        Excel::import(
+            new ProgramProfitabilityImport(
+                $request->indicator_id,
+                $request->form_status
+            ),
+            $request->file
+        );
+
+        return response()->json([
+            'message' => 'Program Profitability data imported successfully'
         ]);
     }
 }

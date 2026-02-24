@@ -10,22 +10,26 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
+    @if(in_array(getRoleName(activeRole()), ['International Office']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
              <h5 class="card-header">Percentage of targets achieved for superior go global stream (Higher Education) (if applicable)</h5>
             <div class="card-datatable table-responsive card-body">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(in_array(getRoleName(activeRole()), ['International Office']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="admissionTargetAchieveTable" class="table table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
+                                                        <th>Faculty</th>
+                                                        <th>Department</th>
+                                                        <th>Program Name</th>
                                                         <th>Target</th>
                                                         <th>Target Achieved</th>
                                                         <th>Actions</th>
@@ -39,7 +43,16 @@
             </div>
         </div>
         <!-- Update Intellectual Property Modal -->
-         
+        @else
+             <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif    
  <!-- Update commercial gain Modal -->
 <div class="modal fade" id="employabilityFormModal" tabindex="-1" aria-labelledby="commericaGainFormModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -129,7 +142,7 @@
 @endpush
 @push('script')
     
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['International Office']))
         <script>
             function fetchCommercialForms() {
                 $.ajax({
@@ -159,6 +172,9 @@
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
+                                form.faculty ? form.faculty.name : 'N/A',
+                                form.department ? form.department.name : 'N/A',
+                                form.program ? form.program.program_name : 'N/A',
                                 form.experience_target || 'N/A',
                                 form.achieved_target || 'N/A',
                                 editButton+ ' ' + deleteBtn
@@ -170,6 +186,9 @@
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
+                                    { title: "Faculty" },
+                                    { title: "Department" },
+                                    { title: "Program Name" },
                                     { title: "Target" },
                                     { title: "Target Achieved" },
                                     { title: "Actions" }

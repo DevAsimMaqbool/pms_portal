@@ -20,10 +20,11 @@ class AdmissionTargetAchievedController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-         if ($user->hasRole('HOD')) {
+         if(in_array(getRoleName(activeRole()), ['Finance'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
-                    $forms = AdmissionTargetAchieved::where('created_by', $employee_id)
+                    $forms = AdmissionTargetAchieved::with(['faculty', 'department', 'program'])
+                    ->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get();
                 }       
@@ -167,4 +168,6 @@ class AdmissionTargetAchievedController extends Controller
             'message' => 'Deleted successfully'
         ]);
     }
+    
+    
 }

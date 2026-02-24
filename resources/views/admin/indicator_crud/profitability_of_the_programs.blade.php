@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
     <style>
         .form-disabled {
             color: #acaab1;
@@ -27,7 +28,7 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
+    @if(in_array(getRoleName(activeRole()), ['Finance']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
@@ -41,28 +42,40 @@
 
 
 
-
-
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['HOD']))
-                    <div class="tab-pane fade show" id="form2" role="tabpanel">
-                        <div class="table-responsive text-nowrap">
-                            <table id="achievementTable" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Profitability</th>
-                                        <th>Program Level</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                    @if(in_array(getRoleName(activeRole()), ['Finance']))
+                        <div class="tab-pane fade show" id="form2" role="tabpanel">
+                           <div class="table-responsive text-nowrap">
+                                <table id="achievementTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Program Name</th>
+                                            <th>Program Level</th>
+                                            <th>Profitability %</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>    
                         </div>
                     </div>
                 @endif
 
             </div>
         </div>
+        @else
+             <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
         <!-- Update Intellectual Property Modal -->
         <!-- Update Form Modal -->
         <div class="modal fade" id="updateFormModal" tabindex="-1" aria-labelledby="updateFormModalLabel"
@@ -74,86 +87,30 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <div class="modal-body">
-                        <!-- Form -->
-                        <form id="researchForm1" enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" id="record_id" name="record_id">
-
-                            <!--start-->
-                            <div class="row">
-                                <!-- First column-->
-
-                                <!-- Second column -->
-                                <div class="col-12 col-lg-12">
-                                    <!-- Pricing Card -->
-                                    <div class="card mb-6">
-                                        <div class="card-header">
-                                            <h5 class="card-title mb-0">Program Information</h5>
-                                        </div>
-                                        <div class="card-body">
-
-
-                                            <div class="mb-3">
-                                                <label for="faculty" class="form-label">Faculty</label>
-                                                <select name="faculty_id" id="faculty_id" class="select2 form-select"
-                                                    required>
-                                                    <option value="">-- Select Faculty --</option>
-                                                    @foreach(get_faculties() as $faculty)
-                                                        <option value="{{ $faculty->id }}">
-                                                            {{ $faculty->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label for="department" class="form-label">Department</label>
-                                                <select name="department_id" id="department_id" class="select2 form-select"
-                                                    required>
-                                                    <option value="">-- Select Department --</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label for="program" class="form-label">Program Name</label>
-                                                <select name="program_id" id="program_id"
-                                                    class="select2 form-select program_id" required>
-                                                    <option value="">-- Select Program --</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="program" class="form-label">Program Level</label>
-                                                <select name="program_level" class="select2 form-select program_level"
-                                                    required>
-                                                    <option value="">-- Select Program --</option>
-                                                    <option value="UG">UG</option>
-                                                    <option value="PG">PG</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label" for="profitability">Profitability</label>
-                                                <input type="number" class="form-control" id="profitability"
-                                                    name="profitability" required>
-                                            </div>
-
-
-
-                                        </div>
-                                    </div>
-                                    <!-- /Pricing Card -->
-
-                                </div>
-                                <!-- /Second column -->
+                         <div class="mb-3">
+                            <label for="program" class="form-label">Program Name</label>
+                            <select name="program_id" id="program_id" class="select2 form-select program_id" required>
+                                <option value="">-- Select Program --</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="program" class="form-label">Program Level</label>
+                            <select name="program_level" class="select2 form-select program_level" required>
+                                <option value="">-- Select Program --</option>
+                                <option value="PG">PG</option>
+                                <option value="UG">UG</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="profitability">Profitability (%)</label>
+                            <div class="input-group">
+                             <span class="input-group-text" id="basic-addon11">%</span>
+                            <input type="number" class="form-control" id="profitability" name="profitability" required>
                             </div>
+                        </div>
 
-                            <!--/end-->
-
-                            <div class="mt-3 text-end">
-                                <button type="submit" class="btn btn-success">Update</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </form>
+                        
+                        
                     </div>
                 </div>
             </div>
@@ -189,8 +146,7 @@
     </script>
 @endpush
 @push('script')
-
-    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+    @if(in_array(getRoleName(activeRole()), ['Finance']))
         <script>
             function fetchAchievementForms() {
                 $.ajax({
@@ -220,9 +176,12 @@
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
-                                form.profitability || 'N/A',
+                                form.faculty ? form.faculty.name : 'N/A',
+                                form.department ? form.department.name : 'N/A',
+                                form.program ? form.program.program_name : 'N/A',
                                 form.program_level || 'N/A',
-                                editButton + ' ' + deleteBtn
+                                form.profitability ? form.profitability + '%' : 'N/A',
+                                editButton+ ' ' + deleteBtn
                             ];
                         });
 
@@ -231,8 +190,11 @@
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
-                                    { title: "Profitability" },
+                                    { title: "Faculty" },
+                                    { title: "Department" },
+                                    { title: "Program Name" },
                                     { title: "Program Level" },
+                                    { title: "Profitability (%)" },
                                     { title: "Actions" }
                                 ]
                             });
