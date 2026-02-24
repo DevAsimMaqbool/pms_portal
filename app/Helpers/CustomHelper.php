@@ -190,6 +190,7 @@ function getRoleAssignments(string $roleName, ?int $kapcid = null, $form = null)
                                     'indicator_category_id' => $indicator->indicator_category_id,
                                     'indicator' => $indicator->indicator,
                                     'indicator_weightage' => $item->indicator_weightage,
+                                    'form_status' => $item->form_status,
                                     'icon' => $indicator->icon,
                                     'short_code' => $indicator->short_code,
                                     'created_by' => $indicator->created_by,
@@ -2083,6 +2084,14 @@ if (!function_exists('activeRole')) {
             'Professor',
             'Program Leader UG',
             'Program Leader PG',
+            'Finance',
+            'International Office',
+            'HR',
+            'QCE',
+            'OEC',
+            'DOPS',
+            'Alumni Office',
+            'Employability Center',
             'HOD',
             'Dean',
         ];
@@ -2168,7 +2177,7 @@ if (!function_exists('getStudentFeedbackByBarcode')) {
     }
 }
 if (!function_exists('getFacultyClassWiseFeedback')) {
-    function getFacultyClassWiseFeedback(int $facultyId)
+    function getFacultyClassWiseFeedback(?int $facultyId)
     {
         return StudentFeedbackClassWise::query()
             ->join(
