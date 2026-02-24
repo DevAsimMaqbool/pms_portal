@@ -16,152 +16,165 @@
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
 
-<!-- new design -->
+        <!-- new design -->
 
-<div class="app-ecommerce">
-    <!-- tab open-->
-    <div class="nav-align-top">
+        <div class="app-ecommerce">
+            <!-- tab open-->
+            <div class="nav-align-top">
 
-        <ul class="nav nav-pills mb-4" role="tablist">
-            <li class="nav-item">
-                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-top-home" aria-controls="navs-pills-top-home" aria-selected="true">Form</button>
-            </li>
-            <li class="nav-item">
-                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-top-profile" aria-controls="navs-pills-top-profile" aria-selected="false">Table</button>
-            </li>
-            
-        </ul>
-        <!-- main tab-->
-        <div class="tab-content" style="padding:0;background: none;border: none;box-shadow: none;">
-             @if(auth()->user()->hasRole(['HOD']))
-            <!-- first tab-->
-            <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
+                <ul class="nav nav-pills mb-4" role="tablist">
+                    <li class="nav-item">
+                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                            data-bs-target="#navs-pills-top-home" aria-controls="navs-pills-top-home"
+                            aria-selected="true">Form</button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                            data-bs-target="#navs-pills-top-profile" aria-controls="navs-pills-top-profile"
+                            aria-selected="false">Table</button>
+                    </li>
 
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
-            <div class="d-flex flex-column justify-content-center">
-                <h4 class="mb-1">Profitability of the programs</h4>
-            </div>
-            <div class="d-flex align-content-center flex-wrap gap-4">
-                <div class="d-flex gap-4">
-                <a class="btn btn-label-primary" href="{{ route('indicators_crud.index', ['slug' => 'profitability_of_the_programs', 'id' => $indicatorId]) }}">View</a></div>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                            <i class="bx bx-upload"></i> Import Excel / CSV</button>
-            </div>
-            </div>
-            <form id="researchForm" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" id="form_status" name="form_status" value="HOD" required>
-                <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-                <div class="row">
-                <!-- /Second column -->
+                </ul>
+                <!-- main tab-->
+                <div class="tab-content" style="padding:0;background: none;border: none;box-shadow: none;">
+                    @if(auth()->user()->hasRole(['HOD']))
+                        <!-- first tab-->
+                        <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
 
-                <!-- Second column -->
-                <div class="col-12 col-lg-12">
-                    <!-- Pricing Card -->
-                    <div class="card mb-6">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Program Information</h5>
+                            <div
+                                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h4 class="mb-1">Profitability of the programs</h4>
+                                </div>
+                                <div class="d-flex align-content-center flex-wrap gap-4">
+                                    <div class="d-flex gap-4">
+                                        <a class="btn btn-label-primary"
+                                            href="{{ route('indicators_crud.index', ['slug' => 'profitability_of_the_programs', 'id' => $indicatorId]) }}">View</a>
+                                    </div>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                        <i class="bx bx-upload"></i> Import Excel / CSV</button>
+                                </div>
+                            </div>
+                            <form id="researchForm" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" id="form_status" name="form_status" value="HOD" required>
+                                <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                                <div class="row">
+                                    <!-- /Second column -->
+
+                                    <!-- Second column -->
+                                    <div class="col-12 col-lg-12">
+                                        <!-- Pricing Card -->
+                                        <div class="card mb-6">
+                                            <div class="card-header">
+                                                <h5 class="card-title mb-0">Program Information</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label for="faculty" class="form-label">Faculty</label>
+                                                    <select name="faculty_id" id="faculty_id" class="select2 form-select"
+                                                        required>
+                                                        <option value="">-- Select Faculty --</option>
+                                                        @foreach(get_faculties() as $faculty)
+                                                            <option value="{{ $faculty->id }}">
+                                                                {{ $faculty->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="department" class="form-label">Department</label>
+                                                    <select name="department_id" id="department_id" class="select2 form-select"
+                                                        required>
+                                                        <option value="">-- Select Department --</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="program" class="form-label">Program Name</label>
+                                                    <select name="program_id" id="program_id"
+                                                        class="select2 form-select program_id" required>
+                                                        <option value="">-- Select Program --</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="program" class="form-label">Program Level</label>
+                                                    <select name="program_level" class="select2 form-select program_level"
+                                                        required>
+                                                        <option value="">-- Select Program --</option>
+                                                        <option value="UG">UG</option>
+                                                        <option value="PG">PG</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="profitability">Profitability</label>
+                                                    <input type="number" class="form-control" id="profitability"
+                                                        name="profitability" required placeholder="Profitability">
+                                                </div>
+                                                <div class="">
+                                                    <button type="submit"
+                                                        class="btn btn-primary waves-effect waves-light">SUBMIT</button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- /Pricing Card -->
+
+                                    </div>
+                                    <!-- /Second column -->
+                                </div>
+                            </form>
+
+                        </div>
+                        <!-- /first tab-->
+                    @endif
+                    <!-- /second tab-->
+                    <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
                     </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label for="faculty" class="form-label">Faculty</label>
-                            <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
-                                 <option value="">-- Select Faculty --</option>
-                                    @foreach(get_faculties() as $faculty)
-                                        <option value="{{ $faculty->id }}">
-                                            {{ $faculty->name }}
-                                        </option>
-                                    @endforeach
-                            </select>
-                        </div>
+                    <!-- /second tab-->
 
-                        <div class="mb-3">
-                            <label for="department" class="form-label">Department</label>
-                            <select name="department_id" id="department_id" class="select2 form-select" required>
-                                <option value="">-- Select Department --</option>
-                            </select>
-                        </div>
-
-                         <div class="mb-3">
-                            <label for="program" class="form-label">Program Name</label>
-                            <select name="program_id" id="program_id" class="select2 form-select program_id" required>
-                                <option value="">-- Select Program --</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="program" class="form-label">Program Level</label>
-                            <select name="program_level" class="select2 form-select program_level" required>
-                                <option value="">-- Select Program --</option>
-                                <option value="PG">PG</option>
-                                <option value="UG">UG</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="profitability">Profitability</label>
-                            <input type="number" class="form-control" id="profitability" name="profitability" required placeholder="Profitability">
-                        </div>
-                        <div class="">
-                        <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
-                    </div>
-                        
-                    </div>
-                    </div>
-                    <!-- /Pricing Card -->
-                
                 </div>
-                <!-- /Second column -->
-                </div>
-            </form>
+                <!-- /main tab-->
 
             </div>
-            <!-- /first tab-->
-            @endif
-            <!-- /second tab-->
-            <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
-            </div>
-            <!-- /second tab-->
-
+            <!-- tab open-->
         </div>
-        <!-- /main tab-->
-
-    </div>
-    <!-- tab open-->
-  </div>
 
 
 
-<!-- / close new design -->
+        <!-- / close new design -->
         <!-- Import Modal -->
-<div class="modal fade" id="importModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form id="importForm" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-            <input type="hidden" name="form_status" value="HOD">
+        <div class="modal fade" id="importModal" tabindex="-1">
+            <div class="modal-dialog">
+                <form id="importForm" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                    <input type="hidden" name="form_status" value="HOD">
 
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Import Employability Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import Employability Data</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
 
-                <div class="modal-body">
-                    <label class="form-label">Upload Excel / CSV</label>
-                    <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
+                        <div class="modal-body">
+                            <label class="form-label">Upload Excel / CSV</label>
+                            <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
 
-                    <small class="text-muted d-block mt-2">
-                        Allowed: xlsx, xls, csv
-                    </small>
-                </div>
+                            <small class="text-muted d-block mt-2">
+                                Allowed: xlsx, xls, csv
+                            </small>
+                        </div>
 
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
 
     </div>
     <!-- / Content -->
@@ -181,18 +194,18 @@
     <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
 @endpush
 @push('script')
-      
+
     @if(auth()->user()->hasRole(['HOD']))
         <script>
             $(document).ready(function () {
-              
-              
 
-                 $('#researchForm').on('submit', function (e) {
+
+
+                $('#researchForm').on('submit', function (e) {
                     e.preventDefault();
                     let form = $(this);
                     let formData = new FormData(this);
-                     // Show loading indicator
+                    // Show loading indicator
                     Swal.fire({
                         title: 'Please wait...',
                         allowOutsideClick: false,
@@ -200,7 +213,7 @@
                             Swal.showLoading();
                         }
                     });
-                     
+
                     $.ajax({
                         url: "{{ route('program-profitability.store') }}",
                         type: "POST",
@@ -214,7 +227,7 @@
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
                             $('.select2').val(null).trigger('change');
-                              // Remove all extra grant groups and keep only the first one
+                            // Remove all extra grant groups and keep only the first one
                             $('#grant-details-container .grant-group:not(:first)').remove();
 
                             // Reset the proof container of the first group
@@ -235,32 +248,32 @@
                             // Clear previous errors before showing new ones
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
-                             if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
 
-                            // Loop through all validation errors
-                            $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
+                                // Loop through all validation errors
+                                $.each(errors, function (field, messages) {
+                                    let input = form.find('[name="' + field + '"]');
 
-                                if (input.length) {
-                                    input.addClass('is-invalid');
+                                    if (input.length) {
+                                        input.addClass('is-invalid');
 
-                                    // Show error message under input
-                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                }
-                            });
+                                        // Show error message under input
+                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                    }
+                                });
 
-                        } else if (xhr.status === 409) {
-                            // 🔥 Duplicate record message
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Duplicate Entry',
-                                text: xhr.responseJSON.message
-                            });
+                            } else if (xhr.status === 409) {
+                                // 🔥 Duplicate record message
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Duplicate Entry',
+                                    text: xhr.responseJSON.message
+                                });
 
-                        } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
-                        }
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
                         }
                     });
                 });
@@ -304,7 +317,7 @@
 
                     departmentSelect.html('<option value="">Loading...</option>');
                     programSelect.html('<option value="">-- Select Program --</option>');
-                    
+
 
                     if (facultyId) {
                         $.ajax({
@@ -318,8 +331,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                                            ${department.name}
-                                        </option>`
+                                                            ${department.name}
+                                                        </option>`
                                     );
                                 });
 
@@ -349,8 +362,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                                            ${program.program_name}
-                                        </option>`
+                                                            ${program.program_name}
+                                                        </option>`
                                     );
                                 });
 
@@ -370,4 +383,4 @@
             });
         </script>
     @endif
-    @endpush
+@endpush

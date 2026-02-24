@@ -57,29 +57,6 @@
                         <div class="col-md-6 mt-1"
                             style="flex:1 1 calc(50% - 15px); padding:15px; border:1px solid #ddd; border-radius:6px;">
                             <label style="font-weight:bold; margin-bottom:8px; display:block;">
-                                Admits mistakes and takes responsibility for correcting them
-                            </label>
-                            <div style="margin-top:8px;">
-                                <label style="margin-right:15px;"><input type="radio" name="responsibility_accountability_1"
-                                        value="20">
-                                    Strongly Disagree</label>
-                                <label style="margin-right:15px;"><input type="radio" name="responsibility_accountability_1"
-                                        value="40">
-                                    Disagree</label>
-                                <label style="margin-right:15px;"><input type="radio" name="responsibility_accountability_1"
-                                        value="60">
-                                    Neutral</label>
-                                <label style="margin-right:15px;"><input type="radio" name="responsibility_accountability_1"
-                                        value="80">
-                                    Agree</label>
-                                <label><input type="radio" name="responsibility_accountability_1" value="100"> Strongly
-                                    Agree</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mt-1"
-                            style="flex:1 1 calc(50% - 15px); padding:15px; border:1px solid #ddd; border-radius:6px;">
-                            <label style="font-weight:bold; margin-bottom:8px; display:block;">
                                 Keeps commitments and meets deadlines consistently
                             </label>
                             <div style="margin-top:8px;">
@@ -96,6 +73,29 @@
                                         value="80">
                                     Agree</label>
                                 <label><input type="radio" name="responsibility_accountability_2" value="100"> Strongly
+                                    Agree</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mt-1"
+                            style="flex:1 1 calc(50% - 15px); padding:15px; border:1px solid #ddd; border-radius:6px;">
+                            <label style="font-weight:bold; margin-bottom:8px; display:block;">
+                                Admits mistakes and takes responsibility for correcting them
+                            </label>
+                            <div style="margin-top:8px;">
+                                <label style="margin-right:15px;"><input type="radio" name="responsibility_accountability_1"
+                                        value="20">
+                                    Strongly Disagree</label>
+                                <label style="margin-right:15px;"><input type="radio" name="responsibility_accountability_1"
+                                        value="40">
+                                    Disagree</label>
+                                <label style="margin-right:15px;"><input type="radio" name="responsibility_accountability_1"
+                                        value="60">
+                                    Neutral</label>
+                                <label style="margin-right:15px;"><input type="radio" name="responsibility_accountability_1"
+                                        value="80">
+                                    Agree</label>
+                                <label><input type="radio" name="responsibility_accountability_1" value="100"> Strongly
                                     Agree</label>
                             </div>
                         </div>

@@ -79,7 +79,7 @@ class PermissionController extends Controller
         if ($role->name == 'Rector') {
             return redirect()->route('rector-dashboard.index');
         }
-        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG') {
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'HR' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center') {
             return view('admin.teacher_dashbord', compact('employee'));
         } elseif ($role->name == 'Survey') {
             return view('admin.survey_dashbord', compact('employee'));
@@ -156,7 +156,7 @@ class PermissionController extends Controller
         $data = [100, 40, 50, 60, 70, 80, 90, 85];
 
 
-        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG') {
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'HR' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center') {
             return view('admin.teacher_dashbord_bk', compact('employee'));
         } else {
             return view('admin.teacher_dashbord', compact('employee'));
@@ -182,6 +182,14 @@ class PermissionController extends Controller
             ?? $user->roles->firstWhere('name', 'Program Leader UG')
             ?? $user->roles->firstWhere('name', 'Program Leader PG')
             ?? $user->roles->firstWhere('name', 'Professor')
+            ?? $user->roles->firstWhere('name', 'Finance')
+            ?? $user->roles->firstWhere('name', 'International Office')
+            ?? $user->roles->firstWhere('name', 'HR')
+            ?? $user->roles->firstWhere('name', 'QCE')
+            ?? $user->roles->firstWhere('name', 'OEC')
+            ?? $user->roles->firstWhere('name', 'DOPS')
+            ?? $user->roles->firstWhere('name', 'Alumni Office')
+            ?? $user->roles->firstWhere('name', 'Employability Center')
             ?? $user->roles->first(),
             'hod' => $user->roles->firstWhere('name', 'HOD'),
             'dean' => $user->roles->firstWhere('name', 'Dean'),
@@ -257,6 +265,14 @@ class PermissionController extends Controller
             case 'dean':
                 return view('admin.dean-v2', compact('employee'));
             default:
+            case 'finance':
+            case 'international office':
+            case 'hr':
+            case 'qec':
+            case 'oec':
+            case 'dops':
+            case 'alumni office':
+            case 'employability center':
                 return view('admin.teacher_dashbord', compact('employee'));
         }
     }
@@ -327,7 +343,7 @@ class PermissionController extends Controller
             abort(403);
         }
 
-        $teacherRoles = ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG'];
+        $teacherRoles = ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG', 'Finance', 'International Office', 'HR', 'QCE', 'OEC', 'DOPS', 'Alumni Office', 'Employability Center'];
         if (in_array($request->role, $teacherRoles)) {
             session(['active_role' => 'teacher']);
         } elseif ($request->role === 'HOD') {
