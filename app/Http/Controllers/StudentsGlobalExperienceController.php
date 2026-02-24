@@ -20,10 +20,10 @@ class StudentsGlobalExperienceController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-         if ($user->hasRole('HOD')) {
+            if(in_array(getRoleName(activeRole()), ['International Office'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
-                    $forms = StudentsGlobalExperience::where('created_by', $employee_id)
+                    $forms = StudentsGlobalExperience::with(['faculty', 'department', 'program'])->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get();
                 }       

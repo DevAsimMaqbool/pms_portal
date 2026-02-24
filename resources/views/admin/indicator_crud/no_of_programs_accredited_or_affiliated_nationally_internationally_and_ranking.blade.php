@@ -10,22 +10,24 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
+        @if(in_array(getRoleName(activeRole()), ['Dean']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
              <h5 class="card-header">No of Programs accredited or affiliated nationally/ Internationally and ranking</h5>
             <div class="card-datatable table-responsive card-body">
-                    @if(auth()->user()->hasRole(['Dean']) == activeRole())
+                    @if(in_array(getRoleName(activeRole()), ['Dean']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="intellectualTable" class="table table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
+                                                        <th>Faculty</th>
                                                         <th>Recognition Type</th>
                                                         <th>Scope</th>
                                                         <th>Validity From</th>
@@ -136,9 +138,8 @@
                         <select name="program_level" id="program_level"
                             class="select2 form-select faculty-member" required>
                             <option value="">-- Select Level --</option>
-                            <option value="ug">UG</option>
-                            <option value="grad">Grad</option>
-                            <option value="phd">PhD</option>
+                            <option value="UG">UG</option>
+                            <option value="PG">PG</option>
                         </select>
                     </div>
 
@@ -297,7 +298,16 @@
         </div>
     </div>
 </div>
-
+        @else
+             <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
 
     </div>
     <!-- / Content -->
@@ -318,7 +328,7 @@
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['Dean']) == activeRole())
+    @if(in_array(getRoleName(activeRole()), ['Dean']))
         <script>
             function fetchCommercialForms() {
                 $.ajax({
@@ -346,6 +356,7 @@
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
+                                form.faculty ? form.faculty.name : 'N/A',
                                 form.recognition_type || 'N/A',
                                 form.scope|| 'N/A',
                                 form.validity_from|| 'N/A',
@@ -365,6 +376,7 @@
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
+                                    { title: "Faculty" },
                                     { title: "Recognition Type" },
                                     { title: "Scope" },
                                     { title: "Validity From" },
@@ -474,7 +486,7 @@
                     let historyHtml = '';
                     history.forEach(update => {
                         let histortText = 'N/A';
-                        if (update.role === 'qec') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
+                        if (update.role === 'QEC') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
                         else histortText = update.status || 'N/A';
 
                         historyHtml += `

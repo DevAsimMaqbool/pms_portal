@@ -20,7 +20,7 @@ class ActiveInternationalResearchPartnerController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-            if ($user->hasRole('Dean') == activeRole()) {
+            if(in_array(getRoleName(activeRole()), ['Dean'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
                     $forms = ActiveInternationalResearchPartner::with([
@@ -32,7 +32,7 @@ class ActiveInternationalResearchPartnerController extends Controller
                         ->get();
                 }       
             }
-            if ($user->hasRole('International Office') == activeRole()) {
+            if(in_array(getRoleName(activeRole()), ['International Office'])){
                 $status = $request->input('status');
                 if($status=="HOD"){
                     $forms = ActiveInternationalResearchPartner::with([
@@ -174,7 +174,7 @@ class ActiveInternationalResearchPartnerController extends Controller
                 // Get current user info
                 $currentUserId = Auth::id();
                 $currentUserName = Auth::user()->name;
-                $userRoll = activeRole() ?? 'N/A';
+                $userRoll = getRoleName(activeRole()) ?? 'N/A';
 
                 // Avoid duplicate consecutive updates by the same user with the same status
                 $lastUpdate = end($history);

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
@@ -23,7 +24,7 @@
             <div class="nav-align-top">
                 <!-- main tab-->
                 <div class="tab-content" style="padding:0;background: none;border: none;box-shadow: none;">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(in_array(getRoleName(activeRole()), ['Finance']))
                         <!-- first tab-->
                         <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
 
@@ -88,9 +89,12 @@
 
 
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="form-label" for="dropout_rate">Dropout Rate</label>
+                                                        <label class="form-label" for="dropout_rate">Dropout Rate (%)</label>
+                                                        <div class="input-group">
+                                                        <span class="input-group-text" id="basic-addon11">%</span> 
                                                         <input type="number" class="form-control" id="dropout_rate"
-                                                            name="dropout_rate" required placeholder="Dropout Rate">
+                                                            name="dropout_rate" required placeholder="Dropout Rate in %">
+                                                         </div>   
                                                     </div>
                                                     <div class="">
                                                         <button type="submit"
@@ -109,11 +113,17 @@
 
                         </div>
                         <!-- /first tab-->
-                    @endif
-                    <!-- /second tab-->
-                    <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
-                    </div>
-                    <!-- /second tab-->
+                        @else
+                            <div class="misc-wrapper">
+                                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                                <div class="mt-12">
+                                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                                </div>
+                            </div>
+                        @endif
+                   
 
                 </div>
                 <!-- /main tab-->
@@ -175,7 +185,7 @@
 @endpush
 @push('script')
 
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['Finance']))
         <script>
             $(document).ready(function () {
 

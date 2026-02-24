@@ -17,7 +17,7 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
             $user = Auth::user();
             $userId = Auth::id();
             $employee_id = $user->employee_id;
-            if ($user->hasRole('Dean') == activeRole()) {
+            if(in_array(getRoleName(activeRole()), ['Dean'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
                         $forms = ProgramAccreditation::with([
@@ -36,7 +36,8 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
                             });
                 }
             }
-            if ($user->hasRole('QEC') == activeRole()) {
+           
+            if(in_array(getRoleName(activeRole()), ['QEC'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
                     $forms = ProgramAccreditation::with([
@@ -273,7 +274,7 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
                 // Get current user info
                 $currentUserId = Auth::id();
                 $currentUserName = Auth::user()->name;
-                $userRoll = activeRole() ?? 'N/A';
+                $userRoll = getRoleName(activeRole()) ?? 'N/A';
 
                 // Avoid duplicate consecutive updates by the same user with the same status
                 $lastUpdate = end($history);

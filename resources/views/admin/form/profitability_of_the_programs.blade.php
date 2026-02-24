@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
@@ -21,19 +22,29 @@
 <div class="app-ecommerce">
     <!-- tab open-->
     <div class="nav-align-top">
-
+       @if(in_array(getRoleName(activeRole()), ['Finance']))
         <ul class="nav nav-pills mb-4" role="tablist">
             <li class="nav-item">
                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-top-home" aria-controls="navs-pills-top-home" aria-selected="true">Form</button>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-top-profile" aria-controls="navs-pills-top-profile" aria-selected="false">Table</button>
-            </li>
+            </li> --}}
             
         </ul>
+        @else
+             <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
         <!-- main tab-->
         <div class="tab-content" style="padding:0;background: none;border: none;box-shadow: none;">
-             @if(auth()->user()->hasRole(['HOD']))
+             @if(in_array(getRoleName(activeRole()), ['Finance']))
             <!-- first tab-->
             <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
 
@@ -98,10 +109,13 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="profitability">Profitability</label>
-                            <input type="number" class="form-control" id="profitability" name="profitability" required placeholder="Profitability">
+                            <label class="form-label" for="profitability">Profitability (%)</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon11">%</span> 
+                                <input type="number" class="form-control" id="profitability" name="profitability" required placeholder="Profitability in %">
+                            </div>
                         </div>
-                        <div class="">
+                        <div class="" style="float:right">
                         <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                     </div>
                         
@@ -118,8 +132,8 @@
             <!-- /first tab-->
             @endif
             <!-- /second tab-->
-            <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
-            </div>
+            {{-- <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
+            </div> --}}
             <!-- /second tab-->
 
         </div>
@@ -182,7 +196,7 @@
 @endpush
 @push('script')
       
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['Finance']))
         <script>
             $(document).ready(function () {
               
@@ -277,7 +291,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('employability.import') }}",
+                        url: "{{ route('program-profitability.import') }}",
                         method: "POST",
                         data: formData,
                         contentType: false,

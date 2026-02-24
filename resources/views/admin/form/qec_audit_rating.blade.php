@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
@@ -18,7 +19,7 @@
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['HOD']))
+                @if(in_array(getRoleName(activeRole()), ['QEC']))
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs mb-3" role="tablist">
                         <li class="nav-item">
@@ -28,9 +29,18 @@
                                             <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
                                         </li> -->
                     </ul>
+                @else
+                    <div class="misc-wrapper">
+                        <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                        <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                        <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                        <div class="mt-12">
+                            <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                        </div>
+                    </div>
                 @endif
                 <div class="tab-content">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(in_array(getRoleName(activeRole()), ['QEC']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             <div class="d-flex justify-content-between">
                                 <div>
@@ -52,9 +62,16 @@
                                                 <label class="form-label">Audit Term</label>
                                                 <select name="audits[0][audit_term]" class="form-select">
                                                     <option value="">Select Audit Term</option>
-                                                    <option value="2021-2022">2021-2022</option>
-                                                    <option value="2022-2023">2022-2023</option>
-                                                    <option value="2023-2024">2023-2024</option>
+                                                    <?php
+                                                        $currentYear = date('Y');
+
+                                                        // Show range from past 2 to next 3 academic years
+                                                        for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
+                                                            $nextYear = $year + 1;
+                                                            $range = $year . '-' . $nextYear;
+                                                            echo "<option value='{$range}'>{$range}</option>";
+                                                        }
+                                                        ?>
                                                 </select>
                                             </div>
 
@@ -178,6 +195,7 @@
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 @endpush
 @push('script')
+@if(in_array(getRoleName(activeRole()), ['QEC']))
     <script>
         let pastIndex = 1;
         let faculties = @json(get_faculties());
@@ -473,6 +491,15 @@
             faculties.forEach(function (fac) {
                 facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
             });
+            // 🔹 Dynamic Academic Year Logic (Same as PHP)
+            let currentYear = new Date().getFullYear();
+            let auditTermOptions = '<option value="">Select Audit Term</option>';
+
+            for (let year = currentYear - 2; year <= currentYear + 3; year++) {
+                let nextYear = year + 1;
+                let range = `${year}-${nextYear}`;
+                auditTermOptions += `<option value="${range}">${range}</option>`;
+            }
 
             let group = `
                         <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
@@ -480,10 +507,7 @@
                         <div class="col-md-4">
                         <label class="form-label">Audit Term</label>
                         <select name="audits[${pastIndex}][audit_term]" class="form-select">
-                        <option value="">Select</option>
-                        <option value="2021-2022">2021-2022</option>
-                        <option value="2022-2023">2022-2023</option>
-                        <option value="2023-2024">2023-2024</option>
+                        ${auditTermOptions}
                         </select>
                         </div>
 
@@ -596,4 +620,5 @@
             pastIndex = 0;
         }
     </script>
+     @endif
 @endpush

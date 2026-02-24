@@ -19,7 +19,7 @@ class StudentEngagementRateController extends Controller
 
                 $status = $request->input('status');
                 if($status=="HOD"){
-                        $forms = StudentEngagementRate::where('created_by', $employee_id)
+                        $forms = StudentEngagementRate::with(['faculty', 'department', 'program'])->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get();
                 }
@@ -50,7 +50,7 @@ class StudentEngagementRateController extends Controller
                     'nature_of_event' => 'required|string',
                     'other_event_detail' => 'nullable|string',
                     'event_location' => 'nullable|array',
-                    'scope_of_the_event' => 'nullable|string',
+                    'scope_of_the_event' => 'required|string',
 
                     // Event Details
                     'title_of_the_event' => 'nullable|string',
@@ -66,7 +66,7 @@ class StudentEngagementRateController extends Controller
                     // Participation
                     'participation_target' => 'nullable|integer',
                     'number_of_students_participated' => 'nullable|integer',
-                    'employer_satisfaction' => 'nullable|integer|min:1|max:5',
+                    'employer_satisfaction' => 'required',
                 ];
 
 
@@ -134,7 +134,7 @@ class StudentEngagementRateController extends Controller
                     // Participation
                     'participation_target' => 'nullable|integer',
                     'number_of_students_participated' => 'nullable|integer',
-                    'employer_satisfaction' => 'nullable|integer|min:1|max:5',
+                    'employer_satisfaction' => 'required',
                 ];
 
 
