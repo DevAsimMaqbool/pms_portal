@@ -2094,6 +2094,9 @@ if (!function_exists('activeRole')) {
             'Employability Center',
             'HOD',
             'Dean',
+            'Rector',
+            'QCH',
+            'ORIC'
         ];
 
         // if (in_array($role, $teacherRoles)) {

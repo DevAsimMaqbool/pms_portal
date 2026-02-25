@@ -36,7 +36,10 @@ class SetDefaultActiveRole
             'OEC',
             'DOPS',
             'Alumni Office',
-            'Employability Center'
+            'Employability Center',
+            'Rector',
+            'QCH',
+            'ORIC'
         ];
 
         if (in_array($role, $teacherRoles)) {

@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
             if (Auth::check() && !Session::has('active_role')) {
                 $user = Auth::user();
 
-                $teacherRoles = ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG', 'Finance', 'International Office', 'HR', 'QCE', 'OEC', 'DOPS', 'Alumni Office', 'Employability Center'];
+                $teacherRoles = ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG', 'Finance', 'International Office', 'HR', 'QCE', 'OEC', 'DOPS', 'Alumni Office', 'Employability Center', 'Rector', 'QCH', 'ORIC'];
 
                 if ($user->roles()->whereIn('name', $teacherRoles)->exists()) {
                     Session::put('active_role', 'teacher');
