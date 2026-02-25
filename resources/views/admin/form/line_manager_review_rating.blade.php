@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
@@ -19,19 +20,8 @@
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['HOD']))
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs mb-3" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Line Manager's Review & Rating on Tasks</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
-                        </li>
-                    </ul>
-                @endif
                 <div class="tab-content">
-                    @if(auth()->user()->hasRole(['HOD']))
+                     @if(in_array(getRoleName(activeRole()), ['HOD','Dean']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             
                             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
@@ -63,12 +53,20 @@
                                             @endforeach
                                         </select>
                                     </div>
-
+                                    @php
+                                        $startYear = 2020; // you can change this
+                                        $currentYear = now()->year;
+                                        $endYear = $currentYear + 5; // how many years ahead you want
+                                    @endphp
                                     <div class="col-md-6">
                                         <label class="form-label" for="multicol-language">Year</label>
                                         <select name="year" id="select2Year" class="select2 form-select" required>
                                             <option value="">-- Select Year --</option>
-                                            <option value="2025-2026">2025-2026</option>
+                                            @for($year = $startYear; $year <= $endYear; $year++)
+                                                <option value="{{ $year }}-{{ $year + 1 }}">
+                                                    {{ $year }}-{{ $year + 1 }}
+                                                </option>
+                                            @endfor
                                         </select>
                                     </div>
                                     <div id="author-past-container">
@@ -105,25 +103,16 @@
                                 </div>
                             </form>
                         </div>
-                    @endif
-                    @if(auth()->user()->hasRole(['Dean', 'HOD', 'ORIC']))
-                        <div class="tab-pane fade show {{ auth()->user()->hasRole(['Dean', 'ORIC']) ? 'active' : '' }}"
-                            id="form2" role="tabpanel">
-                            <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" id="selectAll"></th>
-                                        <th>#</th>
-                                        <th>Created By</th>
-                                        <th>Co Authers</th>
-                                        <th>Author Rank</th>
-                                        <th>Created Date</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    @endif
+                            @else
+                                <div class="misc-wrapper">
+                                    <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                                    <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                                    <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                                    <div class="mt-12">
+                                        <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                                    </div>
+                                </div>
+                            @endif
                 </div>
             </div>
         </div>
@@ -149,7 +138,7 @@
 @endpush
 @push('script')
  
-    @if(auth()->user()->hasRole(['HOD']))
+     @if(in_array(getRoleName(activeRole()), ['HOD','Dean']))
         <script>
         // SVG stars
     const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";

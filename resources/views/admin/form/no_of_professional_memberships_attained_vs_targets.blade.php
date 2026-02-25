@@ -10,17 +10,18 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
 
 <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
 <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+<link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
 <!-- Content -->
 <div class="container-xxl flex-grow-1 container-p-y">
-
+@if(in_array(getRoleName(activeRole()), ['Dean','HOD','Program Leader UG','Program Leader PG','QEC']))
 <!-- Multi Column with Form Separator -->
 <div class="card">
 <div class="card-datatable table-responsive card-body">
 <!-- Tab panes -->
 <div class="tab-content">
-@if(auth()->user()->hasRole(['Dean','HOD']) == activeRole())
+@if(in_array(getRoleName(activeRole()), ['Dean','HOD','Program Leader UG','Program Leader PG']))
 <div class="tab-pane fade show active" id="form1" role="tabpanel">
 <div class="d-flex justify-content-between">
     <div>
@@ -182,8 +183,8 @@ class="country-dropdown select2 form-select" required>
 
 </div>
 @endif
-@if(auth()->user()->hasRole(['QEC']) == activeRole())
-    <div class="tab-pane fade show {{ auth()->user()->hasRole(['QEC']) ? 'active' : '' }}"
+@if(in_array(getRoleName(activeRole()), ['QEC']))
+    <div class="tab-pane fade show {{ in_array(getRoleName(activeRole()), ['QEC']) ? 'active' : '' }}"
         id="form2" role="tabpanel">
             <div class="d-flex">
                 <select id="bulkAction" class="form-select w-auto me-2">
@@ -252,6 +253,17 @@ class="country-dropdown select2 form-select" required>
             </div>
         </div>
         <!--/ Add Permission Modal -->
+
+        @else
+             <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
 </div>
 <!-- / Content -->
 @endsection
@@ -268,11 +280,11 @@ class="country-dropdown select2 form-select" required>
 <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 <script>
         window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
-        window.activeUserRole = "{{ activeRole() }}";
+        window.activeUserRole = "{{ getRoleName(activeRole()) }}";
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['Dean','HOD']) == activeRole())
+    @if(in_array(getRoleName(activeRole()), ['Dean','HOD','Program Leader UG','Program Leader PG']))
         <script>
             $(document).ready(function () {
                 function fetchTarget(indicatorId) {
@@ -377,7 +389,7 @@ class="country-dropdown select2 form-select" required>
             });
         </script>
     @endif
-    @if(auth()->user()->hasRole(['QEC']) == activeRole())
+    @if(in_array(getRoleName(activeRole()), ['QEC']))
         <script>
             function fetchIndicatorForms3() {
                 $.ajax({
@@ -475,7 +487,7 @@ class="country-dropdown select2 form-select" required>
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                    if (window.activeUserRole === 'qec') {
+                    if (window.activeUserRole === 'QEC') {
                         $('#approveCheckbox').prop('checked', form.status == 2);
                         $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
                         // Label text for HOD
@@ -524,7 +536,23 @@ class="country-dropdown select2 form-select" required>
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Membership valid until</th><td>${form.membership_valid_until}</td></tr>`);
                     }
                     if (form.evidence_type) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Evidence Type</th><td>${form.evidence_type}</td></tr>`);
+
+                        let evidenceTypes = form.evidence_type;
+
+                        if (typeof evidenceTypes === 'string') {
+                            evidenceTypes = JSON.parse(evidenceTypes);
+                        }
+
+                        let badges = evidenceTypes.map(type => 
+                            `<span class="badge bg-primary me-1">${type}</span>`
+                        ).join('');
+
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Evidence Type</th>
+                                <td>${badges}</td>
+                            </tr>
+                        `);
                     }
                     if (form.document_link) {
                         let fileUrl = form.document_link;
@@ -580,7 +608,7 @@ class="country-dropdown select2 form-select" required>
                                     let histortText = 'N/A';
 
                                     // Role-based status mapping
-                                    if (update.role === 'qec') {
+                                    if (update.role === 'QEC') {
                                         if (update.status == '1') histortText = 'unapproved';
                                         else if (update.status == '2') histortText = 'Approved';
                                     } else {
