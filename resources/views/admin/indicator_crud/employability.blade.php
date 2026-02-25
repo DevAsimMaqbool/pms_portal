@@ -11,22 +11,26 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
+    @if(in_array(getRoleName(activeRole()), ['Employability Center']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
              <h5 class="card-header">% Employability</h5>
             <div class="card-datatable table-responsive card-body">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(in_array(getRoleName(activeRole()), ['Employability Center']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="employabilityTable" class="table table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
+                                                        <th>Faculty</th>
+                                                        <th>Department</th>
+                                                        <th>Program Name</th>
                                                         <th>Batch</th>
                                                         <th>Passing Year</th>
                                                         <th>Salary</th>
@@ -105,20 +109,15 @@
                             <label for="faculty" class="form-label">Please select period</label>
                             <select name="period" id="period" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Period --</option>
-                                <option value="11"> 2024-2025</option>
-                                <option value="171">2025-2026</option>
-                                <option value="158">2026-2027</option>
+                                <?php $currentYear = date('Y'); 
+                                 for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++)
+                                  { $nextYear = $year + 1; $range = $year . '-' . $nextYear; echo "<option value='{$range}'>{$range}</option>"; }
+                                ?>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="student_name" class="form-label">Student Name</label>
-                            <select name="student_id" id="student_id" class="select2 form-select faculty-member" required>
-                                <option value="">-- Select Student --</option>
-                                <option value="11"> Muhammad Ahmad</option>
-                                <option value="12">MalikMubasharAhmadZafar</option>
-                                <option value="13"> Muhammad Umar</option>
-                                
-                            </select>
+                            <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Student Name" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="faculty" class="form-label">Faculty</label>
@@ -265,7 +264,16 @@
     </div>
 </div>
 
-
+        @else
+             <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
     </div>
     <!-- / Content -->
 @endsection
@@ -327,7 +335,8 @@
 
 
        </script>
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['Employability Center']))
+    
         <script>
             function fetchCommercialForms() {
                 $.ajax({
@@ -357,6 +366,9 @@
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
+                                form.faculty ? form.faculty.name : 'N/A',
+                                form.department ? form.department.name : 'N/A',
+                                form.program ? form.program.program_name : 'N/A',
                                 form.batch || 'N/A',
                                 form.passing_year || 'N/A',
                                 form.salary || 'N/A',
@@ -371,6 +383,9 @@
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
+                                    { title: "Faculty" },
+                                    { title: "Department" },
+                                    { title: "Program Name" },
                                     { title: "Batch" },
                                     { title: "Passing Year" },
                                     { title: "Salary" },
@@ -510,7 +525,7 @@
             $(document).on('click', '.edit-form-btn', function () {
         const form = $(this).data('form');
         $('#researchForm1 #record_id').val(form.id);
-        $('#researchForm1 #student_id').val(form.student_id).trigger('change');
+        $('#researchForm1 #student_name').val(form.student_name);
         populateFacultyDepartmentProgram(form);
         $('#researchForm1 #batch').val(form.batch).trigger('change');
         $('#researchForm1 #period').val(form.period).trigger('change');

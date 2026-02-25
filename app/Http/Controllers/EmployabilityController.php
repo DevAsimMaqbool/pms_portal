@@ -38,10 +38,10 @@ class EmployabilityController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-         if ($user->hasRole('HOD')) {
+        if(in_array(getRoleName(activeRole()), ['Employability Center'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
-                    $forms = Employability::where('created_by', $employee_id)
+                    $forms = Employability::with(['faculty', 'department', 'program'])->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get();
                 }       
@@ -80,7 +80,7 @@ class EmployabilityController extends Controller
                  $rules = [
                     'indicator_id' => 'required',
                     'period' => 'required|string',
-                    'student_id' => 'required|integer',
+                    'student_name' => 'required|string',
                     'faculty_id' => 'required|integer',
                     'department_id' => 'required|integer',
                     'program_id' => 'required|integer',
@@ -157,7 +157,7 @@ class EmployabilityController extends Controller
         $request->validate([
                 'record_id' => 'required',
                 'period' => 'required|string',
-                'student_id' => 'required|integer',
+                'student_name' => 'required|string',
                 'faculty_id' => 'required|integer',
                 'department_id' => 'required|integer',
                 'program_id' => 'required|integer',
@@ -176,7 +176,7 @@ class EmployabilityController extends Controller
         ]);
 
         $data = $request->only([
-                        'period', 'student_id', 'faculty_id', 'program_id', 'batch','passing_year',
+                        'period', 'student_name', 'faculty_id', 'program_id', 'batch','passing_year',
                         'employer_name','sector','salary','market_competitive_salary','job_relevancy','employer_satisfaction',
                         'graduate_satisfaction'
                     ]);
