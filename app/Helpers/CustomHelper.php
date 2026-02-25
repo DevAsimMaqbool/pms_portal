@@ -2086,7 +2086,7 @@ if (!function_exists('activeRole')) {
             'Program Leader PG',
             'Finance',
             'International Office',
-            'HR',
+            'Human Resources',
             'QCE',
             'OEC',
             'DOPS',
