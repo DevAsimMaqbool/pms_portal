@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
@@ -23,14 +24,14 @@
             <div class="nav-align-top">
                 <!-- main tab-->
                 <div class="tab-content" style="padding:0;background: none;border: none;box-shadow: none;">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(in_array(getRoleName(activeRole()), ['Alumni Office']))
                         <!-- first tab-->
                         <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
 
                             <div
                                 class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
                                 <div class="d-flex flex-column justify-content-center">
-                                    <h4 class="mb-1"></h4>
+                                    <h4 class="mb-1">Alumni Satisfaction Rate</h4>
                                 </div>
                                 <div class="d-flex align-content-center flex-wrap gap-4">
                                     <div class="d-flex gap-4">
@@ -99,6 +100,15 @@
                                                             <option value="">-- Select Program --</option>
                                                         </select>
                                                     </div>
+                                                    <div class="mb-3 col-md-4">
+                                                        <label for="program_level" class="form-label">Program Level</label>
+                                                        <select name="program_level" id="program_level"
+                                                            class="select2 form-select faculty-member" required>
+                                                            <option value="">-- Select Level --</option>
+                                                            <option value="UG">UG</option>
+                                                            <option value="PG">PG</option>
+                                                        </select>
+                                                    </div>
 
                                                     <div class="mb-3 col-md-4">
                                                         <label class="form-label" for="roll_no">Roll No</label>
@@ -108,7 +118,7 @@
 
                                                     <div class="mb-3 col-md-4">
                                                         <label class="form-label" for="name">Graduation Year</label>
-                                                        <input type="text" class="form-control" id="graduation_year"
+                                                        <input type="date" class="form-control" id="graduation_year"
                                                             name="graduation_year" required placeholder="Graduation Year">
                                                     </div>
 
@@ -130,22 +140,25 @@
                                                     <div class="mb-3 col-md-4">
                                                         <label class="form-label" for="current_salary">Current
                                                             Salary</label>
-                                                        <input type="text" class="form-control" id="current_salary"
+                                                        <input type="number" class="form-control" id="current_salary"
                                                             name="current_salary" required placeholder="Current Salary">
                                                     </div>
 
                                                     <div class="mb-3 col-md-4">
                                                         <label class="form-label" for="email">Email</label>
-                                                        <input type="text" class="form-control" id="email" name="email" required
+                                                        <input type="email" class="form-control" id="email" name="email" required
                                                             placeholder="exmaple@gmail.com">
                                                     </div>
 
 
                                                     <div class="mb-3 col-md-4">
                                                         <label class="form-label" for="satisfaction_rate">Satisfaction
-                                                            Rate</label>
+                                                            Rate (%)</label>
+                                                        <div class="input-group">  
+                                                         <span class="input-group-text" id="basic-addon11">%</span>  
                                                         <input type="number" class="form-control" id="satisfaction_rate"
                                                             name="satisfaction_rate" required placeholder="Satisfaction Rate">
+                                                        </div>    
                                                     </div>
                                                     <div class="">
                                                         <button type="submit"
@@ -164,11 +177,17 @@
 
                         </div>
                         <!-- /first tab-->
+                    @else
+                        <div class="misc-wrapper">
+                            <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                            <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                            <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                            <div class="mt-12">
+                                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                            </div>
+                        </div>
                     @endif
-                    <!-- /second tab-->
-                    <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
-                    </div>
-                    <!-- /second tab-->
+                   
 
                 </div>
                 <!-- /main tab-->
@@ -230,7 +249,7 @@
 @endpush
 @push('script')
 
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['Alumni Office']))
         <script>
             $(document).ready(function () {
 

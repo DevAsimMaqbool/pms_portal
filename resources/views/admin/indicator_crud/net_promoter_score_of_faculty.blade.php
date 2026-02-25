@@ -11,16 +11,17 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
+       @if(in_array(getRoleName(activeRole()), ['Human Resources']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
              <h5 class="card-header">Net Promoter Score of Faculty</h5>
             <div class="card-datatable table-responsive card-body">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(in_array(getRoleName(activeRole()), ['Human Resources']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="employabilityTable" class="table table-bordered">
@@ -116,6 +117,43 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-4">
+                                                <label for="faculty" class="form-label">Faculty</label>
+                                                <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
+                                                    <option value="">-- Select Faculty --</option>
+                                                    @foreach(get_faculties() as $faculty)
+                                                        <option value="{{ $faculty->id }}">
+                                                            {{ $faculty->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="department_id" class="form-label">Department</label>
+                                                <select name="department_id" id="department_id" class="select2 form-select"
+                                                    required>
+                                                    <option value="">-- Select Department --</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="program" class="form-label">Program</label>
+                                                <select name="program_id" id="program_id" class="select2 form-select program_id"
+                                                    required>
+                                                    <option value="">-- Select Program --</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="program_level" class="form-label">Program Level</label>
+                                                <select name="program_level" id="program_level"
+                                                    class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Level --</option>
+                                                    <option value="UG">UG</option>
+                                                    <option value="PG">PG</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
                                                 <label class="form-label" for="total_faculty_surveyed">Total Faculty Surveyed</label>
                                                 <input type="number" class="form-control" id="total_faculty_surveyed" placeholder="Total Faculty Surveyed" name="total_faculty_surveyed" aria-label="Total Faculty Surveyed">
                                             </div>
@@ -129,7 +167,7 @@
                                             </div>
                                             <div class="col-md-12">
                                                  <label class="form-label" for="promoters_percentage">Promoters Percentage (%)</label>
-                                                <input type="number" class="form-control" id="promoters_percentage" placeholder="Number of Promoters" name="promoters_percentage" aria-label="Number of Promoters (Score 9–10)">
+                                                <input type="text" class="form-control" id="promoters_percentage" placeholder="Number of Promoters" name="promoters_percentage"">
                                             </div>
             
                         
@@ -145,7 +183,16 @@
         </div>
     </div>
 </div>
-
+                    @else
+                        <div class="misc-wrapper">
+                            <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                            <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                            <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                            <div class="mt-12">
+                                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                            </div>
+                        </div>
+                    @endif
 
     </div>
     <!-- / Content -->
@@ -208,7 +255,7 @@
 
 
        </script>
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['Human Resources']))
         <script>
             function fetchCommercialForms() {
                 $.ajax({
@@ -271,6 +318,22 @@
     
             $(document).ready(function () {
                 fetchCommercialForms();
+                function updatePromotersPercentage() {
+        let total = parseFloat($('#total_faculty_surveyed').val()) || 0;
+        let promoters = parseFloat($('#number_of_promoters').val()) || 0;
+
+        if(total > 0){
+            let percentage = (promoters / total) * 100;
+            $('#promoters_percentage').val(percentage.toFixed(2));
+        } else {
+            $('#promoters_percentage').val('');
+        }
+    }
+
+    // Trigger calculation whenever values change
+    $('#total_faculty_surveyed, #number_of_promoters').on('input', function() {
+        updatePromotersPercentage();
+    });
                 $(document).on('click', '.view-form-btn', function () {
                 // Clear modal
                 $('#modalExtraFieldsHistory').empty();
@@ -344,6 +407,9 @@
         $('#researchForm1 #number_of_promoters').val(form.number_of_promoters);
          $('#researchForm1 #promoters_percentage').val(form.promoters_percentage);
         $('#researchForm1 #year').val(form.year).trigger('change');
+        $('#researchForm1 #program_level').val(form.program_level).trigger('change');
+
+        populateFacultyDepartmentProgram(form);
         
         $('#researchForm1 #remarks').val(form.remarks);
 
@@ -413,6 +479,124 @@
         }
     });
 });
+function populateFacultyDepartmentProgram(form) {
+    const facultySelect = $('#faculty_id');
+    const departmentSelect = $('#department_id');
+    const programSelect = $('#program_id');
+
+    // Set faculty and trigger change
+    facultySelect.val(form.faculty_id).trigger('change');
+
+    if (!form.faculty_id) return;
+
+    // Load Departments
+    $.ajax({
+        url: "/get-departments/" + form.faculty_id,
+        type: "GET",
+        success: function (departments) {
+            departmentSelect.empty().append('<option value="">-- Select Department --</option>');
+
+            $.each(departments, function (key, department) {
+                departmentSelect.append(`<option value="${department.id}">${department.name}</option>`);
+            });
+
+            // Set department
+            departmentSelect.val(form.department_id).trigger('change');
+
+            if (!form.department_id) return;
+
+            // Load Programs
+            $.ajax({
+                url: "/get-programs/" + form.department_id,
+                type: "GET",
+                success: function (programs) {
+                    programSelect.empty().append('<option value="">-- Select Program --</option>');
+
+                    $.each(programs, function (key, program) {
+                        programSelect.append(`<option value="${program.id}">${program.program_name}</option>`);
+                    });
+
+                    // Set program
+                    programSelect.val(form.program_id).trigger('change');
+                },
+                error: function () {
+                    programSelect.html('<option value="">Error loading programs</option>');
+                }
+            });
+        },
+        error: function () {
+            departmentSelect.html('<option value="">Error loading departments</option>');
+        }
+    });
+}
+ $('#faculty_id').on('change', function () {
+
+                    let facultyId = $(this).val();
+                    let departmentSelect = $('#department_id');
+                    let programSelect = $('#program_id');
+
+                    departmentSelect.html('<option value="">Loading...</option>');
+                    programSelect.html('<option value="">-- Select Program --</option>');
+
+
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (response) {
+
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">-- Select Department --</option>');
+
+                                $.each(response, function (key, department) {
+                                    departmentSelect.append(
+                                        `<option value="${department.id}">
+                                                    ${department.name}
+                                                </option>`
+                                    );
+                                });
+
+                                departmentSelect.trigger('change'); // refresh select2
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">-- Select Department --</option>');
+                    }
+                });
+                $('#department_id').on('change', function () {
+
+                    let departmentId = $(this).val();
+                    let programSelect = $('#program_id');
+
+                    programSelect.html('<option value="">Loading...</option>');
+
+                    if (departmentId) {
+                        $.ajax({
+                            url: "/get-programs/" + departmentId,
+                            type: "GET",
+                            success: function (response) {
+
+                                programSelect.empty();
+                                programSelect.append('<option value="">-- Select Program --</option>');
+
+                                $.each(response, function (key, program) {
+                                    programSelect.append(
+                                        `<option value="${program.id}">
+                                                    ${program.program_name}
+                                                </option>`
+                                    );
+                                });
+
+                                programSelect.trigger('change'); // refresh select2
+                            },
+                            error: function () {
+                                programSelect.html('<option value="">Error loading programs</option>');
+                            }
+                        });
+                    } else {
+                        programSelect.html('<option value="">-- Select Program --</option>');
+                    }
+                });
      
 
 });

@@ -17,7 +17,7 @@ class FacultyNetPromoterScoreController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-         if ($user->hasRole('HOD')) {
+         if(in_array(getRoleName(activeRole()), ['Human Resources'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
                     $forms = FacultyNetPromoterScore::where('created_by', $employee_id)
@@ -47,9 +47,13 @@ class FacultyNetPromoterScoreController extends Controller
                  $rules = [
                     'indicator_id' => 'required',
                     'year' => 'required|string',
+                    'faculty_id' => 'required|integer',
+                    'department_id' => 'required|integer',
+                    'program_id' => 'required|integer',
+                    'program_level' => 'required|string',
                     'total_faculty_surveyed'    => 'required|integer|min:0',
                     'number_of_promoters'     => 'required|integer|min:0',
-                    'promoters_percentage'   => 'required|integer|min:0',
+                    'promoters_percentage'   => 'required',
                     'remarks'            => 'required|string',
                     'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                 ];
@@ -83,7 +87,7 @@ class FacultyNetPromoterScoreController extends Controller
 
         } catch (\Exception $e) {
              DB::rollBack();
-             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
     public function update(Request $request, $id)
@@ -93,15 +97,19 @@ class FacultyNetPromoterScoreController extends Controller
         $request->validate([
                 'record_id' => 'required',
                 'year' => 'required|string',
+                'faculty_id' => 'required|integer',
+                'department_id' => 'required|integer',
+                'program_id' => 'required|integer',
+                'program_level' => 'required|string',
                 'total_faculty_surveyed'    => 'required|integer|min:0',
                 'number_of_promoters'     => 'required|integer|min:0',
-                'promoters_percentage'   => 'required|integer|min:0',
+                'promoters_percentage'   => 'required',
                 'remarks'            => 'required|string',
     
         ]);
 
         $data = $request->only([
-                        'year', 'total_faculty_surveyed', 'number_of_promoters', 'promoters_percentage', 'remarks',
+                        'year','faculty_id','department_id','program_id','program_level', 'total_faculty_surveyed', 'number_of_promoters', 'promoters_percentage', 'remarks',
                         'graduate_satisfaction'
                     ]);
                     $data['updated_by'] = Auth::user()->employee_id;

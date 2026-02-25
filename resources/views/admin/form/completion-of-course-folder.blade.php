@@ -10,11 +10,12 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
+        @if(in_array(getRoleName(activeRole()), ['QEC','HOD','Teacher']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
@@ -30,16 +31,13 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs mb-3" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Completion of Course Folder</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
+                        <a class="nav-link active" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
                     </li>
                 </ul>
                 @endif
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
+                    @if(in_array(getRoleName(activeRole()), ['Teacher']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             <div class="d-flex justify-content-between">
                                 <div>
@@ -128,7 +126,7 @@
                         </div>
                     @endif
                     @if(in_array(getRoleName(activeRole()), ['HOD']))
-                      <div class="tab-pane fade" id="form3" role="tabpanel">
+                      <div class="tab-pane fade show active" id="form3" role="tabpanel">
                             <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                                     <thead>
                                         <tr>
@@ -214,6 +212,16 @@
             </div>
         </div>
         <!--/ Add Permission Modal -->
+        @else
+             <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
     </div>
     <!-- / Content -->
 @endsection
@@ -235,7 +243,7 @@
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
+    @if(in_array(getRoleName(activeRole()), ['Teacher']))
         <script>
             $(document).ready(function () {
 

@@ -9,6 +9,10 @@ class FacultyNetPromoterScore extends Model
     protected $fillable = [
         'indicator_id',
         'year',
+        'faculty_id',
+        'department_id',
+        'program_id',
+        'program_level',
         'total_faculty_surveyed',
         'number_of_promoters',
         'promoters_percentage',

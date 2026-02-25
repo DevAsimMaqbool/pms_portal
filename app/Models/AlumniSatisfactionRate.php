@@ -13,6 +13,7 @@ class AlumniSatisfactionRate extends Model
         'faculty_id',
         'department_id',
         'program_id',
+        'program_level',
         'roll_no',
         'graduation_year',
         'current_organization',

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
     <style>
         .form-disabled {
             color: #acaab1;
@@ -27,6 +28,7 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
+    @if(in_array(getRoleName(activeRole()), ['Alumni Office']))
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <div class="card-title mb-0">
@@ -37,7 +39,7 @@
                 </div>
             </div>
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['HOD']))
+                @if(in_array(getRoleName(activeRole()), ['Alumni Office']))
                     <div class="tab-pane fade show" id="form2" role="tabpanel">
                         <div class="table-responsive text-nowrap">
                             <table id="achievementTable" class="table table-bordered">
@@ -119,6 +121,15 @@
                                                 <option value="">-- Select Program --</option>
                                             </select>
                                         </div>
+                                        <div class="col-md-4">
+                                            <label for="program_level" class="form-label">Program Level</label>
+                                            <select name="program_level" id="program_level"
+                                                class="select2 form-select faculty-member" required>
+                                                <option value="">-- Select Level --</option>
+                                                <option value="UG">UG</option>
+                                                <option value="PG">PG</option>
+                                            </select>
+                                        </div>
 
                                         <div class="mb-3 col-md-4">
                                             <label class="form-label" for="roll_no">Roll No</label>
@@ -128,7 +139,7 @@
 
                                         <div class="mb-3 col-md-4">
                                             <label class="form-label" for="name">Graduation Year</label>
-                                            <input type="text" class="form-control" id="graduation_year"
+                                            <input type="date" class="form-control" id="graduation_year"
                                                 name="graduation_year" required placeholder="Graduation Year">
                                         </div>
 
@@ -148,21 +159,24 @@
                                         <div class="col-md-4">
                                             <label class="form-label" for="current_salary">Current
                                                 Salary</label>
-                                            <input type="text" class="form-control" id="current_salary"
+                                            <input type="number" class="form-control" id="current_salary"
                                                 name="current_salary" required placeholder="Current Salary">
                                         </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label" for="email">Email</label>
-                                            <input type="text" class="form-control" id="email" name="email" required
+                                            <input type="email" class="form-control" id="email" name="email" required
                                                 placeholder="exmaple@gmail.com">
                                         </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label" for="satisfaction_rate">Satisfaction
                                                 Rate</label>
+                                            <div class="input-group">  
+                                            <span class="input-group-text" id="basic-addon11">%</span>   
                                             <input type="number" class="form-control" id="satisfaction_rate"
                                                 name="satisfaction_rate" required placeholder="Satisfaction Rate">
+                                            </div>    
                                         </div>
                                     </div>
                                 </div>
@@ -177,6 +191,16 @@
                 </div>
             </div>
         </div>
+        @else
+            <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
     </div>
 @endsection
 
@@ -199,7 +223,7 @@
 @endpush
 
 @push('script')
-    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+    @if(in_array(getRoleName(activeRole()), ['Alumni Office']))
         <script>
             function fetchAchievementForms() {
                 $.ajax({
@@ -268,7 +292,7 @@
                     $f.find('[name="gender"]').val(form.gender).trigger('change');
                     // Set Faculty first
                     $f.find('[name="faculty_id"]').val(form.faculty.id).trigger('change');
-
+                    $f.find('[name="program_level"]').val(form.program_level).trigger('change');
                     // Load Departments for this faculty, then set Department
                     $.ajax({
                         url: "/get-departments/" + form.faculty.id,
