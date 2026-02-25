@@ -17,7 +17,7 @@ class NumberOfKnowledgeProductController extends Controller
         try {
             $user = Auth::user();
             $employee_id = $user->employee_id;
-            if ($user->hasRole('ORIC')) {
+            if(in_array(getRoleName(activeRole()), ['ORIC'])) {
                    $status = $request->input('status');
                     if($status=="RESEARCHER"){
                           $forms = NumberOfKnowledgeProduct::with([
@@ -35,7 +35,7 @@ class NumberOfKnowledgeProductController extends Controller
 
             }
 
-            if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+             if(in_array(getRoleName(activeRole()), ['Teacher','Professor','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = NumberOfKnowledgeProduct::with([
@@ -51,7 +51,11 @@ class NumberOfKnowledgeProductController extends Controller
                                 }
                                 return $form;
                             });
-                }
+                }       
+                
+            }
+            if(in_array(getRoleName(activeRole()), ['HOD'])) {
+                $status = $request->input('status');
                 if($status=="HOD"){
                     $employeeIds = User::where('manager_id', $employee_id)
                         ->role('Teacher')->pluck('employee_id');
@@ -72,6 +76,29 @@ class NumberOfKnowledgeProductController extends Controller
                             });
                 }        
                 
+            }
+            if(in_array(getRoleName(activeRole()), ['Dean'])) {
+                $status = $request->input('status');
+                $hod_ids = User::where('manager_id', $employee_id)
+                    ->role('HOD')->pluck('employee_id');
+                if ($status == "HOD") {
+                    $forms = NumberOfKnowledgeProduct::with([
+                        'creator' => function ($q) {
+                            $q->select('employee_id', 'name');
+                        }
+                    ])
+                        ->whereIn('created_by', $hod_ids)
+                        ->whereIn('status', [1, 2])
+                        ->where('form_status', $status)
+                        ->get()
+                        ->map(function ($form) {
+                                if ($form->attach_evidence) {
+                                    $form->attach_evidence = Storage::url($form->attach_evidence);
+                                }
+                                return $form;
+                            });
+                }
+
             }
 
             // Always return JSON if AJAX

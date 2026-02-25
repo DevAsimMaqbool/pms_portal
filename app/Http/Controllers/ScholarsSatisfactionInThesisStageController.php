@@ -19,11 +19,15 @@ class ScholarsSatisfactionInThesisStageController extends Controller
             $user = Auth::user();
             $userId = Auth::id();
             $employee_id = $user->employee_id;
-
-         if ($user->hasRole('HOD')) {
+            if(in_array(getRoleName(activeRole()), ['DOPS'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
-                    $forms = ScholarsSatisfactionInThesisStage::where('created_by', $employee_id)
+                    $forms = ScholarsSatisfactionInThesisStage::with([
+                            'creator:employee_id,name',
+                            'faculty:id,name',
+                            'department:id,name',
+                            'program:id,program_name',
+                        ])->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get();
                 }       

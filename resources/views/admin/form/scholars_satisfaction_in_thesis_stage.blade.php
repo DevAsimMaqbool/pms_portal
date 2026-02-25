@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
@@ -18,19 +19,9 @@
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['HOD']))
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs mb-3" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Scholar's Satisfaction (In Thesis Stage)</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
-                        </li>
-                    </ul>
-                @endif
+                
                 <div class="tab-content">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(in_array(getRoleName(activeRole()), ['DOPS']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             
                             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
@@ -123,25 +114,17 @@
                                 </div>
                             </form>
                         </div>
-                    @endif
-                    @if(auth()->user()->hasRole(['Dean', 'HOD', 'ORIC']))
-                        <div class="tab-pane fade show {{ auth()->user()->hasRole(['Dean', 'ORIC']) ? 'active' : '' }}"
-                            id="form2" role="tabpanel">
-                            <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" id="selectAll"></th>
-                                        <th>#</th>
-                                        <th>Created By</th>
-                                        <th>Co Authers</th>
-                                        <th>Author Rank</th>
-                                        <th>Created Date</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                    @else
+                        <div class="misc-wrapper">
+                            <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                            <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                            <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                            <div class="mt-12">
+                                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                            </div>
                         </div>
                     @endif
+                   
                 </div>
             </div>
         </div>
@@ -163,7 +146,7 @@
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['DOPS']))
         <script>
             
             $(document).ready(function () {

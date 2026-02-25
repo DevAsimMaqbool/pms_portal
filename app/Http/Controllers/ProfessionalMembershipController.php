@@ -19,7 +19,7 @@ class ProfessionalMembershipController extends Controller
             $employee_id = $user->employee_id;
 
 
-            if ($user->hasRole(['Dean','HOD']) == activeRole()) {
+            if(in_array(getRoleName(activeRole()), ['Dean','HOD','Program Leader UG','Program Leader PG'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
                         $forms = ProfessionalMembership::with([
@@ -35,7 +35,7 @@ class ProfessionalMembershipController extends Controller
                             });;
                 }
             }
-            if ($user->hasRole('QEC') == activeRole()) {
+            if(in_array(getRoleName(activeRole()), ['QEC'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
                     $forms = ProfessionalMembership::with([
@@ -228,7 +228,7 @@ class ProfessionalMembershipController extends Controller
                         // Get current user info
                         $currentUserId = Auth::id();
                         $currentUserName = Auth::user()->name;
-                        $userRoll = activeRole() ?? 'N/A';
+                        $userRoll = getRoleName(activeRole()) ?? 'N/A';
 
                         // Avoid duplicate consecutive updates by the same user with the same status
                         $lastUpdate = end($history);

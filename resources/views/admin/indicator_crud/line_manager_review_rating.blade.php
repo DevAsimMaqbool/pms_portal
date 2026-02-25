@@ -11,16 +11,17 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
+        @if(in_array(getRoleName(activeRole()), ['HOD','Dean']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
              <h5 class="card-header">Line Manager's Review & Rating on Tasks</h5>
             <div class="card-datatable table-responsive card-body">
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(in_array(getRoleName(activeRole()), ['HOD','Dean']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="intellectualTable" class="table table-bordered">
@@ -112,12 +113,20 @@
                                             
                                         </select>
                                     </div>
-
+                                     @php
+                                        $startYear = 2020; // you can change this
+                                        $currentYear = now()->year;
+                                        $endYear = $currentYear + 5; // how many years ahead you want
+                                    @endphp
                                     <div class="col-md-6">
                                         <label class="form-label" for="multicol-language">Year</label>
                                         <select name="year" id="year" class="select2 form-select" required>
                                             <option value="">-- Select Year --</option>
-                                            <option value="2025-2026">2025-2026</option>
+                                            @for($year = $startYear; $year <= $endYear; $year++)
+                                                <option value="{{ $year }}-{{ $year + 1 }}">
+                                                    {{ $year }}-{{ $year + 1 }}
+                                                </option>
+                                            @endfor
                                         </select>
                                     </div>
                                     <div id="author-past-container">
@@ -159,7 +168,16 @@
         </div>
     </div>
 </div>
-
+        @else
+             <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
 
     </div>
     <!-- / Content -->
@@ -182,7 +200,7 @@
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['HOD','Dean']))
         <script>
                     function fetchCommercialForms() {
                 $.ajax({
