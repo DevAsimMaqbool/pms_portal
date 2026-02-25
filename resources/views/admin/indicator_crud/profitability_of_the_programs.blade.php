@@ -28,24 +28,24 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-    @if(in_array(getRoleName(activeRole()), ['Finance']))
-        <!-- Multi Column with Form Separator -->
-        <div class="card">
-            <div class="card-header d-flex align-items-center justify-content-between">
-                <div class="card-title mb-0">
-                    <h5 class="mb-1">Profitability of the programs</h5>
+        @if(in_array(getRoleName(activeRole()), ['Finance']))
+            <!-- Multi Column with Form Separator -->
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="card-title mb-0">
+                        <h5 class="mb-1">Profitability of the programs</h5>
+                    </div>
+                    <div>
+                        <a href="{{ url('kpa/3/category/11/indicator/147') }}" class="btn btn-success">Go to Form</a>
+                    </div>
                 </div>
-                <div>
-
-                </div>
-            </div>
 
 
 
-            <div class="card-datatable table-responsive card-body">
+                <div class="card-datatable table-responsive card-body">
                     @if(in_array(getRoleName(activeRole()), ['Finance']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
-                           <div class="table-responsive text-nowrap">
+                            <div class="table-responsive text-nowrap">
                                 <table id="achievementTable" class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -59,20 +59,20 @@
                                         </tr>
                                     </thead>
                                 </table>
-                            </div>    
+                            </div>
                         </div>
-                    </div>
-                @endif
+                    @endif
 
+                </div>
             </div>
-        </div>
         @else
-             <div class="misc-wrapper">
+            <div class="misc-wrapper">
                 <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
                 <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
                 <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
                 <div class="mt-12">
-                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                        alt="page-misc-not-authorized" width="170" class="img-fluid" />
                 </div>
             </div>
         @endif
@@ -83,34 +83,93 @@
             <div class="modal-dialog modal-xl modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header text-white">
-                        <h5 class="modal-title" id="updateFormModalLabel">Edit Student Engagement Rate</h5>
+                        <h5 class="modal-title" id="updateFormModalLabel">Edit Profitability of the programs</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                         <div class="mb-3">
-                            <label for="program" class="form-label">Program Name</label>
-                            <select name="program_id" id="program_id" class="select2 form-select program_id" required>
-                                <option value="">-- Select Program --</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="program" class="form-label">Program Level</label>
-                            <select name="program_level" class="select2 form-select program_level" required>
-                                <option value="">-- Select Program --</option>
-                                <option value="PG">PG</option>
-                                <option value="UG">UG</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="profitability">Profitability (%)</label>
-                            <div class="input-group">
-                             <span class="input-group-text" id="basic-addon11">%</span>
-                            <input type="number" class="form-control" id="profitability" name="profitability" required>
-                            </div>
-                        </div>
+                    <div class="modal-body">
+                        <!-- Form -->
+                        <form id="researchForm1" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" id="record_id" name="record_id">
 
-                        
-                        
+                            <!--start-->
+                            <div class="row">
+                                <!-- First column-->
+
+                                <!-- Second column -->
+                                <div class="col-12 col-lg-12">
+                                    <!-- Pricing Card -->
+                                    <div class="card mb-6">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0">Program Information</h5>
+                                        </div>
+                                        <div class="card-body">
+
+
+                                            <div class="mb-3">
+                                                <label for="faculty" class="form-label">Faculty</label>
+                                                <select name="faculty_id" id="faculty_id" class="select2 form-select"
+                                                    required>
+                                                    <option value="">-- Select Faculty --</option>
+                                                    @foreach(get_faculties() as $faculty)
+                                                        <option value="{{ $faculty->id }}">
+                                                            {{ $faculty->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="department" class="form-label">Department</label>
+                                                <select name="department_id" id="department_id" class="select2 form-select"
+                                                    required>
+                                                    <option value="">-- Select Department --</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="program" class="form-label">Program Name</label>
+                                                <select name="program_id" id="program_id"
+                                                    class="select2 form-select program_id" required>
+                                                    <option value="">-- Select Program --</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="program" class="form-label">Program Level</label>
+                                                <select name="program_level" class="select2 form-select program_level"
+                                                    required>
+                                                    <option value="">-- Select Program --</option>
+                                                    <option value="PG">PG</option>
+                                                    <option value="UG">UG</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" for="profitability">Profitability (%)</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="basic-addon11">%</span>
+                                                    <input type="number" class="form-control" id="profitability"
+                                                        name="profitability" required>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                    <!-- /Pricing Card -->
+
+                                </div>
+                                <!-- /Second column -->
+                            </div>
+
+                            <!--/end-->
+
+                            <div class="mt-3 text-end">
+                                <button type="submit" class="btn btn-success">Update</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -167,9 +226,9 @@
                             let editButton = '';
                             if (parseInt(form.status) === 1) {
                                 editButton = `
-                                            <button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" 
-                                                data-form='${JSON.stringify(form)}'>Edit
-                                            </button>`;
+                                                                                            <button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" 
+                                                                                                data-form='${JSON.stringify(form)}'>Edit
+                                                                                            </button>`;
                             }
                             const deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
 
@@ -181,7 +240,7 @@
                                 form.program ? form.program.program_name : 'N/A',
                                 form.program_level || 'N/A',
                                 form.profitability ? form.profitability + '%' : 'N/A',
-                                editButton+ ' ' + deleteBtn
+                                editButton + ' ' + deleteBtn
                             ];
                         });
 
@@ -379,8 +438,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                                                    ${department.name}
-                                                </option>`
+                                                                                                    ${department.name}
+                                                                                                </option>`
                                     );
                                 });
 
@@ -410,8 +469,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                                                    ${program.program_name}
-                                                </option>`
+                                                                                                    ${program.program_name}
+                                                                                                </option>`
                                     );
                                 });
 
