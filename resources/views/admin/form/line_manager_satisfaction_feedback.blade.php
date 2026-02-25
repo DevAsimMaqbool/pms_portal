@@ -18,7 +18,7 @@
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                {{-- <h5>KPA to role</h5> --}}
+                <h5>Rate your Team Member</h5>
                 <form id="researchForm" enctype="multipart/form-data" class="row">
                     @csrf
                     <div class="row g-3 mb-3">
@@ -295,7 +295,8 @@
                                 Strength
                             </label>
                             <div style="margin-top:8px;">
-                                <input id="TagifyBasic" class="form-control" name="strength" value="" />
+                                <input id="TagifyBasic" class="form-control" name="strength" value=""
+                                    placeholder="Type and press Enter to add strength" />
                             </div>
                         </div>
 
@@ -305,7 +306,8 @@
                                 Area of Improvement
                             </label>
                             <div style="margin-top:8px;">
-                                <input id="TagifyBasic1" class="form-control" name="area_of_improvement" value="" />
+                                <input id="TagifyBasic1" class="form-control" name="area_of_improvement" value=""
+                                    placeholder="Type and press Enter to add improvement area" />
                             </div>
                         </div>
 

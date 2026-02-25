@@ -14,7 +14,7 @@
         <div class="card">
             <!-- Header with Add Feedback Button -->
             <div class="d-flex justify-content-between align-items-center p-3">
-                <h5 class="card-title mb-0">Employee Feedback</h5>
+                <h5 class="card-title mb-0">Rate your Team Members</h5>
                 <!-- <a href="{{ route('linemanager.form') }}" class="btn btn-primary">Add Feedback</a> -->
             </div>
             <div class="px-3 pb-3">
