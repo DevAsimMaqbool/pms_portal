@@ -344,6 +344,13 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:HOD')->group(function () {
         Route::get('/hod-target', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
     });
+    Route::middleware('role:HOD|Dean')->group(function () {
+        Route::get('/employee-feedback', [LineManagerEventFeedbackController::class, 'index'])->name('employee.feedback.index');
+        Route::get('/employee-feedback/edit/{id}', [LineManagerEventFeedbackController::class, 'edit'])->name('employee.feedback.edit');
+        Route::post('/employee-feedback/update/{id}', [LineManagerEventFeedbackController::class, 'update'])->name('employee.feedback.update');
+        Route::get('/employee-feedback/create', [LineManagerEventFeedbackController::class, 'create'])->name('employee.feedback.create');
+        Route::post('/employee-feedback/store', [LineManagerEventFeedbackController::class, 'store'])->name('employee.feedback.store');
+    });
     Route::middleware('role:Dean')->group(function () {
         Route::get('/dean-target', [FormBuilderController::class, 'DeanTargetForms'])->name('dean.target');
     });
@@ -375,11 +382,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/assignments/weightage/save', [RoleKpaAssignmentController::class, 'saveWeightage'])
         ->name('assignments.weightage.save');
 
-    Route::get('/employee-feedback', [LineManagerEventFeedbackController::class, 'index'])->name('employee.feedback.index');
-    Route::get('/employee-feedback/edit/{id}', [LineManagerEventFeedbackController::class, 'edit'])->name('employee.feedback.edit');
-    Route::post('/employee-feedback/update/{id}', [LineManagerEventFeedbackController::class, 'update'])->name('employee.feedback.update');
-    Route::get('/employee-feedback/create', [LineManagerEventFeedbackController::class, 'create'])->name('employee.feedback.create');
-    Route::post('/employee-feedback/store', [LineManagerEventFeedbackController::class, 'store'])->name('employee.feedback.store');
 
     Route::prefix('rating-rules')->group(function () {
         Route::get('/', [RatingRuleController::class, 'index']);
