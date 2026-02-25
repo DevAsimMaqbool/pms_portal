@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
@@ -22,18 +23,9 @@
     <!-- tab open-->
     <div class="nav-align-top">
 
-        <ul class="nav nav-pills mb-4" role="tablist">
-            <li class="nav-item">
-                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-top-home" aria-controls="navs-pills-top-home" aria-selected="true">% Employability</button>
-            </li>
-            <li class="nav-item">
-                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-top-profile" aria-controls="navs-pills-top-profile" aria-selected="false">Table</button>
-            </li>
-            
-        </ul>
         <!-- main tab-->
         <div class="tab-content" style="padding:0;background: none;border: none;box-shadow: none;">
-             @if(auth()->user()->hasRole(['HOD']))
+             @if(in_array(getRoleName(activeRole()), ['Employability Center']))
             <!-- first tab-->
             <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
 
@@ -66,20 +58,15 @@
                             <label for="faculty" class="form-label">Please select period</label>
                             <select name="period" id="period" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Period --</option>
-                                <option value="11"> 2024-2025</option>
-                                <option value="171">2025-2026</option>
-                                <option value="158">2026-2027</option>
+                                <?php $currentYear = date('Y'); 
+                                 for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++)
+                                  { $nextYear = $year + 1; $range = $year . '-' . $nextYear; echo "<option value='{$range}'>{$range}</option>"; }
+                                ?>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="student_name" class="form-label">Student Name</label>
-                            <select name="student_id" class="select2 form-select faculty-member" required>
-                                <option value="">-- Select Student --</option>
-                                <option value="11"> Muhammad Ahmad</option>
-                                <option value="12">MalikMubasharAhmadZafar</option>
-                                <option value="13"> Muhammad Umar</option>
-                                
-                            </select>
+                            <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Student Name" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="faculty" class="form-label">Faculty</label>
@@ -249,11 +236,17 @@
 
             </div>
             <!-- /first tab-->
+            @else
+                <div class="misc-wrapper">
+                    <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                    <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                    <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                    <div class="mt-12">
+                        <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                    </div>
+                </div>
             @endif
-            <!-- /second tab-->
-            <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
-            </div>
-            <!-- /second tab-->
+           
 
         </div>
         <!-- /main tab-->
@@ -353,7 +346,7 @@
 
 
        </script>
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['Employability Center']))
         <script>
             $(document).ready(function () {
               
