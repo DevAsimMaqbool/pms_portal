@@ -401,12 +401,19 @@ class FacultyMemberClassController extends Controller
                         ->first();
 
                     // 4. average_marks
-                    $average = DB::connection('pgsql')
+                    $stats = DB::connection('pgsql')
                         ->table('odoocms_student_course as osc')
                         ->leftJoin('odoocms_class_primary as ocp', 'ocp.id', '=', 'osc.primary_class_id')
                         ->leftJoin('odoocms_student as os', 'os.id', '=', 'osc.student_id')
-                        ->where('ocp.id', $classId) // pass class_id here
-                        ->select(DB::raw('AVG(osc.total_marks) as average_marks'))
+                        ->where('ocp.id', $classId)
+                        ->selectRaw("AVG(osc.total_marks) as average_marks,
+                        ROUND(
+                        (
+                        SUM(CASE WHEN osc.total_marks >= 50 THEN 1 ELSE 0 END)::decimal
+                        / NULLIF(COUNT(os.id), 0)
+                        ) * 100,
+                        2) as passing_percentage
+                        ")
                         ->groupBy('ocp.id')
                         ->first();
 
@@ -419,10 +426,14 @@ class FacultyMemberClassController extends Controller
                     if ($result && $result->result_submit_date) {
                         $updateData['result_submit_date'] = $result->result_submit_date;
                     }
-                    if ($average && $average->average_marks !== null) {
-                        $updateData['average_marks'] = $average->average_marks;
+                    if ($stats) {
+                        if ($stats->average_marks !== null) {
+                            $updateData['average_marks'] = $stats->average_marks;
+                        }
+                        if ($stats->passing_percentage !== null) {
+                            $updateData['passing_percentage'] = $stats->passing_percentage;
+                        }
                     }
-
                     // 6. agar data hai to update kar do
                     if (!empty($updateData)) {
                         DB::table('faculty_member_classes')
