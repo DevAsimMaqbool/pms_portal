@@ -36,8 +36,8 @@
         vertical-align: middle;
     }
 </style>
- @php
- $activeRoleId = getRoleIdByName(activeRole());                                           
+@php
+    $activeRoleId = getRoleIdByName(activeRole());                                           
  @endphp
 <!--  Payment Methods modal -->
 <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
@@ -1106,7 +1106,7 @@
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-                                            $att = myClasses(Auth::user()->faculty_id,$activeRoleId);
+                                            $att = myClasses(Auth::user()->faculty_id, $activeRoleId);
                                             $sr = 1;
                                         @endphp
 
@@ -2174,7 +2174,7 @@
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             @php
-                                $feedbacks = lineManagerRatingOnEvents(Auth::user()->employee_id,$activeRoleId);
+                                $feedbacks = lineManagerRatingOnEvents(Auth::user()->employee_id, $activeRoleId);
                             @endphp
 
                             <table class="table table-striped align-middle custom-table">
@@ -2864,4 +2864,282 @@
         </div>
     </div>
 </div>
+
+@if(in_array(getRoleName(activeRole()), ['HOD', 'Dean', 'Program Leader UG']))
+    <div class="modal fade" id="%Employability" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % Employability
+                    </h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                @php
+                                    $data = EmployabilityOfHOD()->where('indicator_id', 103);
+                                @endphp
+
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Indicator</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($data as $index => $row)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $row->class_name }}</td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ $row->held_percentage }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ $row->rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="%EmployerSatisfaction" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % Employer Satisfaction
+                    </h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                @php
+                                    $data = EmployabilityOfHOD()->where('indicator_id', 104);
+                                @endphp
+
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Indicator</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($data as $index => $row)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $row->class_name }}</td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ $row->held_percentage }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ $row->rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="%JobRelevancy" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % Employer Satisfaction
+                    </h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                @php
+                                    $data = EmployabilityOfHOD()->where('indicator_id', 105);
+                                @endphp
+
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Indicator</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($data as $index => $row)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $row->class_name }}</td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ $row->held_percentage }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ $row->rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="%MarketCompetitiveSalary" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % Market Competitive Salary
+                    </h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                @php
+                                    $data = EmployabilityOfHOD()->where('indicator_id', 106);
+                                @endphp
+
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Indicator</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($data as $index => $row)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $row->class_name }}</td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ $row->held_percentage }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ $row->rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="%GraduateSatisfaction" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % Graduate Satisfaction
+                    </h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                @php
+                                    $data = EmployabilityOfHOD()->where('indicator_id', 107);
+                                @endphp
+
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Indicator</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($data as $index => $row)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $row->class_name }}</td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ $row->held_percentage }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ $row->rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 <!-- / Payment Methods modal -->

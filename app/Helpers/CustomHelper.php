@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Models\Role;
 use App\Models\FacultyMemberClass;
+use App\Models\Employability;
 use App\Models\FacultyTarget;
 use App\Models\LineManagerFeedback;
 use App\Models\LineManagerEventFeedback;
@@ -2322,4 +2323,154 @@ if (!function_exists('getRoleName')) {
             return Role::where('name', $roleName)->value('name') ?? null;
         }
     }
+}
+
+function EmployabilityOfHOD()
+{
+    $departmentId = auth()->user()->department_id;
+
+    $records = Employability::where('department_id', $departmentId)
+        ->where('indicator_id', 103)
+        ->get();
+
+    $totalStudents = $records->count();
+
+    if ($totalStudents == 0) {
+        return collect();
+    }
+
+    $results = collect();
+
+    // Role & Employee
+    $activeRoleId = getRoleIdByName(activeRole());
+    $employeeId = auth()->id();
+
+    /*
+    |--------------------------------------------------------------------------
+    | 1️⃣ Student Employability (103)
+    |--------------------------------------------------------------------------
+    */
+
+    $employed = $records->whereNotNull('date_of_appointment')->count();
+    $employabilityPercentage = round(($employed / $totalStudents) * 100, 2);
+
+    saveIndicatorPercentage(
+        $employeeId,
+        $activeRoleId,
+        1, // KPA ID (adjust if dynamic)
+        1, // Category ID (adjust if dynamic)
+        103,
+        $employabilityPercentage
+    );
+
+    $results->push(makeIndicatorRow('Student Employability', 103, $employabilityPercentage));
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | 2️⃣ Market Competitive Salary (106)
+    |--------------------------------------------------------------------------
+    */
+
+    $salaryScore = 0;
+    foreach ($records as $r) {
+        $salaryScore += match ($r->market_competitive_salary) {
+            'Low' => 33,
+            'At Par' => 66,
+            'Above' => 100,
+            default => 0
+        };
+    }
+
+    $marketSalaryPercentage = round($salaryScore / $totalStudents, 2);
+
+    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 106, $marketSalaryPercentage);
+
+    $results->push(makeIndicatorRow('Market Competitive Salary', 106, $marketSalaryPercentage));
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | 3️⃣ Job Relevancy (105)
+    |--------------------------------------------------------------------------
+    */
+
+    $relevant = $records->where('job_relevancy', 'yes')->count();
+    $jobRelevancyPercentage = round(($relevant / $totalStudents) * 100, 2);
+
+    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 105, $jobRelevancyPercentage);
+
+    $results->push(makeIndicatorRow('Job Relevancy', 105, $jobRelevancyPercentage));
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | 4️⃣ Employer Satisfaction (104)
+    |--------------------------------------------------------------------------
+    */
+
+    $score = 0;
+    foreach ($records as $r) {
+        if (!is_null($r->employer_satisfaction)) {
+            $score += $r->employer_satisfaction * 20;
+        }
+    }
+
+    $employerSatisfactionPercentage = round($score / $totalStudents, 2);
+
+    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 104, $employerSatisfactionPercentage);
+
+    $results->push(makeIndicatorRow('Employer Satisfaction', 104, $employerSatisfactionPercentage));
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | 5️⃣ Graduate Satisfaction (107)
+    |--------------------------------------------------------------------------
+    */
+
+    $score = 0;
+    foreach ($records as $r) {
+        if (!is_null($r->graduate_satisfaction)) {
+            $score += $r->graduate_satisfaction * 20;
+        }
+    }
+
+    $graduateSatisfactionPercentage = round($score / $totalStudents, 2);
+
+    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 107, $graduateSatisfactionPercentage);
+
+    $results->push(makeIndicatorRow('Graduate Satisfaction', 107, $graduateSatisfactionPercentage));
+
+    return $results;
+}
+function makeIndicatorRow($name, $indicatorId, $percentage)
+{
+    if ($percentage >= 90) {
+        $color = '#6EA8FE';
+        $rating = 'OS';
+    } elseif ($percentage >= 80) {
+        $color = '#96e2b4';
+        $rating = 'EE';
+    } elseif ($percentage >= 70) {
+        $color = '#ffcb9a';
+        $rating = 'ME';
+    } elseif ($percentage >= 60) {
+        $color = '#fd7e13';
+        $rating = 'NI';
+    } elseif ($percentage >= 50) {
+        $color = '#ff4c51';
+        $rating = 'BE';
+    } else {
+        $color = '#d3d3d3';
+        $rating = 'NA';
+    }
+
+    return (object) [
+        'indicator_id' => $indicatorId,
+        'class_name' => $name,
+        'held_percentage' => $percentage,
+        'color' => $color,
+        'rating' => $rating,
+    ];
 }
