@@ -208,7 +208,7 @@ class EmployabilityController extends Controller
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv',
+            'file' => 'required',
             'indicator_id' => 'required',
             'form_status' => 'required',
         ]);

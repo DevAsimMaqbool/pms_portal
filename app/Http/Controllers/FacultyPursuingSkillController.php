@@ -19,26 +19,7 @@ class FacultyPursuingSkillController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-        //  if ($user->hasRole('HOD')) {
-        //         $status = $request->input('status');
-        //         if($status=="HOD"){
-        //             $forms = FacultyPursuingSkill::where('created_by', $employee_id)
-        //                 ->orderBy('id', 'desc')
-        //                 ->get()
-        //                 ->map(function ($form) {
-        //                         if ($form->evidence_reference) {
-        //                             $form->evidence_reference = Storage::url($form->evidence_reference);
-        //                         }
-        //                         return $form;
-        //                     });
-        //         }       
-        //     }
-
-
-
-
-
-            if ($user->hasRole('Dean')) {
+                if(in_array(getRoleName(activeRole()), ['Dean'])) {
                    $status = $request->input('status');
                    $hod_ids = User::where('manager_id', $employee_id)
                    ->role('HOD')->pluck('employee_id');
@@ -49,7 +30,7 @@ class FacultyPursuingSkillController extends Controller
                           $forms = FacultyPursuingSkill::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                }
+                                },'faculty', 'department', 'program'
                             ])
                             ->whereIn('created_by', $all_ids)
                             ->where('form_status', $status)
@@ -62,13 +43,15 @@ class FacultyPursuingSkillController extends Controller
                             });
                     }
 
-            }if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+                }
+        
+            if(in_array(getRoleName(activeRole()), ['Teacher'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = FacultyPursuingSkill::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
-                            }
+                            },'faculty', 'department', 'program'
                         ])
                         ->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
@@ -78,16 +61,22 @@ class FacultyPursuingSkillController extends Controller
                                 }
                                 return $form;
                             });
-                }
+                }       
+                
+            }
+            
+            if(in_array(getRoleName(activeRole()), ['HOD'])) {
+                $status = $request->input('status');
                 if($status=="HOD"){
                     $employeeIds = User::where('manager_id', $employee_id)
                         ->role('Teacher')->pluck('employee_id');
+                        $all_ids = $employeeIds->merge($employee_id);
                         $forms = FacultyPursuingSkill::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                }
+                                },'faculty', 'department', 'program'
                             ])
-                            ->whereIn('created_by', $employeeIds)
+                            ->whereIn('created_by', $all_ids)
                             ->whereIn('status', [1, 2])
                             ->where('form_status', 'RESEARCHER')
                             ->orderBy('id', 'desc')
@@ -121,6 +110,10 @@ class FacultyPursuingSkillController extends Controller
             if($request->form_status=='RESEARCHER'){
                  $rules = [
                         'indicator_id' => 'required',
+                        'faculty_id' => 'required|integer',
+                        'department_id' => 'required|integer',
+                        'program_id' => 'required|integer',
+                        'program_level' => 'required|string',
                         'cpd_type.*' => 'required|string',
                         'cpd_other_detail' => 'required_if:cpd_type.*,Other|nullable|string|max:255',
                         'evidence_reference' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -141,6 +134,11 @@ class FacultyPursuingSkillController extends Controller
                         }
                         $data = $request->only([
                             'indicator_id',
+                            'faculty_id',
+                            'department_id',
+                            'program_id',
+                            'program_level',
+                            'cpd_type',
                             'cpd_type',
                             'cpd_other_detail',
                             'remarks',
@@ -176,7 +174,7 @@ class FacultyPursuingSkillController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
-            'message' => 'Oops! Something went wrong'], 500);
+            'message' => $e->getMessage()], 500);
         }
     }
     public function update(Request $request, $id)
@@ -187,6 +185,10 @@ class FacultyPursuingSkillController extends Controller
 
                     $request->validate([
                             'record_id' => 'required',
+                            'faculty_id' => 'required|integer',
+                            'department_id' => 'required|integer',
+                            'program_id' => 'required|integer',
+                            'program_level' => 'required|string',
                             'cpd_type.*' => 'required|string',
                             'cpd_other_detail' => 'required_if:cpd_type.*,Other|nullable|string|max:255',
                             'evidence_reference' => '',
@@ -194,7 +196,7 @@ class FacultyPursuingSkillController extends Controller
                     ]);
 
                     $data = $request->only([
-                                    'cpd_type', 'cpd_other_detail', 'evidence_reference', 'remarks'
+                                    'faculty_id','department_id','program_id','program_level','cpd_type', 'cpd_other_detail', 'evidence_reference', 'remarks'
                                 ]);
                                 if ($request->hasFile('evidence_reference')) {
                                     

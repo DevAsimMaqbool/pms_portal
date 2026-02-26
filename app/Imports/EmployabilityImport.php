@@ -30,11 +30,18 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
 
             // ✅ Validate each row
             $validator = Validator::make($row->toArray(), [
-                'student_id' => 'required|integer',
+                'indicator_id'=>'required',
+                'form_status'=>'required',
+                'student_id' => '',
+                'period'=> 'required',
+                'student_name'=> 'required',
                 'faculty_id' => 'required|integer',
+                'department_id' => 'required|integer',
                 'program_id' => 'required|integer',
                 'batch' => 'required|string',
                 'passing_year' => 'required|digits:4',
+                'date_of_appointment' => 'required',
+                'proof_salary_and_appointment'=> 'required',
                 'employer_name' => 'required|string',
                 'sector' => 'required|string',
                 'salary' => 'required|numeric|min:1',
@@ -50,24 +57,27 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
             }
 
             // 🔁 Optional: Prevent duplicate entry
-            $exists = Employability::where('student_id', $row['student_id'])
-                ->where('indicator_id', $this->indicatorId)
-                ->exists();
+            // $exists = Employability::where('indicator_id', $this->indicatorId)
+            //     ->exists();
 
-            if ($exists) {
-                continue;
-            }
+            // if ($exists) {
+            //     continue;
+            // }
 
             // ✅ Save data
             Employability::create([
                 'indicator_id' => $this->indicatorId,
                 'form_status' => $this->formStatus,
-
-                'student_id' => $row['student_id'],
+                'student_id' => '',
+                'period' => $row['period'],
+                'student_name'=>$row['student_name'],
                 'faculty_id' => $row['faculty_id'],
+                'department_id' => $row['department_id'],
                 'program_id' => $row['program_id'],
                 'batch' => $row['batch'],
                 'passing_year' => $row['passing_year'],
+                'date_of_appointment' => $row['date_of_appointment'],
+                'proof_salary_and_appointment'=>$row['proof_salary_and_appointment'],
                 'employer_name' => $row['employer_name'],
                 'sector' => $row['sector'],
                 'salary' => $row['salary'],
