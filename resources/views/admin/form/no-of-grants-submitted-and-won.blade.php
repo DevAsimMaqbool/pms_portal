@@ -10,15 +10,16 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
+    @if(in_array(getRoleName(activeRole()), ['Dean','HOD','ORIC','Professor','Assistant Professor','Associate Professor']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['Dean']))
+                @if(in_array(getRoleName(activeRole()), ['Dean']))
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs mb-3" role="tablist">
                         <li class="nav-item">
@@ -29,7 +30,7 @@
                         </li>
                     </ul>
                 @endif
-                @if(auth()->user()->hasRole(['HOD']))
+                @if(in_array(getRoleName(activeRole()), ['HOD']))
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs mb-3" role="tablist">
                         <li class="nav-item">
@@ -43,7 +44,7 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+                     @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             <div class="d-flex justify-content-between">
                                 <div>
@@ -108,9 +109,9 @@
                             
                         </div>
                     @endif
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(in_array(getRoleName(activeRole()), ['HOD']))
                         <div class="tab-pane fade" id="form3" role="tabpanel">
-                            @if(auth()->user()->hasRole(['HOD']))
+                            @if(in_array(getRoleName(activeRole()), ['HOD']))
                                 <div class="d-flex">
                                     <select id="bulkAction" class="form-select w-auto me-2">
                                         <option value="">-- Select Action --</option>
@@ -136,7 +137,7 @@
                             </table>
                         </div>
                     @endif
-                    @if(auth()->user()->hasRole(['Dean']))
+                    @if(in_array(getRoleName(activeRole()), ['Dean']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             
                             <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
@@ -175,7 +176,7 @@
                             </table> --}}
                         </div>
                     @endif
-                    @if(auth()->user()->hasRole(['ORIC']))
+                    @if(in_array(getRoleName(activeRole()), ['ORIC']))
                         <div>
                             <div class="d-flex">
                                 <select id="bulkAction" class="form-select w-auto me-2">
@@ -244,6 +245,16 @@
             </div>
         </div>
         <!--/ Add Permission Modal -->
+        @else
+            <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
     </div>
     <!-- / Content -->
 @endsection
@@ -260,10 +271,11 @@
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
     <script>
         window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+        window.activeUserRole = "{{ getRoleName(activeRole()) }}";
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+      @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
         <script>
             $(document).ready(function () {
                function fetchTarget(indicatorId) {
@@ -437,7 +449,7 @@
             });
         </script>
     @endif
-     @if(auth()->user()->hasRole(['HOD']))
+     @if(in_array(getRoleName(activeRole()), ['HOD']))
         <script>
             function fetchIndicatorForms3() {
                 $.ajax({
@@ -534,7 +546,7 @@
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                    if (window.currentUserRole === 'HOD') {
+                    if (window.activeUserRole === 'HOD') {
                         $('#approveCheckbox').prop('checked', form.status == 2);
                         $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
                         // Label text for HOD
@@ -721,7 +733,7 @@
             });
         </script>
     @endif
-    @if(auth()->user()->hasRole(['Dean']))
+     @if(in_array(getRoleName(activeRole()), ['Dean']))
        <script>
             function fetchIndicatorForms3() {
                 $.ajax({
@@ -785,7 +797,7 @@
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                    if (window.currentUserRole === 'Dean') {
+                    if (window.activeUserRole === 'Dean') {
                         $('#status-approval').hide();
                         $('label[for="approveCheckbox"]').hide();
                         $('#approveCheckbox').closest('.form-check-input').hide();
@@ -913,7 +925,7 @@
             });
         </script>
     @endif
-     @if(auth()->user()->hasRole(['ORIC']))
+     @if(in_array(getRoleName(activeRole()), ['ORIC']))
        <script>
             function fetchIndicatorForms3() {
                 $.ajax({
@@ -1010,7 +1022,7 @@
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                    if (window.currentUserRole === 'ORIC') {
+                    if (window.activeUserRole === 'ORIC') {
                         $('#approveCheckbox').prop('checked', form.status == 3);
                         $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
                         // Label text for ORIC

@@ -21,8 +21,7 @@ class ResearchProductivityOfPGStudentsController extends Controller
             $user = Auth::user();
             $userId = Auth::id();
             $employee_id = $user->employee_id;
-
-            if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+            if(in_array(getRoleName(activeRole()), ['Teacher','Program Leader UG','Program Leader PG'])) {
 
                 $status = $request->input('status');
                 if ($status == "Teacher") {
@@ -37,24 +36,8 @@ class ResearchProductivityOfPGStudentsController extends Controller
                         ->get();
                 }
 
-                if ($status == "HOD") {
-                    $employeeIds = User::where('manager_id', $employee_id)
-                        ->role('Teacher')->pluck('employee_id');
-                    $forms = ResearchProductivityOfPgStudentTarget::with([
-                        'creator' => function ($q) {
-                            $q->select('employee_id', 'name');
-                        },
-                        'coAuthors'
-                    ])
-                        ->whereIn('created_by', $employeeIds)
-                        ->whereIn('status', [1, 2])
-                        ->where('form_status', 'RESEARCHER')
-                        ->orderBy('id', 'desc')
-                        ->get();
-                }
-
             }
-            if ($user->hasRole('ORIC')) {
+            if(in_array(getRoleName(activeRole()), ['ORIC'])) {
                 $forms = ResearchProductivityOfPgStudentTarget::with([
                     'creator' => function ($q) {
                         $q->select('employee_id', 'name');
@@ -277,7 +260,7 @@ class ResearchProductivityOfPGStudentsController extends Controller
         // Get current user info
         $currentUserId = Auth::id();
         $currentUserName = Auth::user()->name;
-        $userRoll = Auth::user()->getRoleNames()->first() ?? 'N/A';
+        $userRoll = getRoleName(activeRole()) ?? 'N/A';
 
         // Avoid duplicate consecutive updates by the same user with the same status
         $lastUpdate = end($history);
