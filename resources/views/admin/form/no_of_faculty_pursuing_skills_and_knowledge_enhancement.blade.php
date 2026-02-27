@@ -10,11 +10,12 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
+     @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Dean','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
@@ -31,10 +32,7 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs mb-3" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Faculty pursuing skills and knowledge enhancement</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
+                        <a class="nav-link active" data-bs-toggle="tab" href="#form3" role="tab">Faculty pursuing skills and knowledge enhancement</a>
                     </li>
                 </ul>
                 @endif
@@ -42,7 +40,7 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     {{-- ================= FORM 1 ================= --}}
-                   @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
+                   @if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor']))
                     
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
                     <div class="d-flex justify-content-between">
@@ -57,7 +55,41 @@
                                 <input type="hidden"  id="form_status" name="form_status" value="RESEARCHER" required>
                                 
                                 <div class="row g-3 mt-0">
+                                   <div class="col-md-6">
+                                                <label for="faculty" class="form-label">Faculty</label>
+                                                <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
+                                                    <option value="">-- Select Faculty --</option>
+                                                    @foreach(get_faculties() as $faculty)
+                                                        <option value="{{ $faculty->id }}">
+                                                            {{ $faculty->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="department_id" class="form-label">Department</label>
+                                                <select name="department_id" id="department_id" class="select2 form-select"
+                                                    required>
+                                                    <option value="">-- Select Department --</option>
+                                                </select>
+                                            </div>
 
+                                            <div class="col-md-6">
+                                                <label for="program" class="form-label">Program</label>
+                                                <select name="program_id" id="program_id" class="select2 form-select program_id"
+                                                    required>
+                                                    <option value="">-- Select Program --</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="program_level" class="form-label">Program Level</label>
+                                                <select name="program_level" id="program_level"
+                                                    class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Level --</option>
+                                                    <option value="UG">UG</option>
+                                                    <option value="PG">PG</option>
+                                                </select>
+                                            </div>
                                     <div class="col-md-12">
                                         <label for="cpd_type" class="form-label">CPD Type</label>
                                         <select name="cpd_type" class="select2 form-select cpd_type" required>
@@ -97,7 +129,7 @@
                     </div>
                     @endif
                     @if(in_array(getRoleName(activeRole()), ['HOD']))
-                      <div class="tab-pane fade" id="form3" role="tabpanel">
+                      <div class="tab-pane fade show active" id="form3" role="tabpanel">
                             <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                                     <thead>
                                         <tr>
@@ -182,7 +214,16 @@
             </div>
         </div>
         <!--/ Add Permission Modal -->
-
+    @else
+            <div class="misc-wrapper">
+            <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+            <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+            <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+            <div class="mt-12">
+                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+            </div>
+        </div>
+    @endif
     </div>
     <!-- / Content -->
 @endsection
@@ -335,6 +376,74 @@
                         }
                     });
                 });
+                $('#faculty_id').on('change', function () {
+
+                    let facultyId = $(this).val();
+                    let departmentSelect = $('#department_id');
+                    let programSelect = $('#program_id');
+
+                    departmentSelect.html('<option value="">Loading...</option>');
+                    programSelect.html('<option value="">-- Select Program --</option>');
+
+
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (response) {
+
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">-- Select Department --</option>');
+
+                                $.each(response, function (key, department) {
+                                    departmentSelect.append(
+                                        `<option value="${department.id}">
+                                                    ${department.name}
+                                                </option>`
+                                    );
+                                });
+
+                                departmentSelect.trigger('change'); // refresh select2
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">-- Select Department --</option>');
+                    }
+                });
+                $('#department_id').on('change', function () {
+
+                    let departmentId = $(this).val();
+                    let programSelect = $('#program_id');
+
+                    programSelect.html('<option value="">Loading...</option>');
+
+                    if (departmentId) {
+                        $.ajax({
+                            url: "/get-programs/" + departmentId,
+                            type: "GET",
+                            success: function (response) {
+
+                                programSelect.empty();
+                                programSelect.append('<option value="">-- Select Program --</option>');
+
+                                $.each(response, function (key, program) {
+                                    programSelect.append(
+                                        `<option value="${program.id}">
+                                                    ${program.program_name}
+                                                </option>`
+                                    );
+                                });
+
+                                programSelect.trigger('change'); // refresh select2
+                            },
+                            error: function () {
+                                programSelect.html('<option value="">Error loading programs</option>');
+                            }
+                        });
+                    } else {
+                        programSelect.html('<option value="">-- Select Program --</option>');
+                    }
+                });
 
 
 
@@ -476,7 +585,7 @@
                                     let histortText = 'N/A';
 
                                     // Role-based status mapping
-                                    if (update.role === 'HOD') {
+                                    if (update.role === 'Dean') {
                                         if (update.status == '1') histortText = 'unapproved';
                                         else if (update.status == '2') histortText = 'Approved';
                                     } else if (update.role === 'ORIC') {

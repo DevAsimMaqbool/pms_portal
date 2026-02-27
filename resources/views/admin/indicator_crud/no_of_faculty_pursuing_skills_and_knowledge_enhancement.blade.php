@@ -10,22 +10,27 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
+        @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Dean','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
              <h5 class="card-header">Faculty pursuing skills and knowledge enhancement</h5>
             <div class="card-datatable table-responsive card-body">
-                    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
+                    @if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="intellectualTable" class="table table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
+                                                        <th>Faculty</th>
+                                                        <th>Department</th>
+                                                        <th>Program Name</th>
+                                                        <th>Program Level</th>
                                                         <th>CPD TYPE</th>
                                                         <th>Remarks</th>
                                                         <th>History</th>
@@ -97,7 +102,40 @@
                     <input type="hidden" name="_method" value="PUT">
 
                     <div class="row g-3">  
+                                    <div class="col-md-6">
+                                        <label for="faculty" class="form-label">Faculty</label>
+                                        <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
+                                            <option value="">-- Select Faculty --</option>
+                                            @foreach(get_faculties() as $faculty)
+                                                <option value="{{ $faculty->id }}">
+                                                    {{ $faculty->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="department" class="form-label">Department</label>
+                                        <select name="department_id" id="department_id" class="select2 form-select" required>
+                                            <option value="">-- Select Department --</option>
+                                        </select>
+                                        
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="program" class="form-label">Program</label>
+                                            <select name="program_id" id="program_id" class="select2 form-select program_id" required>
+                                                <option value="">-- Select Program --</option>
+                                            </select>
+                                    </div>
 
+                                    <div class="col-md-6">
+                                                <label for="program_level" class="form-label">Program Level</label>
+                                                <select name="program_level" id="program_level"
+                                                    class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Level --</option>
+                                                    <option value="UG">UG</option>
+                                                    <option value="PG">PG</option>
+                                                </select>
+                                            </div>
                                     <div class="col-md-12">
                                         <label for="cpd_type" class="form-label">CPD Type</label>
                                         <select name="cpd_type" id="cpd_type" class="select2 form-select cpd_type" required>
@@ -141,7 +179,16 @@
         </div>
     </div>
 </div>
-
+       @else
+            <div class="misc-wrapper">
+            <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+            <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+            <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+            <div class="mt-12">
+                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+            </div>
+        </div>
+    @endif
 
     </div>
     <!-- / Content -->
@@ -190,6 +237,10 @@
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
+                                form.faculty ? form.faculty.name : 'N/A',
+                                form.department ? form.department.name : 'N/A',
+                                form.program ? form.program.program_name : 'N/A',
+                                form.program_level || 'N/A',
                                 form.cpd_type || 'N/A',
                                 form.remarks|| 'N/A',
                                  `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
@@ -207,6 +258,10 @@
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
+                                    { title: "Faculty" },
+                                    { title: "Department" },
+                                    { title: "Program Name" },
+                                    { title: "Program Level" },
                                     { title: "CPD Type" },
                                     { title: "Remarks" },
                                     { title: "History" },
@@ -307,6 +362,57 @@
 
                 $('#viewFormModal').modal('show');
             });
+
+                  function populateFacultyDepartmentProgram(form) {
+                    const facultySelect = $('#faculty_id');
+                    const departmentSelect = $('#department_id');
+                    const programSelect = $('#program_id');
+
+                    // Set faculty and trigger change
+                    facultySelect.val(form.faculty_id).trigger('change');
+
+                    if (!form.faculty_id) return;
+
+                    // Load Departments
+                    $.ajax({
+                        url: "/get-departments/" + form.faculty_id,
+                        type: "GET",
+                        success: function (departments) {
+                            departmentSelect.empty().append('<option value="">-- Select Department --</option>');
+
+                            $.each(departments, function (key, department) {
+                                departmentSelect.append(`<option value="${department.id}">${department.name}</option>`);
+                            });
+
+                            // Set department
+                            departmentSelect.val(form.department_id).trigger('change');
+
+                            if (!form.department_id) return;
+
+                            // Load Programs
+                            $.ajax({
+                                url: "/get-programs/" + form.department_id,
+                                type: "GET",
+                                success: function (programs) {
+                                    programSelect.empty().append('<option value="">-- Select Program --</option>');
+
+                                    $.each(programs, function (key, program) {
+                                        programSelect.append(`<option value="${program.id}">${program.program_name}</option>`);
+                                    });
+
+                                    // Set program
+                                    programSelect.val(form.program_id).trigger('change');
+                                },
+                                error: function () {
+                                    programSelect.html('<option value="">Error loading programs</option>');
+                                }
+                            });
+                        },
+                        error: function () {
+                            departmentSelect.html('<option value="">Error loading departments</option>');
+                        }
+                    });
+                }
             $(document).on('click', '.edit-form-btn', function () {
         const form = $(this).data('form');
          let cpdValues = form.cpd_type;
@@ -317,6 +423,7 @@
     }
         $('#researchForm1 #record_id').val(form.id);
         $('#researchForm1 #cpd_type').val(form.cpd_type).trigger('change');
+        $('#researchForm1 #program_level').val(form.program_level).trigger('change');
         // ✅ Show/Hide Other field
     if (cpdValues && cpdValues.includes('Other')) {
         $('#other_cpd_box').show();
@@ -327,6 +434,7 @@
     }
         $('#researchForm1 #cpd_other_detail').val(form.cpd_other_detail);
         $('#researchForm1 #remarks').val(form.remarks);
+        populateFacultyDepartmentProgram(form);
         // Show proof container based on status
        
         if (form.evidence_reference) {
@@ -415,6 +523,74 @@
             }
         });
     });
+     $('#faculty_id').on('change', function () {
+
+                    let facultyId = $(this).val();
+                    let departmentSelect = $('#department_id');
+                    let programSelect = $('#program_id');
+
+                    departmentSelect.html('<option value="">Loading...</option>');
+                    programSelect.html('<option value="">-- Select Program --</option>');
+                    
+
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (response) {
+
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">-- Select Department --</option>');
+
+                                $.each(response, function (key, department) {
+                                    departmentSelect.append(
+                                        `<option value="${department.id}">
+                                            ${department.name}
+                                        </option>`
+                                    );
+                                });
+
+                                departmentSelect.trigger('change'); // refresh select2
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">-- Select Department --</option>');
+                    }
+                });
+                $('#department_id').on('change', function () {
+
+                    let departmentId = $(this).val();
+                    let programSelect = $('#program_id');
+
+                    programSelect.html('<option value="">Loading...</option>');
+
+                    if (departmentId) {
+                        $.ajax({
+                            url: "/get-programs/" + departmentId,
+                            type: "GET",
+                            success: function (response) {
+
+                                programSelect.empty();
+                                programSelect.append('<option value="">-- Select Program --</option>');
+
+                                $.each(response, function (key, program) {
+                                    programSelect.append(
+                                        `<option value="${program.id}">
+                                            ${program.program_name}
+                                        </option>`
+                                    );
+                                });
+
+                                programSelect.trigger('change'); // refresh select2
+                            },
+                            error: function () {
+                                programSelect.html('<option value="">Error loading programs</option>');
+                            }
+                        });
+                    } else {
+                        programSelect.html('<option value="">-- Select Program --</option>');
+                    }
+                });
     $(document).on('click', '.delete-btn', function() {
     let id = $(this).data('id');
 
