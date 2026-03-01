@@ -15,7 +15,9 @@ class FacultyMemberClass extends Model
         'term',
         'career_id',
         'career',
-        'career_code'
+        'career_code',
+        'average_marks',
+        'passing_percentage'
     ];
 
     public function attendances()

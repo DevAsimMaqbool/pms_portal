@@ -6,8 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class LineManagerReviewRatingTask extends Model
 {
+    protected $table = 'line_manager_review_rating_tasks';
     protected $fillable = [
-        'line_manager_review_rating_id', 'task', 'linemanager_rating'
+        'line_manager_review_rating_id',
+        'task',
+        'linemanager_rating'
     ];
 
     public function review()

@@ -21,6 +21,7 @@ use App\Models\IndicatorsPercentage;
 use App\Models\Program;
 use App\Models\RatingRule;
 use App\Models\StudentFeedbackClassWise;
+use App\Models\LineManagerReviewRating;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -235,7 +236,7 @@ function myClassesAttendance($facultyId)
         ->get();
 }
 
-function myClasses($facultyId, $activeRoleId)
+function myClassesBK27Feb($facultyId, $activeRoleId)
 {
     $classes = FacultyMemberClass::with([
         'attendances' => function ($query) {
@@ -243,7 +244,7 @@ function myClasses($facultyId, $activeRoleId)
         }
     ])
         ->where('faculty_id', $facultyId)
-        ->select('class_id', 'class_name', 'code', 'term', 'career_code')
+        ->select('class_id', 'class_name', 'code', 'term', 'career_code', 'average_marks', 'passing_percentage')
         ->get();
     $count = $classes->count();
 
@@ -264,6 +265,58 @@ function myClasses($facultyId, $activeRoleId)
         $score
     );
     return $classes;
+}
+
+function myClasses($facultyId, $activeRoleId)
+{
+    $classes = FacultyMemberClass::with([
+        'attendances' => function ($query) {
+            $query->orderBy('class_date', 'desc');
+        }
+    ])
+        ->where('faculty_id', $facultyId)
+        ->select(
+            'class_id',
+            'class_name',
+            'code',
+            'term',
+            'career_code',
+            'average_marks',
+            'passing_percentage'
+        )
+        ->get();
+
+    $totalCourses = $classes->count();
+    dd($classes);
+    // 🎯 1️⃣ Course Load Score
+    if ($totalCourses > 3) {
+        $courseLoadScore = 100;
+    } elseif ($totalCourses == 3) {
+        $courseLoadScore = 80;
+    } else {
+        $courseLoadScore = 60;
+    }
+
+    // 🎯 2️⃣ Student Pass % Score (average)
+    $averagePassPercentage = $classes->avg('passing_percentage') ?? 0;
+
+    // 🎯 3️⃣ Average Student Marks Score
+    $averageStudentScore = $classes->avg('average_marks') ?? 0;
+    dd($averageStudentScore);
+    // ✅ SAVE INDICATORS (only once)
+    $userId = getUserID($facultyId);
+
+    saveIndicatorPercentage($userId, $activeRoleId, 1, 3, 122, $courseLoadScore);
+    saveIndicatorPercentage90Plus($userId, $activeRoleId, 1, 25, 185, $averagePassPercentage);
+    saveIndicatorPercentage($userId, $activeRoleId, 1, 25, 186, $averageStudentScore);
+
+    return [
+        'classes' => $classes,
+        'totalCourses' => $totalCourses,
+        'courseLoadScore' => $courseLoadScore,
+        'averagePassPercentage' => $averagePassPercentage,
+        'averageStudentScore' => $averageStudentScore,
+    ];
 }
 
 function myClassesAttendanceRecord($facultyId)
@@ -1351,6 +1404,43 @@ if (!function_exists('saveIndicatorPercentage')) {
     }
 }
 
+if (!function_exists('saveIndicatorPercentage90Plus')) {
+    function saveIndicatorPercentage90Plus($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score)
+    {
+        if ($score >= 95) {
+            $color = 'primary';
+            $rating = 'OS';
+        } elseif ($score >= 90) {
+            $color = 'success';
+            $rating = 'EE';
+        } elseif ($score >= 80) {
+            $color = 'warning';
+            $rating = 'ME';
+        } elseif ($score >= 70) {
+            $color = 'orange';
+            $rating = 'NI';
+        } else {
+            $color = 'danger';
+            $rating = 'BE';
+        }
+
+        IndicatorsPercentage::updateOrCreate(
+            [
+                'employee_id' => $employeeId,
+                'role_id' => $role_id,
+                'key_performance_area_id' => $keyPerformanceAreaId,
+                'indicator_category_id' => $indicatorCategoryId,
+                'indicator_id' => $indicatorId,
+            ],
+            [
+                'score' => round($score, 2),
+                'color' => $color,
+                'rating' => $rating,
+            ]
+        );
+    }
+}
+
 
 if (!function_exists('lineManagerRatingOnEvents')) {
     function lineManagerRatingOnEvents($facultyId, $activeRoleId)
@@ -1652,6 +1742,7 @@ function kpaAvgScore($kpa_id, $emp_id)
     // Fetch all scores and cap each at 100
     $avg = IndicatorsPercentage::where('employee_id', $emp_id)
         ->where('key_performance_area_id', $kpa_id)
+        ->where('is_score', 1)
         ->get()
         ->pluck('score')
         ->map(fn($score) => min($score, 100)) // cap each score at 100
@@ -2473,4 +2564,113 @@ function makeIndicatorRow($name, $indicatorId, $percentage)
         'color' => $color,
         'rating' => $rating,
     ];
+}
+
+function NumberOfKnowledgeProduct($facultyId, $activeRoleId)
+{
+    // 1️⃣ Get all knowledge products created by the faculty
+    $knowledgeProducts = \App\Models\NumberOfKnowledgeProduct::where('created_by', $facultyId)
+        ->where('status', 2) // optional: only approved/active products
+        ->get();
+
+    $totalAchieved = $knowledgeProducts->count();
+
+    // 2️⃣ Get the target from faculty_targets table
+    $targetRecord = FacultyTarget::where('user_id', $facultyId)
+        ->where('indicator_id', 194) // indicator_id for NumberOfKnowledgeProduct
+        ->first();
+
+    $target = $targetRecord ? $targetRecord->target : 0;
+
+    // 3️⃣ Calculate score (percentage)
+    $score = $target > 0 ? ($totalAchieved / $target) * 100 : 0;
+    $score = round($score, 2);
+
+    // 4️⃣ Determine rating based on score
+    if ($score >= 90) {
+        $rating = 'OS';
+        $color = 'primary';
+    } elseif ($score >= 80) {
+        $rating = 'EE';
+        $color = 'success';
+    } elseif ($score >= 70) {
+        $rating = 'ME';
+        $color = 'warning';
+    } elseif ($score >= 60) {
+        $rating = 'NI';
+        $color = 'orange';
+    } elseif ($score > 0) {
+        $rating = 'BE';
+        $color = 'danger';
+    } else {
+        $rating = 'NA';
+        $color = 'secondary';
+    }
+
+    saveIndicatorPercentage($facultyId, $activeRoleId, 2, 32, 194, $score);
+
+    // 6️⃣ Return structured data for table
+    return [
+        'totalAchieved' => $totalAchieved,
+        'target' => $target,
+        'score' => $score,
+        'rating' => $rating,
+        'color' => $color,
+        'knowledgeProducts' => $knowledgeProducts,
+    ];
+}
+
+if (!function_exists('lineManagerReviewRatingOnTasks')) {
+    function lineManagerReviewRatingOnTasks($facultyId, $activeRoleId)
+    {
+        $managerRatings = [];
+        $totalScore = 0;
+        $taskCount = 0;
+
+        $reviews = LineManagerReviewRating::with('tasks')
+            ->where('employee_id', $facultyId)
+            ->get();
+
+        foreach ($reviews as $review) {
+            foreach ($review->tasks as $task) {
+
+                $score = $task->linemanager_rating * 20;
+                $totalScore += $score;
+                $taskCount++;
+
+                if ($score >= 90) {
+                    $label = 'OS';
+                    $color = 'bg-primary';
+                } elseif ($score >= 80) {
+                    $label = 'EE';
+                    $color = 'bg-success';
+                } elseif ($score >= 70) {
+                    $label = 'ME';
+                    $color = 'bg-warning';
+                } elseif ($score >= 60) {
+                    $label = 'NI';
+                    $color = 'bg-info';
+                } elseif ($score > 0) {
+                    $label = 'BE';
+                    $color = 'bg-danger';
+                } else {
+                    $label = 'NA';
+                    $color = 'bg-secondary';
+                }
+
+                $managerRatings[] = (object) [
+                    'task' => $task->task,
+                    'rating_data' => [
+                        'percentage' => $score,
+                        'label' => $label,
+                        'color' => $color
+                    ]
+                ];
+            }
+        }
+        $averageScore = $taskCount > 0 ? round($totalScore / $taskCount, 2) : 0;
+        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $averageScore);
+        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $averageScore);
+        return $managerRatings;
+    }
 }

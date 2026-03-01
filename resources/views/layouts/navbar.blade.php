@@ -14,8 +14,8 @@
       <!--/ Language -->
 
       <li><button type="button" class="btn rounded-pill btn-label-primary waves-effect">
-          {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }},
-          {{strtoupper(Auth::user()->job_title)}}</button></li>
+          {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}, As
+          {{strtoupper(activeRole())}}</button></li>
 
       <!-- Style Switcher -->
       <li class="nav-item dropdown">
