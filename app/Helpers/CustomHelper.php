@@ -371,7 +371,6 @@ function myClasses($facultyId, $activeRoleId)
         ->get();
 
     $totalCourses = $classes->count();
-    dd($classes);
     // 🎯 1️⃣ Course Load Score
     if ($totalCourses > 3) {
         $courseLoadScore = 100;
@@ -386,7 +385,6 @@ function myClasses($facultyId, $activeRoleId)
 
     // 🎯 3️⃣ Average Student Marks Score
     $averageStudentScore = $classes->avg('average_marks') ?? 0;
-    dd($averageStudentScore);
     // ✅ SAVE INDICATORS (only once)
     $userId = getUserID($facultyId);
 
