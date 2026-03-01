@@ -10,12 +10,14 @@ class FacultyRetention extends Model
     protected $fillable = [
         'indicator_id',
         'form_status',
-        'faculty_id',
-        'no_retention_rate',
-        'remarks',
+        'year',
         'status',
         'update_history',
         'created_by',
         'updated_by',
     ];
+    public function remarks()
+    {
+        return $this->hasMany(FacultyRetentionRemark::class, 'faculty_retention_id');
+    }
 }

@@ -11,4 +11,8 @@ class Role extends Model
     {
         return $this->hasMany(RoleKpaAssignment::class);
     }
+     public function sidebarKpaAssignments()
+    {
+        return $this->hasMany(SidebarKpaAssignment::class, 'role_id', 'id');
+    }
 }

@@ -20,6 +20,7 @@ use App\Models\LineManagerEventFeedback;
 use App\Models\IndicatorsPercentage;
 use App\Models\Program;
 use App\Models\RatingRule;
+use App\Models\SidebarKpaAssignment;
 use App\Models\StudentFeedbackClassWise;
 use App\Models\LineManagerReviewRating;
 use Illuminate\Support\Facades\DB;
@@ -133,6 +134,89 @@ function getRoleAssignments(string $roleName, ?int $kapcid = null, $form = null)
     }
 
     $assignments = RoleKpaAssignment::with([
+        'kpa',
+        'category' => function ($q) {
+            $q->where('status', 1);
+        },
+        'indicator' => function ($q) {
+            $q->where('status', 1)->with('indicatorForm');
+        }
+    ])
+        ->where('role_id', $roleId)
+        ->when($form == 1, function ($query) {
+            $query->where('form_status', 1);
+        })
+        ->when($kapcid !== null, function ($query) use ($kapcid) {
+            $query->where('key_performance_area_id', $kapcid);
+        })
+        ->get();
+
+    return $assignments->filter(fn($a) => $a->category && $a->indicator) // ✅ skip nulls
+        ->groupBy('kpa.id')
+        ->map(function ($kpaGroup) {
+            $kpa = $kpaGroup->first()->kpa;
+
+            return [
+                'id' => $kpa->id,
+                'performance_area' => $kpa->performance_area,
+                'small_description' => $kpa->small_description,
+                'kpa_weightage' => $kpaGroup->first()->kpa_weightage,
+                'created_by' => $kpa->created_by,
+                'updated_by' => $kpa->updated_by,
+                'created_at' => $kpa->created_at,
+                'updated_at' => $kpa->updated_at,
+                'category' => $kpaGroup->groupBy('category.id')->map(function ($catGroup) {
+                    $category = $catGroup->first()->category;
+
+                    if (!$category) {
+                        return null; // ✅ safeguard
+                    }
+
+                    return [
+                        'id' => $category->id,
+                        'key_performance_area_id' => $category->key_performance_area_id,
+                        'indicator_category' => $category->indicator_category,
+                        'indicator_category_weightage' => $catGroup->first()->indicator_category_weightage,
+                        'cat_icon' => $category->cat_icon,
+                        'cat_short_code' => $category->cat_short_code,
+                        'created_by' => $category->created_by,
+                        'updated_by' => $category->updated_by,
+                        'created_at' => $category->created_at,
+                        'updated_at' => $category->updated_at,
+                        'indicator' => $catGroup
+                            ->filter(fn($item) => $item->indicator) // ✅ skip null indicators
+                            ->map(function ($item) {
+                                $indicator = $item->indicator;
+
+                                return [
+                                    'id' => $indicator->id,
+                                    'indicator_category_id' => $indicator->indicator_category_id,
+                                    'indicator' => $indicator->indicator,
+                                    'indicator_weightage' => $item->indicator_weightage,
+                                    'form_status' => $item->form_status,
+                                    'icon' => $indicator->icon,
+                                    'short_code' => $indicator->short_code,
+                                    'created_by' => $indicator->created_by,
+                                    'updated_by' => $indicator->updated_by,
+                                    'created_at' => $indicator->created_at,
+                                    'updated_at' => $indicator->updated_at,
+                                    'indicator_form' => $indicator->indicatorForm ?? [],
+                                ];
+                            })->values()
+                    ];
+                })->filter()->values() // ✅ remove null categories
+            ];
+        })->values();
+}
+function getSidbarRoleAssignments(string $roleName, ?int $kapcid = null, $form = null)
+{
+    $roleId = Role::where('name', $roleName)->value('id');
+    ;
+    if (!$roleId) {
+        return collect(); // return empty if user doesn't have that role
+    }
+
+    $assignments = SidebarKpaAssignment::with([
         'kpa',
         'category' => function ($q) {
             $q->where('status', 1);
