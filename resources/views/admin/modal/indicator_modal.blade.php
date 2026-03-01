@@ -527,19 +527,41 @@
 
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
-                            <table class="table table-striped align-middle custom-table"">
-                                <thead class=" table-primary">
-                                <tr>
-                                    <th>Sr#</th>
-                                    <th>Product</th>
-                                    <th>Target</th>
-                                    <th>Achieved</th>
-                                    <th>Score</th>
-                                    <th>Rating</th>
-                                </tr>
+                            @php
+                                $data = NumberOfKnowledgeProduct(Auth::id(), $activeRoleId);
+                            @endphp
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Target</th>
+                                        <th>Achieved</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
                                 </thead>
-                                <tbody class="table-border-bottom-0">
-                                    <td colspan="5">no record found</td>
+                                <tbody>
+                                    @if($data['target'] > 0)
+                                        <tr>
+                                            <td>1</td>
+                                            <td>{{ $data['target'] }}</td>
+                                            <td>{{ $data['totalAchieved'] }}</td>
+                                            <td>
+                                                <div class="badge bg-{{ $data['color'] }}">
+                                                    {{ $data['score'] }}%
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="badge bg-{{ $data['color'] }}">
+                                                    {{ $data['rating'] }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="text-center">No record found</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -1092,6 +1114,10 @@
                         </div>
 
                         <!-- Fall -->
+                        @php
+                            $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
+                            $att = $data['classes'];
+                        @endphp
                         <div class="tab-pane fade" id="CourseLoad-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-hover align-middle custom-table">
@@ -1105,11 +1131,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-border-bottom-0">
-                                        @php
-                                            $att = myClasses(Auth::user()->faculty_id, $activeRoleId);
-                                            $sr = 1;
-                                        @endphp
-
+                                        @php $sr = 1; @endphp
                                         @foreach($att as $class)
                                             @php
                                                 // latest attendance or null
@@ -1337,6 +1359,60 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $sr = 1;
+                                        @endphp
+
+                                        @foreach($att as $class)
+                                            @php
+                                                // latest attendance or null
+                                                $latestAttendance = $class->attendances->first();
+                                                $scheduled = $latestAttendance
+                                                    ? \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y')
+                                                    : '-';
+                                                $pass = $class->passing_percentage ?? 0;
+                                                $fail = max(0, 100 - $pass);
+                                                // Determine rating
+                                                if ($pass >= 95) {
+                                                    $color = 'primary';
+                                                    $rating = 'OS';
+                                                } elseif ($pass >= 90) {
+                                                    $color = 'success';
+                                                    $rating = 'EE';
+                                                } elseif ($pass >= 80) {
+                                                    $color = 'warning';
+                                                    $rating = 'ME';
+                                                } elseif ($pass >= 70) {
+                                                    $color = 'orange';
+                                                    $rating = 'NI';
+                                                } else {
+                                                    $color = 'danger';
+                                                    $rating = 'BE';
+                                                }
+                                            @endphp
+
+                                            <tr>
+                                                <td>{{ $sr++ }}</td>
+                                                <td>{{ $class->class_name }}</td>
+                                                <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
+                                                <td>{{ $class->career_code }}</td>
+                                                {{-- Program name (only if attendance exists) --}}
+                                                <td>{{ round($pass, 1) ?? 'N/A' }}</td>
+                                                <td>{{ round($fail, 1) ?? 'N/A' }}</td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{$color }}">
+                                                        {{ round($pass, 1) }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $color }}">
+
+                                                        {{ $rating }}
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        @endforeach
                                         <td colspan="8">no record found</td>
                                     </tbody>
                                 </table>
@@ -1424,7 +1500,59 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <td colspan="7">no record found</td>
+                                        @php
+                                            $sr = 1;
+                                        @endphp
+
+                                        @foreach($att as $class)
+                                            @php
+                                                // latest attendance or null
+                                                $latestAttendance = $class->attendances->first();
+                                                $avg = $class->average_marks ?? 0;
+                                                // Determine rating
+                                                if ($avg >= 90) {
+                                                    $color = 'primary';
+                                                    $rating = 'OS';
+                                                } elseif ($avg >= 80) {
+                                                    $color = 'success';
+                                                    $rating = 'EE';
+                                                } elseif ($avg >= 70) {
+                                                    $color = 'warning';
+                                                    $rating = 'ME';
+                                                } elseif ($avg >= 60) {
+                                                    $color = 'orange';
+                                                    $rating = 'NI';
+                                                } elseif ($avg > 0) {
+                                                    $color = 'danger';
+                                                    $rating = 'BE';
+                                                } else {
+                                                    $color = 'secondary';
+                                                    $rating = 'NA';
+                                                }
+                                            @endphp
+
+
+                                            <tr>
+                                                <td>{{ $sr++ }}</td>
+                                                <td>{{ $class->class_name }}</td>
+                                                <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
+                                                <td>{{ $class->career_code }}</td>
+                                                <td>{{ round($avg, 1) }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ $color }}">
+                                                        {{ round($avg, 1) }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-{{ $color }}">
+
+                                                        {{ $rating }}
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        @endforeach
+                                        <td colspan="8">no record found</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -2013,49 +2141,43 @@
                         <!-- Fall -->
                         <div class="tab-pane fade" id="LineManagersReview&RatingonTasks-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
+
                                 @php
-                                    $feedback = lineManagerRatingOnTasks(Auth::user()->employee_id, $activeRoleId)->first();
+                                    $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
                                 @endphp
 
-                                <table class="table table-hover align-middle custom-table">
+                                <table class="table table-striped align-middle custom-table">
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Virtue</th>
+                                            <th>Task</th>
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
-                                        @if($feedback && $feedback->virtues)
-                                            @foreach($feedback->virtues as $index => $virtue)
-                                                <tr>
-                                                    <td>{{ $index + 1 }}</td>
-                                                    <td>{{ $virtue['name'] }}</td>
-
-                                                    <td>
-                                                        <span class="badge {{ $virtue['rating_data']['color'] }}">
-                                                            {{ $virtue['rating_data']['percentage'] }}%
-                                                        </span>
-                                                    </td>
-
-                                                    <td>
-                                                        <span class="badge {{ $virtue['rating_data']['color'] }}">
-                                                            {{ $virtue['rating_data']['rating'] }}
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @else
+                                        @forelse($feedbacks as $index => $item)
                                             <tr>
-                                                <td colspan="4">No feedback available.</td>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $item->task }}</td>
+                                                <td>
+                                                    <div class="badge {{ $item->rating_data['color'] }}">
+                                                        {{ $item->rating_data['percentage'] }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge {{ $item->rating_data['color'] }}">
+                                                        {{ $item->rating_data['label'] }}
+                                                    </span>
+                                                </td>
                                             </tr>
-                                        @endif
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center">No record found</td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
-
-
                             </div>
                         </div>
                     </div>
@@ -3143,3 +3265,64 @@
     </div>
 @endif
 <!-- / Payment Methods modal -->
+
+<div class="modal fade" id="PerformanceOnTasksAssignedByTheDean" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Performance On Tasks Assigned By The Dean
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            @php
+                                $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
+                            @endphp
+
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Task</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($feedbacks as $index => $item)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $item->task }}</td>
+                                            <td>
+                                                <div class="badge {{ $item->rating_data['color'] }}">
+                                                    {{ $item->rating_data['percentage'] }}%
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge {{ $item->rating_data['color'] }}">
+                                                    {{ $item->rating_data['label'] }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center">No record found</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
