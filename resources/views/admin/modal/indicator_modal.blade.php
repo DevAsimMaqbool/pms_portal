@@ -1804,7 +1804,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $ResearchProductivityofPGStudents = ResearchProductivityofPGStudents(Auth::user()->employee_id, $activeRoleId, 128);
+                                            $ResearchProductivityofPGStudents = ResearchProductivityofPGStudents(Auth::user()->employee_id, $activeRoleId, 133);
                                         @endphp
                                         @foreach ($ResearchProductivityofPGStudents as $ResearchProductivityofPGStudent)
                                             <tr>
@@ -2502,7 +2502,7 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id, 135);
+                                        $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id, $activeRoleId, 'Won', 135);
 
                                     @endphp
                                     @foreach ($noofGrantsWon as $noofGrantsWon_row)
@@ -2742,15 +2742,31 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>3</td>
-                                        <td>3</td>
-                                        <td>
-                                            <div class="badge bg-label-primary">100%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-primary me-1">OS</span></td>
-                                    </tr>
+                                    @php
+                                        $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id, $activeRoleId, 'Submitted', 135);
+
+                                    @endphp
+                                    @foreach ($noofGrantsWon as $noofGrantsWon_row)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $noofGrantsWon_row->target }}</td> <!-- Required target -->
+                                            <td>{{ $noofGrantsWon_row->achieved_count }}</td> <!-- Achieved count -->
+                                            <td>
+                                                <div class="badge"
+                                                    style="background-color: {{ $noofGrantsWon_row->color }}">
+                                                    {{ $noofGrantsWon_row->percentage }}%
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="badge"
+                                                    style="background-color: {{ $noofGrantsWon_row->color }}">
+
+                                                    {{ $noofGrantsWon_row->rating }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
                                 </tbody>
                             </table>
                         </div>
@@ -2788,15 +2804,27 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>32</td>
-                                        <td>30</td>
-                                        <td>
-                                            <div class=" badge bg-label-primary">90%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-primary">OS</span></td>
-                                    </tr>
+                                    @php
+                                        $spinOffs = spinOffs(Auth::user()->employee_id, $activeRoleId, 139);
+                                    @endphp
+                                    @foreach ($spinOffs as $spin)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $spin->target }}</td> <!-- Required target -->
+                                            <td>{{ $spin->achieved_count }}</td> <!-- Achieved count -->
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $spin->color }}">
+                                                    {{ $spin->percentage }}%
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $spin->color }}">
+
+                                                    {{ $spin->rating }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -2878,13 +2906,27 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>4</td>
-                                        <td>3</td>
-                                        <td><span class="badge bg-label-warning">75%</span></td>
-                                        <td><span class="badge bg-label-warning">ME</span></td>
-                                    </tr>
+                                    @php
+                                        $IndustrialProjects = IndustrialProjects(Auth::user()->employee_id, $activeRoleId, 198);
+                                    @endphp
+                                    @foreach ($IndustrialProjects as $project)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $project->target }}</td> <!-- Required target -->
+                                            <td>{{ $project->achieved_count }}</td> <!-- Achieved count -->
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $project->color }}">
+                                                    {{ $project->percentage }}%
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $project->color }}">
+
+                                                    {{ $project->rating }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -2922,15 +2964,27 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>
-                                            <div class=" badge bg-label-danger">50%</div>
-                                        </td>
-                                        <td><span class="badge bg-label-danger me-1">BE</span></td>
-                                    </tr>
+                                    @php
+                                        $ProductsDeliveredToIndustry = ProductsDeliveredToIndustry(Auth::user()->employee_id, $activeRoleId, 199);
+                                    @endphp
+                                    @foreach ($ProductsDeliveredToIndustry as $product)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $product->target }}</td> <!-- Required target -->
+                                            <td>{{ $product->achieved_count }}</td> <!-- Achieved count -->
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $product->color }}">
+                                                    {{ $product->percentage }}%
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $product->color }}">
+
+                                                    {{ $product->rating }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

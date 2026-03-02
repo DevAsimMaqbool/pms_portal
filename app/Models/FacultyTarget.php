@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FacultyTarget extends Model
 {
-     use HasFactory;
+    use HasFactory;
 
     protected $fillable = [
         'indicator_id',
@@ -27,7 +27,7 @@ class FacultyTarget extends Model
         'created_by',
         'updated_by'
     ];
-     // ✅ Relation: FacultyTarget belongs to a User
+    // ✅ Relation: FacultyTarget belongs to a User
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -63,6 +63,26 @@ class FacultyTarget extends Model
     {
         return $this->hasMany(NoOfGrantsSubmitAndWon::class, 'created_by', 'user_id');
     }
-    
+
+    public function researchPublicationTargetsPgStudents()
+    {
+        return $this->hasMany(ResearchProductivityOfPgStudentTarget::class, 'created_by', 'user_id');
+    }
+
+    public function industrialProjectsTarget()
+    {
+        return $this->hasMany(IndustrialProjects::class, 'created_by', 'user_id');
+    }
+
+    public function ProductsDeliveredToIndustry()
+    {
+        return $this->hasMany(ProductsDeliveredToIndustry::class, 'created_by', 'user_id');
+    }
+
+    public function spinOffs()
+    {
+        return $this->hasMany(SpinOff::class, 'created_by', 'user_id');
+    }
+
 
 }

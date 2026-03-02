@@ -42,7 +42,11 @@ class ResearchProductivityOfPgStudentTarget extends Model
     }
     public function coAuthors()
     {
-        return $this->hasMany(ResearchProductivityOfPgStudent::class, 'target_id');
+        return $this->hasMany(
+            ResearchProductivityOfPgStudent::class,
+            'target_id',
+            'id'
+        );
     }
     public function facultyTarget()
     {

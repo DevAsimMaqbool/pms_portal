@@ -1138,31 +1138,38 @@ function MultidisciplinaryProjects($facultyId, $activeRoleId, $indicatorId)
     return $facultyTargets;
 }
 
-function noofGrantsWon($facultyId, $indicator_id)
+function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id)
 {
     $facultyTargets = FacultyTarget::with([
-        'noofGrantsWonTarget' => function ($query) use ($indicator_id) {
+        'noofGrantsWonTarget' => function ($query) use ($indicator_id, $status) {
             $query->where('form_status', 'RESEARCHER')
-                ->where('indicator_id', $indicator_id);
+                ->where('indicator_id', $indicator_id)
+                ->where('grant_status', $status);
         }
     ])
         ->where('user_id', $facultyId)
         ->where('form_status', 'OTHER')
         ->where('indicator_id', $indicator_id)
         ->get();
+    $totalPercentage = 0;
+    $count = 0;
 
-    // Add calculated fields to each record
     foreach ($facultyTargets as $target) {
 
-        $achieved = $target->noofGrantsWonTarget->count(); // Number of achieved publications
-        $required = (int) $target->target;                          // Faculty target value
+        $achieved = $target->noofGrantsWonTarget->count();
+        $required = (int) $target->target;
 
-        // Prevent divide by zero
         if ($required > 0) {
             $percentage = ($achieved / $required) * 100;
         } else {
             $percentage = 0;
         }
+
+        $percentage = round($percentage, 2);
+
+        // Accumulate for average
+        $totalPercentage += $percentage;
+        $count++;
 
         // Rating logic
         if ($percentage >= 90) {
@@ -1185,14 +1192,241 @@ function noofGrantsWon($facultyId, $indicator_id)
             $color = '#000000';
         }
 
+        $target->achieved_count = $achieved;
+        $target->percentage = $percentage;
+        $target->rating = $rating;
+        $target->color = $color;
+    }
+
+    // ✅ Calculate Average
+    $avgPercentage = $count > 0 ? round($totalPercentage / $count, 2) : 0;
+    $status = 'Won' ? $indicatorId = 202 : $indicatorId = $indicator_id;
+
+    // ✅ Save Only One Average Score
+    saveIndicatorPercentage(
+        $facultyId,
+        $activeRoleId,
+        2,  // KPA ID
+        8,  // Category ID
+        $indicatorId,
+        $avgPercentage
+    );
+    return $facultyTargets;
+}
+
+function IndustrialProjects($facultyId, $activeRoleId, $indicator_id)
+{
+    $commercial = FacultyTarget::with([
+        'industrialProjectsTarget' => function ($query) use ($indicator_id) {
+            $query->where('form_status', 'RESEARCHER')
+                ->where('indicator_id', $indicator_id);
+        }
+    ])
+        ->where('user_id', $facultyId)
+        ->where('form_status', 'OTHER')
+        ->where('indicator_id', $indicator_id)
+        ->get();
+
+    $percentages = []; // For calculating overall average
+
+    foreach ($commercial as $target) {
+
+        $rows = $target->industrialProjectsTarget;
+        $achieved = $rows->count();
+        $required = (int) $target->target;
+
+        // Prevent divide by zero
+        $percentage = ($required > 0) ? ($achieved / $required) * 100 : 0;
+
+        // Rating logic
+        if ($percentage >= 90) {
+            $rating = 'OS';
+            $color = '#6EA8FE';
+        } elseif ($percentage >= 80) {
+            $rating = 'EE';
+            $color = '#96e2b4';
+        } elseif ($percentage >= 70) {
+            $rating = 'ME';
+            $color = '#ffcb9a';
+        } elseif ($percentage >= 60) {
+            $rating = 'NI';
+            $color = '#fd7e13';
+        } elseif ($percentage > 0) {
+            $rating = 'BE';
+            $color = '#ff4c51';
+        } else {
+            $rating = 'NA';
+            $color = '#000000';
+        }
+
+        // Save percentage for avg calculation
+        $percentages[] = $percentage;
+
         // Add values into object
         $target->achieved_count = $achieved;
         $target->percentage = round($percentage, 2);
         $target->rating = $rating;
         $target->color = $color;
     }
-    return $facultyTargets;
+
+    // ✅ Calculate overall average percentage
+    $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
+
+    // ✅ Save globally
+    saveIndicatorPercentage(
+        $facultyId,
+        $role_id = $activeRoleId,
+        $keyPerformanceAreaId = 2,
+        $indicatorCategoryId = 8,
+        $indicator_id,
+        $avgPercentage
+    );
+
+    return $commercial;
 }
+
+function spinOffs($facultyId, $activeRoleId, $indicator_id)
+{
+    $commercial = FacultyTarget::with([
+        'spinOffs' => function ($query) use ($indicator_id) {
+            $query->where('form_status', 'RESEARCHER')
+                ->where('indicator_id', $indicator_id);
+        }
+    ])
+        ->where('user_id', $facultyId)
+        ->where('form_status', 'OTHER')
+        ->where('indicator_id', $indicator_id)
+        ->get();
+
+    $percentages = []; // For calculating overall average
+
+    foreach ($commercial as $target) {
+
+        $rows = $target->spinOffs;
+        $achieved = $rows->count();
+        $required = (int) $target->target;
+
+        // Prevent divide by zero
+        $percentage = ($required > 0) ? ($achieved / $required) * 100 : 0;
+
+        // Rating logic
+        if ($percentage >= 90) {
+            $rating = 'OS';
+            $color = '#6EA8FE';
+        } elseif ($percentage >= 80) {
+            $rating = 'EE';
+            $color = '#96e2b4';
+        } elseif ($percentage >= 70) {
+            $rating = 'ME';
+            $color = '#ffcb9a';
+        } elseif ($percentage >= 60) {
+            $rating = 'NI';
+            $color = '#fd7e13';
+        } elseif ($percentage > 0) {
+            $rating = 'BE';
+            $color = '#ff4c51';
+        } else {
+            $rating = 'NA';
+            $color = '#000000';
+        }
+
+        // Save percentage for avg calculation
+        $percentages[] = $percentage;
+
+        // Add values into object
+        $target->achieved_count = $achieved;
+        $target->percentage = round($percentage, 2);
+        $target->rating = $rating;
+        $target->color = $color;
+    }
+
+    // ✅ Calculate overall average percentage
+    $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
+
+    // ✅ Save globally
+    saveIndicatorPercentage(
+        $facultyId,
+        $role_id = $activeRoleId,
+        $keyPerformanceAreaId = 2,
+        $indicatorCategoryId = 8,
+        $indicator_id,
+        $avgPercentage
+    );
+
+    return $commercial;
+}
+
+function ProductsDeliveredToIndustry($facultyId, $activeRoleId, $indicator_id)
+{
+    $commercial = FacultyTarget::with([
+        'ProductsDeliveredToIndustry' => function ($query) use ($indicator_id) {
+            $query->where('form_status', 'RESEARCHER')
+                ->where('indicator_id', $indicator_id);
+        }
+    ])
+        ->where('user_id', $facultyId)
+        ->where('form_status', 'OTHER')
+        ->where('indicator_id', $indicator_id)
+        ->get();
+
+    $percentages = []; // For calculating overall average
+
+    foreach ($commercial as $target) {
+
+        $rows = $target->ProductsDeliveredToIndustry;
+        $achieved = $rows->count();
+        $required = (int) $target->target;
+
+        // Prevent divide by zero
+        $percentage = ($required > 0) ? ($achieved / $required) * 100 : 0;
+
+        // Rating logic
+        if ($percentage >= 90) {
+            $rating = 'OS';
+            $color = '#6EA8FE';
+        } elseif ($percentage >= 80) {
+            $rating = 'EE';
+            $color = '#96e2b4';
+        } elseif ($percentage >= 70) {
+            $rating = 'ME';
+            $color = '#ffcb9a';
+        } elseif ($percentage >= 60) {
+            $rating = 'NI';
+            $color = '#fd7e13';
+        } elseif ($percentage > 0) {
+            $rating = 'BE';
+            $color = '#ff4c51';
+        } else {
+            $rating = 'NA';
+            $color = '#000000';
+        }
+
+        // Save percentage for avg calculation
+        $percentages[] = $percentage;
+
+        // Add values into object
+        $target->achieved_count = $achieved;
+        $target->percentage = round($percentage, 2);
+        $target->rating = $rating;
+        $target->color = $color;
+    }
+
+    // ✅ Calculate overall average percentage
+    $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
+
+    // ✅ Save globally
+    saveIndicatorPercentage(
+        $facultyId,
+        $role_id = $activeRoleId,
+        $keyPerformanceAreaId = 2,
+        $indicatorCategoryId = 8,
+        $indicator_id,
+        $avgPercentage
+    );
+
+    return $commercial;
+}
+
 function CompletionofCourseFolder($facultyId, $activeRoleId, $indicator_id)
 {
     $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember', 'facultyClass'])
@@ -1610,7 +1844,7 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
     function ResearchProductivityofPGStudents($facultyId, $activeRoleId, $indicatorId)
     {
         $facultyTargets = FacultyTarget::with([
-            'researchPublicationTargets' => function ($query) use ($indicatorId) {
+            'researchPublicationTargetsPgStudents' => function ($query) use ($indicatorId) {
                 $query->where('form_status', 'RESEARCHER')
                     ->where('indicator_id', $indicatorId)
                     ->whereNotNull('journal_clasification')
@@ -1624,7 +1858,7 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
             ->where('user_id', $facultyId)
             ->where('form_status', 'HOD')
             ->where('indicator_id', $indicatorId)
-            ->whereHas('researchPublicationTargets', function ($query) use ($indicatorId) {
+            ->whereHas('researchPublicationTargetsPgStudents', function ($query) use ($indicatorId) {
                 $query->where('form_status', 'RESEARCHER')
                     ->where('indicator_id', $indicatorId)
                     ->whereNotNull('journal_clasification')
@@ -1633,7 +1867,7 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
                     });
             })
             ->get();
-
+        // dd($facultyTargets);
         $data = [];
         $percentages = []; // Initialize to avoid count() on null
 
@@ -1647,11 +1881,11 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
         ];
 
         foreach ($facultyTargets as $facultyTarget) {
-            if ($facultyTarget->researchPublicationTargets->isEmpty())
+            if ($facultyTarget->researchPublicationTargetsPgStudents->isEmpty())
                 continue;
 
             // Group research targets by journal_clasification
-            $grouped = $facultyTarget->researchPublicationTargets
+            $grouped = $facultyTarget->researchPublicationTargetsPgStudents
                 ->groupBy(fn($t) => strtoupper($t->journal_clasification));
 
             foreach ($grouped as $classification => $targets) {

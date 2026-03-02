@@ -18,7 +18,7 @@
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+                @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor']))
                     <form id="researchForm1" enctype="multipart/form-data" class="row">
                         @csrf
                         <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
@@ -78,12 +78,12 @@
 
 
                         </div>
-                        <div class="col-4 text-center demo-vertical-spacing">
+                        <div class="col-1 text-end demo-vertical-spacing">
                             <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
                         </div>
                     </form>
                 @endif
-                @if(auth()->user()->hasRole(['Dean']))
+                @if(in_array(getRoleName(activeRole()), ['Dean']))
                     <form id="researchForm2" enctype="multipart/form-data" class="row">
                         @csrf
                         <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
@@ -135,7 +135,7 @@
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
-    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+    @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor']))
         <script>
             $(document).ready(function () {
 
@@ -186,7 +186,7 @@
             });
         </script>
     @endif
-    @if(auth()->user()->hasRole(['Dean']))
+    @if(in_array(getRoleName(activeRole()), ['Dean']))
         <script>
             $(document).ready(function () {
 
