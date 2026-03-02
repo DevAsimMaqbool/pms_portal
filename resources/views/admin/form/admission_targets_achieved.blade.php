@@ -133,27 +133,40 @@
                             </form>
                         </div>
                     @endif
-                    @if(auth()->user()->hasRole(['Dean', 'HOD', 'ORIC']))
-                        <div class="tab-pane fade show {{ auth()->user()->hasRole(['Dean', 'ORIC']) ? 'active' : '' }}"
-                            id="form2" role="tabpanel">
-                            <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" id="selectAll"></th>
-                                        <th>#</th>
-                                        <th>Created By</th>
-                                        <th>Co Authers</th>
-                                        <th>Author Rank</th>
-                                        <th>Created Date</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    @endif
                 </div>
             </div>
         </div>
+
+    <!-- Import Modal -->
+<div class="modal fade" id="importModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form id="importForm" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+            <input type="hidden" name="form_status" value="HOD">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Employability Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <label class="form-label">Upload Excel / CSV</label>
+                    <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
+
+                    <small class="text-muted d-block mt-2">
+                        Allowed: xlsx, xls, csv
+                    </small>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 
     </div>
@@ -388,6 +401,35 @@
                     } else {
                         programSelect.html('<option value="">Select Program</option>');
                     }
+                });
+                $('#importForm').on('submit', function (e) {
+                    e.preventDefault();
+
+                    let formData = new FormData(this);
+
+                    Swal.fire({
+                        title: 'Importing...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+
+                    $.ajax({
+                        url: "{{ route('admission-targets.import') }}",
+                        method: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (res) {
+                            Swal.close();
+                            Swal.fire('Success', res.message, 'success');
+                            $('#importModal').modal('hide');
+                            $('#importForm')[0].reset();
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            Swal.fire('Error', xhr.responseJSON.message ?? 'Import failed', 'error');
+                        }
+                    });
                 });
 
 

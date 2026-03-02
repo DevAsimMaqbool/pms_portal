@@ -264,6 +264,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/student-engagement-rate/import', [StudentEngagementRateController::class, 'import'])->name('student-engagement-rate.import');
         Route::post('/program-profitability/import', [ProgramProfitabilityController::class, 'import'])->name('program-profitability.import');
         Route::post('/admission-targets/import', [AdmissionTargetAchievedController::class, 'import'])->name('admission-targets.import');
+        Route::post('/recovery/import', [RecoveryController::class, 'import'])->name('recovery.import');
 
         // routes/web.php
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
