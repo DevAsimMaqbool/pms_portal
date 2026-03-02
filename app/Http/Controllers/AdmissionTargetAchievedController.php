@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\AdmissionTargetAchievedImport;
 use App\Models\AdmissionTargetAchieved;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdmissionTargetAchievedController extends Controller
 {
@@ -166,6 +168,26 @@ class AdmissionTargetAchievedController extends Controller
 
         return response()->json([
             'message' => 'Deleted successfully'
+        ]);
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+            'indicator_id' => 'required',
+            'form_status' => 'required',
+        ]);
+
+        Excel::import(
+            new AdmissionTargetAchievedImport(
+                $request->indicator_id,
+                $request->form_status
+            ),
+            $request->file
+        );
+
+        return response()->json([
+            'message' => 'Admission Target data imported successfully'
         ]);
     }
     

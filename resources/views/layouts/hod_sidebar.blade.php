@@ -63,7 +63,8 @@
                 'hod' => 'HOD',
                 default => ucfirst($userRole),
             };
-            $result = getRoleAssignments($displayRole, null, 1);
+            //$result = getRoleAssignments($displayRole, null, 1);
+            $result = getSidbarRoleAssignments($displayRole, null, 1);
             $icons = icons();
           @endphp
 

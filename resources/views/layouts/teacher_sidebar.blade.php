@@ -40,7 +40,7 @@
 </a>
 </li> -->
 
-    @if(auth()->user()->hasRole(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Program Leader UG', 'Program Leader PG']))
+     @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Program Leader UG', 'Program Leader PG']))
 
       <li class="menu-item {{ request()->routeIs('comparitive.analysis') ? 'active' : '' }}">
         <a href="{{ route('comparitive.analysis') }}" class="menu-link">
@@ -98,7 +98,8 @@
                                                                                                                                                                                                                                 </a>
                                                                                                                                                                                                                               </li> -->
       @php
-        $result = getRoleAssignments(Auth::user()->getRoleNames()->first(), null, 1);
+       // $result = getRoleAssignments(Auth::user()->getRoleNames()->first(), null, 1);
+        $result = getSidbarRoleAssignments(getRoleName(activeRole()), null, 1);
         $icons = icons();
       @endphp
 

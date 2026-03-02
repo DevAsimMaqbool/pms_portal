@@ -28,7 +28,7 @@ class NoOfGrantsSubmitAndWonController extends Controller
                    ->role('HOD')->pluck('employee_id');
                     if($status=="RESEARCHER"){
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
-                        ->role('Teacher')->pluck('employee_id');
+                        ->role(['Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
                           $all_ids = $teacher_id->merge($hod_ids);
                           $forms = NoOfGrantsSubmitAndWon::with([
                                 'creator' => function ($q) {
@@ -70,7 +70,7 @@ class NoOfGrantsSubmitAndWonController extends Controller
                 }
                 if($status=="HOD"){
                     $employeeIds = User::where('manager_id', $employee_id)
-                    ->role('Teacher')->pluck('employee_id');
+                    ->role(['Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
                     $all_ids = $employeeIds->merge($employee_id);
                     $forms = NoOfGrantsSubmitAndWon::with([
                             'creator' => function ($q) {
