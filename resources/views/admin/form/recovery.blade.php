@@ -125,6 +125,37 @@
         </div>
 
 
+<!-- Import Modal -->
+<div class="modal fade" id="importModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form id="importForm" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+            <input type="hidden" name="form_status" value="HOD">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Employability Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <label class="form-label">Upload Excel / CSV</label>
+                    <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
+
+                    <small class="text-muted d-block mt-2">
+                        Allowed: xlsx, xls, csv
+                    </small>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
     </div>
     <!-- / Content -->
 @endsection
@@ -340,6 +371,35 @@
                     } else {
                         programSelect.html('<option value="">Select Program</option>');
                     }
+                });
+                $('#importForm').on('submit', function (e) {
+                    e.preventDefault();
+
+                    let formData = new FormData(this);
+
+                    Swal.fire({
+                        title: 'Importing...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+
+                    $.ajax({
+                        url: "{{ route('recovery.import') }}",
+                        method: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (res) {
+                            Swal.close();
+                            Swal.fire('Success', res.message, 'success');
+                            $('#importModal').modal('hide');
+                            $('#importForm')[0].reset();
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            Swal.fire('Error', xhr.responseJSON.message ?? 'Import failed', 'error');
+                        }
+                    });
                 });
 
 

@@ -50,17 +50,24 @@
                 <div data-i18n="Target">Target</div>
             </a>
         </li>
-        @if(auth()->user()->hasRole(['Dean']))
+        @if(in_array(getRoleName(activeRole()), ['Dean']))
             @php
                 $teacherRoleId = auth()->user()->roles->firstWhere('name', 'Dean')->id ?? null;
 
-                $assignments = \App\Models\RoleKpaAssignment::with([
+                /*$assignments = \App\Models\RoleKpaAssignment::with([
                     'kpa',
                     'category',
                     'indicator.indicatorForm'
                 ])
                     ->where('role_id', $teacherRoleId)
-                    ->get();
+                    ->get();*/
+                $assignments = \App\Models\SidebarKpaAssignment::with([
+                    'kpa',
+                    'category',
+                    'indicator.indicatorForm'
+                ])
+                    ->where('role_id', $teacherRoleId)
+                    ->get();  
 
                 // Group by KPA → Category → Indicators
                 $result = $assignments->groupBy('kpa.id')->map(function ($kpaGroup) {
