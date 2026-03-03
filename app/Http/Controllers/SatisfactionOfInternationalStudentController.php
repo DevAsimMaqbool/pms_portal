@@ -80,7 +80,7 @@ class SatisfactionOfInternationalStudentController extends Controller
             }
             $employeeId = Auth::user()->employee_id;
             DB::beginTransaction();
-            $data['student_rating'] = $request->score * 20;
+            $data['student_rating'] = $request->score;
             $data['created_by'] = $employeeId;
             $data['updated_by'] = $employeeId;
 
@@ -121,7 +121,7 @@ class SatisfactionOfInternationalStudentController extends Controller
                     'student_program' => $request->student_program,
                     'student_country' => $request->student_country,
                     'student_semester' => $request->student_semester,
-                    'student_rating' => $request->score * 20,
+                    'student_rating' => $request->score,
                     'student_comments' => $request->student_comments,
                     'updated_by' => Auth::id(),
                 ];
