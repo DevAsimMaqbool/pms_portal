@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
     <style>
         .form-disabled {
             color: #acaab1;
@@ -27,6 +28,7 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
+    @if(in_array(getRoleName(activeRole()), ['International Office']))
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <div class="card-title mb-0">
@@ -153,7 +155,7 @@
 
                                         <div class="col-md-4">
                                             <label class="fw-bold mb-2 d-block">Rating</label>
-                                            <div id="ratingBox" class="half-star-ratings raty" data-half="true"
+                                            <div id="ratingBoxs" class="raty" data-half="true"
                                                 data-score="" data-number="5">
                                             </div>
 
@@ -178,6 +180,16 @@
                 </div>
             </div>
         </div>
+         @else
+             <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
     </div>
 @endsection
 
@@ -197,6 +209,33 @@
     <script>
         window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
     </script>
+    <script>
+       let employerRaty;
+ document.addEventListener("DOMContentLoaded", function () {
+
+    // SVG stars
+    const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
+    const starHalf = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='halfStarGradient'%3E%3Cstop offset='50%25' style='stop-color:%23FFD700' /%3E%3Cstop offset='50%25' style='stop-color:%239e9e9e' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23halfStarGradient)' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
+    const starOff = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%239e9e9e' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
+
+    // Employer Rating
+     employerRaty = new Raty(document.getElementById("ratingBoxs"), {
+        number: 5,
+        half: true,
+        starOn: starOn,
+        starHalf: starHalf,
+        starOff: starOff,
+        click: function(score) {
+            document.getElementById("rating").value = score;
+        }
+    }).init();
+
+});
+
+
+
+
+       </script>
 @endpush
 
 @push('script')
@@ -338,8 +377,7 @@
                     $f.find('[name="student_program"]').val(form.student_program);
                     $f.find('[name="student_country"]').val(form.student_country);
                     $f.find('[name="student_semester"]').val(form.student_semester);
-                    $f.find('[name="rating"]').val(form.student_rating);
-                    $f.find('#ratingBox').attr('data-score', form.student_rating);
+                    employerRaty.setScore(form.student_rating);
                     $f.find('[name="student_comments"]').val(form.student_comments);
 
                     // Show modal
