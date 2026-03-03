@@ -21,13 +21,13 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-            if ($user->hasRole('Dean')) {
+            if(in_array(getRoleName(activeRole()), ['Dean'])) {    
                    $status = $request->input('status');
                    $hod_ids = User::where('manager_id', $employee_id)
                    ->role('HOD')->pluck('employee_id');
                     if($status=="RESEARCHER"){
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
-                        ->role('Teacher')->pluck('employee_id');
+                        ->role(['Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
                           $all_ids = $teacher_id->merge($hod_ids);
                           $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
                                 'creator' => function ($q) {
@@ -40,7 +40,8 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                             ->get();
                     }
 
-            }if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+            }
+            if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
@@ -54,20 +55,22 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                 }
                 if($status=="HOD"){
                     $employeeIds = User::where('manager_id', $employee_id)
-                        ->role('Teacher')->pluck('employee_id');
+                        ->role(['Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
+                        $all_ids = $employeeIds->merge($employee_id);
                         $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
                             ])
-                            ->whereIn('created_by', $employeeIds)
+                            ->whereIn('created_by', $all_ids)
                             ->whereIn('status', [1, 2])
                             ->where('form_status', 'RESEARCHER')
                             ->orderBy('id', 'desc')
                             ->get();
                 }        
                 
-            }if ($user->hasRole('ORIC')) {
+            }
+            if(in_array(getRoleName(activeRole()), ['ORIC'])) {
                 $status = $request->input('status');
                     if($status=="RESEARCHER"){
                           $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
@@ -81,7 +84,8 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                             ->get();
                     }
 
-            }if ($user->hasRole('Human Resources')) {
+            }
+            if(in_array(getRoleName(activeRole()), ['Human Resources'])) {
                 $status = $request->input('status');
                      if($status=="HOD"){
                            $forms = NoAchievementOfMultidisciplinaryProjectsTarget::with([
@@ -241,7 +245,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
         // Get current user info
         $currentUserId = Auth::id();
         $currentUserName = Auth::user()->name;
-        $userRoll = Auth::user()->getRoleNames()->first() ?? 'N/A';
+        $userRoll = getRoleName(activeRole()) ?? 'N/A';
 
         // Avoid duplicate consecutive updates by the same user with the same status
         $lastUpdate = end($history);
