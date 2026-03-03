@@ -3041,7 +3041,7 @@
     </div>
 </div>
 
-@if(in_array(getRoleName(activeRole()), ['HOD', 'Dean', 'Program Leader UG']))
+@if(in_array(getRoleName(activeRole()), ['HOD', 'Dean', 'Program Leader UG', 'Associate Professor']))
     <div class="modal fade" id="%Employability" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">

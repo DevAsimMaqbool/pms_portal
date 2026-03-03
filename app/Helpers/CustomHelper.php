@@ -353,44 +353,41 @@ function myClassesBK27Feb($facultyId, $activeRoleId)
 
 function myClasses($facultyId, $activeRoleId)
 {
-    $classes = FacultyMemberClass::with([
-        'attendances' => function ($query) {
-            $query->orderBy('class_date', 'desc');
-        }
-    ])
-        ->where('faculty_id', $facultyId)
-        ->select(
-            'class_id',
-            'class_name',
-            'code',
-            'term',
-            'career_code',
-            'average_marks',
-            'passing_percentage'
-        )
-        ->get();
+    // 1️⃣ Get count and averages in a single query
+    $stats = FacultyMemberClass::where('faculty_id', $facultyId)
+        ->selectRaw('COUNT(*) as total_courses, AVG(average_marks) as avg_marks, AVG(passing_percentage) as avg_pass')
+        ->first();
 
-    $totalCourses = $classes->count();
-    // 🎯 1️⃣ Course Load Score
-    if ($totalCourses > 3) {
-        $courseLoadScore = 100;
-    } elseif ($totalCourses == 3) {
-        $courseLoadScore = 80;
-    } else {
-        $courseLoadScore = 60;
-    }
+    $totalCourses = $stats->total_courses;
+    $averagePassPercentage = $stats->avg_pass ?? 0;
+    $averageStudentScore = $stats->avg_marks ?? 0;
 
-    // 🎯 2️⃣ Student Pass % Score (average)
-    $averagePassPercentage = $classes->avg('passing_percentage') ?? 0;
+    // 2️⃣ Course Load Score
+    $courseLoadScore = $totalCourses > 3 ? 100 : ($totalCourses == 3 ? 80 : 60);
 
-    // 🎯 3️⃣ Average Student Marks Score
-    $averageStudentScore = $classes->avg('average_marks') ?? 0;
-    // ✅ SAVE INDICATORS (only once)
+    // 3️⃣ Get weightages
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', 122)['weightage'],
+        'pass' => getRoleWeightage($activeRoleId, 'indicator', 185)['weightage'],
+        'marks' => getRoleWeightage($activeRoleId, 'indicator', 186)['weightage'],
+    ];
+
+    $weightedCourseLoad = ($courseLoadScore * $weights['course_load']) / 100;
+    $weightedPassScore = ($averagePassPercentage * $weights['pass']) / 100;
+    $weightedMarksScore = ($averageStudentScore * $weights['marks']) / 100;
+
+    // 4️⃣ Save indicators (transaction optional)
     $userId = getUserID($facultyId);
+    DB::transaction(function () use ($userId, $activeRoleId, $weightedCourseLoad, $weightedPassScore, $weightedMarksScore) {
+        saveIndicatorPercentage($userId, $activeRoleId, 1, 3, 122, $weightedCourseLoad);
+        saveIndicatorPercentage90Plus($userId, $activeRoleId, 1, 25, 185, $weightedPassScore);
+        saveIndicatorPercentage($userId, $activeRoleId, 1, 25, 186, $weightedMarksScore);
+    });
 
-    saveIndicatorPercentage($userId, $activeRoleId, 1, 3, 122, $courseLoadScore);
-    saveIndicatorPercentage90Plus($userId, $activeRoleId, 1, 25, 185, $averagePassPercentage);
-    saveIndicatorPercentage($userId, $activeRoleId, 1, 25, 186, $averageStudentScore);
+    // 5️⃣ Return minimal class info (load if needed)
+    $classes = FacultyMemberClass::where('faculty_id', $facultyId)
+        ->select('class_id', 'class_name', 'code', 'term', 'career_code', 'average_marks', 'passing_percentage')
+        ->get();
 
     return [
         'classes' => $classes,
@@ -591,13 +588,18 @@ function myClassesAttendanceData($facultyId)
 
         $activeRoleId = getRoleIdByName(activeRole());
         $employeeId = getUserID($facultyId);
+        $weights = [
+            'course_load' => getRoleWeightage($activeRoleId, 'indicator', 113)['weightage'],
+        ];
+
+        $weightedScore = ($overallPresentPercentage * $weights['course_load']) / 100;
         saveIndicatorPercentage(
             $employeeId,
             $activeRoleId,
             1,
             3,
             113,
-            $overallPresentPercentage
+            $weightedScore
         );
 
         return $class;
@@ -713,14 +715,17 @@ if (!function_exists('ScopusPublications')) {
         $avgPercentage = ($totalTarget > 0)
             ? round(($totalSubmitted / $totalTarget) * 100, 2)
             : 0;
-
+        $weights = [
+            'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'],
+        ];
+        $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
         saveIndicatorPercentage(
             $facultyId,
             $role_id = $activeRoleId,
             $keyPerformanceAreaId,
             $indicatorCategoryId,
             $indicatorId,
-            $avgPercentage
+            $weightedScore
         );
 
         return $data;
@@ -971,7 +976,9 @@ function PatentsIntellectualProperty($facultyId, $activeRoleId, $indicator_id)
 
     // ✅ Calculate overall average percentage
     $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
-
+    $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', $indicator_id);
+    $weight = $indicatorWeight['weightage'] ?? 0;
+    $weightedScore = ($avgPercentage * $weight) / 100;
     // ✅ Save globally
     saveIndicatorPercentage(
         $facultyId,
@@ -979,7 +986,7 @@ function PatentsIntellectualProperty($facultyId, $activeRoleId, $indicator_id)
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
-        $avgPercentage
+        $weightedScore
     );
 
     return $facultyTargets;
@@ -1044,7 +1051,10 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, $i
 
     // ✅ Calculate overall average percentage
     $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
-
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicator_id)['weightage'],
+    ];
+    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
     // ✅ Save globally
     saveIndicatorPercentage(
         $facultyId,
@@ -1052,7 +1062,7 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, $i
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
-        $avgPercentage
+        $weightedScore
     );
 
     return $commercial;
@@ -1126,13 +1136,17 @@ function MultidisciplinaryProjects($facultyId, $activeRoleId, $indicatorId)
     // -------------------------
     // SAVE GLOBALLY
     // -------------------------
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', 136)['weightage'],
+    ];
+    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
     saveIndicatorPercentage(
         $facultyId,
         $role_id = $activeRoleId,
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicatorId = 136,
-        $avgPercentage
+        $weightedScore
     );
 
     return $facultyTargets;
@@ -1201,7 +1215,10 @@ function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id)
     // ✅ Calculate Average
     $avgPercentage = $count > 0 ? round($totalPercentage / $count, 2) : 0;
     $status = 'Won' ? $indicatorId = 202 : $indicatorId = $indicator_id;
-
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'],
+    ];
+    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
     // ✅ Save Only One Average Score
     saveIndicatorPercentage(
         $facultyId,
@@ -1209,7 +1226,7 @@ function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id)
         2,  // KPA ID
         8,  // Category ID
         $indicatorId,
-        $avgPercentage
+        $weightedScore
     );
     return $facultyTargets;
 }
@@ -1271,7 +1288,10 @@ function IndustrialProjects($facultyId, $activeRoleId, $indicator_id)
 
     // ✅ Calculate overall average percentage
     $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
-
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicator_id)['weightage'],
+    ];
+    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
     // ✅ Save globally
     saveIndicatorPercentage(
         $facultyId,
@@ -1279,7 +1299,7 @@ function IndustrialProjects($facultyId, $activeRoleId, $indicator_id)
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
-        $avgPercentage
+        $weightedScore
     );
 
     return $commercial;
@@ -1342,7 +1362,10 @@ function spinOffs($facultyId, $activeRoleId, $indicator_id)
 
     // ✅ Calculate overall average percentage
     $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
-
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicator_id)['weightage'],
+    ];
+    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
     // ✅ Save globally
     saveIndicatorPercentage(
         $facultyId,
@@ -1350,7 +1373,7 @@ function spinOffs($facultyId, $activeRoleId, $indicator_id)
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
-        $avgPercentage
+        $weightedScore
     );
 
     return $commercial;
@@ -1413,7 +1436,10 @@ function ProductsDeliveredToIndustry($facultyId, $activeRoleId, $indicator_id)
 
     // ✅ Calculate overall average percentage
     $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
-
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicator_id)['weightage'],
+    ];
+    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
     // ✅ Save globally
     saveIndicatorPercentage(
         $facultyId,
@@ -1421,7 +1447,7 @@ function ProductsDeliveredToIndustry($facultyId, $activeRoleId, $indicator_id)
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
-        $avgPercentage
+        $weightedScore
     );
 
     return $commercial;
@@ -1471,7 +1497,10 @@ function CompletionofCourseFolder($facultyId, $activeRoleId, $indicator_id)
 
     // Compute average percentage
     $avgPercentage = $count > 0 ? floor($totalScore / $count) : 0;
-
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicator_id)['weightage'],
+    ];
+    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
     // Save to IndicatorsPercentage table
     saveIndicatorPercentage(
         $facultyId,
@@ -1479,7 +1508,7 @@ function CompletionofCourseFolder($facultyId, $activeRoleId, $indicator_id)
         $keyPerformanceAreaId = 1,
         $indicatorCategoryId = 3,
         $indicator_id,
-        $avgPercentage
+        $weightedScore
     );
 
     return $CompletionOfCourseFolder;
@@ -1529,7 +1558,10 @@ function ComplianceandUsageofLMS($facultyId, $activeRoleId, $indicator_id)
     $avgPercentage = count($percentages)
         ? round(array_sum($percentages) / count($percentages), 2)
         : 0;
-
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicator_id)['weightage'],
+    ];
+    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
     // ✅ Save globally (corrected)
     saveIndicatorPercentage(
         $facultyId,
@@ -1537,7 +1569,7 @@ function ComplianceandUsageofLMS($facultyId, $activeRoleId, $indicator_id)
         $keyPerformanceAreaId = 1,
         $indicatorCategoryId = 3,
         $indicator_id,
-        $avgPercentage
+        $weightedScore
     );
 
     return $CompletionOfCourseFolder;
@@ -1643,7 +1675,10 @@ if (!function_exists('lineManagerRatingOnTasks')) {
 
         // Calculate overall average
         $overallAvg = $totalCount ? $overallSum / $totalCount : 0;
-
+        $weights = [
+            'course_load' => getRoleWeightage($activeRoleId, 'indicator', 188)['weightage'],
+        ];
+        $weightedScore = ($overallAvg * $weights['course_load']) / 100;
         // Save overall average to database
         saveIndicatorPercentage(
             $faculty_id = $facultyId,
@@ -1651,7 +1686,7 @@ if (!function_exists('lineManagerRatingOnTasks')) {
             $keyPerformanceAreaId = 13,  // set appropriate KPA ID
             $indicatorCategoryId = 27,   // set appropriate category ID
             $indicatorId = 188,         // set appropriate indicator ID
-            $overallAvg
+            $weightedScore
         );
 
         return $feedbacks;
@@ -1796,13 +1831,18 @@ if (!function_exists('lineManagerRatingOnEvents')) {
             ];
 
             // Save to indicators_percentages table automatically
+            $weights = [
+                'course_load' => getRoleWeightage($activeRoleId, 'indicator', 189)['weightage'],
+            ];
+            $weightedScore = ($percentage * $weights['course_load']) / 100;
+
             saveIndicatorPercentage(
                 $faculty_id = $facultyId,
                 $role_id = $activeRoleId,
                 $keyPerformanceAreaId = 13,   // set appropriate KPA ID
                 $indicatorCategoryId = 28,    // set appropriate category ID
                 $indicatorId = 189,           // set appropriate indicator ID
-                $percentage
+                $weightedScore
             );
         }
 
@@ -1945,14 +1985,17 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
         $avgPercentage = count($percentages)
             ? round(array_sum($percentages) / count($percentages), 2)
             : 0;
-
+        $weights = [
+            'course_load' => getRoleWeightage($activeRoleId, 'indicator', 133)['weightage'],
+        ];
+        $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
         saveIndicatorPercentage(
             $facultyId,
             $role_id = $activeRoleId,
             $keyPerformanceAreaId = 2,
             $indicatorCategoryId = 6,
             $indicatorId = 133,
-            $avgPercentage
+            $weightedScore
         );
 
         return $data;
@@ -2016,6 +2059,37 @@ if (!function_exists('kpaAvgWeightage')) {
 
 
 
+    }
+}
+
+if (!function_exists('getRoleWeightage')) {
+    function getRoleWeightage($role_id, $type, $id)
+    {
+        $query = RoleKpaAssignment::where('role_id', $role_id);
+
+        if ($type == 'kpa') {
+            $query->where('key_performance_area_id', $id);
+            $column = 'kpa_weightage';
+        } elseif ($type == 'indicator') {
+            $query->where('indicator_id', $id);
+            $column = 'indicator_weightage';
+        } else {
+            return [
+                'type' => $type,
+                'role_id' => $role_id,
+                'id' => $id,
+                'weightage' => 0
+            ];
+        }
+
+        $record = $query->first();
+
+        return [
+            'type' => $type,
+            'role_id' => $role_id,
+            'id' => $id,
+            'weightage' => $record ? ($record->$column ?? 0) : 0,
+        ];
     }
 }
 // function kpaAvgScore($kpa_id, $emp_id)
@@ -2760,14 +2834,21 @@ function EmployabilityOfHOD()
 
     $employed = $records->whereNotNull('date_of_appointment')->count();
     $employabilityPercentage = round(($employed / $totalStudents) * 100, 2);
-
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', 103)['weightage'],
+        'course_104' => getRoleWeightage($activeRoleId, 'indicator', 104)['weightage'],
+        'course_105' => getRoleWeightage($activeRoleId, 'indicator', 105)['weightage'],
+        'course_106' => getRoleWeightage($activeRoleId, 'indicator', 106)['weightage'],
+        'course_107' => getRoleWeightage($activeRoleId, 'indicator', 107)['weightage'],
+    ];
+    $weightedScore = ($employabilityPercentage * $weights['course_load']) / 100;
     saveIndicatorPercentage(
         $employeeId,
         $activeRoleId,
         1, // KPA ID (adjust if dynamic)
         1, // Category ID (adjust if dynamic)
         103,
-        $employabilityPercentage
+        $weightedScore
     );
 
     $results->push(makeIndicatorRow('Student Employability', 103, $employabilityPercentage));
@@ -2790,10 +2871,10 @@ function EmployabilityOfHOD()
     }
 
     $marketSalaryPercentage = round($salaryScore / $totalStudents, 2);
+    $weightedScore106 = ($marketSalaryPercentage * $weights['course_106']) / 100;
+    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 106, $weightedScore106);
 
-    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 106, $marketSalaryPercentage);
-
-    $results->push(makeIndicatorRow('Market Competitive Salary', 106, $marketSalaryPercentage));
+    $results->push(makeIndicatorRow('Market Competitive Salary', 106, $weightedScore106));
 
 
     /*
@@ -2804,10 +2885,10 @@ function EmployabilityOfHOD()
 
     $relevant = $records->where('job_relevancy', 'yes')->count();
     $jobRelevancyPercentage = round(($relevant / $totalStudents) * 100, 2);
+    $weightedScore105 = ($jobRelevancyPercentage * $weights['course_105']) / 100;
+    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 105, $weightedScore105);
 
-    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 105, $jobRelevancyPercentage);
-
-    $results->push(makeIndicatorRow('Job Relevancy', 105, $jobRelevancyPercentage));
+    $results->push(makeIndicatorRow('Job Relevancy', 105, $weightedScore105));
 
 
     /*
@@ -2824,10 +2905,10 @@ function EmployabilityOfHOD()
     }
 
     $employerSatisfactionPercentage = round($score / $totalStudents, 2);
+    $weightedScore104 = ($employerSatisfactionPercentage * $weights['course_104']) / 100;
+    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 104, $weightedScore104);
 
-    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 104, $employerSatisfactionPercentage);
-
-    $results->push(makeIndicatorRow('Employer Satisfaction', 104, $employerSatisfactionPercentage));
+    $results->push(makeIndicatorRow('Employer Satisfaction', 104, $weightedScore104));
 
 
     /*
@@ -2844,10 +2925,10 @@ function EmployabilityOfHOD()
     }
 
     $graduateSatisfactionPercentage = round($score / $totalStudents, 2);
+    $weightedScore107 = ($graduateSatisfactionPercentage * $weights['course_107']) / 100;
+    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 107, $weightedScore107);
 
-    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 107, $graduateSatisfactionPercentage);
-
-    $results->push(makeIndicatorRow('Graduate Satisfaction', 107, $graduateSatisfactionPercentage));
+    $results->push(makeIndicatorRow('Graduate Satisfaction', 107, $weightedScore107));
 
     return $results;
 }
@@ -2922,14 +3003,17 @@ function NumberOfKnowledgeProduct($facultyId, $activeRoleId)
         $rating = 'NA';
         $color = 'secondary';
     }
-
-    saveIndicatorPercentage($facultyId, $activeRoleId, 2, 32, 194, $score);
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', 194)['weightage'],
+    ];
+    $weightedScore = ($score * $weights['course_load']) / 100;
+    saveIndicatorPercentage($facultyId, $activeRoleId, 2, 32, 194, $weightedScore);
 
     // 6️⃣ Return structured data for table
     return [
         'totalAchieved' => $totalAchieved,
         'target' => $target,
-        'score' => $score,
+        'score' => $weightedScore,
         'rating' => $rating,
         'color' => $color,
         'knowledgeProducts' => $knowledgeProducts,
@@ -2985,8 +3069,15 @@ if (!function_exists('lineManagerReviewRatingOnTasks')) {
             }
         }
         $averageScore = $taskCount > 0 ? round($totalScore / $taskCount, 2) : 0;
-        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $averageScore);
-        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $averageScore);
+        $weights = [
+            'course_load' => getRoleWeightage($activeRoleId, 'indicator', 175)['weightage'],
+            'course_188' => getRoleWeightage($activeRoleId, 'indicator', 188)['weightage'],
+        ];
+        $weightedScore = ($averageScore * $weights['course_load']) / 100;
+        $weightedScore188 = ($averageScore * $weights['course_188']) / 100;
+
+        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore);
+        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188);
         return $managerRatings;
     }
 }
