@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\IndustrialProjects;
+use App\Models\IndustrialVisit;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,12 +10,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
-class IndustrialProjectsController extends Controller
+class IndustrialVisitController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-     /**
+   /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
@@ -33,7 +30,7 @@ class IndustrialProjectsController extends Controller
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
                         ->role(['Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
                           $all_ids = $teacher_id->merge($hod_ids);
-                          $forms = IndustrialProjects::with([
+                          $forms = IndustrialVisit::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
@@ -43,8 +40,8 @@ class IndustrialProjectsController extends Controller
                             ->orderBy('id', 'desc')
                             ->get()
                             ->map(function ($form) {
-                                if ($form->attachment) {
-                                    $form->attachment = Storage::url($form->attachment);
+                                if ($form->evidence_upload) {
+                                    $form->evidence_upload = Storage::url($form->evidence_upload);
                                 }
                                 return $form;
                             });
@@ -54,48 +51,51 @@ class IndustrialProjectsController extends Controller
             if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
-                    $forms = IndustrialProjects::with([
+                        $forms = IndustrialVisit::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
                             }
                         ])
-                         ->where('created_by', $employee_id)
+                        ->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get()
                         ->map(function ($form) {
-                                if ($form->attachment) {
-                                    $form->attachment = Storage::url($form->attachment);
-                                }
-                                return $form;
-                            });
+                                    if ($form->evidence_upload) {
+                                        $form->evidence_upload = Storage::url($form->evidence_upload);
+                                    }
+                                    return $form;
+                                });
                 }
+
+
                 if($status=="HOD"){
                     $employeeIds = User::where('manager_id', $employee_id)
-                    ->role(['Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
-                    $all_ids = $employeeIds->merge($employee_id);
-                    $forms = IndustrialProjects::with([
-                            'creator' => function ($q) {
-                                $q->select('employee_id', 'name');
-                            }
-                        ])
-                         ->whereIn('created_by', $all_ids)
-                        ->whereIn('status', [1, 2])
-                        ->where('form_status', 'RESEARCHER')
-                        ->orderBy('id', 'desc')
-                        ->get()
-                        ->map(function ($form) {
-                                if ($form->attachment) {
-                                    $form->attachment = Storage::url($form->attachment);
+                        ->role(['Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
+                        $all_ids = $employeeIds->merge($employee_id);
+                        $forms = IndustrialVisit::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
                                 }
-                                return $form;
-                            });
-                }
+                            ])
+                            ->whereIn('created_by', $all_ids)
+                            ->whereIn('status', [1, 2])
+                            ->where('form_status', 'RESEARCHER')
+                            ->orderBy('id', 'desc')
+                            ->get()
+                            ->map(function ($form) {
+                                    if ($form->evidence_upload) {
+                                        $form->evidence_upload = Storage::url($form->evidence_upload);
+                                    }
+                                    return $form;
+                                });
+                        }            
+
                 
             }
             if(in_array(getRoleName(activeRole()), ['ORIC'])) {
                 $status = $request->input('status');
                     if($status=="RESEARCHER"){
-                          $forms = IndustrialProjects::with([
+                          $forms = IndustrialVisit::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
@@ -105,8 +105,8 @@ class IndustrialProjectsController extends Controller
                             ->orderBy('id', 'desc')
                             ->get()
                             ->map(function ($form) {
-                                if ($form->attachment) {
-                                    $form->attachment = Storage::url($form->attachment);
+                                if ($form->evidence_upload) {
+                                    $form->evidence_upload = Storage::url($form->evidence_upload);
                                 }
                                 return $form;
                             });
@@ -116,10 +116,10 @@ class IndustrialProjectsController extends Controller
             if(in_array(getRoleName(activeRole()), ['Human Resources'])) {
                 $status = $request->input('status');
                      if($status=="HOD"){
-                           $forms = IndustrialProjects::with([
+                           $forms = IndustrialVisit::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
-                                }
+                                },'Projects'
                             ])
                             ->whereIn('status', [3, 4])
                             ->where('form_status', $status)
@@ -159,16 +159,28 @@ class IndustrialProjectsController extends Controller
             if($request->form_status=='RESEARCHER'){
                  $rules = [
                         'indicator_id' => 'required',
-                        'project_name' => 'required|string|max:255',
-                        'contracting_industry' => 'required|string|max:255',
-                        'project_duration' => 'required|integer',
-                        'estimated_project_cost' => 'required|integer',
-                        'estimated_complection' => 'required|date',
-                        'attachment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                        'employee_name' => 'required',
+                        'employee_id' => 'required',
+                        'designation' => 'required',
+                        'department_program' => 'required',
+                        'campus_unit' => 'required',
+                        'report_submission_date'=>'required',
+                        'industry_organization' => 'required',
+                        'industry_sector' => 'required',
+                        'purpose_learning_objective' => 'required',
+                        'course_subject' => 'required',
+                        'students_involved' => 'required|integer',
+                        'employee_role' => 'required',
+                        'visit_category' => 'required',
+                        'visit_start_date' => 'required|date',
+                        'visit_end_date' => 'required|date',
+                        'location' => 'required',
+                        'visit_report_submitted' => 'required',
+                        'evidence_upload' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
                         'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                     ];
                     $messages = [
-                        'attachment.mimes' => 'Upload JPG / PNG / PDF only.',
+                        'evidence_upload.mimes' => 'Upload JPG / PNG / PDF only.',
                     ];
 
                     $validator = Validator::make($request->all(), $rules, $messages);
@@ -180,29 +192,41 @@ class IndustrialProjectsController extends Controller
                         }
                         $data = $request->only([
                             'indicator_id',
-                            'project_name',
-                            'contracting_industry',
-                            'project_duration',
-                            'estimated_project_cost',
-                            'estimated_complection',
+                            'employee_name',
+                            'employee_id',
+                            'designation',
+                            'department_program',
+                            'campus_unit',
+                            'report_submission_date',
+                            'industry_organization',
+                            'industry_sector',
+                            'purpose_learning_objective',
+                            'course_subject',
+                            'students_involved',
+                            'employee_role',
+                            'visit_category',
+                            'visit_start_date',
+                            'visit_end_date',
+                            'location',
+                            'visit_report_submitted',
                             'form_status'
                         ]); 
-                    if ($request->hasFile('attachment')) {
+                    if ($request->hasFile('evidence_upload')) {
 
-                        $file = $request->file('attachment');
+                        $file = $request->file('evidence_upload');
                         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                         $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
                         $uniqueNumber = rand(1000, 9999);
                         $extension = $file->getClientOriginalExtension();
                         $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
-                        $path = $file->storeAs('industrialProject', $fileName, 'public');
-                        $data['attachment'] = $path;
+                        $path = $file->storeAs('industrialvisit', $fileName, 'public');
+                        $data['evidence_upload'] = $path;
                     }
                        $employeeId = Auth::user()->employee_id;
                         DB::beginTransaction();
                         $data['created_by'] = $employeeId;
                         $data['updated_by'] = $employeeId;
-                        $research = IndustrialProjects::create($data);
+                        $research = IndustrialVisit::create($data);
                        
                         DB::commit();
                         return response()->json([
@@ -224,11 +248,10 @@ class IndustrialProjectsController extends Controller
             'message' => 'Oops! Something went wrong'], 500);
         }
     }
-
     /**
      * Display the specified resource.
      */
-    public function show(IndustrialProjects $industrialProjects)
+    public function show(string $id)
     {
         //
     }
@@ -236,7 +259,7 @@ class IndustrialProjectsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(IndustrialProjects $industrialProjects)
+    public function edit(string $id)
     {
         //
     }
@@ -244,17 +267,16 @@ class IndustrialProjectsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-   public function update(Request $request, $id)
+    public function update(Request $request, $id)
     {   
         $request->validate([
             'status' => 'required|in:1,2,3,4,5,6'
         ]);
 
-        $target = IndustrialProjects::findOrFail($id);
+        $target = IndustrialVisit::findOrFail($id);
 
         // Get current update history
         $history = $target->update_history ? json_decode($target->update_history, true) : [];
-
 
         // Get current user info
         $currentUserId = Auth::id();
@@ -285,46 +307,73 @@ class IndustrialProjectsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(IndustrialProjects $industrialProjects)
+    public function destroy(string $id)
     {
         //
     }
-    public function updateIndustrialProjectsProject(Request $request, $id)
+    public function updateIndustrialVisit(Request $request, $id)
     {
 
-        $record = IndustrialProjects::findOrFail($id);
+        $record = IndustrialVisit::findOrFail($id);
 
         $request->validate([
                 'record_id' => 'required',
-                'project_name' => 'required|string|max:255',
-                'contracting_industry' => 'required|string|max:255',
-                'project_duration' => 'required|integer',
-                'estimated_project_cost' => 'required|integer',
-                'estimated_complection' => 'required|date',
-                'attachment' => '',
+                'employee_name' => 'required',
+                'employee_id' => 'required',
+                'designation' => 'required',
+                'department_program' => 'required',
+                'campus_unit',
+                'report_submission_date',
+                'industry_organization' => 'required',
+                'industry_sector' => 'required',
+                'purpose_learning_objective' => 'required',
+                'course_subject' => 'required',
+                'students_involved' => 'required|integer',
+                'employee_role' => 'required',
+                'visit_category' => 'required',
+                'visit_start_date' => 'required|date',
+                'visit_end_date' => 'required|date',
+                'location' => 'required',
+                'visit_report_submitted' => 'required',
+                'evidence_upload' => '',
             
         ]);
 
         $data = $request->only([
-                        'project_name', 'contracting_industry', 'project_duration', 'estimated_project_cost',
-                        'estimated_complection'
+                        'employee_name',
+                        'employee_id',
+                        'designation',
+                        'department_program',
+                        'campus_unit',
+                        'report_submission_date',
+                        'industry_organization',
+                        'industry_sector',
+                        'purpose_learning_objective',
+                        'course_subject',
+                        'students_involved',
+                        'employee_role',
+                        'visit_category',
+                        'visit_start_date',
+                        'visit_end_date',
+                        'location',
+                        'visit_report_submitted',
                     ]);
-                     if ($request->hasFile('attachment')) {
+                    if ($request->hasFile('evidence_upload')) {
 
                         // Delete old file if exists
-                        if ($record->attachment && Storage::disk('public')->exists($record->attachment)) {
-                            Storage::disk('public')->delete($record->attachment);
+                        if ($record->evidence_upload && Storage::disk('public')->exists($record->evidence_upload)) {
+                            Storage::disk('public')->delete($record->evidence_upload);
                         }
 
-                        $file = $request->file('attachment');
+                        $file = $request->file('evidence_upload');
                         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                         $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $originalName);
                         $uniqueNumber = rand(1000, 9999);
                         $extension = $file->getClientOriginalExtension();
                         $fileName = $safeName . '_' . $uniqueNumber . '.' . $extension;
-                        $path = $file->storeAs('industrialProject', $fileName, 'public');
-                        $data['attachment'] = $path;
-                    }    
+                        $path = $file->storeAs('industrialvisit', $fileName, 'public');
+                        $data['evidence_upload'] = $path;
+                    }  
                     $data['updated_by'] = Auth::user()->employee_id;
 
                     $record->update($data);

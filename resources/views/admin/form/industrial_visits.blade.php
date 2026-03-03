@@ -10,54 +10,55 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
-    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
+    @if(in_array(getRoleName(activeRole()), ['Dean','HOD','ORIC','Professor','Assistant Professor','Associate Professor']))
+        <!-- Multi Column with Form Separator -->
+        <div class="card">
+            <div class="card-datatable table-responsive card-body">
+                @if(in_array(getRoleName(activeRole()), ['Dean']))
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Industrial Visits</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
+                        </li>
+                    </ul>
+                @endif
+                @if(in_array(getRoleName(activeRole()), ['HOD']))
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Industrial Visits</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
+                        </li>
+                    </ul>
+                @endif
 
-        <!-- new design -->
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    {{-- ================= FORM 1 ================= --}}
+                    @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
 
-        <div class="app-ecommerce">
-            <!-- tab open-->
-            <div class="nav-align-top">
-
-                <ul class="nav nav-pills mb-4" role="tablist">
-                    <li class="nav-item">
-                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-pills-top-home" aria-controls="navs-pills-top-home"
-                            aria-selected="true">Industrial Visits</button>
-                    </li>
-                    <li class="nav-item">
-                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-pills-top-profile" aria-controls="navs-pills-top-profile"
-                            aria-selected="false">Table</button>
-                    </li>
-
-                </ul>
-                <!-- main tab-->
-                <div class="tab-content" style="padding:0;background: none;border: none;box-shadow: none;">
-                    @if(auth()->user()->hasRole(['HOD']))
-                        <!-- first tab-->
-                        <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
-
-                            <div
-                                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h4 class="mb-1">Industrial Visits</h4>
+                        <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                            <div class="d-flex justify-content-between">
+                               <div>
+                                <h5 class="mb-1">Industrial Visits</h5>
                                 </div>
-                                <div class="d-flex align-content-center flex-wrap gap-4">
-                                    <div class="d-flex gap-4">
-                                        <a class="btn btn-label-primary"
-                                            href="{{ route('indicators_crud.index', ['slug' => 'industrial_visits', 'id' => $indicatorId]) }}">View</a>
-                                    </div>
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                        <i class="bx bx-upload"></i> Import Excel / CSV</button>
-                                </div>
-                            </div>
-                            <form id="researchForm" enctype="multipart/form-data">
+                                <a href="{{ route('indicators_crud.index', ['slug' => 'industrial_visits', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            </div>  
+                            
+                            <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
+                            <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" id="form_status" name="form_status" value="HOD" required>
+                                <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
                                 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
                                 <div class="row">
                                     <!-- First column-->
@@ -158,18 +159,18 @@
                                                     <div class="col-md-6 mb-3">
                                                         <label class="form-label">Employee Role</label>
                                                         <select name="employee_role" class="form-control" required>
-                                                            <option>Organizer</option>
-                                                            <option>Coordinator</option>
-                                                            <option>Faculty-in-Charge</option>
-                                                            <option>Participant</option>
+                                                            <option value="Organizer" >Organizer</option>
+                                                            <option value="Coordinator" >Coordinator</option>
+                                                            <option value="Faculty-in-Charge">Faculty-in-Charge</option>
+                                                            <option value="Participant">Participant</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6 mb-3">
                                                         <label class="form-label">Visit Category</label>
                                                         <select name="visit_category" class="form-control" required>
-                                                            <option>Local</option>
-                                                            <option>National</option>
-                                                            <option>International</option>
+                                                            <option value="Local">Local</option>
+                                                            <option value="National">National</option>
+                                                            <option value="International">International</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6 mb-3">
@@ -240,56 +241,135 @@
                                     <!-- /Second column -->
                                 </div>
                             </form>
-
                         </div>
-                        <!-- /first tab-->
                     @endif
-                    <!-- /second tab-->
-                    <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
-                    </div>
-                    <!-- /second tab-->
-
+                    @if(in_array(getRoleName(activeRole()), ['HOD']))
+                        <div class="tab-pane fade" id="form3" role="tabpanel">
+                            @if(in_array(getRoleName(activeRole()), ['HOD']))
+                                <div class="d-flex">
+                                    <select id="bulkAction" class="form-select w-auto me-2">
+                                        <option value="">-- Select Action --</option>
+                                        <option value="2">Verified</option>
+                                        <option value="1">UnVerified</option>
+                                    </select>
+                                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                                </div>
+                            @endif
+                            <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAll"></th>
+                                        <th>#</th>
+                                        <th>Created By</th>
+                                        <th>Employee Name</th>
+                                        <th>Industry Sector</th>
+                                        <th>Status</th>
+                                        <th>Created Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    @endif
+                    @if(in_array(getRoleName(activeRole()), ['Dean']))
+                        <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                            
+                            <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Created By</th>
+                                        <th>Employee Name</th>
+                                        <th>Industry Sector</th>
+                                        <th>Created Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="form2" role="tabpanel">
+                        
+                        </div>
+                    @endif
+                    @if(in_array(getRoleName(activeRole()), ['ORIC']))
+                        <div>
+                            <div class="d-flex">
+                                <select id="bulkAction" class="form-select w-auto me-2">
+                                        <option value="">-- Select Action --</option>
+                                        <option value="3">Verified</option>
+                                        <option value="2">UnVerified</option>
+                                    </select>
+                                <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                            </div>
+                            <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
+                                 <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAll"></th>
+                                        <th>#</th>
+                                        <th>Created By</th>
+                                        <th>Employee Name</th>
+                                        <th>Industry Sector</th>
+                                        <th>Status</th>
+                                        <th>Created Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    @endif
                 </div>
-                <!-- /main tab-->
-
             </div>
-            <!-- tab open-->
         </div>
-
-
-
-        <!-- / close new design -->
-        <!-- Import Modal -->
-        <div class="modal fade" id="importModal" tabindex="-1">
-            <div class="modal-dialog">
-                <form id="importForm" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-                    <input type="hidden" name="form_status" value="HOD">
-
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Import Employability Data</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <label class="form-label">Upload Excel / CSV</label>
-                            <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
-
-                            <small class="text-muted d-block mt-2">
-                                Allowed: xlsx, xls, csv
-                            </small>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Upload</button>
-                        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewFormModalLabel">Form Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </form>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Created By</th>
+                                <td id="modalCreatedBy"></td>
+                            </tr>
+                            <tr id="status-approval">
+                                <th>Status</th>
+                                <td>
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" id="approveCheckbox">
+                                        <label class="form-check-label" for="approveCheckbox">Approved</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Created Date</th>
+                                <td id="modalCreatedDate"></td>
+                            </tr>
+                            <tbody id="modalExtraFields"></tbody>
+                        </table>
+                        <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center"><i class="icon-base ti tabler-history me-3"></i>History</h5>
+                        <ul class="timeline mb-0" id="modalExtraFieldsHistory">
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
-
+        <!--/ Add Permission Modal -->
+        @else
+            <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
     </div>
     <!-- / Content -->
 @endsection
@@ -304,60 +384,50 @@
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
+    <script>
+        window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+        window.activeUserRole = "{{ getRoleName(activeRole()) }}";
+    </script>
 @endpush
 @push('script')
-    <script>
-
-        document.addEventListener("DOMContentLoaded", function () {
-
-            // SVG stars
-            const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-            const starHalf = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='halfStarGradient'%3E%3Cstop offset='50%25' style='stop-color:%23FFD700' /%3E%3Cstop offset='50%25' style='stop-color:%239e9e9e' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23halfStarGradient)' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-            const starOff = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%239e9e9e' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-
-            // Employer Rating
-            const employerRaty = new Raty(document.getElementById("employerRating"), {
-                number: 5,
-                half: true,
-                starOn: starOn,
-                starHalf: starHalf,
-                starOff: starOff,
-                click: function (score) {
-                    document.getElementById("employer_satisfaction").value = score;
-                }
-            }).init();
-
-            // Graduate Rating
-            const graduateRaty = new Raty(document.getElementById("graduateRating"), {
-                number: 5,
-                half: true,
-                starOn: starOn,
-                starHalf: starHalf,
-                starOff: starOff,
-                click: function (score) {
-                    document.getElementById("graduate_satisfaction").value = score;
-                }
-            }).init();
-
-        });
-
-
-
-
-    </script>
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
         <script>
             $(document).ready(function () {
+                 function fetchTarget(indicatorId) {
 
+                    if (!indicatorId) {
+                        $('#indicatorTarget').text('Target: N/A');
+                        return;
+                    }
 
+                    $.ajax({
+                        url: "{{ route('faculty-target.getTarget') }}",
+                        type: "GET",
+                        data: {
+                            indicator_id: indicatorId
+                        },
+                        success: function(res) {
+                            if (res.target) {
+                                $('#indicatorTarget').text('Target: ' + res.target);
+                            } else {
+                                $('#indicatorTarget').text('Target: N/A');
+                            }
+                        },
+                        error: function() {
+                            $('#indicatorTarget').text('Target: N/A');
+                        }
+                    });
+                }
 
-                $('#researchForm').on('submit', function (e) {
+                // ✅ Pass PHP variable safely
+                fetchTarget({{ $indicatorId }});
+
+                $('#researchForm1').on('submit', function (e) {
                     e.preventDefault();
                     let form = $(this);
                     let formData = new FormData(this);
-                    // Show loading indicator
+
+                     // Show loading indicator
                     Swal.fire({
                         title: 'Please wait...',
                         allowOutsideClick: false,
@@ -367,7 +437,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('employability.store') }}",
+                        url: "{{ route('industrial-visit.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,
@@ -378,22 +448,6 @@
                             form[0].reset();
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
-                            $('.select2').val(null).trigger('change');
-                            // Remove all extra grant groups and keep only the first one
-                            $('#grant-details-container .grant-group:not(:first)').remove();
-
-                            // Reset the proof container of the first group
-                            $('#grant-details-container .grant-group:first .proof-container').hide();
-
-                            // Reset index to 1
-                            grantIndex = 1;
-
-                            document.getElementById("employer_satisfaction").value = "";
-                            document.getElementById("graduate_satisfaction").value = "";
-
-                            // Reset stars
-                            employerRaty.setScore(0);
-                            graduateRaty.setScore(0);
                         },
                         error: function (xhr) {
                             Swal.close();
@@ -405,7 +459,9 @@
 
                                 // Loop through all validation errors
                                 $.each(errors, function (field, messages) {
-                                    let input = form.find('[name="' + field + '"]');
+                                    let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                    fieldName = fieldName.replace('[]]', ']');
+                                    let input = form.find('[name="' + fieldName + '"], [name="' + field + '"]');
 
                                     if (input.length) {
                                         input.addClass('is-invalid');
@@ -415,52 +471,886 @@
                                     }
                                 });
 
-                            } else if (xhr.status === 409) {
-                                // 🔥 Duplicate record message
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Duplicate Entry',
-                                    text: xhr.responseJSON.message
-                                });
-
                             } else {
                                 Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
                             }
                         }
                     });
                 });
+            });
+        </script>
+    @endif
+    @if(in_array(getRoleName(activeRole()), ['HOD']))
+        <script>
+            function fetchIndicatorForms3() {
+                $.ajax({
+                    url: "{{ route('industrial-visit.index') }}",
+                    method: "GET",
+                    data: {
+                        status: "HOD" // you can send more values
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
 
-                $('#importForm').on('submit', function (e) {
-                    e.preventDefault();
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
+                            let statusText = 'N/A';
+                            if (form.status == 1) statusText = 'Unverified';
+                            else if (form.status == 2) statusText = 'Verified';
 
-                    let formData = new FormData(this);
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
+                                i + 1,
+                                form.creator ? form.creator.name : 'N/A',
+                                form.employee_name || 'N/A',
+                                form.industry_sector || 'N/A',
+                                `<span class="badge bg-label-primary">${statusText}</span>`,
+                                createdAt,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                            ];
+                        });
 
-                    Swal.fire({
-                        title: 'Importing...',
-                        allowOutsideClick: false,
-                        didOpen: () => Swal.showLoading()
+                        if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
+                            $('#complaintTable3').DataTable({
+                                data: rowData,
+                                columns: [
+                                    { title: "<input type='checkbox' id='selectAll'>" },
+                                    { title: "#" },
+                                    { title: "Created By" },
+                                    { title: "Employee Name" },
+                                    { title: "Industry Sector" },
+                                    { title: "Status" },
+                                    { title: "Created Date" },
+                                    { title: "Actions" }
+                                ]
+                            });
+                        } else {
+                            $('#complaintTable3').DataTable().clear().rows.add(rowData).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
+                });
+            }
+            // ✅ Reusable function for single update
+            function updateSingleStatus(id, status) {
+                $.ajax({
+                    url: `/industrial-visit/${id}`,           // single row endpoint
+                    type: 'POST',                            // POST with _method PUT
+                    data: {
+                        _method: 'PUT',
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: status
+                    },
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Updated',
+                            text: res.message || 'Status updated successfully!'
+                        });
+                        
+                        fetchIndicatorForms3();
+                    },
+                    error: function (xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Something went wrong!'
+                        });
+                    }
+                });
+            }
+            $(document).ready(function () {
+                fetchIndicatorForms3();
+
+                $(document).on('click', '.view-form-btn', function () {
+                    const form = $(this).data('form');
+                    $('#modalExtraFields').find('.optional-field').remove();
+                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
+
+                    $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
+                    $('#modalStatus').text(form.status || 'Pending');
+                    $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+                    if (window.activeUserRole === 'HOD') {
+                        $('#approveCheckbox').prop('checked', form.status == 2);
+                        $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                        // Label text for HOD
+                        let statusLabel = "Pending";
+                        if (form.status == 1) {
+                            statusLabel = "Verified";
+                        } else if (form.status == 2) {
+                            statusLabel = "Verified";
+                        }
+                        $('label[for="approveCheckbox"]').text(statusLabel);
+                    }  else {
+                        $('#approveCheckbox').closest('.form-check-input').hide();
+
+                        let statusLabel = "Pending"; // default
+                        if (form.status == 1) {
+                            statusLabel = "Not Verified";
+                        } else if (form.status == 2) {
+                            statusLabel = "Verified";
+                        } else if (form.status == 3) {
+                            statusLabel = "Approved";
+                        }
+
+                        // update the label text
+                        $('label[for="approveCheckbox"]').text(statusLabel);
+                    }
+
+                    
+                    if (form.employee_name) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Employee Name</th><td>${form.employee_name}</td></tr>`);
+                    }
+                    if (form.employee_id) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Employee Id</th><td>${form.employee_id}</td></tr>`);
+                    }
+                    if (form.designation) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Designation</th><td>${form.designation}</td></tr>`);
+                    }
+                    if (form.department_program) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Department Program</th><td>${form.department_program}</td></tr>`);
+                    }
+                    if (form.campus_unit) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Campus unit</th><td>${form.campus_unit}</td></tr>`);
+                    }
+                    if (form.industry_organization) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Industry Organization</th><td>${form.industry_organization}</td></tr>`);
+                    }
+                    if (form.industry_sector) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Industry Sector</th><td>${form.industry_sector}</td></tr>`);
+                    }
+                    if (form.purpose_learning_objective) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Purpose / Learning Objective</th><td>${form.purpose_learning_objective}</td></tr>`);
+                    }
+                    if (form.course_subject) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Course Subject</th><td>${form.course_subject}</td></tr>`);
+                    }
+                    if (form.students_involved) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Students Involved</th><td>${form.students_involved}</td></tr>`);
+                    }
+                    if (form.employee_role) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Employee Role</th><td>${form.employee_role}</td></tr>`);
+                    }
+                    if (form.visit_category) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Visit category</th><td>${form.visit_category}</td></tr>`);
+                    }
+                    if (form.visit_start_date) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Visit Start Date</th><td>${form.visit_start_date}</td></tr>`);
+                    }
+                    if (form.visit_end_date) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Visit End Date</th><td>${form.visit_end_date}</td></tr>`);
+                    }
+                    if (form.location) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Location</th><td>${form.location}</td></tr>`);
+                    }
+                    if (form.visit_report_submitted !== undefined && form.visit_report_submitted !== null) {
+
+                        let reportStatus = form.visit_report_submitted == 1 ? 'Yes' : 'No';
+
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Visit Report Submitted</th>
+                                <td>${reportStatus}</td>
+                            </tr>
+                        `);
+                    }
+                     if (form.evidence_upload) {
+                        let fileUrl = form.evidence_upload;
+                        let fileExt = fileUrl.split('.').pop().toLowerCase();
+
+                        let filePreview = '';
+
+                        // ✅ If Image → show preview
+                        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)) {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank">
+                                    <img src="${fileUrl}" alt="Screenshot" 
+                                        style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
+                                </a>
+                            `;
+                        }
+                        // ✅ If PDF → show download button
+                        else if (fileExt === 'pdf') {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
+                                    Download PDF
+                                </a>
+                            `;
+                        }
+                        // ✅ Other files → show generic download link
+                        else {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
+                                    Download File
+                                </a>
+                            `;
+                        }
+
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Supporting Document</th>
+                                <td>${filePreview}</td>
+                            </tr>
+                        `);
+                    }
+                    if (form.update_history) {
+                            // Parse JSON string if it's a string
+                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                            if (history.length > 0) {
+                                
+                                let historyHtml = '';
+
+                                history.forEach(update => {
+                                    let histortText = 'N/A';
+
+                                    // Role-based status mapping
+                                    if (update.role === 'HOD') {
+                                        if (update.status == '1') histortText = 'unapproved';
+                                        else if (update.status == '2') histortText = 'Approved';
+                                    } else if (update.role === 'ORIC') {
+                                        if (update.status == '2') histortText = 'Unverified';
+                                        else if (update.status == '3') histortText = 'Verified';
+                                    } else {
+                                        histortText = update.status; // fallback
+                                    }
+                                    historyHtml += `
+                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                            <span class="timeline-point timeline-point-primary"></span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header mb-3">
+                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-lighter rounded-3">
+                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `;
+                                });
+
+                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            }
+                        }
+                        else {
+                            $('#modalExtraFieldsHistory').append(`
+                                <li class="optional-field">
+                                    <th>No History Avalable</th>
+                                </li>
+                            `);
+                        }
+                    
+
+                    $('#viewFormModal').modal('show');
+                });
+                 // ✅ Single checkbox status change
+                $(document).on('change', '#approveCheckbox', function () {
+                    const id = $(this).data('id');
+                    const status = $(this).is(':checked') ? 2 : 1;
+                    updateSingleStatus(id, status);
+                });
+
+                // ✅ Bulk submit button
+                $('#bulkSubmit').on('click', function () {
+                    const status = $('#bulkAction').val();
+                    let selectedIds = [];
+
+                    $('#complaintTable3 .rowCheckbox:checked').each(function () {
+                        selectedIds.push($(this).val());
                     });
 
-                    $.ajax({
-                        url: "{{ route('employability.import') }}",
-                        method: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (res) {
-                            Swal.close();
-                            Swal.fire('Success', res.message, 'success');
-                            $('#importModal').modal('hide');
-                            $('#importForm')[0].reset();
-                        },
-                        error: function (xhr) {
-                            Swal.close();
-                            Swal.fire('Error', xhr.responseJSON.message ?? 'Import failed', 'error');
+                    if (!status) {
+                        Swal.fire({ icon: 'warning', title: 'Select Action', text: 'Please select a status to update.' });
+                        return;
+                    }
+                    if (!selectedIds.length) {
+                        Swal.fire({ icon: 'warning', title: 'No Selection', text: 'Please select at least one row.' });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to change status for ${selectedIds.length} item(s).`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, update it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            selectedIds.forEach(id => updateSingleStatus(id, status));
                         }
                     });
                 });
 
+                // ✅ Select / Deselect all checkboxes
+                $(document).on('change', '#selectAll', function () {
+                    $('.rowCheckbox').prop('checked', $(this).is(':checked'));
+                });
+            });
+        </script>
+    @endif
+    @if(in_array(getRoleName(activeRole()), ['Dean']))
+        <script>
+            function fetchIndicatorForms3() {
+                $.ajax({
+                    url: "{{ route('industrial-visit.index') }}",
+                    method: "GET",
+                    data: {
+                        status: "RESEARCHER" // you can send more values
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
 
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
+                               
+
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                i + 1,
+                                form.creator ? form.creator.name : 'N/A',
+                                form.employee_name || 'N/A',
+                                form.industry_sector || 'N/A',
+                                createdAt,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                            ];
+                        });
+
+                        if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
+                            $('#complaintTable3').DataTable({
+                                data: rowData,
+                                columns: [
+                                    { title: "#" },
+                                    { title: "Created By" },
+                                    { title: "Employee Name" },
+                                    { title: "Industry Sector" },
+                                    { title: "Created Date" },
+                                    { title: "Actions" }
+                                ]
+                            });
+                        } else {
+                            $('#complaintTable3').DataTable().clear().rows.add(rowData).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
+                });
+            }
+            
+            $(document).ready(function () {
+                fetchIndicatorForms3();
+
+                $(document).on('click', '.view-form-btn', function () {
+                    const form = $(this).data('form');
+                    $('#modalExtraFields').find('.optional-field').remove();
+                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
+
+                    $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
+                    $('#modalStatus').text(form.status || 'Pending');
+                    $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+                    if (window.activeUserRole === 'Dean') {
+                       $('#status-approval').hide();
+                        $('label[for="approveCheckbox"]').hide();
+                        $('#approveCheckbox').closest('.form-check-input').hide();
+                    }  else {
+                        
+                    }
+
+                    
+                    if (form.employee_name) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Employee Name</th><td>${form.employee_name}</td></tr>`);
+                    }
+                    if (form.employee_id) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Employee Id</th><td>${form.employee_id}</td></tr>`);
+                    }
+                    if (form.designation) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Designation</th><td>${form.designation}</td></tr>`);
+                    }
+                    if (form.department_program) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Department Program</th><td>${form.department_program}</td></tr>`);
+                    }
+                    if (form.campus_unit) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Campus unit</th><td>${form.campus_unit}</td></tr>`);
+                    }
+                    if (form.industry_organization) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Industry Organization</th><td>${form.industry_organization}</td></tr>`);
+                    }
+                    if (form.industry_sector) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Industry Sector</th><td>${form.industry_sector}</td></tr>`);
+                    }
+                    if (form.purpose_learning_objective) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Purpose / Learning Objective</th><td>${form.purpose_learning_objective}</td></tr>`);
+                    }
+                    if (form.course_subject) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Course Subject</th><td>${form.course_subject}</td></tr>`);
+                    }
+                    if (form.students_involved) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Students Involved</th><td>${form.students_involved}</td></tr>`);
+                    }
+                    if (form.employee_role) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Employee Role</th><td>${form.employee_role}</td></tr>`);
+                    }
+                    if (form.visit_category) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Visit category</th><td>${form.visit_category}</td></tr>`);
+                    }
+                    if (form.visit_start_date) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Visit Start Date</th><td>${form.visit_start_date}</td></tr>`);
+                    }
+                    if (form.visit_end_date) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Visit End Date</th><td>${form.visit_end_date}</td></tr>`);
+                    }
+                    if (form.location) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Location</th><td>${form.location}</td></tr>`);
+                    }
+                    if (form.visit_report_submitted !== undefined && form.visit_report_submitted !== null) {
+
+                        let reportStatus = form.visit_report_submitted == 1 ? 'Yes' : 'No';
+
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Visit Report Submitted</th>
+                                <td>${reportStatus}</td>
+                            </tr>
+                        `);
+                    }
+                     if (form.evidence_upload) {
+                        let fileUrl = form.evidence_upload;
+                        let fileExt = fileUrl.split('.').pop().toLowerCase();
+
+                        let filePreview = '';
+
+                        // ✅ If Image → show preview
+                        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)) {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank">
+                                    <img src="${fileUrl}" alt="Screenshot" 
+                                        style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
+                                </a>
+                            `;
+                        }
+                        // ✅ If PDF → show download button
+                        else if (fileExt === 'pdf') {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
+                                    Download PDF
+                                </a>
+                            `;
+                        }
+                        // ✅ Other files → show generic download link
+                        else {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
+                                    Download File
+                                </a>
+                            `;
+                        }
+
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Supporting Document</th>
+                                <td>${filePreview}</td>
+                            </tr>
+                        `);
+                    }
+                    if (form.update_history) {
+                            // Parse JSON string if it's a string
+                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                            if (history.length > 0) {
+                                
+                                let historyHtml = '';
+
+                                history.forEach(update => {
+                                    let histortText = 'N/A';
+
+                                    // Role-based status mapping
+                                    if (update.role === 'HOD') {
+                                        if (update.status == '1') histortText = 'unapproved';
+                                        else if (update.status == '2') histortText = 'Approved';
+                                    } else if (update.role === 'ORIC') {
+                                        if (update.status == '2') histortText = 'Unverified';
+                                        else if (update.status == '3') histortText = 'Verified';
+                                    } else {
+                                        histortText = update.status; // fallback
+                                    }
+                                    historyHtml += `
+                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                            <span class="timeline-point timeline-point-primary"></span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header mb-3">
+                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-lighter rounded-3">
+                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `;
+                                });
+
+                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            }
+                        }
+                        else {
+                            $('#modalExtraFieldsHistory').append(`
+                                <li class="optional-field">
+                                    <th>No History Avalable</th>
+                                </li>
+                            `);
+                        }
+                    
+
+                    $('#viewFormModal').modal('show');
+                });
+                
+
+              
+            });
+        </script>
+    @endif
+    @if(in_array(getRoleName(activeRole()), ['ORIC']))
+        <script>
+            function fetchIndicatorForms3() {
+                $.ajax({
+                    url: "{{ route('industrial-visit.index') }}",
+                    method: "GET",
+                    data: {
+                        status: "RESEARCHER" // you can send more values
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
+
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
+                            let statusText = 'N/A';
+                            if (form.status == 2) statusText = 'Unapprove';
+                            else if (form.status == 3) statusText = 'Approve';    
+
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
+                                i + 1,
+                                form.creator ? form.creator.name : 'N/A',
+                                form.employee_name || 'N/A',
+                                form.industry_sector || 'N/A',
+                                `<span class="badge bg-label-primary">${statusText}</span>`,
+                                createdAt,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                            ];
+                        });
+
+                        if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
+                            $('#complaintTable3').DataTable({
+                                data: rowData,
+                                columns: [
+                                    { title: "<input type='checkbox' id='selectAll'>" },
+                                    { title: "#" },
+                                    { title: "Created By" },
+                                    { title: "Employee Name" },
+                                    { title: "Industry Sector" },
+                                    { title: "Status" },
+                                    { title: "Created Date" },
+                                    { title: "Actions" }
+                                ]
+                            });
+                        } else {
+                            $('#complaintTable3').DataTable().clear().rows.add(rowData).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
+                });
+            }
+            // ✅ Reusable function for single update
+            function updateSingleStatus(id, status) {
+                $.ajax({
+                    url: `/industrial-visit/${id}`,           // single row endpoint
+                    type: 'POST',                            // POST with _method PUT
+                    data: {
+                        _method: 'PUT',
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: status
+                    },
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Updated',
+                            text: res.message || 'Status updated successfully!'
+                        });
+                        
+                        fetchIndicatorForms3();
+                    },
+                    error: function (xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Something went wrong!'
+                        });
+                    }
+                });
+            }
+            $(document).ready(function () {
+                fetchIndicatorForms3();
+
+                $(document).on('click', '.view-form-btn', function () {
+                    const form = $(this).data('form');
+                    $('#modalExtraFields').find('.optional-field').remove();
+                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
+
+                    $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
+                    $('#modalStatus').text(form.status || 'Pending');
+                    $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+                    if (window.activeUserRole === 'ORIC') {
+                        $('#approveCheckbox').prop('checked', form.status == 3);
+                        $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
+                        // Label text for HOD
+                        let statusLabel = "Pending";
+                        if (form.status == 2) {
+                            statusLabel = "Verified";
+                        } else if (form.status == 3) {
+                            statusLabel = "Verified";
+                        }
+                        $('label[for="approveCheckbox"]').text(statusLabel);
+                    }  else {
+                        $('#approveCheckbox').closest('.form-check-input').hide();
+
+                        let statusLabel = "Pending"; // default
+                        if (form.status == 1) {
+                            statusLabel = "Not Verified";
+                        } else if (form.status == 2) {
+                            statusLabel = "Verified";
+                        } else if (form.status == 3) {
+                            statusLabel = "Approved";
+                        }
+
+                        // update the label text
+                        $('label[for="approveCheckbox"]').text(statusLabel);
+                    }
+
+                    if (form.employee_name) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Employee Name</th><td>${form.employee_name}</td></tr>`);
+                    }
+                    if (form.employee_id) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Employee Id</th><td>${form.employee_id}</td></tr>`);
+                    }
+                    if (form.designation) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Designation</th><td>${form.designation}</td></tr>`);
+                    }
+                    if (form.department_program) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Department Program</th><td>${form.department_program}</td></tr>`);
+                    }
+                    if (form.campus_unit) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Campus unit</th><td>${form.campus_unit}</td></tr>`);
+                    }
+                    if (form.industry_organization) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Industry Organization</th><td>${form.industry_organization}</td></tr>`);
+                    }
+                    if (form.industry_sector) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Industry Sector</th><td>${form.industry_sector}</td></tr>`);
+                    }
+                    if (form.purpose_learning_objective) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Purpose / Learning Objective</th><td>${form.purpose_learning_objective}</td></tr>`);
+                    }
+                    if (form.course_subject) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Course Subject</th><td>${form.course_subject}</td></tr>`);
+                    }
+                    if (form.students_involved) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Students Involved</th><td>${form.students_involved}</td></tr>`);
+                    }
+                    if (form.employee_role) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Employee Role</th><td>${form.employee_role}</td></tr>`);
+                    }
+                    if (form.visit_category) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Visit category</th><td>${form.visit_category}</td></tr>`);
+                    }
+                    if (form.visit_start_date) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Visit Start Date</th><td>${form.visit_start_date}</td></tr>`);
+                    }
+                    if (form.visit_end_date) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Visit End Date</th><td>${form.visit_end_date}</td></tr>`);
+                    }
+                    if (form.location) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Location</th><td>${form.location}</td></tr>`);
+                    }
+                    if (form.visit_report_submitted !== undefined && form.visit_report_submitted !== null) {
+
+                        let reportStatus = form.visit_report_submitted == 1 ? 'Yes' : 'No';
+
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Visit Report Submitted</th>
+                                <td>${reportStatus}</td>
+                            </tr>
+                        `);
+                    }
+                     if (form.evidence_upload) {
+                        let fileUrl = form.evidence_upload;
+                        let fileExt = fileUrl.split('.').pop().toLowerCase();
+
+                        let filePreview = '';
+
+                        // ✅ If Image → show preview
+                        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)) {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank">
+                                    <img src="${fileUrl}" alt="Screenshot" 
+                                        style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;">
+                                </a>
+                            `;
+                        }
+                        // ✅ If PDF → show download button
+                        else if (fileExt === 'pdf') {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-primary">
+                                    Download PDF
+                                </a>
+                            `;
+                        }
+                        // ✅ Other files → show generic download link
+                        else {
+                            filePreview = `
+                                <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-secondary">
+                                    Download File
+                                </a>
+                            `;
+                        }
+
+                        $('#modalExtraFields').append(`
+                            <tr class="optional-field">
+                                <th>Supporting Document</th>
+                                <td>${filePreview}</td>
+                            </tr>
+                        `);
+                    }
+                    
+                    
+                    
+                    if (form.update_history) {
+                            // Parse JSON string if it's a string
+                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                            if (history.length > 0) {
+                                
+                                let historyHtml = '';
+
+                                history.forEach(update => {
+                                    let histortText = 'N/A';
+
+                                    // Role-based status mapping
+                                    if (update.role === 'HOD') {
+                                        if (update.status == '1') histortText = 'unapproved';
+                                        else if (update.status == '2') histortText = 'Approved';
+                                    } else if (update.role === 'ORIC') {
+                                        if (update.status == '2') histortText = 'Unverified';
+                                        else if (update.status == '3') histortText = 'Verified';
+                                    } else {
+                                        histortText = update.status; // fallback
+                                    }
+                                    historyHtml += `
+                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                            <span class="timeline-point timeline-point-primary"></span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header mb-3">
+                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-lighter rounded-3">
+                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `;
+                                });
+
+                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            }
+                        }
+                        else {
+                            $('#modalExtraFieldsHistory').append(`
+                                <li class="optional-field">
+                                    <th>No History Avalable</th>
+                                </li>
+                            `);
+                        }
+                    
+
+                    $('#viewFormModal').modal('show');
+                });
+                 // ✅ Single checkbox status change
+                $(document).on('change', '#approveCheckbox', function () {
+                    const id = $(this).data('id');
+                    const status = $(this).is(':checked') ? 3 : 2;
+                    updateSingleStatus(id, status);
+                });
+
+                // ✅ Bulk submit button
+                $('#bulkSubmit').on('click', function () {
+                    const status = $('#bulkAction').val();
+                    let selectedIds = [];
+
+                    $('#complaintTable3 .rowCheckbox:checked').each(function () {
+                        selectedIds.push($(this).val());
+                    });
+
+                    if (!status) {
+                        Swal.fire({ icon: 'warning', title: 'Select Action', text: 'Please select a status to update.' });
+                        return;
+                    }
+                    if (!selectedIds.length) {
+                        Swal.fire({ icon: 'warning', title: 'No Selection', text: 'Please select at least one row.' });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to change status for ${selectedIds.length} item(s).`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, update it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            selectedIds.forEach(id => updateSingleStatus(id, status));
+                        }
+                    });
+                });
+
+                // ✅ Select / Deselect all checkboxes
+                $(document).on('change', '#selectAll', function () {
+                    $('.rowCheckbox').prop('checked', $(this).is(':checked'));
+                });
             });
         </script>
     @endif

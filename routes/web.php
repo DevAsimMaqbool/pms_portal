@@ -82,6 +82,8 @@ use App\Http\Controllers\DropoutRateController;
 use App\Http\Controllers\AlumniSatisfactionRateController;
 use App\Http\Controllers\LineManagerReviewRatingController;
 use App\Http\Controllers\ComplianceAndUsageOfLMSController;
+use App\Http\Controllers\IndustrialVisitController;
+use App\Http\Controllers\ResearchConferenceImpactController;
 use App\Http\Controllers\ResearchProductivityOfPGStudentsController;
 
 Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
@@ -247,6 +249,8 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('/alumni-satisfaction-rate', AlumniSatisfactionRateController::class);
         Route::resource('/line-manager-review-rating', LineManagerReviewRatingController::class);
+        Route::resource('industrial-visit', IndustrialVisitController::class);
+        Route::resource('conference-impact',ResearchConferenceImpactController::class);
 
         Route::put(
     '/completion-of-course-folder-verification/{id}',
@@ -290,6 +294,8 @@ Route::middleware('auth')->group(function () {
         Route::put('/products-delivered-to-industry/update/{id}', [ProductsDeliveredToIndustryController::class, 'updateMultidisciplinaryProject'])->name('productdelivery.update');
         Route::put('/industrial-projects/update/{id}', [IndustrialProjectsController::class, 'updateIndustrialProjectsProject'])->name('industrialprojects.update');
         Route::put('/no-Of-GrantSubmit-And-Won/update/{id}', [NoOfGrantsSubmitAndWonController::class, 'updateNoOfGrantsSubmitAndWon'])->name('noofgrantssubmit.update');
+        Route::put('/industrial-visits/update/{id}', [IndustrialVisitController::class, 'updateIndustrialVisit'])->name('industrial-visits.update');
+        Route::put('/conference-impacts/update/{id}', [ResearchConferenceImpactController::class, 'updateResearchConferenceImpact'])->name('conference-impacts.update');
 
 
     });

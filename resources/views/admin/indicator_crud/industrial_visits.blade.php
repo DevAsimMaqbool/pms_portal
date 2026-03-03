@@ -15,12 +15,12 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-    @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
+      @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
-             <h5 class="card-header">Industrial Projects</h5>
+             <h5 class="card-header">Industrial Visits</h5>
             <div class="card-datatable table-responsive card-body">
-                    @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
+                     @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="intellectualTable" class="table table-bordered">
@@ -28,7 +28,8 @@
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Created By</th>
-                                                        <th>Title</th>
+                                                        <th>Employee Name</th>
+                                                        <th>Industry Sector</th>
                                                         <th>Created Date</th>
                                                         <th>History</th>
                                                         <th>Actions</th>
@@ -89,7 +90,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Industrial Projects</h5>
+                <h5 class="modal-title" id="commericaGainFormModalLabel">Industrial Visits</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -98,36 +99,182 @@
                     <input type="hidden" id="record_id" name="record_id">
                     <input type="hidden" name="_method" value="PUT">
 
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="project_name" class="form-label">Project Name</label>
-                            <input type="text" id="project_name" name="project_name" class="form-control" required>
-                        </div>
 
-                        <div class="col-md-6">
-                            <label for="contracting_industry" class="form-label">Contracting Industry</label>
-                            <input type="text" id="contracting_industry" name="contracting_industry" class="form-control" required>
-                        </div>
+                    <div class="row">
+                                    <!-- First column-->
+                                    <div class="col-12 col-lg-8">
+                                        <!-- Product Information -->
+                                        <div class="card mb-6">
 
-                        <div class="col-md-6">
-                            <label for="project_duration" class="form-label">Project Duration</label>
-                            <input type="number" id="project_duration" name="project_duration" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="estimated_project_cost" class="form-label">Estimated Project Cost</label>
-                            <input type="number" id="estimated_project_cost" name="estimated_project_cost" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="estimated_complection" class="form-label">Estimated Complection</label>
-                            <input type="date" id="estimated_complection" name="estimated_complection" class="form-control" required>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label for="attachment" class="form-label">Attachment</label>
-                            <input type="file" id="attachment" name="attachment" class="form-control">
-                            <div id="intellectual-img"></div>
-                        </div>
-                    </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Employee Name</label>
+                                                        <input type="text" name="employee_name" id="employee_name" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Employee ID</label>
+                                                        <input type="text" name="employee_id" id="employee_id" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Designation</label>
+                                                        <input type="text" name="designation" id="designation" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Department / Program</label>
+                                                        <input type="text" name="department_program" id="department_program" class="form-control"
+                                                            required>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Campus / Unit</label>
+                                                        <input type="text" name="campus_unit" id="campus_unit" class="form-control">
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Industry / Organization Visited</label>
+                                                        <input type="text" name="industry_organization" id="industry_organization" class="form-control"
+                                                            required>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="sector" class="form-label">Industry Sector</label>
+                                                        <select name="industry_sector" id="industry_sector" class="select2 form-selec" required>
+                                                            <option value="">Select</option>
+                                                            <option value="Manufacturing">Manufacturing</option>
+                                                            <option value="Services">Services</option>
+                                                            <option value="Information Technology (IT)">Information Technology
+                                                                (IT)</option>
+                                                            <option value="Banking & Finance">Banking & Finance</option>
+                                                            <option value="Insurance">Insurance</option>
+                                                            <option value="FMCG & Consumer Goods">FMCG & Consumer Goods</option>
+                                                            <option value="Retail & E-Commerce">Retail & E-Commerce</option>
+                                                            <option value="Energy & Utilities">Energy & Utilities</option>
+                                                            <option value="Oil & Gas">Oil & Gas</option>
+                                                            <option value="Construction & Real Estate">Construction & Real
+                                                                Estate</option>
+                                                            <option value="Healthcare & Pharmaceuticals">Healthcare &
+                                                                Pharmaceuticals</option>
+                                                            <option value="Agriculture & Agribusiness">Agriculture &
+                                                                Agribusiness</option>
+                                                            <option value="Education & Training">Education & Training</option>
+                                                            <option value="Media & Communications">Media & Communications
+                                                            </option>
+                                                            <option value="Logistics & Transportation">Logistics &
+                                                                Transportation</option>
+                                                            <option value="Hospitality & Tourism">Hospitality & Tourism</option>
+                                                            <option value="Telecommunications">Telecommunications</option>
+                                                            <option value="Engineering & Industrial Services">Engineering &
+                                                                Industrial Services</option>
+                                                            <option value="Government / Public Sector">Government / Public
+                                                                Sector</option>
+                                                            <option value="Development Sector / NGO">Development Sector / NGO
+                                                            </option>
+                                                            <option value="Research & Development">Research & Development
+                                                            </option>
+                                                            <option value="Startups & Entrepreneurship">Startups &
+                                                                Entrepreneurship</option>
+                                                            <option value="Environmental & Sustainability">Environmental &
+                                                                Sustainability</option>
+                                                            <option value="Other (Specify)">Other (Specify)</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Purpose / Learning Objective</label>
+                                                        <input type="text" name="purpose_learning_objective" id="purpose_learning_objective"
+                                                            class="form-control" required>
+                                                    </div>
+
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Course / Subject Linked</label>
+                                                        <input type="text" name="course_subject" id="course_subject" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">No. of Students Involved</label>
+                                                        <input type="number" name="students_involved" id="students_involved" class="form-control"
+                                                            required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Employee Role</label>
+                                                        <select name="employee_role" id="employee_role" class="form-control" required>
+                                                            <option value="Organizer" >Organizer</option>
+                                                            <option value="Coordinator" >Coordinator</option>
+                                                            <option value="Faculty-in-Charge">Faculty-in-Charge</option>
+                                                            <option value="Participant">Participant</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Visit Category</label>
+                                                        <select name="visit_category" id="visit_category" class="form-control" required>
+                                                            <option value="Local">Local</option>
+                                                            <option value="National">National</option>
+                                                            <option value="International">International</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Evidence Upload</label>
+                                                        <input type="file" name="evidence_upload" id="evidence_upload" class="form-control" >
+                                                        <div id="intellectual-img"></div>
+                                                    </div>
+
+
+
+
+
+
+                                                </div>
+                                                <!-- Description -->
+
+                                            </div>
+                                        </div>
+                                        <!-- /Product Information -->
+
+
+                                    </div>
+                                    <!-- /Second column -->
+
+                                    <!-- Second column -->
+                                    <div class="col-12 col-lg-4">
+                                        <!-- Pricing Card -->
+                                        <div class="card mb-3">
+
+                                            <div class="card-body">
+
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">Visit Start Date</label>
+                                                    <input type="date" name="visit_start_date" id="visit_start_date" class="form-control" required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">Visit End Date</label>
+                                                    <input type="date" name="visit_end_date" id="visit_end_date" class="form-control" required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">Location</label>
+                                                    <input type="text" name="location" id="location" class="form-control" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>Visit Report Submitted</label>
+                                                    <select name="visit_report_submitted" id="visit_report_submitted" class="form-control" required>
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>Report Submission Date</label>
+                                                    <input type="date" name="report_submission_date" id="report_submission_date" class="form-control">
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Second column -->
+                                </div>
 
                     <div class="mt-4 text-end">
                         <button type="submit" class="btn btn-primary">Update</button>
@@ -172,7 +319,7 @@
         <script>
             function fetchCommercialForms() {
                 $.ajax({
-                    url: "{{ route('industrial-projects.index') }}",
+                    url: "{{ route('industrial-visit.index') }}",
                     method: "GET",
                     data: {
                         status: "Teacher" // you can send more values
@@ -199,7 +346,8 @@
                             return [
                                 i + 1,
                                 form.creator ? form.creator.name : 'N/A',
-                                form.project_name || 'N/A',
+                                form.employee_name || 'N/A',
+                                form.industry_sector || 'N/A',
                                 createdAt,
                                  `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
                                     data-history='${JSON.stringify(form.update_history)}'
@@ -217,7 +365,8 @@
                                 columns: [
                                     { title: "#" },
                                     { title: "Created By" },
-                                    { title: "Title" },
+                                    { title: "Employee Name" },
+                                    { title: "Industry Sector" },
                                     { title: "Created Date" },
                                     { title: "History" },
                                     { title: "Actions" }
@@ -306,13 +455,26 @@
         const form = $(this).data('form');
 
         $('#researchForm1 #record_id').val(form.id);
-        $('#researchForm1 #project_name').val(form.project_name);
-        $('#researchForm1 #contracting_industry').val(form.contracting_industry);
-        $('#researchForm1 #project_duration').val(form.project_duration);
-        $('#researchForm1 #estimated_project_cost').val(form.estimated_project_cost);
-        $('#researchForm1 #estimated_complection').val(form.estimated_complection);
-        if (form.attachment) {
-                        let fileUrl = form.attachment;
+        $('#researchForm1 #employee_name').val(form.employee_name);
+        $('#researchForm1 #employee_id').val(form.employee_id);
+        $('#researchForm1 #designation').val(form.designation);
+        $('#researchForm1 #department_program').val(form.department_program);
+
+        $('#researchForm1 #campus_unit').val(form.campus_unit);
+        $('#researchForm1 #industry_organization').val(form.industry_organization);
+        $('#researchForm1 #industry_sector').val(form.industry_sector).trigger('change');
+        $('#researchForm1 #purpose_learning_objective').val(form.purpose_learning_objective);
+        $('#researchForm1 #course_subject').val(form.course_subject);
+        $('#researchForm1 #students_involved').val(form.students_involved);
+        $('#researchForm1 #employee_role').val(form.employee_role).trigger('change');
+        $('#researchForm1 #visit_category').val(form.visit_category).trigger('change');
+        $('#researchForm1 #visit_start_date').val(form.visit_start_date);
+        $('#researchForm1 #visit_end_date').val(form.visit_end_date);
+        $('#researchForm1 #location').val(form.location);
+        $('#researchForm1 #report_submission_date').val(form.report_submission_date);
+        $('#researchForm1 #visit_report_submitted').val(form.visit_report_submitted).trigger('change');
+        if (form.evidence_upload) {
+                        let fileUrl = form.evidence_upload;
                         let fileExt = fileUrl.split('.').pop().toLowerCase();
 
                         let filePreview = '';
@@ -361,7 +523,7 @@
         });
 
         $.ajax({
-            url: "{{ route('industrialprojects.update', '') }}/" + recordId,
+            url: "{{ route('industrial-visits.update', '') }}/" + recordId,
             method: 'POST',
             data: formData,
             contentType: false,
