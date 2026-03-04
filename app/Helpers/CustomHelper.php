@@ -721,6 +721,7 @@ if (!function_exists('ScopusPublications')) {
             'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'],
         ];
         $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
+        calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId);
         saveIndicatorPercentage(
             $facultyId,
             $role_id = $activeRoleId,
@@ -731,6 +732,46 @@ if (!function_exists('ScopusPublications')) {
         );
 
         return $data;
+    }
+}
+
+if (!function_exists('calculateJournalQuartile')) {
+
+    function calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId)
+    {
+
+        // Quartile Points
+        $quartilePoints = [
+            'Q1' => 20,
+            'Q2' => 15,
+            'Q3' => 10,
+            'Q4' => 5,
+        ];
+
+        // Get Approved Scopus Publications
+        $records = AchievementOfResearchPublicationsTarget::where('indicator_id', $indicatorId)
+            ->where('created_by', $facultyId)
+            ->where('target_category', 'Scopus-Indexed')
+            ->where('form_status', 'RESEARCHER')
+            ->where('status', 3) // Fully approved
+            ->get();
+
+        $obtainedScore = 0;
+
+        foreach ($records as $record) {
+            if (isset($quartilePoints[$record->journal_clasification])) {
+                $obtainedScore += $quartilePoints[$record->journal_clasification];
+            }
+        }
+        saveIndicatorPercentage(
+            $facultyId,
+            $role_id = $activeRoleId,
+            2,
+            5,
+            203,
+            $obtainedScore
+        );
+        return $obtainedScore;
     }
 }
 
