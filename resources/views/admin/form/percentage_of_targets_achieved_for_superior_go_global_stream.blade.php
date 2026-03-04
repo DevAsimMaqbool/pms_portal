@@ -32,8 +32,8 @@
                                 <div class="d-flex align-content-center flex-wrap gap-4">
                                     <div class="d-flex gap-4">
                                     <a class="btn btn-label-primary" href="{{ route('indicators_crud.index', ['slug' => 'percentage_of_targets_achieved_for_superior_go_global_stream', 'id' => $indicatorId]) }}">View</a></div>
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                                                <i class="bx bx-upload"></i> Import Excel / CSV</button>
+                                    {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                                                <i class="bx bx-upload"></i> Import Excel / CSV</button> --}}
                                 </div>
                             </div>
                             <form id="researchForm1" enctype="multipart/form-data" class="row">

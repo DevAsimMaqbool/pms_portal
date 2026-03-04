@@ -41,8 +41,8 @@
             <div class="d-flex align-content-center flex-wrap gap-4">
                 <div class="d-flex gap-4">
                 <a class="btn btn-label-primary" href="{{ route('indicators_crud.index', ['slug' => 'student_engagement_rate', 'id' => $indicatorId]) }}">View</a></div>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                            <i class="bx bx-upload"></i> Import Excel / CSV</button>
+                {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                            <i class="bx bx-upload"></i> Import Excel / CSV</button> --}}
             </div>
             </div>
             <form id="researchForm" enctype="multipart/form-data">

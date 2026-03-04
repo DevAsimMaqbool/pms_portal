@@ -25,7 +25,7 @@ class FacultyPursuingSkillController extends Controller
                    ->role('HOD')->pluck('employee_id');
                     if($status=="RESEARCHER"){
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
-                        ->role('Teacher')->pluck('employee_id');
+                        ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor'])->pluck('employee_id');
                           $all_ids = $teacher_id->merge($hod_ids);
                           $forms = FacultyPursuingSkill::with([
                                 'creator' => function ($q) {
@@ -69,7 +69,7 @@ class FacultyPursuingSkillController extends Controller
                 $status = $request->input('status');
                 if($status=="HOD"){
                     $employeeIds = User::where('manager_id', $employee_id)
-                        ->role('Teacher')->pluck('employee_id');
+                        ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor'])->pluck('employee_id');
                         $all_ids = $employeeIds->merge($employee_id);
                         $forms = FacultyPursuingSkill::with([
                                 'creator' => function ($q) {
