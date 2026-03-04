@@ -722,6 +722,7 @@ if (!function_exists('ScopusPublications')) {
         ];
         $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
         calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId);
+        calculateInternationalScore($facultyId, $activeRoleId, $indicatorId);
         saveIndicatorPercentage(
             $facultyId,
             $role_id = $activeRoleId,
@@ -732,6 +733,51 @@ if (!function_exists('ScopusPublications')) {
         );
 
         return $data;
+    }
+}
+
+if (!function_exists('calculateInternationalScore')) {
+
+    function calculateInternationalScore($facultyId, $activeRoleId, $indicatorId)
+    {
+        // Get Approved Scopus Publications
+        $records = AchievementOfResearchPublicationsTarget::where('indicator_id', $indicatorId)
+            ->where('created_by', $facultyId)
+            ->where('target_category', 'Scopus-Indexed')
+            ->where('form_status', 'RESEARCHER')
+            ->where('status', 3) // Fully approved
+            ->get();
+
+        if ($records->isEmpty()) {
+            return 0;
+        }
+
+        $totalPapers = $records->count();
+
+        // Count International authored papers
+        $internationalPapers = $records->filter(function ($r) {
+            return strtolower(trim($r->nationality)) === 'international';
+        })->count();
+
+        // Fraction of international papers
+        $fraction = $totalPapers > 0 ? $internationalPapers / $totalPapers : 0;
+
+        // Calculate obtained score using indicator weight
+        $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 127);
+        $weight = $indicatorWeight['weightage'] ?? 0;
+        $obtainedScore = ($fraction * $weight) / 100;
+
+        // Save obtained score
+        saveIndicatorPercentage(
+            $facultyId,
+            $activeRoleId,
+            2,
+            5,
+            127,
+            $obtainedScore
+        );
+
+        return round($obtainedScore, 2); // e.g., 5.00
     }
 }
 
