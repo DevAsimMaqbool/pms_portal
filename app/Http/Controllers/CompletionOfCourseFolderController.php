@@ -25,7 +25,7 @@ class CompletionOfCourseFolderController extends Controller
         // dd($data);
 
 
-        if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher'])) {
+        if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Professor','Associate Professor'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = CompletionOfCourseFolder::with([
@@ -39,7 +39,7 @@ class CompletionOfCourseFolderController extends Controller
                 }
                 if($status=="HOD"){
                     $employeeIds = User::where('manager_id', $employeeId)
-                        ->role('Teacher')->pluck('employee_id');
+                        ->role(['Teacher','Assistant Professor','Professor','Associate Professor'])->pluck('employee_id');
                         $forms = CompletionOfCourseFolder::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');

@@ -15,14 +15,14 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-        @if(in_array(getRoleName(activeRole()), ['Teacher']))
+        @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    @if(auth()->user()->hasRole(['Teacher']))
+                    @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             <div class="d-flex justify-content-between">
                                 <div>
@@ -94,9 +94,9 @@
 
                         </div>
                     @endif
-                    @if(auth()->user()->hasRole(['HOD']))
+                    @if(in_array(getRoleName(activeRole()), ['HOD']))
                         <div class="tab-pane fade" id="form3" role="tabpanel">
-                            @if(auth()->user()->hasRole(['HOD']))
+                            @if(in_array(getRoleName(activeRole()), ['HOD']))
                                 <div class="d-flex">
                                     <select id="bulkAction" class="form-select w-auto me-2">
                                         <option value="">-- Select Action --</option>
