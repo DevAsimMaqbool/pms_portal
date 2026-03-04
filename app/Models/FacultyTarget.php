@@ -84,5 +84,10 @@ class FacultyTarget extends Model
         return $this->hasMany(SpinOff::class, 'created_by', 'user_id');
     }
 
+    public function industrialVisitsTarget()
+    {
+        return $this->hasMany(IndustrialVisit::class, 'created_by', 'user_id');
+    }
+
 
 }

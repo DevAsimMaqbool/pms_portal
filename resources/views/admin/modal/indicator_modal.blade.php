@@ -2862,13 +2862,27 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>7</td>
-                                        <td>5</td>
-                                        <td><span class="badge bg-label-warning">75%</span></td>
-                                        <td><span class="badge bg-label-warning">ME</span></td>
-                                    </tr>
+                                    @php
+                                        $IndustrialVisits = IndustrialVisits(Auth::user()->employee_id, $activeRoleId, 197);
+                                    @endphp
+                                    @foreach ($IndustrialVisits as $visit)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $visit->target }}</td> <!-- Required target -->
+                                            <td>{{ $visit->achieved_count }}</td> <!-- Achieved count -->
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $visit->color }}">
+                                                    {{ $visit->percentage }}%
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="badge" style="background-color: {{ $visit->color }}">
+
+                                                    {{ $visit->rating }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

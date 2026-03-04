@@ -445,7 +445,6 @@ function myClassesAttendanceRecord($facultyId)
 
             return $class;
         });
-
     // ✅ Save overall percentage
     saveOverallAttendancePercentage($facultyId = getUserID($facultyId), $classes, $keyPerformanceAreaId = 1, $indicatorCategoryId = 3, $indicatorId = 117);
 
@@ -479,7 +478,10 @@ function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAr
         $color = 'dark';
         $rating = 'NA';
     }
-
+    $activeRoleId = getRoleIdByName(activeRole());
+    $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 117);
+    $weight = $indicatorWeight['weightage'] ?? 0;
+    $weightedScore = ($overallPercentage * $weight) / 100;
     // Save to database
     IndicatorsPercentage::updateOrCreate(
         [
@@ -489,7 +491,7 @@ function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAr
             'indicator_id' => $indicatorId,
         ],
         [
-            'score' => $overallPercentage,
+            'score' => $weightedScore,
             'rating' => $rating,
             'color' => $color,
         ]
@@ -1229,6 +1231,80 @@ function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id)
         $weightedScore
     );
     return $facultyTargets;
+}
+
+function IndustrialVisits($facultyId, $activeRoleId, $indicator_id)
+{
+    $commercial = FacultyTarget::with([
+        'industrialVisitsTarget' => function ($query) use ($indicator_id) {
+            $query->where('form_status', 'RESEARCHER')
+                ->where('indicator_id', $indicator_id);
+        }
+    ])
+        ->where('user_id', $facultyId)
+        ->where('form_status', 'OTHER')
+        ->where('indicator_id', $indicator_id)
+        ->get();
+
+    $percentages = []; // For calculating overall average
+
+    foreach ($commercial as $target) {
+
+        $rows = $target->industrialVisitsTarget;
+        $achieved = $rows->count();
+        $required = (int) $target->target;
+
+        // Prevent divide by zero
+        $percentage = ($required > 0) ? ($achieved / $required) * 100 : 0;
+
+        // Rating logic
+        if ($percentage >= 90) {
+            $rating = 'OS';
+            $color = '#6EA8FE';
+        } elseif ($percentage >= 80) {
+            $rating = 'EE';
+            $color = '#96e2b4';
+        } elseif ($percentage >= 70) {
+            $rating = 'ME';
+            $color = '#ffcb9a';
+        } elseif ($percentage >= 60) {
+            $rating = 'NI';
+            $color = '#fd7e13';
+        } elseif ($percentage > 0) {
+            $rating = 'BE';
+            $color = '#ff4c51';
+        } else {
+            $rating = 'NA';
+            $color = '#000000';
+        }
+
+        // Save percentage for avg calculation
+        $percentages[] = $percentage;
+
+        // Add values into object
+        $target->achieved_count = $achieved;
+        $target->percentage = round($percentage, 2);
+        $target->rating = $rating;
+        $target->color = $color;
+    }
+
+    // ✅ Calculate overall average percentage
+    $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicator_id)['weightage'],
+    ];
+    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
+    // ✅ Save globally
+    saveIndicatorPercentage(
+        $facultyId,
+        $role_id = $activeRoleId,
+        $keyPerformanceAreaId = 2,
+        $indicatorCategoryId = 8,
+        $indicator_id,
+        $weightedScore
+    );
+
+    return $commercial;
 }
 
 function IndustrialProjects($facultyId, $activeRoleId, $indicator_id)
