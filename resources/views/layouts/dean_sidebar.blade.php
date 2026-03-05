@@ -124,7 +124,7 @@
             {{-- Render Menu --}}
             @foreach($result as $kpakey => $kpa)
                 <li class="menu-item active">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $kpa['performance_area'] }}">
                         <i class="menu-icon icon-base {{ $icons[$kpakey % count($icons)] }}"></i>
                         <div data-i18n="{{ $kpa['performance_area'] }}">
                             {{ $kpa['performance_area'] }}
@@ -135,7 +135,7 @@
                     <ul class="menu-sub">
                         @foreach($kpa['category'] as $category)
                             <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $category['indicator_category'] }}">
                                     <div data-i18n="{{ $category['indicator_category'] }}">
                                         {{ $category['indicator_category'] }}
                                     </div>
@@ -150,7 +150,7 @@
                                                 'area' => $kpa['id'],
                                                 'category' => $category['id'],
                                                 'indicator' => $indicator['id']
-                                            ]) }}" class="menu-link">
+                                            ]) }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $indicator['indicator'] }}">
                                                         <div data-i18n="{{ $indicator['indicator'] }}">
                                                             {{ $indicator['indicator'] }}
                                                         </div>
