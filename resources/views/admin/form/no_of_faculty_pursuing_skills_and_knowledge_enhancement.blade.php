@@ -245,7 +245,7 @@
 @endpush
 @push('script')
      
-    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor']))
         <script>
             $(document).ready(function () {
                 //------------------------------------

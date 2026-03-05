@@ -57,14 +57,15 @@ class NumberOfKnowledgeProductController extends Controller
             if(in_array(getRoleName(activeRole()), ['HOD'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
-                    $employeeIds = User::where('manager_id', $employee_id)
-                        ->role('Teacher')->pluck('employee_id');
+                     $employeeIds = User::where('manager_id', $employee_id)
+                        ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor'])->pluck('employee_id');
+                        $all_ids = $employeeIds->merge($employee_id);    
                         $forms = NumberOfKnowledgeProduct::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
                                 }
                             ])
-                            ->whereIn('created_by', $employeeIds)
+                            ->whereIn('created_by', $all_ids)
                             ->whereIn('status', [1, 2])
                             ->where('form_status', 'RESEARCHER')
                             ->orderBy('id', 'desc')
@@ -82,14 +83,16 @@ class NumberOfKnowledgeProductController extends Controller
                 $hod_ids = User::where('manager_id', $employee_id)
                     ->role('HOD')->pluck('employee_id');
                 if ($status == "HOD") {
+                    $teacher_id = User::whereIn('manager_id', $hod_ids)
+                        ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor'])->pluck('employee_id');
+                          $all_ids = $teacher_id->merge($hod_ids);
                     $forms = NumberOfKnowledgeProduct::with([
                         'creator' => function ($q) {
                             $q->select('employee_id', 'name');
                         }
                     ])
-                        ->whereIn('created_by', $hod_ids)
+                        ->whereIn('created_by', $all_ids)
                         ->whereIn('status', [1, 2])
-                        ->where('form_status', $status)
                         ->get()
                         ->map(function ($form) {
                                 if ($form->attach_evidence) {

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\LineManagerReviewRatingImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\LineManagerReviewRating;
 use App\Models\LineManagerReviewRatingTask;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LineManagerReviewRatingController extends Controller
 {
@@ -166,6 +168,26 @@ public function destroy($id)
         'message' => 'Record deleted successfully from both tables!'
     ]);
 }
+ public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+            'indicator_id' => 'required',
+            'form_status' => 'required',
+        ]);
+
+        Excel::import(
+            new LineManagerReviewRatingImport(
+                $request->indicator_id,
+                $request->form_status
+            ),
+            $request->file
+        );
+
+        return response()->json([
+            'message' => 'Imported successfully'
+        ]);
+    }
 
 
 }
