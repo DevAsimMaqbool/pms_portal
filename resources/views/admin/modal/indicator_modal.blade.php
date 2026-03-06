@@ -1743,6 +1743,8 @@
                                     <tbody>
                                         @php
                                             $facultyData = ScopusPublications(Auth::user()->employee_id, $activeRoleId, 128);
+                                            departmentScopusPublicationsOfHOD($activeRoleId, 128);
+                                            departmentScopusAnalysisOfHOD($activeRoleId, 128);
                                             $sr = 1;
                                         @endphp
                                         @foreach ($facultyData as $row)
@@ -2755,7 +2757,8 @@
                                 <tbody>
                                     @php
                                         $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id, $activeRoleId, 'Submitted', 135);
-
+                                        departmentTargetIndicatorsAnalysis($activeRoleId);
+                                        $departmentResults = departmentLineManagerReviewRating(Auth::user()->employee_id, $activeRoleId);
                                     @endphp
                                     @foreach ($noofGrantsWon as $noofGrantsWon_row)
                                         <tr>
@@ -3344,7 +3347,9 @@
     </div>
 @endif
 <!-- / Payment Methods modal -->
-
+@php
+    if ($activeRoleId != 22) {
+@endphp
 <div class="modal fade" id="PerformanceOnTasksAssignedByTheDean" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
@@ -3405,6 +3410,9 @@
         </div>
     </div>
 </div>
+@php
+    }
+@endphp
 
 <div class="modal fade" id="QECAuditRating" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">

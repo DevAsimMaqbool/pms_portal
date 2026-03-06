@@ -25,6 +25,7 @@ use App\Models\StudentFeedbackClassWise;
 use App\Models\LineManagerReviewRating;
 use App\Models\QecAuditRating;
 use App\Models\StudentEngagementRate;
+use App\Models\AchievementOfResearchPublicationTargetCoAuthor;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -3406,7 +3407,7 @@ function myDepartmentClassesAttendanceRecordHOD($employeeId, $activeRoleId)
 
     // 1️⃣ Get all faculty in this department
     $facultyMembers = User::where('department_id', $departmentId)
-        ->get(['id', 'name']);
+        ->get(columns: ['id', 'name']);
 
     $allClasses = collect();
 
@@ -3743,5 +3744,334 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
             182,
             $weightedScore, // optional extra field if your table supports it
         );
+    }
+}
+
+if (!function_exists('departmentScopusPublicationsOfHOD')) {
+    function departmentScopusPublicationsOfHOD($activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
+    {
+        $departmentId = auth()->user()->department_id;
+
+        // Get all faculty IDs in the department
+        $facultyIds = User::where('department_id', $departmentId)
+            ->whereNotNull('faculty_id')
+            ->pluck('id');
+
+        if ($facultyIds->isEmpty()) {
+            return [
+                'department_avg_percentage' => 0,
+                'weighted_score' => 0
+            ];
+        }
+
+        // Get all HOD targets for these faculty
+        $facultyTargets = FacultyTarget::whereIn('user_id', $facultyIds)
+            ->where('form_status', 'HOD')
+            ->where('indicator_id', $indicatorId)
+            ->get();
+
+        $totalTarget = 0;
+        $totalSubmitted = 0;
+
+        foreach ($facultyTargets as $target) {
+            $totalTarget += $target->target ?? 0;
+
+            // Count publications linked to this target
+            $submissionCount = AchievementOfResearchPublicationsTarget::where('created_by', $target->user_id)
+                ->where('indicator_id', $indicatorId)
+                ->where('form_status', 'RESEARCHER')
+                ->whereNotNull('journal_clasification')
+                ->count();
+
+            $totalSubmitted += $submissionCount;
+        }
+
+        // Department-level percentage
+        $departmentAvgPercentage = $totalTarget > 0
+            ? round(($totalSubmitted / $totalTarget) * 100, 2)
+            : 0;
+
+        $weight = getRoleWeightage($activeRoleId, 'indicator', 126)['weightage'] ?? 0;
+        $weightedScore = ($departmentAvgPercentage * $weight) / 100;
+        $hodEmployeeId = auth()->user()->employee_id;
+
+        // Save KPI
+        saveIndicatorPercentage(
+            $hodEmployeeId,
+            $activeRoleId,
+            $keyPerformanceAreaId,
+            $indicatorCategoryId,
+            126,
+            $weightedScore
+        );
+
+        return [
+            'department_avg_percentage' => $departmentAvgPercentage,
+            'weighted_score' => $weightedScore
+        ];
+    }
+}
+
+if (!function_exists('departmentScopusAnalysisOfHOD')) {
+    function departmentScopusAnalysisOfHOD($activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
+    {
+        $departmentId = auth()->user()->department_id;
+
+        // Get all faculty IDs in the department
+        $facultyIds = User::where('department_id', $departmentId)
+            ->whereNotNull('faculty_id')
+            ->pluck('id');
+
+        if ($facultyIds->isEmpty()) {
+            return [
+                'department_avg_percentage' => 0,
+                'weighted_score' => 0,
+                'department_international_fraction' => 0,
+                'department_quartile_score' => 0,
+                'department_research_percentage' => 0,
+            ];
+        }
+
+        $totalTarget = 0;
+        $totalSubmitted = 0;
+        $totalInternational = 0;
+        $totalQuartileScore = 0;
+        $totalResearchSubmitted = 0; // For overall research publications
+        $totalResearchTarget = 0; // For overall research publications
+        $facultyCount = 0;
+
+        foreach ($facultyIds as $facultyId) {
+
+            // Get HOD targets for this faculty
+            $facultyTargets = FacultyTarget::where('user_id', $facultyId)
+                ->where('form_status', 'HOD')
+                ->where('indicator_id', $indicatorId)
+                ->get();
+
+            $facultyTargetTotal = 0;
+            $facultySubmittedTotal = 0;
+            $facultyInternationalCount = 0;
+            $facultyQuartileScore = 0;
+            $facultyResearchSubmitted = 0;
+            $facultyResearchTarget = 0;
+
+            foreach ($facultyTargets as $target) {
+                $facultyTargetTotal += $target->target ?? 0;
+                $facultyResearchTarget += $target->target ?? 0;
+
+                // Publications submitted by faculty (main)
+                $facultyRecords = AchievementOfResearchPublicationsTarget::where('created_by', $facultyId)
+                    ->where('indicator_id', $indicatorId)
+                    ->where('form_status', 'RESEARCHER')
+                    ->where('status', 3) // approved
+                    ->get();
+
+                // Count co-author publications
+                $coAuthorCount = AchievementOfResearchPublicationTargetCoAuthor::whereIn('target_id', $facultyRecords->pluck('id'))->count();
+
+                $submissionCount = $facultyRecords->count() + $coAuthorCount;
+                $facultySubmittedTotal += $submissionCount;
+                $facultyResearchSubmitted += $submissionCount; // also for overall research
+
+                // International papers
+                $facultyInternationalCount += $facultyRecords->filter(fn($r) => strtolower(trim($r->nationality)) === 'international')->count();
+
+                // Journal Quartile scoring
+                $quartilePoints = ['Q1' => 20, 'Q2' => 15, 'Q3' => 10, 'Q4' => 5];
+                foreach ($facultyRecords as $record) {
+                    if (isset($quartilePoints[$record->journal_clasification])) {
+                        $facultyQuartileScore += $quartilePoints[$record->journal_clasification];
+                    }
+                }
+            }
+
+            $totalTarget += $facultyTargetTotal;
+            $totalSubmitted += $facultySubmittedTotal;
+            $totalInternational += $facultyInternationalCount;
+            $totalQuartileScore += $facultyQuartileScore;
+
+            $totalResearchTarget += $facultyResearchTarget;
+            $totalResearchSubmitted += $facultyResearchSubmitted;
+
+            $facultyCount++;
+        }
+
+        // Department-level Scopus percentage
+        $departmentAvgPercentage = $totalTarget > 0
+            ? round(($totalSubmitted / $totalTarget) * 100, 2)
+            : 0;
+
+        // Department international fraction
+        $departmentInternationalFraction = $totalSubmitted > 0
+            ? round(($totalInternational / $totalSubmitted) * 100, 2)
+            : 0;
+
+        // Department overall research publications percentage
+        $departmentResearchPercentage = $totalResearchTarget > 0
+            ? round(($totalResearchSubmitted / $totalResearchTarget) * 100, 2)
+            : 0;
+
+        $hodEmployeeId = auth()->user()->employee_id;
+
+        $weights = [
+            'weight127' => getRoleWeightage($activeRoleId, 'indicator', 127)['weightage'],
+            'weight128' => getRoleWeightage($activeRoleId, 'indicator', 128)['weightage'],
+            'weight203' => getRoleWeightage($activeRoleId, 'indicator', 203)['weightage'],
+        ];
+        $weightedScore127 = ($departmentInternationalFraction * $weights['weight127']) / 100;
+        $weightedScore128 = ($departmentResearchPercentage * $weights['weight128']) / 100;
+        $weightedScore203 = ($totalQuartileScore * $weights['weight203']) / 100;
+
+        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 127, $weightedScore127); // International
+        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 203, $weightedScore203); // Quartile
+        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 128, $weightedScore128); // Overall Research % (dummy indicator_id 999, change as needed)
+
+        return [
+            'department_avg_percentage' => $departmentAvgPercentage,
+            'department_international_fraction' => $departmentInternationalFraction,
+            'department_quartile_score' => $totalQuartileScore,
+            'department_research_percentage' => $departmentResearchPercentage,
+        ];
+    }
+}
+
+if (!function_exists('departmentTargetIndicatorsAnalysis')) {
+    function departmentTargetIndicatorsAnalysis($activeRoleId)
+    {
+        $departmentId = auth()->user()->department_id;
+
+        // Get faculty user IDs and employee IDs
+        $faculty = User::where('department_id', $departmentId)
+            ->whereNotNull('faculty_id')
+            ->get(['id', 'employee_id']);
+
+        $userIds = $faculty->pluck('id');
+        $employeeIds = $faculty->pluck('employee_id');
+
+        // Define indicators and models
+        $indicators = [
+            ['id' => 135, 'model' => \App\Models\NoOfGrantsSubmitAndWon::class, 'filter' => ['grant_status' => 'Submitted']],
+            ['id' => 202, 'model' => \App\Models\NoOfGrantsSubmitAndWon::class, 'filter' => ['grant_status' => 'Won']],
+            ['id' => 136, 'model' => \App\Models\NoAchievementOfMultidisciplinaryProjectsTarget::class],
+            ['id' => 197, 'model' => \App\Models\IndustrialVisit::class],
+            ['id' => 198, 'model' => \App\Models\IndustrialProjects::class],
+            ['id' => 139, 'model' => \App\Models\SpinOff::class],
+            ['id' => 199, 'model' => \App\Models\ProductsDeliveredToIndustry::class],
+            ['id' => 137, 'model' => \App\Models\CommercialGainsCounsultancyResearchIncome::class],
+            ['id' => 138, 'model' => \App\Models\IntellectualProperty::class],
+        ];
+
+        $results = [];
+
+        foreach ($indicators as $indicator) {
+            $indicatorId = $indicator['id'];
+            $modelClass = $indicator['model'];
+            $filter = $indicator['filter'] ?? [];
+
+            // ✅ Faculty targets (user_id)
+            $totalTarget = FacultyTarget::whereIn('user_id', $userIds)
+                ->where('indicator_id', $indicatorId)
+                ->sum('target');
+
+            // ✅ Submissions (employee_id)
+            $totalSubmitted = $modelClass::whereIn('created_by', $employeeIds)
+                ->where('indicator_id', $indicatorId)
+                ->when(!empty($filter), function ($q) use ($filter) {
+                    foreach ($filter as $key => $value) {
+                        $q->where($key, $value);
+                    }
+                })
+                ->count();
+
+            // Department-level percentage
+            $departmentAvgPercentage = $totalTarget > 0
+                ? round(($totalSubmitted / $totalTarget) * 100, 2)
+                : 0;
+
+            $weightedScore = ($departmentAvgPercentage * 20) / 100;
+
+            // Save department KPI
+            saveIndicatorPercentage(
+                auth()->user()->employee_id,
+                $activeRoleId,
+                2,
+                8,
+                $indicatorId,
+                $weightedScore
+            );
+
+            $results[$indicatorId] = [
+                'department_avg_percentage' => $departmentAvgPercentage,
+                'weighted_score' => $weightedScore,
+                'total_target' => $totalTarget,
+                'total_submitted' => $totalSubmitted
+            ];
+        }
+
+        return $results;
+    }
+}
+
+if (!function_exists('departmentLineManagerReviewRating')) {
+    function departmentLineManagerReviewRating($facultyId, $activeRoleId)
+    {
+        $departmentId = auth()->user()->department_id;
+
+        // Get all faculty members in this department
+        $facultyMembers = User::where('department_id', $departmentId)
+            ->get(['id', 'employee_id', 'name']);
+
+        $totalScore = 0;
+        $totalTasks = 0;
+
+        $allRatings = [];
+
+        foreach ($facultyMembers as $faculty) {
+
+            $reviews = LineManagerReviewRating::with('tasks')
+                ->where('employee_id', $faculty->id)
+                ->get();
+
+            foreach ($reviews as $review) {
+                foreach ($review->tasks as $task) {
+
+                    $score = $task->linemanager_rating * 20; // convert 0-5 scale to %
+                    $totalScore += $score;
+                    $totalTasks++;
+                    $allRatings[] = (object) [
+                        'faculty_name' => $faculty->name,
+                        'task' => $task->task,
+                        'rating_data' => [
+                            'percentage' => $score
+                        ]
+                    ];
+                }
+            }
+        }
+
+        // Department average
+        $departmentAvgScore = $totalTasks > 0 ? round($totalScore / $totalTasks, 2) : 0;
+
+        // Get indicator weights
+        $weights = [
+            'course_load' => getRoleWeightage($activeRoleId, 'indicator', 175)['weightage'] ?? 0,
+            'course_188' => getRoleWeightage($activeRoleId, 'indicator', 188)['weightage'] ?? 0,
+        ];
+
+        // Weighted department scores
+        $weightedScore175 = ($departmentAvgScore * $weights['course_load']) / 100;
+        $weightedScore188 = ($departmentAvgScore * $weights['course_188']) / 100;
+        // Save department-level KPI
+        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore175);
+        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188);
+
+        return [
+            'department_avg_score' => $departmentAvgScore,
+            'weighted_scores' => [
+                175 => $weightedScore175,
+                188 => $weightedScore188,
+            ],
+            'all_faculty_ratings' => $allRatings
+        ];
     }
 }
