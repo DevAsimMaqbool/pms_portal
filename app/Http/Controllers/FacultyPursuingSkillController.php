@@ -45,7 +45,7 @@ class FacultyPursuingSkillController extends Controller
 
                 }
         
-            if(in_array(getRoleName(activeRole()), ['Teacher'])) {
+            if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = FacultyPursuingSkill::with([

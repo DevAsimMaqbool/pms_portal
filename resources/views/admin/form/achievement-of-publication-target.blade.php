@@ -59,12 +59,16 @@
                 @if(auth()->user()->hasRole(['Teacher', 'HOD', 'Assistant Professor']))
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
 
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h5 class="mb-1">Research Publication</h5>
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h4 class="mb-1">Research Publication</h4>
                             </div>
-                            <a href="{{ route('indicators_crud.index', ['slug' => 'achievement-of-publication-target', 'id' => $indicatorId]) }}"
-                                class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                            <div class="d-flex align-content-center flex-wrap gap-4">
+                                <div class="d-flex gap-4">
+                                <a class="btn rounded-pill btn-outline-primary waves-effect" href="{{ route('indicators_crud.index', ['slug' => 'achievement-of-publication-target', 'id' => $indicatorId]) }}">View</a></div>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                    <i class="bx bx-upload"></i> Import Excel / CSV</button>
+                            </div>
                         </div>
                         <form id="researchForm1" enctype="multipart/form-data">
                             @csrf
@@ -571,6 +575,36 @@
             </div>
         </div>
         <!--/ Add Permission Modal -->
+        <!-- Import Modal -->
+        <div class="modal fade" id="importModal" tabindex="-1">
+            <div class="modal-dialog">
+                <form id="importForm" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                    <input type="hidden" name="form_status" value="RESEARCHER">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import Dropout Rate Data</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <label class="form-label">Upload Excel / CSV</label>
+                            <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
+
+                            <small class="text-muted d-block mt-2">
+                                Allowed: xlsx, xls, csv
+                            </small>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -994,6 +1028,35 @@
                             } else {
                                 Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
                             }
+                        }
+                    });
+                });
+                $('#importForm').on('submit', function (e) {
+                    e.preventDefault();
+
+                    let formData = new FormData(this);
+
+                    Swal.fire({
+                        title: 'Importing...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+
+                    $.ajax({
+                        url: "{{ route('indicator-form.import') }}",
+                        method: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (res) {
+                            Swal.close();
+                            Swal.fire('Success', res.message, 'success');
+                            $('#importModal').modal('hide');
+                            $('#importForm')[0].reset();
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            Swal.fire('Error', xhr.responseJSON.message ?? 'Import failed', 'error');
                         }
                     });
                 });

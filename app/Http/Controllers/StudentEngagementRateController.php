@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\StudentEngagementRateImport;
 use App\Models\StudentEngagementRate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentEngagementRateController extends Controller
 {
@@ -184,6 +186,26 @@ class StudentEngagementRateController extends Controller
 
         return response()->json([
             'message' => 'Deleted successfully'
+        ]);
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+            'indicator_id' => 'required',
+            'form_status' => 'required',
+        ]);
+
+        Excel::import(
+            new StudentEngagementRateImport(
+                $request->indicator_id,
+                $request->form_status
+            ),
+            $request->file
+        );
+
+        return response()->json([
+            'message' => 'Imported successfully'
         ]);
     }
 }

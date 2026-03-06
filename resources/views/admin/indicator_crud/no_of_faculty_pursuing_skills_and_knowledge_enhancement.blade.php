@@ -209,7 +209,7 @@
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor']))
         <script>
             function fetchCommercialForms() {
                 $.ajax({
@@ -331,8 +331,7 @@
                     let historyHtml = '';
                     history.forEach(update => {
                         let histortText = 'N/A';
-                        if (update.role === 'HOD') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
-                        else if (update.role === 'ORIC') histortText = update.status == '2' ? 'Unverified' : (update.status == '3' ? 'Verified' : update.status);
+                        if (update.role === 'Dean') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
                         else histortText = update.status || 'N/A';
 
                         historyHtml += `

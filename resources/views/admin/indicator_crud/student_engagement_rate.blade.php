@@ -137,7 +137,7 @@
                                     <div class="col-md">
                                     <div class="form-check custom-option custom-option-basic">
                                         <label class="form-check-label custom-option-content" for="customCheckTemp4">
-                                        <input class="form-check-input" name="event_location[]"  type="radio" value="" id="customCheckTemp4" />
+                                        <input class="form-check-input" name="event_location[]"  type="radio" value="both" id="customCheckTemp4" />
                                         <span class="custom-option-header">
                                             <span class="h6 mb-0">Both</span>
                                         </span>

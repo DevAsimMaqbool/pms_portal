@@ -379,6 +379,11 @@
                         $('#status-approval').hide();
                         $('label[for="approveCheckbox"]').hide();
                         $('#approveCheckbox').closest('.form-check-input').hide();
+                    }
+                    if (window.activeUserRole === 'Dean') {
+                        $('#status-approval').hide();
+                        $('label[for="approveCheckbox"]').hide();
+                        $('#approveCheckbox').closest('.form-check-input').hide();
                     }  else {
                         
                     }

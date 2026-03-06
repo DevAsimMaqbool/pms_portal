@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\DropoutRateImport;
 use App\Models\DropoutRate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DropoutRateController extends Controller
 {
@@ -127,6 +129,26 @@ class DropoutRateController extends Controller
 
         return response()->json([
             'message' => 'Deleted successfully'
+        ]);
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+            'indicator_id' => 'required',
+            'form_status' => 'required',
+        ]);
+
+        Excel::import(
+            new DropoutRateImport(
+                $request->indicator_id,
+                $request->form_status
+            ),
+            $request->file
+        );
+
+        return response()->json([
+            'message' => 'Admission Target data imported successfully'
         ]);
     }
 
