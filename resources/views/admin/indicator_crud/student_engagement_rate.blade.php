@@ -35,7 +35,7 @@
                     <h5 class="mb-1">Student Engagement Rate</h5>
                 </div>
                 <div>
-                    
+                     <a href="{{ url('kpa/1/category/4/indicator/123') }}" class="btn btn-primary">Add</a>
                 </div>
              </div>
 

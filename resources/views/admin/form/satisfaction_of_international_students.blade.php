@@ -40,13 +40,13 @@
                                 <a href="{{ route('indicators_crud.index', ['slug' => 'satisfaction_of_international_students', 'id' => $indicatorId]) }}"
                                     class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
                             </div>
-                            <form id="researchForm1" enctype="multipart/form-data" class="row">
+                            <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden" name="form_status" value="HOD">
 
                                 <div id="student-satisfaction-container">
-                                    <div class="student-group row g-3 mb-3 border p-3 mt-3 rounded">
+                                    <div class="student-group row g-3 m-0 border p-3 mt-3 rounded">
                                         <div class="col-md-4">
                                             <label class="form-label">Student Name</label>
                                             <input type="text" name="student_name" class="form-control"
@@ -93,7 +93,7 @@
                                     </div>
                                 </div>
 
-                                <div class="text-end">
+                                <div class="mt-3 text-end">
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </form>

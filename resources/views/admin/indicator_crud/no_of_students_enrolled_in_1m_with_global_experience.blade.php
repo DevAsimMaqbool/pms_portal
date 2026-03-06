@@ -18,7 +18,14 @@
     @if(in_array(getRoleName(activeRole()), ['International Office']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
-             <h5 class="card-header">No. of students enrolled in 1M with global experience (work experience) (if applicable)</h5>
+             <div class="card-header d-flex align-items-center justify-content-between">
+                <div class="card-title mb-0">
+                    <h5 class="mb-1">No. of students enrolled in 1M with global experience (work experience) (if applicable)/h5>
+                </div>
+                <div class="">
+                    <a href="{{ url('kpa/4/category/12/indicator/150') }}" class="btn btn-primary">Add</a>
+                </div>
+            </div>
             <div class="card-datatable table-responsive card-body">
                     @if(in_array(getRoleName(activeRole()), ['International Office']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">

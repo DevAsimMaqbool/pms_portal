@@ -35,7 +35,7 @@
                                         <i class="bx bx-upload"></i> Import Excel / CSV</button>
                                 </div>
                             </div>
-                            <form id="researchForm1" enctype="multipart/form-data" class="row">
+                            <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden" id="form_status" name="form_status" value="HOD">
@@ -99,7 +99,7 @@
                                             </div>
 
                                 </div>
-                                <div class="mt-3 text-end" style="margin-left: -19px !important;">
+                                <div class="mt-3 text-end">
                                     <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                 </div>
                             </form>

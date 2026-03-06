@@ -35,7 +35,7 @@
                     <h5 class="mb-1">Number of Knowledge Products</h5>
                 </div>
                 <div class="">
-                    <a href="{{ url('kpa/2/category/5/indicator/194') }}" class="btn btn-success">Add</a>
+                    <a href="{{ url('kpa/2/category/5/indicator/194') }}" class="btn btn-primary">Add</a>
                 </div>
             </div>
             <div class="card-datatable table-responsive card-body">

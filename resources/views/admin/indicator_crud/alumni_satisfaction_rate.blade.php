@@ -32,10 +32,10 @@
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <div class="card-title mb-0">
-                    <h5 class="mb-1">Dropout Rate</h5>
+                    <h5 class="mb-1">Alumni Satisfaction Rate</h5>
                 </div>
                 <div class="">
-                    <a href="{{ url('kpa/6/category/14/indicator/160') }}" class="btn btn-success">Add</a>
+                    <a href="{{ url('kpa/6/category/15/indicator/163') }}" class="btn btn-primary">Add</a>
                 </div>
             </div>
             <div class="card-datatable table-responsive card-body">

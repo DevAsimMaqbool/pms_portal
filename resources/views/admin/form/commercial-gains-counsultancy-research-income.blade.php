@@ -58,7 +58,7 @@
                             </div>  
                             
                             <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
-                            <form id="researchForm1" enctype="multipart/form-data" class="row">
+                            <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
@@ -95,7 +95,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12 demo-vertical-spacing">
-                                    <button class="btn btn-primary waves-effect waves-light float-end" style="margin-right: 24px;">SUBMIT</button>
+                                    <button class="btn btn-primary waves-effect waves-light float-end">SUBMIT</button>
                                 </div>
                             </form>
                         </div>

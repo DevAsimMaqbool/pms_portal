@@ -20,20 +20,26 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function index(Request $request)
-    {
-        $token = session('access_token');
-        $userId = session('user_id');
-        $baseUrl = config('services.pms.base_url');
-        $response = Http::withToken($token)->get("{$this->baseUrl}/get-employee-info", [
-            'user_id' => $userId,
-        ]);
-        if ($response->successful()) {
-            $employee = $response->json();
+    // public function index(Request $request)
+    // {
+    //     $token = session('access_token');
+    //     $userId = session('user_id');
+    //     $baseUrl = config('services.pms.base_url');
+    //     $response = Http::withToken($token)->get("{$this->baseUrl}/get-employee-info", [
+    //         'user_id' => $userId,
+    //     ]);
+    //     if ($response->successful()) {
+    //         $employee = $response->json();
 
-            // ✅ Pass employee data to a Blade view
-            return view('profile.index', compact('employee'));
-        }
+    //         // ✅ Pass employee data to a Blade view
+    //         return view('profile.index', compact('employee'));
+    //     }
+    // }
+    public function index()
+    {
+        $employee = Auth::user();
+
+        return view('profile.index', compact('employee'));
     }
     public function edit(Request $request): View
     {

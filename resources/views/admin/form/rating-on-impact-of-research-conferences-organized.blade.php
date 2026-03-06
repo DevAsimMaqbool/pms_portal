@@ -146,7 +146,7 @@
                 {{-- ================= Dynamic International Participants ================= --}}
                 <h5 class="card-title mb-0 mt-3">International Participants’ Detail</h5>
                 <div id="author-past-container">
-                    <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+                    <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
                         <div class="col-md-6">
                             <label class="form-label">Name</label>
                             <input type="text" name="intrtnationpart[0][name]" class="form-control" required>
@@ -187,7 +187,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 mb-3">
+                <div class="col-12 mb-3 mt-3">
                     <button type="button" class="btn btn-primary waves-effect waves-light" id="add-coauthor">
                         <i class="icon-base ti tabler-plus me-1"></i> Add
                     </button>
@@ -220,7 +220,7 @@
                 </div>
 
                 <div class="mt-3 text-end">
-                    <button class="btn btn-success waves-effect waves-light">SUBMIT</button>
+                    <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                 </div>
             </form>
                         </div>
@@ -382,7 +382,7 @@
             // Add new participant row
             $('#add-coauthor').click(function () {
                 let newGroup = `
-                <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+                <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
                     <div class="col-md-6">
                         <label class="form-label">Name</label>
                         <input type="text" name="intrtnationpart[${pastIndex}][name]" class="form-control" required>
