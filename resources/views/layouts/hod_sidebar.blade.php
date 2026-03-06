@@ -50,12 +50,12 @@
                 <div data-i18n="Team Performance">Team Performance</div>
             </a>
         </li>
-        <li class="menu-item {{ request()->routeIs('survey.report') ? 'active' : '' }}">
+        {{-- <li class="menu-item {{ request()->routeIs('survey.report') ? 'active' : '' }}">
             <a href="{{ route('survey.report') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-contract"></i>
                 <div data-i18n="Report">Report</div>
             </a>
-        </li>
+        </li> --}}
 
         @php
             $userRole = activeRole();

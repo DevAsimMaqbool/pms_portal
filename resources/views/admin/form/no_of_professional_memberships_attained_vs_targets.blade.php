@@ -30,13 +30,13 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
     <a href="{{ route('indicators_crud.index', ['slug' => 'no_of_professional_memberships_attained_vs_targets', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
 </div> 
 <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
-<form id="researchForm" enctype="multipart/form-data" class="row">
+<form id="researchForm" enctype="multipart/form-data">
 @csrf
 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-<div class="row g-6 mt-0">
+<div class="row g-3 mt-0">
 <div id="grant-details-container">
-<div class="grant-group row g-3 mb-3 p-3 border border-primary">
+<div class="grant-group row g-3 m-0 p-3 border border-primary">
 <div class="col-md-6">
 <label for="type_of_membership" class="form-label">Type of Membership</label>
 <select name="type_of_membership" id="type_of_membership" class="select2 form-select faculty-member"
@@ -176,7 +176,7 @@ class="country-dropdown select2 form-select" required>
 </div>
 </div>
 </div>
-<div class="mt-3 text-end" style="margin-left: -16px !important;">
+<div class="mt-3 text-end">
 <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
 </div>
 </form>

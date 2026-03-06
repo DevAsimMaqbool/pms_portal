@@ -36,7 +36,7 @@
                         <h5 class="mb-1">Profitability of the programs</h5>
                     </div>
                     <div>
-                        <a href="{{ url('kpa/3/category/11/indicator/147') }}" class="btn btn-success">Go to Form</a>
+                        <a href="{{ url('kpa/3/category/11/indicator/147') }}" class="btn btn-primary">Go to Form</a>
                     </div>
                 </div>
 

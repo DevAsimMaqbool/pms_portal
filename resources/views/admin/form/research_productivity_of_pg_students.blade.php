@@ -270,8 +270,8 @@
                                 </div>
 
 
-                                <div class="col-8 mt-3">
-                                    <button class="btn btn-primary float-end" style="margin-right: -440px;">SUBMIT</button>
+                                <div class="mt-3 text-end">
+                                    <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                 </div>
                             </form>
                         </div>

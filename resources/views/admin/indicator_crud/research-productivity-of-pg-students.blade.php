@@ -32,10 +32,10 @@
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <div class="card-title mb-0">
-                    <h5 class="mb-1">Research Publications</h5>
+                    <h5 class="mb-1">Research Productivity of PG Students (MS/MPhil/PhD)</h5>
                 </div>
                 <div>
-
+                     <a href="{{ url('kpa/2/category/6/indicator/133') }}" class="btn btn-primary">Add</a>
                 </div>
             </div>
             <div class="card-datatable table-responsive card-body">

@@ -13,7 +13,7 @@
         <div class="card">
             <div class="card-datatable table-responsive card-body">
 
-                <form id="researchForm" class="row">
+                <form id="researchForm">
                     @csrf
 
                     <div class="row g-3" style="padding:20px; font-family:Arial;">
@@ -73,8 +73,8 @@
 
                     </div>
 
-                    <div class="col-1 text-center mb-3">
-                        <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
+                    <div class="text-end" style="padding:20px;">
+                        <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                     </div>
 
                 </form>

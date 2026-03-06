@@ -44,10 +44,10 @@
                                     <h5 class="mb-1">Completion of Course Folder</h5>
                                 </div>
                                 <a href="{{ route('completion-of-course-folder.index') }}"
-                                    class="btn rounded-pill btn-outline-primary waves-effect" style="margin-right: 17px;">
+                                    class="btn rounded-pill btn-outline-primary waves-effect">
                                     View</a>
                             </div>
-                            <form id="researchForm" enctype="multipart/form-data" class="row">
+                            <form id="researchForm" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
                                 <input type="hidden" id="indicator_id" name="completion_of_Course_folder_indicator_id"
@@ -58,7 +58,7 @@
                                 <div class="row g-6 mt-0">
 
                                     <div id="grant-details-container">
-                                        <div class="grant-group row g-3 mb-3 p-3 border border-primary">
+                                        <div class="grant-group row g-3 m-0 p-3 border border-primary">
 
 
                                             <div class="col-md-6 d-none">
@@ -118,8 +118,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-1 text-center demo-vertical-spacing">
-                                    <button class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
+                                <div class="mt-3 text-end">
+                                    <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                 </div>
                             </form>
 

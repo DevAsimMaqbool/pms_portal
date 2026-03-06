@@ -225,8 +225,8 @@
                     </div>
                     </div>
                     <!-- /Pricing Card -->
-                    <div class="">
-                        <button type="submit" class="btn btn-primary w-100 waves-effect waves-light">SUBMIT</button>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                     </div>
                 
                 </div>

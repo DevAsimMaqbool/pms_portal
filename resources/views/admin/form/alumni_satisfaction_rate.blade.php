@@ -160,7 +160,7 @@
                                                             name="satisfaction_rate" required placeholder="Satisfaction Rate">
                                                         </div>    
                                                     </div>
-                                                    <div class="">
+                                                    <div class="text-end">
                                                         <button type="submit"
                                                             class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                                     </div>

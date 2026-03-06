@@ -18,7 +18,14 @@
         @if(in_array(getRoleName(activeRole()), ['Dean']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
-            <h5 class="card-header">No of Programs accredited or affiliated nationally/ Internationally and ranking</h5>
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <div class="card-title mb-0">
+                    <h5 class="mb-1">No of Programs accredited or affiliated nationally/ Internationally and ranking</h5>
+                </div>
+                <div class="">
+                    <a href="{{ url('kpa/6/category/14/indicator/154') }}" class="btn btn-primary">Add</a>
+                </div>
+            </div>
             <div class="card-datatable table-responsive card-body">
                     @if(in_array(getRoleName(activeRole()), ['Dean']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
@@ -36,8 +43,7 @@
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
-                                            </table>
-                            </div>    
+                                            </table>   
                         </div>
                     </div>
                 @endif
@@ -291,7 +297,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
         @else
              <div class="misc-wrapper">
