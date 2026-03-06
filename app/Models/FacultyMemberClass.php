@@ -24,4 +24,8 @@ class FacultyMemberClass extends Model
     {
         return $this->hasMany(FacultyClassAttendance::class, 'class_id', 'class_id');
     }
+    public function faculty()
+    {
+        return $this->belongsTo(User::class, 'faculty_id');
+    }
 }

@@ -23,6 +23,8 @@ use App\Models\RatingRule;
 use App\Models\SidebarKpaAssignment;
 use App\Models\StudentFeedbackClassWise;
 use App\Models\LineManagerReviewRating;
+use App\Models\QecAuditRating;
+use App\Models\StudentEngagementRate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -398,7 +400,7 @@ function myClasses($facultyId, $activeRoleId)
     ];
 }
 
-function myClassesAttendanceRecord($facultyId)
+function myClassesAttendanceRecord($facultyId, $activeRoleId)
 {
     $classes = FacultyMemberClass::withCount([
         'attendances as total_rows',
@@ -446,11 +448,11 @@ function myClassesAttendanceRecord($facultyId)
             return $class;
         });
     // ✅ Save overall percentage
-    saveOverallAttendancePercentage($facultyId = getUserID($facultyId), $classes, $keyPerformanceAreaId = 1, $indicatorCategoryId = 3, $indicatorId = 117);
+    saveOverallAttendancePercentage($facultyId = getUserID($facultyId), $classes, $keyPerformanceAreaId = 1, $indicatorCategoryId = 3, $indicatorId = 117, $activeRoleId);
 
     return $classes;
 }
-function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId)
+function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $activeRoleId)
 {
     if ($classes->count() == 0) {
         $overallPercentage = 0;
@@ -478,7 +480,6 @@ function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAr
         $color = 'dark';
         $rating = 'NA';
     }
-    $activeRoleId = getRoleIdByName(activeRole());
     $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 117);
     $weight = $indicatorWeight['weightage'] ?? 0;
     $weightedScore = ($overallPercentage * $weight) / 100;
@@ -486,6 +487,7 @@ function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAr
     IndicatorsPercentage::updateOrCreate(
         [
             'employee_id' => $facultyId,
+            'role_id' => $activeRoleId,
             'key_performance_area_id' => $keyPerformanceAreaId,
             'indicator_category_id' => $indicatorCategoryId,
             'indicator_id' => $indicatorId,
@@ -3242,5 +3244,504 @@ if (!function_exists('lineManagerReviewRatingOnTasks')) {
         saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore);
         saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188);
         return $managerRatings;
+    }
+}
+
+function QECAuditRatingOfHOD($employeeId, $activeRoleId)
+{
+    $departmentId = auth()->user()->department_id;
+
+    $records = QecAuditRating::with([
+        'details.faculty',
+        'details.department',
+        'details.program'
+    ])
+        ->whereHas('details', function ($q) use ($departmentId) {
+            $q->where('department_id', $departmentId);
+        })
+        ->get();
+
+    $data = [];
+
+    foreach ($records as $record) {
+
+        foreach ($record->details as $detail) {
+
+            if ($detail->department_id != $departmentId) {
+                continue;
+            }
+
+            $percentage = 0;
+
+            if ($detail->total_score > 0) {
+                $percentage = ($detail->obtained_score / $detail->total_score) * 100;
+            }
+
+            // Rating logic example
+            if ($percentage >= 90) {
+                $label = 'OS';
+                $color = 'bg-primary';
+            } elseif ($percentage >= 80) {
+                $label = 'EE';
+                $color = 'bg-success';
+            } elseif ($percentage >= 70) {
+                $label = 'ME';
+                $color = 'bg-warning';
+            } elseif ($percentage >= 60) {
+                $label = 'NI';
+                $color = 'bg-info';
+            } elseif ($percentage > 0) {
+                $label = 'BE';
+                $color = 'bg-danger';
+            } else {
+                $label = 'NA';
+                $color = 'bg-secondary';
+            }
+            $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 110);
+            $weight = $indicatorWeight['weightage'] ?? 0;
+            $weightedScore = ($percentage * $weight) / 100;
+            saveIndicatorPercentage($employeeId, $activeRoleId, 1, 3, 110, $weightedScore);
+            $data[] = (object) [
+                'audit_term' => $detail->audit_term,
+                'faculty' => $detail->faculty->name ?? '',
+                'department' => $detail->department->name ?? '',
+                'program' => $detail->program->program_name ?? '',
+                'career' => $detail->program_level ?? '',
+                'total_score' => $detail->total_score,
+                'obtained_score' => $detail->obtained_score,
+                'percentage' => round($percentage, 1),
+                'rating' => $label,
+                'color' => $color
+            ];
+        }
+    }
+
+    return $data;
+}
+
+function StudentAttendanceOfHOD($employeeId, $activeRoleId)
+{
+    $departmentId = auth()->user()->department_id;
+
+    // Get all faculty in this department
+    $facultyMembers = User::where('department_id', $departmentId)
+        ->get(['faculty_id', 'name']);
+    $data = [];
+
+    foreach ($facultyMembers as $faculty) {
+
+        // Get all classes of this faculty
+        $classes = FacultyMemberClass::with([
+            'attendances' => function ($q) {
+                $q->orderBy('class_date', 'desc');
+            }
+        ])
+            ->where('faculty_id', $faculty->faculty_id)
+            ->get();
+
+        foreach ($classes as $class) {
+
+            // Get attendance summary for this class
+            $attendance = $class->attendances->first(); // latest attendance
+
+            if (!$attendance)
+                continue;
+
+            // Calculate percentage if not provided
+            $percentage = 0;
+            if ($attendance->present_count && $attendance->total_students) {
+                $percentage = ($attendance->present_count / $attendance->total_students) * 100;
+            }
+
+            $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 113);
+            $weight = $indicatorWeight['weightage'] ?? 0;
+            $weightedScore = ($percentage * $weight) / 100;
+
+            saveIndicatorPercentage($employeeId, $activeRoleId, 1, 3, 113, $weightedScore);
+
+            // Rating logic example
+            if ($percentage >= 90) {
+                $rating = 'OS';
+                $color = 'bg-primary';
+            } elseif ($percentage >= 80) {
+                $rating = 'EE';
+                $color = 'bg-success';
+            } elseif ($percentage >= 70) {
+                $rating = 'ME';
+                $color = 'bg-warning';
+            } elseif ($percentage >= 60) {
+                $rating = 'NI';
+                $color = 'bg-info';
+            } elseif ($percentage > 0) {
+                $rating = 'BE';
+                $color = 'bg-danger';
+            } else {
+                $rating = 'NA';
+                $color = 'bg-secondary';
+            }
+
+            $data[] = (object) [
+                'faculty_name' => $faculty->name,
+                'class_name' => $class->class_name,
+                'code' => $class->code,
+                'term' => $class->term,
+                'career' => $class->career,
+                'program' => $attendance->program_name,
+                'total_students' => $attendance->total_students,
+                'present_count' => $attendance->present_count,
+                'absent_count' => $attendance->absent_count,
+                'percentage' => round($percentage, 2),
+                'rating' => $rating,
+                'color' => $color
+            ];
+        }
+    }
+
+    return $data;
+}
+
+function myDepartmentClassesAttendanceRecordHOD($employeeId, $activeRoleId)
+{
+    $departmentId = auth()->user()->department_id;
+
+    // 1️⃣ Get all faculty in this department
+    $facultyMembers = User::where('department_id', $departmentId)
+        ->get(['id', 'name']);
+
+    $allClasses = collect();
+
+    foreach ($facultyMembers as $faculty) {
+
+        // 2️⃣ Get classes with attendance counts
+        $classes = FacultyMemberClass::withCount([
+            'attendances as total_rows',
+            'attendances as class_held_count' => function ($query) {
+                $query->where('att_marked', 1);
+            },
+            'attendances as class_not_held_count' => function ($query) {
+                $query->where('att_marked', 0);
+            },
+        ])
+            ->where('faculty_id', $faculty->id)
+            ->get()
+            ->map(function ($class) use ($faculty) {
+
+                // Latest program name from attendances
+                $class->program = $class->attendances()->latest('class_date')->value('program_name');
+
+                // Held / Not Held percentages
+                $class->held_percentage = $class->total_rows
+                    ? round(($class->class_held_count / $class->total_rows) * 100, 2)
+                    : 0;
+
+                $class->not_held_percentage = $class->total_rows
+                    ? round(($class->class_not_held_count / $class->total_rows) * 100, 2)
+                    : 0;
+
+                // Add faculty info for table
+                $class->faculty_name = $faculty->name;
+
+                return $class;
+            });
+
+        $allClasses = $allClasses->merge($classes);
+        // Optional: Save overall attendance per faculty
+        saveOverallAttendancePercentage(
+            $employeeId,
+            $classes,
+            $keyPerformanceAreaId = 1,
+            $indicatorCategoryId = 3,
+            $indicatorId = 117,
+            $activeRoleId
+        );
+    }
+
+    return $allClasses;
+}
+
+function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
+{
+    $departmentId = auth()->user()->department_id;
+
+    // 1️⃣ Get all faculty members in this department
+    $facultyMembers = User::where('department_id', $departmentId)
+        ->get(['id', 'employee_id', 'name']);
+
+    $allRecords = collect();
+
+    foreach ($facultyMembers as $faculty) {
+
+        // 2️⃣ Get CompletionOfCourseFolder records for this faculty
+        $records = CompletionOfCourseFolder::with(['facultyMember', 'facultyClass'])
+            ->where('faculty_member_id', $faculty->id)
+            ->where('status', 2)
+            ->where('completion_of_Course_folder_indicator_id', $indicator_id)
+            ->get();
+
+        $totalScore = 0;
+        $count = 0;
+
+        foreach ($records as $target) {
+
+            // Rating logic
+            if ($target->completion_of_Course_folder == 100) {
+                $rating = 'OS';
+                $color = '#6EA8FE';
+                $status = 'Completed';
+            } elseif ($target->completion_of_Course_folder >= 70) {
+                $rating = 'ME';
+                $color = '#ffcb9a';
+                $status = 'Partially Completed';
+            } elseif ($target->completion_of_Course_folder >= 25) {
+                $rating = 'BE';
+                $color = '#ff4c51';
+                $status = 'Not Completed';
+            } else {
+                $rating = 'NI';
+                $color = '#000000';
+                $status = 'NA';
+            }
+
+            // Modify object for frontend
+            $target->rating = $rating;
+            $target->color = $color;
+            $target->status_folder = $status;
+
+            // For calculating average %
+            $totalScore += $target->completion_of_Course_folder;
+            $count++;
+        }
+
+        // Compute average percentage
+        $avgPercentage = $count > 0 ? floor($totalScore / $count) : 0;
+
+        // Calculate weighted score
+        $weights = [
+            'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicator_id)['weightage'] ?? 0,
+        ];
+        $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
+
+        // Save to IndicatorsPercentage table for this faculty
+        saveIndicatorPercentage(
+            $faculty->employee_id,       // make sure employee_id is correct
+            $activeRoleId,
+            1,                          // keyPerformanceAreaId
+            3,                          // indicatorCategoryId
+            $indicator_id,
+            $weightedScore
+        );
+
+        // Merge this faculty’s records into final collection
+        $allRecords = $allRecords->merge($records);
+    }
+
+    return $allRecords;
+}
+
+// function StudentEngagementRateForHOD($activeRoleId, $indicatorId)
+// {
+//     $departmentId = auth()->user()->department_id;
+
+//     // Fetch all student engagement records for this department
+//     $records = StudentEngagementRate::where('department_id', $departmentId)
+//         ->where('indicator_id', $indicatorId)
+//         ->get();
+
+//     $totalParticipated = $records->sum('number_of_students_participated');
+//     $totalTarget = $records->sum('participation_target');
+
+//     // Calculate department-level participation %
+//     $participationPercentage = $totalTarget > 0
+//         ? round(($totalParticipated / $totalTarget) * 100, 2)
+//         : 0;
+
+//     // Rating & color logic
+//     if ($participationPercentage >= 90) {
+//         $rating = 'OS';
+//         $color = '#6EA8FE';
+//     } elseif ($participationPercentage >= 80) {
+//         $rating = 'EE';
+//         $color = '#96e2b4';
+//     } elseif ($participationPercentage >= 70) {
+//         $rating = 'ME';
+//         $color = '#ffcb9a';
+//     } elseif ($participationPercentage >= 60) {
+//         $rating = 'NI';
+//         $color = '#fd7e13';
+//     } elseif ($participationPercentage >= 50) {
+//         $rating = 'BE';
+//         $color = '#ff4c51';
+//     } else {
+//         $rating = 'NA';
+//         $color = '#d3d3d3';
+//     }
+
+//     // Weighted score
+//     $weight = getRoleWeightage($activeRoleId, 'indicator', 123)['weightage'] ?? 0;
+//     $weightedScore = ($participationPercentage * $weight) / 100;
+
+//     // Save department-level KPI to IndicatorsPercentage
+//     // Here we can use a "department employee_id" placeholder or any HOD representing the department
+//     $hodEmployeeId = auth()->user()->employee_id;
+
+//     saveIndicatorPercentage(
+//         $hodEmployeeId,
+//         $activeRoleId,
+//         1, // keyPerformanceAreaId
+//         4, // indicatorCategoryId
+//         $indicatorId,
+//         $weightedScore,
+//     );
+
+//     // Attach calculated data for display
+//     $records->each(function ($record) use ($participationPercentage, $rating, $color) {
+//         $record->participation_percentage = $participationPercentage;
+//         $record->rating = $rating;
+//         $record->color = $color;
+//     });
+
+//     return $records;
+// }
+
+function StudentEngagementRateForHOD($activeRoleId, $indicatorId)
+{
+    $departmentId = auth()->user()->department_id;
+
+    // Fetch all student engagement records for this department
+    $records = StudentEngagementRate::where('department_id', $departmentId)
+        ->where('indicator_id', $indicatorId)
+        ->get();
+
+    $totalParticipated = $records->sum('number_of_students_participated');
+    $totalTarget = $records->sum('participation_target');
+
+    // Calculate department-level participation %
+    $participationPercentage = $totalTarget > 0
+        ? round(($totalParticipated / $totalTarget) * 100, 2)
+        : 0;
+
+    // Calculate average employer satisfaction
+    // Map non-numeric satisfaction to numeric if needed
+    $totalSatisfaction = 0;
+    $satisfactionCount = 0;
+
+    foreach ($records as $record) {
+        if (!empty($record->employer_satisfaction)) {
+            if (is_numeric($record->employer_satisfaction)) {
+                $score = $record->employer_satisfaction;
+            } else {
+                // Example mapping, adjust as per your system
+                $map = [
+                    'Excellent' => 100,
+                    'Very Good' => 85,
+                    'Good' => 70,
+                    'Average' => 50,
+                    'Poor' => 30,
+                ];
+                $score = $map[$record->employer_satisfaction] ?? 0;
+            }
+
+            $totalSatisfaction += $score;
+            $satisfactionCount++;
+        }
+    }
+
+    $avgEmployerSatisfaction = $satisfactionCount > 0
+        ? round($totalSatisfaction / $satisfactionCount, 2) * 20
+        : 0;
+
+    // Rating & color logic for participation
+    if ($participationPercentage >= 90) {
+        $rating = 'OS';
+        $color = '#6EA8FE';
+    } elseif ($participationPercentage >= 80) {
+        $rating = 'EE';
+        $color = '#96e2b4';
+    } elseif ($participationPercentage >= 70) {
+        $rating = 'ME';
+        $color = '#ffcb9a';
+    } elseif ($participationPercentage >= 60) {
+        $rating = 'NI';
+        $color = '#fd7e13';
+    } elseif ($participationPercentage >= 50) {
+        $rating = 'BE';
+        $color = '#ff4c51';
+    } else {
+        $rating = 'NA';
+        $color = '#d3d3d3';
+    }
+
+    // Weighted score
+    $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+    $weight124 = getRoleWeightage($activeRoleId, 'indicator', 124)['weightage'] ?? 0;
+    $weightedScore = ($participationPercentage * $weight) / 100;
+    $weightedScore124 = ($avgEmployerSatisfaction * $weight124) / 100;
+
+    // Save department-level KPI to IndicatorsPercentage
+    $hodEmployeeId = auth()->user()->employee_id;
+
+    saveIndicatorPercentage(
+        $hodEmployeeId,
+        $activeRoleId,
+        1, // keyPerformanceAreaId
+        4, // indicatorCategoryId
+        $indicatorId,
+        $weightedScore, // optional extra field if your table supports it
+    );
+
+    saveIndicatorPercentage(
+        $hodEmployeeId,
+        $activeRoleId,
+        1, // keyPerformanceAreaId
+        4, // indicatorCategoryId
+        124,
+        $weightedScore124, // optional extra field if your table supports it
+    );
+
+    // Attach calculated data for display
+    $records->each(function ($record) use ($participationPercentage, $rating, $color, $avgEmployerSatisfaction) {
+        $record->participation_percentage = $participationPercentage;
+        $record->rating = $rating;
+        $record->color = $color;
+        $record->avg_employer_satisfaction = $avgEmployerSatisfaction;
+    });
+
+    return $records;
+}
+
+if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
+    function getDepartmentFacultyFeedbackForHOD($activeRoleId)
+    {
+        $departmentId = auth()->user()->department_id;
+
+        $departmentAvgScore = StudentFeedbackClassWise::query()
+            ->join(
+                'faculty_member_classes',
+                'faculty_member_classes.code',
+                '=',
+                'student_feedback_class_wises.component_class'
+            )
+            ->join(
+                'users',
+                'users.faculty_id',
+                '=',
+                'faculty_member_classes.faculty_id'
+            )
+            ->where('users.department_id', $departmentId)
+            ->avg('student_feedback_class_wises.feedback');
+
+        $weight = getRoleWeightage($activeRoleId, 'indicator', 182)['weightage'] ?? 0;
+        $weightedScore = ($departmentAvgScore * $weight) / 100;
+        // Save department-level KPI to IndicatorsPercentage
+        $hodEmployeeId = auth()->user()->employee_id;
+
+        saveIndicatorPercentage(
+            $hodEmployeeId,
+            $activeRoleId,
+            1, // keyPerformanceAreaId
+            23, // indicatorCategoryId
+            182,
+            $weightedScore, // optional extra field if your table supports it
+        );
     }
 }

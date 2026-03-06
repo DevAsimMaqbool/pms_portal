@@ -2,7 +2,7 @@
 
 @push('style')
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/dropzone/dropzone.css') }}" />
-    
+
 
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
     <link rel="stylesheet"
@@ -15,313 +15,345 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 
-<style>
-    .form-check {
-        margin-bottom: 4px;
-    }
-
-    .row-bordered>[class*="col-"] {
-        border: none !important;
-    }
-
-    .form-row-block {
-        min-height: 100px;
-        margin-bottom: 4px;
-    }
-
-    .form-row-block .card-header {
-        min-height: 36px;
-        display: flex;
-        align-items: center;
-        padding: 4px 8px;
-        font-size: 0.95rem;
-    }
-
-    .form-row-block .card-title {
-        min-height: 36px;
-        display: flex;
-        align-items: center;
-        padding: 4px 8px;
-        font-size: 1.4rem;
-    }
-
-    .form-row-block .card-body {
-        padding: 4px 8px;
-    }
-
-    .form-control {
-        min-height: 34px;
-        font-size: 0.95rem;
-        padding: 4px 8px;
-    }
-
-    textarea.form-control {
-        resize: none;
-    }
-</style>
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <div class="card p-3">
-            <div class="card-datatable table-responsive card-body">
-            <div class="d-flex justify-content-between">
-                               <div>
-                                <h5 class="mb-1">Student Satisfaction Rate / Happiness of students</h5>
+        <!-- new design -->
+
+        <div class="app-ecommerce">
+            <!-- tab open-->
+            <div class="nav-align-top">
+
+
+                <!-- main tab-->
+                <div class="tab-content" style="padding:0;background: none;border: none;box-shadow: none;">
+                    @if(in_array(getRoleName(activeRole()), ['OEC']))
+                        <!-- first tab-->
+                        <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
+
+                            <div
+                                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h4 class="mb-1">Student Satisfaction Rate / Happiness of students</h4>
                                 </div>
-                                <a href="{{ route('indicators_crud.index', ['slug' => 'Internationalization_section', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
-                            </div> 
-                <form id="researchForm" method="POST" action="{{ route('nomination.store') }}"
-                    enctype="multipart/form-data">
-                    @csrf
-                    {{-- <input type="hidden" id="employeeId" name="employee_id" value="{{ Auth::user()->employee_id }}"
-                        class="form-control" /> --}}
-                    <input type="hidden" id="form_status" name="form_status" value="HOD" required>
-                    <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">    
-
-                    <div class="row g-3" style="padding-top:20px; font-family:Arial;">
-                        <div class="card mb-6">
-                            <div class="row row-bordered g-0 mt-2">
-
-                                {{-- Column 1 --}}
-                                <div class="col-md-4">
-                                    <!-- Stakeholder Category -->
-                                    <div class="form-row-block">
-                                        <h3 class="card-title">Type of Engagement</h3>
-                                        <h5 class="card-header">Stakeholder Category</h5>
-                                        <div class="card-body">
-                                            @php $chaudhry = $submission->chaudhry_akram_awards ?? []; @endphp
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="stakeholder_category[]"
-                                                    value="faculty" {{ in_array('faculty', $chaudhry) ? 'checked' : '' }}><label class="form-check-label">Faculty</label></div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="stakeholder_category[]"
-                                                    value="staff" {{ in_array('staff', $chaudhry) ? 'checked' : '' }}><label
-                                                    class="form-check-label">Staff</label></div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="stakeholder_category[]"
-                                                    value="students" {{ in_array('students', $chaudhry) ? 'checked' : '' }}><label class="form-check-label">Students</label></div>
-                                        </div>
+                                <div class="d-flex align-content-center flex-wrap gap-4">
+                                    <div class="d-flex gap-4">
+                                        <a class="btn btn-label-primary"
+                                            href="{{ route('indicators_crud.index', ['slug' => 'student_engagement_rate', 'id' => $indicatorId]) }}">View</a>
                                     </div>
-
-                                    <!-- Nature of Activity -->
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Nature of Activity</h5>
-                                        <div class="card-body"><input type="text" class="form-control"
-                                                name="nature_of_activity">
-                                        </div>
-                                    </div>
-
-                                    <!-- Activity Location -->
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Activity Location</h5>
-                                        <div class="card-body">
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="activity_location[]"
-                                                    value="within_campus" {{ in_array('within_campus', $chaudhry) ? 'checked' : '' }}><label class="form-check-label">Within Campus</label>
+                                    {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                        <i class="bx bx-upload"></i> Import Excel / CSV</button> --}}
+                                </div>
+                            </div>
+                            <form id="researchForm" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" id="form_status" name="form_status" value="HOD" required>
+                                <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                                <div class="row">
+                                    <!-- First column-->
+                                    <div class="col-12 col-lg-8">
+                                        <!-- Product Information -->
+                                        <div class="card mb-6">
+                                            <div class="card-header">
+                                                <h5 class="card-tile mb-0">Engagement</h5>
                                             </div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="activity_location[]"
-                                                    value="outside_campus" {{ in_array('outside_campus', $chaudhry) ? 'checked' : '' }}><label class="form-check-label">Outside Campus</label>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label" for="">Nature of the Event</label>
+                                                        <select name="nature_of_event" id="nature_of_event"
+                                                            class="select2 form-select" required>
+                                                            <option value="">-- Select --</option>
+                                                            <option value="Sports">Sports</option>
+                                                            <option value="Nights">Nights</option>
+                                                            <option value="Welcome">Welcome</option>
+                                                            <option value="Tour">Tour</option>
+                                                            <option value="Other">Other (please specify)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12 mb-3" id="other_event_div" style="display:none;">
+                                                        <label class="form-label">Specify Other Event</label>
+                                                        <input type="text" name="other_event_detail" id="other_event_detail"
+                                                            class="form-control">
+                                                    </div>
+
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label" for="">Event Location</label>
+                                                        <div>
+                                                            <div class="row">
+                                                                <div class="col-md mb-md-0 mb-5">
+                                                                    <div class="form-check custom-option custom-option-basic">
+                                                                        <label class="form-check-label custom-option-content"
+                                                                            for="customCheckTemp3">
+                                                                            <input class="form-check-input"
+                                                                                name="event_location[]" type="radio"
+                                                                                value="within_campus" id="customCheckTemp3"
+                                                                                checked />
+                                                                            <span class="custom-option-header">
+                                                                                <span class="h6 mb-0">Within Campus</span>
+                                                                            </span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md mb-md-0 mb-5">
+                                                                    <div class="form-check custom-option custom-option-basic">
+                                                                        <label class="form-check-label custom-option-content"
+                                                                            for="customCheckTemp3">
+                                                                            <input class="form-check-input"
+                                                                                name="event_location[]" type="radio"
+                                                                                value="outside_campus" id="customCheckTemp3" />
+                                                                            <span class="custom-option-header">
+                                                                                <span class="h6 mb-0">Outside Campus</span>
+                                                                            </span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md">
+                                                                    <div class="form-check custom-option custom-option-basic">
+                                                                        <label class="form-check-label custom-option-content"
+                                                                            for="customCheckTemp4">
+                                                                            <input class="form-check-input"
+                                                                                name="event_location[]" type="radio" value=""
+                                                                                id="customCheckTemp4" />
+                                                                            <span class="custom-option-header">
+                                                                                <span class="h6 mb-0">Both</span>
+                                                                            </span>
+
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label" for="evidence_reference">Scope of the
+                                                            Event</label>
+                                                        <div>
+
+                                                            <div class="form-check form-check-inline mt-4">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="scope_of_the_event" id="inlineRadio1"
+                                                                    value="institutional" />
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio1">Institutional</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="scope_of_the_event" id="inlineRadio2"
+                                                                    value="departmental" />
+                                                                <label class="form-check-label"
+                                                                    for="inlineRadio2">Departmental</label>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                                <!-- Description -->
+
                                             </div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="activity_location[]"
-                                                    value="both" {{ in_array('both', $chaudhry) ? 'checked' : '' }}><label
-                                                    class="form-check-label">Both</label></div>
                                         </div>
-                                    </div>
-                                </div>
+                                        <!-- /Product Information -->
 
-                                {{-- Column 2 --}}
-                                <div class="col-md-4">
-                                    <div class="form-row-block">
-                                        <h3 class="card-title">Activity Details</h3>
-                                        <h5 class="card-header">Title of Activity / Program</h5>
-                                        <div class="card-body"><textarea class="form-control" id="TitleOfActivity"
-                                                name="title_of_activity"
-                                                rows="2">{{ $submission->title_of_activity ?? '' }}</textarea></div>
-                                    </div>
 
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Brief Description of Activity</h5>
-                                        <div class="card-body"><textarea class="form-control" id="BriefDescription"
-                                                name="brief_description_of_activity"
-                                                rows="2">{{ $submission->sitara_qiyadat_why ?? '' }}</textarea></div>
-                                    </div>
-
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Date(s) of Activity</h5>
-                                        <div class="card-body"><input class="form-control" name="date_of_activity"
-                                                type="date" value="{{ $submission->date_of_activity ?? '' }}"></div>
-                                    </div>
-
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Partner Organization (if any)</h5>
-                                        <div class="card-body"><textarea class="form-control" id="PartnerOrganization"
-                                                name="partner_organization"
-                                                rows="2">{{ $submission->partner_organization ?? '' }}</textarea></div>
-                                    </div>
-                                </div>
-
-                                {{-- Column 3 --}}
-                                <div class="col-md-4">
-                                    <div class="form-row-block">
-                                        <h3 class="card-title">Participation Data</h3>
-                                        <h5 class="card-header">Total Number of Faculty in Department</h5>
-                                        <div class="card-body"><input type="number" class="form-control"
-                                                name="total_number_of_faculty_in_department"
-                                                value="{{ $submission->total_number_of_faculty_in_department ?? '' }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Number of Faculty Participated</h5>
-                                        <div class="card-body"><input type="number" class="form-control"
-                                                name="number_of_faculty_participated"
-                                                value="{{ $submission->number_of_faculty_participated ?? '' }}"></div>
-                                    </div>
-
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Total Number of Staff in Office</h5>
-                                        <div class="card-body"><input type="number" class="form-control"
-                                                name="total_number_of_staff_in_office"
-                                                value="{{ $submission->total_number_of_staff_in_office ?? '' }}"></div>
-                                    </div>
-
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Number of Staff Participated</h5>
-                                        <div class="card-body"><input type="number" class="form-control"
-                                                name="number_of_staff_participated"
-                                                value="{{ $submission->number_of_staff_participated ?? '' }}"></div>
-                                    </div>
-
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Total Number of Students in Program / Society</h5>
-                                        <div class="card-body"><input type="number" class="form-control"
-                                                name="total_number_of_students_in_program"
-                                                value="{{ $submission->total_number_of_students_in_program ?? '' }}"></div>
-                                    </div>
-
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Number of Students Participated</h5>
-                                        <div class="card-body"><input type="number" class="form-control"
-                                                name="number_of_students_participated"
-                                                value="{{ $submission->number_of_students_participated ?? '' }}"></div>
-                                    </div>
-                                </div>
-
-                                {{-- Impact Measurement / Verification --}}
-                                <div class="col-md-4">
-                                    <div class="form-row-block">
-                                        <h3 class="card-title">Impact Measurement</h3>
-                                        <h5 class="card-header">Type of Impact Achieved (Multiple choice)</h5>
-                                        <div class="card-body">
-                                            @php $chaudhry = $submission->chaudhry_akram_awards ?? []; @endphp
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="typ_of_impact_achieved[]"
-                                                    value="community_benefited" {{ in_array('community_benefited', $chaudhry) ? 'checked' : '' }}><label class="form-check-label">Community
-                                                    benefited</label></div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="typ_of_impact_achieved[]"
-                                                    value="environmental_improvement" {{ in_array('environmental_improvement', $chaudhry) ? 'checked' : '' }}><label class="form-check-label">Environmental improvement</label>
+                                        <!-- Product Information -->
+                                        <div class="card mb-6">
+                                            <div class="card-header">
+                                                <h5 class="card-tile mb-0">Event Details</h5>
                                             </div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="typ_of_impact_achieved[]"
-                                                    value="awareness_created" {{ in_array('awareness_created', $chaudhry) ? 'checked' : '' }}><label class="form-check-label">Awareness
-                                                    created</label></div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="typ_of_impact_achieved[]"
-                                                    value="policy_practice_change" {{ in_array('policy_practice_change', $chaudhry) ? 'checked' : '' }}><label
-                                                    class="form-check-label">Policy/practice change</label></div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="typ_of_impact_achieved[]"
-                                                    value="skill_development" {{ in_array('skill_development', $chaudhry) ? 'checked' : '' }}><label class="form-check-label">Skill
-                                                    development</label></div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox" name="typ_of_impact_achieved[]"
-                                                    value="other" {{ in_array('other', $chaudhry) ? 'checked' : '' }}><label
-                                                    class="form-check-label">Other (specify)</label></div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label" for="title_of_the_event">Title of the
+                                                            Event</label>
+                                                        <textarea class="form-control" id="title_of_the_event"
+                                                            name="title_of_the_event" rows="2"
+                                                            placeholder="Enter your message here..."></textarea>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label" for="brief_description_of_activity">Brief
+                                                            Description of the Event</label>
+                                                        <textarea class="form-control" id="BriefDescription"
+                                                            name="brief_description_of_activity" rows="2"
+                                                            placeholder="Enter your message here..."></textarea>
+                                                    </div>
+
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label" for="date_of_the_event">Date(s) of the
+                                                            Event</label>
+
+                                                        <div class="input-group">
+                                                            <input type="date" name="event_start_date" class="form-control"
+                                                                required>
+                                                            <span class="input-group-text">to</span>
+                                                            <input type="date" name="event_end_date" class="form-control"
+                                                                required>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                                <!-- Description -->
+
+                                            </div>
                                         </div>
+                                        <!-- /Product Information -->
+
+
                                     </div>
+                                    <!-- /Second column -->
+
+                                    <!-- Second column -->
+                                    <div class="col-12 col-lg-4">
+                                        <!-- Pricing Card -->
+                                        <div class="card mb-6">
+                                            <div class="card-header">
+                                                <h5 class="card-title mb-0">Program Information</h5>
+                                            </div>
+                                            <div class="card-body">
+
+
+                                                <div class="mb-3">
+                                                    <label for="faculty" class="form-label">Faculty</label>
+                                                    <select name="faculty_id" id="faculty_id" class="select2 form-select"
+                                                        required>
+                                                        <option value="">-- Select Faculty --</option>
+                                                        @foreach(get_faculties() as $faculty)
+                                                            <option value="{{ $faculty->id }}">
+                                                                {{ $faculty->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="department" class="form-label">Department</label>
+                                                    <select name="department_id" id="department_id" class="select2 form-select"
+                                                        required>
+                                                        <option value="">-- Select Department --</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="program" class="form-label">Program Name</label>
+                                                    <select name="program_id" id="program_id"
+                                                        class="select2 form-select program_id" required>
+                                                        <option value="">-- Select Program --</option>
+                                                    </select>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                        <!-- /Pricing Card -->
+                                        <!-- Pricing Card -->
+                                        <div class="card mb-6">
+                                            <div class="card-header">
+                                                <h5 class="card-title mb-0">Participation Data</h5>
+                                            </div>
+                                            <div class="card-body">
+
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="total_programs_assessed">Participation
+                                                        Target</label>
+                                                    <input type="number" class="form-control" name="participation_target"
+                                                        value="" placeholder="Enter Participation Target...">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="number_of_students_participated" class="form-label">Number of
+                                                        Students Participated</label>
+                                                    <input type="number" class="form-control"
+                                                        name="number_of_students_participated"
+                                                        value="{{ $submission->number_of_students_participated ?? '' }}"
+                                                        placeholder="add..">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="proportion_of_profitable_programs" class="form-label">Student
+                                                        Satisfaction Rate / Happiness of students</label>
+                                                    <div id="employerRating" class="raty"></div>
+                                                    <input type="hidden" name="employer_satisfaction" id="employer_satisfaction"
+                                                        value="">
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <!-- /Pricing Card -->
+                                        <div class="mt-3 text-end" style="margin-left: -16px !important;">
+                                            <button type="submit"
+                                                class="btn btn-primary waves-effect waves-light">SUBMIT</button>
+                                        </div>
+
+                                    </div>
+                                    <!-- /Second column -->
                                 </div>
+                            </form>
 
-                                <div class="col-md-4">
-                                    <div class="form-row-block">
-                                        <h3 class="card-title">Impact Description (Mandatory)</h3>
-                                        <div class="card-body">
-                                            <p>Paragraph (Quantify where possible: number of beneficiaries, trees planted,
-                                                funds raised, waste reduced, hours served, etc.)</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Evidence of Impact Available (File upload)</h5>
-                                        <div class="card-body">
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox"
-                                                    name="evidence_of_impact_available[]" value="photos" {{ in_array('photos', $chaudhry) ? 'checked' : '' }}><label
-                                                    class="form-check-label">Photos</label></div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox"
-                                                    name="evidence_of_impact_available[]" value="attendance_sheets" {{ in_array('attendance_sheets', $chaudhry) ? 'checked' : '' }}><label
-                                                    class="form-check-label">Attendance sheets</label></div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox"
-                                                    name="evidence_of_impact_available[]" value="certificates" {{ in_array('certificates', $chaudhry) ? 'checked' : '' }}><label
-                                                    class="form-check-label">Certificates</label></div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox"
-                                                    name="evidence_of_impact_available[]" value="reports" {{ in_array('reports', $chaudhry) ? 'checked' : '' }}><label
-                                                    class="form-check-label">Reports</label></div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox"
-                                                    name="evidence_of_impact_available[]" value="media_coverage" {{ in_array('media_coverage', $chaudhry) ? 'checked' : '' }}><label
-                                                    class="form-check-label">Media coverage</label></div>
-                                            <div class="form-check"><input type="checkbox"
-                                                    class="form-check-input sitara-checkbox"
-                                                    name="evidence_of_impact_available[]" value="none" {{ in_array('none', $chaudhry) ? 'checked' : '' }}><label
-                                                    class="form-check-label">None</label></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-row-block">
-                                        <h3 class="card-title">Verification & Declaration</h3>
-                                        <div class="card-body">
-                                            <h6>Verified By:</h6>
-                                            <p>Name & Designation</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Declaration</h5>
-                                        <div class="card-body">
-                                            <input class="form-check-input" type="checkbox" name="declaration" value="1" {{ isset($submission->declaration) && $submission->declaration ? 'checked' : '' }}>
-                                            <label class="form-check-label">I confirm that the information provided is
-                                                accurate and verifiable.</label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row-block">
-                                        <h5 class="card-header">Student Satisfaction Rate / Happiness of students</h5>
-                                        <div class="card-body">
-                                        <div id="employerRating" class="raty"></div>
-                                        <input type="hidden" name="employer_satisfaction" id="employer_satisfaction" value="">
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
+                        </div>
+                        <!-- /first tab-->
+                    @else
+                        <div class="misc-wrapper">
+                            <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                            <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                            <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                            <div class="mt-12">
+                                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                                    alt="page-misc-not-authorized" width="170" class="img-fluid" />
                             </div>
                         </div>
+                    @endif
 
-                        <div class="mt-3 text-end">
-                            <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
+
+                </div>
+                <!-- /main tab-->
+
+            </div>
+            <!-- tab open-->
+        </div>
+
+
+
+        <!-- / close new design -->
+        <!-- Import Modal -->
+        <div class="modal fade" id="importModal" tabindex="-1">
+            <div class="modal-dialog">
+                <form id="importForm" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                    <input type="hidden" name="form_status" value="HOD">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import Student Satisfaction Rate / Happiness of students Data</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
+                        <div class="modal-body">
+                            <label class="form-label">Upload Excel / CSV</label>
+                            <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
+
+                            <small class="text-muted d-block mt-2">
+                                Allowed: xlsx, xls, csv
+                            </small>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -334,20 +366,9 @@
     <script src="{{ asset('admin/assets/js/forms-file-upload.js') }}"></script>
     <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
-    {{-- <script>
-        document.getElementById('researchForm').addEventListener('submit', function (e) {
-            if (!document.querySelectorAll('.sitara-checkbox:checked').length) {
-                alert('Please select at least one award.');
-                e.preventDefault(); return false;
-            }
-            if (!Array.from(document.querySelectorAll('.description-area')).some(t => t.value.trim() !== '')) {
-                alert('Please fill out at least one justification.');
-                e.preventDefault(); return false;
-            }
-        });
-    </script> --}}
 
-     <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+
+    <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/popular.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/bootstrap5.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/auto-focus.js') }}"></script>
@@ -362,8 +383,8 @@
 @endpush
 @push('script')
 
-    <script>
-     document.addEventListener("DOMContentLoaded", function () {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
 
         // SVG stars
         const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
@@ -377,7 +398,7 @@
             starOn: starOn,
             starHalf: starHalf,
             starOff: starOff,
-            click: function(score) {
+            click: function (score) {
                 document.getElementById("employer_satisfaction").value = score;
             }
         }).init();
@@ -389,61 +410,79 @@
             starOn: starOn,
             starHalf: starHalf,
             starOff: starOff,
-            click: function(score) {
+            click: function (score) {
                 document.getElementById("graduate_satisfaction").value = score;
             }
         }).init();
 
     });
 
-    </script>
-    @if(auth()->user()->hasRole(['HOD']))
-        <script>
-            $(document).ready(function () {
-              
-              
+</script>
+@if(in_array(getRoleName(activeRole()), ['OEC']))
+    <script>
+        $(document).ready(function () {
+            function toggleOtherField() {
+                let selected = $('#nature_of_event').val();
 
-                 $('#researchForm').on('submit', function (e) {
-                    e.preventDefault();
-                    let form = $(this);
-                    let formData = new FormData(this);
-                     // Show loading indicator
-                    Swal.fire({
-                        title: 'Please wait...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-                     
-                    $.ajax({
-                        url: "{{ route('student-satisfaction.store') }}",
-                        type: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            Swal.close();
-                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
-                            form[0].reset();
-                            form.find('.invalid-feedback').remove();
-                            form.find('.is-invalid').removeClass('is-invalid');
-                            $('.select2').val(null).trigger('change');
-                              // Remove all extra grant groups and keep only the first one
-                            $('#grant-details-container .grant-group:not(:first)').remove();
+                if (selected === 'Other') {
+                    $('#other_event_div').show();
+                    $('#other_event_detail').prop('required', true);
+                } else {
+                    $('#other_event_div').hide();
+                    $('#other_event_detail').prop('required', false).val('');
+                }
+            }
 
-                            // Reset the proof container of the first group
-                            $('#grant-details-container .grant-group:first .proof-container').hide();
+            // On change
+            $('#nature_of_event').on('change', function () {
+                toggleOtherField();
+            });
 
-                            // Reset index to 1
-                            grantIndex = 1;
-                        },
-                        error: function (xhr) {
-                            Swal.close();
-                            // Clear previous errors before showing new ones
-                            form.find('.invalid-feedback').remove();
-                            form.find('.is-invalid').removeClass('is-invalid');
-                             if (xhr.status === 422) {
+            // Run on page load (important for edit forms)
+            toggleOtherField();
+
+
+            $('#researchForm').on('submit', function (e) {
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(this);
+                // Show loading indicator
+                Swal.fire({
+                    title: 'Please wait...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('student-engagement-rate.store') }}",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        Swal.close();
+                        Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                        form[0].reset();
+                        form.find('.invalid-feedback').remove();
+                        form.find('.is-invalid').removeClass('is-invalid');
+                        $('.select2').val(null).trigger('change');
+                        // Remove all extra grant groups and keep only the first one
+                        $('#grant-details-container .grant-group:not(:first)').remove();
+
+                        // Reset the proof container of the first group
+                        $('#grant-details-container .grant-group:first .proof-container').hide();
+
+                        // Reset index to 1
+                        grantIndex = 1;
+                    },
+                    error: function (xhr) {
+                        Swal.close();
+                        // Clear previous errors before showing new ones
+                        form.find('.invalid-feedback').remove();
+                        form.find('.is-invalid').removeClass('is-invalid');
+                        if (xhr.status === 422) {
                             let errors = xhr.responseJSON.errors;
 
                             // Loop through all validation errors
@@ -467,13 +506,111 @@
                             });
 
                         } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
+                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
                         }
+                    }
+                });
+            });
+
+            $('#faculty_id').on('change', function () {
+
+                let facultyId = $(this).val();
+                let departmentSelect = $('#department_id');
+                let programSelect = $('#program_id');
+
+                departmentSelect.html('<option value="">Loading...</option>');
+                programSelect.html('<option value="">-- Select Program --</option>');
+
+
+                if (facultyId) {
+                    $.ajax({
+                        url: "/get-departments/" + facultyId,
+                        type: "GET",
+                        success: function (response) {
+
+                            departmentSelect.empty();
+                            departmentSelect.append('<option value="">-- Select Department --</option>');
+
+                            $.each(response, function (key, department) {
+                                departmentSelect.append(
+                                    `<option value="${department.id}">
+                                                                                                                                        ${department.name}
+                                                                                                                                    </option>`
+                                );
+                            });
+
+                            departmentSelect.trigger('change'); // refresh select2
                         }
                     });
+                } else {
+                    departmentSelect.html('<option value="">-- Select Department --</option>');
+                }
+            });
+            $('#department_id').on('change', function () {
+
+                let departmentId = $(this).val();
+                let programSelect = $('#program_id');
+
+                programSelect.html('<option value="">Loading...</option>');
+
+                if (departmentId) {
+                    $.ajax({
+                        url: "/get-programs/" + departmentId,
+                        type: "GET",
+                        success: function (response) {
+
+                            programSelect.empty();
+                            programSelect.append('<option value="">-- Select Program --</option>');
+
+                            $.each(response, function (key, program) {
+                                programSelect.append(
+                                    `<option value="${program.id}">
+                                                                                                                                        ${program.program_name}
+                                                                                                                                    </option>`
+                                );
+                            });
+
+                            programSelect.trigger('change'); // refresh select2
+                        },
+                        error: function () {
+                            programSelect.html('<option value="">Error loading programs</option>');
+                        }
+                    });
+                } else {
+                    programSelect.html('<option value="">-- Select Program --</option>');
+                }
+            });
+            $('#importForm').on('submit', function (e) {
+                e.preventDefault();
+
+                let formData = new FormData(this);
+
+                Swal.fire({
+                    title: 'Importing...',
+                    allowOutsideClick: false,
+                    didOpen: () => Swal.showLoading()
                 });
 
+                $.ajax({
+                    url: "{{ route('student-engagement-rate.import') }}",
+                    method: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        Swal.close();
+                        Swal.fire('Success', res.message, 'success');
+                        $('#importModal').modal('hide');
+                        $('#importForm')[0].reset();
+                    },
+                    error: function (xhr) {
+                        Swal.close();
+                        Swal.fire('Error', xhr.responseJSON.message ?? 'Import failed', 'error');
+                    }
+                });
             });
-        </script>
-    @endif
-    @endpush
+
+        });
+    </script>
+@endif
+push

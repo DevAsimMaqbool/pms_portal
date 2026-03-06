@@ -117,6 +117,7 @@
                                     <tbody>
                                         @php
                                             $classFeedback = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
+                                            getDepartmentFacultyFeedbackForHOD($activeRoleId);
                                             function ratingMeta($average)
                                             {
                                                 if ($average >= 90)
@@ -341,6 +342,9 @@
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
 
+@php
+    if ($activeRoleId == 21) { 
+@endphp
 <div class="modal fade" id="StudentAttendance" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
@@ -426,6 +430,7 @@
         </div>
     </div>
 </div>
+
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
 
@@ -474,8 +479,10 @@
                                 </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                    @php $sr = 1; @endphp
-                                    @foreach(myClassesAttendanceRecord(Auth::user()->faculty_id) as $class)
+                                    @php $sr = 1;
+                                        $classes = myClassesAttendanceRecord(Auth::user()->faculty_id, $activeRoleId); 
+                                    @endphp
+                                    @foreach($classes as $class)
                                         <tr>
                                             <td>{{ $sr++ }}</td>
                                             <td>{{ $class->class_name }}</td>
@@ -508,6 +515,9 @@
         </div>
     </div>
 </div>
+@php
+    }
+@endphp
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->
 
@@ -648,6 +658,7 @@
 
                                         @php
                                             $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, $activeRoleId, 120);
+                                            CompletionOfCourseFolderForHOD($activeRoleId, 120);
 
                                         @endphp
                                         @foreach ($CompletionofCourseFolders as $CompletionofCourser)
@@ -3385,6 +3396,78 @@
                                             <td colspan="4" class="text-center">No record found</td>
                                         </tr>
                                     @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="QECAuditRating" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    QEC Audit Rating
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Audit Term</th>
+                                        <th>Faculty</th>
+                                        <th>Department</th>
+                                        <th>Program</th>
+                                        <th>Career (PG/UG)</th>
+                                        <th>Total Score</th>
+                                        <th>Obtained Score</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    @php
+                                        $feedbacks = QECAuditRatingOfHOD(Auth::user()->employee_id, $activeRoleId);
+                                        StudentAttendanceOfHOD(Auth::user()->employee_id, $activeRoleId);
+                                        myDepartmentClassesAttendanceRecordHOD(Auth::user()->employee_id, $activeRoleId);
+                                        StudentEngagementRateForHOD($activeRoleId, 123)
+                                    @endphp
+
+                                    @foreach($feedbacks as $class)
+                                        <tr>
+                                            <td>{{ $sr++ }}</td>
+                                            <td>{{ $class->audit_term }}</td>
+                                            <td>{{ $class->faculty }}</td>
+                                            <td>{{ $class->department }}</td>
+                                            <td>{{ $class->program }}</td>
+                                            <td>{{ $class->career }}</td>
+                                            <td>{{ $class->total_score }}</td>
+                                            <td>{{ $class->obtained_score }}</td>
+                                            <td>
+                                                <span class="badge" style="background-color: {{ $class->color }}">
+                                                    {{ $class->percentage }}%
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge" style="background-color: {{ $class->color }}">
+                                                    {{ $class->rating }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
