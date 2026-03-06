@@ -31,15 +31,15 @@
                             <div
                                 class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
                                 <div class="d-flex flex-column justify-content-center">
-                                    <h4 class="mb-1"></h4>
+                                    <h4 class="mb-1">Dropout Rate</h4>
                                 </div>
                                 <div class="d-flex align-content-center flex-wrap gap-4">
                                     <div class="d-flex gap-4">
                                         <a class="btn btn-label-primary"
                                             href="{{ route('indicators_crud.index', ['slug' => 'dropout_rate', 'id' => $indicatorId]) }}">View</a>
                                     </div>
-                                    {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                        <i class="bx bx-upload"></i> Import Excel / CSV</button> --}}
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                        <i class="bx bx-upload"></i> Import Excel / CSV</button>
                                 </div>
                             </div>
                             <form id="researchForm" enctype="multipart/form-data">
@@ -96,7 +96,7 @@
                                                             name="dropout_rate" required placeholder="Dropout Rate in %">
                                                          </div>   
                                                     </div>
-                                                    <div class="">
+                                                    <div class="mt-3 text-end">
                                                         <button type="submit"
                                                             class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                                     </div>
@@ -280,7 +280,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('dropout-rate.index') }}",
+                        url: "{{ route('dropout-rate.import') }}",
                         method: "POST",
                         data: formData,
                         contentType: false,

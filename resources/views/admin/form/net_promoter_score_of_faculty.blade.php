@@ -36,9 +36,9 @@
                                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden"  id="form_status" name="form_status" value="HOD">
 
-                                <div class="row g-6 mt-0">
+                                <div class="mt-3">
                                          
-                                        <div class="row g-3 pb-3 border border-primary">
+                                        <div class="row g-3 m-0 pb-3 border border-primary">
                                             <div class="col-md-4">
                                                 <label for="batch" class="form-label">Select Year</label>
                                                 <select name="year" id="year" class="select2 form-select faculty-member" required>

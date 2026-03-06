@@ -42,21 +42,27 @@
                 <div class="tab-content">
                     @if(in_array(getRoleName(activeRole()), ['QEC']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h5 class="mb-1">QEC Audit Rating</h5>
+                             <div
+                                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h4 class="mb-1">QEC Audit Rating</h4>
                                 </div>
-                                <a href="{{ route('qec-audit-rating.index') }}"
-                                    class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                                <div class="d-flex align-content-center flex-wrap gap-4">
+                                    <div class="d-flex gap-4">
+                                        <a href="{{ route('qec-audit-rating.index') }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                                    </div>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                        <i class="bx bx-upload"></i> Import Excel / CSV</button>
+                                </div>
                             </div>
-                            <form id="researchForm1" enctype="multipart/form-data" class="row">
+                            <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden" id="form_status" name="form_status" value="HOD">
 
-                                <div class="row">
+                                <div class="row g-3">
                                     <div id="author-past-container">
-                                        <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+                                        <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
                                             <div class="col-md-4">
                                                 <label class="form-label">Audit Term</label>
@@ -144,7 +150,7 @@
                                             required placeholder=""></textarea>
                                     </div>
                                 </div>
-                                <div class="mt-3 text-end" style="margin-left: -19px !important;">
+                                <div class="mt-3 text-end">
                                     <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                 </div>
                             </form>
@@ -177,7 +183,36 @@
                 </div>
             </div>
         </div>
+        <!-- Import Modal -->
+        <div class="modal fade" id="importModal" tabindex="-1">
+            <div class="modal-dialog">
+                <form id="importForm" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                    <input type="hidden" name="form_status" value="HOD">
 
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import Dropout Rate Data</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <label class="form-label">Upload Excel / CSV</label>
+                            <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
+
+                            <small class="text-muted d-block mt-2">
+                                Allowed: xlsx, xls, csv
+                            </small>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
     </div>
     <!-- / Content -->
@@ -412,6 +447,35 @@
                     programSelect.html('<option value="">Select Program</option>').trigger('change');
                 }
             });
+            $('#importForm').on('submit', function (e) {
+                    e.preventDefault();
+
+                    let formData = new FormData(this);
+
+                    Swal.fire({
+                        title: 'Importing...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+
+                    $.ajax({
+                        url: "{{ route('qec-audit-rating.import') }}",
+                        method: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (res) {
+                            Swal.close();
+                            Swal.fire('Success', res.message, 'success');
+                            $('#importModal').modal('hide');
+                            $('#importForm')[0].reset();
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            Swal.fire('Error', xhr.responseJSON.message ?? 'Import failed', 'error');
+                        }
+                    });
+                });
 
 
         });
@@ -502,7 +566,7 @@
             }
 
             let group = `
-                        <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+                        <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
                         <div class="col-md-4">
                         <label class="form-label">Audit Term</label>
@@ -510,16 +574,6 @@
                         ${auditTermOptions}
                         </select>
                         </div>
-
-                                        <div class="col-md-4">
-                                        <label class="form-label">Audit Term</label>
-                                        <select name="audits[${pastIndex}][audit_term]" class="form-select">
-                                        <option value="">Select</option>
-                                        <option value="2021-2022">2021-2022</option>
-                                        <option value="2022-2023">2022-2023</option>
-                                        <option value="2023-2024">2023-2024</option>
-                                        </select>
-                                        </div>
 
                                         <div class="col-md-4">
                                         <label class="form-label">Faculty</label>

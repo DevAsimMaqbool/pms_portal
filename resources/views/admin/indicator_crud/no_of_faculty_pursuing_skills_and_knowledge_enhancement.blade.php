@@ -18,7 +18,14 @@
         @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Dean','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
-             <h5 class="card-header">Faculty pursuing skills and knowledge enhancement</h5>
+             <div class="card-header d-flex align-items-center justify-content-between">
+                <div class="card-title mb-0">
+                    <h5 class="mb-1">Faculty pursuing skills and knowledge enhancement</h5>
+                </div>
+                <div class="">
+                    <a href="{{ url('kpa/7/category/17/indicator/170') }}" class="btn btn-primary">Add</a>
+                </div>
+            </div>
             <div class="card-datatable table-responsive card-body">
                     @if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
@@ -209,7 +216,7 @@
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor']))
         <script>
             function fetchCommercialForms() {
                 $.ajax({
@@ -331,8 +338,7 @@
                     let historyHtml = '';
                     history.forEach(update => {
                         let histortText = 'N/A';
-                        if (update.role === 'HOD') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
-                        else if (update.role === 'ORIC') histortText = update.status == '2' ? 'Unverified' : (update.status == '3' ? 'Verified' : update.status);
+                        if (update.role === 'Dean') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
                         else histortText = update.status || 'N/A';
 
                         historyHtml += `

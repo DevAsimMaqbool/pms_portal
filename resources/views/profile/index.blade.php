@@ -23,7 +23,7 @@
               <div class="user-profile-info">
                 <h4 class="mb-2 mt-lg-6">{{ $employee['name'] }}</h4>
                 <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-4 my-2">
-                  <li class="list-inline-item d-flex gap-2 align-items-center"><i class="icon-base ti tabler-palette icon-lg"></i><span class="fw-medium">{{ $employee['job_title'] }}</span></li>
+                  <li class="list-inline-item d-flex gap-2 align-items-center"><i class="icon-base ti tabler-palette icon-lg"></i><span class="fw-medium">{{strtoupper(activeRole())}}</span></li>
                   <li class="list-inline-item d-flex gap-2 align-items-center"><i class="icon-base ti tabler-map-pin  icon-lg"></i><span class="fw-medium">Vatican City</span></li>
                   <li class="list-inline-item d-flex gap-2 align-items-center"><i class="icon-base ti tabler-calendar  icon-lg"></i><span class="fw-medium"> {{ $employee['birthday'] }} </span></li>
                 </ul>
@@ -46,9 +46,9 @@
           <ul class="list-unstyled my-3 py-1">
             <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-user icon-lg"></i><span class="fw-medium mx-2">Full Name:</span> <span>{{ $employee['name'] }}</span></li>
             <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-check icon-lg"></i><span class="fw-medium mx-2">Status:</span> <span>Active</span></li>
-            <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-crown icon-lg"></i><span class="fw-medium mx-2">Role:</span> <span>{{ $employee['job_title'] }}</span></li>
-            <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-flag icon-lg"></i><span class="fw-medium mx-2">Country:</span> <span>USA</span></li>
-            <li class="d-flex align-items-center mb-2"><i class="icon-base ti tabler-language icon-lg"></i><span class="fw-medium mx-2">Languages:</span> <span>English</span></li>
+            <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-crown icon-lg"></i><span class="fw-medium mx-2">Role:</span> <span>{{strtoupper(activeRole())}}</span></li>
+            <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-flag icon-lg"></i><span class="fw-medium mx-2">Country:</span> <span>Pakistan</span></li>
+            {{-- <li class="d-flex align-items-center mb-2"><i class="icon-base ti tabler-language icon-lg"></i><span class="fw-medium mx-2">Languages:</span> <span>English</span></li> --}}
           </ul>
           <p class="card-text text-uppercase text-body-secondary small mb-0">Contacts</p>
           <ul class="list-unstyled my-3 py-1">
@@ -63,11 +63,11 @@
             </li>
              <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-map-pin icon-lg"></i><span class="fw-medium mx-2">location:</span> <span>{{ $employee['work_location'] }}</span></li>
           </ul>
-          <p class="card-text text-uppercase text-body-secondary small mb-0">Teams</p>
+          {{-- <p class="card-text text-uppercase text-body-secondary small mb-0">Teams</p>
           <ul class="list-unstyled mb-0 mt-3 pt-1">
             <li class="d-flex flex-wrap mb-4"><span class="fw-medium me-2">Backend Developer</span><span>(126 Members)</span></li>
             <li class="d-flex flex-wrap"><span class="fw-medium me-2">React Developer</span><span>(98 Members)</span></li>
-          </ul>
+          </ul> --}}
         </div>
       </div>
       <!--/ About User -->

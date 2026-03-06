@@ -35,7 +35,7 @@
                     <h5 class="mb-1">Dropout Rate</h5>
                 </div>
                 <div class="">
-                    <a href="{{ url('kpa/6/category/14/indicator/160') }}" class="btn btn-success">Add</a>
+                    <a href="{{ url('kpa/6/category/14/indicator/160') }}" class="btn btn-primary">Add</a>
                 </div>
             </div>
             <div class="card-datatable table-responsive card-body">
@@ -168,6 +168,7 @@
                     data: { status: "HOD" },
                     dataType: "json",
                     success: function (data) {
+                        
                         const forms = data.forms || [];
 
                         const rowData = forms.map((form, i) => {
@@ -179,9 +180,9 @@
 
                             return [
                                 i + 1,
-                                form.faculty.name || 'N/A',
-                                form.department.name,
-                                form.program.program_name,
+                                form.faculty ? form.faculty.name : 'N/A',
+                                form.department ? form.department.name : 'N/A',
+                                form.program ? form.program.program_name : 'N/A',
                                 form.dropout_rate + ' %',
                                 editButton + ' ' + deleteBtn
                             ];

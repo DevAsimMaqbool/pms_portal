@@ -38,8 +38,8 @@
                                         <a class="btn btn-label-primary"
                                             href="{{ route('indicators_crud.index', ['slug' => 'alumni_satisfaction_rate', 'id' => $indicatorId]) }}">View</a>
                                     </div>
-                                    {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                        <i class="bx bx-upload"></i> Import Excel / CSV</button> --}}
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                        <i class="bx bx-upload"></i> Import Excel / CSV</button>
                                 </div>
                             </div>
                             <form id="researchForm" enctype="multipart/form-data">
@@ -160,7 +160,7 @@
                                                             name="satisfaction_rate" required placeholder="Satisfaction Rate">
                                                         </div>    
                                                     </div>
-                                                    <div class="">
+                                                    <div class="text-end">
                                                         <button type="submit"
                                                             class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                                     </div>
@@ -344,7 +344,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('alumni-satisfaction-rate.index') }}",
+                        url: "{{ route('alumni-satisfaction-rate.import') }}",
                         method: "POST",
                         data: formData,
                         contentType: false,

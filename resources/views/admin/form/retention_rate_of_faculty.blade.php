@@ -34,12 +34,12 @@
                                                                 <i class="bx bx-upload"></i> Import Excel / CSV</button> --}}
                                 </div>
                             </div>
-                            <form id="researchForm1" enctype="multipart/form-data" class="row">
+                            <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden" id="form_status" name="form_status" value="HOD">
 
-                                <div class="row">
+                                <div class="row g-3">
                                     @php
                                         $startYear = 2020; // you can change this
                                         $currentYear = now()->year;
@@ -57,7 +57,7 @@
                                         </select>
                                     </div>
                                     <div id="author-past-container">
-                                        <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+                                        <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
                                             <div class="col-md-6">
                                                 <label class="form-label">Faculty</label>
@@ -92,7 +92,7 @@
                                     </div>
 
                                 </div>
-                                <div class="mt-3 text-end" style="margin-left: -19px !important;">
+                                <div class="mt-3 text-end">
                                     <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                 </div>
                             </form>
@@ -145,7 +145,7 @@
                             facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
                         });
                     let newGroup = `
-            <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+            <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
 
                 <div class="col-md-6">

@@ -269,6 +269,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/program-profitability/import', [ProgramProfitabilityController::class, 'import'])->name('program-profitability.import');
         Route::post('/admission-targets/import', [AdmissionTargetAchievedController::class, 'import'])->name('admission-targets.import');
         Route::post('/recovery/import', [RecoveryController::class, 'import'])->name('recovery.import');
+        Route::post('/alumni-satisfaction-rate/import', [AlumniSatisfactionRateController::class, 'import'])->name('alumni-satisfaction-rate.import');
+        Route::post('/dropout-rate/import', [DropoutRateController::class, 'import'])->name('dropout-rate.import');
+        Route::post('/qec-audit-rating/import', [QecAuditRatingController::class, 'import'])->name('qec-audit-rating.import');
+        Route::post('/line-manager-review-rating/import', [LineManagerReviewRatingController::class, 'import'])->name('line-manager-review-rating.import');
+        Route::post('/indicator-form/import', [AchievementOfResearchPublicationsTargetController::class, 'import'])->name('indicator-form.import');
 
         // routes/web.php
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');

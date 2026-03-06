@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\AchievementOfResearchPublicationsTargetImport;
 use App\Models\AchievementOfResearchPublicationsTarget;
 use App\Models\AchievementOfResearchPublicationTargetCoAuthor;
 use App\Models\User;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AchievementOfResearchPublicationsTargetController extends Controller
 {
@@ -390,7 +392,6 @@ class AchievementOfResearchPublicationsTargetController extends Controller
     }
     public function updateResearchPublication(Request $request, $id)
     {
-        dd('yaha');
         $userId = Auth::id(); // current logged-in user
 
         $form = AchievementOfResearchPublicationsTarget::with('coAuthors')->findOrFail($id);
@@ -454,6 +455,26 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Research publication updated successfully.'
+        ]);
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+            'indicator_id' => 'required',
+            'form_status' => 'required',
+        ]);
+
+        Excel::import(
+            new AchievementOfResearchPublicationsTargetImport(
+                $request->indicator_id,
+                $request->form_status
+            ),
+            $request->file
+        );
+
+        return response()->json([
+            'message' => 'Imported successfully'
         ]);
     }
 

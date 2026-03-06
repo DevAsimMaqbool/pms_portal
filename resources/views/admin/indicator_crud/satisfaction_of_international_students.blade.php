@@ -35,7 +35,7 @@
                     <h5 class="mb-1">Satisfaction of International Students</h5>
                 </div>
                 <div class="">
-                    <a href="{{ url('kpa/1/category/1/indicator/176') }}" class="btn btn-success">Add</a>
+                    <a href="{{ url('kpa/4/category/12/indicator/176') }}" class="btn btn-primary">Add</a>
                 </div>
             </div>
             <div class="card-datatable table-responsive card-body">

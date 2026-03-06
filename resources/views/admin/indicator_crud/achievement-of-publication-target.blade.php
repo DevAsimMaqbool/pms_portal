@@ -34,9 +34,10 @@
                     <h5 class="mb-1">Research Publications</h5>
                 </div>
                 <div>
-
+                     <a href="{{ url('kpa/2/category/5/indicator/128') }}" class="btn btn-primary">Add</a>
                 </div>
             </div>
+            
             <div class="card-datatable table-responsive card-body">
                 @if(auth()->user()->hasRole(['HOD', 'Teacher']))
                     <div class="tab-pane fade show" id="form2" role="tabpanel">

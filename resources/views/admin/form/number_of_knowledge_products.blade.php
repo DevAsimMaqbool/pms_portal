@@ -49,7 +49,7 @@
                                     class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
                             </div>
                             <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
-                            <form id="researchForm1" enctype="multipart/form-data" class="row">
+                            <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
@@ -83,7 +83,7 @@
                                 </div>
                                 <div class="col-12 demo-vertical-spacing">
                                     <button class="btn btn-primary waves-effect float-end waves-light"
-                                        style="margin-right: 24px;">SUBMIT</button>
+                                        >SUBMIT</button>
                                 </div>
                             </form>
                         </div>
@@ -376,6 +376,11 @@
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
                       
                     if (window.activeUserRole === 'HOD') {
+                        $('#status-approval').hide();
+                        $('label[for="approveCheckbox"]').hide();
+                        $('#approveCheckbox').closest('.form-check-input').hide();
+                    }
+                    if (window.activeUserRole === 'Dean') {
                         $('#status-approval').hide();
                         $('label[for="approveCheckbox"]').hide();
                         $('#approveCheckbox').closest('.form-check-input').hide();
