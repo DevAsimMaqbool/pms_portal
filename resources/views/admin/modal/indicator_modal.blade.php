@@ -537,6 +537,7 @@
 
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
+                            
                             @php
                                 $data = NumberOfKnowledgeProduct(Auth::id(), $activeRoleId);
                             @endphp
@@ -551,26 +552,32 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if($data['target'] > 0)
-                                        <tr>
-                                            <td>1</td>
-                                            <td>{{ $data['target'] }}</td>
-                                            <td>{{ $data['totalAchieved'] }}</td>
-                                            <td>
-                                                <div class="badge bg-{{ $data['color'] }}">
-                                                    {{ $data['score'] }}%
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="badge bg-{{ $data['color'] }}">
-                                                    {{ $data['rating'] }}
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    @if ($activeRoleId == 21)
+                                        @if($data['target'] > 0)
+                                            <tr>
+                                                <td>1</td>
+                                                <td>{{ $data['target'] }}</td>
+                                                <td>{{ $data['totalAchieved'] }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ $data['color'] }}">
+                                                        {{ $data['score'] }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-{{ $data['color'] }}">
+                                                        {{ $data['rating'] }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @else
+                                            <tr>
+                                                <td colspan="5" class="text-center">No record found</td>
+                                            </tr>
+                                        @endif
                                     @else
-                                        <tr>
-                                            <td colspan="5" class="text-center">No record found</td>
-                                        </tr>
+                                        @php
+                                            departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 32, 194)
+                                        @endphp
                                     @endif
                                 </tbody>
                             </table>
@@ -1816,33 +1823,39 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                            $ResearchProductivityofPGStudents = ResearchProductivityofPGStudents(Auth::user()->employee_id, $activeRoleId, 133);
-                                        @endphp
-                                        @foreach ($ResearchProductivityofPGStudents as $ResearchProductivityofPGStudent)
-                                            <tr>
-                                                <td>{{ $ResearchProductivityofPGStudent['target_category'] }}</td>
-                                                <td>{{ $ResearchProductivityofPGStudent['journal_clasification'] }}</td>
-                                                <td>{{ $ResearchProductivityofPGStudent['value'] }}</td>
-                                                <td>{{ $ResearchProductivityofPGStudent['count'] }}</td>
-                                                <td>{{ $ResearchProductivityofPGStudent['student_roll_no'] }}</td>
-                                                <td>{{ $ResearchProductivityofPGStudent['student_career'] }}</td>
-                                                <td>
-                                                    <div class="badge"
-                                                        style="background-color: {{$ResearchProductivityofPGStudent['color'] }}">
-                                                        {{ $ResearchProductivityofPGStudent['percentage'] }}%
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="badge"
-                                                        style="background-color: {{ $ResearchProductivityofPGStudent['color'] }}">
+                                        @if ($activeRoleId == 21) 
+                                            @php
+                                                $ResearchProductivityofPGStudents = ResearchProductivityofPGStudents(Auth::user()->employee_id, $activeRoleId, 133);
+                                            @endphp
+                                            @foreach ($ResearchProductivityofPGStudents as $ResearchProductivityofPGStudent)
+                                                <tr>
+                                                    <td>{{ $ResearchProductivityofPGStudent['target_category'] }}</td>
+                                                    <td>{{ $ResearchProductivityofPGStudent['journal_clasification'] }}</td>
+                                                    <td>{{ $ResearchProductivityofPGStudent['value'] }}</td>
+                                                    <td>{{ $ResearchProductivityofPGStudent['count'] }}</td>
+                                                    <td>{{ $ResearchProductivityofPGStudent['student_roll_no'] }}</td>
+                                                    <td>{{ $ResearchProductivityofPGStudent['student_career'] }}</td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{$ResearchProductivityofPGStudent['color'] }}">
+                                                            {{ $ResearchProductivityofPGStudent['percentage'] }}%
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $ResearchProductivityofPGStudent['color'] }}">
 
-                                                        {{ $ResearchProductivityofPGStudent['rating'] }}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                                            {{ $ResearchProductivityofPGStudent['rating'] }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            @php
 
+                                                researchProductivityPGStudentsOfHOD($activeRoleId, 133);
+                                            @endphp
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -2154,11 +2167,6 @@
                         <!-- Fall -->
                         <div class="tab-pane fade" id="LineManagersReview&RatingonTasks-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
-
-                                @php
-                                    $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
-                                @endphp
-
                                 <table class="table table-striped align-middle custom-table">
                                     <thead class="table-primary">
                                         <tr>
@@ -2169,26 +2177,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($feedbacks as $index => $item)
-                                            <tr>
-                                                <td>{{ $index + 1 }}</td>
-                                                <td>{{ $item->task }}</td>
-                                                <td>
-                                                    <div class="badge {{ $item->rating_data['color'] }}">
-                                                        {{ $item->rating_data['percentage'] }}%
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge {{ $item->rating_data['color'] }}">
-                                                        {{ $item->rating_data['label'] }}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="4" class="text-center">No record found</td>
-                                            </tr>
-                                        @endforelse
+                                        @if($activeRoleId != 22)
+                                             @php
+                                                $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
+                                            @endphp
+                                            @forelse($feedbacks as $index => $item)
+                                                <tr>
+                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $item->task }}</td>
+                                                    <td>
+                                                        <div class="badge {{ $item->rating_data['color'] }}">
+                                                            {{ $item->rating_data['percentage'] }}%
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge {{ $item->rating_data['color'] }}">
+                                                            {{ $item->rating_data['label'] }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="4" class="text-center">No record found</td>
+                                                </tr>
+                                            @endforelse
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -2308,10 +2321,6 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
-                            @php
-                                $feedbacks = lineManagerRatingOnEvents(Auth::user()->employee_id, $activeRoleId);
-                            @endphp
-
                             <table class="table table-striped align-middle custom-table">
                                 <thead class="table-primary">
                                     <tr>
@@ -2322,22 +2331,31 @@
                                     </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                    @foreach($feedbacks as $index => $item)
-                                        <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $item->event_name }}</td>
-                                            <td>
-                                                <div class="badge {{ $item->rating_data['color'] }}">
-                                                    {{ $item->rating_data['percentage'] }}%
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="badge {{ $item->rating_data['color'] }} me-1">
-                                                    {{ $item->rating_data['label'] }}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                    @if($activeRoleId != 22)
+                                        @php
+                                            $feedbacks = lineManagerRatingOnEvents(Auth::user()->employee_id, $activeRoleId);
+                                        @endphp
+                                                @foreach($feedbacks as $index => $item)
+                                                    <tr>
+                                                        <td>{{ $index + 1 }}</td>
+                                                        <td>{{ $item->event_name }}</td>
+                                                        <td>
+                                                            <div class="badge {{ $item->rating_data['color'] }}">
+                                                                {{ $item->rating_data['percentage'] }}%
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge {{ $item->rating_data['color'] }} me-1">
+                                                                {{ $item->rating_data['label'] }}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                    @else
+                                        @php
+                                            departmentEventFeedbackAverage(Auth::user()->employee_id, $activeRoleId, 13, 28, 189);
+                                        @endphp
+                                    @endif
                                 </tbody>
                             </table>
 
@@ -2476,6 +2494,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $feedbacks = scholarsSatisfactionAverageOfHOD($activeRoleId);
+                                    @endphp
                                     <td colspan="7">no record found</td>
                                 </tbody>
                             </table>
@@ -2757,7 +2778,15 @@
                                 <tbody>
                                     @php
                                         $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id, $activeRoleId, 'Submitted', 135);
-                                        departmentTargetIndicatorsAnalysis($activeRoleId);
+                                        departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 135);
+                                        departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 136);
+                                        departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 137);
+                                        departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 138);
+                                        departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 139);
+                                        departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 197);
+                                        departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 198);
+                                        departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 199);
+                                        departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 202);
                                         $departmentResults = departmentLineManagerReviewRating(Auth::user()->employee_id, $activeRoleId);
                                     @endphp
                                     @foreach ($noofGrantsWon as $noofGrantsWon_row)
@@ -3484,4 +3513,627 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="%ofAdmissionTargetsAchieved" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    % of Admission Targets Achieved
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Audit Term</th>
+                                        <th>Faculty</th>
+                                        <th>Department</th>
+                                        <th>Program</th>
+                                        <th>Career (PG/UG)</th>
+                                        <th>Total Score</th>
+                                        <th>Obtained Score</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    @php
+                                        admissionTargetDepartmentAverage(Auth::user()->employee_id, $activeRoleId, 143)
+                                    @endphp
+                                        <td colspan="10"></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Recovery%" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Recovery%
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Audit Term</th>
+                                        <th>Faculty</th>
+                                        <th>Department</th>
+                                        <th>Program</th>
+                                        <th>Career (PG/UG)</th>
+                                        <th>Total Score</th>
+                                        <th>Obtained Score</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    @php
+                                        recoveryTargetDepartmentAveraget(Auth::user()->employee_id, $activeRoleId, 146)
+                                    @endphp
+                                        <td colspan="10"></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Profitabilityoftheprograms" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Profitability of the Programs
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Audit Term</th>
+                                        <th>Faculty</th>
+                                        <th>Department</th>
+                                        <th>Program</th>
+                                        <th>Career (PG/UG)</th>
+                                        <th>Total Score</th>
+                                        <th>Obtained Score</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    @php
+                                        programProfitabilityDepartmentAverage(Auth::user()->employee_id, $activeRoleId, 147)
+                                    @endphp
+                                        <td colspan="10"></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Percentageoftargetsachieved" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Profitability of the Programs
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Audit Term</th>
+                                        <th>Faculty</th>
+                                        <th>Department</th>
+                                        <th>Program</th>
+                                        <th>Career (PG/UG)</th>
+                                        <th>Total Score</th>
+                                        <th>Obtained Score</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    @php
+                                        goGlobalStreamDepartmentAverage(Auth::user()->employee_id, $activeRoleId, 149)
+                                    @endphp
+                                        <td colspan="10"></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="No.ofstudentsenrolledin1M" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Profitability of the Programs
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Audit Term</th>
+                                        <th>Faculty</th>
+                                        <th>Department</th>
+                                        <th>Program</th>
+                                        <th>Career (PG/UG)</th>
+                                        <th>Total Score</th>
+                                        <th>Obtained Score</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    @php
+                                        NoOfStudentsEnrolledIn1MWithGlobalExperienceOfHOD(Auth::user()->employee_id, $activeRoleId, 150)
+                                    @endphp
+                                        <td colspan="10"></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="No.ofstudentsenrolledin1M" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Profitability of the Programs
+                </h3>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Audit Term</th>
+                                        <th>Faculty</th>
+                                        <th>Department</th>
+                                        <th>Program</th>
+                                        <th>Career (PG/UG)</th>
+                                        <th>Total Score</th>
+                                        <th>Obtained Score</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    @php
+                                        internationalStudentSatisfactionAverage(Auth::user()->employee_id, $activeRoleId, 176)
+                                    @endphp
+                                        <td colspan="10"></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="NoofProgramsaccreditedoraffiliatednationally" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-xl modal-dialog-centered">
+<div class="modal-content custom-modal">
+<div class="modal-header">
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body p-4">
+<!-- Title -->
+<h3 class="text-center mb-4 fw-bold text-primary">
+No of Programs accredited or affiliated nationally / Internationally and ranking
+</h3>
+<div class="card">
+<div class="card-header d-flex justify-content-between align-items-center">
+<h4 class="card-title mb-0 fw-bold text-primary"></h4>
+</div>
+<div class="card-body">
+<div class="table-responsive text-nowrap">
+<table class="table table-striped align-middle custom-table">
+<thead class=" table-primary">
+<tr>
+<th>Sr#</th>
+<th>Audit Term</th>
+<th>Faculty</th>
+<th>Department</th>
+<th>Program</th>
+<th>Career (PG/UG)</th>
+<th>Total Score</th>
+<th>Obtained Score</th>
+<th>Score</th>
+<th>Rating</th>
+</tr>
+</thead>
+<tbody class="table-border-bottom-0">
+@php
+    departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 6, 14, 154);
+    departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 6, 14, 155)
+@endphp
+<td colspan="10"></td>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="modal fade" id="EmployerSatisfactionScore" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+    <div class="modal-header">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+            <!-- Title -->
+        <h3 class="text-center mb-4 fw-bold text-primary">
+        Employer Satisfaction Score
+            </h3>
+                <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                <tr>
+                                <th>Sr#</th>
+                                <th>Audit Term</th>
+                                <th>Faculty</th>
+                                <th>Department</th>
+                                <th>Program</th>
+                                <th>Career (PG/UG)</th>
+                                <th>Total Score</th>
+                                <th>Obtained Score</th>
+                            <th>Score</th>
+                        <th>Rating</th>
+                        </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+
+                                                       @php
+                                                        departmentEmployerSatisfactionOfHOD(Auth::user()->employee_id, $activeRoleId, 6, 14, 157);
+                                                    @endphp
+                    <td colspan="10"></td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="DropoutRate" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+    <div class="modal-header">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+            <!-- Title -->
+        <h3 class="text-center mb-4 fw-bold text-primary">
+        Dropout Rate
+            </h3>
+                <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                <tr>
+                                <th>Sr#</th>
+                                <th>Audit Term</th>
+                                <th>Faculty</th>
+                                <th>Department</th>
+                                <th>Program</th>
+                                <th>Career (PG/UG)</th>
+                                <th>Total Score</th>
+                                <th>Obtained Score</th>
+                            <th>Score</th>
+                        <th>Rating</th>
+                        </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+
+                                                       @php
+                                                        departmentDropoutRateOfHOD(Auth::user()->employee_id, $activeRoleId, 6, 14, 160);
+                                                    @endphp
+                    <td colspan="10"></td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="NetPromoterScoreofFaculty" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+    <div class="modal-header">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+            <!-- Title -->
+        <h3 class="text-center mb-4 fw-bold text-primary">
+        Net Promoter Score of Faculty
+            </h3>
+                <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                <tr>
+                                <th>Sr#</th>
+                                <th>Audit Term</th>
+                                <th>Faculty</th>
+                                <th>Department</th>
+                                <th>Program</th>
+                                <th>Career (PG/UG)</th>
+                                <th>Total Score</th>
+                                <th>Obtained Score</th>
+                            <th>Score</th>
+                        <th>Rating</th>
+                        </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+
+                                                       @php
+                                                        departmentPromotersPercentageOfHOD(Auth::user()->employee_id, $activeRoleId, 6, 15, 161);
+                                                    @endphp
+                    <td colspan="10"></td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="NetPromoterScoreofFaculty" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+    <div class="modal-header">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+            <!-- Title -->
+        <h3 class="text-center mb-4 fw-bold text-primary">
+        Net Promoter Score of Faculty
+            </h3>
+                <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                <tr>
+                                <th>Sr#</th>
+                                <th>Audit Term</th>
+                                <th>Faculty</th>
+                                <th>Department</th>
+                                <th>Program</th>
+                                <th>Career (PG/UG)</th>
+                                <th>Total Score</th>
+                                <th>Obtained Score</th>
+                            <th>Score</th>
+                        <th>Rating</th>
+                        </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+
+                                                       @php
+                                                        departmentAlumniSatisfactionRateOfHOD(Auth::user()->employee_id, $activeRoleId, 6, 15, 163);
+                                                    @endphp
+                    <td colspan="10"></td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="NetPromoterScoreofFaculty" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+    <div class="modal-header">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+            <!-- Title -->
+        <h3 class="text-center mb-4 fw-bold text-primary">
+        Net Promoter Score of Faculty
+            </h3>
+                <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                <tr>
+                                <th>Sr#</th>
+                                <th>Audit Term</th>
+                                <th>Faculty</th>
+                                <th>Department</th>
+                                <th>Program</th>
+                                <th>Career (PG/UG)</th>
+                                <th>Total Score</th>
+                                <th>Obtained Score</th>
+                            <th>Score</th>
+                        <th>Rating</th>
+                        </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+
+                                                       @php
+                                                        calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 177);
+                                                        calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
+                                                    @endphp
+                    <td colspan="10"></td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="modal fade" id="NetPromoterScoreofFaculty" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+    <div class="modal-header">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+            <!-- Title -->
+        <h3 class="text-center mb-4 fw-bold text-primary">
+        Net Promoter Score of Faculty
+            </h3>
+                <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class=" table-primary">
+                                <tr>
+                                <th>Sr#</th>
+                                <th>Audit Term</th>
+                                <th>Faculty</th>
+                                <th>Department</th>
+                                <th>Program</th>
+                                <th>Career (PG/UG)</th>
+                                <th>Total Score</th>
+                                <th>Obtained Score</th>
+                            <th>Score</th>
+                        <th>Rating</th>
+                        </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+
+                                                       @php
+                                                        lineManagerReviewRatingOnTasks169(Auth::user()->employee_id, $activeRoleId);
+                                                    @endphp
+                    <td colspan="10"></td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
 </div>
