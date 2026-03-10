@@ -39,7 +39,9 @@ class User extends Authenticatable
         'blood_group',
         'email',
         'department',
+        'faculty',
         'department_id',
+        'program_id',
         'employee_code',
         'manager_id',
         'manager_name',
@@ -81,6 +83,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Department::class);
     }
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
 
     public function forms()
     {
@@ -120,5 +126,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(User::class, 'manager_id');
     }
+
 
 }

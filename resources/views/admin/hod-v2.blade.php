@@ -970,7 +970,7 @@
                 <h5 class="card-title mb-0">Departments Overview</h5>
               </div>
               <div class="card-body d-flex justify-content-center align-items-center">
-                <div id="radialBarChart"></div>
+                <div id="hodDepartmentsOverview"></div>
               </div>
             </div>
           </div>
@@ -1575,31 +1575,36 @@
       });
     });
 
-    document.addEventListener("DOMContentLoaded", function () {
+ 
+      document.addEventListener("DOMContentLoaded", function () {
       const c = document.querySelector("#carrierPerformance");
-      const categories = [
-        "Journal Publication",
-        "Multidisciplinary Projects",
-        "Commercial Gains",
-        "Intellectual Properties",
-        "Spin Off"
-      ];
+      const researchData = @json($researchData);
+      const categories = Object.values(researchData).map(item => item.title);
+      const cod = Object.values(researchData).map(item => item.cod);
       // Distinct color for each category
       const colors = [
         "#1F77B4", // Publication
         "#FF7F0E", // Projects
-        "#2CA02C", // Commercial Gains
-        "#9467BD", // Intellectual Properties
-        "#D62728"  // Spin Off
+        "#2CA02C"
       ];
       // Lighter versions for "Achieved"
       const lightColors = [
         "#6BAED6", // lighter blue
         "#FFBB78", // lighter orange
-        "#98DF8A", // lighter green
-        "#C5B0D5", // lighter purple
-        "#FF9896"  // lighter red
+        "#98DF8A"
       ];
+      // Build series dynamically
+      const targetSeries = Object.values(researchData).map((item, i) => ({
+        x: item.cod,
+        y: item.target,
+        fillColor: colors[i] // use your colors array
+      }));
+
+      const achievedSeries = Object.values(researchData).map((item, i) => ({
+        x: item.cod,
+        y: item.achieved,
+        fillColor: lightColors[i] // use lighter colors array
+      }));
       const a = {
         chart: {
           height: 330,
@@ -1619,29 +1624,11 @@
         dataLabels: { enabled: false },
         // Two series: Target & Achieved
         series: [
-          {
-            name: "Target",
-            data: [
-              { x: "JP", y: 5, fillColor: colors[0] },
-              { x: "MP", y: 7, fillColor: colors[1] },
-              { x: "CG", y: 3, fillColor: colors[2] },
-              { x: "IP", y: 6, fillColor: colors[3] },
-              { x: "SO", y: 5, fillColor: colors[4] }
-            ]
-          },
-          {
-            name: "Achieved",
-            data: [
-              { x: "JP", y: 4, fillColor: lightColors[0] },
-              { x: "MP", y: 3.5, fillColor: lightColors[1] },
-              { x: "CG", y: 2, fillColor: lightColors[2] },
-              { x: "IP", y: 4, fillColor: lightColors[3] },
-              { x: "SO", y: 2, fillColor: lightColors[4] }
-            ]
-          }
+          { name: "Target", data: targetSeries },
+          { name: "Achieved", data: achievedSeries }
         ],
         xaxis: {
-          categories: ["JP", "MP", "CG", "IP", "SO"],
+          categories: cod,
           labels: {
             style: {
               colors: "#6E6B7B",
@@ -1690,10 +1677,7 @@
         categories.forEach((label, i) => {
           const item = document.createElement("div");
           item.classList.add("d-flex", "align-items-center", "mx-2", "my-1");
-          item.innerHTML = `
-          <span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span>
-          <span style="font-size:13px;color:#6e6b7b;">${label}</span>
-          `;
+          item.innerHTML = `<span style="width:14px;height:14px;background:${colors[i]};border-radius:50%;display:inline-block;margin-right:6px;"></span><span style="font-size:13px;color:#6e6b7b;">${label}</span>`;
           legendContainer.appendChild(item);
         });
       }
@@ -1882,6 +1866,68 @@
     window.addEventListener("load", function () {
       document.querySelector(".fade-section").classList.add("show");
     });
+    $(document).ready(function(){
+
+    $.ajax({
+        url: "/hod-departments-overview",
+        type: "GET",
+        success: function(response){
+           var firstValue = response.series.length ? response.series[0] : 0;
+            var options = {
+                chart: {
+                    height: 348,
+                    type: "radialBar"
+                },
+
+                plotOptions: {
+                    radialBar: {
+                        size: 185,
+                        hollow: {
+                            size: "40%"
+                        },
+                        track: {
+                            margin: 10
+                        },
+                        dataLabels: {
+                            name: {
+                                fontSize: "2rem"
+                            },
+                            value: {
+                                fontSize: "1.2rem"
+                            },
+                            total: {
+                                show: true,
+                                label: "",
+                                formatter: function () {
+                                    return firstValue + "%"; // <-- use firstValue here
+                                }
+                            }
+                        }
+                    }
+                },
+
+
+                legend: {
+                    show: true,
+                    position: "bottom",
+                    offsetY: -30,
+                },
+
+                stroke: {
+                    lineCap: "round"
+                },
+
+                series: response.series,
+                labels: response.labels
+            };
+
+            var chart = new ApexCharts(document.querySelector("#hodDepartmentsOverview"), options);
+            chart.render();
+
+        }
+    });
+
+});
   </script>
 
 @endpush

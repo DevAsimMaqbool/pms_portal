@@ -192,6 +192,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/assigned-forms/view/{userId}/{title}', [AssignFormToUserController::class, 'view'])
         ->name('forms.assigned.view');
     //Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
+    Route::get('/hod-departments-overview', [PermissionController::class, 'hodDepartmentsOverview']);
 
 
 
