@@ -226,27 +226,19 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 'hec_y' => 'nullable|integer|min:0',
                 'medical_recognized' => 'nullable|integer|min:0',
                 'co_author' => 'nullable|array',
-                'co_author.*.name' => 'required_with:co_author|string|max:255',
-                'co_author.*.rank' => 'required_with:co_author|integer|min:0',
-                'co_author.*.univeristy_name' => 'required_with:co_author|string|max:255',
-                'co_author.*.country' => 'required_with:co_author|string|max:255',
-                'co_author.*.your_role' => 'required_with:co_author|in:Student,Researcher,Professional',
+                'co_author.*.name' => '',
+                'co_author.*.rank' => '',
+                'co_author.*.univeristy_name' => '',
+                'co_author.*.country' => '',
+                'co_author.*.your_role' => '',
                 'co_author.*.designation' => '',
-                'co_author.*.no_paper_past' => 'required_with:co_author|integer|min:0',
+                'co_author.*.no_paper_past' => '',
                 'co_author.*.is_the_student_fitst_coauthor' => '',
                 'co_author.*.student_roll_no' => '',
                 'co_author.*.career' => '',
             ];
-            $messages = [
-                'co_author.*.name.required_with' => 'Co-Author name is required.',
-                'co_author.*.rank.required_with' => 'Co-Author rank is required.',
-                'co_author.*.univeristy_name.required_with' => 'University name is required.',
-                'co_author.*.country.required_with' => 'Country is required.',
-                'co_author.*.your_role.required_with' => 'Co-Author role is required.',
-                'co_author.*.no_paper_past.required_with' => 'Number of past papers is required.',
-            ];
 
-            $validator = Validator::make($request->all(), $rules, $messages);
+            $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 return response()->json(['status' => 'error', 'errors' => $validator->errors()], 422);
             }
