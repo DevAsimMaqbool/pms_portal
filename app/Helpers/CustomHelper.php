@@ -33,6 +33,7 @@ use App\Models\ProgramProfitability;
 use App\Models\GoGlobalStreamTarget;
 use App\Models\StudentsGlobalExperience;
 use App\Models\SatisfactionOfInternationalStudent;
+use App\Models\ActiveInternationalResearchPartner;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -392,9 +393,11 @@ function myClasses($facultyId, $activeRoleId)
     // 4️⃣ Save indicators (transaction optional)
     $userId = getUserID($facultyId);
     DB::transaction(function () use ($userId, $activeRoleId, $weightedCourseLoad, $weightedPassScore, $weightedMarksScore) {
-        saveIndicatorPercentage($userId, $activeRoleId, 1, 3, 122, $weightedCourseLoad);
-        saveIndicatorPercentage90Plus($userId, $activeRoleId, 1, 25, 185, $weightedPassScore);
-        saveIndicatorPercentage($userId, $activeRoleId, 1, 25, 186, $weightedMarksScore);
+        if ($activeRoleId != 22) {
+            saveIndicatorPercentage($userId, $activeRoleId, 1, 3, 122, $weightedCourseLoad);
+            saveIndicatorPercentage90Plus($userId, $activeRoleId, 1, 25, 185, $weightedPassScore);
+            saveIndicatorPercentage($userId, $activeRoleId, 1, 25, 186, $weightedMarksScore);
+        }
     });
 
     // 5️⃣ Return minimal class info (load if needed)
@@ -1870,7 +1873,7 @@ if (!function_exists('lineManagerRatingOnTasks')) {
 }
 
 if (!function_exists('saveIndicatorPercentage')) {
-    function saveIndicatorPercentage($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score)
+    function saveIndicatorPercentage($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null)
     {
         // Determine color and rating based on score
         // if ($score >= 90 && $score <= 100) {
@@ -1924,6 +1927,7 @@ if (!function_exists('saveIndicatorPercentage')) {
             ],
             [
                 'score' => round($score, 2),
+                'with_out_weight_score' => round($withOutWeightScore, 2),
                 'color' => $color,
                 'rating' => $rating,
             ]
@@ -3311,7 +3315,7 @@ function QECAuditRatingOfHOD($employeeId, $activeRoleId)
             $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 110);
             $weight = $indicatorWeight['weightage'] ?? 0;
             $weightedScore = ($percentage * $weight) / 100;
-            saveIndicatorPercentage($employeeId, $activeRoleId, 1, 3, 110, $weightedScore);
+            saveIndicatorPercentage($employeeId, $activeRoleId, 1, 3, 110, $weightedScore, $percentage);
             $data[] = (object) [
                 'audit_term' => $detail->audit_term,
                 'faculty' => $detail->faculty->name ?? '',
@@ -3812,7 +3816,8 @@ if (!function_exists('departmentScopusPublicationsOfHOD')) {
             $keyPerformanceAreaId,
             $indicatorCategoryId,
             126,
-            $weightedScore
+            $weightedScore,
+            $departmentAvgPercentage
         );
 
         return [
@@ -3934,7 +3939,7 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
 
         saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 127, $weightedScore127); // International
         saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 203, $weightedScore203); // Quartile
-        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 128, $weightedScore128); // Overall Research % (dummy indicator_id 999, change as needed)
+        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 128, $weightedScore128, $departmentResearchPercentage); // Overall Research % (dummy indicator_id 999, change as needed)
 
         return [
             'department_avg_percentage' => $departmentAvgPercentage,
@@ -4128,7 +4133,8 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
             $KpaId,
             $categoryId,
             $indicatorId,
-            $weightedScore
+            $weightedScore,
+            $departmentAvgPercentage
         );
 
         return [
@@ -4436,7 +4442,8 @@ if (!function_exists('admissionTargetDepartmentAverage')) {
                 3, // Key performance area
                 10, // Indicator category
                 $indicatorId,
-                $weightedScore
+                $weightedScore,
+                $avgFacultyPercentage
             );
         }
 
@@ -4519,9 +4526,10 @@ if (!function_exists('recoveryTargetDepartmentAveraget')) {
                 $employeeId,
                 $activeRoleId,
                 3, // Key performance area
-                10, // Indicator category
+                11, // Indicator category
                 $indicatorId,
-                $weightedScore
+                $weightedScore,
+                $avgFacultyPercentage
             );
         }
 
@@ -4601,9 +4609,10 @@ if (!function_exists('programProfitabilityDepartmentAverage')) {
                 $employeeId,
                 $activeRoleId,
                 3, // Key performance area
-                10, // Indicator category
+                11, // Indicator category
                 $indicatorId,
-                $weightedScore
+                $weightedScore,
+                $avgFacultyPercentage
             );
         }
 
@@ -4939,7 +4948,8 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
             4,
             12,
             $indicatorId,
-            $weightedScore
+            $weightedScore,
+            $avgRating
         );
 
         return [
@@ -5336,4 +5346,127 @@ if (!function_exists('lineManagerReviewRatingOnTasks169')) {
 
         return ['average_score' => $averageScore, 'ratings' => $managerRatings];
     }
+}
+
+if (!function_exists('ActiveInternationalResearchPartnerOfHOD')) {
+
+    function ActiveInternationalResearchPartnerOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
+    {
+        $departmentId = auth()->user()->department_id;
+
+        // 1️⃣ Get employees in department
+        $employeeIds = User::where('department_id', $departmentId)
+            ->pluck('employee_id')
+            ->filter()
+            ->toArray();
+
+        if (empty($employeeIds)) {
+            return [
+                'department_average' => 0,
+                'weighted_score' => 0
+            ];
+        }
+
+        // 2️⃣ Get department totals
+        $totals = ActiveInternationalResearchPartner::whereIn('created_by', $employeeIds)
+            ->where('indicator_id', $indicatorId)
+            ->selectRaw('SUM(target) as total_target, SUM(achieved_target) as total_achieved')
+            ->first();
+
+        $totalTarget = $totals->total_target ?? 0;
+        $totalAchieved = $totals->total_achieved ?? 0;
+
+        // 3️⃣ Calculate department average
+        if ($totalTarget > 0) {
+            $departmentAvg = ($totalAchieved / $totalTarget) * 100;
+        } else {
+            $departmentAvg = 0;
+        }
+
+        $departmentAvg = round($departmentAvg, 2);
+
+        // 4️⃣ Get indicator weight
+        $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+
+        // 5️⃣ Calculate weighted score
+        $weightedScore = ($departmentAvg * $weight) / 100;
+
+        // 6️⃣ Save result
+        saveIndicatorPercentage(
+            $employeeId,
+            $activeRoleId,
+            $KpaId,
+            $categoryId,
+            $indicatorId,
+            $weightedScore,
+            $departmentAvg
+        );
+
+        return [
+            'department_average' => $departmentAvg,
+            'weighted_score' => round($weightedScore, 2)
+        ];
+    }
+}
+
+if (!function_exists('calculateDeanPercentagesFast')) {
+
+    function calculateDeanPercentagesFast($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId)
+    {
+        // Get average score of all employees under this dean
+        $avgScore = IndicatorsPercentage::join('users', 'indicators_percentages.employee_id', '=', 'users.employee_id')
+            ->where('users.manager_id', $employeeId)
+            ->where('indicators_percentages.role_id', 22)
+            ->where('indicators_percentages.indicator_id', $indicatorId)
+            ->avg('indicators_percentages.score');
+
+        // Prevent null values
+        $avgScore = $avgScore ?? 0;
+        // dd($indicatorId);
+        // Save result
+        saveIndicatorPercentage(
+            $employeeId,
+            $activeRoleId,
+            $kpaId,
+            $categoryId,
+            $indicatorId,
+            $avgScore
+        );
+
+        return round($avgScore, 2);
+    }
+
+}
+
+if (!function_exists('calculateDeanPercentagesFastDiffFromHOD')) {
+
+    function calculateDeanPercentagesFastDiffFromHOD($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId)
+    {
+        // Get average score of all employees under this dean
+        $avgScore = IndicatorsPercentage::join('users', 'indicators_percentages.employee_id', '=', 'users.employee_id')
+            ->where('users.manager_id', $employeeId)
+            ->where('indicators_percentages.role_id', 22)
+            ->where('indicators_percentages.indicator_id', $indicatorId)
+            ->avg('indicators_percentages.with_out_weight_score');
+
+        // Prevent null values
+        $avgScore = $avgScore ?? 0;
+        // 4️⃣ Get indicator weight
+        $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+
+        // 5️⃣ Calculate weighted score
+        $weightedScore = ($avgScore * $weight) / 100;
+        // Save result
+        saveIndicatorPercentage(
+            $employeeId,
+            $activeRoleId,
+            $kpaId,
+            $categoryId,
+            $indicatorId,
+            $weightedScore
+        );
+
+        return round($avgScore, 2);
+    }
+
 }

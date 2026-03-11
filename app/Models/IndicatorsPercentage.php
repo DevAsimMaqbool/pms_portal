@@ -14,6 +14,7 @@ class IndicatorsPercentage extends Model
         'indicator_category_id',
         'indicator_id',
         'score',
+        'with_out_weight_score',
         'rating',
         'color',
         'badge_name',
