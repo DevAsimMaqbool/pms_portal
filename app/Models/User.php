@@ -83,6 +83,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Department::class);
     }
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
 
     public function forms()
     {
@@ -122,5 +126,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(User::class, 'manager_id');
     }
+
 
 }
