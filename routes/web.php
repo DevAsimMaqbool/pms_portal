@@ -83,6 +83,7 @@ use App\Http\Controllers\AlumniSatisfactionRateController;
 use App\Http\Controllers\LineManagerReviewRatingController;
 use App\Http\Controllers\ComplianceAndUsageOfLMSController;
 use App\Http\Controllers\IndustrialVisitController;
+use App\Http\Controllers\PunctualityController;
 use App\Http\Controllers\ResearchConferenceImpactController;
 use App\Http\Controllers\ResearchProductivityOfPGStudentsController;
 
@@ -235,6 +236,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('/students-global-experience', StudentsGlobalExperienceController::class);
         Route::resource('/program-profitability', ProgramProfitabilityController::class);
         Route::resource('/faculty-netpromoter-score', FacultyNetPromoterScoreController::class);
+        Route::resource('/punctuality', PunctualityController::class);
         Route::resource('/faculty-engagement-department', FacultyEngagementDepartmentController::class);
         Route::resource('/faculty-pursuing-skills', FacultyPursuingSkillController::class);
         Route::resource('/academic-governance-compliance', AcademicGovernanceComplianceController::class);
