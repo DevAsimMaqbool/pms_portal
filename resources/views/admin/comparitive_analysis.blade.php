@@ -168,7 +168,30 @@
             </div>
             <div class="card-body top-department-list">
               <ul class="p-0 m-0">
-                
+                @php
+                    $hodTopPerformers = hodTopPerformers();
+                @endphp
+                @if(!empty($hodTopPerformers))
+                  @foreach($hodTopPerformers as $hodTopPerformer)
+                   <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-html="true"  data-bs-placement="top"
+                      data-bs-custom-class="tooltip-{{ $hodTopPerformer['color'] }}"
+                      data-bs-original-title="{{ $hodTopPerformer['name'] }}<br>{{ $hodTopPerformer['location'] }}">
+                      <div class="chart-progress me-3" data-color="{{ $hodTopPerformer['color'] }}" data-series="{{ $hodTopPerformer['avg_score'] }}" data-progress_variant="true">
+                      </div>
+                      <div class="row w-100 align-items-center">
+                        <div class="col-8">
+                          <div class="me-2">
+                            <small class="text-cut-hot">{{ $hodTopPerformer['department'] ?? 'Null..' }}</small>
+                            <h6 class="mb-0 text-cut-one">{{ $hodTopPerformer['name'] ?? 'Null..' }}</h6>
+                          </div>
+                        </div>
+                        <div class="col-4 d-flex justify-content-end">
+                          <div class="badge bg-label-{{ $hodTopPerformer['color'] }}">{{ $hodTopPerformer['label'] }}</div>
+                        </div>
+                      </div>
+                    </li>
+                  @endforeach
+                @else
                  <li class="d-flex mb-6 performer-item" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-secondary"
                   data-bs-original-title="Yet there is no top performer !">
@@ -342,6 +365,7 @@
                     </div>
                   </div>
                 </li> --}}
+                @endif
               </ul>
             </div>
           </div>
@@ -357,7 +381,33 @@
             </div>
             <div class="card-body top-faculties-list">
               <ul class="p-0 m-0">
-                
+                @php
+                  $FacultyLevelToppers = FacultyLevelToppers();
+                @endphp
+                @if(!empty($FacultyLevelToppers))
+                  @foreach($FacultyLevelToppers as $FacultyLevelTopper)
+                    <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top"
+                      data-bs-custom-class="tooltip-{{ $FacultyLevelTopper['color'] }}"
+                      data-bs-original-title="{{ $FacultyLevelTopper['name'] }}<br>{{ $FacultyLevelTopper['department'] ?? 'Null..' }}">
+                      <div class="d-flex w-50 align-items-center me-4">
+                        <div class="badge bg-label-{{ $FacultyLevelTopper['color'] }} rounded p-1_5 me-4"><i
+                            class="icon-base ti tabler-award icon-md"></i>
+                        </div>
+                        <div>
+                          <small class="text-cut-hot">{{ $FacultyLevelTopper['department'] ?? 'Null..' }}</small>
+                          <h6 class="mb-0 text-cut-one">{{ $FacultyLevelTopper['name'] ?? 'Null..' }}</h6>
+                        </div>
+                      </div>
+                      <div class="d-flex flex-grow-1 align-items-center">
+                        <div class="progress w-100 me-4" style="height:8px;">
+                          <div class="progress-bar bg-{{ $FacultyLevelTopper['color'] }}" role="progressbar" style="width: {{ $FacultyLevelTopper['avg_score'] }}%" aria-valuenow="{{ $FacultyLevelTopper['avg_score'] }}"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <span class="text-body-secondary">{{ $FacultyLevelTopper['avg_score'] }}%</span>
+                      </div>
+                    </li>
+                    @endforeach
+                @else
                 <li class="mb-6 d-flex performer-item scgrool-card-h" data-bs-toggle="tooltip" data-bs-placement="top"
                   data-bs-custom-class="tooltip-secondary"
                   data-bs-original-title="Yet there is no top performer !">
@@ -561,6 +611,7 @@
                     <span class="text-body-secondary">{{ number_format(50, 1) }}%</span>
                   </div>
                 </li> --}}
+                @endif
               </ul>
             </div>
           </div>

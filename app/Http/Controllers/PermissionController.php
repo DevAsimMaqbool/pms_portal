@@ -268,10 +268,11 @@ class PermissionController extends Controller
                 $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
                 return view('admin.hod-v2', compact('employee', 'researchData'));
             case 'hod':
-                $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
-                return view('admin.hod-v2', compact('employee', 'researchData'));
+                $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
+                return view('admin.hod-v2', compact('employee','researchData'));
             case 'dean':
-                return view('admin.dean-v2', compact('employee'));
+                $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
+                return view('admin.dean-v2', compact('employee','researchData'));
             default:
             case 'finance':
             case 'international office':
@@ -371,22 +372,22 @@ class PermissionController extends Controller
     public function hodDepartmentsOverview()
     {
         $activeRoleId = getRoleIdByName(activeRole());
-        $series = [];
-        $labels = [];
-        if (in_array(getRoleName(activeRole()), ['HOD'])) {
-            $faculty = auth()->user()->faculty;
-            $employeeIds = User::where('faculty', $faculty)->role(['HOD'])->pluck('employee_id');
-            $topEmployees = IndicatorsPercentage::select('employee_id', DB::raw('AVG(score) as avg_score'))
-                ->with([
-                    'user:id,employee_id,name,department_id', // load user with department_id
-                    'user.department:id,name'
-                ])
-                ->whereIn('employee_id', $employeeIds)
-                ->where('role_id', $activeRoleId)
-                ->groupBy('employee_id')
-                ->orderByDesc('avg_score')   // Sort by avg_score descending
-                ->limit(3)                   // Take top 5
-                ->get();
+         $series = [];
+         $labels = [];
+        if(in_array(getRoleName(activeRole()), ['HOD','Dean'])){
+           $faculty = auth()->user()->faculty;
+           $employeeIds = User::where('faculty', $faculty)->role(['HOD'])->pluck('employee_id');
+           $topEmployees = IndicatorsPercentage::select('employee_id', DB::raw('AVG(score) as avg_score'))
+            ->with([
+                'user:id,employee_id,name,department_id', // load user with department_id
+                'user.department:id,name'
+            ])
+            ->whereIn('employee_id', $employeeIds)
+            ->where('role_id', 22) 
+            ->groupBy('employee_id')
+            ->orderByDesc('avg_score')   // Sort by avg_score descending
+            ->limit(3)                   // Take top 5
+            ->get();
             //dd($topEmployees);
             // Map avg_score to series and user.name to labels
             foreach ($topEmployees as $emp) {
