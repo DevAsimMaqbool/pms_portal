@@ -266,10 +266,11 @@ class PermissionController extends Controller
             case 'program leader pg':
                 return view('admin.hod-v2', compact('employee'));
             case 'hod':
-                $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
+                $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
                 return view('admin.hod-v2', compact('employee','researchData'));
             case 'dean':
-                return view('admin.dean-v2', compact('employee'));
+                $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
+                return view('admin.dean-v2', compact('employee','researchData'));
             default:
             case 'finance':
             case 'international office':
@@ -371,7 +372,7 @@ class PermissionController extends Controller
         $activeRoleId = getRoleIdByName(activeRole());
          $series = [];
          $labels = [];
-        if(in_array(getRoleName(activeRole()), ['HOD'])){
+        if(in_array(getRoleName(activeRole()), ['HOD','Dean'])){
            $faculty = auth()->user()->faculty;
            $employeeIds = User::where('faculty', $faculty)->role(['HOD'])->pluck('employee_id');
            $topEmployees = IndicatorsPercentage::select('employee_id', DB::raw('AVG(score) as avg_score'))
@@ -380,7 +381,7 @@ class PermissionController extends Controller
                 'user.department:id,name'
             ])
             ->whereIn('employee_id', $employeeIds)
-            ->where('role_id', $activeRoleId) 
+            ->where('role_id', 22) 
             ->groupBy('employee_id')
             ->orderByDesc('avg_score')   // Sort by avg_score descending
             ->limit(3)                   // Take top 5

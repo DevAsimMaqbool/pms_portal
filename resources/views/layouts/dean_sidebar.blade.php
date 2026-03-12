@@ -44,126 +44,83 @@
                 <div data-i18n="Report">Report</div>
             </a>
         </li> --}}
-        <li class="menu-item {{ request()->routeIs('dean.target') ? 'active' : '' }}">
-            <a href="{{ route('dean.target') }}" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-contract"></i>
-                <div data-i18n="Target">Target</div>
-            </a>
-        </li>
+        
         @if(in_array(getRoleName(activeRole()), ['Dean']))
+           
+
             @php
-                $teacherRoleId = auth()->user()->roles->firstWhere('name', 'Dean')->id ?? null;
-
-                /*$assignments = \App\Models\RoleKpaAssignment::with([
-                    'kpa',
-                    'category',
-                    'indicator.indicatorForm'
-                ])
-                    ->where('role_id', $teacherRoleId)
-                    ->get();*/
-                $assignments = \App\Models\SidebarKpaAssignment::with([
-                    'kpa',
-                    'category',
-                    'indicator.indicatorForm'
-                ])
-                    ->where('role_id', $teacherRoleId)
-                    ->get();  
-
-                // Group by KPA → Category → Indicators
-                $result = $assignments->groupBy('kpa.id')->map(function ($kpaGroup) {
-                    $kpa = $kpaGroup->first()->kpa;
-
-                    return [
-                        'id' => $kpa->id,
-                        'performance_area' => $kpa->performance_area,
-                        'created_by' => $kpa->created_by,
-                        'updated_by' => $kpa->updated_by,
-                        'created_at' => $kpa->created_at,
-                        'updated_at' => $kpa->updated_at,
-                        'category' => $kpaGroup->groupBy('category.id')->map(function ($catGroup) {
-                            $category = $catGroup->first()->category;
-
-                            return [
-                                'id' => $category->id,
-                                'key_performance_area_id' => $category->key_performance_area_id,
-                                'indicator_category' => $category->indicator_category,
-                                'created_by' => $category->created_by,
-                                'updated_by' => $category->updated_by,
-                                'created_at' => $category->created_at,
-                                'updated_at' => $category->updated_at,
-                                'indicator' => $catGroup->map(function ($item) {
-                                    $indicator = $item->indicator;
-
-                                    return [
-                                        'id' => $indicator->id,
-                                        'indicator_category_id' => $indicator->indicator_category_id,
-                                        'indicator' => $indicator->indicator,
-                                        'created_by' => $indicator->created_by,
-                                        'updated_by' => $indicator->updated_by,
-                                        'created_at' => $indicator->created_at,
-                                        'updated_at' => $indicator->updated_at,
-                                        'indicator_form' => $indicator->indicatorForm ?? [],
-                                    ];
-                                })->values()
-                            ];
-                        })->values()
-                    ];
-                })->values();
-                $icons = [
-                    'ti tabler-star',
-                    'ti tabler-heart',
-                    'ti tabler-award',
-                    'ti tabler-book',
-                    'ti tabler-chart-bar',
-                    'ti tabler-rocket',
-                    'ti tabler-star',
-                    'ti tabler-device-laptop'
-                ];
+            $userRole = activeRole();
+            $displayRole = match (strtolower($userRole)) {
+                'dean' => 'Dean',
+                default => ucfirst($userRole),
+            };
+            //$result = getRoleAssignments($displayRole, null, 1);
+            $result = getSidbarRoleAssignments($displayRole, null, 1);
+            $icons = icons();
             @endphp
 
-            {{-- Render Menu --}}
-            @foreach($result as $kpakey => $kpa)
-                <li class="menu-item active">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $kpa['performance_area'] }}">
-                        <i class="menu-icon icon-base {{ $icons[$kpakey % count($icons)] }}"></i>
-                        <div data-i18n="{{ $kpa['performance_area'] }}">
-                            {{ $kpa['performance_area'] }}
-                        </div>
-                    </a>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon icon-base ti tabler-text-recognition"></i>
+                    <div data-i18n="Forms">Forms</div>
+                </a>
 
-                    {{-- Level 2: Indicator Categories --}}
-                    <ul class="menu-sub">
-                        @foreach($kpa['category'] as $category)
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $category['indicator_category'] }}">
-                                    <div data-i18n="{{ $category['indicator_category'] }}">
-                                        {{ $category['indicator_category'] }}
-                                    </div>
-                                </a>
+                <ul class="menu-sub">
 
-                                {{-- Level 3: Indicators --}}
-                                @if(!empty($category['indicator']))
-                                    <ul class="menu-sub">
-                                        @foreach($category['indicator'] as $indicator)
-                                                <li class="menu-item">
-                                                    <a href="{{ route('indicator.form', [
-                                                'area' => $kpa['id'],
-                                                'category' => $category['id'],
-                                                'indicator' => $indicator['id']
-                                            ]) }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $indicator['indicator'] }}">
-                                                        <div data-i18n="{{ $indicator['indicator'] }}">
-                                                            {{ $indicator['indicator'] }}
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                        @endforeach
-                                    </ul>
-                                @endif
-                            </li>
-                        @endforeach
-                    </ul>
-                </li>
-            @endforeach
+                    @foreach($result as $kpakey => $kpa)
+                        <li class="menu-item">
+                            <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $kpa['performance_area'] }}">
+                                <i class="menu-icon icon-base {{ $icons[$kpakey % count($icons)] }}"></i>
+                                <div data-i18n="{{ $kpa['performance_area'] }}">{{ $kpa['performance_area'] }}</div> {{-- keep
+                                same
+                                label as
+                                your original --}}
+                            </a>
+
+                            <ul class="menu-sub">
+                                @foreach($kpa['category'] as $category)
+                                    <li class="menu-item" title="{{ $category['indicator_category'] }}">
+                                        <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $category['indicator_category'] }}">
+                                            <div data-i18n="{{ $category['indicator_category'] }}">
+                                                {{ $category['indicator_category'] }}
+                                            </div>
+                                        </a>
+
+                                        @if(!empty($category['indicator']))
+                                            <ul
+                                                class="menu-sub {{ request()->routeIs('indicator.form') && request()->route('category') == $category['id'] ? 'active open' : '' }}">
+                                                @foreach($category['indicator'] as $indicator)
+                                                                    <li class="menu-item" title="{{ $indicator['indicator'] }}">
+                                                                        <a href="{{ route('indicator.form', [
+                                                        'area' => $kpa['id'],
+                                                        'category' => $category['id'],
+                                                        'indicator' => $indicator['id']
+                                                    ]) }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $indicator['indicator'] }}">
+                                                                            <div data-i18n="{{ $indicator['short_code'] ?? $indicator['indicator'] }}">
+                                                                                {{ $indicator['short_code'] ?? $indicator['indicator'] }}
+                                                                            </div>
+                                                                        </a>
+                                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+
+                                    </li>
+                                @endforeach
+                            </ul>
+
+                        </li>
+                    @endforeach
+                    
+                    
+                    <li class="menu-item {{ request()->routeIs('dean.target') ? 'active' : '' }} data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Target"">
+                        <a href="{{ route('dean.target') }}" class="menu-link">
+                            <i class="menu-icon icon-base ti tabler-contract"></i>
+                            <div data-i18n="Target">Target</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
         @endif
     </ul>
 

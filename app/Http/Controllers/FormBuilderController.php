@@ -116,7 +116,8 @@ class FormBuilderController extends Controller
     {
         $user = Auth::user();
         $employee_id = $user->employee_id;
-        $facultyMembers = User::where('manager_id', $employee_id)->get(['id', 'name', 'department', 'job_title']);
+        $facultyMembers = User::where('manager_id', $employee_id)
+        ->role(['Teacher','Professor','Assistant Professor','Associate Professor'])->get(['id', 'name', 'department', 'job_title']);
         return view('admin.form.hod_targets', compact('facultyMembers'));
     }
     public function DeanTargetForms()
