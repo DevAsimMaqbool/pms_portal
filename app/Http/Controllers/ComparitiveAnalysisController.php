@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Indicator;
 use App\Models\IndicatorCategory;
+use App\Models\IndicatorsPercentage;
 use App\Models\KeyPerformanceArea;
+use App\Models\Role;
 use App\Models\RoleKpaAssignment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class ComparitiveAnalysisController extends Controller
 {
     /**
@@ -18,19 +23,15 @@ class ComparitiveAnalysisController extends Controller
     public function index()
     {
         try {
-            $user = Auth::user();
-            $role = $user->roles->first();
-            $roleId = $role->id;
-            $roleName = $role->name;
-            $department = $user->department;
-            $employee_id = $user->employee_id;
-            $keyPerformanceAreaId = 1;
-            
            
+            $activeRoleId = getRoleIdByName(activeRole());
+           
+            
+            
            
             // Assigned KPAs based on role
             $assignments = RoleKpaAssignment::with('kpa')
-                ->where('role_id', $role->id)
+                ->where('role_id', $activeRoleId)
                 ->get();
 
             // Extract KPAs from assignments
@@ -157,9 +158,8 @@ public function getSelfVsSelfData(Request $request)
     $keyPerformanceAreaId = $request->input('keyPerformanceAreaId', 1);
 
     $user = Auth::user();
-    $role = $user->roles->first();
-    $roleId = $role->id;
-    $roleName = $role->name;
+    $roleName = getRoleName(activeRole());
+    $activeRoleId = getRoleIdByName(activeRole());
     $employeeId = $user->employee_id;
 
     $currentYear  = Carbon::now()->year;
@@ -171,7 +171,7 @@ public function getSelfVsSelfData(Request $request)
     $userRecord = User::where('employee_id', $employeeId)
         ->role($roleName)
         ->select('id', 'name', 'employee_id')
-        ->with(['indicatorsPercentages' => function ($q) use ($keyPerformanceAreaId, $currentYear, $previousYear) {
+        ->with(['indicatorsPercentages' => function ($q) use ($keyPerformanceAreaId, $currentYear, $previousYear,$activeRoleId) {
             $q->select(
                 'employee_id',
                 'score',
@@ -179,6 +179,7 @@ public function getSelfVsSelfData(Request $request)
                 'created_at'
             )
             ->where('key_performance_area_id', $keyPerformanceAreaId)
+            ->where('role_id', $activeRoleId)
             ->where(function ($query) use ($currentYear, $previousYear) {
                 $query->whereYear('created_at', $currentYear)
                       ->orWhereYear('created_at', $previousYear);
@@ -219,6 +220,57 @@ public function getSelfVsSelfData(Request $request)
 }
 
     public function getCarrierChartData(Request $request)
+{
+    $keyPerformanceAreaId = $request->input('keyPerformanceAreaId', 1); // default 1 if not passed
+
+    $user = Auth::user();
+    $highlightName = $user->name;
+
+
+       $roleIds = Role::whereIn('name', ['Teacher','Professor','Associate Professor','Assistant Professor'])->pluck('id')->toArray();
+        $departmentId = auth()->user()->department_id;
+        $department = Department::find($departmentId);
+        // 1️⃣ Get all employee_ids in the department
+        $employeeIds = User::where('department_id', $departmentId)
+             ->role(['Teacher','Professor','Associate Professor','Assistant Professor'])
+            ->pluck('employee_id')
+            ->filter() // remove nulls
+            ->toArray();
+        if (empty($employeeIds)) {
+            return response()->json([
+                'categories' => [],
+                'values' => [],
+                'highlightName' => $highlightName
+            ]);
+        }
+        // 2️⃣ Get top 5 employees with avg score + eager load user
+        $topEmployees = IndicatorsPercentage::select('employee_id','role_id', DB::raw('AVG(score) as avg_score'))
+            ->with([
+                'user:employee_id,name,email,job_title,work_location'
+            ])
+            ->whereIn('employee_id', $employeeIds)
+            ->whereIn('role_id', $roleIds)
+            ->where('key_performance_area_id', $keyPerformanceAreaId)
+            ->groupBy('employee_id', 'role_id') 
+            ->orderBy('avg_score', 'asc')
+            ->get();
+
+
+            // Prepare chart data
+            $categories = [];
+            $values = [];
+            foreach ($topEmployees as $employee) {
+                $categories[] = $employee->user->name ?? 'N/A';
+                $values[] = round($employee->avg_score, 2);
+            }
+
+            return response()->json([
+                'categories' => $categories,
+                'values' => $values,
+                'highlightName' => $highlightName
+            ]);
+}
+public function getCarrierChartData11112(Request $request)
 {
     $keyPerformanceAreaId = $request->input('keyPerformanceAreaId', 1); // default 1 if not passed
 

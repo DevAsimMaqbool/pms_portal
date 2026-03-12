@@ -760,8 +760,33 @@
             </div>
             <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
 
+             @php
+               $hodTopPerformers = hodTopPerformers();
+            @endphp
+            @if(!empty($hodTopPerformers))
+              @foreach($hodTopPerformers as $hodTopPerformer)
+                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right" data-bs-custom-class="tooltip-{{ $hodTopPerformer['color'] }}"
+                  data-bs-original-title="{{ $hodTopPerformer['name'] }}<br>{{ $hodTopPerformer['location'] }}">
+                  <div class="card-body d-flex">
+                    <div class="d-flex w-70 align-items-center me-4">
+                      <div class="badge bg-label-{{ $hodTopPerformer['color'] }} rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
+                      </div>
+                      <div>
+                        <h6 class="mb-0 text-cut">{{ $hodTopPerformer['name'] ?? 'Null..' }}</h6>
+                        <small class="text-dark fs-10 text-cut">{{ $hodTopPerformer['department'] ?? 'Null..' }}</small>
+                      </div>
+                    </div>
+                    <div class="d-flex flex-grow-1 align-items-center justify-content-end">
 
-              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+                      <span class="badge bg-label-{{ $hodTopPerformer['color'] }} ms-1">{{ $hodTopPerformer['avg_score'] }}</span>
+                      <span class="badge bg-label-{{ $hodTopPerformer['color'] }} ms-1">{{ $hodTopPerformer['label'] }}</span>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+
+            @else
+             <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
                 data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
                 <div class="card-body d-flex">
                   <div class="d-flex w-70 align-items-center me-4">
@@ -852,6 +877,11 @@
                   </div>
                 </div>
               </div>
+            @endif
+             
+
+              
+
             </div>
 
           </div>
