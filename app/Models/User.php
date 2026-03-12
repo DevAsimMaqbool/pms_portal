@@ -127,5 +127,10 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'manager_id');
     }
 
+    public function leadingPrograms()
+    {
+        return $this->hasMany(Program::class, 'leader_id');
+    }
+
 
 }

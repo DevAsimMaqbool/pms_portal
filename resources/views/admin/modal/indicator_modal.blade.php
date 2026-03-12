@@ -3663,3 +3663,123 @@
         </div>
 
 @endif
+
+@if(in_array(getRoleName(activeRole()), ['Program Leader UG']))
+
+    <div class="modal fade" id="StudentEngagementRate" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content custom-modal">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <!-- Title -->
+                        <h3 class="text-center mb-4 fw-bold text-primary">
+                            <div class="badge bg-label-primary rounded p-2"><i
+                                    class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % Graduate Satisfaction
+                        </h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive text-nowrap">
+                                    @php
+                                        calculateStudentEngagementRateFromPL(Auth::user()->employee_id, $activeRoleId, 1, 4, 123);
+                                        EmployabilityOfPL(Auth::user()->employee_id);
+                                        QECAuditRatingOfPL(Auth::user()->employee_id, $activeRoleId);
+                                        lineManagerReviewRatingOnTasksOfPL(Auth::user()->employee_id, $activeRoleId);
+                                        lineManagerRatingOnEvents(Auth::user()->employee_id, $activeRoleId);
+                                        admissionTargetAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 10, 143);
+                                        recoveryTargetAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 11, 146);
+                                        programProfitabilityAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 11, 147);
+                                        targetIndicatorsAnalysisOfPL(Auth::user()->employee_id, $activeRoleId, 6, 14, 154);
+                                        targetIndicatorsAnalysisOfPL(Auth::user()->employee_id, $activeRoleId, 6, 14, 154);
+                                        professionalMembershipTargetPL(Auth::user()->employee_id, $activeRoleId, 155);
+                                        dropOutRateAverageForPL(Auth::user()->employee_id, $activeRoleId, 6, 14, 160);
+                                        alumniSatisfactionRateAverageForPL(Auth::user()->employee_id, $activeRoleId, 6, 15, 163);
+                                        calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 177);
+                                        calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
+                                    @endphp
+
+                                    <table class="table table-striped align-middle custom-table">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Sr#</th>
+                                                <th>Indicator</th>
+                                                <th>Score</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                                <tr colspan="4">
+
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+@endif
+
+@if(in_array(getRoleName(activeRole()), ['Program Leader PG']))
+
+    <div class="modal fade" id="StudentEngagementRate" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content custom-modal">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <!-- Title -->
+                        <h3 class="text-center mb-4 fw-bold text-primary">
+                            <div class="badge bg-label-primary rounded p-2"><i
+                                    class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % Graduate Satisfaction
+                        </h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive text-nowrap">
+                                    @php
+                                        calculateStudentEngagementRateFromPL(Auth::user()->employee_id, $activeRoleId, 1, 4, 123);
+                                        QECAuditRatingOfPL(Auth::user()->employee_id, $activeRoleId);
+                                        scholarsSatisfactionAverageForPL(Auth::user()->employee_id, $activeRoleId, 2, 6, 132);
+                                        ResearchProductivityofPGStudents(Auth::user()->employee_id, $activeRoleId, 133);
+                                        lineManagerReviewRatingOnTasksOfPL(Auth::user()->employee_id, $activeRoleId);
+                                        lineManagerRatingOnEvents(Auth::user()->employee_id, $activeRoleId);
+                                        lineManagerRatingOnEventsForPL(Auth::user()->employee_id, $activeRoleId);
+                                        admissionTargetAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 10, 143);
+                                        recoveryTargetAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 11, 146);
+                                        programProfitabilityAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 11, 147);
+                                        dropOutRateAverageForPL(Auth::user()->employee_id, $activeRoleId, 6, 14, 160);
+                                        calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 177);
+                                        calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
+                                    @endphp
+
+                                    <table class="table table-striped align-middle custom-table">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Sr#</th>
+                                                <th>Indicator</th>
+                                                <th>Score</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                                <tr colspan="4">
+
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+@endif
