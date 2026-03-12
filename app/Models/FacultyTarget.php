@@ -88,6 +88,10 @@ class FacultyTarget extends Model
     {
         return $this->hasMany(IndustrialVisit::class, 'created_by', 'user_id');
     }
+    public function professionalMembershipTarget()
+    {
+        return $this->hasMany(ProfessionalMembership::class, 'created_by', 'user_id');
+    }
 
 
 }
