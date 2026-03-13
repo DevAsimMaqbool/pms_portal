@@ -262,9 +262,11 @@ class PermissionController extends Controller
             case 'associate professor':
                 return view('admin.hod-v2', compact('employee'));
             case 'program leader ug':
-                return view('admin.hod-v2', compact('employee'));
+                $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
+                return view('admin.hod-v2', compact('employee', 'researchData'));
             case 'program leader pg':
-                return view('admin.hod-v2', compact('employee'));
+                $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
+                return view('admin.hod-v2', compact('employee', 'researchData'));
             case 'hod':
                 $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
                 return view('admin.hod-v2', compact('employee','researchData'));
@@ -390,10 +392,10 @@ class PermissionController extends Controller
             // Map avg_score to series and user.name to labels
             foreach ($topEmployees as $emp) {
                 $series[] = round($emp->avg_score, 2); // round for prettier chart
-                $labels[] = $emp->user && $emp->user->department   ? $emp->user->department->name : 'No Dept';
+                $labels[] = $emp->user && $emp->user->department ? $emp->user->department->name : 'No Dept';
             }
         }
-        
+
         $data = [
             'series' => $series,
             'labels' => $labels

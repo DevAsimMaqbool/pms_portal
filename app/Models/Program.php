@@ -19,4 +19,8 @@ class Program extends Model
     {
         return $this->belongsTo(Department::class);
     }
+    public function leader()
+    {
+        return $this->belongsTo(User::class, 'leader_id');
+    }
 }
