@@ -611,7 +611,7 @@ function myClassesAttendanceData($facultyId)
         ];
 
         $weightedScore = ($overallPresentPercentage * $weights['course_load']) / 100;
-        saveIndicatorPercentage(
+        saveIndicatorPercentage90Plus(
             $employeeId,
             $activeRoleId,
             1,
@@ -1681,7 +1681,7 @@ function CompletionofCourseFolder($facultyId, $activeRoleId, $indicator_id)
     ];
     $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
     // Save to IndicatorsPercentage table
-    saveIndicatorPercentage(
+    saveIndicatorPercentage100Plus(
         $facultyId,
         $role_id = $activeRoleId,
         $keyPerformanceAreaId = 1,
@@ -1944,7 +1944,7 @@ if (!function_exists('saveIndicatorPercentage')) {
 }
 
 if (!function_exists('saveIndicatorPercentage90Plus')) {
-    function saveIndicatorPercentage90Plus($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score)
+    function saveIndicatorPercentage90Plus($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null)
     {
         if ($score >= 95) {
             $color = 'primary';
@@ -3031,7 +3031,7 @@ function EmployabilityOfHOD()
         'course_107' => getRoleWeightage($activeRoleId, 'indicator', 107)['weightage'],
     ];
     $weightedScore = ($employabilityPercentage * $weights['course_load']) / 100;
-    saveIndicatorPercentage(
+    saveIndicatorPercentage90Plus(
         $employeeId,
         $activeRoleId,
         1, // KPA ID (adjust if dynamic)
@@ -3075,7 +3075,7 @@ function EmployabilityOfHOD()
     $relevant = $records->where('job_relevancy', 'yes')->count();
     $jobRelevancyPercentage = round(($relevant / $totalStudents) * 100, 2);
     $weightedScore105 = ($jobRelevancyPercentage * $weights['course_105']) / 100;
-    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 105, $weightedScore105);
+    saveIndicatorPercentage90Plus($employeeId, $activeRoleId, 1, 1, 105, $weightedScore105);
 
     $results->push(makeIndicatorRow('Job Relevancy', 105, $weightedScore105));
 
@@ -3381,7 +3381,7 @@ function StudentAttendanceOfHOD($employeeId, $activeRoleId)
             $weight = $indicatorWeight['weightage'] ?? 0;
             $weightedScore = ($percentage * $weight) / 100;
 
-            saveIndicatorPercentage($employeeId, $activeRoleId, 1, 3, 113, $weightedScore);
+            saveIndicatorPercentage90Plus($employeeId, $activeRoleId, 1, 3, 113, $weightedScore);
 
             // Rating logic example
             if ($percentage >= 90) {
@@ -3546,7 +3546,7 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
         $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
 
         // Save to IndicatorsPercentage table for this faculty
-        saveIndicatorPercentage(
+        saveIndicatorPercentage100Plus(
             $faculty->employee_id,       // make sure employee_id is correct
             $activeRoleId,
             1,                          // keyPerformanceAreaId
@@ -3759,7 +3759,7 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
         // Save department-level KPI to IndicatorsPercentage
         $hodEmployeeId = auth()->user()->employee_id;
 
-        saveIndicatorPercentage(
+        saveIndicatorPercentage90Plus(
             $hodEmployeeId,
             $activeRoleId,
             1, // keyPerformanceAreaId
@@ -4444,7 +4444,7 @@ if (!function_exists('admissionTargetDepartmentAverage')) {
             $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
             $weightedScore = ($avgFacultyPercentage * $weight) / 100;
 
-            saveIndicatorPercentage(
+            saveIndicatorPercentage100Plus(
                 $employeeId,
                 $activeRoleId,
                 3, // Key performance area
@@ -4530,7 +4530,7 @@ if (!function_exists('recoveryTargetDepartmentAveraget')) {
             $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
             $weightedScore = ($avgFacultyPercentage * $weight) / 100;
 
-            saveIndicatorPercentage(
+            saveIndicatorPercentage90Plus(
                 $employeeId,
                 $activeRoleId,
                 3, // Key performance area
@@ -4613,7 +4613,7 @@ if (!function_exists('programProfitabilityDepartmentAverage')) {
             $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
             $weightedScore = ($avgFacultyPercentage * $weight) / 100;
 
-            saveIndicatorPercentage(
+            saveIndicatorPercentage90Plus(
                 $employeeId,
                 $activeRoleId,
                 3, // Key performance area
@@ -4950,7 +4950,7 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
         $weightedScore = ($avgRating * $weight) / 100;
 
         // 4️⃣ Save score
-        saveIndicatorPercentage(
+        saveIndicatorPercentage90Plus(
             $employeeId,
             $activeRoleId,
             4,
@@ -5408,7 +5408,7 @@ if (!function_exists('ActiveInternationalResearchPartnerOfHOD')) {
         $weightedScore = ($departmentAvg * $weight) / 100;
 
         // 6️⃣ Save result
-        saveIndicatorPercentage(
+        saveIndicatorPercentage90Plus(
             $employeeId,
             $activeRoleId,
             $KpaId,
@@ -5473,14 +5473,35 @@ if (!function_exists('calculateDeanPercentagesFastDiffFromHOD')) {
         // 5️⃣ Calculate weighted score
         $weightedScore = ($avgScore * $weight) / 100;
         // Save result
-        saveIndicatorPercentage(
-            $employeeId,
-            $activeRoleId,
-            $kpaId,
-            $categoryId,
-            $indicatorId,
-            $weightedScore
-        );
+        if ($indicatorId == 146 || $indicatorId == 147 || $indicatorId == 148 || $indicatorId == 176) {
+            saveIndicatorPercentage90Plus(
+                $employeeId,
+                $activeRoleId,
+                $kpaId,
+                $categoryId,
+                $indicatorId,
+                $weightedScore
+            );
+        } elseif ($indicatorId == 143) {
+            saveIndicatorPercentage100Plus(
+                $employeeId,
+                $activeRoleId,
+                $kpaId,
+                $categoryId,
+                $indicatorId,
+                $weightedScore
+            );
+        } else {
+            saveIndicatorPercentage(
+                $employeeId,
+                $activeRoleId,
+                $kpaId,
+                $categoryId,
+                $indicatorId,
+                $weightedScore
+            );
+        }
+
 
         return round($avgScore, 2);
     }
@@ -5565,7 +5586,7 @@ function EmployabilityOfPL($employeeId)
         'course_157' => getRoleWeightage($activeRoleId, 'indicator', 157)['weightage'],
     ];
     $weightedScore = ($employabilityPercentage * $weights['course_load']) / 100;
-    saveIndicatorPercentage(
+    saveIndicatorPercentage90Plus(
         $employeeId,
         $activeRoleId,
         1, // KPA ID (adjust if dynamic)
@@ -5609,7 +5630,7 @@ function EmployabilityOfPL($employeeId)
     $relevant = $records->where('job_relevancy', 'yes')->count();
     $jobRelevancyPercentage = round(($relevant / $totalStudents) * 100, 2);
     $weightedScore105 = ($jobRelevancyPercentage * $weights['course_105']) / 100;
-    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 105, $weightedScore105);
+    saveIndicatorPercentage90Plus($employeeId, $activeRoleId, 1, 1, 105, $weightedScore105);
 
     $results->push(makeIndicatorRow('Job Relevancy', 105, $weightedScore105));
 
@@ -5777,7 +5798,7 @@ if (!function_exists('admissionTargetAverageForPL')) {
         // 5️⃣ Calculate weighted score
         $weightedScore123 = round(($stats->admission_target * $weight123) / 100, 2);
         // Save result
-        saveIndicatorPercentage(
+        saveIndicatorPercentage100Plus(
             $employeeId,
             $activeRoleId,
             $kpaId,
@@ -5804,7 +5825,7 @@ if (!function_exists('recoveryTargetAverageForPL')) {
         // 5️⃣ Calculate weighted score
         $weightedScore123 = round(($stats->target_achieved * $weight123) / 100, 2);
         // Save result
-        saveIndicatorPercentage(
+        saveIndicatorPercentage90Plus(
             $employeeId,
             $activeRoleId,
             $kpaId,
@@ -5831,7 +5852,7 @@ if (!function_exists('programProfitabilityAverageForPL')) {
         // 5️⃣ Calculate weighted score
         $weightedScore123 = round(($stats->profit * $weight123) / 100, 2);
         // Save result
-        saveIndicatorPercentage(
+        saveIndicatorPercentage90Plus(
             $employeeId,
             $activeRoleId,
             $kpaId,
@@ -6217,5 +6238,68 @@ if (!function_exists('lineManagerRatingOnEventsForPL')) {
         }
 
         return $feedbacks;
+    }
+}
+
+if (!function_exists('retentionRateofFaculty')) {
+
+    function retentionRateofFaculty($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId)
+    {
+        $facultyId = Auth::user()->faculty;
+        $stats = DB::table('faculty_retentions_remarks')
+            ->where('faculty_id', $facultyId)
+            ->selectRaw('
+        AVG(no_retention_rate) as satisfaction
+    ')->first();
+
+        $weight123 = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+        // 5️⃣ Calculate weighted score
+        $weightedScore123 = round(($stats->satisfaction * $weight123) / 100, 2);
+        // Save result
+        saveIndicatorPercentage90Plus(
+            $employeeId,
+            $activeRoleId,
+            $kpaId,
+            $categoryId,
+            $indicatorId,
+            $weightedScore123
+        );
+    }
+}
+
+if (!function_exists('saveIndicatorPercentage100Plus')) {
+    function saveIndicatorPercentage100Plus($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null)
+    {
+        if ($score == 100) {
+            $color = 'primary';
+            $rating = 'OS';
+        } elseif ($score >= 90 && $score <= 99) {
+            $color = 'success';
+            $rating = 'EE';
+        } elseif ($score >= 80 && $score <= 89) {
+            $color = 'warning';
+            $rating = 'ME';
+        } elseif ($score >= 70 && $score <= 79) {
+            $color = 'orange';
+            $rating = 'NI';
+        } else { // <= 69
+            $color = 'danger';
+            $rating = 'BE';
+        }
+
+        IndicatorsPercentage::updateOrCreate(
+            [
+                'employee_id' => $employeeId,
+                'role_id' => $role_id,
+                'key_performance_area_id' => $keyPerformanceAreaId,
+                'indicator_category_id' => $indicatorCategoryId,
+                'indicator_id' => $indicatorId,
+            ],
+            [
+                'score' => round($score, 2),
+                'color' => $color,
+                'rating' => $rating,
+            ]
+        );
     }
 }

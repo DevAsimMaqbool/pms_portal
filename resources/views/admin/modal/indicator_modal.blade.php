@@ -3543,7 +3543,8 @@
         calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 177);
         calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
         lineManagerReviewRatingOnTasks169(Auth::user()->employee_id, $activeRoleId);
-        ActiveInternationalResearchPartnerOfHOD(Auth::user()->employee_id, $activeRoleId, 4, 12, 148)
+        ActiveInternationalResearchPartnerOfHOD(Auth::user()->employee_id, $activeRoleId, 4, 12, 148);
+        retentionRateofFaculty(Auth::user()->employee_id, $activeRoleId, 6, 15, 162)
     @endphp
 @endif
 <!-- / Payment Methods modal -->
@@ -3565,6 +3566,7 @@
                             <div class="card-body">
                                 <div class="table-responsive text-nowrap">
                                     @php
+                                        retentionRateofFaculty(Auth::user()->employee_id, $activeRoleId, 6, 15, 162);
                                         $deanIndicators = [
                                             ['kpa_id' => 1, 'category_id' => 4, 'indicator_id' => 123],
                                             ['kpa_id' => 1, 'category_id' => 4, 'indicator_id' => 124],
