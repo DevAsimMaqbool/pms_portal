@@ -29,7 +29,7 @@
     <div class="container-xxl flex-grow-1 container-p-y">
 
         <div class="nav-align-top">
-            @if(auth()->user()->hasRole(['Dean']))
+            @if(in_array(getRoleName(activeRole()), ['Dean']))
                 <!-- Nav tabs -->
                 <ul class="nav nav-pills mb-4" role="tablist">
                     <li class="nav-item">
@@ -37,7 +37,7 @@
                     </li>
                 </ul>
             @endif
-            @if(auth()->user()->hasRole(['HOD']))
+            @if(in_array(getRoleName(activeRole()), ['HOD']))
                 <!-- Nav tabs -->
                 <ul class="nav nav-pills mb-4" role="tablist">
                     <li class="nav-item">
@@ -56,7 +56,7 @@
             <div class="tab-content">
 
                 {{-- ================= FORM 1 ================= --}}
-                @if(auth()->user()->hasRole(['Teacher', 'HOD', 'Assistant Professor']))
+                @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor']))
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
 
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
@@ -328,7 +328,7 @@
                     </div>
                 @endif
                 {{-- ================= FORM 2 ================= --}}
-                @if(auth()->user()->hasRole(['HOD']))
+                @if(in_array(getRoleName(activeRole()), ['HOD']))
                     <div class="tab-pane fade" id="form2" role="tabpanel">
                         <form id="researchForm2" enctype="multipart/form-data" class="row">
                             @csrf
@@ -445,7 +445,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="form3" role="tabpanel">
-                        @if(auth()->user()->hasRole(['HOD']))
+                        @if(in_array(getRoleName(activeRole()), ['HOD']))
                             <div class="d-flex">
                                 <select id="bulkAction" class="form-select w-auto me-2">
                                     <option value="">-- Select Action --</option>
@@ -471,7 +471,7 @@
                         </table>
                     </div>
                 @endif
-                @if(auth()->user()->hasRole(['Dean']))
+                @if(in_array(getRoleName(activeRole()), ['Dean']))
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
                         <table id="complaintTable1" class="table table-bordered table-striped" style="width:100%">
                             <thead>
@@ -502,7 +502,7 @@
                         </table> --}}
                     </div>
                 @endif
-                @if(auth()->user()->hasRole(['ORIC']))
+                @if(in_array(getRoleName(activeRole()), ['ORIC']))
                     <div>
                         <div class="d-flex">
                             <select id="bulkAction" class="form-select w-auto me-2">
@@ -622,8 +622,9 @@
     <script>
         window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
         const redirectUrl = "{{ route('indicators_crud.index', ['slug' => 'achievement-of-publication-target', 'id' => $indicatorId]) }}";
+        window.activeUserRole = "{{ getRoleName(activeRole()) }}";
     </script>
-    @if(auth()->user()->hasRole(['HOD', 'Teacher', 'Assistant Professor']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor']))
         <script>
             $(document).ready(function () {
                 $(document).on('change', 'select[name="target_category"]', function () {
@@ -1063,7 +1064,7 @@
             });
         </script>
     @endif
-    @if(auth()->user()->hasRole(['HOD']))
+     @if(in_array(getRoleName(activeRole()), ['HOD']))
         <script>
             function fetchHodTarget() {
                 $.ajax({
@@ -1312,7 +1313,7 @@
                     $('#modalTargetCategory').text(form.target_category || 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                    if (window.currentUserRole === 'HOD') {
+                    if (window.activeUserRole === 'HOD') {
                         $('#approveCheckbox').prop('checked', form.status == 2);
                         $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
                         // Label text for HOD
@@ -1508,7 +1509,7 @@
             });
         </script>
     @endif
-    @if(auth()->user()->hasRole(['Dean']))
+    @if(in_array(getRoleName(activeRole()), ['Dean']))
         <script>
 
             function fetchIndicatorForms1() {
@@ -1575,7 +1576,7 @@
                     $('#modalTargetCategory').text(form.target_category || 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                    if (window.currentUserRole === 'Dean') {
+                    if (window.activeUserRole === 'Dean') {
                         $('#status-approval').hide();
                         $('label[for="approveCheckbox"]').hide();
                         $('#approveCheckbox').closest('.form-check-input').hide();
@@ -1712,7 +1713,7 @@
             });
         </script>
     @endif
-    @if(auth()->user()->hasRole(['ORIC']))
+    @if(in_array(getRoleName(activeRole()), ['ORIC']))
         <script>
             function fetchIndicatorForms3() {
                 $.ajax({
@@ -1810,7 +1811,7 @@
                     $('#modalTargetCategory').text(form.target_category || 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                    if (window.currentUserRole === 'ORIC') {
+                    if (window.activeUserRole === 'ORIC') {
                         $('#approveCheckbox').prop('checked', form.status == 3);
                         $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
                         // Label text for Dean
