@@ -72,8 +72,9 @@
                     <div class="card-body">
                         <h5 class="card-title mb-0">{{ $area['performance_area'] }} 🎉</h5>
                         <p class="mb-2">Overall KPA Performance</p>
-                        <h4 class="text-primary mb-1"> 
-                        {{ min(number_format(avgKpaScore(Auth::user()->id, request()->segment(2)), 1), 100) }}%</h4>
+                        <h4 class="text-primary mb-1">
+                            {{ min(number_format(avgKpaScore(Auth::user()->id, request()->segment(2)), 1), 100) }}%
+                        </h4>
                         @if(!empty($area['small_description']))
                             <p class="card-text">{{ $area['small_description'] }}</p>
                         @else
@@ -100,7 +101,8 @@
                             <div class="col-md-7 text-md-end text-start p-0">
                                 <div class="btn-group" role="group" aria-label="radio toggle button group">
                                     <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
-                                    <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall for 2024-2025</label>
+                                    <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall for
+                                        2024-2025</label>
 
                                 </div>
                             </div>
@@ -154,7 +156,7 @@
                     <div class="tab-pane fade show active" id="store_details" role="tabpanel">
                         <div class="card h-100">
                             <div class="card-header d-flex align-items-center justify-content-between">
-                                <h5 class="card-title m-0 me-2">Progress</h5>
+                                <h5 class="card-title m-0 me-2">Progress (Weighted Score)</h5>
                             </div>
                             <div class="card-body">
                                 <ul class="p-0 m-0">
@@ -338,10 +340,10 @@
                         li.style.fontSize = "9px";
                         li.style.cursor = "pointer";
                         li.innerHTML = `
-                <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                border-radius:50%;margin-right:5px;"></span>
-                ${label} (${shortLabels[i]})
-                `;
+                        <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                        border-radius:50%;margin-right:5px;"></span>
+                        ${label} (${shortLabels[i]})
+                        `;
 
                         li.addEventListener("mouseenter", () => {
                             radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -450,23 +452,23 @@
                                 let percentage = indicator.percentage || 0;
 
                                 $list.append(`
-                        <li class="d-flex mb-6">
-                        <div class="chart-progress me-4" data-color="${color}" data-series="${percentage}" data-progress_variant="true"></div>
+                                <li class="d-flex mb-6">
+                                <div class="chart-progress me-4" data-color="${color}" data-series="${percentage}" data-progress_variant="true"></div>
 
-                        <div class="row w-100 align-items-center">
-                        <div class="col-9">
-                        <div class="me-2">
-                        <h6 class="mb-1_5">${indicator.indicator}</h6>
-                        </div>
-                        </div>
-                        <div class="col-3 text-end">
-                        <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
-                        <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                        </button>
-                        </div>
-                        </div>
-                        </li>
-                        `);
+                                <div class="row w-100 align-items-center">
+                                <div class="col-9">
+                                <div class="me-2">
+                                <h6 class="mb-1_5">${indicator.indicator}</h6>
+                                </div>
+                                </div>
+                                <div class="col-3 text-end">
+                                <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
+                                <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
+                                </button>
+                                </div>
+                                </div>
+                                </li>
+                                `);
                             });
 
                             initChartProgress(); // re-init charts after AJAX load
