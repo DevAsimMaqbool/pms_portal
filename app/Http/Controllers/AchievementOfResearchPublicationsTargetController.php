@@ -306,7 +306,6 @@ class AchievementOfResearchPublicationsTargetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd('yaha');
         $request->validate([
             'status' => 'required|in:1,2,3,4,5,6'
         ]);
