@@ -3202,7 +3202,7 @@ function NumberOfKnowledgeProduct($facultyId, $activeRoleId)
     return [
         'totalAchieved' => $totalAchieved,
         'target' => $target,
-        'score' => $weightedScore,
+        'score' => $score,
         'rating' => $rating,
         'color' => $color,
         'knowledgeProducts' => $knowledgeProducts,
