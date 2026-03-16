@@ -164,6 +164,9 @@
 
         $('#pipTable').DataTable({
           data: rowData,
+          scrollX: true,
+          scrollCollapse: true,
+          autoWidth: false,
           columns: [
             { title: "#" },
             { title: "Description" },

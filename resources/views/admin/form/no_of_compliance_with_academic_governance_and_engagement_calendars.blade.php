@@ -26,7 +26,7 @@
                         <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">% of Compliance with academic- governance-and engagement calendars</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
+                        <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Approvals</a>
                     </li>
                 </ul>
                 @endif

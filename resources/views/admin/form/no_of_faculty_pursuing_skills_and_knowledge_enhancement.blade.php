@@ -486,6 +486,9 @@
                         if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
                             $('#complaintTable3').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "#" },
                                     { title: "Created By" },
@@ -668,6 +671,9 @@
                         if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
                             $('#complaintTable3').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "<input type='checkbox' id='selectAll'>" },
                                     { title: "#" },

@@ -27,7 +27,7 @@
                                 time</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
+                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Approvals</a>
                         </li>
                     </ul>
                 @endif

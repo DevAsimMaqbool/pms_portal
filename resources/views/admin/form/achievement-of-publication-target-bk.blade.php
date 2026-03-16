@@ -37,7 +37,7 @@
                     <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Approvals</a>
                 </li>
             </ul>
             @endif
@@ -889,6 +889,9 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                         if (!$.fn.DataTable.isDataTable('#geTtargetTable')) {
                             $('#geTtargetTable').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "#" },
                                     { title: "User" },
@@ -954,6 +957,9 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
             if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
                 $('#complaintTable3').DataTable({
                     data: rowData,
+                    scrollX: true,
+                    scrollCollapse: true,
+                    autoWidth: false,
                     columns: [
                         { title: "<input type='checkbox' id='selectAll'>" },
                         { title: "#" },
@@ -1134,7 +1140,7 @@ fetchTarget('#researchForm1', {{ $indicatorId }});
                     $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
                 }
                 if (form.nationality) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality</th><td>${form.nationality}</td></tr>`);
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality11</th><td>${form.nationality}</td></tr>`);
                 }
                 if (form.scopus_q1) {
                     $('#modalExtraFields').append(`<tr class="optional-field"><th>Q1</th><td>${form.scopus_q1}</td></tr>`);
@@ -1334,6 +1340,9 @@ function fetchIndicatorForms1() {
             if (!$.fn.DataTable.isDataTable('#complaintTable1')) {
                 $('#complaintTable1').DataTable({
                     data: rowData,
+                    scrollX: true,
+                    scrollCollapse: true,
+                    autoWidth: false,
                     columns: [
                         { title: "<input type='checkbox' id='selectAll'>" },
                         { title: "#" },
@@ -1431,7 +1440,7 @@ function fetchIndicatorForms1() {
                     $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
                 }
                 if (form.nationality) {
-                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality</th><td>${form.nationality}</td></tr>`);
+                    $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality22</th><td>${form.nationality}</td></tr>`);
                 }
                 if (form.scopus_q1) {
                     $('#modalExtraFields').append(`<tr class="optional-field"><th>Q1</th><td>${form.scopus_q1}</td></tr>`);
@@ -1632,6 +1641,9 @@ function fetchIndicatorForms1() {
                         if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
                             $('#complaintTable3').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "<input type='checkbox' id='selectAll'>" },
                                     { title: "#" },
@@ -1727,7 +1739,7 @@ function fetchIndicatorForms1() {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
                     }
                     if (form.nationality) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality</th><td>${form.nationality}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality33</th><td>${form.nationality}</td></tr>`);
                     }
                     if (form.scopus_q1) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Q1</th><td>${form.scopus_q1}</td></tr>`);
