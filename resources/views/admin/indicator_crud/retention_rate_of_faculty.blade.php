@@ -36,6 +36,7 @@
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Year</th>
+                                                        <th>Created Date</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -216,6 +217,9 @@
                         const forms = data.forms || [];
 
                         const rowData = forms.map((form, i) => {
+                             const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
                             
                             let editButton = '';
                             if (parseInt(form.status) === 1) {
@@ -231,6 +235,7 @@
                             return [
                                 i + 1,
                                 form.year || 'N/A',
+                                createdAt,
                                 editButton+ ' ' + deleteBtn
                             ];
                         });
@@ -241,6 +246,7 @@
                                 columns: [
                                     { title: "#" },
                                     { title: "Year" },
+                                    { title: "Created Date" },
                                     { title: "Actions" }
                                 ]
                             });

@@ -285,28 +285,42 @@
                         },
                         error: function (xhr) {
                             Swal.close();
-                            // Clear previous errors before showing new ones
+                            // Clear previous errors
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
+
                             if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
+                                let response = xhr.responseJSON;
 
-                                // Loop through all validation errors
-                                $.each(errors, function (field, messages) {
-                                    let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
-                                    fieldName = fieldName.replace('[]]', ']');
-                                    let input = form.find('[name="' + fieldName + '"]');
+                                // If backend sends 'errors' (normal validation)
+                                if (response.errors) {
+                                    $.each(response.errors, function (field, messages) {
+                                        let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                        fieldName = fieldName.replace('[]]', ']');
+                                        let input = form.find('[name="' + fieldName + '"]');
 
-                                    if (input.length) {
-                                        input.addClass('is-invalid');
+                                        if (input.length) {
+                                            input.addClass('is-invalid');
+                                            input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                        }
+                                    });
+                                }
 
-                                        // Show error message under input
-                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                    }
-                                });
+                                // If backend sends a single 'message' (like duplicate record)
+                                if (response.message && !response.errors) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: response.message
+                                    });
+                                }
 
                             } else {
-                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Something went wrong!'
+                                });
                             }
                         }
                     });

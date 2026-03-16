@@ -70,7 +70,7 @@
                         
                         <div class="col-md-4">
                                                 <label class="form-label">Faculty</label>
-                                                <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-select">
+                                                <select name="faculty_id" id="faculty_id" class="select2 form-select faculty-select" required>
                                                     <option value="">Select Faculty</option>
                                                     @foreach(get_faculties() as $faculty)
                                                         <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
@@ -80,14 +80,14 @@
 
                                             <div class="col-md-4">
                                                 <label class="form-label">Department</label>
-                                                <select name="department_id" id="department_id" class="select2 form-select department-select">
+                                                <select name="department_id" id="department_id" class="select2 form-select department-select" required>
                                                     <option value="">Select Department</option>
                                                 </select>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <label class="form-label">Program Name</label>
-                                                <select name="program_id" id="program_id" class="select2 form-select program-select">
+                                                <select name="program_id" id="program_id" class="select2 form-select program-select" required>
                                                     <option value="">Select Program</option>
                                                 </select>
                                             </div>
@@ -96,7 +96,7 @@
                                             <div class="col-md-4">
                                                 <label for="admissions_campaign_id" class="form-label">Admissions Campaign</label>
                                                 @php
-                                                    $year = now()->year;
+                                                    $year = now()->year - 1;
                                                 @endphp
                                                 <select name="admissions_campaign" id="admissions_campaign"
                                                     class="select2 form-select admissions-campaign" required>
@@ -277,11 +277,21 @@
                 Swal.close();
                 if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
+                    let response_dublicate = xhr.responseJSON;
                     $.each(errors, function (field, messages) {
                         let input = $('#researchForm1').find('[name="' + field + '"]');
                         input.addClass('is-invalid');
                         input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
                     });
+
+                    // If backend sends a single 'message' (like duplicate record)
+                    if (response_dublicate.message && !response_dublicate.errors) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response_dublicate.message
+                        });
+                    }
                 } else {
                     Swal.fire('Error', 'Something went wrong!', 'error');
                 }

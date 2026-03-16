@@ -405,5 +405,10 @@ class PermissionController extends Controller
 
         return response()->json($data);
     }
+    public function MultiRolePerformance(Request $request)
+    {
+        return view('admin.multi_role_performance');
+    }
+    
 
 }

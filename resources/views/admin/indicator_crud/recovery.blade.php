@@ -263,11 +263,21 @@
                 Swal.close();
                 if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
+                    let response_dublicate = xhr.responseJSON;
                     $.each(errors, function (field, messages) {
                         let input = $('#researchForm1').find('[name="' + field + '"]');
                         input.addClass('is-invalid');
                         input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
                     });
+
+                    // If backend sends a single 'message' (like duplicate record)
+                    if (response_dublicate.message && !response_dublicate.errors) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response_dublicate.message
+                        });
+                    }
                 } else {
                     Swal.fire('Error', 'Something went wrong!', 'error');
                 }

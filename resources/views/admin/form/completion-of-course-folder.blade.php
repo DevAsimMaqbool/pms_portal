@@ -79,7 +79,7 @@
 
 
                                             <div class="col-md-12">
-                                                <label class="form-label d-block">1- Course Folder Status as per QCH</label>
+                                                <label class="form-label d-block">1- Course folder status</label>
                                                 <div>
                                                     <input type="radio" name="completion_of_Course_folder" id="completed"
                                                         value="100">
@@ -473,7 +473,7 @@
 
                         $('#modalExtraFields').append(`
                             <tr class="optional-field">
-                                <th>Course Folder Status as per QCH</th>
+                                <th>Course Folder Status</th>
                                 <td>${folderStatus}</td>
                             </tr>
                         `);
@@ -690,7 +690,7 @@
 
                         $('#modalExtraFields').append(`
                             <tr class="optional-field">
-                                <th>Course Folder Status as per QCH</th>
+                                <th>Course Folder Status</th>
                                 <td>${folderStatus}</td>
                             </tr>
                         `);
