@@ -2140,7 +2140,9 @@ function avgKpaScore($employeeId, $kpaId)
 
     // Calculate average
     $avg = $cappedScores->avg();
-    return round($avg, 2);
+    $weightage = getRoleWeightage($userRoleId, 'kpa', 1)['weightage'];
+    $weightedScore = ($avg * $weightage) / 100;
+    return number_format($weightedScore, 1);
 }
 
 if (!function_exists('ResearchProductivityofPGStudents')) {
