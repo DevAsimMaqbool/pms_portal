@@ -35,9 +35,11 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
+                                                        <th>Faculty</th>
                                                         <th>Year</th>
                                                         <th>Total Faculty Surveyed</th>
                                                         <th>Number of Promoters</th>
+                                                        <th>Promoters Percentage (%)</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -292,9 +294,11 @@
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
+                                form.faculty ? form.faculty.name : 'N/A',
                                 form.year || 'N/A',
                                 form.total_faculty_surveyed || 'N/A',
                                 form.number_of_promoters || 'N/A',
+                                form.promoters_percentage || 'N/A',
                                 editButton+ ' ' + deleteBtn
                             ];
                         });
@@ -305,9 +309,11 @@
                                 data: rowData,
                                 columns: [
                                     { title: "#" },
+                                    { title: "Faculty" },
                                     { title: "Year" },
                                     { title: "Total Faculty Surveyed" },
                                     { title: "Number of Promoters" },
+                                    { title: "Promoters Percentage (%)" },
                                     { title: "Actions" }
                                 ]
                             });

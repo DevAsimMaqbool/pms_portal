@@ -94,6 +94,20 @@ class AdmissionTargetAchievedController extends Controller
 
                         $savedRecords = [];
                     foreach ($request->admission as $admissions) {
+
+
+                    $exists = AdmissionTargetAchieved::where('faculty_id', $admissions['faculty_id'])
+                        ->where('department_id', $admissions['department_id'])
+                        ->where('program_id', $admissions['program_id'])
+                        ->where('admissions_campaign', $admissions['admissions_campaign'])
+                        ->exists();
+
+                    if ($exists) {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'Duplicate record found for same Faculty, Department, Program, and Campaign.'
+                        ], 422);
+                    }
                         $admissions['indicator_id'] = $request->indicator_id;
                         $admissions['form_status'] = $request->form_status ?? 'HOD';
                         $admissions['created_by'] = $employeeId;
@@ -147,6 +161,20 @@ class AdmissionTargetAchievedController extends Controller
                 'achieved_target' => 'required|integer|min:0',
     
         ]);
+        // Check for duplicate record (ignore current record ID)
+        $exists = AdmissionTargetAchieved::where('faculty_id', $request->faculty_id)
+            ->where('department_id', $request->department_id)
+            ->where('program_id', $request->program_id)
+            ->where('admissions_campaign', $request->admissions_campaign)
+            ->where('id', '!=', $id)  // exclude current record
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Duplicate record found for same Faculty, Department, Program, and Campaign.'
+            ], 422);
+        }
 
         $data = $request->only([
                         'faculty_id', 'department_id', 'program_id', 'admissions_campaign', 'admissions_target','achieved_target'

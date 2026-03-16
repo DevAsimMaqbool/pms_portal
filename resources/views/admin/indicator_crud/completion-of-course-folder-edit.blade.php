@@ -66,7 +66,7 @@
                                     </div>
 
                                            <div class="col-md-12 mt-3">
-                                        <label class="form-label d-block">1- Course Folder Status as per QCH</label>
+                                        <label class="form-label d-block">1- Course Folder Status</label>
                                         <div>
                                             <input type="radio" name="completion_of_Course_folder" id="completed"
                                                 value="100" {{ $data->completion_of_Course_folder == 100 ? 'checked' : '' }}>

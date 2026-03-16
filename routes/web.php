@@ -194,6 +194,7 @@ Route::middleware('auth')->group(function () {
         ->name('forms.assigned.view');
     //Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
     Route::get('/hod-departments-overview', [PermissionController::class, 'hodDepartmentsOverview']);
+    Route::get('/multi-role-performance', [PermissionController::class, 'MultiRolePerformance']);
 
 
 

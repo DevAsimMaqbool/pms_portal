@@ -93,6 +93,20 @@ class RecoveryController extends Controller
 
                         $savedRecords = [];
                     foreach ($request->recovery as $recoverys) {
+
+                        
+                        $exists = Recovery::where('faculty_id', $recoverys['faculty_id'])
+                            ->where('department_id', $recoverys['department_id'])
+                            ->where('program_id', $recoverys['program_id'])
+                            ->where('target_month_year', $recoverys['target_month_year'])
+                            ->exists();
+
+                        if ($exists) {
+                            return response()->json([
+                                'status' => 'error',
+                                'message' => 'Duplicate record found for same Faculty, Department, Program, and Campaign.'
+                            ], 422);
+                        }
                         $recoverys['indicator_id'] = $request->indicator_id;
                         $recoverys['form_status'] = $request->form_status ?? 'HOD';
                         $recoverys['created_by'] = $employeeId;
@@ -146,6 +160,19 @@ class RecoveryController extends Controller
                 'achieved_target' => 'required|integer|min:0',
     
         ]);
+        $exists = Recovery::where('faculty_id', $request->faculty_id)
+            ->where('department_id', $request->department_id)
+            ->where('program_id', $request->program_id)
+            ->where('target_month_year', $request->target_month_year)
+            ->where('id', '!=', $id)  // exclude current record
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Duplicate record found for same Faculty, Department, Program, and Campaign.'
+            ], 422);
+        }
 
         $data = $request->only([
                         'faculty_id', 'department_id', 'program_id', 'target_month_year', 'recovery_target','achieved_target'

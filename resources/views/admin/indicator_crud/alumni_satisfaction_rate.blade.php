@@ -67,7 +67,7 @@
             <div class="modal-dialog modal-xl modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header text-white">
-                        <h5 class="modal-title" id="updateFormModalLabel">Edit Satisfaction of International Students</h5>
+                        <h5 class="modal-title" id="updateFormModalLabel">Edit Alumni Satisfaction Rate</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -282,6 +282,8 @@
                 $(document).on('click', '.edit-form-btn', function () {
                     let form = $(this).data('form');
                     let $f = $('#researchForm1');
+                    $f.find('.invalid-feedback').remove();
+                    $f.find('.is-invalid').removeClass('is-invalid');
 
                     // Reset form
                     $f[0].reset();

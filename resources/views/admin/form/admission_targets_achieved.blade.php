@@ -91,7 +91,7 @@
                                             <div class="col-md-4">
                                                 <label for="admissions_campaign_id" class="form-label">Admissions Campaign</label>
                                                 @php
-                                                    $year = now()->year;
+                                                    $year = now()->year - 1;
                                                 @endphp
                                                 <select name="admission[0][admissions_campaign]"
                                                     class="select2 form-select admissions-campaign" required>
@@ -201,7 +201,7 @@
                         faculties.forEach(function(fac) {
                             facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
                         });
-                       let currentYear = new Date().getFullYear();
+                       let currentYear = new Date().getFullYear() - 1;
                         let campaignOptions = `<option value="">-- Select Admission Campaign --</option>`;
 
                         for (let i = 0; i < 3; i++) {
@@ -315,28 +315,42 @@
                         },
                         error: function (xhr) {
                             Swal.close();
-                            // Clear previous errors before showing new ones
+                            // Clear previous errors
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
+
                             if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
+                                let response = xhr.responseJSON;
 
-                                // Loop through all validation errors
-                                $.each(errors, function (field, messages) {
-                                    let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
-                                    fieldName = fieldName.replace('[]]', ']');
-                                    let input = form.find('[name="' + fieldName + '"]');
+                                // If backend sends 'errors' (normal validation)
+                                if (response.errors) {
+                                    $.each(response.errors, function (field, messages) {
+                                        let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                        fieldName = fieldName.replace('[]]', ']');
+                                        let input = form.find('[name="' + fieldName + '"]');
 
-                                    if (input.length) {
-                                        input.addClass('is-invalid');
+                                        if (input.length) {
+                                            input.addClass('is-invalid');
+                                            input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                        }
+                                    });
+                                }
 
-                                        // Show error message under input
-                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                    }
-                                });
+                                // If backend sends a single 'message' (like duplicate record)
+                                if (response.message && !response.errors) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: response.message
+                                    });
+                                }
 
                             } else {
-                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Something went wrong!'
+                                });
                             }
                         }
                     });

@@ -47,7 +47,7 @@
                                 <td>{{ $firstDetail->audit_term ?? 'N/A' }}</td>
                                 <td>{{ $firstDetail->faculty->name ?? 'N/A' }}</td>
                                 <td>{{ $firstDetail->department->name ?? 'N/A' }}</td>
-                                <td>{{ $firstDetail->program->name ?? 'N/A' }}</td>
+                                <td>{{ $firstDetail->program->program_name ?? 'N/A' }}</td>
                                 <td>{{ $firstDetail->total_score ?? 0 }}</td>
                                 <td>{{ $firstDetail->obtained_score ?? 0 }}</td>
                                 <td>{{ $firstDetail->strenght ?? 'N/A' }}</td>

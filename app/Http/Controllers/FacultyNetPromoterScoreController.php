@@ -20,7 +20,8 @@ class FacultyNetPromoterScoreController extends Controller
          if(in_array(getRoleName(activeRole()), ['Human Resources'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
-                    $forms = FacultyNetPromoterScore::where('created_by', $employee_id)
+                    $forms = FacultyNetPromoterScore::with(['faculty', 'department', 'program'])
+                    ->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get();
                 }       
