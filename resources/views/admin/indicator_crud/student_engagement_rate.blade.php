@@ -448,6 +448,9 @@ function toggleOtherField() {
                         if (!$.fn.DataTable.isDataTable('#achievementTable')) {
                             $('#achievementTable').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "#" },
                                     { title: "Faculty" },

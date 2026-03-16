@@ -205,6 +205,9 @@
                         if (!$.fn.DataTable.isDataTable('#admissionTargetAchieveTable')) {
                             $('#admissionTargetAchieveTable').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "#" },
                                      { title: "Faculty" },

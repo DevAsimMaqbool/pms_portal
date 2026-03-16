@@ -264,6 +264,9 @@
                         if (!$.fn.DataTable.isDataTable('#employabilityTable')) {
                             $('#employabilityTable').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "#" },
                                     { title: "Year" },

@@ -31,7 +31,7 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs mb-3" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
+                        <a class="nav-link active" data-bs-toggle="tab" href="#form3" role="tab">Approvals</a>
                     </li>
                 </ul>
                 @endif

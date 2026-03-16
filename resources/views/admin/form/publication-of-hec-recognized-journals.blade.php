@@ -236,6 +236,9 @@
                         if (!$.fn.DataTable.isDataTable('#complaintTable2')) {
                             $('#complaintTable2').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "<input type='checkbox' id='selectAll'>" },
                                     { title: "#" },
