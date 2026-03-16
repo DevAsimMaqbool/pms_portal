@@ -543,7 +543,7 @@
 
           <div class="col-md-6 col-lg-4" id="scrollableCol">
             <div class=" d-flex justify-content-between">
-              <h5 class="fw-bold">Hot Indicators</h5>
+              <h5 class="fw-bold">Key Indicators</h5>
             </div>
             <!--/ Statistics -->
             @php

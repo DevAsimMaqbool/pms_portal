@@ -409,7 +409,7 @@
                                                 <td>{{ $class->avg_absent_count }}</td>
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $class->color }}">
-                                                        {{ $class->avg_present_percentage }}%
+                                                        {{number_format($class->avg_present_percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -496,7 +496,7 @@
                                                 <td>{{ $class->class_not_held_count }}</td>
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $class->color }}">
-                                                        {{ $class->held_percentage }}%
+                                                        {{ number_format($class->held_percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -556,7 +556,7 @@
                                                     <td>{{ $data['totalAchieved'] }}</td>
                                                     <td>
                                                         <div class="badge bg-{{ $data['color'] }}">
-                                                            {{ $data['score'] }}%
+                                                            {{number_format($data['score'], 1) }}%
                                                         </div>
                                                     </td>
                                                     <td>
@@ -1410,11 +1410,11 @@
                                                                     <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
                                                                     <td>{{ $class->career_code }}</td>
                                                                     {{-- Program name (only if attendance exists) --}}
-                                                                    <td>{{ round($pass, 1) ?? 'N/A' }}</td>
-                                                                    <td>{{ round($fail, 1) ?? 'N/A' }}</td>
+                                                                    <td>{{ number_format($pass, 1) ?? 'N/A' }}</td>
+                                                                    <td>{{ number_format($fail, 1) ?? 'N/A' }}</td>
                                                                     <td>
                                                                         <div class="badge" style="background-color: {{$color }}">
-                                                                            {{ round($pass, 1) }}%
+                                                                            {{ number_format($pass, 1) }}%
                                                                         </div>
                                                                     </td>
                                                                     <td>
@@ -1554,10 +1554,10 @@
                                                                     <td>{{ $class->class_name }}</td>
                                                                     <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
                                                                     <td>{{ $class->career_code }}</td>
-                                                                    <td>{{ round($avg, 1) }}</td>
+                                                                    <td>{{ number_format($avg, 1) }}</td>
                                                                     <td>
                                                                         <div class="badge bg-{{ $color }}">
-                                                                            {{ round($avg, 1) }}%
+                                                                            {{ number_format($avg, 1) }}%
                                                                         </div>
                                                                     </td>
                                                                     <td>
@@ -1762,7 +1762,7 @@
                                                     <td>{{ $row['count'] }}</td>
                                                     <td>
                                                         <div class="badge" style="background-color: {{$row['color'] }}">
-                                                            {{ $row['percentage'] }}%
+                                                            {{ number_format($row['percentage'], 1) }}%
                                                         </div>
                                                     </td>
                                                     <td>
@@ -1838,7 +1838,7 @@
                                                     <td>
                                                         <div class="badge"
                                                             style="background-color: {{$ResearchProductivityofPGStudent['color'] }}">
-                                                            {{ $ResearchProductivityofPGStudent['percentage'] }}%
+                                                            {{ number_format($ResearchProductivityofPGStudent['percentage'], 1) }}%
                                                         </div>
                                                     </td>
                                                     <td>
@@ -2182,7 +2182,7 @@
                                                     <td>{{ $item->task }}</td>
                                                     <td>
                                                         <div class="badge {{ $item->rating_data['color'] }}">
-                                                            {{ $item->rating_data['percentage'] }}%
+                                                            {{ number_format($item->rating_data['percentage'], 1) }}%
                                                         </div>
                                                     </td>
                                                     <td>
@@ -2539,7 +2539,7 @@
                                                 <td>
                                                     <div class="badge"
                                                         style="background-color: {{ $noofGrantsWon_row->color }}">
-                                                        {{ $noofGrantsWon_row->percentage }}%
+                                                        {{ number_format($noofGrantsWon_row->percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -2601,7 +2601,7 @@
                                                 <td>{{ $row->achieved_count }}</td> <!-- Achieved count -->
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $row->color }}">
-                                                        {{ $row->percentage }}%
+                                                        {{ number_format($row->percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -2664,7 +2664,7 @@
                                                 <td>{{ $ResearchIncome->total_fee }}</td>
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $ResearchIncome->color }}">
-                                                        {{ $ResearchIncome->percentage }}%
+                                                        {{ number_format($ResearchIncome->percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -2725,7 +2725,7 @@
                                                 <td>{{ $row->achieved_count }}</td> <!-- Achieved count -->
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $row->color }}">
-                                                        {{ $row->percentage }}%
+                                                        {{ number_format($row->percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -2786,7 +2786,7 @@
                                                 <td>
                                                     <div class="badge"
                                                         style="background-color: {{ $noofGrantsWon_row->color }}">
-                                                        {{ $noofGrantsWon_row->percentage }}%
+                                                        {{ number_format($noofGrantsWon_row->percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -2847,7 +2847,7 @@
                                                 <td>{{ $spin->achieved_count }}</td> <!-- Achieved count -->
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $spin->color }}">
-                                                        {{ $spin->percentage }}%
+                                                        {{ number_format($spin->percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -2907,7 +2907,7 @@
                                                 <td>{{ $visit->achieved_count }}</td> <!-- Achieved count -->
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $visit->color }}">
-                                                        {{ $visit->percentage }}%
+                                                        {{ number_format($visit->percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -2967,7 +2967,7 @@
                                                 <td>{{ $project->achieved_count }}</td> <!-- Achieved count -->
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $project->color }}">
-                                                        {{ $project->percentage }}%
+                                                        {{ number_format($project->percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -3027,7 +3027,7 @@
                                                 <td>{{ $product->achieved_count }}</td> <!-- Achieved count -->
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $product->color }}">
-                                                        {{ $product->percentage }}%
+                                                        {{ number_format($product->percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -3132,7 +3132,7 @@
                                                         <td>{{ $item->task }}</td>
                                                         <td>
                                                             <div class="badge {{ $item->rating_data['color'] }}">
-                                                                {{ $item->rating_data['percentage'] }}%
+                                                                {{ number_format($item->rating_data['percentage'], 1) }}%
                                                             </div>
                                                         </td>
                                                         <td>
@@ -3265,7 +3265,7 @@
                                                 <td>{{ $row->class_name }}</td>
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $row->color }}">
-                                                        {{ $row->held_percentage }}%
+                                                        {{ number_format($row->held_percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -3321,7 +3321,7 @@
                                                 <td>{{ $row->class_name }}</td>
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $row->color }}">
-                                                        {{ $row->held_percentage }}%
+                                                        {{ number_format($row->held_percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -3376,7 +3376,7 @@
                                                 <td>{{ $row->class_name }}</td>
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $row->color }}">
-                                                        {{ $row->held_percentage }}%
+                                                        {{ number_format($row->held_percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -3431,7 +3431,7 @@
                                                 <td>{{ $row->class_name }}</td>
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $row->color }}">
-                                                        {{ $row->held_percentage }}%
+                                                        {{ number_format($row->held_percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>
@@ -3486,7 +3486,7 @@
                                                 <td>{{ $row->class_name }}</td>
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $row->color }}">
-                                                        {{ $row->held_percentage }}%
+                                                        {{ number_format($row->held_percentage, 1) }}%
                                                     </div>
                                                 </td>
                                                 <td>

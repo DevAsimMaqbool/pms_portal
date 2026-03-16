@@ -18,8 +18,8 @@
         <div class="card mb-6">
             <h5 class="card-header">Target Assign</h5>
             <form class="card-body" id="researchForm2">
-             @csrf
-                <input type="hidden"  id="form_status" name="form_status" value="OTHER" required>
+                @csrf
+                <input type="hidden" id="form_status" name="form_status" value="OTHER" required>
                 <div class="row g-6">
                     <div class="col-md-4">
                         <label class="form-label" for="indicator_id">Select Indicator</label>
@@ -29,6 +29,7 @@
                             <option value="136">Multidisciplinary Projects</option>
                             <option value="137">Commercial Consultancy/Research Income</option>
                             <option value="138">Patents/Intellectual Property (IPR)</option>
+                            <option value="139">Spin Offs</option>
                             <option value="198">Industrial Projects</option>
                             <option value="199">Products Delivered to Industry</option>
                             <option value="194">Number of Knowledge Products</option>
@@ -44,17 +45,16 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="multicol-language">Name of Faculty Member</label>
-                         <select  name="faculty_member_id[]" id="select2Success" class="select2 form-select"  multiple required>
-                                <option value="">-- Select Faculty Member --</option>
-                                @foreach($facultyMembers as $member)
-                                    <option 
-                                        value="{{ $member->id }}" 
-                                        data-department="{{ $member->department }}" 
-                                        data-job_title="{{ $member->job_title }}">
-                                        {{ $member->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                        <select name="faculty_member_id[]" id="select2Success" class="select2 form-select" multiple
+                            required>
+                            <option value="">-- Select Faculty Member --</option>
+                            @foreach($facultyMembers as $member)
+                                <option value="{{ $member->id }}" data-department="{{ $member->department }}"
+                                    data-job_title="{{ $member->job_title }}">
+                                    {{ $member->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="pt-6">
@@ -64,20 +64,20 @@
             </form>
         </div>
         <!--/ Permission Table -->
-         <div class="card mb-6">
+        <div class="card mb-6">
             <div class="table-responsive text-nowrap">
-               <table id="complaintTable3" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>User</th>
-                                        <th>Indicator</th>
-                                        <th>Target</th>
-                                    </tr>
-                                </thead>
-                            </table>
-            </div>                
-         </div>
+                <table id="complaintTable3" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Indicator</th>
+                            <th>Target</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
     <!-- / Content -->
 @endsection
@@ -92,12 +92,12 @@
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
-      <script>
-    window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+    <script>
+        window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
     </script>
     @if(auth()->user()->hasRole(['HOD']))
-    <script>
-    function fetchTarget() {
+        <script>
+            function fetchTarget() {
                 $.ajax({
                     url: "{{ route('faculty-target.index') }}",
                     method: "GET",
@@ -145,14 +145,14 @@
             }
 
 
-    $(document).ready(function () {
-        fetchTarget();
-         $('#researchForm2').on('submit', function (e) {
-            e.preventDefault();
-            let form = $(this);
-            let formData = new FormData(this);
+            $(document).ready(function () {
+                fetchTarget();
+                $('#researchForm2').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
 
-             // Show loading indicator
+                    // Show loading indicator
                     Swal.fire({
                         title: 'Please wait...',
                         allowOutsideClick: false,
@@ -161,68 +161,68 @@
                         }
                     });
 
-            $.ajax({
-                url: "{{ route('faculty-target.store') }}",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    Swal.close();
-                   // Swal.fire({ icon: 'success', title: 'Success', text: response.message });
-                   Swal.fire({
-                        icon: 'success',
-                        html: `<div class="alert alert-success alert-dismissible" role="alert">${response.message}</div>`,
-                        background: '#ffffffff',
-                        showConfirmButton: false,
-                        timer: 3500,
-                        timerProgressBar: true,
-                    });
-                    form[0].reset();
-
-                    // Reset Select2 dropdowns
-                    $('#indicator_id').val(null).trigger('change');
-                    $('#select2Success').val(null).trigger('change');
-                    fetchTarget();
-                },
-                error: function (xhr) {
-                    Swal.close();
-                     // Clear previous errors before showing new ones
-                    form.find('.invalid-feedback').remove();
-                    form.find('.is-invalid').removeClass('is-invalid');
-                    // ✅ If duplicate assignment (HTTP 409)
-                    if (xhr.status === 409) {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Already Assigned',
-                            text: xhr.responseJSON.message
-                        });
-                        return;
-                    }
-                     if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
-
-                            // Loop through all validation errors
-                            $.each(errors, function (field, messages) {
-                                let input = form.find('[name="' + field + '"]');
-
-                                if (input.length) {
-                                    input.addClass('is-invalid');
-
-                                    // Show error message under input
-                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                }
+                    $.ajax({
+                        url: "{{ route('faculty-target.store') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.close();
+                            // Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                            Swal.fire({
+                                icon: 'success',
+                                html: `<div class="alert alert-success alert-dismissible" role="alert">${response.message}</div>`,
+                                background: '#ffffffff',
+                                showConfirmButton: false,
+                                timer: 3500,
+                                timerProgressBar: true,
                             });
+                            form[0].reset();
 
-                        } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!'});
+                            // Reset Select2 dropdowns
+                            $('#indicator_id').val(null).trigger('change');
+                            $('#select2Success').val(null).trigger('change');
+                            fetchTarget();
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            // Clear previous errors before showing new ones
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            // ✅ If duplicate assignment (HTTP 409)
+                            if (xhr.status === 409) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Already Assigned',
+                                    text: xhr.responseJSON.message
+                                });
+                                return;
+                            }
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+
+                                // Loop through all validation errors
+                                $.each(errors, function (field, messages) {
+                                    let input = form.find('[name="' + field + '"]');
+
+                                    if (input.length) {
+                                        input.addClass('is-invalid');
+
+                                        // Show error message under input
+                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                    }
+                                });
+
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
                         }
-                }
-            });
-        });
-      
+                    });
+                });
 
-    });
-    </script>
+
+            });
+        </script>
     @endif
 @endpush

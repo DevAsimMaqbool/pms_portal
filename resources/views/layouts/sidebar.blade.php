@@ -3,7 +3,7 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu">
 
   <div class="app-brand demo">
-    <a href="{{ route('dashboard') }}" class="app-brand-link">
+    <a href="#" class="app-brand-link">
       <img style="width: 175px;" src="{{ asset('admin/assets/img/avatars/superior.svg') }}">
     </a>
 
@@ -49,15 +49,15 @@
           <a href="javascript:void(0);" class="menu-link menu-toggle">
             <span class="menu-icon"
               style="
-                                                                                                                                                                      display: inline-flex;
-                                                                                                                                                                      align-items: center;
-                                                                                                                                                                      justify-content: center;
-                                                                                                                                                                      width: 24px;
-                                                                                                                                                                      height: 24px;
-                                                                                                                                                                      border-radius: 50%;
-                                                                                                                                                                      background: #eee;
-                                                                                                                                                                      font-weight: bold;
-                                                                                                                                                                      font-size: 14px;">
+                                                                                                                                                                          display: inline-flex;
+                                                                                                                                                                          align-items: center;
+                                                                                                                                                                          justify-content: center;
+                                                                                                                                                                          width: 24px;
+                                                                                                                                                                          height: 24px;
+                                                                                                                                                                          border-radius: 50%;
+                                                                                                                                                                          background: #eee;
+                                                                                                                                                                          font-weight: bold;
+                                                                                                                                                                          font-size: 14px;">
               {{ $loop->iteration }}
             </span>
             <div data-i18n="{{ $area->performance_area }}">
@@ -165,11 +165,11 @@
         </a>
       </li>
       <!-- <li class="menu-item {{ request()->routeIs('assigndepartment.index') ? 'active' : '' }}">
-                                                                                    <a href="{{ route('assigndepartment.index') }}" class="menu-link">
-                                                                                    <i class="menu-icon icon-base ti tabler-message-heart"></i>
-                                                                                    <div data-i18n="Assign Department">Assign Department</div>
-                                                                                    </a>
-                                                                                  </li> -->
+                                                                                      <a href="{{ route('assigndepartment.index') }}" class="menu-link">
+                                                                                      <i class="menu-icon icon-base ti tabler-message-heart"></i>
+                                                                                      <div data-i18n="Assign Department">Assign Department</div>
+                                                                                      </a>
+                                                                                    </li> -->
       <li class="menu-item {{ request()->routeIs('students.index') ? 'active' : '' }}">
         <a href="{{ route('students.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-message-heart"></i>

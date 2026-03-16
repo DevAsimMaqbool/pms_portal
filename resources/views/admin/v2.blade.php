@@ -561,46 +561,40 @@
             <!--/ Statistics -->
             <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
               @php
-                  $feedbackValues = getStudentFeedbackByBarcode(Auth::user()->barcode);
+                $averageFeedback = getStudentFeedbackForTeacher(Auth::user()->faculty_id);
+                $average = is_numeric($averageFeedback) ? $averageFeedback : 0;
+                // Get rating description
+                $getRatingByPercentage = getRatingByPercentage($average);
+                $rating_description = $getRatingByPercentage['description'];
 
-                  // Take only the first 4 values (the actual scores)
-                  $values = array_map(fn($v) => (float) $v, array_slice($feedbackValues, 0, 4));
+                // Determine rating and color
+                function ratingMeta($average)
+                {
+                if ($average >= 90)
+                return ['OS', 'primary'];
+                if ($average >= 80)
+                return ['EE', 'success'];
+                if ($average >= 70)
+                return ['ME', 'warning'];
+                if ($average >= 60)
+                return ['NI', 'orange'];
+                return ['BE', 'danger'];
+                }
+                $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 182);
 
-                  // Calculate the average
-                  $average = array_sum($values) / count($values);
-
-                  // Get rating description
-                  $getRatingByPercentage = getRatingByPercentage($average);
-                  $rating_description = $getRatingByPercentage['description'];
-
-                  // Determine rating and color
-                  function ratingMeta($average)
-                  {
-                    if ($average >= 90)
-                      return ['OS', 'primary'];
-                    if ($average >= 80)
-                      return ['EE', 'success'];
-                    if ($average >= 70)
-                      return ['ME', 'warning'];
-                    if ($average >= 60)
-                      return ['NI', 'orange'];
-                    return ['BE', 'danger'];
-                  }
-                  $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 182);
-
-                  $weight = $indicatorWeight['weightage'];
-                  $weight_ss = ($average * $weight) / 100;
-                  [$rating, $color] = ratingMeta($weight_ss);
+                $weight = $indicatorWeight['weightage'];
+                $weight_ss = ($average * $weight) / 100;
+                [$rating, $color] = ratingMeta($weight_ss);
 
 
                 saveIndicatorPercentage90Plus(
-                    Auth::user()->employee_id,
-                    $activeRoleId,
-                    $keyPerformanceAreaId = 1,
-                    $indicatorCategoryId = 23,
-                    $indicator_id = 182,
-                    $weight_ss
-                  );
+                Auth::user()->employee_id,
+                $activeRoleId,
+                $keyPerformanceAreaId = 1,
+                $indicatorCategoryId = 23,
+                $indicator_id = 182,
+                $weight_ss
+                );
               @endphp
 
               <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"

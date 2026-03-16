@@ -451,12 +451,9 @@ function myClassesAttendanceRecord($facultyId, $activeRoleId)
             } elseif ($class->held_percentage >= 60) {
                 $class->color = '#fd7e13';
                 $class->rating = 'NI';
-            } elseif ($class->held_percentage >= 50) {
+            } else {
                 $class->color = '#ff4c51';
                 $class->rating = 'BE';
-            } else {
-                $class->color = '#d3d3d3';
-                $class->rating = 'NA';
             }
 
             return $class;
@@ -487,12 +484,9 @@ function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAr
     } elseif ($overallPercentage >= 60) {
         $color = 'orange';
         $rating = 'NI';
-    } elseif ($overallPercentage >= 50) {
+    } else {
         $color = 'danger';
         $rating = 'BE';
-    } else {
-        $color = 'dark';
-        $rating = 'NA';
     }
     $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 117);
     $weight = $indicatorWeight['weightage'] ?? 0;
@@ -583,14 +577,10 @@ function myClassesAttendanceData($facultyId)
         } elseif ($class->avg_present_percentage >= 60) {
             $class->color = '#fd7e13';
             $class->rating = 'NI';
-        } elseif ($class->avg_present_percentage >= 50) {
+        } else {
             $class->color = '#ff4c51';
             $class->rating = 'BE';
-        } else {
-            $class->color = '#d3d3d3';
-            $class->rating = 'NA';
         }
-
         // Assign color/rating to each attendance record for Blade
         foreach ($class->attendances as $att) {
             $att->color = $class->color;
@@ -623,7 +613,6 @@ function myClassesAttendanceData($facultyId)
         return $class;
     });
 }
-
 if (!function_exists('ScopusPublications')) {
     function ScopusPublications($facultyId, $activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
     {
@@ -631,6 +620,7 @@ if (!function_exists('ScopusPublications')) {
             'researchPublicationTargets' => function ($query) use ($indicatorId) {
                 $query->where('form_status', 'RESEARCHER')
                     ->where('indicator_id', $indicatorId)
+                    ->where('status', 3)
                     ->whereNotNull('journal_clasification');
             }
         ])
@@ -647,7 +637,133 @@ if (!function_exists('ScopusPublications')) {
             'ME' => '#ffcb9a',
             'NI' => '#fd7e13',
             'BE' => '#ff4c51',
-            'NA' => '#000000',
+        ];
+
+        $totalTarget = 0;
+        $totalSubmitted = 0;
+
+        foreach ($facultyTargets as $facultyTarget) {
+
+            $targetCount = $facultyTarget->target ?? 0;
+            $submissionCount = $facultyTarget->researchPublicationTargets->count();
+
+            $totalTarget += $targetCount;
+            $totalSubmitted += $submissionCount;
+
+            // Group submissions by classification
+            $grouped = $facultyTarget->researchPublicationTargets
+                ->groupBy(fn($t) => strtoupper($t->journal_clasification));
+
+            // List of all classifications to always show
+            $classifications = ['Q1', 'Q2', 'Q3', 'Q4', 'W', 'X', 'Y', 'MEDICAL'];
+
+            foreach ($classifications as $classification) {
+
+                $targets = $grouped[$classification] ?? collect(); // empty if no submissions
+                $value = match (strtolower($classification)) {
+                    'q1' => $facultyTarget->scopus_q1,
+                    'q2' => $facultyTarget->scopus_q2,
+                    'q3' => $facultyTarget->scopus_q3,
+                    'q4' => $facultyTarget->scopus_q4,
+                    'w' => $facultyTarget->hec_w,
+                    'x' => $facultyTarget->hec_x,
+                    'y' => $facultyTarget->hec_y,
+                    'medical' => $facultyTarget->medical_recognized,
+                    default => 0,
+                };
+
+                $count = $targets->count();
+                $internationalCount = $targets->filter(fn($t) => strtolower(trim($t->nationality)) === 'international')->count();
+                $percentage = ($value > 0) ? round(($count / $value) * 100, 2) : 0;
+
+                // Rating logic
+                if ($count === 0) {
+                    $rating = 'BE';
+                } elseif ($count < $value) {
+                    $rating = 'NI';
+                } elseif ($count === $value) {
+                    $rating = match ($internationalCount) {
+                        0 => 'NI',
+                        1 => 'ME',
+                        2 => 'EE',
+                        default => 'OS',
+                    };
+                } elseif ($count > $value && $count < ($value * 2)) {
+                    $rating = 'EE';
+                } elseif ($count >= ($value * 2)) {
+                    $rating = 'OS';
+                } else {
+                    $rating = 'BE';
+                }
+
+                $firstTarget = $targets->first();
+
+                $data[] = [
+                    'target_category' => $facultyTarget->target_category ?? '-',
+                    'journal_clasification' => $classification,
+                    'value' => $value,
+                    'count' => $count,
+                    'percentage' => $percentage,
+                    'rating' => $rating,
+                    'color' => $ratingColors[$rating],
+                    'rank' => $firstTarget?->rank ?? '-',
+                    'nationality' => $firstTarget?->nationality ?? '-',
+                    'international_count' => $internationalCount,
+                ];
+            }
+        }
+
+        // Overall percentage
+        $avgPercentage = ($totalTarget > 0)
+            ? round(($totalSubmitted / $totalTarget) * 100, 2)
+            : 0;
+
+        $weights = [
+            'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'],
+        ];
+
+        $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
+
+        calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId);
+        calculateInternationalScore($facultyId, $activeRoleId, $indicatorId);
+
+        saveIndicatorPercentage(
+            $facultyId,
+            $activeRoleId,
+            $keyPerformanceAreaId,
+            $indicatorCategoryId,
+            $indicatorId,
+            $weightedScore
+        );
+
+        return $data;
+    }
+}
+
+if (!function_exists('ScopusPublicationsBKKKK')) {
+    function ScopusPublicationsBKKKK($facultyId, $activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
+    {
+        $facultyTargets = FacultyTarget::with([
+            'researchPublicationTargets' => function ($query) use ($indicatorId) {
+                $query->where('form_status', 'RESEARCHER')
+                    ->where('indicator_id', $indicatorId)
+                    ->where('status', 3)
+                    ->whereNotNull('journal_clasification');
+            }
+        ])
+            ->where('user_id', $facultyId)
+            ->where('form_status', 'HOD')
+            ->where('indicator_id', $indicatorId)
+            ->get();
+
+        $data = [];
+
+        $ratingColors = [
+            'OS' => '#6EA8FE',
+            'EE' => '#96e2b4',
+            'ME' => '#ffcb9a',
+            'NI' => '#fd7e13',
+            'BE' => '#ff4c51',
         ];
 
         $totalTarget = 0;
@@ -709,7 +825,7 @@ if (!function_exists('ScopusPublications')) {
                 } elseif ($count >= ($value * 2)) {
                     $rating = 'OS'; // Double or more
                 } else {
-                    $rating = 'NA'; // fallback
+                    $rating = 'BE'; // fallback
                 }
 
                 $firstTarget = $targets->first();
@@ -733,9 +849,11 @@ if (!function_exists('ScopusPublications')) {
         $avgPercentage = ($totalTarget > 0)
             ? round(($totalSubmitted / $totalTarget) * 100, 2)
             : 0;
+
         $weights = [
             'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'],
         ];
+
         $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
         calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId);
         calculateInternationalScore($facultyId, $activeRoleId, $indicatorId);
@@ -862,7 +980,6 @@ if (!function_exists('calculateJournalQuartile')) {
 //             'ME' => '#ffcb9a',
 //             'NI' => '#fd7e13',
 //             'BE' => '#ff4c51',
-//             'NA' => '#000000',
 //         ];
 
 //         $totalTarget = 0;
@@ -962,7 +1079,6 @@ if (!function_exists('ScopusPublicationsbk')) {
             'ME' => '#ffcb9a',
             'NI' => '#fd7e13',
             'BE' => '#ff4c51',
-            'NA' => '#000000',
         ];
 
         foreach ($facultyTargets as $facultyTarget) {
@@ -999,10 +1115,8 @@ if (!function_exists('ScopusPublicationsbk')) {
                     $rating = 'ME';
                 elseif ($percentage >= 60)
                     $rating = 'NI';
-                elseif ($percentage > 0)
-                    $rating = 'BE';
                 else
-                    $rating = 'NA';
+                    $rating = 'BE';
 
                 // Pick first target for optional fields
                 $firstTarget = $targets->first();
@@ -1064,12 +1178,9 @@ function PatentsIntellectualProperty($facultyId, $activeRoleId, $indicator_id)
         } elseif ($percentage >= 60) {
             $rating = 'NI';
             $color = '#fd7e13';
-        } elseif ($percentage > 0) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
-        } else {
-            $rating = 'NA';
-            $color = '#000000';
         }
 
         // Add calculated values into object
@@ -1135,12 +1246,9 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, $i
         } elseif ($percentage >= 60) {
             $rating = 'NI';
             $color = '#fd7e13';
-        } elseif ($percentage > 0) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
-        } else {
-            $rating = 'NA';
-            $color = '#000000';
         }
 
         // Save percentage for avg calculation
@@ -1210,12 +1318,9 @@ function MultidisciplinaryProjects($facultyId, $activeRoleId, $indicatorId)
         } elseif ($percentage >= 60) {
             $rating = 'NI';
             $color = '#fd7e13';
-        } elseif ($percentage > 0) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
-        } else {
-            $rating = 'NA';
-            $color = '#000000';
         }
 
         // Attach calculated values
@@ -1303,12 +1408,9 @@ function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id)
         } elseif ($percentage >= 60) {
             $rating = 'NI';
             $color = '#fd7e13';
-        } elseif ($percentage > 0) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
-        } else {
-            $rating = 'NA';
-            $color = '#000000';
         }
 
         $target->achieved_count = $achieved;
@@ -1373,12 +1475,9 @@ function IndustrialVisits($facultyId, $activeRoleId, $indicator_id)
         } elseif ($percentage >= 60) {
             $rating = 'NI';
             $color = '#fd7e13';
-        } elseif ($percentage > 0) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
-        } else {
-            $rating = 'NA';
-            $color = '#000000';
         }
 
         // Save percentage for avg calculation
@@ -1447,12 +1546,9 @@ function IndustrialProjects($facultyId, $activeRoleId, $indicator_id)
         } elseif ($percentage >= 60) {
             $rating = 'NI';
             $color = '#fd7e13';
-        } elseif ($percentage > 0) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
-        } else {
-            $rating = 'NA';
-            $color = '#000000';
         }
 
         // Save percentage for avg calculation
@@ -1521,12 +1617,9 @@ function spinOffs($facultyId, $activeRoleId, $indicator_id)
         } elseif ($percentage >= 60) {
             $rating = 'NI';
             $color = '#fd7e13';
-        } elseif ($percentage > 0) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
-        } else {
-            $rating = 'NA';
-            $color = '#000000';
         }
 
         // Save percentage for avg calculation
@@ -1595,12 +1688,9 @@ function ProductsDeliveredToIndustry($facultyId, $activeRoleId, $indicator_id)
         } elseif ($percentage >= 60) {
             $rating = 'NI';
             $color = '#fd7e13';
-        } elseif ($percentage > 0) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
-        } else {
-            $rating = 'NA';
-            $color = '#000000';
         }
 
         // Save percentage for avg calculation
@@ -1654,14 +1744,10 @@ function CompletionofCourseFolder($facultyId, $activeRoleId, $indicator_id)
             $rating = 'ME';
             $color = '#ffcb9a';
             $status = 'Partially Completed';
-        } elseif ($target->completion_of_Course_folder == 25) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
             $status = 'Not Completed';
-        } else {
-            $rating = 'NI';
-            $color = '#000000';
-            $status = 'NA';
         }
 
         // Modify object (unchanged)
@@ -1714,14 +1800,10 @@ function ComplianceandUsageofLMS($facultyId, $activeRoleId, $indicator_id)
             $rating = 'ME';
             $color = '#ffcb9a';
             $status = 'Partially Completed';
-        } elseif ($target->compliance_and_usage_of_lms == 25) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
             $status = 'Not Completed';
-        } else {
-            $rating = 'NI';
-            $color = '#000000';
-            $status = 'NA';
         }
 
         // attach existing values back to object
@@ -1766,10 +1848,8 @@ if (!function_exists('generateVirtueRating')) {
             return ['percentage' => $avg, 'rating' => 'ME', 'color' => 'bg-label-warning'];
         if ($avg >= 60)
             return ['percentage' => $avg, 'rating' => 'NI', 'color' => 'bg-label-orange'];
-        if ($avg > 0)
+        if ($avg >= 0)
             return ['percentage' => $avg, 'rating' => 'BE', 'color' => 'bg-label-danger'];
-
-        return ['percentage' => 0, 'rating' => 'NA', 'color' => 'bg-label-dark'];
     }
 }
 
@@ -1917,12 +1997,9 @@ if (!function_exists('saveIndicatorPercentage')) {
         } elseif ($score >= 60) {
             $color = 'orange';
             $rating = 'NI';
-        } elseif ($score > 0) {
+        } else {
             $color = 'danger';
             $rating = 'BE';
-        } else {
-            $color = 'secondary';
-            $rating = 'NA';
         }
 
         IndicatorsPercentage::updateOrCreate(
@@ -1934,8 +2011,8 @@ if (!function_exists('saveIndicatorPercentage')) {
                 'indicator_id' => $indicatorId,
             ],
             [
-                'score' => round($score, 2),
-                'with_out_weight_score' => round($withOutWeightScore, 2),
+                'score' => number_format($score, 2),
+                'with_out_weight_score' => number_format($withOutWeightScore, 1),
                 'color' => $color,
                 'rating' => $rating,
             ]
@@ -1972,7 +2049,7 @@ if (!function_exists('saveIndicatorPercentage90Plus')) {
                 'indicator_id' => $indicatorId,
             ],
             [
-                'score' => round($score, 2),
+                'score' => number_format($score, 2),
                 'color' => $color,
                 'rating' => $rating,
             ]
@@ -2004,12 +2081,9 @@ if (!function_exists('lineManagerRatingOnEvents')) {
             } elseif ($percentage >= 60) {
                 $label = 'NI';
                 $color = 'bg-label-orange';
-            } elseif ($percentage > 0) {
+            } else {
                 $label = 'BE';
                 $color = 'bg-label-danger';
-            } else {
-                $label = 'NA';
-                $color = 'bg-label-dark';
             }
 
             $item->rating_data = [
@@ -2106,7 +2180,6 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
             'ME' => '#ffcb9a',
             'NI' => '#fd7e13',
             'BE' => '#ff4c51',
-            'NA' => '#000000',
         ];
 
         foreach ($facultyTargets as $facultyTarget) {
@@ -2144,10 +2217,8 @@ if (!function_exists('ResearchProductivityofPGStudents')) {
                     $rating = 'ME';
                 elseif ($percentage >= 60)
                     $rating = 'NI';
-                elseif ($percentage > 0)
-                    $rating = 'BE';
                 else
-                    $rating = 'NA';
+                    $rating = 'BE';
 
                 // Pick first target for optional fields
                 $firstTarget = $targets->first();
@@ -2211,12 +2282,9 @@ function overallAvgScore($emp_id)
     } elseif ($avg >= 60) {
         $color = 'orange';
         $rating = 'NI';
-    } elseif ($avg >= 0) {
+    } else {
         $color = 'danger';
         $rating = 'BE';
-    } else {
-        $color = 'secondary';
-        $rating = 'N/A';
     }
 
     return [
@@ -2342,12 +2410,9 @@ function kpaAvgScore($kpa_id, $emp_id)
     } elseif ($avg >= 60) {
         $color = 'orange';
         $rating = 'NI';
-    } elseif ($avg >= 0) {
+    } else {
         $color = 'danger';
         $rating = 'BE';
-    } else {
-        $color = 'secondary';
-        $rating = 'N/A';
     }
 
     return [
@@ -2383,12 +2448,9 @@ function indicatorAvgScore($indicator_id, $emp_id)
     } elseif ($avg >= 60) {
         $color = 'orange';
         $rating = 'NI';
-    } elseif ($avg >= 0) {
+    } else {
         $color = 'danger';
         $rating = 'BE';
-    } else {
-        $color = 'secondary';
-        $rating = 'N/A';
     }
 
     return [
@@ -2397,7 +2459,40 @@ function indicatorAvgScore($indicator_id, $emp_id)
         'color' => $color,
     ];
 }
+function indicatorCategoryAvgScoreForReport($category_id, $kpa_id, $emp_id)
+{
+    $avg = IndicatorsPercentage::where('employee_id', $emp_id)
+        ->where('key_performance_area_id', $kpa_id)
+        ->where('indicator_category_id', $category_id)
+        ->avg('score');
+    // AVG(COALESCE(score,0)) as avg_scores, 
+    // AVG(COALESCE(passing_percentage,0)) as avg_pass')
+    $avg = $avg ? round($avg, 2) : 0.00;
 
+    // Determine rating & color dynamically
+    if ($avg >= 90) {
+        $color = 'primary';
+        $rating = 'OS';
+    } elseif ($avg >= 80) {
+        $color = 'success';
+        $rating = 'EE';
+    } elseif ($avg >= 70) {
+        $color = 'warning';
+        $rating = 'ME';
+    } elseif ($avg >= 60) {
+        $color = 'orange';
+        $rating = 'NI';
+    } else {
+        $color = 'danger';
+        $rating = 'BE';
+    }
+
+    return [
+        'avg' => $avg,
+        'rating' => $rating,
+        'color' => $color,
+    ];
+}
 function indicatorCategoryAvgScore($category_id, $kpa_id, $emp_id)
 {
     $avg = IndicatorsPercentage::where('employee_id', $emp_id)
@@ -2420,12 +2515,9 @@ function indicatorCategoryAvgScore($category_id, $kpa_id, $emp_id)
     } elseif ($avg >= 60) {
         $color = 'orange';
         $rating = 'NI';
-    } elseif ($avg >= 0) {
+    } else {
         $color = 'danger';
         $rating = 'BE';
-    } else {
-        $color = 'secondary';
-        $rating = 'N/A';
     }
 
     return [
@@ -2489,12 +2581,9 @@ function Research_publication_count($facultyId, $indicator_id)
         } elseif ($percentage >= 60) {
             $rating = 'NI';
             $color = '#fd7e13';
-        } elseif ($percentage > 0) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
-        } else {
-            $rating = 'NA';
-            $color = '#000000';
         }
 
         // Add calculated values into object
@@ -2708,12 +2797,9 @@ if (!function_exists('getTopIndicatorsOfEmployee')) {
                 } elseif ($avg >= 60) {
                     $color = 'ni';
                     $rating = 'NI';
-                } elseif ($avg >= 0) {
+                } else {
                     $color = 'danger';
                     $rating = 'BE';
-                } else {
-                    $color = 'secondary';
-                    $rating = 'N/A';
                 }
 
                 // Get KPA info from first record
@@ -2813,6 +2899,17 @@ if (!function_exists('forVirtueReport')) {
     }
 }
 
+if (!function_exists('getRoleIdByName')) {
+    function getRoleIdByName(?string $roleName = null)
+    {
+        if (empty($roleName)) {
+            return null;
+        }
+
+        return Role::where('name', $roleName)->value('id') ?? null;
+    }
+}
+
 if (!function_exists('getStudentFeedbackByBarcode')) {
     function getStudentFeedbackByBarcode(string $barcode)
     {
@@ -2839,17 +2936,26 @@ if (!function_exists('getStudentFeedbackByBarcode')) {
             number_format($feedback->inspirational_leadership, 1),
         ];
     }
-    if (!function_exists('getRoleIdByName')) {
-        function getRoleIdByName(?string $roleName = null)
-        {
-            if (empty($roleName)) {
-                return null;
-            }
-
-            return Role::where('name', $roleName)->value('id') ?? null;
+}
+if (!function_exists('getStudentFeedbackForTeacher')) {
+    function getStudentFeedbackForTeacher(?int $facultyId)
+    {
+        if (!$facultyId) {
+            return null; // or 0 if you prefer
         }
+
+        return StudentFeedbackClassWise::query()
+            ->join(
+                'faculty_member_classes',
+                'faculty_member_classes.code',
+                '=',
+                'student_feedback_class_wises.component_class'
+            )
+            ->where('faculty_member_classes.faculty_id', $facultyId)
+            ->avg('student_feedback_class_wises.feedback');
     }
 }
+
 if (!function_exists('getFacultyClassWiseFeedback')) {
     function getFacultyClassWiseFeedback(?int $facultyId)
     {
@@ -3135,12 +3241,9 @@ function makeIndicatorRow($name, $indicatorId, $percentage)
     } elseif ($percentage >= 60) {
         $color = '#fd7e13';
         $rating = 'NI';
-    } elseif ($percentage >= 50) {
+    } else {
         $color = '#ff4c51';
         $rating = 'BE';
-    } else {
-        $color = '#d3d3d3';
-        $rating = 'NA';
     }
 
     return (object) [
@@ -3185,12 +3288,9 @@ function NumberOfKnowledgeProduct($facultyId, $activeRoleId)
     } elseif ($score >= 60) {
         $rating = 'NI';
         $color = 'orange';
-    } elseif ($score > 0) {
+    } else {
         $rating = 'BE';
         $color = 'danger';
-    } else {
-        $rating = 'NA';
-        $color = 'secondary';
     }
     $weights = [
         'course_load' => getRoleWeightage($activeRoleId, 'indicator', 194)['weightage'],
@@ -3239,12 +3339,9 @@ if (!function_exists('lineManagerReviewRatingOnTasks')) {
                 } elseif ($score >= 60) {
                     $label = 'NI';
                     $color = 'bg-info';
-                } elseif ($score > 0) {
+                } else {
                     $label = 'BE';
                     $color = 'bg-danger';
-                } else {
-                    $label = 'NA';
-                    $color = 'bg-secondary';
                 }
 
                 $managerRatings[] = (object) [
@@ -3314,12 +3411,9 @@ function QECAuditRatingOfHOD($employeeId, $activeRoleId)
             } elseif ($percentage >= 60) {
                 $label = 'NI';
                 $color = 'bg-info';
-            } elseif ($percentage > 0) {
+            } else {
                 $label = 'BE';
                 $color = 'bg-danger';
-            } else {
-                $label = 'NA';
-                $color = 'bg-secondary';
             }
             $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 110);
             $weight = $indicatorWeight['weightage'] ?? 0;
@@ -3396,12 +3490,9 @@ function StudentAttendanceOfHOD($employeeId, $activeRoleId)
             } elseif ($percentage >= 60) {
                 $rating = 'NI';
                 $color = 'bg-info';
-            } elseif ($percentage > 0) {
+            } else {
                 $rating = 'BE';
                 $color = 'bg-danger';
-            } else {
-                $rating = 'NA';
-                $color = 'bg-secondary';
             }
 
             $data[] = (object) [
@@ -3516,14 +3607,10 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
                 $rating = 'ME';
                 $color = '#ffcb9a';
                 $status = 'Partially Completed';
-            } elseif ($target->completion_of_Course_folder >= 25) {
+            } else {
                 $rating = 'BE';
                 $color = '#ff4c51';
                 $status = 'Not Completed';
-            } else {
-                $rating = 'NI';
-                $color = '#000000';
-                $status = 'NA';
             }
 
             // Modify object for frontend
@@ -3687,12 +3774,9 @@ function StudentEngagementRateForHOD($activeRoleId, $indicatorId)
     } elseif ($participationPercentage >= 60) {
         $rating = 'NI';
         $color = '#fd7e13';
-    } elseif ($participationPercentage >= 50) {
+    } else {
         $rating = 'BE';
         $color = '#ff4c51';
-    } else {
-        $rating = 'NA';
-        $color = '#d3d3d3';
     }
 
     // Weighted score
@@ -4420,12 +4504,9 @@ if (!function_exists('admissionTargetDepartmentAverage')) {
                     $rating = 'ME';
                 } elseif ($percentage >= 60) {
                     $rating = 'NI';
-                } elseif ($percentage > 0) {
-                    $rating = 'BE';
                 } else {
-                    $rating = 'NA';
+                    $rating = 'BE';
                 }
-
                 $allData[] = [
                     'faculty_id' => $target->faculty_id,
                     'program_id' => $target->program_id,
@@ -4506,10 +4587,8 @@ if (!function_exists('recoveryTargetDepartmentAveraget')) {
                     $rating = 'ME';
                 } elseif ($percentage >= 60) {
                     $rating = 'NI';
-                } elseif ($percentage > 0) {
-                    $rating = 'BE';
                 } else {
-                    $rating = 'NA';
+                    $rating = 'BE';
                 }
 
                 $allData[] = [
@@ -4591,10 +4670,8 @@ if (!function_exists('programProfitabilityDepartmentAverage')) {
                     $rating = 'ME';
                 } elseif ($profitability >= 60) {
                     $rating = 'NI';
-                } elseif ($profitability > 0) {
-                    $rating = 'BE';
                 } else {
-                    $rating = 'NA';
+                    $rating = 'BE';
                 }
 
                 $allData[] = [
@@ -4678,10 +4755,8 @@ if (!function_exists('goGlobalStreamDepartmentAverage')) {
                     $rating = 'ME';
                 } elseif ($percentage >= 60) {
                     $rating = 'NI';
-                } elseif ($percentage > 0) {
-                    $rating = 'BE';
                 } else {
-                    $rating = 'NA';
+                    $rating = 'BE';
                 }
 
                 $allData[] = [
@@ -4767,10 +4842,8 @@ if (!function_exists('goGlobalStreamDepartmentAverage')) {
                     $rating = 'ME';
                 } elseif ($percentage >= 60) {
                     $rating = 'NI';
-                } elseif ($percentage > 0) {
-                    $rating = 'BE';
                 } else {
-                    $rating = 'NA';
+                    $rating = 'BE';
                 }
 
                 $allData[] = [
@@ -4856,10 +4929,8 @@ if (!function_exists('NoOfStudentsEnrolledIn1MWithGlobalExperienceOfHOD')) {
                     $rating = 'ME';
                 } elseif ($percentage >= 60) {
                     $rating = 'NI';
-                } elseif ($percentage > 0) {
-                    $rating = 'BE';
                 } else {
-                    $rating = 'NA';
+                    $rating = 'BE';
                 }
 
                 $allData[] = [
@@ -4928,10 +4999,8 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
                 $category = 'ME';
             } elseif ($rating >= 60) {
                 $category = 'NI';
-            } elseif ($rating > 0) {
-                $category = 'BE';
             } else {
-                $category = 'NA';
+                $category = 'BE';
             }
 
             $data[] = [
@@ -5321,12 +5390,9 @@ if (!function_exists('lineManagerReviewRatingOnTasks169')) {
                 } elseif ($score >= 60) {
                     $label = 'NI';
                     $color = 'bg-info';
-                } elseif ($score > 0) {
+                } else {
                     $label = 'BE';
                     $color = 'bg-danger';
-                } else {
-                    $label = 'NA';
-                    $color = 'bg-secondary';
                 }
 
                 $managerRatings[] = (object) [
@@ -5754,12 +5820,9 @@ if (!function_exists('lineManagerReviewRatingOnTasksOfPL')) {
                 } elseif ($score >= 60) {
                     $label = 'NI';
                     $color = 'bg-info';
-                } elseif ($score > 0) {
+                } else {
                     $label = 'BE';
                     $color = 'bg-danger';
-                } else {
-                    $label = 'NA';
-                    $color = 'bg-secondary';
                 }
 
                 $managerRatings[] = (object) [
@@ -5900,12 +5963,9 @@ function professionalMembershipTargetPL($employeeId, $activeRoleId, $indicatorId
         } elseif ($percentage >= 60) {
             $rating = 'NI';
             $color = '#fd7e13';
-        } elseif ($percentage > 0) {
+        } else {
             $rating = 'BE';
             $color = '#ff4c51';
-        } else {
-            $rating = 'NA';
-            $color = '#000000';
         }
 
         // Save percentage for avg calculation
@@ -6206,12 +6266,9 @@ if (!function_exists('lineManagerRatingOnEventsForPL')) {
             } elseif ($percentage >= 60) {
                 $label = 'NI';
                 $color = 'bg-label-orange';
-            } elseif ($percentage > 0) {
+            } else {
                 $label = 'BE';
                 $color = 'bg-label-danger';
-            } else {
-                $label = 'NA';
-                $color = 'bg-label-dark';
             }
 
             $item->rating_data = [
@@ -6296,7 +6353,7 @@ if (!function_exists('saveIndicatorPercentage100Plus')) {
                 'indicator_id' => $indicatorId,
             ],
             [
-                'score' => round($score, 2),
+                'score' => number_format($score, 2),
                 'color' => $color,
                 'rating' => $rating,
             ]

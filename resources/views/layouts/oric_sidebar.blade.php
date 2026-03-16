@@ -3,7 +3,7 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu">
 
     <div class="app-brand demo">
-        <a href="{{ route('dashboard') }}" class="app-brand-link">
+        <a href="#" class="app-brand-link">
             <img style="width: 175px;" src="{{ asset('admin/assets/img/avatars/superior.svg') }}">
         </a>
 
@@ -38,58 +38,58 @@
                 <div data-i18n="Target">Target</div>
             </a>
         </li>
-        
+
         @if(auth()->user()->hasRole(['ORIC']))
             @php
                 $teacherRoleId = auth()->user()->roles->firstWhere('name', 'ORIC')->id ?? null;
 
                 $assignments = \App\Models\RoleKpaAssignment::with([
-                'kpa',
-                'category',
-                'indicator.indicatorForm'
+                    'kpa',
+                    'category',
+                    'indicator.indicatorForm'
                 ])
-                ->where('role_id', $teacherRoleId)
-                ->get();
+                    ->where('role_id', $teacherRoleId)
+                    ->get();
 
                 // Group by KPA → Category → Indicators
                 $result = $assignments->groupBy('kpa.id')->map(function ($kpaGroup) {
-                $kpa = $kpaGroup->first()->kpa;
-
-                return [
-                    'id' => $kpa->id,
-                    'performance_area' => $kpa->performance_area,
-                    'created_by' => $kpa->created_by,
-                    'updated_by' => $kpa->updated_by,
-                    'created_at' => $kpa->created_at,
-                    'updated_at' => $kpa->updated_at,
-                    'category' => $kpaGroup->groupBy('category.id')->map(function ($catGroup) {
-                    $category = $catGroup->first()->category;
+                    $kpa = $kpaGroup->first()->kpa;
 
                     return [
-                        'id' => $category->id,
-                        'key_performance_area_id' => $category->key_performance_area_id,
-                        'indicator_category' => $category->indicator_category,
-                        'created_by' => $category->created_by,
-                        'updated_by' => $category->updated_by,
-                        'created_at' => $category->created_at,
-                        'updated_at' => $category->updated_at,
-                        'indicator' => $catGroup->map(function ($item) {
-                        $indicator = $item->indicator;
+                        'id' => $kpa->id,
+                        'performance_area' => $kpa->performance_area,
+                        'created_by' => $kpa->created_by,
+                        'updated_by' => $kpa->updated_by,
+                        'created_at' => $kpa->created_at,
+                        'updated_at' => $kpa->updated_at,
+                        'category' => $kpaGroup->groupBy('category.id')->map(function ($catGroup) {
+                            $category = $catGroup->first()->category;
 
-                        return [
-                            'id' => $indicator->id,
-                            'indicator_category_id' => $indicator->indicator_category_id,
-                            'indicator' => $indicator->indicator,
-                            'created_by' => $indicator->created_by,
-                            'updated_by' => $indicator->updated_by,
-                            'created_at' => $indicator->created_at,
-                            'updated_at' => $indicator->updated_at,
-                            'indicator_form' => $indicator->indicatorForm ?? [],
-                        ];
+                            return [
+                                'id' => $category->id,
+                                'key_performance_area_id' => $category->key_performance_area_id,
+                                'indicator_category' => $category->indicator_category,
+                                'created_by' => $category->created_by,
+                                'updated_by' => $category->updated_by,
+                                'created_at' => $category->created_at,
+                                'updated_at' => $category->updated_at,
+                                'indicator' => $catGroup->map(function ($item) {
+                                    $indicator = $item->indicator;
+
+                                    return [
+                                        'id' => $indicator->id,
+                                        'indicator_category_id' => $indicator->indicator_category_id,
+                                        'indicator' => $indicator->indicator,
+                                        'created_by' => $indicator->created_by,
+                                        'updated_by' => $indicator->updated_by,
+                                        'created_at' => $indicator->created_at,
+                                        'updated_at' => $indicator->updated_at,
+                                        'indicator_form' => $indicator->indicatorForm ?? [],
+                                    ];
+                                })->values()
+                            ];
                         })->values()
                     ];
-                    })->values()
-                ];
                 })->values();
                 $icons = [
                     'ti tabler-star',
@@ -104,49 +104,49 @@
             @endphp
 
             {{-- Render Menu --}}
-            @foreach($result as $kpakey=>$kpa)
+            @foreach($result as $kpakey => $kpa)
                 <li class="menu-item active">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon icon-base {{ $icons[$kpakey % count($icons)] }}"></i>
-                    <div data-i18n="{{ $kpa['performance_area'] }}">
-                    {{ $kpa['performance_area'] }}
-                    </div>
-                </a>
-
-                {{-- Level 2: Indicator Categories --}}
-                <ul class="menu-sub">
-                    @foreach($kpa['category'] as $category)
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <div data-i18n="{{ $category['indicator_category'] }}">
-                            {{ $category['indicator_category'] }}
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon icon-base {{ $icons[$kpakey % count($icons)] }}"></i>
+                        <div data-i18n="{{ $kpa['performance_area'] }}">
+                            {{ $kpa['performance_area'] }}
                         </div>
-                        </a>
+                    </a>
 
-                        {{-- Level 3: Indicators --}}
-                        @if(!empty($category['indicator']))
-                        <ul class="menu-sub">
-                            @foreach($category['indicator'] as $indicator)
-                                <li class="menu-item">
-                                <a href="{{ route('indicator.form', [
-                                'area' => $kpa['id'],
-                                'category' => $category['id'],
-                                'indicator' => $indicator['id']
-                            ]) }}" class="menu-link">
-                                    <div data-i18n="{{ $indicator['indicator'] }}">
-                                    {{ $indicator['indicator'] }}
+                    {{-- Level 2: Indicator Categories --}}
+                    <ul class="menu-sub">
+                        @foreach($kpa['category'] as $category)
+                            <li class="menu-item">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <div data-i18n="{{ $category['indicator_category'] }}">
+                                        {{ $category['indicator_category'] }}
                                     </div>
                                 </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                        @endif
-                    </li>
-                    @endforeach
-                </ul>
+
+                                {{-- Level 3: Indicators --}}
+                                @if(!empty($category['indicator']))
+                                    <ul class="menu-sub">
+                                        @foreach($category['indicator'] as $indicator)
+                                                <li class="menu-item">
+                                                    <a href="{{ route('indicator.form', [
+                                                'area' => $kpa['id'],
+                                                'category' => $category['id'],
+                                                'indicator' => $indicator['id']
+                                            ]) }}" class="menu-link">
+                                                        <div data-i18n="{{ $indicator['indicator'] }}">
+                                                            {{ $indicator['indicator'] }}
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
                 </li>
             @endforeach
-      @endif
+        @endif
     </ul>
 
 </aside>

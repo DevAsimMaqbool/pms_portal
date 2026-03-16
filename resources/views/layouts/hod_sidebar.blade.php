@@ -3,7 +3,7 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu">
 
     <div class="app-brand demo">
-        <a href="{{ route('dashboard') }}" class="app-brand-link">
+        <a href="#" class="app-brand-link">
             <img style="width: 175px;" src="{{ asset('admin/assets/img/avatars/superior.svg') }}">
         </a>
 
@@ -78,7 +78,8 @@
 
                 @foreach($result as $kpakey => $kpa)
                     <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $kpa['performance_area'] }}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip"
+                            data-bs-placement="right" data-bs-original-title="{{ $kpa['performance_area'] }}">
                             <i class="menu-icon icon-base {{ $icons[$kpakey % count($icons)] }}"></i>
                             <div data-i18n="{{ $kpa['performance_area'] }}">{{ $kpa['performance_area'] }}</div> {{-- keep
                             same
@@ -89,7 +90,9 @@
                         <ul class="menu-sub">
                             @foreach($kpa['category'] as $category)
                                 <li class="menu-item" title="{{ $category['indicator_category'] }}">
-                                    <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $category['indicator_category'] }}">
+                                    <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        data-bs-original-title="{{ $category['indicator_category'] }}">
                                         <div data-i18n="{{ $category['indicator_category'] }}">
                                             {{ $category['indicator_category'] }}
                                         </div>
@@ -104,7 +107,9 @@
                                                     'area' => $kpa['id'],
                                                     'category' => $category['id'],
                                                     'indicator' => $indicator['id']
-                                                ]) }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $indicator['indicator'] }}">
+                                                ]) }}" class="menu-link" data-bs-toggle="tooltip"
+                                                                        data-bs-placement="right"
+                                                                        data-bs-original-title="{{ $indicator['indicator'] }}">
                                                                         <div data-i18n="{{ $indicator['short_code'] ?? $indicator['indicator'] }}">
                                                                             {{ $indicator['short_code'] ?? $indicator['indicator'] }}
                                                                         </div>
@@ -121,18 +126,23 @@
                     </li>
                 @endforeach
                 <li class="menu-item {{ request()->routeIs('employee.rating.index') ? 'active' : '' }}">
-                    <a href="{{ route('employee.rating.index') }}"" class=" menu-link" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Line Manager Feedback">
+                    <a href="{{ route('employee.rating.index') }}"" class=" menu-link" data-bs-toggle="tooltip"
+                        data-bs-placement="right" data-bs-original-title="Line Manager Feedback">
                         <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
                         <div data-i18n="Line Manager Feedback">Line Manager Feedback</div>
                     </a>
                 </li>
-                <li class="menu-item {{ request()->routeIs('employee.feedback.index') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Line Manager Event Feedback">
+                <li class="menu-item {{ request()->routeIs('employee.feedback.index') ? 'active' : '' }}"
+                    data-bs-toggle="tooltip" data-bs-placement="right"
+                    data-bs-original-title="Line Manager Event Feedback">
                     <a href="{{ route('employee.feedback.index') }}"" class=" menu-link">
                         <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
                         <div data-i18n="Line Manager Event Feedback">Line Manager Event Feedback</div>
                     </a>
                 </li>
-                <li class="menu-item {{ request()->is('kpa/1/category/3/indicator/120') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Completion of Course Folder">
+                <li class="menu-item {{ request()->is('kpa/1/category/3/indicator/120') ? 'active' : '' }}"
+                    data-bs-toggle="tooltip" data-bs-placement="right"
+                    data-bs-original-title="Completion of Course Folder">
                     <a href="{{ url('kpa/1/category/3/indicator/120') }}"" class=" menu-link">
                         <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
                         <div data-i18n="Completion of Course Folder">Completion of Course Folder</div>
@@ -144,7 +154,8 @@
                         <div data-i18n="Compliance and Usage of LMS">Compliance and Usage of LMS</div>
                     </a>
                 </li> -->
-                <li class="menu-item {{ request()->routeIs('hod.target') ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Target">
+                <li class="menu-item {{ request()->routeIs('hod.target') ? 'active' : '' }}" data-bs-toggle="tooltip"
+                    data-bs-placement="right" data-bs-original-title="Target">
                     <a href="{{ route('hod.target') }}" class="menu-link">
                         <i class="menu-icon icon-base ti tabler-contract"></i>
                         <div data-i18n="Target">Target</div>

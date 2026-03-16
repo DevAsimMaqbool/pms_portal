@@ -3,7 +3,7 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu">
 
     <div class="app-brand demo">
-        <a href="{{ route('dashboard') }}" class="app-brand-link">
+        <a href="#" class="app-brand-link">
             <img style="width: 175px;" src="{{ asset('admin/assets/img/avatars/superior.svg') }}">
         </a>
 

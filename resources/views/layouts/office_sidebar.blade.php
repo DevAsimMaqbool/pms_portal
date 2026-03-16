@@ -3,7 +3,7 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu">
 
   <div class="app-brand demo">
-    <a href="{{ route('dashboard') }}" class="app-brand-link">
+    <a href="#" class="app-brand-link">
       <img style="width: 175px;" src="{{ asset('admin/assets/img/avatars/superior.svg') }}">
     </a>
 
@@ -41,7 +41,8 @@
 
         @foreach($result as $kpakey => $kpa)
           <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $kpa['performance_area'] }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right"
+              data-bs-original-title="{{ $kpa['performance_area'] }}">
               <i class="menu-icon icon-base {{ $icons[$kpakey % count($icons)] }}"></i>
               <div data-i18n="{{ $kpa['performance_area'] }}">{{ $kpa['performance_area'] }}</div> {{-- keep same label as
               your original --}}
@@ -49,7 +50,8 @@
             <ul class="menu-sub">
               @foreach($kpa['category'] as $category)
                 <li class="menu-item" title="{{ $category['indicator_category'] }}">
-                  <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $category['indicator_category'] }}">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip"
+                    data-bs-placement="right" data-bs-original-title="{{ $category['indicator_category'] }}">
                     <div data-i18n="{{ $category['indicator_category'] }}">
                       {{ $category['indicator_category'] }}
                     </div>
@@ -64,7 +66,8 @@
                           'area' => $kpa['id'],
                           'category' => $category['id'],
                           'indicator' => $indicator['id']
-                        ]) }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ $indicator['indicator'] }}">
+                        ]) }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"
+                                    data-bs-original-title="{{ $indicator['indicator'] }}">
                                     <div data-i18n="{{ $indicator['short_code'] ?? $indicator['indicator'] }}">
                                       {{ $indicator['short_code'] ?? $indicator['indicator'] }}
                                     </div>
