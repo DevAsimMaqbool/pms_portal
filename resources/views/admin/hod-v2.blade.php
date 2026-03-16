@@ -290,7 +290,7 @@
                 <div class="card" style="box-shadow: none;background: none;">
                   <div class="card-header text-center">
                     <div class="card-title mb-0">
-                      <h5 class="mb-1">Hii, {{ trim(preg_replace('/[-\s]*\d+$/', '', $employee->name)) }} 🎉</h5>
+                      <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', $employee->name)) }} 🎉</h5>
                       <div class="mb-2 rounded bg-label-success p-1" data-bs-toggle="tooltip" data-bs-placement="top"
                 data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->department }}">
                                           <span class="bg-label-success text-cut-department">
