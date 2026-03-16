@@ -24,7 +24,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-            if ($user->hasRole('Dean')) {
+            if(in_array(getRoleName(activeRole()), ['Dean'])) {   
                 $status = $request->input('status');
                 $hod_ids = User::where('manager_id', $employee_id)
                     ->role('HOD')->pluck('employee_id');
@@ -47,7 +47,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
                 if ($status == "RESEARCHER") {
                     $teacher_id = User::whereIn('manager_id', $hod_ids)
-                        ->role('Teacher')->pluck('employee_id');
+                        ->role(['Teacher','Assistant Professor'])->pluck('employee_id');
                     $all_ids = $teacher_id->merge($hod_ids);
                     $forms = AchievementOfResearchPublicationsTarget::with([
                         'creator' => function ($q) {
@@ -62,7 +62,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
 
             }
-            if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+            if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Assistant Professor'])) {  
 
                 $status = $request->input('status');
                 if ($status == "Teacher") {
@@ -79,14 +79,15 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
                 if ($status == "HOD") {
                     $employeeIds = User::where('manager_id', $employee_id)
-                        ->role('Teacher')->pluck('employee_id');
+                        ->role(['Teacher','Assistant Professor'])->pluck('employee_id');
+                        $all_ids = $employeeIds->merge($employee_id);
                     $forms = AchievementOfResearchPublicationsTarget::with([
                         'creator' => function ($q) {
                             $q->select('employee_id', 'name');
                         },
                         'coAuthors'
                     ])
-                        ->whereIn('created_by', $employeeIds)
+                        ->whereIn('created_by', $all_ids)
                         ->whereIn('status', [1, 2])
                         ->where('form_status', 'RESEARCHER')
                         ->orderBy('id', 'desc')
@@ -94,7 +95,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
 
             }
-            if ($user->hasRole('ORIC')) {
+            if(in_array(getRoleName(activeRole()), ['ORIC'])) {
                 $forms = AchievementOfResearchPublicationsTarget::with([
                     'creator' => function ($q) {
                         $q->select('employee_id', 'name');
@@ -107,7 +108,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                     ->get();
 
             }
-            if ($user->hasRole('Human Resources')) {
+            if(in_array(getRoleName(activeRole()), ['Human Resources'])) {
                 $status = $request->input('status');
                 if ($status == "HOD") {
                     $forms = AchievementOfResearchPublicationsTarget::with([
@@ -319,7 +320,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         // Get current user info
         $currentUserId = Auth::id();
         $currentUserName = Auth::user()->name;
-        $userRoll = Auth::user()->getRoleNames()->first() ?? 'N/A';
+        $userRoll = getRoleName(activeRole()) ?? 'N/A';
 
         // Avoid duplicate consecutive updates by the same user with the same status
         $lastUpdate = end($history);

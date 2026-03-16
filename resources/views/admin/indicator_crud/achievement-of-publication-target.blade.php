@@ -39,7 +39,7 @@
             </div>
             
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+                @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
                     <div class="tab-pane fade show" id="form2" role="tabpanel">
                         <div class="table-responsive text-nowrap">
                             <table id="achievementTable" class="table table-bordered">
@@ -267,7 +267,7 @@
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD', 'Teacher']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
         <script>
             function fetchAchievementForms() {
                 $.ajax({
