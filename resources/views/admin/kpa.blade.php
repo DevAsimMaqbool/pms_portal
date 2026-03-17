@@ -297,7 +297,7 @@
                         animation: { duration: 600 },
                         scales: {
                             r: {
-                                min: Math.min(...fixedDataset1) <= 0 ? 0 : 50,
+                                min: 0,
                                 max: 100,
                                 ticks: {
                                     display: true,

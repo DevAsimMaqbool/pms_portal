@@ -56,10 +56,13 @@
                                 <td style="color: {{ $color }}">{{ $status }}</td>
                                 <td>{{ $key->completion_of_Course_folder ?? 'N/A' }}</td>
                                 <td>
+                                @if($key->status == 1)
                                     <a href="{{ route('completion-of-course-folder.edit', $key->id) }}"
                                         class="btn btn-sm btn-primary">
                                         Edit
                                     </a>
+                                @endif
+                                    
                                 </td>
                             </tr>
                         @empty
