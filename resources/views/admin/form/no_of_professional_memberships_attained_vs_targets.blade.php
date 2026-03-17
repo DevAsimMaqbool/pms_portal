@@ -34,9 +34,9 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
 @csrf
 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-<div class="row g-3 mt-0">
-<div id="grant-details-container">
-<div class="grant-group row g-3 m-0 p-3 border border-primary">
+<div class="">
+<div>
+<div class="grant-group row g-3">
 <div class="col-md-6">
 <label for="type_of_membership" class="form-label">Type of Membership</label>
 <select name="type_of_membership" id="type_of_membership" class="select2 form-select faculty-member"
