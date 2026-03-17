@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FacultyTarget;
 use App\Models\ProfessionalMembership;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -279,6 +281,60 @@ class ProfessionalMembershipController extends Controller
     {
         $area = ProfessionalMembership::with('indicatorCategories.indicators')->findOrFail($id);
         return view('admin.performance', compact('area'));
+    }
+    public function target(Request $request)
+    {
+         try {
+            $user = Auth::user();
+            $userId = Auth::id();
+            $employee_id = $user->employee_id;
+
+            if ($user->hasRole('Dean')) {
+                   $status = $request->input('status');
+                   $indicator_id = $request->input('indicator');
+                   if($status=="OTHER"){
+                       $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
+                            ->where('created_by', $employee_id)
+                            ->where('form_status', 'OTHER')
+                            ->get();
+                   }          
+                
+            }
+            
+           
+          
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'forms' => $forms
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Oops! Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function ProfessionalMembershipUsers(Request $request)
+    {
+         try {
+           
+           $user = Auth::user();
+           $userId = Auth::id();
+           $faculty = $user->faculty;
+           $users = User::where('faculty', $faculty)
+                    ->role(['HOD','Dean','Program Leader UG','Program Leader PG'])->get();
+
+         return response()->json($users);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Oops! Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
 
