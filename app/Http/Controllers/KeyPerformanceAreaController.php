@@ -127,6 +127,7 @@ class KeyPerformanceAreaController extends Controller
     public function kpa($id)
     {
         $userRole = activeRole();
+        $userRoleId = getRoleIdByName(activeRole());
         $displayRole = match (strtolower($userRole)) {
             'hod' => 'HOD',
             default => ucfirst($userRole),
@@ -143,6 +144,7 @@ class KeyPerformanceAreaController extends Controller
         $indicatorCategories = \App\Models\IndicatorsPercentage::select('indicator_category_id', DB::raw('AVG(score) as avg_score'))
             ->where('employee_id', $employeeId)
             ->where('key_performance_area_id', $id)
+            ->where('role_id', $userRoleId)
             ->groupBy('indicator_category_id')
             ->get();
 
@@ -152,7 +154,6 @@ class KeyPerformanceAreaController extends Controller
             $cat['score'] = $avg ? floor($avg->avg_score) : 0;
             return $cat;
         });
-
         if ($id == 14) {
             return view('admin.kpa_virtue', compact('area'));
         }
