@@ -19,6 +19,17 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
 <!-- Multi Column with Form Separator -->
 <div class="card">
 <div class="card-datatable table-responsive card-body">
+            @if(in_array(getRoleName(activeRole()), ['Dean']))
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs mb-3" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">No of Professional Memberships attained vs targets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Target Setting</a>
+                    </li>
+                </ul>
+            @endif
 <!-- Tab panes -->
 <div class="tab-content">
 @if(in_array(getRoleName(activeRole()), ['Dean','HOD','Program Leader UG','Program Leader PG']))
@@ -180,6 +191,65 @@ class="country-dropdown select2 form-select" required>
 <button type="submit" class="btn btn-primary waves-effect waves-light">SUBMIT</button>
 </div>
 </form>
+
+</div>
+@endif
+@if(in_array(getRoleName(activeRole()), ['Dean']))
+<div class="tab-pane fade" id="form2" role="tabpanel">
+
+    <div class="mb-6">
+            <h5>Target Assign</h5>
+            <form id="researchForm2">
+                @csrf
+                <input type="hidden" id="form_status" name="form_status" value="OTHER" required>
+                <div class="row g-6">
+                    <div class="col-md-4 d-none">
+                        <label class="form-label" for="indicator_id">Select Indicator</label>
+                        <select id="indicator_id" class="form-control"  name="indicator_id[]"
+                             required>
+                            <option value="155">No of Professional Memberships attained vs targets</option>
+                        </select>
+                        <div class="invalid-feedback" id="indicatorError"></div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label" for="target">Target</label>
+                        <input type="number" id="target" name="target" class="form-control" placeholder="1">
+                        <div class="invalid-feedback" id="targetError"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="multicol-language">Name of Faculty Member</label>
+                        <select name="faculty_member_id[]" id="select2Success" class="select2 form-select" multiple
+                            required>
+                            <option value="">-- Select Faculty Member --</option>
+                           
+                        </select>
+                    </div>
+                </div>
+                <div class="pt-6">
+                    <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">Submit</button>
+                    <button type="reset" class="btn btn-label-secondary waves-effect">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <!--/ Permission Table -->
+        <div class="card mb-6">
+            <div class="table-responsive text-nowrap">
+                <table id="complaintTable3" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Indicator</th>
+                            <th>Target</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+
+
+
 
 </div>
 @endif
@@ -692,6 +762,159 @@ class="country-dropdown select2 form-select" required>
                 $(document).on('change', '#selectAll', function () {
                     $('.rowCheckbox').prop('checked', $(this).is(':checked'));
                 });
+            });
+        </script>
+    @endif
+     @if(auth()->user()->hasRole(['Dean']))
+        <script>
+            function fetchTarget() {
+                $.ajax({
+                    url: "{{ route('professional-membership-target.get') }}",
+                    method: "GET",
+                    data: {
+                        status: "OTHER" // you can send more values
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
+
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
+
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                i + 1,
+                                form.user ? form.user.name : 'N/A',
+                                form.indicator ? form.indicator.indicator : 'N/A',
+                                form.target || 'N/A'
+                            ];
+                        });
+
+                        if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
+                            $('#complaintTable3').DataTable({
+                                data: rowData,
+                                columns: [
+                                    { title: "#" },
+                                    { title: "User" },
+                                    { title: "Indicator" },
+                                    { title: "Target" },
+                                ]
+                            });
+                        } else {
+                            $('#complaintTable3').DataTable().clear().rows.add(rowData).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
+                });
+            }
+
+
+            $(document).ready(function () {
+                fetchTarget();
+                $('#researchForm2').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
+
+                    // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: "{{ route('faculty-target.store') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.close();
+                            // Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                            Swal.fire({
+                                icon: 'success',
+                                html: `<div class="alert alert-success alert-dismissible" role="alert">${response.message}</div>`,
+                                background: '#ffffffff',
+                                showConfirmButton: false,
+                                timer: 3500,
+                                timerProgressBar: true,
+                            });
+                            form[0].reset();
+
+                            // Reset Select2 dropdowns
+                            //$('#indicator_id').val(null).trigger('change');
+                            $('#select2Success').val(null).trigger('change');
+                            fetchTarget();
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            // Clear previous errors before showing new ones
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            // ✅ If duplicate assignment (HTTP 409)
+                            if (xhr.status === 409) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Already Assigned',
+                                    text: xhr.responseJSON.message
+                                });
+                                return;
+                            }
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+
+                                // Loop through all validation errors
+                                $.each(errors, function (field, messages) {
+                                    let input = form.find('[name="' + field + '"]');
+
+                                    if (input.length) {
+                                        input.addClass('is-invalid');
+
+                                        // Show error message under input
+                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                    }
+                                });
+
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
+                        }
+                    });
+                });
+                $('#select2Success').select2({
+        placeholder: "Select Faculty Member",
+        allowClear: true
+    });
+
+    // Load data via AJAX
+    $.ajax({
+        url: "/professional-membership-users",
+        type: "GET",
+        success: function (data) {
+            let select = $('#select2Success');
+            select.empty();
+
+            $.each(data, function (index, user) {
+                select.append(
+                    `<option value="${user.id}" data-department="${user.department}" data-job_title="${user.job_title}">${user.name}</option>`
+                );
+            });
+        },
+        error: function() {
+                            alert('pps');
+                        }
+    });
+
+
             });
         </script>
     @endif
