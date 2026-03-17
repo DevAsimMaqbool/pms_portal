@@ -34,9 +34,9 @@
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
                                 <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-                                <div class="row g-3 mt-0">
-                                    <div id="grant-details-container">
-                                        <div class="grant-group row g-3 m-0 p-3 border border-primary">
+                                <div class="mt-2">
+                                    <div>
+                                        <div class="row g-3">
                                             <div class="col-md-6">
                                                 <label for="faculty" class="form-label">Faculty</label>
                                                 <select name="faculty_id" id="faculty_id" class="select2 form-select" required>

@@ -166,15 +166,17 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
-                            let editButton = '';
+                            
+                             let editButton = '';
+                            let deleteBtn = '';
                             if (parseInt(form.status) === 1) {
                                 editButton = `
                                     <button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" 
                                         data-form='${JSON.stringify(form)}'>
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
-                            }  
-                             const deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;     
+                                deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
+                            }     
 
                             // Pass entire form as JSON in button's data attribute
                             return [

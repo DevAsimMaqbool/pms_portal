@@ -38,7 +38,7 @@
 
                                 <div class="mt-3">
                                          
-                                        <div class="row g-3 m-0 pb-3 border border-primary">
+                                        <div class="row g-3 pb-3">
                                             <div class="col-md-4">
                                                 <label for="batch" class="form-label">Select Year</label>
                                                 <select name="year" id="year" class="select2 form-select faculty-member" required>
