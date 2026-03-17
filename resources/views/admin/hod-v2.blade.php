@@ -544,11 +544,12 @@
     </div>
     <div class="row gy-6 mt-2">
 
-      <div class="col-md-6 col-lg-4" id="scrollableCol">
+      <div class="col-md-6 col-lg-4">
         <div class=" d-flex justify-content-between">
           <h5 class="fw-bold">Key Indicators</h5>
         </div>
         <!--/ Statistics -->
+        <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
         @php
 
           $EmployabilityhodHotIndicators = hodHotIndicators(103, $activeRoleId);
@@ -793,137 +794,139 @@
             </div>
           </div>
         </div>
+        </div>
 
       </div>
 
-      <div class="col-md-6 col-lg-4" id="scrollableCol1">
+      <div class="col-md-6 col-lg-4">
 
 
         <div class=" d-flex justify-content-between">
           <h5 class="fw-bold">Top Performers</h5>
         </div>
-        @php
-          $hodTopPerformers = hodTopPerformers();
-        @endphp
-        @if(!empty($hodTopPerformers))
-          @foreach($hodTopPerformers as $hodTopPerformer)
-            <div class="card mb-6" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
-              data-bs-custom-class="tooltip-{{ $hodTopPerformer['color'] }}"
-              data-bs-original-title="{{ $hodTopPerformer['name'] }}<br>{{ $hodTopPerformer['location'] }}">
-              <div class="card-body d-flex">
-                <div class="d-flex w-70 align-items-center me-4">
-                  <div class="badge bg-label-{{ $hodTopPerformer['color'] }} rounded p-1_5 me-4"><i
-                      class="icon-base ti tabler-trophy icon-md"></i>
+          <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
+            @php
+              $hodTopPerformers = hodTopPerformers();
+            @endphp
+            @if(!empty($hodTopPerformers))
+              @foreach($hodTopPerformers as $hodTopPerformer)
+                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+                  data-bs-custom-class="tooltip-{{ $hodTopPerformer['color'] }}"
+                  data-bs-original-title="{{ $hodTopPerformer['name'] }}<br>{{ $hodTopPerformer['location'] }}">
+                  <div class="card-body d-flex">
+                    <div class="d-flex w-70 align-items-center me-4">
+                      <div class="badge bg-label-{{ $hodTopPerformer['color'] }} rounded p-1_5 me-4"><i
+                          class="icon-base ti tabler-trophy icon-md"></i>
+                      </div>
+                      <div>
+                        <h6 class="mb-0 text-cut">{{ $hodTopPerformer['name'] ?? 'Null..' }}</h6>
+                        <small class="text-dark fs-10 text-cut">{{ $hodTopPerformer['department'] ?? 'Null..' }}</small>
+                      </div>
+                    </div>
+                    <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                      <span class="badge bg-label-{{ $hodTopPerformer['color'] }} ms-1">{{ $hodTopPerformer['avg_score'] }}</span>
+                      <span class="badge bg-label-{{ $hodTopPerformer['color'] }} ms-1">{{ $hodTopPerformer['label'] }}</span>
+                    </div>
                   </div>
-                  <div>
-                    <h6 class="mb-0 text-cut">{{ $hodTopPerformer['name'] ?? 'Null..' }}</h6>
-                    <small class="text-dark fs-10 text-cut">{{ $hodTopPerformer['department'] ?? 'Null..' }}</small>
+                </div>
+              @endforeach
+
+            @else
+              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+                data-bs-original-title="Yet there is no top performer !">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-70 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-mood-empty icon-md"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                      <small class="text-dark fs-10 text-cut">...</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
                   </div>
                 </div>
-                <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+              </div>
 
-                  <span class="badge bg-label-{{ $hodTopPerformer['color'] }} ms-1">{{ $hodTopPerformer['avg_score'] }}</span>
-                  <span class="badge bg-label-{{ $hodTopPerformer['color'] }} ms-1">{{ $hodTopPerformer['label'] }}</span>
+              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+                data-bs-original-title="Yet there is no top performer !">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-70 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-mood-empty icon-md"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                      <small class="text-dark fs-10 text-cut">...</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                  </div>
                 </div>
               </div>
-            </div>
-          @endforeach
 
-        @else
-          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-            data-bs-original-title="Yet there is no top performer !">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-mood-empty icon-md"></i>
-                </div>
-                <div>
-                  <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                  <small class="text-dark fs-10 text-cut">...</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+                data-bs-original-title="Yet there is no top performer !">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-70 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-mood-empty icon-md"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                      <small class="text-dark fs-10 text-cut">...</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
 
-              </div>
-            </div>
-          </div>
-
-          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-            data-bs-original-title="Yet there is no top performer !">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-mood-empty icon-md"></i>
-                </div>
-                <div>
-                  <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                  <small class="text-dark fs-10 text-cut">...</small>
+                  </div>
                 </div>
               </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-              </div>
-            </div>
-          </div>
-
-          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-            data-bs-original-title="Yet there is no top performer !">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-mood-empty icon-md"></i>
-                </div>
-                <div>
-                  <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                  <small class="text-dark fs-10 text-cut">...</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-              </div>
-            </div>
-          </div>
 
 
-          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-            data-bs-original-title="Yet there is no top performer !">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-mood-empty icon-md"></i>
-                </div>
-                <div>
-                  <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                  <small class="text-dark fs-10 text-cut">...</small>
+              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+                data-bs-original-title="Yet there is no top performer !">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-70 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-mood-empty icon-md"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                      <small class="text-dark fs-10 text-cut">...</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                  </div>
                 </div>
               </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-              </div>
-            </div>
-          </div>
 
 
-          <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-            data-bs-original-title="Yet there is no top performer !">
-            <div class="card-body d-flex">
-              <div class="d-flex w-70 align-items-center me-4">
-                <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-mood-empty icon-md"></i>
+              <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+                data-bs-original-title="Yet there is no top performer !">
+                <div class="card-body d-flex">
+                  <div class="d-flex w-70 align-items-center me-4">
+                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-mood-empty icon-md"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                      <small class="text-dark fs-10 text-cut">...</small>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                  </div>
                 </div>
-                <div>
-                  <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                  <small class="text-dark fs-10 text-cut">...</small>
-                </div>
               </div>
-              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+            @endif
 
-              </div>
-            </div>
-          </div>
-        @endif
-
-
+       </div>
 
       </div>
 
@@ -1278,6 +1281,27 @@
       // Auto adjust on window resize
       window.addEventListener("resize", () => {
         scrollableDiv.style.maxHeight = `${newHeight}px`;
+      });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+      const scrollableDivs = document.querySelectorAll(".scrollableCol");
+      let isSyncingScroll = false;
+
+      scrollableDivs.forEach(div => {
+        div.addEventListener("scroll", () => {
+          if (isSyncingScroll) return;
+          isSyncingScroll = true;
+
+          const scrollTop = div.scrollTop;
+
+          scrollableDivs.forEach(otherDiv => {
+            if (otherDiv !== div) {
+              otherDiv.scrollTop = scrollTop; // instant sync
+            }
+          });
+
+          isSyncingScroll = false;
+        });
       });
     });
     document.addEventListener("DOMContentLoaded", function () {
