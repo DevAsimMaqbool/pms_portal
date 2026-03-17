@@ -544,12 +544,13 @@
     </div>
     <div class="row gy-6 mt-2">
 
-      <div class="col-md-6 col-lg-4" id="scrollableCol">
+      <div class="col-md-6 col-lg-4">
         <div class=" d-flex justify-content-between">
           <h5 class="fw-bold">Key Indicators</h5>
         </div>
         <!--/ Statistics -->
-
+        <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
+ 
         @php
 
           $EmployabilitydeanHotIndicators = deanHotIndicators(103, $activeRoleId);
@@ -793,16 +794,18 @@
             </div>
           </div>
         </div>
-
+     
+       </div>
 
       </div>
 
-      <div class="col-md-6 col-lg-4" id="scrollableCol1">
+      <div class="col-md-6 col-lg-4">
 
 
         <div class=" d-flex justify-content-between">
           <h5 class="fw-bold">Top Performers</h5>
         </div>
+        <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
 
         @php
           $deanTopPerformers = deanTopPerformers();
@@ -931,7 +934,7 @@
 
 
 
-
+       </div>
       </div>
 
       <div class="col-md-6 col-lg-4">
@@ -1285,6 +1288,27 @@
       // Auto adjust on window resize
       window.addEventListener("resize", () => {
         scrollableDiv.style.maxHeight = `${newHeight}px`;
+      });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+      const scrollableDivs = document.querySelectorAll(".scrollableCol");
+      let isSyncingScroll = false;
+
+      scrollableDivs.forEach(div => {
+        div.addEventListener("scroll", () => {
+          if (isSyncingScroll) return;
+          isSyncingScroll = true;
+
+          const scrollTop = div.scrollTop;
+
+          scrollableDivs.forEach(otherDiv => {
+            if (otherDiv !== div) {
+              otherDiv.scrollTop = scrollTop; // instant sync
+            }
+          });
+
+          isSyncingScroll = false;
+        });
       });
     });
     document.addEventListener("DOMContentLoaded", function () {
