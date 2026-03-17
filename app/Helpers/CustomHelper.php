@@ -2126,6 +2126,7 @@ if (!function_exists('lineManagerRatingOnEvents')) {
 function avgKpaScore($employeeId, $kpaId)
 {
     $userRoleId = getRoleIdByName(activeRole());
+
     // Get all scores for the employee and KPA
     $scores = IndicatorsPercentage::where('employee_id', $employeeId)
         ->where('key_performance_area_id', $kpaId)
@@ -2135,13 +2136,12 @@ function avgKpaScore($employeeId, $kpaId)
     if ($scores->isEmpty()) {
         return 0;
     }
-
     // Cap each score at 100
     $cappedScores = $scores->map(fn($score) => min($score, 100));
 
     // Calculate average
     $avg = $cappedScores->avg();
-    $weightage = getRoleWeightage($userRoleId, 'kpa', 1)['weightage'];
+    $weightage = getRoleWeightage($userRoleId, 'kpa', $kpaId)['weightage'];
     $weightedScore = ($avg * $weightage) / 100;
     return number_format($weightedScore, 1);
 }
@@ -2352,65 +2352,38 @@ if (!function_exists('getRoleWeightage')) {
         ];
     }
 }
-// function kpaAvgScore($kpa_id, $emp_id)
-// {
-//     $avg = IndicatorsPercentage::where('employee_id', $emp_id)
-//         ->where('key_performance_area_id', $kpa_id)
-//         ->avg('score');
-
-//     $avg = $avg ? round($avg, 2) : 0.00;
-
-//     // Determine rating & color dynamically
-//     if ($avg >= 90) {
-//         $color = 'primary';
-//         $rating = 'OS';
-//     } elseif ($avg >= 80) {
-//         $color = 'success';
-//         $rating = 'EE';
-//     } elseif ($avg >= 70) {
-//         $color = 'warning';
-//         $rating = 'ME';
-//     } elseif ($avg >= 60) {
-//         $color = 'orange';
-//         $rating = 'NI';
-//     } elseif ($avg >= 0) {
-//         $color = 'danger';
-//         $rating = 'BE';
-//     } else {
-//         $color = 'secondary';
-//         $rating = 'N/A';
-//     }
-
-//     return [
-//         'avg' => $avg,
-//         'rating' => $rating,
-//         'color' => $color,
-//     ];
-// }
-function kpaAvgScore($kpa_id, $emp_id)
+function kpaAvgScore($kpaId, $employeeId)
 {
-    // Fetch all scores and cap each at 100
-    $avg = IndicatorsPercentage::where('employee_id', $emp_id)
-        ->where('key_performance_area_id', $kpa_id)
-        ->where('is_score', 1)
-        ->get()
-        ->pluck('score')
-        ->map(fn($score) => min($score, 100)) // cap each score at 100
-        ->avg();
+    $userRoleId = getRoleIdByName(activeRole());
 
-    $avg = $avg ? round($avg, 2) : 0.00;
+    // Get all scores for the employee and KPA
+    $scores = IndicatorsPercentage::where('employee_id', $employeeId)
+        ->where('key_performance_area_id', $kpaId)
+        ->where('role_id', $userRoleId)
+        ->pluck('score'); // get array of scores
 
-    // Determine rating & color dynamically
-    if ($avg >= 90) {
+    if ($scores->isEmpty()) {
+        return 0;
+    }
+
+    // Cap each score at 100
+    $cappedScores = $scores->map(fn($score) => min($score, 100));
+
+    // Calculate average
+    $avg = $cappedScores->avg();
+    $weightage = getRoleWeightage($userRoleId, 'kpa', $kpaId)['weightage'];
+    $weightedScore = ($avg * $weightage) / 100;
+
+    if ($weightedScore >= 90) {
         $color = 'primary';
         $rating = 'OS';
-    } elseif ($avg >= 80) {
+    } elseif ($weightedScore >= 80) {
         $color = 'success';
         $rating = 'EE';
-    } elseif ($avg >= 70) {
+    } elseif ($weightedScore >= 70) {
         $color = 'warning';
         $rating = 'ME';
-    } elseif ($avg >= 60) {
+    } elseif ($weightedScore >= 60) {
         $color = 'orange';
         $rating = 'NI';
     } else {
@@ -2420,8 +2393,10 @@ function kpaAvgScore($kpa_id, $emp_id)
 
     return [
         'avg' => $avg,
+        'weighted_score' => $weightedScore,
         'rating' => $rating,
         'color' => $color,
+        'weight' => $weightage,
     ];
 }
 

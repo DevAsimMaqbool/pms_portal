@@ -22,11 +22,12 @@
       font-size: 13px !important;
     }
 
-    
+
     .bg-orange {
       background-color: #fd7e13 !important;
       color: #fd7e13 !important
     }
+
     .bg-label-orange {
 
       background-color: color-mix(in sRGB, var(--bs-paper-bg) var(--bs-bg-label-tint-amount), var(--bs-orange)) !important;
@@ -134,34 +135,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-            .flip-card-inner {
-            transition: none;
-            }
-            .flip-card-front,
-            .flip-card-back {
-            position: relative;
-            transform: none;
-            backface-visibility: visible;
-            }
-            .flip-card-back { display: none; } /* or display block on click via JS if needed */
+              .flip-card-inner {
+              transition: none;
+              }
+              .flip-card-front,
+              .flip-card-back {
+              position: relative;
+              transform: none;
+              backface-visibility: visible;
+              }
+              .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-            background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-            background-image:
-            radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-            radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+              background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+              background-image:
+              radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+              radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-            background-image:
-            radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-            radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-            radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+              background-image:
+              radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+              radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+              radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-            background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+              background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-            */
+              */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -253,813 +254,842 @@
     .swiper-wrapper {
       height: 269px;
     }
+
     .text-cut-hot {
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* ✅ Limit to 3 lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-  line-height: 1.2;
-}
- .text-cut-department {
-  display: -webkit-box;
-  -webkit-line-clamp: 1; /* ✅ Limit to 1 lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-  line-height: 1.2;
-  font-size: 0.8667em;
-}
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      /* ✅ Limit to 3 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      line-height: 1.2;
+    }
+
+    .text-cut-department {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      /* ✅ Limit to 1 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      line-height: 1.2;
+      font-size: 0.8667em;
+    }
   </style>
 @endpush
 @section('content')
-      <!-- Content -->
-      <div class="container-xxl flex-grow-1 container-p-y">
-        <!-- Accordion1 -->
-        <div class="row gy-6 fade-section">
+  <!-- Content -->
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Accordion1 -->
+    <div class="row gy-6 fade-section">
 
 
-          <!-- Sales Overview -->
-          <div class="col-lg-3 col-md-12 d-flex flex-column">
-            <div class="row flex-fill">
+      <!-- Sales Overview -->
+      <div class="col-lg-3 col-md-12 d-flex flex-column">
+        <div class="row flex-fill">
 
-              <!-- Generated Leads -->
-              <div class="col-lg-12 col-md-6 col-sm-12">
-                <div class="card" style="box-shadow: none;background: none;">
-                  <div class="card-header text-center">
-                    <div class="card-title mb-0">
-                      <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', $employee->name)) }} 🎉</h5>
-                      <div class="mb-2 rounded bg-label-success p-1" data-bs-toggle="tooltip" data-bs-placement="top"
-                data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->department }}">
-                                          <span class="bg-label-success text-cut-department">
-                                              {{ Auth::user()->department }}
-                                          </span>
-                                          </div>
-                      <p class="card-subtitle">Welcome to your Performance Hub</p>
-
+          <!-- Generated Leads -->
+          <div class="col-lg-12 col-md-6 col-sm-12">
+            <div class="card" style="box-shadow: none;background: none;">
+              <div class="card-header text-center">
+                <div class="card-title mb-0">
+                  <h5 class="mb-1">Hi, {{ trim(preg_replace('/[-\s]*\d+$/', '', $employee->name)) }} 🎉</h5>
+                  <div class="mb-2 rounded bg-label-success p-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                    data-bs-custom-class="tooltip-success" data-bs-original-title="{{ Auth::user()->department }}">
+                    <span class="bg-label-success text-cut-department">
+                      {{ Auth::user()->department }}
+                    </span>
                   </div>
+                  <p class="card-subtitle">Welcome to your Performance Hub</p>
+
                 </div>
               </div>
-            </div>
-            <!--/ Generated Leads -->
-            <!-- Profit last month -->
-            <div class="col-lg-4 col-md-3 col-sm-6">
-              <div class="card h-100" style="background-color: #ac7cad;">
-                <div class="card-body d-flex justify-content-center align-items-center ">
-                  <h6 class="mb-0 text-center text-white">As {{ucfirst(activeRole())}}</h6>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-3 col-sm-6">
-              <div class="card h-100 {{overallAvgScore(Auth::user()->employee_id)['color']}}">
-
-                <div class="card-body d-flex justify-content-center align-items-center">
-                  <h5 class="mb-0 text-center" id="avg-teachervalue">0%</h5>
-
-
-                  </div>
-                </div>
-              </div>
-
-            <div class="col-lg-4 col-md-3 col-sm-6">
-              <div class="card h-100" id="rating-teachercolor" data-bs-toggle="tooltip" data-bs-placement="top"
-                        data-bs-custom-class="tooltip-" data-bs-original-title="You’re going beyond what’s asked of you.">
-                <div class="card-body d-flex justify-content-center align-items-center">
-                  <h4 class="mb-0 text-center text-white" id="rating-teachervalue"></h4>
-
-
-                  </div>
-                </div>
-              </div>
-              <!--/ Expenses -->
             </div>
           </div>
-          <!--/ Sales Overview -->
-
-        <!-- Website Analytics -->
-        <div class="col-lg-9 col-md-12">
-          <div class="swiper-reviews-carousel overflow-hidden">
-            <div class="swiper" id="swiper-reviews">
-              <div class="swiper-wrapper">
-                @php
-  
-  $activeRoleId = getRoleIdByName(activeRole());
-  $result = getRoleAssignments(activeRole());
-  $icon1 = ['tabler-book', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
-  $static_color = ['primary', 'success', 'warning', 'orange', 'danger'];
-  $index2 = 0;
-  $totalWeightSS = 0;
-                @endphp
-
-                @foreach($result as $kpakey => $kpa)
-                  @php
-    $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
-    $iconClass = $icon1[$index2 % count($icon1)];
-    $iconClasscolor = $static_color[$index2 % count($static_color)];
-    $index2++;
-
-    // Get dynamic average, rating, and color
-    $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
-    $kpaAvgWeightage = kpaAvgWeightage($kpa['id'], $activeRoleId);
-    $weight = $kpaAvgWeightage['kpa_weightage'];
-
-    $avg = $kpaResult['avg'];
-    $weight_ss = ($avg * $weight) / 100;
-    $totalWeightSS += $weight_ss;
-    $rating = $kpaResult['rating'];
-    $color = $kpaResult['color']; // this will be used for bg and bg-label
-
-    $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
-    $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
-
-                  @endphp
-                  {{-- <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
-
-                      <!-- FRONT SIDE -->
-                      <div class="card bg-{{ $color1 }} text-white h-100">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                          <div class="card-title mb-0 text-white">
-                            <p class="mb-0">{{ $kpa['performance_area'] }}</p>
-                          </div>
-                          <div class="card-icon">
-                            <span class="badge bg-label-{{ $color1 }} rounded p-2">
-                              <i class="icon-base ti {{ $iconClass }} icon-26px"></i>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div> --}}
-                    <div class="swiper-slide" id="{{ $targetId }}">
-                      <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
-                        <div class="flip-card h-100">
-                          <div class="flip-card-inner">
-
-                          <!-- FRONT -->
-                          <div class="flip-card-front card bg-{{ $iconClasscolor }} text-white">
-
-                            <div class="card-body position-relative d-flex flex-column justify-content-between">
-                              <div>
-                                <div class="d-flex align-items-center mb-1">
-                                  <div class="avatar me-4">
-                                    <span class="avatar-initial rounded bg-label-{{ $iconClasscolor }}">
-                                      <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
-                                    </span>
-                                  </div>
-                                </div>
-                                <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
-                              </div>
-                              <!-- Metrics bottom right -->
-                              {{-- <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
-                                @if ($kpa['id'] == 1)
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
-                                @elseif ($kpa['id'] == 2)
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
-                                @elseif ($kpa['id'] == 3)
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
-                                @elseif ($kpa['id'] == 4)
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
-                                @elseif ($kpa['id'] == 5)
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
-                                @elseif ($kpa['id'] == 6)
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
-                                @elseif ($kpa['id'] == 7)
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
-                                  <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
-                                @endif
-                              </div> --}}
-                                
-                                <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
-                                <div class="mb-1">
-                                  <span class="fw-semibold">Score </span> <span
-                                    class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
-                                </div>
-                                <div class="mb-1">
-                                  <span class="fw-semibold">Rating </span> <span
-                                    class="badge bg-label-{{ $color }}">{{ $rating }}</span>
-                                </div>
-                                <div class="mb-1">
-                                  <span class="fw-semibold">Weight </span> <span
-                                    class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
-                                </div>
-                                <div>
-                                  <span class="fw-semibold">Weighted Score </span> <span
-                                    class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
-                                </div>
-                              </div>
-                              <!-- /matrics-->
-
-
-
-                            </div>
-
-                            </div>
-
-                          <!-- BACK -->
-                          <div class="flip-card-back card bg-{{ $iconClasscolor }} text-dark h-100">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                              <div class="badge rounded p-2 bg-label-{{ $iconClasscolor }} mb-2"><i
-                                  class="icon-base ti {{ $iconClass }} icon-lg"></i>
-                              </div>
-                              <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
-                              @if ($kpa['id'] == 1)
-                                <p class=" text-center mb-0 text-white fs-13">
-                                  Focuses on teaching quality, classroom management, and continuous improvement to enhance
-                                  student learning outcomes.
-                                </p>
-                              @elseif ($kpa['id'] == 2)
-                                <p class="text-center mb-0 text-white fs-13">
-                                  Measures research output, quality, and supervision, emphasizing innovation and practical
-                                  application of research for societal and industry impact.
-                                </p>
-                              @elseif ($kpa['id'] == 3)
-                                <p class="text-center mb-0 text-white fs-13">
-                                  Ensures financial health through diversified revenue, cost efficiency, strategic growth, and
-                                  reinvestment in institutional excellence.
-                                </p>
-                              @elseif ($kpa['id'] == 4)
-                                <p class="text-center mb-0 text-white fs-13">
-                                  Tracks institutional success in achieving global engagement targets and providing students
-                                  with international exposure opportunities.
-                                </p>
-                              @elseif ($kpa['id'] == 5)
-                                <p class="text-center mb-0 text-white fs-13">
-                                  Advances social and environmental impact through service, sustainability, civic engagement,
-                                  and community development initiatives.
-                                </p>
-                              @elseif ($kpa['id'] == 6)
-                                <p class="text-center mb-0 text-white fs-13">
-                                  Builds institutional reputation and distinctiveness through excellence, stakeholder trust,
-                                  global linkages, and consistent quality.
-                                </p>
-                              @elseif ($kpa['id'] == 7)
-                                <p class="text-center mb-0 text-white fs-13">
-                                  Promotes transparent, accountable, participative leadership ensuring alignment, trust,
-                                  compliance, and mission-driven institutional effectiveness.
-                                </p>
-                              @elseif ($kpa['id'] == 13)
-                                <p class="text-center mb-0 text-white fs-13">
-                                  Focuses on active involvement in departmental and institutional activities to promote
-                                  collaboration, visibility, and shared success.
-                                </p>
-                              @elseif ($kpa['id'] == 14)
-                                <p class="text-center mb-0 text-white fs-13">
-                                  Represents ethical conduct and leadership grounded in integrity, empathy, humility, and
-                                  accountability.
-                                </p>
-                              @else
-                                <p class="text-center mb-0 text-white fs-13">Other text</p>
-                              @endif
-                            </div>
-                          </div>
-
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-
-                  @endforeach
-
-                </div>
-                <div class="swiper-button-next text-white"></div>
-                <div class="swiper-button-prev text-white"></div>
+          <!--/ Generated Leads -->
+          <!-- Profit last month -->
+          <div class="col-lg-4 col-md-3 col-sm-6">
+            <div class="card h-100" style="background-color: #ac7cad;">
+              <div class="card-body d-flex justify-content-center align-items-center ">
+                <h6 class="mb-0 text-center text-white">As {{ucfirst(activeRole())}}</h6>
               </div>
             </div>
           </div>
 
-          <!--/ Website Analytics -->
+          <div class="col-lg-4 col-md-3 col-sm-6">
+            <div class="card h-100 {{overallAvgScore(Auth::user()->employee_id)['color']}}">
 
+              <div class="card-body d-flex justify-content-center align-items-center">
+                <h5 class="mb-0 text-center" id="avg-teachervalue">0%</h5>
+
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-3 col-sm-6">
+            <div class="card h-100" id="rating-teachercolor" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="tooltip-" data-bs-original-title="You’re going beyond what’s asked of you.">
+              <div class="card-body d-flex justify-content-center align-items-center">
+                <h4 class="mb-0 text-center text-white" id="rating-teachervalue"></h4>
+
+
+              </div>
+            </div>
+          </div>
+          <!--/ Expenses -->
         </div>
-        <div class="row gy-6 mt-2">
+      </div>
+      <!--/ Sales Overview -->
 
-          <div class="col-md-6 col-lg-4" id="scrollableCol">
-            <div class=" d-flex justify-content-between">
-              <h5 class="fw-bold">Key Indicators</h5>
-            </div>
-            <!--/ Statistics -->
-            
-             @php
-             
-             $EmployabilitydeanHotIndicators = deanHotIndicators(103,$activeRoleId);
-             $EmployabilityPercentage = getRatingByPercentage($EmployabilitydeanHotIndicators['avg']);
-             @endphp
-            <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-              data-bs-custom-class="tooltip-{{ $EmployabilitydeanHotIndicators['color'] }}"
-              data-bs-original-title="{{ $EmployabilityPercentage['description'] }}">
-              <div class="card-body d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-{{ $EmployabilitydeanHotIndicators['color'] }} rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-smile icon-md"></i>
-                  </div>
-                  <div>
-                    <small class="text-dark text-cut-hot">% Employability</small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-{{ $EmployabilitydeanHotIndicators['color'] }}" role="progressbar" style="width:{{ $EmployabilitydeanHotIndicators['avg'] }}%" aria-valuenow="65"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">{{ $EmployabilitydeanHotIndicators['avg'] }}%</span>
-                  <span class="badge bg-label-{{ $EmployabilitydeanHotIndicators['color'] }} ms-1">{{ $EmployabilitydeanHotIndicators['rating'] }}</span>
-                </div>
-              </div>
-            </div>
-
-            @php
-             
-             $ResearchPublicationssdeanHotIndicators = deanHotIndicators(128,$activeRoleId);
-             $ResearchPublicationsPercentage = getRatingByPercentage($ResearchPublicationssdeanHotIndicators['avg']);
-             @endphp
-            <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-              data-bs-custom-class="tooltip-{{ $ResearchPublicationssdeanHotIndicators['color'] }}"
-              data-bs-original-title="{{ $ResearchPublicationsPercentage['description'] }}">
-              <div class="card-body d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-{{ $ResearchPublicationssdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i class="icon-base ti tabler-chalkboard icon-md"></i>
-                  </div>
-                  <div>
-                    <small class="text-dark text-cut-hot">% Achievement of Research Publications</small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-{{ $ResearchPublicationssdeanHotIndicators['color'] }}" role="progressbar" style="width:{{ $ResearchPublicationssdeanHotIndicators['avg'] }}%" aria-valuenow="65"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">{{ $ResearchPublicationssdeanHotIndicators['avg'] }}%</span>
-                  <span class="badge bg-label-{{ $ResearchPublicationssdeanHotIndicators['color'] }} ms-1">{{ $ResearchPublicationssdeanHotIndicators['rating'] }}</span>
-                </div>
-              </div>
-            </div>
-
-            @php
-             
-             $AdmissionTargetsdeanHotIndicators = deanHotIndicators(143,$activeRoleId);
-             $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
-             @endphp
-            <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-              data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
-              data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
-              <div class="card-body d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i class="icon-base ti tabler-mood-smile icon-md"></i>
-                  </div>
-                  <div>
-                    <small class="text-dark text-cut-hot">% of Admission Targets Achieved</small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar" style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
-                  <span class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
-                </div>
-              </div>
-            </div>
-
-
-            @php
-             
-             $AdmissionTargetsdeanHotIndicators = deanHotIndicators(146,$activeRoleId);
-             $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
-             @endphp
-            <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-              data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
-              data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
-              <div class="card-body d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i class="icon-base ti tabler-book-2 icon-md"></i>
-                  </div>
-                  <div>
-                    <small class="text-dark text-cut-hot">% of Recovery</small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar" style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
-                  <span class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
-                </div>
-              </div>
-            </div>
-
-            @php
-             
-             $AdmissionTargetsdeanHotIndicators = deanHotIndicators(147,$activeRoleId);
-             $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
-             @endphp
-            <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-              data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
-              data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
-              <div class="card-body d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
-                  </div>
-                  <div>
-                    <small class="text-dark text-cut-hot">Profitability of the Programs</small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar" style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
-                  <span class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
-                </div>
-              </div>
-            </div>
-
-
-            @php
-             
-             $AdmissionTargetsdeanHotIndicators = deanHotIndicators(166,$activeRoleId);
-             $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
-             @endphp
-            <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-              data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
-              data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
-              <div class="card-body d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
-                  </div>
-                  <div>
-                    <small class="text-dark text-cut-hot">Faculty Satisfaction Score</small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar" style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
-                  <span class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
-                </div>
-              </div>
-            </div>
-
-
-            @php
-             
-             $AdmissionTargetsdeanHotIndicators = deanHotIndicators(179,$activeRoleId);
-             $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
-             @endphp
-            <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-              data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
-              data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
-              <div class="card-body d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
-                  </div>
-                  <div>
-                    <small class="text-dark text-cut-hot">Student Feedback Score</small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar" style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
-                  <span class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
-                </div>
-              </div>
-            </div>
-
-
+      <!-- Website Analytics -->
+      <div class="col-lg-9 col-md-12">
+        <div class="swiper-reviews-carousel overflow-hidden">
+          <div class="swiper" id="swiper-reviews">
+            <div class="swiper-wrapper">
               @php
-             
-             $AdmissionTargetsdeanHotIndicators = deanHotIndicators(181,$activeRoleId);
-             $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
-             @endphp
-            <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-              data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
-              data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
-              <div class="card-body d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i class="icon-base ti tabler-stars icon-md"></i>
-                  </div>
-                  <div>
-                    <small class="text-dark text-cut-hot">Faculty Discipline / Punctuality</small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar" style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
-                  <span class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
-                </div>
-              </div>
-            </div>
 
+                $activeRoleId = getRoleIdByName(activeRole());
+                $result = getRoleAssignments(activeRole());
+                $icon1 = ['tabler-book', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
+                $static_color = ['primary', 'success', 'warning', 'orange', 'danger'];
+                $index2 = 0;
+                $totalWeightSS = 0;
+              @endphp
 
-          </div>
+              @foreach($result as $kpakey => $kpa)
+                @php
+                  $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+                  $iconClass = $icon1[$index2 % count($icon1)];
+                  $iconClasscolor = $static_color[$index2 % count($static_color)];
+                  $index2++;
 
-          <div class="col-md-6 col-lg-4" id="scrollableCol1">
+                  // Get dynamic average, rating, and color
+                  $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
+                  $weight = $kpaResult['weight'];
+                  $avg = $kpaResult['avg'];
+                  $weight_ss = $kpaResult['weighted_score'];
+                  $totalWeightSS += $weight_ss;
+                  $rating = $kpaResult['rating'];
+                  $color = $kpaResult['color']; // this will be used for bg and bg-label
 
+                  $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
+                  $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
 
-            <div class=" d-flex justify-content-between">
-              <h5 class="fw-bold">Top Performers</h5>
-            </div>
+                @endphp
+                {{-- <div class="col-xl-3 col-md-6 col-sm-12" id="{{ $targetId }}">
 
-             @php
-               $deanTopPerformers = deanTopPerformers();
-            @endphp
-            @if(!empty($deanTopPerformers))
-              @foreach($deanTopPerformers as $deanTopPerformer)
-                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right" data-bs-custom-class="tooltip-{{ $deanTopPerformer['color'] }}"
-                  data-bs-original-title="{{ $deanTopPerformer['name'] }}<br>{{ $deanTopPerformer['location'] }}">
-                  <div class="card-body d-flex">
-                    <div class="d-flex w-70 align-items-center me-4">
-                      <div class="badge bg-label-{{ $deanTopPerformer['color'] }} rounded p-1_5 me-4"><i class="icon-base ti tabler-trophy icon-md"></i>
+                  <!-- FRONT SIDE -->
+                  <div class="card bg-{{ $color1 }} text-white h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                      <div class="card-title mb-0 text-white">
+                        <p class="mb-0">{{ $kpa['performance_area'] }}</p>
                       </div>
-                      <div>
-                        <h6 class="mb-0 text-cut">{{ $deanTopPerformer['name'] ?? 'Null..' }}</h6>
-                        <small class="text-dark fs-10 text-cut">{{ $deanTopPerformer['department'] ?? 'Null..' }}</small>
+                      <div class="card-icon">
+                        <span class="badge bg-label-{{ $color1 }} rounded p-2">
+                          <i class="icon-base ti {{ $iconClass }} icon-26px"></i>
+                        </span>
                       </div>
                     </div>
-                    <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                      <span class="badge bg-label-{{ $deanTopPerformer['color'] }} ms-1">{{ $deanTopPerformer['avg_score'] }}</span>
-                      <span class="badge bg-label-{{ $deanTopPerformer['color'] }} ms-1">{{ $deanTopPerformer['label'] }}</span>
-                    </div>
                   </div>
+
+                </div> --}}
+                <div class="swiper-slide" id="{{ $targetId }}">
+                  <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
+                    <div class="flip-card h-100">
+                      <div class="flip-card-inner">
+
+                        <!-- FRONT -->
+                        <div class="flip-card-front card bg-{{ $iconClasscolor }} text-white">
+
+                          <div class="card-body position-relative d-flex flex-column justify-content-between">
+                            <div>
+                              <div class="d-flex align-items-center mb-1">
+                                <div class="avatar me-4">
+                                  <span class="avatar-initial rounded bg-label-{{ $iconClasscolor }}">
+                                    <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
+                                  </span>
+                                </div>
+                              </div>
+                              <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
+                            </div>
+                            <!-- Metrics bottom right -->
+                            {{-- <div class="card-metrics mt-2 text-end position-absolute bottom-0 end-0 p-2">
+                              @if ($kpa['id'] == 1)
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
+                              @elseif ($kpa['id'] == 2)
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
+                              @elseif ($kpa['id'] == 3)
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
+                              @elseif ($kpa['id'] == 4)
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">60%</span>
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">N1</span>
+                              @elseif ($kpa['id'] == 5)
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">90%</span>
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">OS</span>
+                              @elseif ($kpa['id'] == 6)
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">80%</span>
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">EE</span>
+                              @elseif ($kpa['id'] == 7)
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">70%</span>
+                              <span class="metric-badge bg-label-{{ $color1 }} fw-bold">ME</span>
+                              @endif
+                            </div> --}}
+
+                            <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
+                              <div class="mb-1">
+                                <span class="fw-semibold">Score </span> <span
+                                  class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
+                              </div>
+                              <div class="mb-1">
+                                <span class="fw-semibold">Rating </span> <span
+                                  class="badge bg-label-{{ $color }}">{{ $rating }}</span>
+                              </div>
+                              <div class="mb-1">
+                                <span class="fw-semibold">Weight </span> <span
+                                  class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
+                              </div>
+                              <div>
+                                <span class="fw-semibold">Weighted Score </span> <span
+                                  class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
+                              </div>
+                            </div>
+                            <!-- /matrics-->
+
+
+
+                          </div>
+
+                        </div>
+
+                        <!-- BACK -->
+                        <div class="flip-card-back card bg-{{ $iconClasscolor }} text-dark h-100">
+                          <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                            <div class="badge rounded p-2 bg-label-{{ $iconClasscolor }} mb-2"><i
+                                class="icon-base ti {{ $iconClass }} icon-lg"></i>
+                            </div>
+                            <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
+                            @if ($kpa['id'] == 1)
+                              <p class=" text-center mb-0 text-white fs-13">
+                                Focuses on teaching quality, classroom management, and continuous improvement to enhance
+                                student learning outcomes.
+                              </p>
+                            @elseif ($kpa['id'] == 2)
+                              <p class="text-center mb-0 text-white fs-13">
+                                Measures research output, quality, and supervision, emphasizing innovation and practical
+                                application of research for societal and industry impact.
+                              </p>
+                            @elseif ($kpa['id'] == 3)
+                              <p class="text-center mb-0 text-white fs-13">
+                                Ensures financial health through diversified revenue, cost efficiency, strategic growth, and
+                                reinvestment in institutional excellence.
+                              </p>
+                            @elseif ($kpa['id'] == 4)
+                              <p class="text-center mb-0 text-white fs-13">
+                                Tracks institutional success in achieving global engagement targets and providing students
+                                with international exposure opportunities.
+                              </p>
+                            @elseif ($kpa['id'] == 5)
+                              <p class="text-center mb-0 text-white fs-13">
+                                Advances social and environmental impact through service, sustainability, civic engagement,
+                                and community development initiatives.
+                              </p>
+                            @elseif ($kpa['id'] == 6)
+                              <p class="text-center mb-0 text-white fs-13">
+                                Builds institutional reputation and distinctiveness through excellence, stakeholder trust,
+                                global linkages, and consistent quality.
+                              </p>
+                            @elseif ($kpa['id'] == 7)
+                              <p class="text-center mb-0 text-white fs-13">
+                                Promotes transparent, accountable, participative leadership ensuring alignment, trust,
+                                compliance, and mission-driven institutional effectiveness.
+                              </p>
+                            @elseif ($kpa['id'] == 13)
+                              <p class="text-center mb-0 text-white fs-13">
+                                Focuses on active involvement in departmental and institutional activities to promote
+                                collaboration, visibility, and shared success.
+                              </p>
+                            @elseif ($kpa['id'] == 14)
+                              <p class="text-center mb-0 text-white fs-13">
+                                Represents ethical conduct and leadership grounded in integrity, empathy, humility, and
+                                accountability.
+                              </p>
+                            @else
+                              <p class="text-center mb-0 text-white fs-13">Other text</p>
+                            @endif
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </a>
                 </div>
+
               @endforeach
 
-            @else
-             <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
-                <div class="card-body d-flex">
-                  <div class="d-flex w-70 align-items-center me-4">
-                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-mood-empty icon-md"></i>
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                      <small class="text-dark fs-10 text-cut">...</small>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                  </div>
-                </div>
-              </div>
-
-              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
-                <div class="card-body d-flex">
-                  <div class="d-flex w-70 align-items-center me-4">
-                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-mood-empty icon-md"></i>
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                      <small class="text-dark fs-10 text-cut">...</small>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                  </div>
-                </div>
-              </div>
-
-              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
-                <div class="card-body d-flex">
-                  <div class="d-flex w-70 align-items-center me-4">
-                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-mood-empty icon-md"></i>
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                      <small class="text-dark fs-10 text-cut">...</small>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
-                data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
-                <div class="card-body d-flex">
-                  <div class="d-flex w-70 align-items-center me-4">
-                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-mood-empty icon-md"></i>
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                      <small class="text-dark fs-10 text-cut">...</small>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-                data-bs-original-title="Yet there is no top performer !">
-                <div class="card-body d-flex">
-                  <div class="d-flex w-70 align-items-center me-4">
-                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-mood-empty icon-md"></i>
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                      <small class="text-dark fs-10 text-cut">...</small>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                  </div>
-                </div>
-              </div>
-            @endif
-
-
-
-
-
-
-
-          </div>
-
-          <div class="col-md-6 col-lg-4">
-            <div class=" d-flex justify-content-between">
-              <h5 class="fw-bold">Overall KPA Performance</h5>
             </div>
-
-
-            <div class="row g-6">
-              <!-- Profit last month -->
-
-
-              <!-- Generated Leads -->
-              <div class="col-xl-12">
-                <div class="card caed-wave-bg ">
-                  <div class="card-header d-flex justify-content-between">
-                    <div class="card-title mb-0">
-                      <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><span
-                          class="icon-xs icon-base ti tabler-chart-pie me-2"></span>Overall </button>
-                    </div>
-                    <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="top"
-                      data-bs-original-title="View large">
-                      <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button"
-                        data-bs-toggle="modal" data-bs-target="#fullscreenModal">
-                        <i class="icon-base ti tabler-arrows-maximize"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <canvas class="chartjs" id="radarChart1"></canvas>
-                  </div>
-                </div>
-
-              </div>
-
-              <!--/ Generated Leads -->
-
-
-              <!--/ Expenses -->
-            </div>
-
-
-
-
-
+            <div class="swiper-button-next text-white"></div>
+            <div class="swiper-button-prev text-white"></div>
           </div>
-
-
-
-
-
-          <!-- Website Analytics -->
-          <div class="col-xl-4 col">
-
-            <div class="card h-100">
-              <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="card-title m-0 me-2">Research Innovation & Commercialization</h5>
-
-              </div>
-              <div class="card-body">
-                <div id="carrierPerformance"></div>
-                <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
-              </div>
-            </div>
-          </div>
-          <!--/ Website Analytics -->
-
-          <!-- Radial bar Chart -->
-          <div class="col-md-4 col-12">
-            <div class="card h-100">
-              <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="card-title mb-0">Departments Overview</h5>
-              </div>
-              <div class="card-body d-flex justify-content-center align-items-center">
-                <div id="hodDepartmentsOverview"></div>
-              </div>
-            </div>
-          </div>
-          <!-- /Radial bar Chart -->
-          <!-- Website Analytics -->
-          <div class="col-xl-4 col">
-            <div class="card h-100">
-              <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="card-title m-0 me-2">Semester-wise Overall Performance</h5>
-
-              </div>
-              <div class="card-body">
-                <div id="carrierPerformance1"></div>
-              </div>
-            </div>
-          </div>
-          <!--/ Website Analytics -->
-
-
         </div>
-        <!--/ Accordion1 -->
+      </div>
 
+      <!--/ Website Analytics -->
 
+    </div>
+    <div class="row gy-6 mt-2">
 
+      <div class="col-md-6 col-lg-4" id="scrollableCol">
+        <div class=" d-flex justify-content-between">
+          <h5 class="fw-bold">Key Indicators</h5>
+        </div>
+        <!--/ Statistics -->
 
+        @php
 
-        <!-- Modal -->
-        <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-fullscreen" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="modalFullTitle">Overall KPA Performance</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          $EmployabilitydeanHotIndicators = deanHotIndicators(103, $activeRoleId);
+          $EmployabilityPercentage = getRatingByPercentage($EmployabilitydeanHotIndicators['avg']);
+         @endphp
+        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-{{ $EmployabilitydeanHotIndicators['color'] }}"
+          data-bs-original-title="{{ $EmployabilityPercentage['description'] }}">
+          <div class="card-body d-flex">
+            <div class="d-flex w-50 align-items-center me-4">
+              <div class="badge bg-label-{{ $EmployabilitydeanHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                  class="icon-base ti tabler-mood-smile icon-md"></i>
               </div>
-              <div class="modal-body">
-
-
-
-                <div class="row g-6 pt-2">
-                  <div class="col-12 col-12" id="targetDivchart">
-                    <div class="card caed-wave-bg">
-
-                      <div class="card-header d-flex justify-content-between">
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-                          <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
-                          <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
-
-                          <input type="radio" class="btn-check" name="termRadio" id="spring25">
-                          <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
-
-                          <input type="radio" class="btn-check" name="termRadio" id="fall25">
-                          <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
-                        </div>
-                      </div>
-
-                      <div class="card-body pt-0">
-                        <div class="row justify-content-center text-center">
-                          <div class="col-md-8 d-flex justify-content-center">
-                            <canvas class="chartjs" id="radarChart"></canvas>
-                          </div>
-
-                          <div class="col-12 mt-2">
-                            <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0"
-                              style="list-style:none;">
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-
-
-                    </div>
-                  </div>
-                </div>
+              <div>
+                <small class="text-dark text-cut-hot">% Employability</small>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+              <div class="progress w-100 me-4" style="height:8px;">
+                <div class="progress-bar bg-{{ $EmployabilitydeanHotIndicators['color'] }}" role="progressbar"
+                  style="width:{{ $EmployabilitydeanHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                  aria-valuemax="100"></div>
               </div>
+              <span class="text-body-secondary">{{ $EmployabilitydeanHotIndicators['avg'] }}%</span>
+              <span
+                class="badge bg-label-{{ $EmployabilitydeanHotIndicators['color'] }} ms-1">{{ $EmployabilitydeanHotIndicators['rating'] }}</span>
             </div>
           </div>
         </div>
+
+        @php
+
+          $ResearchPublicationssdeanHotIndicators = deanHotIndicators(128, $activeRoleId);
+          $ResearchPublicationsPercentage = getRatingByPercentage($ResearchPublicationssdeanHotIndicators['avg']);
+         @endphp
+        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-{{ $ResearchPublicationssdeanHotIndicators['color'] }}"
+          data-bs-original-title="{{ $ResearchPublicationsPercentage['description'] }}">
+          <div class="card-body d-flex">
+            <div class="d-flex w-50 align-items-center me-4">
+              <div class="badge bg-label-{{ $ResearchPublicationssdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                  class="icon-base ti tabler-chalkboard icon-md"></i>
+              </div>
+              <div>
+                <small class="text-dark text-cut-hot">% Achievement of Research Publications</small>
+              </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+              <div class="progress w-100 me-4" style="height:8px;">
+                <div class="progress-bar bg-{{ $ResearchPublicationssdeanHotIndicators['color'] }}" role="progressbar"
+                  style="width:{{ $ResearchPublicationssdeanHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                  aria-valuemax="100"></div>
+              </div>
+              <span class="text-body-secondary">{{ $ResearchPublicationssdeanHotIndicators['avg'] }}%</span>
+              <span
+                class="badge bg-label-{{ $ResearchPublicationssdeanHotIndicators['color'] }} ms-1">{{ $ResearchPublicationssdeanHotIndicators['rating'] }}</span>
+            </div>
+          </div>
+        </div>
+
+        @php
+
+          $AdmissionTargetsdeanHotIndicators = deanHotIndicators(143, $activeRoleId);
+          $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
+         @endphp
+        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
+          data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
+          <div class="card-body d-flex">
+            <div class="d-flex w-50 align-items-center me-4">
+              <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                  class="icon-base ti tabler-mood-smile icon-md"></i>
+              </div>
+              <div>
+                <small class="text-dark text-cut-hot">% of Admission Targets Achieved</small>
+              </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+              <div class="progress w-100 me-4" style="height:8px;">
+                <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar"
+                  style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                  aria-valuemax="100"></div>
+              </div>
+              <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
+              <span
+                class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
+            </div>
+          </div>
+        </div>
+
+
+        @php
+
+          $AdmissionTargetsdeanHotIndicators = deanHotIndicators(146, $activeRoleId);
+          $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
+         @endphp
+        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
+          data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
+          <div class="card-body d-flex">
+            <div class="d-flex w-50 align-items-center me-4">
+              <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                  class="icon-base ti tabler-book-2 icon-md"></i>
+              </div>
+              <div>
+                <small class="text-dark text-cut-hot">% of Recovery</small>
+              </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+              <div class="progress w-100 me-4" style="height:8px;">
+                <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar"
+                  style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                  aria-valuemax="100"></div>
+              </div>
+              <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
+              <span
+                class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
+            </div>
+          </div>
+        </div>
+
+        @php
+
+          $AdmissionTargetsdeanHotIndicators = deanHotIndicators(147, $activeRoleId);
+          $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
+         @endphp
+        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
+          data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
+          <div class="card-body d-flex">
+            <div class="d-flex w-50 align-items-center me-4">
+              <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                  class="icon-base ti tabler-stars icon-md"></i>
+              </div>
+              <div>
+                <small class="text-dark text-cut-hot">Profitability of the Programs</small>
+              </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+              <div class="progress w-100 me-4" style="height:8px;">
+                <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar"
+                  style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                  aria-valuemax="100"></div>
+              </div>
+              <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
+              <span
+                class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
+            </div>
+          </div>
+        </div>
+
+
+        @php
+
+          $AdmissionTargetsdeanHotIndicators = deanHotIndicators(166, $activeRoleId);
+          $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
+         @endphp
+        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
+          data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
+          <div class="card-body d-flex">
+            <div class="d-flex w-50 align-items-center me-4">
+              <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                  class="icon-base ti tabler-stars icon-md"></i>
+              </div>
+              <div>
+                <small class="text-dark text-cut-hot">Faculty Satisfaction Score</small>
+              </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+              <div class="progress w-100 me-4" style="height:8px;">
+                <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar"
+                  style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                  aria-valuemax="100"></div>
+              </div>
+              <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
+              <span
+                class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
+            </div>
+          </div>
+        </div>
+
+
+        @php
+
+          $AdmissionTargetsdeanHotIndicators = deanHotIndicators(179, $activeRoleId);
+          $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
+         @endphp
+        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
+          data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
+          <div class="card-body d-flex">
+            <div class="d-flex w-50 align-items-center me-4">
+              <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                  class="icon-base ti tabler-stars icon-md"></i>
+              </div>
+              <div>
+                <small class="text-dark text-cut-hot">Student Feedback Score</small>
+              </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+              <div class="progress w-100 me-4" style="height:8px;">
+                <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar"
+                  style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                  aria-valuemax="100"></div>
+              </div>
+              <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
+              <span
+                class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
+            </div>
+          </div>
+        </div>
+
+
+        @php
+
+          $AdmissionTargetsdeanHotIndicators = deanHotIndicators(181, $activeRoleId);
+          $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg']);
+         @endphp
+        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+          data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] }}"
+          data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
+          <div class="card-body d-flex">
+            <div class="d-flex w-50 align-items-center me-4">
+              <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                  class="icon-base ti tabler-stars icon-md"></i>
+              </div>
+              <div>
+                <small class="text-dark text-cut-hot">Faculty Discipline / Punctuality</small>
+              </div>
+            </div>
+            <div class="d-flex flex-grow-1 align-items-center">
+              <div class="progress w-100 me-4" style="height:8px;">
+                <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] }}" role="progressbar"
+                  style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                  aria-valuemax="100"></div>
+              </div>
+              <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] }}%</span>
+              <span
+                class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] }}</span>
+            </div>
+          </div>
+        </div>
+
 
       </div>
-      <!-- / Content -->
+
+      <div class="col-md-6 col-lg-4" id="scrollableCol1">
+
+
+        <div class=" d-flex justify-content-between">
+          <h5 class="fw-bold">Top Performers</h5>
+        </div>
+
+        @php
+          $deanTopPerformers = deanTopPerformers();
+        @endphp
+        @if(!empty($deanTopPerformers))
+          @foreach($deanTopPerformers as $deanTopPerformer)
+            <div class="card mb-6" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+              data-bs-custom-class="tooltip-{{ $deanTopPerformer['color'] }}"
+              data-bs-original-title="{{ $deanTopPerformer['name'] }}<br>{{ $deanTopPerformer['location'] }}">
+              <div class="card-body d-flex">
+                <div class="d-flex w-70 align-items-center me-4">
+                  <div class="badge bg-label-{{ $deanTopPerformer['color'] }} rounded p-1_5 me-4"><i
+                      class="icon-base ti tabler-trophy icon-md"></i>
+                  </div>
+                  <div>
+                    <h6 class="mb-0 text-cut">{{ $deanTopPerformer['name'] ?? 'Null..' }}</h6>
+                    <small class="text-dark fs-10 text-cut">{{ $deanTopPerformer['department'] ?? 'Null..' }}</small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                  <span
+                    class="badge bg-label-{{ $deanTopPerformer['color'] }} ms-1">{{ $deanTopPerformer['avg_score'] }}</span>
+                  <span class="badge bg-label-{{ $deanTopPerformer['color'] }} ms-1">{{ $deanTopPerformer['label'] }}</span>
+                </div>
+              </div>
+            </div>
+          @endforeach
+
+        @else
+          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+            data-bs-original-title="Yet there is no top performer !">
+            <div class="card-body d-flex">
+              <div class="d-flex w-70 align-items-center me-4">
+                <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-mood-empty icon-md"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                  <small class="text-dark fs-10 text-cut">...</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+            data-bs-original-title="Yet there is no top performer !">
+            <div class="card-body d-flex">
+              <div class="d-flex w-70 align-items-center me-4">
+                <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-mood-empty icon-md"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                  <small class="text-dark fs-10 text-cut">...</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+            data-bs-original-title="Yet there is no top performer !">
+            <div class="card-body d-flex">
+              <div class="d-flex w-70 align-items-center me-4">
+                <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-mood-empty icon-md"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                  <small class="text-dark fs-10 text-cut">...</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+              </div>
+            </div>
+          </div>
+
+
+          <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+            data-bs-original-title="Yet there is no top performer !">
+            <div class="card-body d-flex">
+              <div class="d-flex w-70 align-items-center me-4">
+                <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-mood-empty icon-md"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                  <small class="text-dark fs-10 text-cut">...</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+              </div>
+            </div>
+          </div>
+
+
+          <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+            data-bs-original-title="Yet there is no top performer !">
+            <div class="card-body d-flex">
+              <div class="d-flex w-70 align-items-center me-4">
+                <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-mood-empty icon-md"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                  <small class="text-dark fs-10 text-cut">...</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+              </div>
+            </div>
+          </div>
+        @endif
+
+
+
+
+
+
+
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class=" d-flex justify-content-between">
+          <h5 class="fw-bold">Overall KPA Performance</h5>
+        </div>
+
+
+        <div class="row g-6">
+          <!-- Profit last month -->
+
+
+          <!-- Generated Leads -->
+          <div class="col-xl-12">
+            <div class="card caed-wave-bg ">
+              <div class="card-header d-flex justify-content-between">
+                <div class="card-title mb-0">
+                  <button type="button" class="btn rounded-pill btn-outline-primary waves-effect"><span
+                      class="icon-xs icon-base ti tabler-chart-pie me-2"></span>Overall </button>
+                </div>
+                <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-original-title="View large">
+                  <button class="btn  rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button"
+                    data-bs-toggle="modal" data-bs-target="#fullscreenModal">
+                    <i class="icon-base ti tabler-arrows-maximize"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <canvas class="chartjs" id="radarChart1"></canvas>
+              </div>
+            </div>
+
+          </div>
+
+          <!--/ Generated Leads -->
+
+
+          <!--/ Expenses -->
+        </div>
+
+
+
+
+
+      </div>
+
+
+
+
+
+      <!-- Website Analytics -->
+      <div class="col-xl-4 col">
+
+        <div class="card h-100">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="card-title m-0 me-2">Research Innovation & Commercialization</h5>
+
+          </div>
+          <div class="card-body">
+            <div id="carrierPerformance"></div>
+            <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
+          </div>
+        </div>
+      </div>
+      <!--/ Website Analytics -->
+
+      <!-- Radial bar Chart -->
+      <div class="col-md-4 col-12">
+        <div class="card h-100">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="card-title mb-0">Departments Overview</h5>
+          </div>
+          <div class="card-body d-flex justify-content-center align-items-center">
+            <div id="hodDepartmentsOverview"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /Radial bar Chart -->
+      <!-- Website Analytics -->
+      <div class="col-xl-4 col">
+        <div class="card h-100">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="card-title m-0 me-2">Semester-wise Overall Performance</h5>
+
+          </div>
+          <div class="card-body">
+            <div id="carrierPerformance1"></div>
+          </div>
+        </div>
+      </div>
+      <!--/ Website Analytics -->
+
+
+    </div>
+    <!--/ Accordion1 -->
+
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-fullscreen" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalFullTitle">Overall KPA Performance</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+
+
+            <div class="row g-6 pt-2">
+              <div class="col-12 col-12" id="targetDivchart">
+                <div class="card caed-wave-bg">
+
+                  <div class="card-header d-flex justify-content-between">
+                    <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                      <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
+                      <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
+
+                      <input type="radio" class="btn-check" name="termRadio" id="spring25">
+                      <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
+
+                      <input type="radio" class="btn-check" name="termRadio" id="fall25">
+                      <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
+                    </div>
+                  </div>
+
+                  <div class="card-body pt-0">
+                    <div class="row justify-content-center text-center">
+                      <div class="col-md-8 d-flex justify-content-center">
+                        <canvas class="chartjs" id="radarChart"></canvas>
+                      </div>
+
+                      <div class="col-12 mt-2">
+                        <ul id="customLegend" class="d-flex justify-content-center flex-wrap p-0 m-0"
+                          style="list-style:none;">
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- / Content -->
 @endsection
 @push('script')
   <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
@@ -1082,68 +1112,68 @@
       let total = {{ $totalWeightSS }};
       total = parseFloat(total.toFixed(1));
       function getRatingAndColor(percentage) {
-      let rating = '';
-      let color = '';
-      let tooltipText = '';
-      let tooltipClass = '';
-      if (percentage >= 90) {
-        rating = 'OS';
-        color = '#6EA8FE';
-        tooltipText = 'You’re achieving excellence with distinction.You set the pace for others to follow.';
-        tooltipClass = 'tooltip-primary';
-      } else if (percentage >= 80) {
-        rating = 'EE';
-        color = '#28c76f';
-        tooltipText = 'You’re going beyond what’s asked of you.Keep shining — your impact inspires others.';
-        tooltipClass = 'tooltip-success';
-      } else if (percentage >= 70) {
-        rating = 'ME';
-        color = '#ffcb9a';
-        tooltipText = 'You’re doing well and meeting your goals.Keep your consistency — it’s your strength.';
-        tooltipClass = 'tooltip-warning';
-      } else if (percentage >= 60) {
-        rating = 'NI';
-        color = '#fd7e13';
-        tooltipText = 'You’re on your way — just refine and push forward.Every effort moves you closer to success.';
-        tooltipClass = 'tooltip-orange';
-      } else if (percentage > 0) {
-        rating = 'BE';
-        color = '#ff4c51';
-        tooltipText = 'Not quite there yet — but growth starts here.Reflect. Refocus. Rise higher.';
-        tooltipClass = 'tooltip-danger';
-      } else {
-        rating = 'NA';
-        color = '#000000';
-        tooltipText = 'NA';
-        tooltipClass = 'tooltip-danger';
-      }
-      return { rating, color, tooltipText, tooltipClass };
-    }
-
-    let result = getRatingAndColor(total);
-    let avgElement = document.getElementById('avg-teachervalue');
-    let ratingElement = document.getElementById('rating-teachervalue');
-    let ratingColor = document.getElementById('rating-teachercolor');
-
-    if (avgElement) {
-
-      avgElement.innerText = total.toFixed(1) + '%';
-    }
-    if (ratingElement) {
-      ratingElement.innerText = result.rating;
-    }
-    if (ratingColor) {
-      ratingColor.style.backgroundColor = result.color;
-      ratingColor.setAttribute('data-bs-original-title', result.tooltipText);
-      ratingColor.setAttribute('data-bs-custom-class', result.tooltipClass);
-      const oldTooltip = bootstrap.Tooltip.getInstance(ratingColor);
-      if (oldTooltip) {
-        oldTooltip.dispose();
+        let rating = '';
+        let color = '';
+        let tooltipText = '';
+        let tooltipClass = '';
+        if (percentage >= 90) {
+          rating = 'OS';
+          color = '#6EA8FE';
+          tooltipText = 'You’re achieving excellence with distinction.You set the pace for others to follow.';
+          tooltipClass = 'tooltip-primary';
+        } else if (percentage >= 80) {
+          rating = 'EE';
+          color = '#28c76f';
+          tooltipText = 'You’re going beyond what’s asked of you.Keep shining — your impact inspires others.';
+          tooltipClass = 'tooltip-success';
+        } else if (percentage >= 70) {
+          rating = 'ME';
+          color = '#ffcb9a';
+          tooltipText = 'You’re doing well and meeting your goals.Keep your consistency — it’s your strength.';
+          tooltipClass = 'tooltip-warning';
+        } else if (percentage >= 60) {
+          rating = 'NI';
+          color = '#fd7e13';
+          tooltipText = 'You’re on your way — just refine and push forward.Every effort moves you closer to success.';
+          tooltipClass = 'tooltip-orange';
+        } else if (percentage > 0) {
+          rating = 'BE';
+          color = '#ff4c51';
+          tooltipText = 'Not quite there yet — but growth starts here.Reflect. Refocus. Rise higher.';
+          tooltipClass = 'tooltip-danger';
+        } else {
+          rating = 'NA';
+          color = '#000000';
+          tooltipText = 'NA';
+          tooltipClass = 'tooltip-danger';
+        }
+        return { rating, color, tooltipText, tooltipClass };
       }
 
-      // 🟢 Recreate tooltip so custom class is applied
-      new bootstrap.Tooltip(ratingColor);
-    }
+      let result = getRatingAndColor(total);
+      let avgElement = document.getElementById('avg-teachervalue');
+      let ratingElement = document.getElementById('rating-teachervalue');
+      let ratingColor = document.getElementById('rating-teachercolor');
+
+      if (avgElement) {
+
+        avgElement.innerText = total.toFixed(1) + '%';
+      }
+      if (ratingElement) {
+        ratingElement.innerText = result.rating;
+      }
+      if (ratingColor) {
+        ratingColor.style.backgroundColor = result.color;
+        ratingColor.setAttribute('data-bs-original-title', result.tooltipText);
+        ratingColor.setAttribute('data-bs-custom-class', result.tooltipClass);
+        const oldTooltip = bootstrap.Tooltip.getInstance(ratingColor);
+        if (oldTooltip) {
+          oldTooltip.dispose();
+        }
+
+        // 🟢 Recreate tooltip so custom class is applied
+        new bootstrap.Tooltip(ratingColor);
+      }
 
       const elements = document.querySelectorAll('.text-cut');
 
@@ -1219,8 +1249,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                      #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                    `;
+                                                                                                                                                        #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                      `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1248,8 +1278,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                      #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                    `;
+                                                                                                                                                        #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                      `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1409,10 +1439,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-          <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-          border-radius:50%;margin-right:5px;"></span>
-          ${label} (${shortLabels[i]})
-          `;
+            <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+            border-radius:50%;margin-right:5px;"></span>
+            ${label} (${shortLabels[i]})
+            `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1563,10 +1593,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-          <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-          border-radius:50%;margin-right:5px;"></span>
-          ${label} (${shortLabels[i]})
-          `;
+            <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+            border-radius:50%;margin-right:5px;"></span>
+            ${label} (${shortLabels[i]})
+            `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1581,7 +1611,7 @@
       });
     });
 
-          document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
       const c = document.querySelector("#carrierPerformance");
       const researchData = @json($researchData);
       const categories = Object.values(researchData).map(item => item.title);
@@ -1871,68 +1901,68 @@
     window.addEventListener("load", function () {
       document.querySelector(".fade-section").classList.add("show");
     });
-    $(document).ready(function(){
+    $(document).ready(function () {
 
-    $.ajax({
+      $.ajax({
         url: "/hod-departments-overview",
         type: "GET",
-        success: function(response){
-           var firstValue = response.series.length ? response.series[0] : 0;
-            var options = {
-                chart: {
-                    height: 348,
-                    type: "radialBar"
+        success: function (response) {
+          var firstValue = response.series.length ? response.series[0] : 0;
+          var options = {
+            chart: {
+              height: 348,
+              type: "radialBar"
+            },
+
+            plotOptions: {
+              radialBar: {
+                size: 185,
+                hollow: {
+                  size: "40%"
                 },
-
-                plotOptions: {
-                    radialBar: {
-                        size: 185,
-                        hollow: {
-                            size: "40%"
-                        },
-                        track: {
-                            margin: 10
-                        },
-                        dataLabels: {
-                            name: {
-                                fontSize: "2rem"
-                            },
-                            value: {
-                                fontSize: "1.2rem"
-                            },
-                            total: {
-                                show: true,
-                                label: "",
-                                formatter: function () {
-                                    return firstValue + "%"; // <-- use firstValue here
-                                }
-                            }
-                        }
-                    }
+                track: {
+                  margin: 10
                 },
-
-
-                legend: {
+                dataLabels: {
+                  name: {
+                    fontSize: "2rem"
+                  },
+                  value: {
+                    fontSize: "1.2rem"
+                  },
+                  total: {
                     show: true,
-                    position: "bottom",
-                    offsetY: -30,
-                },
+                    label: "",
+                    formatter: function () {
+                      return firstValue + "%"; // <-- use firstValue here
+                    }
+                  }
+                }
+              }
+            },
 
-                stroke: {
-                    lineCap: "round"
-                },
 
-                series: response.series,
-                labels: response.labels
-            };
+            legend: {
+              show: true,
+              position: "bottom",
+              offsetY: -30,
+            },
 
-            var chart = new ApexCharts(document.querySelector("#hodDepartmentsOverview"), options);
-            chart.render();
+            stroke: {
+              lineCap: "round"
+            },
+
+            series: response.series,
+            labels: response.labels
+          };
+
+          var chart = new ApexCharts(document.querySelector("#hodDepartmentsOverview"), options);
+          chart.render();
 
         }
-    });
+      });
 
-});
+    });
   </script>
 
 @endpush

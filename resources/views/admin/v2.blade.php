@@ -468,24 +468,22 @@
 
           @foreach($result as $kpakey => $kpa)
             @php
-    $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
-    $iconClass = $icon1[$index2 % count($icon1)];
-    $iconClasscolor = $static_color[$index2 % count($static_color)];
-    $index2++;
+              $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+              $iconClass = $icon1[$index2 % count($icon1)];
+              $iconClasscolor = $static_color[$index2 % count($static_color)];
+              $index2++;
 
-    // Get dynamic average, rating, and color
-    $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
-    $kpaAvgWeightage = kpaAvgWeightage($kpa['id'], $activeRoleId);
-    $weight = $kpaAvgWeightage['kpa_weightage'];
+              // Get dynamic average, rating, and color
+              $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
+              $weight = $kpaResult['weight'];
+              $avg = $kpaResult['avg'];
+              $weight_ss = $kpaResult['weighted_score'];
+              $totalWeightSS += $weight_ss;
+              $rating = $kpaResult['rating'];
+              $color = $kpaResult['color']; // this will be used for bg and bg-label
 
-    $avg = $kpaResult['avg'];
-    $weight_ss = ($avg * $weight) / 100;
-    $totalWeightSS += $weight_ss;
-    $rating = $kpaResult['rating'];
-    $color = $kpaResult['color']; // this will be used for bg and bg-label
-
-    $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
-    $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
+              $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
+              $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
 
             @endphp
 
