@@ -37,7 +37,7 @@
                             <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Rating on Impact of Research Conferences Organized</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Table</a>
+                            <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Approvals</a>
                         </li>
                     </ul>
                 @endif
@@ -529,6 +529,9 @@
                         if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
                             $('#complaintTable3').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "<input type='checkbox' id='selectAll'>" },
                                     { title: "#" },
@@ -797,6 +800,9 @@
                         if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
                             $('#complaintTable3').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "#" },
                                     { title: "Created By" },
@@ -983,6 +989,9 @@
                         if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
                             $('#complaintTable3').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "<input type='checkbox' id='selectAll'>" },
                                     { title: "#" },

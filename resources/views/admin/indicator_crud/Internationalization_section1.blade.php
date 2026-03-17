@@ -454,6 +454,9 @@
                         if (!$.fn.DataTable.isDataTable('#internationalSectionTable')) {
                             $('#internationalSectionTable').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "#" },
                                     { title: "Title of Activity" },

@@ -351,6 +351,9 @@
                         if (!$.fn.DataTable.isDataTable('#intellectualTable')) {
                             $('#intellectualTable').DataTable({
                                 data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
                                 columns: [
                                     { title: "#" },
                                     { title: "Created By" },

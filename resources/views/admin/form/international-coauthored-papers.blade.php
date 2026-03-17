@@ -25,7 +25,7 @@
                         <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">International co-Authored Papers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Table</a>
+                        <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Approvals</a>
                     </li>
                 </ul>
                 @endif
@@ -273,6 +273,9 @@ function fetchIndicatorForms() {
             if (!$.fn.DataTable.isDataTable('#complaintTable2')) {
                 $('#complaintTable2').DataTable({
                     data: rowData,
+                    scrollX: true,
+                    scrollCollapse: true,
+                    autoWidth: false,
                     columns: [
                         { title: "<input type='checkbox' id='selectAll'>" },
                         { title: "#" },
