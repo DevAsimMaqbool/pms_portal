@@ -232,7 +232,7 @@ class UserController extends Controller
         $datasetInstitutional = [];
 
         foreach ($kpaIds as $kpaId) {
-            $result = kpaAvgScore($kpaId, $id);
+            $result = kpaAvgScoreForReport($kpaId, $id);
             $dataset1[] = $result['avg'];    // only avg
         }
         foreach ($catIds as $catId) {

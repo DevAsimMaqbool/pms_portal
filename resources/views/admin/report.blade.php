@@ -829,40 +829,40 @@
                 <tbody>
                     <tr>
                         @php
-                            $kpaResult = kpaAvgScore(1, Auth::user()->employee_id);
+                            $kpaResult = kpaAvgScoreForReport(1, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
+                            $target = $kpaResult['target'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
-                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $kpaResult['color'];
                         @endphp
                         <td>Teaching and Learning</td>
-                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $target }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = kpaAvgScore(2, Auth::user()->employee_id);
+                            $kpaResult = kpaAvgScoreForReport(2, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
+                            $target = $kpaResult['target'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
-                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $kpaResult['color'];
                         @endphp
                         <td>Research, Innovation and Commercialisation</td>
-                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $target }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = kpaAvgScore(13, Auth::user()->employee_id);
+                            $kpaResult = kpaAvgScoreForReport(13, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
+                            $target = $kpaResult['target'];
                             $rating = $kpaResult['rating'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
-                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                            $color = $kpaResult['color'];
                         @endphp
                         <td>Institutional Engagement</td>
-                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ $target }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -959,7 +959,7 @@
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Delivery  (PG/UG)</td>
-                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -972,7 +972,7 @@
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Management</td>
-                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -985,7 +985,7 @@
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Output</td>
-                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1089,7 +1089,7 @@
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Research Productivity & Quality</td>
-                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1102,20 +1102,20 @@
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Other Knowledge Products</td>
-                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(6, 2, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(34, 2, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
-                        <td>Research Supervision at PG Level</td>
-                        <td class="report-center">100%</td>
+                        <td>Research Operations</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1128,7 +1128,7 @@
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Innovation & Commercialization</td>
-                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ $avg }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1235,7 +1235,7 @@
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Performance in Departmental Tasks</td>
-                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1248,7 +1248,7 @@
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Performance in Events</td>
-                        <td class="report-center">100%</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>

@@ -1945,7 +1945,8 @@ if (!function_exists('lineManagerRatingOnTasks')) {
             $keyPerformanceAreaId = 13,  // set appropriate KPA ID
             $indicatorCategoryId = 27,   // set appropriate category ID
             $indicatorId = 188,         // set appropriate indicator ID
-            $weightedScore
+            $weightedScore,
+            $overallAvg
         );
 
         return $feedbacks;
@@ -2461,47 +2462,21 @@ function indicatorAvgScore($indicator_id, $emp_id)
         'color' => $color,
     ];
 }
-function indicatorCategoryAvgScoreForReport($category_id, $kpa_id, $emp_id)
-{
-    $avg = IndicatorsPercentage::where('employee_id', $emp_id)
-        ->where('key_performance_area_id', $kpa_id)
-        ->where('indicator_category_id', $category_id)
-        ->avg('score');
-    // AVG(COALESCE(score,0)) as avg_scores, 
-    // AVG(COALESCE(passing_percentage,0)) as avg_pass')
-    $avg = $avg ? round($avg, 2) : 0.00;
 
-    // Determine rating & color dynamically
-    if ($avg >= 90) {
-        $color = 'primary';
-        $rating = 'OS';
-    } elseif ($avg >= 80) {
-        $color = 'success';
-        $rating = 'EE';
-    } elseif ($avg >= 70) {
-        $color = 'warning';
-        $rating = 'ME';
-    } elseif ($avg >= 60) {
-        $color = 'orange';
-        $rating = 'NI';
-    } else {
-        $color = 'danger';
-        $rating = 'BE';
-    }
-
-    return [
-        'avg' => $avg,
-        'rating' => $rating,
-        'color' => $color,
-    ];
-}
 function indicatorCategoryAvgScore($category_id, $kpa_id, $emp_id)
 {
-    $avg = IndicatorsPercentage::where('employee_id', $emp_id)
+    $roleId = getRoleIdByName(activeRole());
+    $avgs = IndicatorsPercentage::where('employee_id', $emp_id)
         ->where('key_performance_area_id', $kpa_id)
         ->where('indicator_category_id', $category_id)
+        ->where('role_id', $roleId)
         ->avg('score');
 
+    $target = RoleKpaAssignment::where('role_id', $roleId)
+        ->where('key_performance_area_id', $kpa_id)
+        ->where('indicator_category_id', $category_id)
+        ->sum('indicator_weightage');
+    $avg = $target > 0 ? ($avgs / $target) * 100 : 0;
     $avg = $avg ? round($avg, 2) : 0.00;
 
     // Determine rating & color dynamically
@@ -2523,6 +2498,7 @@ function indicatorCategoryAvgScore($category_id, $kpa_id, $emp_id)
     }
 
     return [
+        'target' => $target,
         'avg' => $avg,
         'rating' => $rating,
         'color' => $color,
@@ -2648,6 +2624,7 @@ function Research_Innovation_Commercialization($facultyId, $activeRoleId, $indic
 if (!function_exists('getIndicatorsByScore')) {
     function getIndicatorsByScore($scoreCompare, $scoreValue, $employeeId = null, $kpaId = null, $isBadge = null)
     {
+        $roleId = getRoleIdByName(activeRole());
         $query = IndicatorsPercentage::with([
             'kpa:id,short_code',
             'category:id,cat_short_code',
@@ -2671,6 +2648,7 @@ if (!function_exists('getIndicatorsByScore')) {
 
         return $query
             ->where('score', $scoreCompare, $scoreValue)
+            ->where('role_id', $roleId)
             ->get([
                 'id',
                 'employee_id',
@@ -3365,7 +3343,7 @@ if (!function_exists('lineManagerReviewRatingOnTasks')) {
         $weightedScore188 = ($averageScore * $weights['course_188']) / 100;
 
         saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore);
-        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188);
+        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $averageScore);
         return $managerRatings;
     }
 }
@@ -4292,7 +4270,7 @@ if (!function_exists('departmentLineManagerReviewRating')) {
         $weightedScore188 = ($departmentAvgScore * $weights['course_188']) / 100;
         // Save department-level KPI
         saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore175);
-        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188);
+        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $departmentAvgScore);
 
         return [
             'department_avg_score' => $departmentAvgScore,
@@ -5842,7 +5820,7 @@ if (!function_exists('lineManagerReviewRatingOnTasksOfPL')) {
             'course_188' => getRoleWeightage($activeRoleId, 'indicator', 188)['weightage'],
         ];
         $weightedScore188 = ($averageScore * $weights['course_188']) / 100;
-        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188);
+        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $averageScore);
         return $managerRatings;
     }
 }
@@ -6361,4 +6339,53 @@ if (!function_exists('saveIndicatorPercentage100Plus')) {
             ]
         );
     }
+}
+
+function kpaAvgScoreForReport($kpa_id, $emp_id)
+{
+    // Get employee role
+    $roleId = getRoleIdByName(activeRole());
+
+    // Get KPA target weightage
+    $target = RoleKpaAssignment::where('role_id', $roleId)
+        ->where('key_performance_area_id', $kpa_id)
+        ->value('kpa_weightage');
+
+    $target = $target ?? 0;
+
+    // Fetch scores and cap each at 100
+    $avgs = IndicatorsPercentage::where('employee_id', $emp_id)
+        ->where('role_id', $roleId)
+        ->where('key_performance_area_id', $kpa_id)
+        ->where('is_score', 1)
+        ->get()
+        ->pluck('score')
+        ->map(fn($score) => min($score, 100))
+        ->avg();
+    $avg = ($avgs / $target) * 100;
+    $avg = $avg ? round($avg, 2) : 0.00;
+    // Rating logic
+    if ($avg >= 90) {
+        $color = '#6EA8FE';
+        $rating = 'OS';
+    } elseif ($avg >= 80) {
+        $color = '#96e2b4';
+        $rating = 'EE';
+    } elseif ($avg >= 70) {
+        $color = '#ffcb9a';
+        $rating = 'ME';
+    } elseif ($avg >= 60) {
+        $color = '#fd7e13';
+        $rating = 'NI';
+    } else {
+        $color = '#ff4c51';
+        $rating = 'BE';
+    }
+
+    return [
+        'target' => $target,
+        'avg' => $avg,
+        'rating' => $rating,
+        'color' => $color,
+    ];
 }
