@@ -135,34 +135,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-              .flip-card-inner {
-              transition: none;
-              }
-              .flip-card-front,
-              .flip-card-back {
-              position: relative;
-              transform: none;
-              backface-visibility: visible;
-              }
-              .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                  .flip-card-inner {
+                  transition: none;
+                  }
+                  .flip-card-front,
+                  .flip-card-back {
+                  position: relative;
+                  transform: none;
+                  backface-visibility: visible;
+                  }
+                  .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-              background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-              background-image:
-              radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-              radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                  background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                  background-image:
+                  radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                  radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-              background-image:
-              radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-              radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-              radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                  background-image:
+                  radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                  radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                  radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-              background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                  background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-              */
+                  */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -550,250 +550,250 @@
         </div>
         <!--/ Statistics -->
         <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
-        @php
+          @php
 
-          $EmployabilityhodHotIndicators = hodHotIndicators(103, $activeRoleId);
-          $EmployabilityPercentage = getRatingByPercentage($EmployabilityhodHotIndicators['avg']);
-         @endphp
-        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-{{ $EmployabilityhodHotIndicators['color'] }}"
-          data-bs-original-title="{{ $EmployabilityPercentage['description'] }}">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-{{ $EmployabilityhodHotIndicators['color'] }} rounded p-1_5 me-4"><i
-                  class="icon-base ti tabler-mood-smile icon-md"></i>
+            $EmployabilityhodHotIndicators = hodHotIndicators(103, $activeRoleId);
+            $EmployabilityPercentage = getRatingByPercentage($EmployabilityhodHotIndicators['avg']);
+           @endphp
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-{{ $EmployabilityhodHotIndicators['color'] }}"
+            data-bs-original-title="{{ $EmployabilityPercentage['description'] }}">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-{{ $EmployabilityhodHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-mood-smile icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">% Employability</small>
+                </div>
               </div>
-              <div>
-                <small class="text-dark text-cut-hot">% Employability</small>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-{{ $EmployabilityhodHotIndicators['color'] }}" role="progressbar"
+                    style="width:{{ $EmployabilityhodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                    aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">{{ $EmployabilityhodHotIndicators['avg'] }}%</span>
+                <span
+                  class="badge bg-label-{{ $EmployabilityhodHotIndicators['color'] }} ms-1">{{ $EmployabilityhodHotIndicators['rating'] }}</span>
               </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-{{ $EmployabilityhodHotIndicators['color'] }}" role="progressbar"
-                  style="width:{{ $EmployabilityhodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">{{ $EmployabilityhodHotIndicators['avg'] }}%</span>
-              <span
-                class="badge bg-label-{{ $EmployabilityhodHotIndicators['color'] }} ms-1">{{ $EmployabilityhodHotIndicators['rating'] }}</span>
-            </div>
-          </div>
-        </div>
-
-        @php
-
-          $ResearchPublicationsshodHotIndicators = hodHotIndicators(128, $activeRoleId);
-          $ResearchPublicationsPercentage = getRatingByPercentage($ResearchPublicationsshodHotIndicators['avg']);
-         @endphp
-        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-{{ $ResearchPublicationsshodHotIndicators['color'] }}"
-          data-bs-original-title="{{ $ResearchPublicationsPercentage['description'] }}">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-{{ $ResearchPublicationsshodHotIndicators['color'] }} rounded p-1_5 me-4"><i
-                  class="icon-base ti tabler-chalkboard icon-md"></i>
-              </div>
-              <div>
-                <small class="text-dark text-cut-hot">% Achievement of Research Publications</small>
-              </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-{{ $ResearchPublicationsshodHotIndicators['color'] }}" role="progressbar"
-                  style="width:{{ $ResearchPublicationsshodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">{{ $ResearchPublicationsshodHotIndicators['avg'] }}%</span>
-              <span
-                class="badge bg-label-{{ $ResearchPublicationsshodHotIndicators['color'] }} ms-1">{{ $ResearchPublicationsshodHotIndicators['rating'] }}</span>
             </div>
           </div>
-        </div>
 
-        @php
+          @php
 
-          $AdmissionTargetshodHotIndicators = hodHotIndicators(143, $activeRoleId);
-          $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetshodHotIndicators['avg']);
-         @endphp
-        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-{{ $AdmissionTargetshodHotIndicators['color'] }}"
-          data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-{{ $AdmissionTargetshodHotIndicators['color'] }} rounded p-1_5 me-4"><i
-                  class="icon-base ti tabler-mood-smile icon-md"></i>
+            $ResearchPublicationsshodHotIndicators = hodHotIndicators(128, $activeRoleId);
+            $ResearchPublicationsPercentage = getRatingByPercentage($ResearchPublicationsshodHotIndicators['avg']);
+           @endphp
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-{{ $ResearchPublicationsshodHotIndicators['color'] }}"
+            data-bs-original-title="{{ $ResearchPublicationsPercentage['description'] }}">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-{{ $ResearchPublicationsshodHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-chalkboard icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">% Achievement of Research Publications</small>
+                </div>
               </div>
-              <div>
-                <small class="text-dark text-cut-hot">% of Admission Targets Achieved</small>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-{{ $ResearchPublicationsshodHotIndicators['color'] }}" role="progressbar"
+                    style="width:{{ $ResearchPublicationsshodHotIndicators['avg'] }}%" aria-valuenow="65"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">{{ $ResearchPublicationsshodHotIndicators['avg'] }}%</span>
+                <span
+                  class="badge bg-label-{{ $ResearchPublicationsshodHotIndicators['color'] }} ms-1">{{ $ResearchPublicationsshodHotIndicators['rating'] }}</span>
               </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-{{ $AdmissionTargetshodHotIndicators['color'] }}" role="progressbar"
-                  style="width:{{ $AdmissionTargetshodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">{{ $AdmissionTargetshodHotIndicators['avg'] }}%</span>
-              <span
-                class="badge bg-label-{{ $AdmissionTargetshodHotIndicators['color'] }} ms-1">{{ $AdmissionTargetshodHotIndicators['rating'] }}</span>
-            </div>
-          </div>
-        </div>
-
-
-        @php
-
-          $recoveryhodHotIndicators = hodHotIndicators(146, $activeRoleId);
-          $recoveryTargetPercentage = getRatingByPercentage($recoveryhodHotIndicators['avg']);
-         @endphp
-        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-{{ $recoveryhodHotIndicators['color'] }}"
-          data-bs-original-title="{{ $recoveryTargetPercentage['description'] }}">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-{{ $recoveryhodHotIndicators['color'] }} rounded p-1_5 me-4"><i
-                  class="icon-base ti tabler-book-2 icon-md"></i>
-              </div>
-              <div>
-                <small class="text-dark text-cut-hot">% of Recovery</small>
-              </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-{{ $recoveryhodHotIndicators['color'] }}" role="progressbar"
-                  style="width:{{ $recoveryhodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">{{ $recoveryhodHotIndicators['avg'] }}%</span>
-              <span
-                class="badge bg-label-{{ $recoveryhodHotIndicators['color'] }} ms-1">{{ $recoveryhodHotIndicators['rating'] }}</span>
             </div>
           </div>
-        </div>
 
-        @php
+          @php
 
-          $ProfitabilityhodHotIndicators = hodHotIndicators(147, $activeRoleId);
-          $ProfitabilityTargetPercentage = getRatingByPercentage($ProfitabilityhodHotIndicators['avg']);
-         @endphp
-        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-{{ $ProfitabilityhodHotIndicators['color'] }}"
-          data-bs-original-title="{{ $ProfitabilityTargetPercentage['description'] }}">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-{{ $ProfitabilityhodHotIndicators['color'] }} rounded p-1_5 me-4"><i
-                  class="icon-base ti tabler-stars icon-md"></i>
+            $AdmissionTargetshodHotIndicators = hodHotIndicators(143, $activeRoleId);
+            $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetshodHotIndicators['avg']);
+           @endphp
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-{{ $AdmissionTargetshodHotIndicators['color'] }}"
+            data-bs-original-title="{{ $AdmissionTargetPercentage['description'] }}">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-{{ $AdmissionTargetshodHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-mood-smile icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">% of Admission Targets Achieved</small>
+                </div>
               </div>
-              <div>
-                <small class="text-dark text-cut-hot">Profitability of the Programs</small>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-{{ $AdmissionTargetshodHotIndicators['color'] }}" role="progressbar"
+                    style="width:{{ $AdmissionTargetshodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                    aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">{{ $AdmissionTargetshodHotIndicators['avg'] }}%</span>
+                <span
+                  class="badge bg-label-{{ $AdmissionTargetshodHotIndicators['color'] }} ms-1">{{ $AdmissionTargetshodHotIndicators['rating'] }}</span>
               </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-{{ $ProfitabilityhodHotIndicators['color'] }}" role="progressbar"
-                  style="width:{{ $ProfitabilityhodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">{{ $ProfitabilityhodHotIndicators['avg'] }}%</span>
-              <span
-                class="badge bg-label-{{ $ProfitabilityhodHotIndicators['color'] }} ms-1">{{ $ProfitabilityhodHotIndicators['rating'] }}</span>
             </div>
           </div>
-        </div>
 
 
-        @php
+          @php
 
-          $FacultySatisfactionScorehodHotIndicators = hodHotIndicators(166, $activeRoleId);
-          $FacultySatisfactionScoreTargetPercentage = getRatingByPercentage($FacultySatisfactionScorehodHotIndicators['avg']);
-         @endphp
-        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-{{ $FacultySatisfactionScorehodHotIndicators['color'] }}"
-          data-bs-original-title="{{ $FacultySatisfactionScoreTargetPercentage['description'] }}">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-{{ $FacultySatisfactionScorehodHotIndicators['color'] }} rounded p-1_5 me-4"><i
-                  class="icon-base ti tabler-stars icon-md"></i>
+            $recoveryhodHotIndicators = hodHotIndicators(146, $activeRoleId);
+            $recoveryTargetPercentage = getRatingByPercentage($recoveryhodHotIndicators['avg']);
+           @endphp
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-{{ $recoveryhodHotIndicators['color'] }}"
+            data-bs-original-title="{{ $recoveryTargetPercentage['description'] }}">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-{{ $recoveryhodHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-book-2 icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">% of Recovery</small>
+                </div>
               </div>
-              <div>
-                <small class="text-dark text-cut-hot">Faculty Satisfaction Score</small>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-{{ $recoveryhodHotIndicators['color'] }}" role="progressbar"
+                    style="width:{{ $recoveryhodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                    aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">{{ $recoveryhodHotIndicators['avg'] }}%</span>
+                <span
+                  class="badge bg-label-{{ $recoveryhodHotIndicators['color'] }} ms-1">{{ $recoveryhodHotIndicators['rating'] }}</span>
               </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-{{ $FacultySatisfactionScorehodHotIndicators['color'] }}" role="progressbar"
-                  style="width:{{ $FacultySatisfactionScorehodHotIndicators['avg'] }}%" aria-valuenow="65"
-                  aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">{{ $FacultySatisfactionScorehodHotIndicators['avg'] }}%</span>
-              <span
-                class="badge bg-label-{{ $FacultySatisfactionScorehodHotIndicators['color'] }} ms-1">{{ $FacultySatisfactionScorehodHotIndicators['rating'] }}</span>
             </div>
           </div>
-        </div>
 
+          @php
 
-
-        @php
-
-          $StudentFeedbackScoretshodHotIndicators = hodHotIndicators(179, $activeRoleId);
-          $StudentFeedbackScorePercentage = getRatingByPercentage($StudentFeedbackScoretshodHotIndicators['avg']);
-         @endphp
-        <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-{{ $StudentFeedbackScoretshodHotIndicators['color'] }}"
-          data-bs-original-title="{{ $StudentFeedbackScorePercentage['description'] }}">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-{{ $StudentFeedbackScoretshodHotIndicators['color'] }} rounded p-1_5 me-4"><i
-                  class="icon-base ti tabler-stars icon-md"></i>
+            $ProfitabilityhodHotIndicators = hodHotIndicators(147, $activeRoleId);
+            $ProfitabilityTargetPercentage = getRatingByPercentage($ProfitabilityhodHotIndicators['avg']);
+           @endphp
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-{{ $ProfitabilityhodHotIndicators['color'] }}"
+            data-bs-original-title="{{ $ProfitabilityTargetPercentage['description'] }}">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-{{ $ProfitabilityhodHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-stars icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">Profitability of the Programs</small>
+                </div>
               </div>
-              <div>
-                <small class="text-dark text-cut-hot">Student Feedback Score</small>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-{{ $ProfitabilityhodHotIndicators['color'] }}" role="progressbar"
+                    style="width:{{ $ProfitabilityhodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                    aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">{{ $ProfitabilityhodHotIndicators['avg'] }}%</span>
+                <span
+                  class="badge bg-label-{{ $ProfitabilityhodHotIndicators['color'] }} ms-1">{{ $ProfitabilityhodHotIndicators['rating'] }}</span>
               </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-{{ $StudentFeedbackScoretshodHotIndicators['color'] }}" role="progressbar"
-                  style="width:{{ $StudentFeedbackScoretshodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">{{ $StudentFeedbackScoretshodHotIndicators['avg'] }}%</span>
-              <span
-                class="badge bg-label-{{ $StudentFeedbackScoretshodHotIndicators['color'] }} ms-1">{{ $StudentFeedbackScoretshodHotIndicators['rating'] }}</span>
             </div>
           </div>
-        </div>
 
 
-        @php
+          @php
 
-          $PunctualityhodHotIndicators = hodHotIndicators(181, $activeRoleId);
-          $PunctualityScorePercentage = getRatingByPercentage($PunctualityhodHotIndicators['avg']);
-         @endphp
-        <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-          data-bs-custom-class="tooltip-{{ $PunctualityhodHotIndicators['color'] }}"
-          data-bs-original-title="{{ $PunctualityScorePercentage['description'] }}">
-          <div class="card-body d-flex">
-            <div class="d-flex w-50 align-items-center me-4">
-              <div class="badge bg-label-{{ $PunctualityhodHotIndicators['color'] }} rounded p-1_5 me-4"><i
-                  class="icon-base ti tabler-stars icon-md"></i>
+            $FacultySatisfactionScorehodHotIndicators = hodHotIndicators(166, $activeRoleId);
+            $FacultySatisfactionScoreTargetPercentage = getRatingByPercentage($FacultySatisfactionScorehodHotIndicators['avg']);
+           @endphp
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-{{ $FacultySatisfactionScorehodHotIndicators['color'] }}"
+            data-bs-original-title="{{ $FacultySatisfactionScoreTargetPercentage['description'] }}">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-{{ $FacultySatisfactionScorehodHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-stars icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">Faculty Satisfaction Score</small>
+                </div>
               </div>
-              <div>
-                <small class="text-dark text-cut-hot">Faculty Discipline / Punctuality</small>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-{{ $FacultySatisfactionScorehodHotIndicators['color'] }}" role="progressbar"
+                    style="width:{{ $FacultySatisfactionScorehodHotIndicators['avg'] }}%" aria-valuenow="65"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">{{ $FacultySatisfactionScorehodHotIndicators['avg'] }}%</span>
+                <span
+                  class="badge bg-label-{{ $FacultySatisfactionScorehodHotIndicators['color'] }} ms-1">{{ $FacultySatisfactionScorehodHotIndicators['rating'] }}</span>
               </div>
-            </div>
-            <div class="d-flex flex-grow-1 align-items-center">
-              <div class="progress w-100 me-4" style="height:8px;">
-                <div class="progress-bar bg-{{ $PunctualityhodHotIndicators['color'] }}" role="progressbar"
-                  style="width:{{ $PunctualityhodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-              <span class="text-body-secondary">{{ $PunctualityhodHotIndicators['avg'] }}%</span>
-              <span
-                class="badge bg-label-{{ $PunctualityhodHotIndicators['color'] }} ms-1">{{ $PunctualityhodHotIndicators['rating'] }}</span>
             </div>
           </div>
-        </div>
+
+
+
+          @php
+
+            $StudentFeedbackScoretshodHotIndicators = hodHotIndicators(179, $activeRoleId);
+            $StudentFeedbackScorePercentage = getRatingByPercentage($StudentFeedbackScoretshodHotIndicators['avg']);
+           @endphp
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-{{ $StudentFeedbackScoretshodHotIndicators['color'] }}"
+            data-bs-original-title="{{ $StudentFeedbackScorePercentage['description'] }}">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-{{ $StudentFeedbackScoretshodHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-stars icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">Student Feedback Score</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-{{ $StudentFeedbackScoretshodHotIndicators['color'] }}" role="progressbar"
+                    style="width:{{ $StudentFeedbackScoretshodHotIndicators['avg'] }}%" aria-valuenow="65"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">{{ $StudentFeedbackScoretshodHotIndicators['avg'] }}%</span>
+                <span
+                  class="badge bg-label-{{ $StudentFeedbackScoretshodHotIndicators['color'] }} ms-1">{{ $StudentFeedbackScoretshodHotIndicators['rating'] }}</span>
+              </div>
+            </div>
+          </div>
+
+
+          @php
+
+            $PunctualityhodHotIndicators = hodHotIndicators(181, $activeRoleId);
+            $PunctualityScorePercentage = getRatingByPercentage($PunctualityhodHotIndicators['avg']);
+           @endphp
+          <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-{{ $PunctualityhodHotIndicators['color'] }}"
+            data-bs-original-title="{{ $PunctualityScorePercentage['description'] }}">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-{{ $PunctualityhodHotIndicators['color'] }} rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-stars icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">Faculty Discipline / Punctuality</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-{{ $PunctualityhodHotIndicators['color'] }}" role="progressbar"
+                    style="width:{{ $PunctualityhodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
+                    aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">{{ $PunctualityhodHotIndicators['avg'] }}%</span>
+                <span
+                  class="badge bg-label-{{ $PunctualityhodHotIndicators['color'] }} ms-1">{{ $PunctualityhodHotIndicators['rating'] }}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -804,129 +804,130 @@
         <div class=" d-flex justify-content-between">
           <h5 class="fw-bold">Top Performers</h5>
         </div>
-          <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
-            @php
-              $hodTopPerformers = hodTopPerformers();
-            @endphp
-            @if(!empty($hodTopPerformers))
-              @foreach($hodTopPerformers as $hodTopPerformer)
-                <div class="card mb-6" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
-                  data-bs-custom-class="tooltip-{{ $hodTopPerformer['color'] }}"
-                  data-bs-original-title="{{ $hodTopPerformer['name'] }}<br>{{ $hodTopPerformer['location'] }}">
-                  <div class="card-body d-flex">
-                    <div class="d-flex w-70 align-items-center me-4">
-                      <div class="badge bg-label-{{ $hodTopPerformer['color'] }} rounded p-1_5 me-4"><i
-                          class="icon-base ti tabler-trophy icon-md"></i>
-                      </div>
-                      <div>
-                        <h6 class="mb-0 text-cut">{{ $hodTopPerformer['name'] ?? 'Null..' }}</h6>
-                        <small class="text-dark fs-10 text-cut">{{ $hodTopPerformer['department'] ?? 'Null..' }}</small>
-                      </div>
-                    </div>
-                    <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                      <span class="badge bg-label-{{ $hodTopPerformer['color'] }} ms-1">{{ $hodTopPerformer['avg_score'] }}</span>
-                      <span class="badge bg-label-{{ $hodTopPerformer['color'] }} ms-1">{{ $hodTopPerformer['label'] }}</span>
-                    </div>
-                  </div>
-                </div>
-              @endforeach
-
-            @else
-              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-                data-bs-original-title="Yet there is no top performer !">
+        <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
+          @php
+            $hodTopPerformers = hodTopPerformers();
+          @endphp
+          @if(!empty($hodTopPerformers))
+            @foreach($hodTopPerformers as $hodTopPerformer)
+              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+                data-bs-custom-class="tooltip-{{ $hodTopPerformer['color'] }}"
+                data-bs-original-title="{{ $hodTopPerformer['name'] }}<br>{{ $hodTopPerformer['location'] }}">
                 <div class="card-body d-flex">
                   <div class="d-flex w-70 align-items-center me-4">
-                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-mood-empty icon-md"></i>
+                    <div class="badge bg-label-{{ $hodTopPerformer['color'] }} rounded p-1_5 me-4"><i
+                        class="icon-base ti tabler-trophy icon-md"></i>
                     </div>
                     <div>
-                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                      <small class="text-dark fs-10 text-cut">...</small>
+                      <h6 class="mb-0 text-cut">{{ $hodTopPerformer['name'] ?? 'Null..' }}</h6>
+                      <small class="text-dark fs-10 text-cut">{{ $hodTopPerformer['department'] ?? 'Null..' }}</small>
                     </div>
                   </div>
                   <div class="d-flex flex-grow-1 align-items-center justify-content-end">
 
+                    <span
+                      class="badge bg-label-{{ $hodTopPerformer['color'] }} ms-1">{{ $hodTopPerformer['avg_score'] }}</span>
+                    <span class="badge bg-label-{{ $hodTopPerformer['color'] }} ms-1">{{ $hodTopPerformer['label'] }}</span>
                   </div>
                 </div>
               </div>
+            @endforeach
 
-              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-                data-bs-original-title="Yet there is no top performer !">
-                <div class="card-body d-flex">
-                  <div class="d-flex w-70 align-items-center me-4">
-                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-mood-empty icon-md"></i>
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                      <small class="text-dark fs-10 text-cut">...</small>
-                    </div>
+          @else
+            <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+              data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
+              <div class="card-body d-flex">
+                <div class="d-flex w-70 align-items-center me-4">
+                  <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                      class="icon-base ti tabler-mood-empty icon-md"></i>
                   </div>
-                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
+                  <div>
+                    <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                    <small class="text-dark fs-10 text-cut">...</small>
                   </div>
                 </div>
-              </div>
+                <div class="d-flex flex-grow-1 align-items-center justify-content-end">
 
-              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-                data-bs-original-title="Yet there is no top performer !">
-                <div class="card-body d-flex">
-                  <div class="d-flex w-70 align-items-center me-4">
-                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-mood-empty icon-md"></i>
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                      <small class="text-dark fs-10 text-cut">...</small>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                  </div>
                 </div>
               </div>
+            </div>
 
-
-              <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-                data-bs-original-title="Yet there is no top performer !">
-                <div class="card-body d-flex">
-                  <div class="d-flex w-70 align-items-center me-4">
-                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-mood-empty icon-md"></i>
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                      <small class="text-dark fs-10 text-cut">...</small>
-                    </div>
+            <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+              data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
+              <div class="card-body d-flex">
+                <div class="d-flex w-70 align-items-center me-4">
+                  <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                      class="icon-base ti tabler-mood-empty icon-md"></i>
                   </div>
-                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
+                  <div>
+                    <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                    <small class="text-dark fs-10 text-cut">...</small>
                   </div>
                 </div>
-              </div>
+                <div class="d-flex flex-grow-1 align-items-center justify-content-end">
 
-
-              <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
-                data-bs-original-title="Yet there is no top performer !">
-                <div class="card-body d-flex">
-                  <div class="d-flex w-70 align-items-center me-4">
-                    <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
-                        class="icon-base ti tabler-mood-empty icon-md"></i>
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
-                      <small class="text-dark fs-10 text-cut">...</small>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-grow-1 align-items-center justify-content-end">
-
-                  </div>
                 </div>
               </div>
-            @endif
+            </div>
 
-       </div>
+            <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+              data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
+              <div class="card-body d-flex">
+                <div class="d-flex w-70 align-items-center me-4">
+                  <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                      class="icon-base ti tabler-mood-empty icon-md"></i>
+                  </div>
+                  <div>
+                    <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                    <small class="text-dark fs-10 text-cut">...</small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
+              data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
+              <div class="card-body d-flex">
+                <div class="d-flex w-70 align-items-center me-4">
+                  <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                      class="icon-base ti tabler-mood-empty icon-md"></i>
+                  </div>
+                  <div>
+                    <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                    <small class="text-dark fs-10 text-cut">...</small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
+              data-bs-original-title="Yet there is no top performer !">
+              <div class="card-body d-flex">
+                <div class="d-flex w-70 align-items-center me-4">
+                  <div class="badge bg-label-secondary rounded p-1_5 me-4"><i
+                      class="icon-base ti tabler-mood-empty icon-md"></i>
+                  </div>
+                  <div>
+                    <h6 class="mb-0 text-cut">Yet there is no top performer !</h6>
+                    <small class="text-dark fs-10 text-cut">...</small>
+                  </div>
+                </div>
+                <div class="d-flex flex-grow-1 align-items-center justify-content-end">
+
+                </div>
+              </div>
+            </div>
+          @endif
+
+        </div>
 
       </div>
 
@@ -1150,6 +1151,18 @@
       let avgElement = document.getElementById('avg-teachervalue');
       let ratingElement = document.getElementById('rating-teachervalue');
       let ratingColor = document.getElementById('rating-teachercolor');
+      let avgScore = total.toFixed(1);
+      let rating = result.rating;
+      let userId = {{ auth()->id() }};
+      $.ajax({
+        url: "{{ route('users.update_score') }}",
+        type: "POST",
+        data: {
+          _token: "{{ csrf_token() }}",
+          id: userId,
+          as_admin_score: avgScore
+        }
+      });
 
       if (avgElement) {
 
@@ -1245,8 +1258,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                        #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                      `;
+                                                                                                                                                            #scrollableCol::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                          `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1274,8 +1287,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                        #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                      `;
+                                                                                                                                                            #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                          `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1456,10 +1469,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-            <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-            border-radius:50%;margin-right:5px;"></span>
-            ${label} (${shortLabels[i]})
-            `;
+                <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                border-radius:50%;margin-right:5px;"></span>
+                ${label} (${shortLabels[i]})
+                `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -1610,10 +1623,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-            <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-            border-radius:50%;margin-right:5px;"></span>
-            ${label} (${shortLabels[i]})
-            `;
+                <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                border-radius:50%;margin-right:5px;"></span>
+                ${label} (${shortLabels[i]})
+                `;
 
         li.addEventListener("mouseenter", () => {
           radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);

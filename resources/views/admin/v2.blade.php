@@ -1202,6 +1202,18 @@
       let avgElement = document.getElementById('avg-teachervalue');
       let ratingElement = document.getElementById('rating-teachervalue');
       let ratingColor = document.getElementById('rating-teachercolor');
+      let avgScore = total.toFixed(1);
+      let rating = result.rating;
+      let userId = {{ auth()->id() }};
+      $.ajax({
+        url: "{{ route('users.update_score') }}",
+        type: "POST",
+        data: {
+          _token: "{{ csrf_token() }}",
+          id: userId,
+          as_teacher_score: avgScore
+        }
+      });
 
       if (avgElement) {
 

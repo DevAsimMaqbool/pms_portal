@@ -397,10 +397,39 @@ class PermissionController extends Controller
 
         return response()->json($data);
     }
+
     public function MultiRolePerformance(Request $request)
     {
-        return view('admin.multi_role_performance');
+        $user = Auth::user();
+        $userRoles = $user->roles; // Collection of Role models
+
+        $teacherRoles = [21, 26, 27, 28];
+        $adminRoles = [19, 22, 23, 29];
+
+        $scores = [];
+
+        foreach ($userRoles as $role) {
+            if (in_array($role->id, $teacherRoles)) {
+                $scores[] = [
+                    'role_name' => $role->name,         // Use the role's name
+                    'score' => $user->as_teacher_score ?? 0,
+                    'type' => 'teacher',
+                    'chart_id' => 'supportTrackerTeacher' // unique ID
+                ];
+            }
+
+            if (in_array($role->id, $adminRoles)) {
+                $scores[] = [
+                    'role_name' => $role->name,
+                    'score' => $user->as_admin_score ?? 0,
+                    'type' => 'admin',
+                    'chart_id' => 'supportTrackerAdmin' // unique ID
+                ];
+            }
+        }
+
+        return view('admin.multi_role_performance', compact('scores'));
     }
-    
+
 
 }
