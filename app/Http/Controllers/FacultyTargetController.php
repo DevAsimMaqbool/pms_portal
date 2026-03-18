@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FacultyTarget;
 use App\Models\User;
+use App\Models\RoleKpaAssignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,52 +17,53 @@ class FacultyTargetController extends Controller
      */
     public function index(Request $request)
     {
-         try {
+        try {
             $user = Auth::user();
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
             if ($user->hasRole('HOD')) {
-                   $status = $request->input('status');
-                   $indicator_id = $request->input('indicator');
-                   if($status=="HOD"){
-                         $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
-                            ->where('created_by', $employee_id)
-                            ->where('form_status', 'HOD')
-                            ->where('indicator_id', $indicator_id)
-                            ->get();
-                   }if($status=="OTHER"){
-                       $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
-                            ->where('created_by', $employee_id)
-                            ->where('form_status', 'OTHER')
-                            ->get();
-                   }
-                   
-                
+                $status = $request->input('status');
+                $indicator_id = $request->input('indicator');
+                if ($status == "HOD") {
+                    $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
+                        ->where('created_by', $employee_id)
+                        ->where('form_status', 'HOD')
+                        ->where('indicator_id', $indicator_id)
+                        ->get();
+                }
+                if ($status == "OTHER") {
+                    $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
+                        ->where('created_by', $employee_id)
+                        ->where('form_status', 'OTHER')
+                        ->get();
+                }
+
+
             }
             if ($user->hasRole('Dean')) {
-                   $hod_ids = User::where('manager_id', $employee_id)
-                   ->role('HOD')->pluck('employee_id');
-                           $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator','assign:id,name,employee_id',])
-                            ->whereIn('created_by', $hod_ids)
-                            ->whereIn('status', [1, 2])
-                            ->whereIn('form_status', ['OTHER', 'HOD'])
-                            ->get();
+                $hod_ids = User::where('manager_id', $employee_id)
+                    ->role('HOD')->pluck('employee_id');
+                $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
+                    ->whereIn('created_by', $hod_ids)
+                    ->whereIn('status', [1, 2])
+                    ->whereIn('form_status', ['OTHER', 'HOD'])
+                    ->get();
             }
             if ($user->hasRole('ORIC')) {
-                
-                            $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator','assign:id,name,employee_id',])
-                            ->whereIn('status', [2, 3])
-                            ->whereIn('form_status', ['OTHER', 'HOD'])
-                            ->get();
+
+                $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
+                    ->whereIn('status', [2, 3])
+                    ->whereIn('form_status', ['OTHER', 'HOD'])
+                    ->get();
 
             }
             if ($user->hasRole('Human Resources')) {
-                
-                            $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator','assign:id,name,employee_id',])
-                            ->whereIn('status', [3, 4])
-                            ->whereIn('form_status', ['OTHER', 'HOD'])
-                            ->get();
+
+                $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
+                    ->whereIn('status', [3, 4])
+                    ->whereIn('form_status', ['OTHER', 'HOD'])
+                    ->get();
 
             }
 
@@ -92,126 +94,170 @@ class FacultyTargetController extends Controller
      */
     public function store(Request $request)
     {
-        try { 
+        try {
             $employeeId = Auth::user()->employee_id;
-            if($request->form_status=='HOD'){
-                 $rules = [
-                        'indicator_id' => 'required',
-                        'faculty_member_id' => 'required|array',
-                        'national' => 'required|integer',
-                        'international' => 'required|integer',
-                        'faculty_member_id.*' => 'integer|exists:users,id',
-                        'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-                    ];
-                    
+            if ($request->form_status == 'HOD') {
+                $rules = [
+                    'indicator_id' => 'required',
+                    'faculty_member_id' => 'required|array',
+                    'national' => 'required|integer',
+                    'international' => 'required|integer',
+                    'faculty_member_id.*' => 'integer|exists:users,id',
+                    'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                ];
 
-                    $validator = Validator::make($request->all(), $rules);
-                    if ($validator->fails()) {
-                            return response()->json([
-                                'status' => 'error',
-                                'errors' => $validator->errors()
-                            ], 422);
-                        }
-                         $data = [
-                            'indicator_id' => $request->indicator_id,
-                            'target'=>$request->target,
-                            'form_status' => $request->form_status,
-                            'scopus_q1' => $request->scopus_q1,
-                            'scopus_q2' => $request->scopus_q2,
-                            'scopus_q3' => $request->scopus_q3,
-                            'scopus_q4' => $request->scopus_q4,
-                            'hec_w' => $request->hec_w,
-                            'hec_x' => $request->hec_x,
-                            'hec_y' => $request->hec_y,
-                            'medical_recognized' => $request->medical_recognized,
-                            'national' => $request->national,
-                            'international' => $request->international,
-                            'created_by' => $employeeId,
-                            'updated_by' => $employeeId,
-                        ];
-                        DB::beginTransaction();
 
-                        foreach ($request->faculty_member_id as $userId) {
-                            FacultyTarget::updateOrCreate(
-                                [
-                                    'user_id'      => $userId,
-                                    'indicator_id' => $request->indicator_id
-                                ],
-                                $data
-                            );
-                        }    
-               
-                       
-                        DB::commit();
-                        return response()->json([
-                            'status' => 'success',
-                            'message' => 'Form saved successfully!',
-                        ]);
-                       
-            }if($request->form_status=='OTHER'){
-                     $rules = [
-                        'indicator_id' => 'required|array',
-                        'indicator_id.*' => 'integer',
-                        'faculty_member_id' => 'required|array',
-                        'target' => 'required|integer',
-                        'faculty_member_id.*' => 'integer|exists:users,id',
-                        'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-                    ];
-                    
+                $validator = Validator::make($request->all(), $rules);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                $data = [
+                    'indicator_id' => $request->indicator_id,
+                    'target' => $request->target,
+                    'form_status' => $request->form_status,
+                    'scopus_q1' => $request->scopus_q1,
+                    'scopus_q2' => $request->scopus_q2,
+                    'scopus_q3' => $request->scopus_q3,
+                    'scopus_q4' => $request->scopus_q4,
+                    'hec_w' => $request->hec_w,
+                    'hec_x' => $request->hec_x,
+                    'hec_y' => $request->hec_y,
+                    'medical_recognized' => $request->medical_recognized,
+                    'national' => $request->national,
+                    'international' => $request->international,
+                    'created_by' => $employeeId,
+                    'updated_by' => $employeeId,
+                ];
+                DB::beginTransaction();
 
-                    $validator = Validator::make($request->all(), $rules);
-                    if ($validator->fails()) {
-                            return response()->json([
-                                'status' => 'error',
-                                'errors' => $validator->errors()
-                            ], 422);
-                        }
-                     $data = [
-                            'target'=>$request->target,
-                            'form_status' => $request->form_status,
-                            'created_by' => $employeeId,
-                            'updated_by' => $employeeId,
-                        ];
-                        DB::beginTransaction();
+                foreach ($request->faculty_member_id as $userId) {
+                    FacultyTarget::updateOrCreate(
+                        [
+                            'user_id' => $userId,
+                            'indicator_id' => $request->indicator_id
+                        ],
+                        $data
+                    );
+                }
 
-                            foreach ($request->faculty_member_id as $userId) {
-                                foreach ($request->indicator_id as $indicatorId) {
 
-                                    // ✅ CHECK IF ALREADY ASSIGNED
-                                     $existing = FacultyTarget::where('user_id', $userId)
-                                        ->where('indicator_id', $indicatorId)
-                                        ->first();
+                DB::commit();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Form saved successfully!',
+                ]);
 
-                                    if ($existing) {
-                                      // 🔄 UPDATE EXISTING RECORD
-                                        $existing->update([
-                                            'target'      => $request->target,
-                                            'form_status' => $request->form_status,
-                                            'updated_by'  => $employeeId,
-                                        ]);
-                                    }else {
-                                        // ➕ CREATE NEW RECORD
-                                        FacultyTarget::create([
-                                            'user_id'      => $userId,
-                                            'indicator_id' => $indicatorId,
-                                            'target'       => $request->target,
-                                            'form_status'  => $request->form_status,
-                                            'created_by'   => $employeeId,
-                                            'updated_by'   => $employeeId,
-                                        ]);
-                                    }
-                                }
+            }
+            if ($request->form_status == 'OTHER') {
+                $rules = [
+                    'indicator_id' => 'required|array',
+                    'indicator_id.*' => 'integer',
+                    'faculty_member_id' => 'required|array',
+                    'target' => 'required|integer',
+                    'faculty_member_id.*' => 'integer|exists:users,id',
+                    'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                ];
+
+
+                $validator = Validator::make($request->all(), $rules);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                $data = [
+                    'target' => $request->target,
+                    'form_status' => $request->form_status,
+                    'created_by' => $employeeId,
+                    'updated_by' => $employeeId,
+                ];
+                DB::beginTransaction();
+                $userIds = $request->faculty_member_id;
+                $indicatorIds = $request->indicator_id;
+                $indicatorsInfo = DB::table('indicators')
+                    ->join('indicator_categories', 'indicators.indicator_category_id', '=', 'indicator_categories.id')
+                    ->select(
+                        'indicators.id as indicator_id',
+                        'indicators.indicator_category_id',
+                        'indicator_categories.key_performance_area_id as kpa_id'
+                    )
+                    ->whereIn('indicators.id', $indicatorIds)
+                    ->get()
+                    ->keyBy('indicator_id');
+                $userRoles = DB::table('model_has_roles')
+                    ->where('model_type', User::class)
+                    ->whereIn('model_id', $userIds)
+                    ->pluck('role_id', 'model_id');
+
+                foreach ($userIds as $userId) {
+                    $roleId = $userRoles[$userId] ?? null;
+                    foreach ($indicatorIds as $indicatorId) {
+                        $info = $indicatorsInfo[$indicatorId] ?? null;
+                        if (!$info)
+                            continue; // skip if indicator not found
+
+                        $indicatorCategoryId = $info->indicator_category_id;
+                        $kpaId = $info->kpa_id;
+                        // ✅ CHECK IF ALREADY ASSIGNED
+                        $existing = FacultyTarget::where('user_id', $userId)
+                            ->where('indicator_id', $indicatorId)
+                            ->first();
+
+                        if ($existing) {
+                            // 🔄 UPDATE EXISTING RECORD
+                            $existing->update([
+                                'target' => $request->target,
+                                'form_status' => $request->form_status,
+                                'updated_by' => $employeeId,
+                            ]);
+                        } else {
+                            // ➕ CREATE NEW RECORD
+                            FacultyTarget::create([
+                                'user_id' => $userId,
+                                'indicator_id' => $indicatorId,
+                                'target' => $request->target,
+                                'form_status' => $request->form_status,
+                                'created_by' => $employeeId,
+                                'updated_by' => $employeeId,
+                            ]);
+                            if ($kpaId == 2 && $indicatorCategoryId == 8) {
+                                // ✅ Insert record in role_kpa_assignments
+                                DB::table('role_kpa_assignments')->insert([
+                                    'role_id' => $roleId,
+                                    'key_performance_area_id' => $kpaId,
+                                    'indicator_category_id' => $indicatorCategoryId,
+                                    'indicator_id' => $indicatorId,
+                                ]);
+                                $count = RoleKpaAssignment::where('role_id', $roleId)
+                                    ->where('key_performance_area_id', $kpaId)
+                                    ->where('indicator_category_id', $indicatorCategoryId)
+                                    ->count();
+                                $weightage = 10 / $count;
+                                DB::table('role_kpa_assignments')
+                                    ->where('role_id', $roleId)
+                                    ->where('key_performance_area_id', $kpaId)
+                                    ->where('indicator_category_id', $indicatorCategoryId)
+                                    ->update([
+                                        'indicator_weightage' => $weightage,
+                                    ]);
                             }
-               
-                       
-                        DB::commit();
-                        return response()->json([
-                            'status' => 'success',
-                            'message' => 'Target saved successfully!',
-                        ]);    
+                        }
+                    }
+                }
+
+
+                DB::commit();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Target saved successfully!',
+                ]);
             }
 
-           
+
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -220,7 +266,8 @@ class FacultyTargetController extends Controller
             //     'error' => $e->getMessage()
             // ], 500);
             return response()->json([
-            'message' => 'Oops! Something went wrong'], 500);
+                'message' => 'Oops! Something went wrong'
+            ], 500);
         }
     }
 
@@ -244,7 +291,7 @@ class FacultyTargetController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {   
+    {
         $request->validate([
             'status' => 'required|in:1,2,3,4,5,6'
         ]);
@@ -268,8 +315,8 @@ class FacultyTargetController extends Controller
     public function getTarget11(Request $request)
     {
         $record = FacultyTarget::where('indicator_id', $request->indicator_id)
-                    ->where('user_id', 45433)
-                    ->first(); // ✅ No error if not found
+            ->where('user_id', 45433)
+            ->first(); // ✅ No error if not found
 
         return response()->json([
             'target' => $record ? $record->target : null
@@ -280,7 +327,7 @@ class FacultyTargetController extends Controller
     {
         $employeeId = Auth::user()->employee_id;
         $record = FacultyTarget::where('indicator_id', $request->indicator_id)
-             ->where('user_id', $employeeId)
+            ->where('user_id', $employeeId)
             ->first();
 
         return response()->json([

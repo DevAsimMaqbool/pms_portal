@@ -296,4 +296,19 @@ class UserController extends Controller
 
         return view('admin.virtue_report', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional', 'noteable', 'areaOfDevelopment'));
     }
+
+    public function update_score(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+
+        if ($request->has('as_teacher_score')) {
+            $user->as_teacher_score = $request->as_teacher_score;
+        }
+
+        if ($request->has('as_admin_score')) {
+            $user->as_admin_score = $request->as_admin_score;
+        }
+
+        $user->save();
+    }
 }

@@ -47,6 +47,8 @@ class User extends Authenticatable
         'manager_name',
         'level',
         'status',
+        'as_teacher_score',
+        'as_admin_score',
         'password',
     ];
     public $incrementing = false;

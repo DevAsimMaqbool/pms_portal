@@ -169,6 +169,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/user_report/{id}', [UserController::class, 'userReport']);
     Route::get('/user_virtue_report/{id}', [UserController::class, 'userVirtueReport']);
     Route::resource('users', UserController::class);
+    Route::post('/update_score', [UserController::class, 'update_score'])->name('users.update_score');
     Route::resource('/faculty', FacultyController::class);
     Route::resource('/assigndepartment', DepartmentAssignmentController::class);
 
@@ -194,7 +195,7 @@ Route::middleware('auth')->group(function () {
         ->name('forms.assigned.view');
     //Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
     Route::get('/hod-departments-overview', [PermissionController::class, 'hodDepartmentsOverview']);
-    Route::get('/multi-role-performance', [PermissionController::class, 'MultiRolePerformance']);
+    Route::get('/multi-role-performance', [PermissionController::class, 'MultiRolePerformance'])->name('multi-role-performance');
 
 
 
@@ -254,12 +255,12 @@ Route::middleware('auth')->group(function () {
         Route::resource('/alumni-satisfaction-rate', AlumniSatisfactionRateController::class);
         Route::resource('/line-manager-review-rating', LineManagerReviewRatingController::class);
         Route::resource('industrial-visit', IndustrialVisitController::class);
-        Route::resource('conference-impact',ResearchConferenceImpactController::class);
+        Route::resource('conference-impact', ResearchConferenceImpactController::class);
 
         Route::put(
-    '/completion-of-course-folder-verification/{id}',
-    [CompletionOfCourseFolderController::class, 'updatestatusverification']
-)->name('completion.folder.verification');
+            '/completion-of-course-folder-verification/{id}',
+            [CompletionOfCourseFolderController::class, 'updatestatusverification']
+        )->name('completion.folder.verification');
 
 
 

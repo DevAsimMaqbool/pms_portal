@@ -33,7 +33,6 @@
                             <option value="198">Industrial Projects</option>
                             <option value="199">Products Delivered to Industry</option>
                             <option value="194">Number of Knowledge Products</option>
-                            <option value="155">No of Professional Memberships attained vs targets</option>
                             <option value="197">Industrial Visits</option>
                         </select>
                         <div class="invalid-feedback" id="indicatorError"></div>
