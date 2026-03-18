@@ -53,6 +53,7 @@ class ProgramProfitabilityController extends Controller
                     'program_id'     => 'required|integer',
                     'program_level'  => 'required|in:UG,PG',
                     'profitability' => 'nullable|numeric',
+                    'period_date' => 'required',
                     'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                 ];
 
@@ -98,6 +99,7 @@ class ProgramProfitabilityController extends Controller
                     'department_id'     => 'required|integer',
                     'program_id'     => 'required|integer',
                     'program_level'  => 'required|in:UG,PG',
+                    'period_date' => 'required',
                     'profitability' => 'nullable|numeric',
                 ];
 

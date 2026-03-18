@@ -100,9 +100,9 @@
                                 <!-- Second column -->
                                 <div class="col-12 col-lg-12">
                                     <!-- Pricing Card -->
-                                    <div class="card mb-6">
+                                    <div class="mb-6">
                                         <div class="card-header">
-                                            <h5 class="card-title mb-0">Program Information</h5>
+                                            <h5 class="card-title mb-2">Program Information</h5>
                                         </div>
                                         <div class="card-body">
 
@@ -144,6 +144,10 @@
                                                     <option value="UG">UG</option>
                                                 </select>
                                             </div>
+                                            <div class="mb-3">
+                                                    <label class="form-label" for="period_date">Period</label>
+                                                    <input type="date" class="form-control" id="period_date" name="period_date" required>
+                                                </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="profitability">Profitability (%)</label>
                                                 <div class="input-group">
@@ -351,6 +355,7 @@
                     // Text Fields
                     // ---------------------------
                     $f.find('[name="profitability"]').val(form.profitability);
+                    $f.find('[name="period_date"]').val(form.period_date);
 
 
 

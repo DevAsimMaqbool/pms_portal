@@ -13,6 +13,7 @@ class ProgramProfitability extends Model
         'program_id',
         'program_level',
         'profitability',
+        'period_date',
         'form_status',
         'status',
         'update_history',
