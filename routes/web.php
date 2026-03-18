@@ -138,6 +138,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/get-users', [AssignUserKpaController::class, 'getUsers'])->name('indicatorCategory.getUsers');
     Route::post('/get-indicators', [AssignUserKpaController::class, 'getIndicators'])->name('indicator.getIndicators');
     Route::post('/get-indicator', [KeyPerformanceAreaController::class, 'getIndicators'])->name('indicator.getIndicator');
+    Route::get('/export-kpa-report', [KeyPerformanceAreaController::class, 'exportKpaReport'])->name('export.kpa.report');
 
     Route::get('/assignments', [RoleKpaAssignmentController::class, 'create'])->name('assignments.create');
     Route::post('/assignments', [RoleKpaAssignmentController::class, 'store'])->name('assignments.store');

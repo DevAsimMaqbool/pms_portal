@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use App\Exports\EmployeeKpaReportExport;
+use Maatwebsite\Excel\Facades\Excel;
 class KeyPerformanceAreaController extends Controller
 {
     public function index(Request $request)
@@ -216,6 +218,11 @@ class KeyPerformanceAreaController extends Controller
         return response()->json([
             'indicators' => $indicators
         ]);
+    }
+
+    public function exportKpaReport()
+    {
+        return Excel::download(new EmployeeKpaReportExport, 'employee_kpa_report.xlsx');
     }
 
 

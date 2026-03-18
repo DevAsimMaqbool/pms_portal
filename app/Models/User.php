@@ -134,5 +134,18 @@ class User extends Authenticatable
         return $this->hasMany(Program::class, 'leader_id');
     }
 
+    // User.php
+    public function facultyyy()
+    {
+        // faculty column in users table = faculty
+        return $this->belongsTo(Faculty::class, 'faculty', 'id');
+    }
+
+    public function departmentttt()
+    {
+        // department_id column in users table = department_id
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
 
 }
