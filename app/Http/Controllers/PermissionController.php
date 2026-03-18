@@ -255,20 +255,12 @@ class PermissionController extends Controller
             case 'teacher':
             case 'professor':
             case 'qch':
-                $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
-                return view('admin.v2', compact('employee', 'dataset1', 'researchData'));
             case 'assistant professor':
-                $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
-                return view('admin.hod-v2', compact('employee', 'researchData'));
             case 'associate professor':
-                $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
-                return view('admin.hod-v2', compact('employee', 'researchData'));
             case 'program leader ug':
-                $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
-                return view('admin.hod-v2', compact('employee', 'researchData'));
             case 'program leader pg':
                 $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
-                return view('admin.hod-v2', compact('employee', 'researchData'));
+                return view('admin.v2', compact('employee', 'dataset1', 'researchData'));
             case 'hod':
                 $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
                 return view('admin.hod-v2', compact('employee', 'researchData'));

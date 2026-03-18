@@ -12,6 +12,9 @@
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
   <style>
+  .swiper-wrapper {
+      height: 269px;
+    }
     .avatar-xxl {
       --bs-avatar-size: 6rem;
       --bs-avatar-initial: 1.875rem;
@@ -429,9 +432,10 @@
               <!--/ Generated Leads -->
               <!-- Profit last month -->
               <div class="col-lg-4 col-md-3 col-sm-6">
-                <div class="card h-100" style="background-color: #ac7cad;">
+                <div class="card h-100" data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-custom-class="tooltip-" data-bs-original-title="{{ucfirst(activeRole())}}" style="background-color: #ac7cad;">
                   <div class="card-body d-flex justify-content-center align-items-center ">
-                    <h6 class="mb-0 text-center text-white">As {{ucfirst(activeRole())}}</h6>
+                    <h6 class="mb-0 text-center text-white">As {{ substr(ucfirst(activeRole()), 0, 7) }}<h6>
                   </div>
                 </div>
               </div>
@@ -460,92 +464,197 @@
           @php
   $activeRoleId = getRoleIdByName(activeRole());
   $result = getRoleAssignments(activeRole());
+  $countResult = count($result);
   $icon1 = ['tabler-book', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
   $static_color = ['primary', 'success', 'warning', 'orange', 'danger'];
   $index2 = 0;
   $totalWeightSS = 0;
           @endphp
+          @if($countResult > 3)
+            <!-- count >3 -->
+              <div class="col-lg-9 col-md-12">
+                <div class="swiper-reviews-carousel overflow-hidden">
+                  <div class="swiper" id="swiper-reviews">
+                    <div class="swiper-wrapper">
 
-          @foreach($result as $kpakey => $kpa)
-            @php
-              $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
-              $iconClass = $icon1[$index2 % count($icon1)];
-              $iconClasscolor = $static_color[$index2 % count($static_color)];
-              $index2++;
+                      @foreach($result as $kpakey => $kpa)
+                        @php
+                          $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+                          $iconClass = $icon1[$index2 % count($icon1)];
+                          $iconClasscolor = $static_color[$index2 % count($static_color)];
+                          $index2++;
 
-              // Get dynamic average, rating, and color
-              $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
-              $weight = $kpaResult['weight'];
-              $avg = $kpaResult['avg'];
-              $weight_ss = $kpaResult['weighted_score'];
-              $totalWeightSS += $weight_ss;
-              $rating = $kpaResult['rating'];
-              $color = $kpaResult['color']; // this will be used for bg and bg-label
+                          // Get dynamic average, rating, and color
+                          $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
+                          $weight = $kpaResult['weight'];
+                          $avg = $kpaResult['avg'];
+                          $weight_ss = $kpaResult['weighted_score'];
+                          $totalWeightSS += $weight_ss;
+                          $rating = $kpaResult['rating'];
+                          $color = $kpaResult['color']; // this will be used for bg and bg-label
 
-              $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
-              $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
+                          $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
+                          $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
 
-            @endphp
+                        @endphp
+                        <div class="swiper-slide" id="{{ $targetId }}">
+                          <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
+                            <div class="flip-card h-100">
+                              <div class="flip-card-inner">
 
-            <div class="col-lg-3 col-md-4" id="{{ $targetId }}">
-              <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
-                <div class="flip-card h-100">
-                  <div class="flip-card-inner">
+                                <!-- FRONT -->
+                                <div class="flip-card-front card bg-{{ $iconClasscolor }} text-white">
 
-                    <!-- FRONT -->
-                    <div class="flip-card-front card bg-{{ $iconClasscolor }} text-white">
-                      <div class="card-body position-relative d-flex flex-column justify-content-between">
-                        <div>
-                          <div class="d-flex align-items-center mb-1">
-                            <div class="avatar me-4">
-                              <span class="avatar-initial rounded bg-label-{{ $iconClasscolor }}">
-                                <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
-                              </span>
+                                  <div class="card-body position-relative d-flex flex-column justify-content-between">
+                                    <div>
+                                      <div class="d-flex align-items-center mb-1">
+                                        <div class="avatar me-4">
+                                          <span class="avatar-initial rounded bg-label-{{ $iconClasscolor }}">
+                                            <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
+                                    </div>
+                                    
+
+                                    <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
+                                      <div class="mb-1">
+                                        <span class="fw-semibold">Score </span> <span
+                                          class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
+                                      </div>
+                                      <div class="mb-1">
+                                        <span class="fw-semibold">Rating </span> <span
+                                          class="badge bg-label-{{ $color }}">{{ $rating }}</span>
+                                      </div>
+                                      <div class="mb-1">
+                                        <span class="fw-semibold">Weight </span> <span
+                                          class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
+                                      </div>
+                                      <div>
+                                        <span class="fw-semibold">Weighted Score </span> <span
+                                          class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
+                                      </div>
+                                    </div>
+                                    <!-- /matrics-->
+
+
+
+                                  </div>
+
+                                </div>
+
+                                <!-- BACK -->
+                                <div class="flip-card-back card bg-{{ $iconClasscolor }} text-dark h-100">
+                                  <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                    <div class="badge rounded p-2 bg-label-{{ $iconClasscolor }} mb-2"><i
+                                        class="icon-base ti {{ $iconClass }} icon-lg"></i>
+                                    </div>
+                                    <h6 class="mb-2 text-white text-center ">{{ $kpa['performance_area'] }}</h6>
+                                    <p class="text-center mb-0 text-white fs-13">
+                                      {{ $schroll_rating_description ?? 'Keep performing well in this area!' }}
+                                    </p>
+                                  </div>
+                                </div>
+
+                              </div>
                             </div>
-                          </div>
-                          <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
-                        </div>
-                        <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
-                          <div class="mb-1">
-                            <span class="fw-semibold">Score </span> <span
-                              class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
-                          </div>
-                          <div class="mb-1">
-                            <span class="fw-semibold">Rating </span> <span
-                              class="badge bg-label-{{ $color }}">{{ $rating }}</span>
-                          </div>
-                          <div class="mb-1">
-                            <span class="fw-semibold">Weight </span> <span
-                              class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
-                          </div>
-                          <div>
-                            <span class="fw-semibold">Weighted Score </span> <span
-                              class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
-                          </div>
+                          </a>
                         </div>
 
+                      @endforeach
 
-                      </div>
                     </div>
-
-                    <!-- BACK -->
-                    <div class="flip-card-back card bg-{{ $iconClasscolor }} text-dark h-100">
-                      <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                        <div class="badge rounded p-2 mb-2 bg-label-{{ $iconClasscolor }}">
-                          <i class="icon-base ti {{ $iconClass }} icon-lg"></i>
-                        </div>
-                        <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] }}</h6>
-                        <p class="text-center mb-0 text-white fs-13">
-                          {{ $schroll_rating_description ?? 'Keep performing well in this area!' }}
-                        </p>
-                      </div>
-                    </div>
-
+                    <div class="swiper-button-next text-white"></div>
+                    <div class="swiper-button-prev text-white"></div>
                   </div>
                 </div>
-              </a>
-            </div>
-          @endforeach
+              </div>
+
+              <!--/ count >3 -->
+
+          @else
+            @foreach($result as $kpakey => $kpa)
+              @php
+                $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+                $iconClass = $icon1[$index2 % count($icon1)];
+                $iconClasscolor = $static_color[$index2 % count($static_color)];
+                $index2++;
+
+                // Get dynamic average, rating, and color
+                $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
+                $weight = $kpaResult['weight'];
+                $avg = $kpaResult['avg'];
+                $weight_ss = $kpaResult['weighted_score'];
+                $totalWeightSS += $weight_ss;
+                $rating = $kpaResult['rating'];
+                $color = $kpaResult['color']; // this will be used for bg and bg-label
+
+                $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
+                $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
+
+              @endphp
+
+              <div class="col-lg-3 col-md-4" id="{{ $targetId }}">
+                <a href="{{ route('kpa.report', ['id' => $kpa['id']]) }}" class="text-decoration-none">
+                  <div class="flip-card h-100">
+                    <div class="flip-card-inner">
+
+                      <!-- FRONT -->
+                      <div class="flip-card-front card bg-{{ $iconClasscolor }} text-white">
+                        <div class="card-body position-relative d-flex flex-column justify-content-between">
+                          <div>
+                            <div class="d-flex align-items-center mb-1">
+                              <div class="avatar me-4">
+                                <span class="avatar-initial rounded bg-label-{{ $iconClasscolor }}">
+                                  <i class="icon-base ti {{ $iconClass }} icon-28px"></i>
+                                </span>
+                              </div>
+                            </div>
+                            <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
+                          </div>
+                          <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
+                            <div class="mb-1">
+                              <span class="fw-semibold">Score </span> <span
+                                class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
+                            </div>
+                            <div class="mb-1">
+                              <span class="fw-semibold">Rating </span> <span
+                                class="badge bg-label-{{ $color }}">{{ $rating }}</span>
+                            </div>
+                            <div class="mb-1">
+                              <span class="fw-semibold">Weight </span> <span
+                                class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
+                            </div>
+                            <div>
+                              <span class="fw-semibold">Weighted Score </span> <span
+                                class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
+                            </div>
+                          </div>
+
+
+                        </div>
+                      </div>
+
+                      <!-- BACK -->
+                      <div class="flip-card-back card bg-{{ $iconClasscolor }} text-dark h-100">
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                          <div class="badge rounded p-2 mb-2 bg-label-{{ $iconClasscolor }}">
+                            <i class="icon-base ti {{ $iconClass }} icon-lg"></i>
+                          </div>
+                          <h6 class="mb-2 text-white text-center">{{ $kpa['performance_area'] }}</h6>
+                          <p class="text-center mb-0 text-white fs-13">
+                            {{ $schroll_rating_description ?? 'Keep performing well in this area!' }}
+                          </p>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </a>
+              </div>
+            @endforeach
+          @endif
 
           <!--/ Website Analytics -->
 
@@ -1040,6 +1149,10 @@
   <script src="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
   <script src="{{ asset('admin/assets/js/extended-ui-perfect-scrollbar.js') }}"></script>
   <script src="{{ asset('admin/assets/js/cards-advance.js') }}"></script>
+  <script src="{{ asset('admin/assets/vendor/libs/swiper/swiper.js') }}"></script>
+  <script src="{{ asset('admin/assets/vendor/libs/nouislider/nouislider.js') }}"></script>
+  <script src="{{ asset('admin/assets/js/front-page-landing.js') }}"></script>
+  <script src="{{ asset('admin/assets/js/charts-apex.js') }}"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       let total = {{ $totalWeightSS }};
