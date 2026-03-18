@@ -51,6 +51,7 @@
                                         <th>Faculty / Program</th>
                                         <th>Country</th>
                                         <th>Semester / Year</th>
+                                        <th>History</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -266,6 +267,12 @@
                                 form.student_program,
                                 form.student_country,
                                 form.student_semester,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
+                                    data-history='${JSON.stringify(form.update_history)}'
+                                    data-user='${form.creator ? form.creator.name : "N/A"}'
+                                    data-created='${form.created_at}'>
+                                    <span class="icon-xs icon-base ti tabler-history me-2"></span>History
+                                </button>`,
                                 editButton + ' ' + deleteBtn
                             ];
                         });
@@ -283,6 +290,7 @@
                                     { title: "Program / Faculty" },
                                     { title: "Country" },
                                     { title: "Semester" },
+                                    { title: "History" },
                                     { title: "Actions" }
                                 ]
                             });
