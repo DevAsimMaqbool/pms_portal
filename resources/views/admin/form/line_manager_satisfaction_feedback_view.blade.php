@@ -13,17 +13,17 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="card">
             <!-- Header with Add Feedback Button -->
-            <div class="d-flex justify-content-between align-items-center p-3">
+            <div class="d-flex justify-content-between align-items-center card-header">
                 <h5 class="card-title mb-0">Rate your Team Members</h5>
                 <!-- <a href="{{ route('linemanager.form') }}" class="btn btn-primary">Add Feedback</a> -->
             </div>
-            <div class="px-3 pb-3">
+            <div class="card-header">
                 <span class="badge bg-primary">Total: {{ $total }}</span>
                 <span class="badge bg-success">Completed: {{ $completed }}</span>
                 <span class="badge bg-danger">Not Completed: {{ $notCompleted }}</span>
             </div>
 
-            <div class="card-datatable">
+            <div class="card-datatable card-body">
                 <table class="table" id="userTable">
                     <thead class="border-top">
                         <tr>

@@ -108,6 +108,10 @@
                                                         <option value="UG">UG</option>
                                                     </select>
                                                 </div>
+                                                 <div class="mb-3">
+                                                    <label class="form-label" for="period_date">Period</label>
+                                                    <input type="date" class="form-control" id="period_date" name="period_date" required>
+                                                </div>
                                                 <div class="mb-3">
                                                     <label class="form-label" for="profitability">Profitability (%)</label>
                                                     <div class="input-group">
