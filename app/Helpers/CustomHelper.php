@@ -1144,6 +1144,7 @@ function PatentsIntellectualProperty($facultyId, $activeRoleId, $indicator_id)
     $facultyTargets = FacultyTarget::with([
         'intellectualPropertyTargets' => function ($query) use ($indicator_id) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 2)
                 ->where('indicator_id', $indicator_id);
         }
     ])
@@ -1213,6 +1214,7 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, $i
     $commercial = FacultyTarget::with([
         'commercialGainsCounsultancyTargets' => function ($query) use ($indicator_id) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 2)
                 ->where('indicator_id', $indicator_id);
         }
     ])
@@ -1285,6 +1287,7 @@ function MultidisciplinaryProjects($facultyId, $activeRoleId, $indicatorId)
     $facultyTargets = FacultyTarget::with([
         'achievementOfMultidisciplinaryProjectsTarget' => function ($query) use ($indicatorId) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 2)
                 ->where('indicator_id', $indicatorId);
         }
     ])
@@ -1367,6 +1370,7 @@ function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id)
     $facultyTargets = FacultyTarget::with([
         'noofGrantsWonTarget' => function ($query) use ($indicator_id, $status) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 2)
                 ->where('indicator_id', $indicator_id)
                 ->where('grant_status', $status);
         }
@@ -1443,6 +1447,7 @@ function IndustrialVisits($facultyId, $activeRoleId, $indicator_id)
     $commercial = FacultyTarget::with([
         'industrialVisitsTarget' => function ($query) use ($indicator_id) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 2)
                 ->where('indicator_id', $indicator_id);
         }
     ])
@@ -1514,6 +1519,7 @@ function IndustrialProjects($facultyId, $activeRoleId, $indicator_id)
     $commercial = FacultyTarget::with([
         'industrialProjectsTarget' => function ($query) use ($indicator_id) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 2)
                 ->where('indicator_id', $indicator_id);
         }
     ])
@@ -1585,6 +1591,7 @@ function spinOffs($facultyId, $activeRoleId, $indicator_id)
     $commercial = FacultyTarget::with([
         'spinOffs' => function ($query) use ($indicator_id) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 2)
                 ->where('indicator_id', $indicator_id);
         }
     ])
@@ -1656,6 +1663,7 @@ function ProductsDeliveredToIndustry($facultyId, $activeRoleId, $indicator_id)
     $commercial = FacultyTarget::with([
         'ProductsDeliveredToIndustry' => function ($query) use ($indicator_id) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 2)
                 ->where('indicator_id', $indicator_id);
         }
     ])
@@ -1727,6 +1735,7 @@ function CompletionofCourseFolder($facultyId, $activeRoleId, $indicator_id)
     $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember', 'facultyClass'])
         ->where('faculty_member_id', $facultyId)
         ->where('form_status', 'HOD')
+        ->where('status', 2)
         ->where('completion_of_Course_folder_indicator_id', $indicator_id)
         ->get();
 
@@ -1784,6 +1793,7 @@ function ComplianceandUsageofLMS($facultyId, $activeRoleId, $indicator_id)
     $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember', 'facultyClass'])
         ->where('faculty_member_id', $facultyId)
         ->where('form_status', 'HOD')
+        ->where('status', 2)
         ->where('compliance_and_usage_of_lms_indicator_id', $indicator_id)
         ->get();
 
@@ -5013,6 +5023,7 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
         // 1️⃣ Get all ratings for this indicator
         $ratings = SatisfactionOfInternationalStudent::where('indicator_id', $indicatorId)
             ->where('form_status', 'HOD')
+            ->where('status', 2)
             ->pluck('student_rating');
 
         $data = [];

@@ -118,17 +118,19 @@
                                         @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                             @php
                                                 $classFeedback = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
-                                                function ratingMeta($average)
-                                                {
-                                                    if ($average >= 90)
-                                                        return ['OS', 'primary'];
-                                                    if ($average >= 80)
-                                                        return ['EE', 'success'];
-                                                    if ($average >= 70)
-                                                        return ['ME', 'warning'];
-                                                    if ($average >= 60)
-                                                        return ['NI', 'orange'];
-                                                    return ['BE', 'danger'];
+                                                if (!function_exists('ratingMeta')) {
+                                                    function ratingMeta($average)
+                                                    {
+                                                        if ($average >= 90)
+                                                            return ['OS', 'primary'];
+                                                        if ($average >= 80)
+                                                            return ['EE', 'success'];
+                                                        if ($average >= 70)
+                                                            return ['ME', 'warning'];
+                                                        if ($average >= 60)
+                                                            return ['NI', 'orange'];
+                                                        return ['BE', 'danger'];
+                                                    }
                                                 }
                                             @endphp
 
@@ -1376,7 +1378,7 @@
                                                 $sr = 1;
                                             @endphp
 
-                                                            @foreach($att as $class)
+                                                            @forelse($att as $class)
                                                                 @php
                                                                     // latest attendance or null
                                                                     $latestAttendance = $class->attendances->first();
@@ -1425,10 +1427,15 @@
                                                                     </td>
 
                                                                 </tr>
-                                                            @endforeach
-                                                            <td colspan="8">no record found</td>
-                                                        </tbody>
+
+                                                            @empty
+                                                                <tr>
+                                                                    <td colspan="8" class="text-center">No record found</td>
+                                                                </tr>
+                                                            @endforelse
                                         @endif
+                                                        </tbody>
+                                        
                                 </table>
                             </div>
                         </div>
@@ -1521,7 +1528,7 @@
                                                 $sr = 1;
                                             @endphp
 
-                                                            @foreach($att as $class)
+                                                            @forelse($att as $class)
                                                                 @php
                                                                     // latest attendance or null
                                                                     $latestAttendance = $class->attendances->first();
@@ -1568,8 +1575,11 @@
                                                                     </td>
 
                                                                 </tr>
-                                                            @endforeach
-                                                            <td colspan="8">no record found</td>
+                                                             @empty
+                                                                <tr>
+                                                                        <td colspan="8" class="text-center">No record found</td>
+                                                                                        </tr>
+                                                            @endforelse
                                         @endif
                                     </tbody>
                                 </table>
@@ -1752,26 +1762,43 @@
                                             @php
                                                 $facultyData = ScopusPublications(Auth::user()->employee_id, $activeRoleId, 128);
                                                 $sr = 1;
+                                                if (!function_exists('ratingFunction')) {
+                                                    function ratingFunction($average)
+                                                    {
+                                                        if ($average >= 90)
+                                                            return ['OS', 'primary'];
+                                                        if ($average >= 80)
+                                                            return ['EE', 'success'];
+                                                        if ($average >= 70)
+                                                            return ['ME', 'warning'];
+                                                        if ($average >= 60)
+                                                            return ['NI', 'orange'];
+                                                        return ['BE', 'danger'];
+                                                    }
+                                                }
                                             @endphp
                                             @foreach ($facultyData as $row)
-                                                <tr>
-                                                    <td>{{ $sr++ }}</td>
-                                                    <td>{{ $row['target_category'] }}</td>
-                                                    <td>{{ $row['journal_clasification'] }}</td>
-                                                    <td>{{ $row['value'] }}</td>
-                                                    <td>{{ $row['count'] }}</td>
-                                                    <td>
-                                                        <div class="badge" style="background-color: {{$row['color'] }}">
-                                                            {{ number_format($row['percentage'], 1) }}%
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="badge" style="background-color: {{ $row['color'] }}">
+                                                @php
+                                                    [$rating, $color] = ratingFunction($row['percentage']);
+                                                @endphp
+                                                    <tr>
+                                                        <td>{{ $sr++ }}</td>
+                                                        <td>{{ $row['target_category'] }}</td>
+                                                        <td>{{ $row['journal_clasification'] }}</td>
+                                                        <td>{{ $row['value'] }}</td>
+                                                        <td>{{ $row['count'] }}</td>
+                                                        <td>
+                                                            <div  class="badge bg-label-{{ $color }}">
+                                                                {{ number_format($row['percentage'], 1) }}%
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="badge bg-label-{{ $color }}">
 
-                                                            {{ $row['rating'] }}
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                                {{ $rating }}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
                                             @endforeach
                                         @endif
 
@@ -2589,7 +2616,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $data = MultidisciplinaryProjects(Auth::user()->employee_id, $activeRoleId, 136);
 
@@ -2713,7 +2740,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $data = PatentsIntellectualProperty(Auth::user()->employee_id, $activeRoleId, 138);
 
@@ -2896,7 +2923,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $IndustrialVisits = IndustrialVisits(Auth::user()->employee_id, $activeRoleId, 197);
                                         @endphp
