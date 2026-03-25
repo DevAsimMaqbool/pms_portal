@@ -32,6 +32,7 @@ class PermissionController extends Controller
         //     // ✅ Pass employee data to a Blade view
         //     return view('admin.dashbord', compact('employee'));
         // }
+        return redirect('/teacher_dashboard');
         $user = Auth::user();
         $role = $user->roles->first();
 
