@@ -2589,7 +2589,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $data = MultidisciplinaryProjects(Auth::user()->employee_id, $activeRoleId, 136);
 
@@ -2713,7 +2713,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $data = PatentsIntellectualProperty(Auth::user()->employee_id, $activeRoleId, 138);
 
@@ -2896,7 +2896,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $IndustrialVisits = IndustrialVisits(Auth::user()->employee_id, $activeRoleId, 197);
                                         @endphp

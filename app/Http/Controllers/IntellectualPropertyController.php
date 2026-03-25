@@ -48,7 +48,7 @@ class IntellectualPropertyController extends Controller
                     }
 
             }
-            if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor'])) {
+            if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Professor','Assistant Professor','Associate Professor'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
                         $forms = IntellectualProperty::with([
@@ -68,7 +68,7 @@ class IntellectualPropertyController extends Controller
                 }
                 if($status=="HOD"){
                 $employeeIds = User::where('manager_id', $employee_id)
-                    ->role(['Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
+                    ->role(['Teacher','Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
                     $all_ids = $employeeIds->merge($employee_id);
                     $forms = IntellectualProperty::with([
                             'creator' => function ($q) {
