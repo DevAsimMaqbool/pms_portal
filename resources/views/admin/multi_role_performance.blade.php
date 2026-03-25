@@ -196,16 +196,22 @@
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row g-6">
+       @php
+          $colors_cards = ['warning', 'secondary', 'info', 'primary', 'danger'];
+      @endphp
       @foreach($scores as $index => $data)
+      @php
+        $color_res = $colors_cards[$index % count($colors_cards)];
+       @endphp
         <div class="col-12 col-md-4">
-          <div class="card h-100">
+          <div class="card h-100 text-bg-{{ $color_res }}">
             <div class="card-header">
-              <h5 class="mb-1">{{ $data['role_name'] }}</h5>
+              <h5 class="mb-1 text-white">{{ $data['role_name'] }}</h5>
             </div>
             <div class="card-body row">
               <div class="col-12 col-sm-4">
-                <h2 class="mb-0">{{ $data['score'] }}%</h2>
-                <p class="mb-0">Score</p>
+                <h2 class="mb-0 text-white">{{ $data['score'] }}%</h2>
+                <p class="mb-0 text-white">Score</p>
               </div>
               <div class="col-12 col-md-8">
                 <div id="{{ $data['chart_id'] }}"></div>
@@ -215,14 +221,14 @@
         </div>
       @endforeach
       <div class="col-12 col-md-4">
-        <div class="card h-100">
+        <div class="card h-100 text-bg-success">
           <div class="card-header">
-            <h5 class="mb-1">Combined Score</h5>
+            <h5 class="mb-1 text-white">Combined Score</h5>
           </div>
           <div class="card-body row">
             <div class="col-12 col-sm-4">
-              <h2 class="mb-0">{{ $combinedScore }}%</h2>
-              <p class="mb-0">Score</p>
+              <h2 class="mb-0 text-white">{{ $combinedScore }}%</h2>
+              <p class="mb-0 text-white">Score</p>
             </div>
             <div class="col-12 col-md-8">
               <div id="combinedScoreChart"></div>
@@ -263,8 +269,8 @@
               hollow: { size: "65%" },
               track: { background: "#f2f2f2", strokeWidth: "100%" },
               dataLabels: {
-                name: { offsetY: -20, color: "#6c757d", fontSize: "13px" },
-                value: { offsetY: 10, color: "#000", fontSize: "38px" }
+                name: { offsetY: -20, color: "#ffffff", fontSize: "13px" },
+                value: { offsetY: 10, color: "#ffffff", fontSize: "38px" }
               }
             }
           },
