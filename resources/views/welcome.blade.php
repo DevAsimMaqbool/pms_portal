@@ -91,7 +91,7 @@
           <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
           <span class="d-none d-md-block">Login</span>
         </a>
-        <a href="{{ route('survey.login') }}" class="btn btn-primary">
+        {{-- <a href="{{ route('survey.login') }}" class="btn btn-primary">
           <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
           <span class="d-none d-md-block">Survey Manager Login</span>
         </a>
@@ -102,7 +102,7 @@
         <a href="{{ route('student.login') }}" class="btn btn-primary">
           <span class="tf-icons icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
           <span class="d-none d-md-block">Student Login</span>
-        </a>
+        </a> --}}
         </li>
         @endif
       @endif
