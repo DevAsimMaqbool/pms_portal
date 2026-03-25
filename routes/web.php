@@ -132,6 +132,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/indicator-categories/{kpaId}', [IndicatorController::class, 'getCategoriesByKPA'])->name('indicators.categories');
     Route::get('/performance/{id}', [KeyPerformanceAreaController::class, 'report'])->name('performance.report');
     Route::get('/kpa/{id}', [KeyPerformanceAreaController::class, 'kpa'])->name('kpa.report');
+    // Returns the indicator modal HTML (without initial page include),
+    // used for lazy-loading inside `admin/kpa.blade.php`.
+    Route::get('/indicator-modal-html', function () {
+        return view('admin.modal.indicator_modal');
+    })->name('indicator.modal.html');
 
     Route::get('/teaching_learning', [AssignUserKpaController::class, 'index']);
     Route::post('/get-indicator-categories', [AssignUserKpaController::class, 'getIndicatorCategories'])->name('indicatorCategory.getIndicatorCategories');

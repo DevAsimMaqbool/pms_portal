@@ -172,7 +172,8 @@
     </div>
 
 
-    @include('admin.modal.indicator_modal')
+    {{-- Lazy-load indicator modals to speed up initial KPA page render --}}
+    <div id="indicator-modal-dynamic"></div>
     </div>
     <!-- / Content -->
 @endsection
@@ -182,6 +183,36 @@
     <script src="{{ asset('admin/assets/vendor/libs/chartjs/chartjs.js') }}"></script>
     <script src="{{ asset('admin/assets/js/cards-advance.js') }}"></script>
     <script>
+        // Lazy load indicator modal HTML when user clicks an indicator button.
+        // This avoids running heavy PHP calculations during initial page load.
+        (function () {
+            let loaded = false;
+            const $container = $('#indicator-modal-dynamic');
+
+            $(document).on('click', '#indicatorList [data-bs-target]', function (e) {
+                const target = $(this).attr('data-bs-target');
+                if (!target || !target.startsWith('#')) return;
+
+                const modalId = target.slice(1);
+                if (document.getElementById(modalId)) return; // already present
+
+                if (loaded) return; // HTML fetch failed or not found
+
+                e.preventDefault();
+
+                $.get('{{ route("indicator.modal.html") }}', function (html) {
+                    $container.html(html);
+                    loaded = true;
+
+                    const el = document.getElementById(modalId);
+                    if (el && window.bootstrap?.Modal) {
+                        const modal = window.bootstrap.Modal.getOrCreateInstance(el);
+                        modal.show();
+                    }
+                });
+            });
+        })();
+
         document.addEventListener("DOMContentLoaded", function () {
             var trendScores = [90, 95]; // ✅ your scores
             var trendSemesters = ["Spring 2025", "Fall 2025"]; // ✅ your categories
@@ -340,10 +371,10 @@
                         li.style.fontSize = "9px";
                         li.style.cursor = "pointer";
                         li.innerHTML = `
-                        <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                        border-radius:50%;margin-right:5px;"></span>
-                        ${label} (${shortLabels[i]})
-                        `;
+                            <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                            border-radius:50%;margin-right:5px;"></span>
+                            ${label} (${shortLabels[i]})
+                            `;
 
                         li.addEventListener("mouseenter", () => {
                             radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -452,23 +483,23 @@
                                 let percentage = indicator.percentage || 0;
 
                                 $list.append(`
-                                <li class="d-flex mb-6">
-                                <div class="chart-progress me-4" data-color="${color}" data-series="${percentage}" data-progress_variant="true"></div>
+                                    <li class="d-flex mb-6">
+                                    <div class="chart-progress me-4" data-color="${color}" data-series="${percentage}" data-progress_variant="true"></div>
 
-                                <div class="row w-100 align-items-center">
-                                <div class="col-9">
-                                <div class="me-2">
-                                <h6 class="mb-1_5">${indicator.indicator}</h6>
-                                </div>
-                                </div>
-                                <div class="col-3 text-end">
-                                <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
-                                <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                                </button>
-                                </div>
-                                </div>
-                                </li>
-                                `);
+                                    <div class="row w-100 align-items-center">
+                                    <div class="col-9">
+                                    <div class="me-2">
+                                    <h6 class="mb-1_5">${indicator.indicator}</h6>
+                                    </div>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                    <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
+                                    <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
+                                    </button>
+                                    </div>
+                                    </div>
+                                    </li>
+                                    `);
                             });
 
                             initChartProgress(); // re-init charts after AJAX load

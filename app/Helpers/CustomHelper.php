@@ -2125,7 +2125,14 @@ if (!function_exists('lineManagerRatingOnEvents')) {
 
 function avgKpaScore($employeeId, $kpaId)
 {
+    // Memoize per-request to avoid duplicate calculations in Blade.
+    static $memo = [];
+
     $userRoleId = getRoleIdByName(activeRole());
+    $key = $employeeId . '|' . $kpaId . '|' . $userRoleId;
+    if (array_key_exists($key, $memo)) {
+        return $memo[$key];
+    }
 
     // Get all scores for the employee and KPA
     $scores = IndicatorsPercentage::where('employee_id', $employeeId)
@@ -2143,7 +2150,9 @@ function avgKpaScore($employeeId, $kpaId)
     $avg = $cappedScores->avg();
     $weightage = getRoleWeightage($userRoleId, 'kpa', $kpaId)['weightage'];
     $weightedScore = ($avg * $weightage) / 100;
-    return number_format($weightedScore, 1);
+    $result = number_format($weightedScore, 1);
+    $memo[$key] = $result;
+    return $result;
 }
 
 if (!function_exists('ResearchProductivityofPGStudents')) {
@@ -2325,6 +2334,13 @@ if (!function_exists('kpaAvgWeightage')) {
 if (!function_exists('getRoleWeightage')) {
     function getRoleWeightage($role_id, $type, $id)
     {
+        // Memoize per-request to avoid repeating the same lookup many times in Blade.
+        static $memo = [];
+        $key = $role_id . '|' . $type . '|' . $id;
+        if (array_key_exists($key, $memo)) {
+            return $memo[$key];
+        }
+
         $query = RoleKpaAssignment::where('role_id', $role_id);
 
         if ($type == 'kpa') {
@@ -2344,12 +2360,15 @@ if (!function_exists('getRoleWeightage')) {
 
         $record = $query->first();
 
-        return [
+        $result = [
             'type' => $type,
             'role_id' => $role_id,
             'id' => $id,
             'weightage' => $record ? ($record->$column ?? 0) : 0,
         ];
+
+        $memo[$key] = $result;
+        return $result;
     }
 }
 function kpaAvgScore($kpaId, $employeeId)
@@ -2778,12 +2797,22 @@ if (!function_exists('getTopIndicatorsOfEmployee')) {
 if (!function_exists('activeRole')) {
     function activeRole()
     {
+        static $memo;
+        static $hasMemo = false;
+        if ($hasMemo) {
+            return $memo;
+        }
+
         if (session()->has('active_role')) {
-            return session('active_role');
+            $memo = session('active_role');
+            $hasMemo = true;
+            return $memo;
         }
 
         if (!auth()->check()) {
-            return null;
+            $memo = null;
+            $hasMemo = true;
+            return $memo;
         }
 
         // Fallback for old sessions
@@ -2815,7 +2844,9 @@ if (!function_exists('activeRole')) {
         //     return 'teacher';
         // }
 
-        return strtolower($role); // hod, admin, etc.
+        $memo = strtolower($role); // hod, admin, etc.
+        $hasMemo = true;
+        return $memo;
     }
 }
 
@@ -2861,7 +2892,14 @@ if (!function_exists('getRoleIdByName')) {
             return null;
         }
 
-        return Role::where('name', $roleName)->value('id') ?? null;
+        static $memo = [];
+        if (array_key_exists($roleName, $memo)) {
+            return $memo[$roleName];
+        }
+
+        $result = Role::where('name', $roleName)->value('id') ?? null;
+        $memo[$roleName] = $result;
+        return $result;
     }
 }
 
@@ -2914,7 +2952,13 @@ if (!function_exists('getStudentFeedbackForTeacher')) {
 if (!function_exists('getFacultyClassWiseFeedback')) {
     function getFacultyClassWiseFeedback(?int $facultyId)
     {
-        return StudentFeedbackClassWise::query()
+        static $memo = [];
+        $key = (string) $facultyId;
+        if (array_key_exists($key, $memo)) {
+            return $memo[$key];
+        }
+
+        $result = StudentFeedbackClassWise::query()
             ->join(
                 'faculty_member_classes',
                 'faculty_member_classes.code',
@@ -2928,6 +2972,9 @@ if (!function_exists('getFacultyClassWiseFeedback')) {
                 'faculty_member_classes.faculty_id'
             )
             ->get();
+
+        $memo[$key] = $result;
+        return $result;
     }
 }
 
@@ -3051,7 +3098,14 @@ if (!function_exists('getRoleName')) {
     function getRoleName($roleName = null)
     {
         if ($roleName) {
-            return Role::where('name', $roleName)->value('name') ?? null;
+            static $memo = [];
+            if (array_key_exists($roleName, $memo)) {
+                return $memo[$roleName];
+            }
+
+            $result = Role::where('name', $roleName)->value('name') ?? null;
+            $memo[$roleName] = $result;
+            return $result;
         }
     }
 }
@@ -4084,13 +4138,25 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
     {
         $departmentId = auth()->user()->department_id;
 
-        // Get faculty users
-        $faculty = User::where('department_id', $departmentId)
-            ->whereNotNull('faculty_id')
-            ->get(['id', 'employee_id']);
+        // This function is called many times per request for different indicators.
+        // Memoize department faculty list to avoid running the same query repeatedly.
+        static $deptFacultyMemo = [];
+        if (array_key_exists($departmentId, $deptFacultyMemo)) {
+            $userIds = $deptFacultyMemo[$departmentId]['userIds'];
+            $employeeIds = $deptFacultyMemo[$departmentId]['employeeIds'];
+        } else {
+            $faculty = User::where('department_id', $departmentId)
+                ->whereNotNull('faculty_id')
+                ->get(['id', 'employee_id']);
 
-        $userIds = $faculty->pluck('id');
-        $employeeIds = $faculty->pluck('employee_id');
+            $userIds = $faculty->pluck('id');
+            $employeeIds = $faculty->pluck('employee_id');
+
+            $deptFacultyMemo[$departmentId] = [
+                'userIds' => $userIds,
+                'employeeIds' => $employeeIds,
+            ];
+        }
 
         // Indicator configuration
         $indicators = [
@@ -4426,8 +4492,14 @@ if (!function_exists('admissionTargetDepartmentAverage')) {
         $departmentId = auth()->user()->department_id;
 
         // 1️⃣ Get all faculty members in this department who have HOD records for this indicator
-        $facultyMembers = User::where('department_id', $departmentId)
-            ->get(['faculty_id', 'name']);
+        static $facultyMembersMemo = [];
+        if (array_key_exists($departmentId, $facultyMembersMemo)) {
+            $facultyMembers = $facultyMembersMemo[$departmentId];
+        } else {
+            $facultyMembers = User::where('department_id', $departmentId)
+                ->get(['faculty_id', 'name']);
+            $facultyMembersMemo[$departmentId] = $facultyMembers;
+        }
 
         $allData = [];
         $allPercentages = [];
@@ -4509,8 +4581,14 @@ if (!function_exists('recoveryTargetDepartmentAveraget')) {
         $departmentId = auth()->user()->department_id;
 
         // 1️⃣ Get all faculty members in this department who have HOD records for this indicator
-        $facultyMembers = User::where('department_id', $departmentId)
-            ->get(['faculty_id', 'name']);
+        static $facultyMembersMemo = [];
+        if (array_key_exists($departmentId, $facultyMembersMemo)) {
+            $facultyMembers = $facultyMembersMemo[$departmentId];
+        } else {
+            $facultyMembers = User::where('department_id', $departmentId)
+                ->get(['faculty_id', 'name']);
+            $facultyMembersMemo[$departmentId] = $facultyMembers;
+        }
 
         $allData = [];
         $allPercentages = [];
