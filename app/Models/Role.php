@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    protected $fillable = ['name', 'guard_name'];
+    protected $fillable = ['name', 'guard_name', 'weightage'];
     public function kpaAssignments()
     {
         return $this->hasMany(RoleKpaAssignment::class);
     }
-     public function sidebarKpaAssignments()
+    public function sidebarKpaAssignments()
     {
         return $this->hasMany(SidebarKpaAssignment::class, 'role_id', 'id');
     }

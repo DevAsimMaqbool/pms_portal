@@ -59,12 +59,14 @@ class RoleController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:roles,name',
+            'weightage' => 'required',
             //'permissions' => 'array',
         ]);
 
         $role = Role::create([
             'name' => $request->name,
             'guard_name' => 'web',
+            'weightage' => $request->weightage,
         ]);
 
         // if ($request->has('permissions')) {
@@ -92,21 +94,16 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, Role $user_role)
     {
         $request->validate([
-            'name' => 'required|unique:roles,name,' . $role->id,
+            'name' => 'required|unique:roles,name,' . $user_role->id,
+            'weightage' => 'required',
             //'permissions' => 'array',
         ]);
-
-        $role->name = $request->name;
-        $role->save();
-
-        // if ($request->has('permissions')) {
-        //     $role->syncPermissions($request->permissions);
-        // } else {
-        //     $role->syncPermissions([]);
-        // }
+        $user_role->name = $request->name;
+        $user_role->weightage = $request->weightage;
+        $user_role->save();
     }
 
     /**

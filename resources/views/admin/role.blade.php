@@ -19,6 +19,7 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            <th>Weightage</th>
                             <th>Created Date</th>
                             <th>ACTIONS</th>
                         </tr>
@@ -44,36 +45,42 @@
                         <!-- Add role form -->
                         <form id="roleForm" class="row">
                             <input type="hidden" id="role_id">
-                            <div class="col-12 form-control-validation mb-3">
+                            <div class="col-6 form-control-validation mb-3">
                                 <label class="form-label" for="user-role">Role Name</label>
                                 <input type="text" id="user-role" name="name" class="form-control"
                                     placeholder="Enter a role name" tabindex="-1" />
                                 <div class="invalid-feedback" id="user-roleError"></div>
                             </div>
+                            <div class="col-6 form-control-validation mb-3">
+                                <label class="form-label" for="user-role">Role Weightage</label>
+                                <input type="number" id="user-weightage" name="weightage" class="form-control"
+                                    placeholder="30" tabindex="-1" />
+                                <div class="invalid-feedback" id="user-weightageError"></div>
+                            </div>
                             <div class="col-12">
                                 <!-- Permission table -->
                                 <!-- <div class="table-responsive">
-                                        <table class="table table-flush-spacing">
-                                            <tbody id="permissionsTableBody">
-                                                <tr id="AccessId">
-                                                    <td class="text-nowrap fw-medium">
-                                                        Select Permissions
-                                                        <i class="icon-base ti tabler-info-circle icon-xs"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Allows a full access to the system"></i>
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex justify-content-end">
-                                                            <div class="form-check mb-0">
+                                                                                                                <table class="table table-flush-spacing">
+                                                                                                                    <tbody id="permissionsTableBody">
+                                                                                                                        <tr id="AccessId">
+                                                                                                                            <td class="text-nowrap fw-medium">
+                                                                                                                                Select Permissions
+                                                                                                                                <i class="icon-base ti tabler-info-circle icon-xs"
+                                                                                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                                                                                    title="Allows a full access to the system"></i>
+                                                                                                                            </td>
+                                                                                                                            <td>
+                                                                                                                                <div class="d-flex justify-content-end">
+                                                                                                                                    <div class="form-check mb-0">
 
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </td>
+                                                                                                                        </tr>
 
-                                            </tbody>
-                                        </table>
-                                    </div> -->
+                                                                                                                    </tbody>
+                                                                                                                </table>
+                                                                                                            </div> -->
                                 <!-- Permission table -->
                             </div>
                             <div class="col-12 text-center demo-vertical-spacing">
@@ -111,17 +118,17 @@
                     let rows = '';
                     response.data.forEach(function (permission) {
                         rows += `
-                                    <tr>
-                                        <td class="text-nowrap fw-medium text-heading">${permission.name.replace(/_/g, ' ').toUpperCase()}</td>
-                                        <td>
-                                            <div class="d-flex justify-content-end">
-                                                <div class="form-check mb-0 me-4 me-lg-12">
-                                                    <input class="form-check-input" type="checkbox" name="permissions[]" value="${permission.name}" id="perm_${permission.id}">
-                                                    <label class="form-check-label" for="perm_${permission.id}">Assign</label>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>`;
+                                                                                                            <tr>
+                                                                                                                <td class="text-nowrap fw-medium text-heading">${permission.name.replace(/_/g, ' ').toUpperCase()}</td>
+                                                                                                                <td>
+                                                                                                                    <div class="d-flex justify-content-end">
+                                                                                                                        <div class="form-check mb-0 me-4 me-lg-12">
+                                                                                                                            <input class="form-check-input" type="checkbox" name="permissions[]" value="${permission.name}" id="perm_${permission.id}">
+                                                                                                                            <label class="form-check-label" for="perm_${permission.id}">Assign</label>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </td>
+                                                                                                            </tr>`;
                     });
 
                     // Insert AFTER the AccessId row
@@ -144,6 +151,7 @@
                         return [
                             i + 1,
                             s.name || 'N/A',
+                            s.weightage,
                             formattedDate,
                             `<div class="d-flex align-items-center"><a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="editRole(${s.id})"><i class="icon-base ti tabler-edit icon-22px"></i></a><a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteRole(${s.id})"><i class="icon-base ti tabler-trash icon-md"></i></a></div>`
                         ];
@@ -160,6 +168,7 @@
                             columns: [
                                 { title: "#" },
                                 { title: "Name" },
+                                { title: "Weightage" },
                                 { title: "Created Date" },
                                 { title: "Actions", orderable: false }
                             ],
@@ -213,6 +222,7 @@
             $.get(`/user-role/${id}/edit`, function (data) {
                 $('#role_id').val(data.id);
                 $('#user-role').val(data.name);
+                $('#user-weightage').val(data.weightage);
                 $('#modalTitle').text('Edit Role');
                 $('.invalid-feedback').text('');
                 modal.show();
@@ -228,7 +238,8 @@
             const formData = {
                 _token: "{{ csrf_token() }}",
                 _method: method,
-                name: $('#user-role').val()
+                name: $('#user-role').val(),
+                weightage: $('#user-weightage').val()
             };
             $.ajax({
                 url: url,

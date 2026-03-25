@@ -408,28 +408,47 @@ class PermissionController extends Controller
         $adminRoles = [19, 22, 23, 29];
 
         $scores = [];
+        $totalWeightedScore = 0;
+        $totalWeight = 0;
 
         foreach ($userRoles as $role) {
+            $weight = $role->weightage ?? 0; // get weightage from roles table
+
             if (in_array($role->id, $teacherRoles)) {
+                $score = $user->as_teacher_score ?? 0;
                 $scores[] = [
-                    'role_name' => $role->name,         // Use the role's name
-                    'score' => $user->as_teacher_score ?? 0,
+                    'role_name' => $role->name,
+                    'score' => $score,
                     'type' => 'teacher',
-                    'chart_id' => 'supportTrackerTeacher' // unique ID
+                    'chart_id' => 'supportTrackerTeacher',
+                    'weight' => $weight,
+                    'weighted_score' => $score * $weight / 100 // weighted score
                 ];
+
+                $totalWeightedScore += $score * $weight / 100;
+                $totalWeight += $weight;
             }
 
             if (in_array($role->id, $adminRoles)) {
+                $score = $user->as_admin_score ?? 0;
                 $scores[] = [
                     'role_name' => $role->name,
-                    'score' => $user->as_admin_score ?? 0,
+                    'score' => $score,
                     'type' => 'admin',
-                    'chart_id' => 'supportTrackerAdmin' // unique ID
+                    'chart_id' => 'supportTrackerAdmin',
+                    'weight' => $weight,
+                    'weighted_score' => $score * $weight / 100
                 ];
+
+                $totalWeightedScore += $score * $weight / 100;
+                $totalWeight += $weight;
             }
         }
 
-        return view('admin.multi_role_performance', compact('scores'));
+        // Calculate combined weighted score (avoid division by zero)
+        $combinedScore = $totalWeight > 0 ? round($totalWeightedScore / ($totalWeight / 100), 2) : 0;
+
+        return view('admin.multi_role_performance', compact('scores', 'combinedScore'));
     }
 
 

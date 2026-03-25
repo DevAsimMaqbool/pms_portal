@@ -197,7 +197,7 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row g-6">
       @foreach($scores as $index => $data)
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-4">
           <div class="card h-100">
             <div class="card-header">
               <h5 class="mb-1">{{ $data['role_name'] }}</h5>
@@ -214,17 +214,34 @@
           </div>
         </div>
       @endforeach
+      <div class="col-12 col-md-4">
+        <div class="card h-100">
+          <div class="card-header">
+            <h5 class="mb-1">Combined Score</h5>
+          </div>
+          <div class="card-body row">
+            <div class="col-12 col-sm-4">
+              <h2 class="mb-0">{{ $combinedScore }}%</h2>
+              <p class="mb-0">Score</p>
+            </div>
+            <div class="col-12 col-md-8">
+              <div id="combinedScoreChart"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
   </div>
   <!-- / Content -->
 @endsection
 @push('script')
   <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
   <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}
-                                            "></script>
+                                                                      "></script>
   <script src="{{ asset('admin/assets/js/app-logistics-dashboard.js') }}"></script>
   <script src="{{ asset('admin/assets/vendor/libs/swiper/swiper.js') }}
-                                              "></script>
+                                                                        "></script>
   <!-- <script src="{{ asset('admin/assets/js/cards-statistics.js') }}"></script> -->
   <script src="{{ asset('admin/assets/js/dashboards-analytics.js') }}"></script>
 
@@ -272,10 +289,14 @@
         chart.render();
       }
 
+      // Individual role charts
       @foreach($scores as $data)
         renderChart("#{{ $data['chart_id'] }}", {{ $data['score'] }}, "{{ $data['role_name'] }}");
       @endforeach
 
-      });
+      // Combined score chart
+      renderChart("#combinedScoreChart", {{ $combinedScore }}, "Combined Score");
+
+    });
   </script>
 @endpush
