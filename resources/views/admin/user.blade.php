@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/%40form-validation/form-validation.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
 @endpush
 @section('content')
     <!-- Content -->
@@ -102,7 +104,7 @@
                         </div>
                         <div class="mb-6">
                             <label class="form-label" for="user-role">User Role</label>
-                            <select id="user-role" class="form-select" name="role">
+                            <select id="user-role" class="form-select select2" name="role[]" multiple>
                                 <option value="">All</option>
                                 @foreach($roles as $role)
                                     <option value="{{ $role->name }}">{{ $role->name }}</option>
@@ -110,20 +112,6 @@
                             </select>
                             <div class="invalid-feedback" id="roleError"></div>
                         </div>
-                        <!-- <div class="mb-6">
-                                                                                                                        <label class="form-label" for="user-level">Select Level</label>
-                                                                                                                        <select id="user-level" class="form-select" name="level" required>
-                                                                                                                            <option value="Managerial">Managerial</option>
-                                                                                                                            <option value="Operational">Operational</option>
-                                                                                                                        </select>
-                                                                                                                        <div class="invalid-feedback" id="levelError"></div>
-                                                                                                                    </div> -->
-                        <!-- <div class="mb-6">
-                                                                                                                                        <label class="form-label" for="user-manager">Select Manager</label>
-                                                                                                                                        <select id="user-manager" class="form-select" name="manager_id">
-                                                                                                                                        </select>
-                                                                                                                                        <div class="invalid-feedback" id="manager_idError"></div>
-                                                                                                                                    </div> -->
                         <div class="mb-6">
                             <label class="form-label" for="user-status">Select Status</label>
                             <select id="user-status" class="form-select" name="status" required readonly>
@@ -151,6 +139,9 @@
     <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/auto-focus.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/extended-ui-sweetalert2.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
     {{--
     <script src="{{ asset('admin/assets/js/app-user-list.js') }}"></script> --}}
 @endpush
@@ -160,6 +151,7 @@
             $('#addNewUserForm')[0].reset();          // Reset form fields
             $('#adminuserId').val('');                // Clear hidden ID
             $('#nameError').hide().text('');          // Clear errors if any
+            $('#user-role').val(null).trigger('change');
         })
         $(document).ready(function () {
             const table = $('#userTable').DataTable({
@@ -189,187 +181,6 @@
                 table.draw();
             });
         });
-        // function fetchUsers() {
-        //     $.ajax({
-        //         url: "{{ route('users.index') }}", // Your Laravel route
-        //         method: "GET",
-        //         dataType: "json",
-        //         success: function (data) {
-        //             const managerial_users = data.managerial_users;
-        //             // Step 1: Create a map of employee_id => name
-        //             const employeeIdToNameMap = {};
-        //             managerial_users.forEach(user => {
-        //                 employeeIdToNameMap[user.employee_id] = user.name;
-        //             });
-        //             // Step 2: Generate manager options using manager_id
-        //             let manageruserOptions = '<option value="">Select Manager</option>';
-        //             managerial_users.forEach(manageruser => {
-        //                 const managerName = employeeIdToNameMap[manageruser.manager_id] || 'Unknown';
-        //                 manageruserOptions += `<option value="${manageruser.manager_id}">${managerName}</option>`;
-        //             });
-        //             // Step 3: Inject into the select element
-        //             $('#user-manager').html(manageruserOptions);
-        //             const statusMap = {
-        //                 pending: { title: "pending", class: "bg-label-warning" },
-        //                 active: { title: "active", class: "bg-label-success" },
-        //                 inactive: { title: "inactive", class: "bg-label-secondary" }
-        //             };
-
-        //             // Prepare rows
-        //             const rowData = data.users.map((user, index) => {
-        //                 const createdAt = new Date(user.created_at);
-        //                 const formattedDate = createdAt.toISOString().split('T')[0];
-
-        //                 // Example roles icons mapping (you can adjust)
-        //                 const roleIcons = {
-        //                     user: '<i class="icon-base ti tabler-user icon-md text-success me-2"></i>',
-        //                     admin: '<i class="icon-base ti tabler-device-desktop icon-md text-danger me-2"></i>'
-        //                 };
-
-        //                 return {
-        //                     id: user.id,
-        //                     checkbox: '', // Checkbox rendered later
-        //                     full_name: user.name,
-        //                     email: user.email,
-        //                     role: user.roles || "user", // default role if missing
-        //                     department: user.department, // example, change as needed
-        //                     level: user.level || "N/A", // example, change as needed
-        //                     status: user.status || 2, // default Active if missing
-        //                     created_at: formattedDate,
-        //                     actions: '' // Actions rendered later
-        //                 };
-        //             });
-
-        //             if ($.fn.DataTable.isDataTable('#userTable')) {
-        //                 // If table exists, reload data
-        //                 $('#userTable').DataTable().clear().rows.add(rowData).draw();
-        //             } else {
-        //                 // Initialize DataTable
-        //                 $('#userTable').DataTable({
-        //                     data: rowData,
-        //                     columns: [
-        //                         {
-        //                             data: 'id',
-        //                             orderable: false,
-        //                             searchable: false,
-        //                             className: 'control',
-        //                             render: function () {
-        //                                 return '';
-        //                             }
-        //                         },
-        //                         {
-        //                             data: null,
-        //                             orderable: false,
-        //                             searchable: false,
-        //                             render: function (data) {
-        //                                 return `<input type="checkbox" class="dt-checkboxes form-check-input" data-user-id="${data.id}">`;
-        //                             }
-        //                         },
-        //                         {
-        //                             data: null,
-        //                             render: function (data) {
-        //                                 return `<div class="d-flex justify-content-start align-items-center user-name"><div class="avatar-wrapper"><div class="avatar avatar-sm me-4"><span class="avatar-initial rounded-circle bg-label-primary">${data.full_name.charAt(0).toUpperCase()}</span></div></div><div class="d-flex flex-column"><a href="app-user-view-account.html" class="text-heading text-truncate"><span class="fw-medium">${data.full_name}</span></a><small>${data.email}</small></div></div>`;
-        //                             }
-        //                         },
-        //                         {
-        //                             data: 'role',
-        //                             render: function (role) {
-        //                                 const safeRole = role || 'user';
-        //                                 let icon = '';
-
-        //                                 if (safeRole == 'admin') {
-        //                                     icon = '<i class="icon-base ti tabler-device-desktop icon-md text-danger me-2"></i>';
-        //                                 } else if (safeRole == 'user') {
-        //                                     icon = '<i class="icon-base ti tabler-user icon-md text-success me-2"></i>';
-        //                                 } else {
-        //                                     icon = '<i class="icon-base ti tabler-circle icon-md text-primary me-2"></i>'; // default or other role
-        //                                 }
-
-        //                                 return `<span class='text-truncate d-flex align-items-center text-heading'>${icon} ${safeRole}</span>`;
-        //                             }
-        //                         },
-        //                         { data: 'department' },
-        //                         { data: 'level' },
-        //                         {
-        //                             data: 'status',
-        //                             render: function (status) {
-        //                                 const s = statusMap[status] || statusMap['inactive']; // Default Active
-        //                                 return `<span class="badge ${s.class}" text-capitalized>${s.title}</span>`;
-        //                             }
-        //                         },
-        //                         {
-        //                             data: null,
-        //                             orderable: false,
-        //                             searchable: false,
-        //                             render: function (data) {
-        //                                 return `<div class="d-flex align-items-center"><a href="javascript:;" class="btn btn-text-secondary rounded-pill waves-effect btn-icon" onclick="editUser(${data.id})"><i class="icon-base ti tabler-edit icon-22px"></i></a><a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteUser(${data.id})"><i class="icon-base ti tabler-trash icon-md"></i></a><a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/user_report/${data.id}" target="_blank"><i class="icon-base ti tabler-eye icon-md"></i></a></div>`;
-        //                             }
-        //                         }
-        //                     ],
-        //                     order: [[2, 'asc']],
-
-        //                     layout: {
-        //                         topStart: {
-        //                             rowClass: "row m-3 my-0 justify-content-between",
-        //                             features: [
-        //                                 {
-        //                                     pageLength: {
-        //                                         menu: [10, 25, 50, 100],
-        //                                         text: "Show _MENU_"
-        //                                     }
-        //                                 },
-        //                                 {
-        //                                     buttons: [
-        //                                         {
-        //                                             text: '<span class="d-flex align-items-center gap-2">' +
-        //                                                 '<i class="icon-base ti tabler-plus icon-xs"></i>' +
-        //                                                 '<span class="d-none d-sm-inline-block">Add New User</span>' +
-        //                                                 '</span>',
-        //                                             className: "add-new btn btn-primary",
-        //                                             attr: {
-        //                                                 "data-bs-toggle": "offcanvas",
-        //                                                 "data-bs-target": "#offcanvasAddUser"
-        //                                             }
-        //                                         }
-        //                                     ]
-        //                                 }
-        //                             ]
-        //                         }
-        //                     }
-
-        //                 });
-        //                 // Append custom department filter manually
-        //                 setTimeout(() => {
-        //                     const $topStartRow = $('#userTable_wrapper .row.m-3');
-        //                     const $firstCol = $topStartRow.children('.col-auto, .col-md-auto').first();
-
-        //                     // Extract unique department names
-        //                     const departments = [...new Set(rowData.map(user => user.department).filter(Boolean))].sort();
-        //                     let departmentOptions = '<option value="">All Departments</option>';
-        //                     departments.forEach(dept => {
-        //                         departmentOptions += `<option value="${dept}">${dept}</option>`;
-        //                     });
-
-        //                     // Create and insert the dropdown
-        //                     const $departmentCol = $(`<div class="col-md-auto mt-2 mt-md-0 align-self-center"><select id="departmentFilter" class="form-select">${departmentOptions}</select></div>`);
-
-        //                     $firstCol.after($departmentCol);
-
-        //                     // Apply filter on change
-        //                     $('#departmentFilter').on('change', function () {
-        //                         const val = $(this).val();
-        //                         $('#userTable').DataTable().column(4).search(val).draw(); // 4 = department column index
-        //                     });
-        //                 }, 0);
-
-
-        //             }
-        //         },
-        //         error: function (xhr) {
-        //             console.error("Error fetching user data:", xhr.responseText);
-        //         }
-        //     });
-        // }
         $('#addNewUserForm').submit(function (e) {
             e.preventDefault();
             const isEdit = $('#adminuserId').val() !== '';
@@ -424,21 +235,20 @@
             $.get(`/users/${id}/edit`, function (data) {
                 const user = data.user;
                 const roles = data.roles;
+
                 $('#adminuserId').val(user.id);
                 $('#add-user-fullname').val(user.name);
                 $('#add-user-email').val(user.email);
                 $('#add-user-employee-code').val(user.barcode);
                 $('#add-user-department').val(user.department);
-                if (roles.length > 0) {
-                    $('#user-role').val(roles[0]);
-                } else {
-                    $('#user-role').val('');
-                }
-                //$('#user-level').val(user.level);
-                //$('#user-manager').val(user.manager_id);
+
+                // ✅ MULTIPLE ROLES SET
+                $('#user-role').val(roles).trigger('change');
+
                 $('#user-status').val(user.status);
 
                 $('#offcanvasAddUserLabel').text('Edit User');
+
                 const offcanvas = new bootstrap.Offcanvas('#offcanvasAddUser');
                 offcanvas.show();
             });

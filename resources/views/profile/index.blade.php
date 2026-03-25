@@ -58,7 +58,7 @@
                   class="fw-medium mx-2">Status:</span> <span>Active</span></li>
               <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-crown icon-lg"></i><span
                   class="fw-medium mx-2">Role:</span>
-                <span>{{ strtoupper(activeRole() === 'teacher' ? 'Lecturer' : activeRole()) }}</span>
+                <span>{{$employee['job_title']}}</span>
               </li>
               <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-flag icon-lg"></i><span
                   class="fw-medium mx-2">Country:</span> <span>Pakistan</span></li>

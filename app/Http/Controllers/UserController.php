@@ -70,15 +70,26 @@ class UserController extends Controller
             </div>';
                 })
                 ->addColumn('role', function ($user) {
-                    // use loaded relation instead of new query
-                    $role = $user->roles->pluck('name')->first() ?? 'user';
-                    $icon = match ($role) {
-                        'admin' => '<i class="icon-base ti tabler-device-desktop icon-md text-danger me-2"></i>',
-                        'user' => '<i class="icon-base ti tabler-user icon-md text-success me-2"></i>',
-                        'Teacher' => '<i class="icon-base ti tabler-chalkboard icon-md text-info me-2"></i>',
-                        default => '<i class="icon-base ti tabler-circle icon-md text-primary me-2"></i>',
-                    };
-                    return '<span class="d-flex align-items-center text-heading">' . $icon . ' ' . $role . '</span>';
+
+                    if ($user->roles->isEmpty()) {
+                        return '<span class="badge bg-label-secondary">No Role</span>';
+                    }
+
+                    $output = '';
+
+                    foreach ($user->roles as $role) {
+
+                        $class = match ($role->name) {
+                            'admin' => 'bg-label-danger',
+                            'user' => 'bg-label-success',
+                            'Teacher' => 'bg-label-info',
+                            default => 'bg-label-primary',
+                        };
+
+                        $output .= '<span class="badge ' . $class . ' me-1">' . $role->name . '</span>';
+                    }
+
+                    return $output;
                 })
                 ->addColumn('status', function ($user) {
                     $statusMap = [
@@ -187,7 +198,8 @@ class UserController extends Controller
             'email' => 'required|email|max:255|unique:users,email,' . $id,
             'employee_code' => 'required|string|max:50',
             'department' => 'required|string|max:100',
-            'role' => 'required|string',
+            'role' => 'required|array',
+            'role.*' => 'exists:roles,name',
             //'level' => 'required|string|max:50',
             //'manager_id' => 'required|exists:users,id',
             'status' => 'required|in:active,inactive',
@@ -201,11 +213,10 @@ class UserController extends Controller
         //$user->level = $request->level;
         // $user->manager_id = $request->manager_id;
         $user->status = $request->status;
-
         $user->save();
 
         // Sync role
-        $user->syncRoles([$request->role]);
+        $user->syncRoles($request->role);
 
         return response()->json(['message' => 'User updated successfully', 'user' => $user]);
     }
