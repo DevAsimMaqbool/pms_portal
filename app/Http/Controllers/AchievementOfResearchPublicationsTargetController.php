@@ -47,7 +47,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
                 if ($status == "RESEARCHER") {
                     $teacher_id = User::whereIn('manager_id', $hod_ids)
-                        ->role(['Teacher','Assistant Professor'])->pluck('employee_id');
+                        ->role(['Teacher','Assistant Professor','Professor','Associate Professor'])->pluck('employee_id');
                     $all_ids = $teacher_id->merge($hod_ids);
                     $forms = AchievementOfResearchPublicationsTarget::with([
                         'creator' => function ($q) {
@@ -62,7 +62,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
 
             }
-            if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Assistant Professor'])) {  
+            if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Assistant Professor','Professor','Associate Professor'])) {  
 
                 $status = $request->input('status');
                 if ($status == "Teacher") {
@@ -79,7 +79,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
                 if ($status == "HOD") {
                     $employeeIds = User::where('manager_id', $employee_id)
-                        ->role(['Teacher','Assistant Professor'])->pluck('employee_id');
+                        ->role(['Teacher','Assistant Professor','Professor','Associate Professor'])->pluck('employee_id');
                         $all_ids = $employeeIds->merge($employee_id);
                     $forms = AchievementOfResearchPublicationsTarget::with([
                         'creator' => function ($q) {
@@ -214,7 +214,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             $rules = [
                 'indicator_id' => 'required|exists:indicators,id',
                 'target_category' => 'required|string|max:255',
-                'link_of_publications' => 'required|url|max:500',
+                'link_of_publications' => 'required|max:500',
                 'journal_clasification' => 'required',
                 'nationality' => 'required|string|max:255',
                 'as_author_your_rank' => 'required|integer|min:0',
@@ -243,8 +243,19 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             if ($validator->fails()) {
                 return response()->json(['status' => 'error', 'errors' => $validator->errors()], 422);
             }
+            
 
             $employeeId = Auth::user()->employee_id;
+            $exists = AchievementOfResearchPublicationsTarget::where('created_by', $employeeId)
+                            ->where('link_of_publications', $request->link_of_publications)
+                            ->exists();
+
+            if ($exists) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Duplicate record found DOI Number and user is already exist'
+                ], 422);
+            }
 
             $targetData = $request->only([
                 'indicator_id',
@@ -407,6 +418,17 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'co_author.*.career' => '',
 
         ]);
+        $exists = AchievementOfResearchPublicationsTarget::where('created_by', $userId)
+            ->where('link_of_publications', $request->link_of_publications)
+            ->where('id', '!=', $id)  // exclude current record
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Duplicate record found DOI Number and user is already exist'
+            ], 422);
+        }
 
         // Update main form fields
         $form->update($request->only([

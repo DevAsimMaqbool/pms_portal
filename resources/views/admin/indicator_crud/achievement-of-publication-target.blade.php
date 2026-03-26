@@ -34,12 +34,12 @@
                     <h5 class="mb-1">Research Publications</h5>
                 </div>
                 <div>
-                     <a href="{{ url('kpa/2/category/5/indicator/128') }}" class="btn btn-primary">Add</a>
+                     <a href="{{ url('kpa/2/category/5/indicator/128') }}" class="btn btn-success">Add</a>
                 </div>
             </div>
             
             <div class="card-datatable table-responsive card-body">
-                @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
+                @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Professor','Associate Professor']))
                     <div class="tab-pane fade show" id="form2" role="tabpanel">
                         <div class="table-responsive text-nowrap">
                             <table id="achievementTable" class="table table-bordered">
@@ -267,7 +267,7 @@
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Professor','Associate Professor']))
         <script>
             function fetchAchievementForms() {
                 $.ajax({
@@ -288,7 +288,7 @@
                             let editButton = '';
                             if (parseInt(form.status) === 1) {
                                 editButton = `
-                                                    <button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" 
+                                                    <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
                                                         data-form='${JSON.stringify(form)}'>
                                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                                     </button>`;
@@ -691,6 +691,7 @@
                             form.find('.is-invalid').removeClass('is-invalid');
                             if (xhr.status === 422) {
                                 let errors = xhr.responseJSON.errors;
+                                let response_dublicate = xhr.responseJSON;
 
                                 $.each(errors, function (field, messages) {
                                     let fieldName = field;
@@ -719,6 +720,14 @@
                                 let firstError = form.find('.is-invalid').first();
                                 if (firstError.length) {
                                     $('html, body').animate({ scrollTop: firstError.offset().top - 100 }, 500);
+                                }
+                                // If backend sends a single 'message' (like duplicate record)
+                                if (response_dublicate.message && !response_dublicate.errors) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: response_dublicate.message
+                                    });
                                 }
 
                             } else {

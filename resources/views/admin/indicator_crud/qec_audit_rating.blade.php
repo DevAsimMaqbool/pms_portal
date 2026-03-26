@@ -17,7 +17,7 @@
             <!-- Header with Add Feedback Button -->
             <div class="d-flex justify-content-between align-items-center p-3">
                 <h5 class="card-title mb-0">QEC Audit Rating</h5>
-                <a href="{{ url('kpa/1/category/3/indicator/110') }}" class="btn btn-primary">Add</a>
+                <a href="{{ url('kpa/1/category/3/indicator/110') }}" class="btn btn-success">Add</a>
             </div>
 
             <div class="card-datatable table-responsive card-body">

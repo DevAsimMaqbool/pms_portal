@@ -35,7 +35,7 @@
                     <h5 class="mb-1">Research Productivity of PG Students (MS/MPhil/PhD)</h5>
                 </div>
                 <div>
-                     <a href="{{ url('kpa/2/category/6/indicator/133') }}" class="btn btn-primary">Add</a>
+                     <a href="{{ url('kpa/2/category/6/indicator/133') }}" class="btn btn-success">Add</a>
                 </div>
             </div>
             <div class="card-datatable table-responsive card-body">
@@ -294,7 +294,7 @@
                             let editButton = '';
                             if (parseInt(form.status) === 1) {
                                 editButton = `
-                                                                                                                                                                                                                                                            <button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" 
+                                                                                                                                                                                                                                                            <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
                                                                                                                                                                                                                                                                 data-form='${JSON.stringify(form)}'>
                                                                                                                                                                                                                                                                 <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                                                                                                                                                                                                                                             </button>`;

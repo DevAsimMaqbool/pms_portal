@@ -436,7 +436,7 @@
                             let editButton = '';
                             if (parseInt(form.status) === 1) {
                                 editButton = `
-                                    <button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" 
+                                    <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
                                         data-form='${JSON.stringify(form)}'>
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
