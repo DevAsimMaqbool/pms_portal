@@ -64,9 +64,9 @@
             <i class="icon-base ti tabler-x icon-lg"></i>
           </button>
           <ul class="navbar-nav me-auto">
-            <li class="nav-item">
+            {{-- <li class="nav-item">
               <a class="nav-link fw-medium" aria-current="page" href="/">Home</a>
-            </li>
+            </li> --}}
 
           </ul>
         </div>
@@ -78,8 +78,12 @@
           <!-- / Style Switcher-->
 
           <!-- navbar button: Start -->
-          @if (Route::has('login'))
-          @if (session()->has('access_token') && session()->has('user_id'))
+        <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-1">
+        <a href="{{ url('/') }}" class="btn btn-primary">
+          Home
+        </a>
+        </li>
+        @if(Auth::check())
         <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-1">
         <a href="{{ url('/dashboard') }}" class="btn btn-primary">
           Dashboard
@@ -104,7 +108,6 @@
           <span class="d-none d-md-block">Student Login</span>
         </a> --}}
         </li>
-        @endif
       @endif
           <!-- navbar button: End -->
         </ul>
