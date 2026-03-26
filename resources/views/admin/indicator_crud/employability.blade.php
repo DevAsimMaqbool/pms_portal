@@ -117,7 +117,7 @@
                             <select name="period" id="period" class="select2 form-select faculty-member" required>
                                 <option value="">-- Select Period --</option>
                                 <?php $currentYear = date('Y'); 
-                                 for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++)
+                                 for ($year = $currentYear - 1; $year <= $currentYear + 3; $year++)
                                   { $nextYear = $year + 1; $range = $year . '-' . $nextYear; echo "<option value='{$range}'>{$range}</option>"; }
                                 ?>
                             </select>
