@@ -197,11 +197,13 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row g-6">
        @php
-          $colors_cards = ['warning', 'secondary', 'info', 'primary', 'danger'];
+          $colors_cards = ['warning', 'info', 'info', 'primary', 'danger'];
+          $icon_cards = ['user', 'school', 'info', 'primary', 'danger'];
       @endphp
       @foreach($scores as $index => $data)
       @php
         $color_res = $colors_cards[$index % count($colors_cards)];
+        $icon_res = $icon_cards[$index % count($icon_cards)];
        @endphp
         <div class="col-12 col-md-4">
           <div class="card h-100 text-bg-{{ $color_res }}">
@@ -210,8 +212,9 @@
             </div>
             <div class="card-body row">
               <div class="col-12 col-sm-4">
-                <h2 class="mb-0 text-white">{{ $data['score'] }}%</h2>
-                <p class="mb-0 text-white">Score</p>
+                <div class="avatar flex-shrink-0 me-4">
+                  <span class="avatar-initial rounded bg-label-{{ $color_res }}"><i class="icon-base ti tabler-{{ $icon_res }} icon-26px"></i></span>
+                </div>
               </div>
               <div class="col-12 col-md-8">
                 <div id="{{ $data['chart_id'] }}"></div>
@@ -227,8 +230,9 @@
           </div>
           <div class="card-body row">
             <div class="col-12 col-sm-4">
-              <h2 class="mb-0 text-white">{{ $combinedScore }}%</h2>
-              <p class="mb-0 text-white">Score</p>
+              <div class="avatar flex-shrink-0 me-4">
+                <span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-blend-mode icon-26px"></i></span>
+              </div>
             </div>
             <div class="col-12 col-md-8">
               <div id="combinedScoreChart"></div>
@@ -274,13 +278,13 @@
               }
             }
           },
-          colors: ["#696cff"],
+          colors: ["#000000"],
           fill: {
             type: "gradient",
             gradient: {
               shade: "dark",
               shadeIntensity: 0.5,
-              gradientToColors: ["#696cff"],
+              gradientToColors: ["#000000"],
               inverseColors: true,
               opacityFrom: 1,
               opacityTo: 0.6,
