@@ -88,7 +88,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="form-label">Publications Link</label>
+                                                    <label class="form-label">DOI Number</label>
                                                     <input type="url" name="link_of_publications" class="form-control">
                                                 </div>
                                                 <div class="col-md-6">
@@ -1351,7 +1351,7 @@
 
 
                     if (form.link_of_publications) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Publications Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>DOI Number</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
                     }
                     if (form.rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
@@ -1601,7 +1601,7 @@
 
 
                     if (form.link_of_publications) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Publications Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>DOI Number</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
                     }
                     if (form.rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
@@ -1864,7 +1864,7 @@
 
 
                     if (form.link_of_publications) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Publications Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>DOI Number</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
                     }
                     if (form.rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);

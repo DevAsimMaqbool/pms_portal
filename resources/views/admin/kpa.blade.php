@@ -188,6 +188,23 @@
         (function () {
             let loaded = false;
             const $container = $('#indicator-modal-dynamic');
+            // simple loader
+            const loader = `
+                <div id="loader" style="
+                    position:fixed;
+                    top:0;left:0;
+                    width:100%;height:100%;
+                    background:#00000080;
+                    display:none;
+                    z-index:9999;
+                    text-align:center;
+                    padding-top:20%;
+                    color:#fff;
+                    font-size:20px;">
+                    Loading...
+                </div>
+            `;
+             $('body').append(loader);
 
             $(document).on('click', '#indicatorList [data-bs-target]', function (e) {
                 const target = $(this).attr('data-bs-target');
@@ -199,6 +216,8 @@
                 if (loaded) return; // HTML fetch failed or not found
 
                 e.preventDefault();
+                 // show loader
+                $('#loader').show();
 
                 $.get('{{ route("indicator.modal.html") }}', function (html) {
                     $container.html(html);
@@ -209,6 +228,9 @@
                         const modal = window.bootstrap.Modal.getOrCreateInstance(el);
                         modal.show();
                     }
+                }).always(function () {
+                    // hide loader
+                    $('#loader').hide();
                 });
             });
         })();
