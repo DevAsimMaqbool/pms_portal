@@ -1,11 +1,11 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-    <!-- <h4 class="mb-1">Welcome to Assessment!</h4> -->
+    <h5 class=" text-center" style="color: #701b73;">My Performance Hub</h5>
     <!-- <p class="mb-6">Make your app management easy and fun!</p> -->
     <form method="POST" action="{{ route('login') }}" id="formAuthentication" class="mb-4">
         @csrf
-         <input type="hidden" name="user_status" value="{{ encrypt('other') }}">
+        <input type="hidden" name="user_status" value="{{ encrypt('other') }}">
         <!-- Email Address -->
         <div class="mb-6 form-control-validation">
             <x-input-label for="email" :value="__('Email')" />
@@ -50,9 +50,9 @@
     {{-- <p class="text-center">
         <span>New on our platform?</span>
         @if (Route::has('register'))
-            <a href="{{ route('register') }}">
-                <span>Create an account</span>
-            </a>
+        <a href="{{ route('register') }}">
+            <span>Create an account</span>
+        </a>
         @endif
     </p> --}}
 </x-guest-layout>

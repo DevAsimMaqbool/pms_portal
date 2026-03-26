@@ -126,7 +126,7 @@ class KeyPerformanceAreaController extends Controller
         }
         return view('admin.kpa', compact('area'));
     }
-    public function kpa($id)
+    public function kpaBkASIM($id)
     {
         $userRole = activeRole();
         $userRoleId = getRoleIdByName(activeRole());
@@ -159,6 +159,71 @@ class KeyPerformanceAreaController extends Controller
         if ($id == 14) {
             return view('admin.kpa_virtue', compact('area'));
         }
+        return view('admin.kpa', compact('area'));
+    }
+
+    public function kpa($id)
+    {
+        $userRole = activeRole();
+        $userRoleId = getRoleIdByName(activeRole());
+
+        $displayRole = match (strtolower($userRole)) {
+            'hod' => 'HOD',
+            default => ucfirst($userRole),
+        };
+
+        $result = getRoleAssignments($displayRole);
+        $area = collect($result)->firstWhere('id', $id);
+
+        if (!$area) {
+            return view("admin.error");
+        }
+
+        $employeeId = Auth::user()->employee_id;
+
+        // =====================================================
+        // ✅ STEP 1: Get SUM of scores per category
+        // =====================================================
+        $indicatorScores = \App\Models\IndicatorsPercentage::select(
+            'indicator_category_id',
+            DB::raw('SUM(score) as total_score')
+        )
+            ->where('employee_id', $employeeId)
+            ->where('key_performance_area_id', $id)
+            ->where('role_id', $userRoleId)
+            ->groupBy('indicator_category_id')
+            ->get()
+            ->keyBy('indicator_category_id');
+
+        // =====================================================
+        // ✅ STEP 2: Map score + divide by SUM(weightage)
+        // =====================================================
+        $area['category'] = collect($area['category'])->map(function ($cat) use ($indicatorScores) {
+
+            $categoryId = $cat['id'];
+
+            // SUM of scores
+            $totalScore = isset($indicatorScores[$categoryId])
+                ? $indicatorScores[$categoryId]->total_score
+                : 0;
+
+            // SUM of weightage from role_kpa_assignments (already inside indicators list)
+            $totalWeight = collect($cat['indicator'])
+                ->sum('indicator_weightage');
+            // FINAL FORMULA: SUM(score) / SUM(weightage)
+            $cat['score'] = $totalWeight > 0
+                ? round(($totalScore / $totalWeight) * 100, 1)
+                : 0;
+            return $cat;
+        });
+
+        // =====================================================
+        // ✅ Views (UNCHANGED)
+        // =====================================================
+        if ($id == 14) {
+            return view('admin.kpa_virtue', compact('area'));
+        }
+
         return view('admin.kpa', compact('area'));
     }
 
