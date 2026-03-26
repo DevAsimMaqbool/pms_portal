@@ -56,7 +56,7 @@
             <div class="tab-content">
 
                 {{-- ================= FORM 1 ================= --}}
-                @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor']))
+                @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor','Professor','Associate Professor']))
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
 
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
@@ -624,7 +624,7 @@
         const redirectUrl = "{{ route('indicators_crud.index', ['slug' => 'achievement-of-publication-target', 'id' => $indicatorId]) }}";
         window.activeUserRole = "{{ getRoleName(activeRole()) }}";
     </script>
-    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor','Professor','Associate Professor']))
         <script>
             $(document).ready(function () {
                 $(document).on('change', 'select[name="target_category"]', function () {
@@ -996,35 +996,44 @@
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
                             if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
+                                let response = xhr.responseJSON;
+                                if (response.errors) {
+                                    // Loop through all validation errors
+                                    $.each(response.errors, function (field, messages) {
+                                        let fieldName;
 
-                                // Loop through all validation errors
-                                $.each(errors, function (field, messages) {
-                                    let fieldName;
+                                        // Check if field contains a dot (dynamic field)
+                                        if (field.indexOf('.') !== -1) {
+                                            // Convert Laravel dot notation to input name format
+                                            fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                            fieldName = fieldName.replace('[]]', ']'); // fix extra brackets
+                                        } else {
+                                            // Static field
+                                            fieldName = field;
+                                        }
 
-                                    // Check if field contains a dot (dynamic field)
-                                    if (field.indexOf('.') !== -1) {
-                                        // Convert Laravel dot notation to input name format
-                                        fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
-                                        fieldName = fieldName.replace('[]]', ']'); // fix extra brackets
-                                    } else {
-                                        // Static field
-                                        fieldName = field;
-                                    }
+                                        // Find input by name
+                                        let input = form.find('[name="' + fieldName + '"]');
 
-                                    // Find input by name
-                                    let input = form.find('[name="' + fieldName + '"]');
+                                        if (input.length) {
+                                            input.addClass('is-invalid');
 
-                                    if (input.length) {
-                                        input.addClass('is-invalid');
+                                            // Remove old error if exists
+                                            input.next('.invalid-feedback').remove();
 
-                                        // Remove old error if exists
-                                        input.next('.invalid-feedback').remove();
-
-                                        // Show error message under input
-                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                                    }
-                                });
+                                            // Show error message under input
+                                            input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                        }
+                                    });
+                                }
+                                // If backend sends a single 'message' (like duplicate record)
+                                if (response.message && !response.errors) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: response.message
+                                    });
+                                }
 
                             } else {
                                 Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });

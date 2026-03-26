@@ -24,7 +24,7 @@
                     <h5 class="mb-1">Faculty Discipline / Punctuality</h5>
                 </div>
                 <div class="">
-                    <a href="{{ url('kpa/7/category/17/indicator/181') }}" class="btn btn-primary">Add</a>
+                    <a href="{{ url('kpa/7/category/17/indicator/181') }}" class="btn btn-success">Add</a>
                 </div>
             </div>
             <div class="card-datatable table-responsive card-body">
@@ -244,7 +244,7 @@
                             let deleteBtn = '';
                             if (parseInt(form.status) === 1) {
                                 editButton = `
-                                    <button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" 
+                                    <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
                                         data-form='${JSON.stringify(form)}'>
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;

@@ -58,7 +58,7 @@
                                 <div class="row g-6 mt-0">
 
                                     <div id="grant-details-container">
-                                        <div class="grant-group row g-3 m-0 p-3 border border-primary">
+                                        <div class="grant-group row g-3 m-0 p-3">
 
 
                                             <div class="col-md-6 d-none">

@@ -231,7 +231,7 @@
                             let editButton = '';
                             let deleteBtn = '';
                             if (parseInt(form.status) === 1) {
-                                editButton = `<button class="btn rounded-pill btn-outline-primary waves-effect edit-form-btn" data-form='${JSON.stringify(form)}'>Edit</button>`;
+                                editButton = `<button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" data-form='${JSON.stringify(form)}'>Edit</button>`;
                                 deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
                             } 
 
