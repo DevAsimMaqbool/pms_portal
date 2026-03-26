@@ -7,6 +7,7 @@ use App\Models\IndicatorsPercentage;
 use App\Models\KeyPerformanceArea;
 use App\Models\Faculty;
 use App\Models\Department;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -17,7 +18,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
     public function __construct()
     {
-        // Fetch all KPAs (id => performance_area)
+        // KPA list (id => name)
         $this->kpaList = KeyPerformanceArea::pluck('performance_area', 'id')->toArray();
     }
 
@@ -31,8 +32,9 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
     public function headings(): array
     {
         $kpaHeadings = [];
+
         foreach ($this->kpaList as $kpaName) {
-            $kpaHeadings[] = $kpaName . ' Total Score';
+            $kpaHeadings[] = $kpaName . ' Weighted Score';
         }
 
         return array_merge([
@@ -51,18 +53,15 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
     {
         $rows = [];
 
-        // Loop through all roles for the user
         foreach ($user->roles as $role) {
 
             $facultyName = Faculty::where('id', (int) $user->faculty)->value('name') ?? 'N/A';
             $departmentName = Department::where('id', (string) $user->department_id)->value('name') ?? 'N/A';
 
-            // Filter KPAs by this role
-            $kpaScores = IndicatorsPercentage::where('employee_id', $user->id)
+            // Get weightages per role
+            $kpaWeights = DB::table('role_kpa_assignments')
                 ->where('role_id', $role->id)
-                ->groupBy('key_performance_area_id')
-                ->selectRaw('key_performance_area_id, SUM(score) as total_score')
-                ->pluck('total_score', 'key_performance_area_id')
+                ->pluck('kpa_weightage', 'key_performance_area_id')
                 ->toArray();
 
             $row = [
@@ -73,27 +72,46 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
                 $departmentName
             ];
 
-            $allScores = [];
+            $weightedSum = 0;
 
             foreach ($this->kpaList as $kpaId => $kpaName) {
-                $score = $kpaScores[$kpaId] ?? null;
-                $row[] = $score ?? 0;
 
-                if ($score !== null) {
-                    $allScores[] = $score;
-                }
+                // Get KPA data
+                $kpaQuery = IndicatorsPercentage::where('employee_id', $user->id)
+                    ->where('role_id', $role->id)
+                    ->where('key_performance_area_id', $kpaId);
+
+                $totalScoreKpa = $kpaQuery->sum('score');
+                $indicatorCount = $kpaQuery->count();
+
+                // Normalize
+                $normalized = $indicatorCount > 0
+                    ? ($totalScoreKpa / $indicatorCount)
+                    : 0;
+
+                // Weight
+                $weight = $kpaWeights[$kpaId] ?? 0;
+                $weightFactor = $weight / 100;
+
+                // Weighted KPA score
+                $weightedKpaScore = $normalized * $weightFactor;
+
+                // Add to total
+                $weightedSum += $weightedKpaScore;
+
+                // Excel column (weighted score per KPA)
+                $row[] = round($weightedKpaScore, 2);
             }
 
-            $totalScore = count($allScores) > 0 ? array_sum($allScores) / count($allScores) : 0;
+            // Final Score
+            $totalScore = round($weightedSum, 2);
 
-            $row[] = round($totalScore, 2);
+            $row[] = $totalScore;
             $row[] = $this->calculateRating($totalScore);
 
             $rows[] = $row;
         }
 
-        // Return only the first row? Excel expects 1 row per map call
-        // So we flatten rows for the export by overriding FromCollection
         return $rows;
     }
 
