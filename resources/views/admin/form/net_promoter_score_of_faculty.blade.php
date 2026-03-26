@@ -47,7 +47,7 @@
                                                         $currentYear = date('Y');
 
                                                         // Show range from past 2 to next 3 academic years
-                                                        for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
+                                                        for ($year = $currentYear - 1; $year <= $currentYear + 3; $year++) {
                                                             $nextYear = $year + 1;
                                                             $range = $year . '-' . $nextYear;
                                                             echo "<option value='{$range}'>{$range}</option>";
