@@ -2688,7 +2688,7 @@ if (!function_exists('getRatingByPercentage')) {
             return [
                 'min_percentage' => 0,
                 'max_percentage' => 0,
-                'rating' => 'NA',
+                'rating' => 'BE',
                 'description' => 'NA',
                 'color' => '#000000'
             ];
@@ -3031,8 +3031,8 @@ if (!function_exists('indicatorsPercentageStatus')) {
                     'indicator_category_id' => $row->indicator_category_id,
                     'indicator_id' => $row->indicator_id,
                     'score' => 0,
-                    'rating' => 'NA',
-                    'color' => 'secondary',
+                    'rating' => 'BE',
+                    'color' => 'danger',
                     'badge_name' => null,
                     'given_by' => null,
                     'status' => '1',

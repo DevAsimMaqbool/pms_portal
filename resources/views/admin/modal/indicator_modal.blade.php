@@ -1546,12 +1546,9 @@
                                                                     } elseif ($avg >= 60) {
                                                                         $color = 'orange';
                                                                         $rating = 'NI';
-                                                                    } elseif ($avg > 0) {
+                                                                    } else {
                                                                         $color = 'danger';
                                                                         $rating = 'BE';
-                                                                    } else {
-                                                                        $color = 'secondary';
-                                                                        $rating = 'NA';
                                                                     }
                                                                 @endphp
 
