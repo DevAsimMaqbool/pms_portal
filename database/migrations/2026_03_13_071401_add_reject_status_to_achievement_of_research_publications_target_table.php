@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('achievement_of_research_publications_target', function (Blueprint $table) {
-            $table->enum('reject_status', ['1','2','3'])->default('1')->after('update_history');
+            $table->enum('reject_status', ['0','1','2','3'])->default('0')->after('update_history');
             $table->string('reject_status_remarks')->nullable()->after('reject_status');
         });
     }

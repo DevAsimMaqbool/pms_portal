@@ -318,41 +318,87 @@ class AchievementOfResearchPublicationsTargetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'status' => 'required|in:1,2,3,4,5,6'
-        ]);
+        if ($request->has('status_update')) {
+            $request->validate([
+                'status' => 'required|in:1,2,3,4,5,6'
+            ]);
 
-        $target = AchievementOfResearchPublicationsTarget::findOrFail($id);
+            $target = AchievementOfResearchPublicationsTarget::findOrFail($id);
 
 
-        // Get current update history
-        $history = $target->update_history ? json_decode($target->update_history, true) : [];
+            // Get current update history
+            $history = $target->update_history ? json_decode($target->update_history, true) : [];
 
-        // Get current user info
-        $currentUserId = Auth::id();
-        $currentUserName = Auth::user()->name;
-        $userRoll = getRoleName(activeRole()) ?? 'N/A';
+            // Get current user info
+            $currentUserId = Auth::id();
+            $currentUserName = Auth::user()->name;
+            $userRoll = getRoleName(activeRole()) ?? 'N/A';
 
-        // Avoid duplicate consecutive updates by the same user with the same status
-        $lastUpdate = end($history);
-        if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
-            $history[] = [
-                'user_id' => $currentUserId,
-                'user_name' => $currentUserName,
-                'status' => $request->status,
-                'role' => $userRoll,
-                'updated_at' => now()->toDateTimeString(),
-            ];
+            // Avoid duplicate consecutive updates by the same user with the same status
+            $lastUpdate = end($history);
+            if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+                $history[] = [
+                    'user_id' => $currentUserId,
+                    'user_name' => $currentUserName,
+                    'status' => $request->status,
+                    'role' => $userRoll,
+                    'remarks'     => null,
+                    'updated_at' => now()->toDateTimeString(),
+                ];
+            }
+
+
+
+            $target->status = $request->status;
+            $target->reject_status = '0';
+            $target->reject_status_remarks = null;
+            $target->update_history = json_encode($history);
+            $target->updated_by = $currentUserId;
+            $target->save();
+
+            return response()->json(['success' => true]);
         }
+        if ($request->has('status_reject_update')) {
+                $request->validate([
+                    'status' => 'required|in:0,1,2,3,4,5,6'
+                ]);
+
+                $target = AchievementOfResearchPublicationsTarget::findOrFail($id);
+
+                // Get current update history
+                $history = $target->update_history ? json_decode($target->update_history, true) : [];
+
+                // Get current user info
+                $currentUserId = Auth::id();
+                $currentUserName = Auth::user()->name;
+                $userRoll = getRoleName(activeRole()) ?? 'N/A';
+
+                // Avoid duplicate consecutive updates by the same user with the same status
+                $lastUpdate = end($history);
+                if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+                    $history[] = [
+                        'user_id'    => $currentUserId,
+                        'user_name'  => $currentUserName,
+                        'status'     => 0,
+                        'role'     => $userRoll,
+                        'remarks'     => $request->reject_status_remarks,
+                        'updated_at' => now()->toDateTimeString(),
+                    ];
+                }
 
 
 
-        $target->status = $request->status;
-        $target->update_history = json_encode($history);
-        $target->updated_by = $currentUserId;
-        $target->save();
 
-        return response()->json(['success' => true]);
+
+                $target->status = 1;
+                $target->reject_status = $request->status;
+                $target->reject_status_remarks = $request->reject_status_remarks;
+                $target->update_history = json_encode($history);
+                $target->updated_by = $currentUserId;
+                $target->save();
+
+                return response()->json(['success' => true]);
+            }
     }
 
     /**
@@ -431,13 +477,18 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         }
 
         // Update main form fields
-        $form->update($request->only([
+       
+         $form->fill($request->only([
             'target_category',
             'link_of_publications',
             'journal_clasification',
             'nationality',
             'as_author_your_rank'
-        ]));
+            ]));
+        $form->status = 1;
+        $form->reject_status = '0';
+        $form->reject_status_remarks = null;
+        $form->save();
 
         // Keep track of co-author IDs
         $coAuthorIds = [];
