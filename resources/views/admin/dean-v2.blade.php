@@ -812,9 +812,14 @@
           @endphp
           @if(!empty($deanTopPerformers))
             @foreach($deanTopPerformers as $deanTopPerformer)
+              @php
+                $deanTopPerformers_avg_score = min($deanTopPerformer['avg_score'] ?? 0, 100);
+                $deanTopPerformers_avg_scoretRatingByPercentage = getRatingByPercentage($deanTopPerformers_avg_score);
+                $deanTopPerformers_description = $deanTopPerformers_avg_scoretRatingByPercentage['description'];
+              @endphp
               <div class="card mb-6" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
                 data-bs-custom-class="tooltip-{{ $deanTopPerformer['color'] }}"
-                data-bs-original-title="{{ $deanTopPerformer['name'] }}<br>{{ $deanTopPerformer['location'] }}">
+                data-bs-original-title="{{ $deanTopPerformers_description }}">
                 <div class="card-body d-flex">
                   <div class="d-flex w-70 align-items-center me-4">
                     <div class="badge bg-label-{{ $deanTopPerformer['color'] }} rounded p-1_5 me-4"><i
