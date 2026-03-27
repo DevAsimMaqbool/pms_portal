@@ -2069,59 +2069,66 @@ if (!function_exists('saveIndicatorPercentage90Plus')) {
 }
 
 
-if (!function_exists('lineManagerRatingOnEvents')) {
-    function lineManagerRatingOnEvents($facultyId, $activeRoleId)
-    {
-        $feedbacks = LineManagerEventFeedback::where('employee_id', $facultyId)->get();
+function lineManagerRatingOnEvents($facultyId, $activeRoleId)
+{
+    $feedbacks = LineManagerEventFeedback::where('employee_id', $facultyId)->get();
 
-        foreach ($feedbacks as $item) {
+    if ($feedbacks->isEmpty()) {
+        return [];
+    }
 
-            // Ensure rating is numeric
-            $percentage = (float) $item->rating;
+    $total = 0;
+    $count = $feedbacks->count();
 
-            // Assign rating data for frontend display
-            if ($percentage >= 90) {
-                $label = 'OS';
-                $color = 'bg-label-primary';
-            } elseif ($percentage >= 80) {
-                $label = 'EE';
-                $color = 'bg-label-success';
-            } elseif ($percentage >= 70) {
-                $label = 'ME';
-                $color = 'bg-label-warning';
-            } elseif ($percentage >= 60) {
-                $label = 'NI';
-                $color = 'bg-label-orange';
-            } else {
-                $label = 'BE';
-                $color = 'bg-label-danger';
-            }
+    foreach ($feedbacks as $item) {
+        $total += $item->rating;
 
-            $item->rating_data = [
-                'percentage' => $percentage,
-                'label' => $label,
-                'color' => $color
-            ];
+        // Label logic (keep this if needed for UI)
+        $percentage = round($item->rating, 1);
 
-            // Save to indicators_percentages table automatically
-            $weights = [
-                'course_load' => getRoleWeightage($activeRoleId, 'indicator', 189)['weightage'],
-            ];
-            $weightedScore = ($percentage * $weights['course_load']) / 100;
-
-            saveIndicatorPercentage(
-                $faculty_id = $facultyId,
-                $role_id = $activeRoleId,
-                $keyPerformanceAreaId = 13,   // set appropriate KPA ID
-                $indicatorCategoryId = 28,    // set appropriate category ID
-                $indicatorId = 189,           // set appropriate indicator ID
-                $weightedScore,
-                $percentage
-            );
+        if ($percentage >= 90) {
+            $label = 'OS';
+            $color = 'bg-label-primary';
+        } elseif ($percentage >= 80) {
+            $label = 'EE';
+            $color = 'bg-label-success';
+        } elseif ($percentage >= 70) {
+            $label = 'ME';
+            $color = 'bg-label-warning';
+        } elseif ($percentage >= 60) {
+            $label = 'NI';
+            $color = 'bg-label-orange';
+        } else {
+            $label = 'BE';
+            $color = 'bg-label-danger';
         }
 
-        return $feedbacks;
+        $item->rating_data = [
+            'percentage' => $percentage,
+            'label' => $label,
+            'color' => $color
+        ];
     }
+
+    // ✅ Average calculation
+    $averagePercentage = $total / $count;
+
+    // ✅ Apply weight
+    $weight = getRoleWeightage($activeRoleId, 'indicator', 189)['weightage'];
+    $weightedScore = ($averagePercentage * $weight) / 100;
+
+    // ✅ Save ONCE
+    saveIndicatorPercentage(
+        $facultyId,
+        $activeRoleId,
+        13,
+        28,
+        189,
+        $weightedScore,
+        $averagePercentage
+    );
+
+    return $feedbacks;
 }
 
 // function avgKpaScore($employeeId, $kpaId)

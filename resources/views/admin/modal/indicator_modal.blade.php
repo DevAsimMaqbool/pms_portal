@@ -360,7 +360,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                        <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio1" id="dailyRadio1" checked>
                             <label class="btn btn-outline-primary waves-effect" for="dailyRadio1">Weekly</label>
 
@@ -369,7 +369,7 @@
 
                             <input type="radio" class="btn-check" name="btnradio1" id="yearlyRadio1">
                             <label class="btn btn-outline-primary waves-effect" for="yearlyRadio1">Yearly</label>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
@@ -407,8 +407,8 @@
                                                 <td>{{ $latestAttendance->program_name }}</td>
                                                 <td>{{ $class->career_code }}</td>
                                                 <td>{{ $class->class_id }}</td>
-                                                <td>{{ $class->avg_present_count }}</td>
-                                                <td>{{ $class->avg_absent_count }}</td>
+                                                <td>{{ round($class->avg_present_count, 1) }}</td>
+                                                <td>{{ round($class->avg_absent_count, 1) }}</td>
                                                 <td>
                                                     <div class="badge" style="background-color: {{ $class->color }}">
                                                         {{number_format($class->avg_present_percentage, 1) }}%

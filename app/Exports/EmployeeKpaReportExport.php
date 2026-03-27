@@ -61,7 +61,12 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
             // Get weightages per role
             $kpaWeights = DB::table('role_kpa_assignments')
                 ->where('role_id', $role->id)
-                ->pluck('kpa_weightage', 'key_performance_area_id')
+                ->select('key_performance_area_id', 'kpa_weightage')
+                ->get()
+                ->groupBy('key_performance_area_id')
+                ->map(function ($items) {
+                    return $items->first()->kpa_weightage;
+                })
                 ->toArray();
 
             $row = [
@@ -100,13 +105,15 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
                 $weightedSum += $weightedKpaScore;
 
                 // Excel column (weighted score per KPA)
-                $row[] = round($weightedKpaScore, 2);
+                $row[] = ($indicatorCount > 0 || $weight > 0)
+                    ? round((float) $weightedKpaScore, 1)
+                    : 0;
             }
 
             // Final Score
-            $totalScore = round($weightedSum, 2);
+            $totalScore = round($weightedSum, 1);
 
-            $row[] = $totalScore;
+            $row[] = $totalScore > 0 ? $totalScore : 0;
             $row[] = $this->calculateRating($totalScore);
 
             $rows[] = $row;
