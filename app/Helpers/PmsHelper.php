@@ -83,7 +83,7 @@ if (!function_exists('hodHotIndicators')) {
             ->first();
     
 
-        $avg = $record ? round($record->score, 2) : 0.00;
+        $avg = $record ? round($record->score, 1) : 0.00;
 
         if ($avg >= 90) {
             $color = 'primary';
@@ -139,7 +139,7 @@ if (!function_exists('deanTopPerformers')) {
             ->get();
             // 3️⃣ Transform data into array with label and color
             $result = $topEmployees->map(function ($item){    
-                $avg_score = round($item->avg_score, 2);
+                $avg_score = $item ? round($item->avg_score, 1) : 0.0;
 
                 if ($avg_score >= 90) {
                     $color = 'primary';
@@ -198,7 +198,7 @@ if (!function_exists('deanHotIndicators')) {
           
            
               
-               $avg = $avg ? round($avg, 2) : 0.00;
+               $avg = $avg ? round($avg, 1) : 0.00;
 
                 if ($avg >= 90) {
                     $color = 'primary';
