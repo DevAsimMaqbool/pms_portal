@@ -23,18 +23,16 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs mb-3" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab"># of Grants Won</a>
+                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab"># of Grant Proposals Submitted</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
-                        </li>
+                       
                     </ul>
                 @endif
                 @if(in_array(getRoleName(activeRole()), ['HOD']))
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs mb-3" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab"># of Grants Won</a>
+                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab"># of Grant Proposals Submitted</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#form3" role="tab">Approvals</a>
@@ -48,7 +46,7 @@
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                  <h5 class="mb-1"># of Grants Won</h5>
+                                  <h5 class="mb-1"># of Grant Proposals Submitted</h5>
                                 </div>
                                 <a href="{{ route('indicators_crud.index', ['slug' => 'no-of-grants-submitted-and-won', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
                             </div> 

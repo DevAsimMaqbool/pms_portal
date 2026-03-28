@@ -214,6 +214,8 @@ class KeyPerformanceAreaController extends Controller
             $cat['score'] = $totalWeight > 0
                 ? round(($totalScore / $totalWeight) * 100, 1)
                 : 0;
+            $cat['total_weight'] = $totalWeight ?? 0;
+            $cat['total_score'] = $totalScore ?? 0;
             return $cat;
         });
 
@@ -223,7 +225,7 @@ class KeyPerformanceAreaController extends Controller
         if ($id == 14) {
             return view('admin.kpa_virtue', compact('area'));
         }
-
+       // dd($area);
         return view('admin.kpa', compact('area'));
     }
 

@@ -20,7 +20,7 @@
         <div class="card">
              <div class="card-header d-flex align-items-center justify-content-between">
                 <div class="card-title mb-0">
-                    <h5 class="mb-1"># of Grants Won</h5>
+                    <h5 class="mb-1"># of Grant Proposals Submitted</h5>
                 </div>
                 <div class="">
                     <a href="{{ url('kpa/2/category/8/indicator/135') }}" class="btn btn-success">Add</a>
@@ -96,7 +96,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Commercial Consultancy/Research Income 1</h5>
+                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit # of Grant Proposals Submitted</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
