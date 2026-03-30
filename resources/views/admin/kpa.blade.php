@@ -104,7 +104,7 @@
                                 <div class="btn-group" role="group" aria-label="radio toggle button group">
                                     <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
                                     <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall for
-                                        2024-2025</label>
+                                        2025-2026</label>
 
                                 </div>
                             </div>
@@ -132,40 +132,42 @@
         <div class="row g-6 pt-5">
             <div class="col-12 col-lg-12">
                 <div class="card">
-                    <h5 class="card-header">Table Header &amp; Footer</h5>
+                    <h5 class="card-header">Sub Categories Score</h5>
                     <div class="table-responsive text-nowrap">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>KPA Category</th>
-                                    <th>Total Score</th>
-                                    <th>Total Weight</th>
-                                    <th>Formula</th>
-                                    <th>Score</th>
+                                    <th>Sub KPA</th>
+                                    <th class="text-center">Obtained Score</th>
+                                    <th class="text-center">Weight</th>
+                                    <th class="text-center">Formula</th>
+                                    <th class="text-center">Obtained %</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
-$sumTotalScore = 0;
+                                 $sumTotalScore = 0;
+                                 $sumTotalWeight = 0;
                                 @endphp
                                 @foreach ($area['category'] as $key => $category)
                                     @php
-    $sumTotalScore += $category['total_score'] ?? 0;
+                                     $sumTotalScore += $category['total_score'] ?? 0;
+                                     $sumTotalWeight += $category['total_weight'] ?? 0;
                                     @endphp
                                     <tr>
                                         <td>
                                             <i
-                                                class="icon-base {{ $category['cat_icon'] ?? 'ti tabler-check' }} icon-md text-danger me-4"></i>
+                                                class="icon-base {{ $category['cat_icon'] ?? 'ti tabler-check' }} icon-md text-primary me-4"></i>
                                             <span class="fw-medium">{{ $category['indicator_category'] }}</span>
                                         </td>
-                                        <td>{{ $category['total_score'] }}</td>
-                                        <td>
+                                        <td class="text-center">{{ $category['total_score'] }}</td>
+                                        <td class="text-center">
                                             {{ $category['total_weight'] }}
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             ({{ $category['total_score'] }} / {{ $category['total_weight']}}) x 100 =
                                         </td>
-                                        <td>{{ $category['score'] }}</td>
+                                        <td class="text-center">{{ $category['score'] }}</td>
                                     </tr>
                                 @endforeach
 
@@ -175,10 +177,10 @@ $sumTotalScore = 0;
                             <tfoot style="background-color: #7367F0;">
                                 <tr>
                                     <th class="text-white">Total</th>
-                                    <th class="text-white">{{ $sumTotalScore }}</th>
-                                    <th> <i class="icon-base ti tabler-barbell icon-md text-white me-4"></i></th>
-                                    <th> <i class="icon-base ti tabler-calculator icon-md text-white me-4"></th>
-                                    <th> <i class="icon-base ti tabler-scoreboard icon-md text-white me-4"></i></th>
+                                    <th class="text-white text-center">{{ $sumTotalScore }}</th>
+                                    <th class="text-white text-center">{{ $sumTotalWeight }}</th>
+                                    <th class="text-center"> <i class="icon-base ti tabler-calculator icon-md text-white me-4"></th>
+                                    <th class="text-center"> <i class="icon-base ti tabler-scoreboard icon-md text-white me-4"></i></th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -191,7 +193,7 @@ $sumTotalScore = 0;
             <!-- Navigation -->
             <div class="col-12 col-lg-4">
                 <div class="d-flex justify-content-between flex-column mb-4 mb-md-0">
-                    <h5 class="mb-4">Sub Categories</h5>
+                    <h5 class="mb-4">Indicator Score</h5>
                     <ul class="nav nav-align-left nav-pills flex-column">
 
                         @foreach ($area['category'] as $key => $category)

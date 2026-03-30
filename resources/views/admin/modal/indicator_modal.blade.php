@@ -117,7 +117,11 @@
                                     <tbody>
                                         @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                             @php
-                                                $classFeedback = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
+                                                $feedbackData  = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
+                                                // Collection of class feedback
+                                                $classFeedback = $feedbackData['collection'];
+                                                // Total feedback sum
+                                                $totalFeedback = $feedbackData['totalFeedback'];
                                                 if (!function_exists('ratingMeta')) {
                                                     function ratingMeta($average)
                                                     {
@@ -189,6 +193,19 @@
                                             @endforelse
                                         @endif
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="text-end">Total</th>
+                                            <th colspan="5" class="text-end"></th>
+                                            <th>
+                                                <b>
+                                                    {{ number_format($totalFeedback, 1) }}
+                                                </b>
+                                            </th>
+                                            <th class="text-end text-white"></th>
+                                        </tr>
+                                    </tfoot>
+
                                 </table>
                             </div>
                         </div>
