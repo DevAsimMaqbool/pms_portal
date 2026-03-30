@@ -16,18 +16,20 @@ class FacultyRetentionController extends Controller
      */
     public function index(Request $request)
     {
-         try {
+        try {
             $user = Auth::user();
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-        
-                $status = $request->input('status');
-                if($status=="HOD"){
-                    $forms = FacultyRetention::with('remarks')->where('created_by', $employee_id)
-                        ->orderBy('id', 'desc')
-                        ->get();
-                }       
+
+            $status = $request->input('status');
+            if ($status == "HOD") {
+                $forms = FacultyRetention::with([
+                    'remarks.faculty'
+                ])->where('created_by', $employee_id)
+                    ->orderBy('id', 'desc')
+                    ->get();
+            }
 
             if ($request->ajax()) {
                 return response()->json([
@@ -56,49 +58,49 @@ class FacultyRetentionController extends Controller
      */
     public function store(Request $request)
     {
-        try { 
-            
-                $employeeId = Auth::user()->employee_id;
-               $rules = [
-                        'indicator_id' => 'required|integer',
-                        'year' => 'required',
-                        'retention_rate' => 'required|array|min:1',
-                        'retention_rate.*.faculty_id' => 'required|integer',
-                        'retention_rate.*.no_retention_rate' => 'required|numeric|min:0|max:100',
-                        'retention_rate.*.remarks' => 'nullable|string',
-                        'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
-                    ];
+        try {
 
-                    $messages = [
-                        'retention_rate.*.faculty_id.required' => 'Faculty is required',
-                        'retention_rate.*.no_retention_rate.required' => 'Rate is required',
-                    ];
-                
+            $employeeId = Auth::user()->employee_id;
+            $rules = [
+                'indicator_id' => 'required|integer',
+                'year' => 'required',
+                'retention_rate' => 'required|array|min:1',
+                'retention_rate.*.faculty_id' => 'required|integer',
+                'retention_rate.*.no_retention_rate' => 'required|numeric|min:0|max:100',
+                'retention_rate.*.remarks' => 'nullable|string',
+                'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+            ];
 
-                    $validator = Validator::make($request->all(), $rules, $messages);
-                    if ($validator->fails()) {
-                            return response()->json([
-                                'status' => 'error',
-                                'errors' => $validator->errors()
-                            ], 422);
-                        }
-                    // Create main record
-                    $FacultyRetention = FacultyRetention::create([
-                        'indicator_id' => $request->indicator_id,
-                        'year' => $request->year,
-                        'form_status' => $request->form_status,
-                        'created_by' => $employeeId,
-                        'updated_by' => $employeeId,
-                    ]);      
+            $messages = [
+                'retention_rate.*.faculty_id.required' => 'Faculty is required',
+                'retention_rate.*.no_retention_rate.required' => 'Rate is required',
+            ];
 
-                    foreach ($request->retention_rate as $retention_rates) {
-                        FacultyRetentionRemark::create([
-                            'faculty_retention_id' => $FacultyRetention->id,
-                            'faculty_id' => $retention_rates['faculty_id'],
-                            'no_retention_rate' => $retention_rates['no_retention_rate'],
-                            'remarks' => $retention_rates['remarks'],
-                        ]);
-                    }
+
+            $validator = Validator::make($request->all(), $rules, $messages);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            // Create main record
+            $FacultyRetention = FacultyRetention::create([
+                'indicator_id' => $request->indicator_id,
+                'year' => $request->year,
+                'form_status' => $request->form_status,
+                'created_by' => $employeeId,
+                'updated_by' => $employeeId,
+            ]);
+
+            foreach ($request->retention_rate as $retention_rates) {
+                FacultyRetentionRemark::create([
+                    'faculty_retention_id' => $FacultyRetention->id,
+                    'faculty_id' => $retention_rates['faculty_id'],
+                    'no_retention_rate' => $retention_rates['no_retention_rate'],
+                    'remarks' => $retention_rates['remarks'],
+                ]);
+            }
 
             return response()->json([
                 'status' => 'success',
@@ -107,8 +109,8 @@ class FacultyRetentionController extends Controller
             ]);
 
         } catch (\Exception $e) {
-             DB::rollBack();
-             return response()->json(['message' => $e->getMessage()], 500);
+            DB::rollBack();
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
@@ -119,12 +121,12 @@ class FacultyRetentionController extends Controller
     {
 
         $rules = [
-                'year' => 'required',
-                'retention_rate' => 'required|array|min:1',
-                'retention_rate.*.faculty_id' => 'required|integer',
-                'retention_rate.*.no_retention_rate' => 'required|numeric|min:0|max:100',
-                'retention_rate.*.remarks' => 'nullable|string',
-    
+            'year' => 'required',
+            'retention_rate' => 'required|array|min:1',
+            'retention_rate.*.faculty_id' => 'required|integer',
+            'retention_rate.*.no_retention_rate' => 'required|numeric|min:0|max:100',
+            'retention_rate.*.remarks' => 'nullable|string',
+
         ];
         Validator::validate($request->all(), $rules);
         $record = FacultyRetention::findOrFail($id);
@@ -143,7 +145,7 @@ class FacultyRetentionController extends Controller
                 'remarks' => $row['remarks'],
             ]);
         }
-        return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+        return response()->json(['status' => 'success', 'message' => 'Record updated successfully', 'data' => $record]);
     }
 
     /**

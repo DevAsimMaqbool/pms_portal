@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FacultyRetentionRemark extends Model
 {
     protected $table = 'faculty_retentions_remarks';
-        protected $fillable = [
+    protected $fillable = [
         'faculty_retention_id',
         'faculty_id',
         'no_retention_rate',
@@ -17,6 +17,11 @@ class FacultyRetentionRemark extends Model
     public function facultyRetention()
     {
         return $this->belongsTo(FacultyRetention::class, 'faculty_retention_id');
+    }
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class, 'faculty_id');
     }
 
 }

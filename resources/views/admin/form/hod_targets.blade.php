@@ -25,15 +25,15 @@
                         <label class="form-label" for="indicator_id">Select Indicator</label>
                         <select id="indicator_id" class="select2 form-select" data-allow-clear="true" name="indicator_id[]"
                             multiple required>
-                            <option value="135"># of Grant Proposals Submitted</option>
-                            <option value="136">Multidisciplinary Projects</option>
-                            <option value="137">Commercial Consultancy/Research Income</option>
-                            <option value="138">Patents/Intellectual Property (IPR)</option>
-                            <option value="139">Spin Offs</option>
-                            <option value="198">Industrial Projects</option>
-                            <option value="199">Products Delivered to Industry</option>
-                            <option value="194">Number of Knowledge Products</option>
-                            <option value="197">Industrial Visits</option>
+                            <option value="135"># of Grant Proposals Submitted (I&C)</option>
+                            <option value="136">Multidisciplinary Projects (I&C)</option>
+                            <option value="137">Commercial Consultancy/Research Income (I&C)</option>
+                            <option value="138">Patents/Intellectual Property (IPR) (I&C)</option>
+                            <option value="139">Spin Offs (I&C)</option>
+                            <option value="198">Industrial Projects (I&C)</option>
+                            <option value="199">Products Delivered to Industry (I&C)</option>
+                            <option value="194">Number of Knowledge Products (I&C)</option>
+                            <option value="197">Industrial Visits (I&C)</option>
                         </select>
                         <div class="invalid-feedback" id="indicatorError"></div>
                     </div>
