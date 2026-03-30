@@ -20,7 +20,7 @@ class ActiveInternationalResearchPartnerController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-            if(in_array(getRoleName(activeRole()), ['Dean'])) {
+            if(in_array(getRoleName(activeRole()), ['Dean','HOD'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
                     $forms = ActiveInternationalResearchPartner::with([
