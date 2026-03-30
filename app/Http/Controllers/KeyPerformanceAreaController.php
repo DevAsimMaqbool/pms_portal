@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Exports\EmployeeKpaReportExport;
+use App\Exports\EmployeeCombineReportExport;
 use Maatwebsite\Excel\Facades\Excel;
 class KeyPerformanceAreaController extends Controller
 {
@@ -314,6 +315,11 @@ class KeyPerformanceAreaController extends Controller
     public function exportKpaReport()
     {
         return Excel::download(new EmployeeKpaReportExport, 'employee_kpa_report.xlsx');
+    }
+
+    public function exportCombineReport()
+    {
+        return Excel::download(new EmployeeCombineReportExport, 'employee_kpa_report.xlsx');
     }
 
 
