@@ -2989,9 +2989,21 @@ if (!function_exists('getFacultyClassWiseFeedback')) {
                 'faculty_member_classes.faculty_id'
             )
             ->get();
+        // Calculate sum of feedback (numeric)
+            $totalFeedback = $result->sum(function ($item) {
+                return (float) str_replace('%', '', $item->feedback);
+            });       
 
-        $memo[$key] = $result;
-        return $result;
+
+        // Return both collection and sum as an array
+        $data = [
+            'collection' => $result,
+            'totalFeedback' => $totalFeedback,
+        ];
+
+        $memo[$key] = $data;
+
+        return $data;    
     }
 }
 
