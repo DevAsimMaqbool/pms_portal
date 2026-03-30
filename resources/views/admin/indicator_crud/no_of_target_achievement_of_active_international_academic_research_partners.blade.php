@@ -15,7 +15,7 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-      @if(in_array(getRoleName(activeRole()), ['Dean']))
+      @if(in_array(getRoleName(activeRole()), ['Dean','HOD']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
              <div class="card-header d-flex align-items-center justify-content-between">
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="card-datatable table-responsive card-body">
-                    @if(in_array(getRoleName(activeRole()), ['Dean']))
+                    @if(in_array(getRoleName(activeRole()), ['Dean','HOD']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="admissionTargetAchieveTable" class="table table-bordered">
@@ -169,7 +169,7 @@
 @endpush
 @push('script')
     
-    @if(in_array(getRoleName(activeRole()), ['Dean']))
+    @if(in_array(getRoleName(activeRole()), ['Dean','HOD']))
         <script>
             function fetchCommercialForms() {
                 $.ajax({

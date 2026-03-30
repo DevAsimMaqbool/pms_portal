@@ -15,12 +15,12 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-         @if(in_array(getRoleName(activeRole()), ['Dean','International Office']))
+         @if(in_array(getRoleName(activeRole()), ['Dean','HOD','International Office']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
                 <div class="tab-content">
-                    @if(in_array(getRoleName(activeRole()), ['Dean']))
+                    @if(in_array(getRoleName(activeRole()), ['Dean','HOD']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             
                             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
@@ -180,7 +180,7 @@
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['Dean']))
+    @if(in_array(getRoleName(activeRole()), ['Dean','HOD']))
         <script>
             
             $(document).ready(function () {
