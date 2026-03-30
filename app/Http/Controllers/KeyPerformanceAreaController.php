@@ -225,7 +225,7 @@ class KeyPerformanceAreaController extends Controller
         if ($id == 14) {
             return view('admin.kpa_virtue', compact('area'));
         }
-       // dd($area);
+        // dd($area);
         return view('admin.kpa', compact('area'));
     }
 
@@ -243,41 +243,65 @@ class KeyPerformanceAreaController extends Controller
             'indicators' => $indicators
         ]);
     }
+
     public function getIndicators(Request $request)
     {
-        $employeeId = Auth::user()->employee_id; // logged-in employee
-        //$activeRoleId = Auth::user()->roles->firstWhere('name', Auth::user()->getRoleNames()->first())->id;
+        $employeeId = Auth::user()->employee_id;
         $userRoleId = getRoleIdByName(activeRole());
 
-        // Fetch indicators assigned to this category & role
-        $indicators = Indicator::whereIn('id', function ($query) use ($request, $userRoleId) {
-            $query->select('indicator_id')
-                ->from('role_kpa_assignments')
-                ->where('indicator_category_id', $request->id)
-                ->where('status', 1)
-                ->where('role_id', $userRoleId);
-        })->get();
+        // Fetch assignments
+        $assignments = \DB::table('role_kpa_assignments')
+            ->where('indicator_category_id', $request->id)
+            ->where('status', 1)
+            ->where('role_id', $userRoleId)
+            ->get();
 
-        // Fetch saved percentages for this employee
-        $savedPercentages = \App\Models\IndicatorsPercentage::where('employee_id', $employeeId)
-            ->whereIn('indicator_id', $indicators->pluck('id'))
+        $indicatorIds = $assignments->pluck('indicator_id');
+
+        // Weightage map
+        $weightages = $assignments->pluck('indicator_weightage', 'indicator_id');
+
+        // Fetch indicators
+        $indicators = Indicator::whereIn('id', $indicatorIds)->get();
+
+        // Fetch saved scores
+        $savedScores = \App\Models\IndicatorsPercentage::where('employee_id', $employeeId)
+            ->whereIn('indicator_id', $indicatorIds)
             ->where('role_id', $userRoleId)
             ->get()
-            ->keyBy('indicator_id'); // keyed by indicator_id for fast lookup
+            ->keyBy('indicator_id');
 
-        // Map percentage to indicators
-        $indicators = $indicators->map(function ($indicator) use ($savedPercentages) {
-            if (isset($savedPercentages[$indicator->id])) {
-                $saved = $savedPercentages[$indicator->id];
-                // $indicator->percentage = floor($saved->score);
-                $indicator->percentage = min(round($saved->score, 1), 100);
-                $indicator->color = $saved->color;   // ✅ add color
-                $indicator->rating = $saved->rating; // optional
+        // Map response
+        $indicators = $indicators->map(function ($indicator) use ($savedScores, $weightages) {
+
+            $weightage = $weightages[$indicator->id] ?? 1;
+
+            if (isset($savedScores[$indicator->id])) {
+
+                $saved = $savedScores[$indicator->id];
+
+                // ✅ Raw score (WITHOUT division)
+                $indicator->score = round($saved->score, 1);
+                $indicator->weightage = $weightage;
+
+                // ✅ Percentage (WITH division)
+                $percentage = ($weightage > 0)
+                    ? ($saved->score / $weightage) * 100
+                    : 0;
+
+                $indicator->percentage = min(round($percentage, 1), 100);
+                $indicator->color = $saved->color;
+                $indicator->rating = $saved->rating;
+
             } else {
+                $indicator->score = 0; // no score
                 $indicator->percentage = 0;
-                $indicator->color = '#d3d3d3';       // fallback color
-                $indicator->rating = 'NA';           // fallback rating
+                $indicator->color = '#d3d3d3';
+                $indicator->rating = 'NA';
             }
+
+            // send weightage too
+            $indicator->indicator_weightage = $weightage;
 
             return $indicator;
         });
