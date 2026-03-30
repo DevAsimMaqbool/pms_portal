@@ -451,7 +451,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                        <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio" id="dailyRadio" checked>
                             <label class="btn btn-outline-primary waves-effect" for="dailyRadio">Weekly</label>
 
@@ -460,7 +460,7 @@
 
                             <input type="radio" class="btn-check" name="btnradio" id="yearlyRadio">
                             <label class="btn btn-outline-primary waves-effect" for="yearlyRadio">Yearly</label>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
@@ -836,7 +836,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                        <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio01" id="dailyRadio01" checked>
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadio01"> 📅 Weekly</label>
 
@@ -846,7 +846,7 @@
 
                             <input type="radio" class="btn-check" name="btnradio01" id="yearlyRadio">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio01"> 📅 Yearly</label>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
@@ -1211,7 +1211,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                        <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio02" id="dailyRadioo2" checked>
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadioo2">Weekly</label>
 
@@ -1221,7 +1221,7 @@
 
                             <input type="radio" class="btn-check" name="btnradio02" id="yearlyRadio02">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio02">Yearly</label>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
@@ -1258,9 +1258,9 @@
                     Adoption of Active Learning Techniques
                 </h3>
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                        <!--<div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradioo3" id="dailyRadioo3" checked>
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadio03"> 📅 Weekly</label>
 
@@ -1270,8 +1270,8 @@
 
                             <input type="radio" class="btn-check" name="btnradio03" id="yearlyRadio03">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio03"> 📅 Yearly</label>
-                        </div>
-                    </div>
+                        </div>-->
+                    </div> 
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
@@ -1682,9 +1682,9 @@
                     🎓 Guidance to Students
                 </h3>
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                        <!--<div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio05" id="dailyRadio05" checked>
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
 
@@ -1694,8 +1694,8 @@
 
                             <input type="radio" class="btn-check" name="btnradio05" id="yearlyRadio05">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio05"> 📅 Yearly</label>
-                        </div>
-                    </div>
+                        </div>-->
+                    </div> 
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
@@ -2395,16 +2395,16 @@
                     Scorecard for each role is developed separately
                 </h3>
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                        <!--<div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio07" id="dailyRadio07" checked>
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadio07"> 📅 Weekly</label>
 
                             <input type="radio" class="btn-check" name="btnradio07" id="yearlyRadio07">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio07"> 📅 Yearly</label>
-                        </div>
-                    </div>
+                        </div>-->
+                    </div> 
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">
@@ -2442,13 +2442,13 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                        <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio08" id="dailyRadio08" checked>
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadio08"> 📅 Weekly</label>
 
                             <input type="radio" class="btn-check" name="btnradio08" id="yearlyRadio08">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio08"> 📅 Yearly</label>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
@@ -2484,16 +2484,16 @@
                     Scholar's Satisfaction(In Thesis Stage)
                 </h3>
                 <div class="card">
-                    <!-- <div class="card-header d-flex justify-content-between align-items-center">
+                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                        <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+                        <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
                             <input type="radio" class="btn-check" name="btnradio09" id="dailyRadio09" checked>
                             <label class="btn btn-outline-secondary waves-effect" for="dailyRadio09"> 📅 Weekly</label>
 
                             <input type="radio" class="btn-check" name="btnradio09" id="yearlyRadio09">
                             <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio09"> 📅 Yearly</label>
-                        </div>
-                    </div> -->
+                        </div>-->
+                    </div> 
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table table-striped align-middle custom-table"">

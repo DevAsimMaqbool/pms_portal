@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Performance Insight Report 2024-2025</title>
+    <title>Performance Insight Report 2025-2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -778,7 +778,7 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="title">2024-2025</div>
+                <div class="title">2025-2026</div>
                 <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
             </div>
         </header>
@@ -786,7 +786,7 @@
         <section class="intro">
             <p>
                 This Performance Insight Report provides a comprehensive review of your performance as
-                <em>{{ $user->job_title }}</em> for the period of 2024-2025. The report covers key areas essential to
+                <em>{{ $user->job_title }}</em> for the period of 2025-2026. The report covers key areas essential to
                 your
                 role including: Teaching and Learning, Research, Innovation and Commercialisation and Institutional
                 Engagement. By analyzing achievements, and
@@ -911,7 +911,7 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="title">2024-2025</div>
+                <div class="title">2025-2026</div>
                 <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
             </div>
         </header>
@@ -1041,7 +1041,7 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="title">2024-2025</div>
+                <div class="title">2025-2026</div>
                 <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
             </div>
         </header>
@@ -1184,7 +1184,7 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="title">2024-2025</div>
+                <div class="title">2025-2026</div>
                 <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
             </div>
         </header>
@@ -1306,7 +1306,7 @@
             </div>
             <div class="report-title">
                 <div class="title">Performance Insight Report</div>
-                <div class="title">2024-2025</div>
+                <div class="title">2025-2026</div>
                 <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
             </div>
         </header>

@@ -433,9 +433,9 @@
               <!-- Profit last month -->
               <div class="col-lg-4 col-md-3 col-sm-6">
                 <div class="card h-100" data-bs-toggle="tooltip" data-bs-placement="top"
-                  data-bs-custom-class="tooltip-" data-bs-original-title="{{ucfirst(activeRole())}}" style="background-color: #ac7cad;">
+                  data-bs-custom-class="tooltip-" data-bs-original-title="{{ucfirst(Auth::user()->job_title)}}" style="background-color: #ac7cad;">
                   <div class="card-body d-flex justify-content-center align-items-center ">
-                    <h6 class="mb-0 text-center text-white">As {{ substr(ucfirst(activeRole()), 0, 7) }}<h6>
+                    <h6 class="mb-0 text-center text-white">As {{ substr(ucfirst(Auth::user()->job_title), 0, 7) }}<h6>
                   </div>
                 </div>
               </div>
@@ -516,7 +516,7 @@
                                       </div>
                                       <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
                                     </div>
-                                    
+
 
                                     <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
                                       <div class="mb-1">
