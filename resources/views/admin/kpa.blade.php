@@ -73,8 +73,9 @@
                         <h5 class="card-title mb-0">{{ $area['performance_area'] }} 🎉</h5>
                         <p class="mb-2">Overall KPA Performance</p>
                         <h4 class="text-primary mb-1">
-                            {{ min(number_format(avgKpaScore(Auth::user()->id, request()->segment(2)), 1), 100) }}%
+                            {{ min(number_format(avgKpaScore(Auth::user()->id, request()->segment(2)), 1), 100) }}% 
                         </h4>
+                        <span class="badge bg-label-primary mb-1">W: {{ $area['kpa_weightage']??'NULL' }}</span>
                         @if(!empty($area['small_description']))
                             <p class="card-text">{{ $area['small_description'] }}</p>
                         @else
@@ -127,7 +128,62 @@
                 </div>
             </div>
         </div>
-
+        <div class="row g-6 pt-5">
+          <div class="col-12 col-lg-12">
+               <div class="card">
+                    <h5 class="card-header">Table Header &amp; Footer</h5>
+                    <div class="table-responsive text-nowrap">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>KPA Category</th>
+                            <th>Total Score</th>
+                            <th>Total Weight</th>
+                            <th>Formula</th>
+                            <th>Score</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @php
+                            $sumTotalScore = 0;
+                        @endphp
+                         @foreach ($area['category'] as $key => $category)
+                          @php
+                                $sumTotalScore += $category['total_score'] ?? 0;
+                            @endphp
+                        <tr>
+                            <td>
+                            <i class="icon-base {{ $category['cat_icon'] ?? 'ti tabler-check' }} icon-md text-danger me-4"></i>
+                            <span class="fw-medium">{{ $category['indicator_category'] }}</span>
+                            </td>
+                            <td>{{ $category['total_score'] }}</td>
+                            <td>
+                              {{ $category['total_weight'] }}
+                            </td>
+                            <td>
+                             ({{ $category['total_score'] }} / {{ $category['total_weight']}}) x 100 =
+                            </td>
+                            <td>{{ $category['score'] }}</td>
+                        </tr>
+                        @endforeach
+                        
+                       
+                       
+                        </tbody>
+                        <tfoot class="table-border-bottom-0 table-dark">
+                        <tr>
+                            <th>Total</th>
+                            <th>{{ $sumTotalScore }}</th>
+                            <th> <i class="icon-base ti tabler-barbell icon-md text-danger me-4"></i></th>
+                            <th> <i class="icon-base ti tabler-calculator icon-md text-danger me-4"></th>
+                            <th> <i class="icon-base ti tabler-scoreboard icon-md text-danger me-4"></i></th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    </div>
+                </div>
+          </div>
+        </div>
         <!-- Categories + Indicators -->
         <div class="row g-6 pt-5">
             <!-- Navigation -->

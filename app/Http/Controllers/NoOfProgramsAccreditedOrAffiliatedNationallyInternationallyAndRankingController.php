@@ -17,7 +17,7 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
             $user = Auth::user();
             $userId = Auth::id();
             $employee_id = $user->employee_id;
-            if(in_array(getRoleName(activeRole()), ['Dean'])) {
+            if(in_array(getRoleName(activeRole()), ['Dean','HOD','Program Leader UG'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
                         $forms = ProgramAccreditation::with([

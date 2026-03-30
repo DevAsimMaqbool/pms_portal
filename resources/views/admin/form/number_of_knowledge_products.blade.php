@@ -90,6 +90,12 @@
                     @endif
                     @if(in_array(getRoleName(activeRole()), ['HOD','Dean']))
                         <div class="tab-pane fade show active" id="form3" role="tabpanel">
+                             <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="mb-1">Number of Knowledge Products</h5>
+                                </div>
+                                
+                            </div>
                             <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                                 <thead>
                                     <tr>

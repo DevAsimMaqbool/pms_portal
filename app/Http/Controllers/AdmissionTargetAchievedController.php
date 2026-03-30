@@ -57,7 +57,7 @@ class AdmissionTargetAchievedController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-        public function store(Request $request)
+        public function store11(Request $request)
     {
         try { 
             
@@ -125,6 +125,86 @@ class AdmissionTargetAchievedController extends Controller
         } catch (\Exception $e) {
              DB::rollBack();
              return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+    
+
+    public function store(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $employeeId = Auth::user()->employee_id;
+
+            $validator = Validator::make($request->all(), [
+                'indicator_id' => 'required|integer',
+                'admission' => 'required|array|min:1',
+                'admission.*.faculty_id' => 'required|integer',
+                'admission.*.department_id' => 'required|integer',
+                'admission.*.program_id' => 'required|integer',
+                'admission.*.admissions_campaign' => 'required|string',
+                'admission.*.admissions_target' => 'required',
+                'admission.*.achieved_target' => 'required',
+                'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $errors = [];
+            $savedRecords = [];
+
+            foreach ($request->admission as $index => $admissions) {
+
+                $exists = AdmissionTargetAchieved::where('faculty_id', $admissions['faculty_id'])
+                    ->where('department_id', $admissions['department_id'])
+                    ->where('program_id', $admissions['program_id'])
+                    ->where('admissions_campaign', $admissions['admissions_campaign'])
+                    ->exists();
+
+                if ($exists) {
+                    $errors["admission.$index"] = "Row " . ($index + 1) . " already exists.";
+                    continue;
+                }
+
+                $admissions['indicator_id'] = $request->indicator_id;
+                $admissions['form_status'] = $request->form_status ?? 'HOD';
+                $admissions['created_by'] = $employeeId;
+                $admissions['updated_by'] = $employeeId;
+
+                $savedRecords[] = AdmissionTargetAchieved::create($admissions);
+            }
+
+            // ❌ If ANY duplicate found → rollback ALL
+            if (!empty($errors)) {
+                DB::rollBack();
+
+                return response()->json([
+                    'status' => 'error',
+                    'errors' => $errors
+                ], 422);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'All records saved successfully',
+                'data' => $savedRecords
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 

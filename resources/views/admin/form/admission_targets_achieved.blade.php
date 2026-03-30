@@ -283,8 +283,14 @@
                 $(document).on('click', '.remove-past', function () {
                     $(this).closest('.past-group').remove();
                 });
+                
                 $('#researchForm1').on('submit', function (e) {
                     e.preventDefault();
+                    if (checkDuplicateAdmissions()) {
+                        // ❌ Duplicate found → STOP
+                        return;
+                    }
+
                     let form = $(this);
                     let formData = new FormData(this);
 
@@ -333,17 +339,20 @@
                                             input.addClass('is-invalid');
                                             input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
                                         }
+                                        let index = field.split('.')[1]; // get row index
+
+                                        let row = $('.past-group').eq(index);
+
+                                        row.addClass('border-danger');
+
+                                        row.append(`
+                                            <div class="text-danger duplicate-error mt-2">
+                                                ${messages}
+                                            </div>
+                                        `);
                                     });
                                 }
 
-                                // If backend sends a single 'message' (like duplicate record)
-                                if (response.message && !response.errors) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: response.message
-                                    });
-                                }
 
                             } else {
                                 Swal.fire({
@@ -448,6 +457,45 @@
 
 
             });
+            // Function to check duplicates
+            function checkDuplicateAdmissions() {
+                let records = {};
+                let isDuplicate = false;
+
+                $('.past-group').each(function (index) {
+                    let faculty = $(this).find('.faculty-select').val();
+                    let department = $(this).find('.department-select').val();
+                    let program = $(this).find('.program-select').val();
+                    let campaign = $(this).find('.admissions-campaign').val();
+
+                    let key = faculty + '-' + department + '-' + program + '-' + campaign;
+
+                    // Remove old error
+                    $(this).removeClass('border-danger');
+                    $(this).find('.duplicate-error').remove();
+
+                    if (faculty && department && program && campaign) {
+
+                        if (records[key] !== undefined) {
+                            isDuplicate = true;
+
+                            // Highlight ONLY current duplicate row
+                            $(this).addClass('border-danger');
+
+                            // Show error message only in this row
+                            $(this).append(`
+                                <div class="text-danger mt-2 duplicate-error">
+                                    Duplicate record not allowed!
+                                </div>
+                            `);
+                        } else {
+                            records[key] = index;
+                        }
+                    }
+                });
+
+                return isDuplicate;
+            }
         </script>
     @endif
 @endpush
