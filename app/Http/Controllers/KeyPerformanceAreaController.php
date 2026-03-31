@@ -284,6 +284,7 @@ class KeyPerformanceAreaController extends Controller
                 // ✅ Raw score (WITHOUT division)
                 $indicator->score = round($saved->score, 1);
                 $indicator->weightage = $weightage;
+                $indicator->indicatorId = $indicator->id;
 
                 // ✅ Percentage (WITH division)
                 $percentage = ($weightage > 0)

@@ -439,16 +439,10 @@ function myClassesAttendanceRecord($facultyId, $activeRoleId)
                 : 0;
 
             // Color & rating logic
-            if ($class->held_percentage >= 90) {
-                $class->color = '#6EA8FE';
-                $class->rating = 'OS';
-            } elseif ($class->held_percentage >= 80) {
-                $class->color = '#96e2b4';
-                $class->rating = 'EE';
-            } elseif ($class->held_percentage >= 70) {
+            if ($class->held_percentage == 100) {
                 $class->color = '#ffcb9a';
                 $class->rating = 'ME';
-            } elseif ($class->held_percentage >= 60) {
+            } elseif ($class->held_percentage >= 90 && $class->held_percentage <= 100) {
                 $class->color = '#fd7e13';
                 $class->rating = 'NI';
             } else {
@@ -472,16 +466,10 @@ function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAr
     }
 
     // Color & rating logic (same as above)
-    if ($overallPercentage >= 90) {
-        $color = 'primary';
-        $rating = 'OS';
-    } elseif ($overallPercentage >= 80) {
-        $color = 'success';
-        $rating = 'EE';
-    } elseif ($overallPercentage >= 70) {
+    if ($overallPercentage == 100) {
         $color = 'warning';
         $rating = 'ME';
-    } elseif ($overallPercentage >= 60) {
+    } elseif ($overallPercentage >= 90 && $overallPercentage <= 100) {
         $color = 'orange';
         $rating = 'NI';
     } else {
@@ -2990,9 +2978,9 @@ if (!function_exists('getFacultyClassWiseFeedback')) {
             )
             ->get();
         // Calculate sum of feedback (numeric)
-            $totalFeedback = $result->sum(function ($item) {
-                return (float) str_replace('%', '', $item->feedback);
-            });       
+        $totalFeedback = $result->sum(function ($item) {
+            return (float) str_replace('%', '', $item->feedback);
+        });
 
 
         // Return both collection and sum as an array
@@ -3003,7 +2991,7 @@ if (!function_exists('getFacultyClassWiseFeedback')) {
 
         $memo[$key] = $data;
 
-        return $data;    
+        return $data;
     }
 }
 

@@ -146,13 +146,13 @@
                             </thead>
                             <tbody>
                                 @php
-                                 $sumTotalScore = 0;
-                                 $sumTotalWeight = 0;
+$sumTotalScore = 0;
+$sumTotalWeight = 0;
                                 @endphp
                                 @foreach ($area['category'] as $key => $category)
                                     @php
-                                     $sumTotalScore += $category['total_score'] ?? 0;
-                                     $sumTotalWeight += $category['total_weight'] ?? 0;
+    $sumTotalScore += $category['total_score'] ?? 0;
+    $sumTotalWeight += $category['total_weight'] ?? 0;
                                     @endphp
                                     <tr>
                                         <td>
@@ -179,8 +179,10 @@
                                     <th class="text-white">Total</th>
                                     <th class="text-white text-center">{{ $sumTotalScore }}</th>
                                     <th class="text-white text-center">{{ $sumTotalWeight }}</th>
-                                    <th class="text-center"> <i class="icon-base ti tabler-calculator icon-md text-white me-4"></th>
-                                    <th class="text-center"> <i class="icon-base ti tabler-scoreboard icon-md text-white me-4"></i></th>
+                                    <th class="text-center"> <i
+                                            class="icon-base ti tabler-calculator icon-md text-white me-4"></th>
+                                    <th class="text-center"> <i
+                                            class="icon-base ti tabler-scoreboard icon-md text-white me-4"></i></th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -250,20 +252,20 @@
             const $container = $('#indicator-modal-dynamic');
             // simple loader
             const loader = `
-                                                                        <div id="loader" style="
-                                                                            position:fixed;
-                                                                            top:0;left:0;
-                                                                            width:100%;height:100%;
-                                                                            background:#00000080;
-                                                                            display:none;
-                                                                            z-index:9999;
-                                                                            text-align:center;
-                                                                            padding-top:20%;
-                                                                            color:#fff;
-                                                                            font-size:20px;">
-                                                                            Loading...
-                                                                        </div>
-                                                                    `;
+                                                                                        <div id="loader" style="
+                                                                                            position:fixed;
+                                                                                            top:0;left:0;
+                                                                                            width:100%;height:100%;
+                                                                                            background:#00000080;
+                                                                                            display:none;
+                                                                                            z-index:9999;
+                                                                                            text-align:center;
+                                                                                            padding-top:20%;
+                                                                                            color:#fff;
+                                                                                            font-size:20px;">
+                                                                                            Loading...
+                                                                                        </div>
+                                                                                    `;
             $('body').append(loader);
 
             $(document).on('click', '#indicatorList [data-bs-target]', function (e) {
@@ -453,10 +455,10 @@
                         li.style.fontSize = "9px";
                         li.style.cursor = "pointer";
                         li.innerHTML = `
-                                                                                                                <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                border-radius:50%;margin-right:5px;"></span>
-                                                                                                                ${label} (${shortLabels[i]})
-                                                                                                                `;
+                                                                                                                                <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                ${label} (${shortLabels[i]})
+                                                                                                                                `;
 
                         li.addEventListener("mouseenter", () => {
                             radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
@@ -524,64 +526,80 @@
             });
         }
         function getColorByPercentage(percentage) {
-                if (percentage >= 90) return '#7367f0'; // primary
-                if (percentage >= 80) return '#28c76f'; // success
-                if (percentage >= 70) return '#ff9f43'; // warning
-                if (percentage >= 60) return '#fd7e14'; // orange
+            if (percentage >= 90) return '#7367f0'; // primary
+            if (percentage >= 80) return '#28c76f'; // success
+            if (percentage >= 70) return '#ff9f43'; // warning
+            if (percentage >= 60) return '#fd7e14'; // orange
+            return '#ea5455'; // danger
+        }
+        function getColorByPercentageForGraph(percentage) {
+            if (percentage >= 90) return 'primary'; // primary
+            if (percentage >= 80) return 'success'; // success
+            if (percentage >= 70) return 'warning'; // warning
+            if (percentage >= 60) return 'orange'; // orange
+            return 'danger'; // danger
+        }
+        function getColorByPercentageForGraphClassesHeld(percentage) {
+            if (percentage == 100) return 'warning'; // primary
+            if (percentage >= 90 && percentage <= 100) return 'orange'; // success
+            return 'danger'; // danger
+        }
+        function getColorByPercentageClassesHeld(percentage) {
+                if (percentage == 90) return '#ff9f43'; // warning
+                if (percentage >= 90 && percentage <= 100) return '#fd7e14'; // orange
                 return '#ea5455'; // danger
-            }
-            function getColorByPercentageForGraph(percentage) {
-                    if (percentage >= 90) return 'primary'; // primary
-                    if (percentage >= 80) return 'success'; // success
-                    if (percentage >= 70) return 'warning'; // warning
-                    if (percentage >= 60) return 'orange'; // orange
-                    return 'danger'; // danger
-                }
+            } 
 
         function initProgressTooltips() {
-                document.querySelectorAll('.chart-progress').forEach(function (el) {
+            document.querySelectorAll('.chart-progress').forEach(function (el) {
 
-                    let score = el.getAttribute('data-value');
-                    let series = el.getAttribute('data-series');
-                    let weightage = el.getAttribute('data-weightage') || 3;
-                    let color = getColorByPercentage(series);
+                let score = el.getAttribute('data-value');
+                let series = el.getAttribute('data-series');
+                let weightage = el.getAttribute('data-weightage') || 3;
+                let indicatorId = el.getAttribute('data-indicatorId'); 
+                let color;
+                if (indicatorId == 117) {
+                    color = getColorByPercentageClassesHeld(series); //indicator.color || 'primary';
+                } else {
+                    color = getColorByPercentage(series); //indicator.color || 'primary';
+                }
 
-                    // Bootstrap tooltip attributes
-                    el.setAttribute('data-bs-toggle', 'tooltip');
-                    el.setAttribute('data-bs-placement', 'top');
-                    el.setAttribute('data-bs-title', `${score}% out of ${weightage}%`);
+                // Bootstrap tooltip attributes
+                el.setAttribute('data-bs-toggle', 'tooltip');
+                el.setAttribute('data-bs-placement', 'top');
+                el.setAttribute('data-bs-title', `${score}% out of ${weightage}%`);
 
-                    // IMPORTANT: destroy old instance (prevents duplicate/ghost tooltips)
-                    let existing = bootstrap.Tooltip.getInstance(el);
-                    if (existing) existing.dispose();
+                // IMPORTANT: destroy old instance (prevents duplicate/ghost tooltips)
+                let existing = bootstrap.Tooltip.getInstance(el);
+                if (existing) existing.dispose();
 
-                    // create tooltip
-                    new bootstrap.Tooltip(el, {
-                        trigger: 'hover'
-                    });
-
-                    // apply color AFTER tooltip shows
-                    el.addEventListener('shown.bs.tooltip', function () {
-
-                        const tooltipEl = document.querySelector('.tooltip.show');
-                        if (!tooltipEl) return;
-
-                        const inner = tooltipEl.querySelector('.tooltip-inner');
-                        if (inner) {
-                            inner.style.backgroundColor = color;
-                            inner.style.color = '#fff';
-                            inner.style.borderRadius = '6px';
-                            inner.style.padding = '6px 10px';
-                        }
-
-                        const arrow = tooltipEl.querySelector('.tooltip-arrow');
-                        if (arrow) {
-                            arrow.style.setProperty('--bs-tooltip-bg', color);
-                        }
-                    });
-
+                // create tooltip
+                new bootstrap.Tooltip(el, {
+                    trigger: 'hover'
                 });
-            }
+
+                // apply color AFTER tooltip shows
+                el.addEventListener('shown.bs.tooltip', function () {
+
+                    const tooltipEl = document.querySelector('.tooltip.show');
+                    if (!tooltipEl) return;
+
+                    const inner = tooltipEl.querySelector('.tooltip-inner');
+                    if (inner) {
+                        inner.style.backgroundColor = color;
+                        inner.style.color = '#fff';
+                        inner.style.borderRadius = '6px';
+                        inner.style.padding = '6px 10px';
+                    }
+
+                    const arrow = tooltipEl.querySelector('.tooltip-arrow');
+                    if (arrow) {
+                        arrow.style.setProperty('--bs-tooltip-bg', color);
+                    }
+                });
+
+            });
+        }
 
         $(document).ready(function () {
             // ✅ By default select first category
@@ -627,42 +645,48 @@
                             let colors = ["primary", "success", "warning", "secondary-color", "danger"];
 
                             $.each(response.indicators, function (index, indicator) {
-                                let color = getColorByPercentageForGraph(indicator.percentage); //indicator.color || 'primary';
+                                let indicatorId = parseInt(indicator.indicatorId || indicator.indicator_id || indicator.id);
+                                let color;
+                                if (indicatorId == 117) {
+                                     color = getColorByPercentageForGraphClassesHeld(indicator.percentage); //indicator.color || 'primary';
+                                } else {
+                                     color = getColorByPercentageForGraph(indicator.percentage); //indicator.color || 'primary';
+                                }
                                 let formattedIndicator = indicator.indicator.replace(/[\s#']+/g, '');
                                 let percentage = indicator.percentage || 0;
                                 let indicatorScore = indicator.score || 0;
-                                let indicatorWeightage = indicator.weightage || 0; 
+                                let indicatorWeightage = indicator.weightage || 0;
                                 let isDisabled = disabledRoles.includes(userRole);
 
                                 $list.append(`
-                                                                                <li class="d-flex mb-6">
-                                                                                <div class="chart-progress me-4"
-                                                                                                     data-color="${color}"
-                                                                                                     data-series="${percentage}"
-                                                                                                     data-progress_variant="true"  data-value="${indicatorScore}" title="" data-weightage="${indicatorWeightage}"></div>
+                                                                                                <li class="d-flex mb-6">
+                                                                                                <div class="chart-progress me-4"
+                                                                                                                     data-color="${color}"
+                                                                                                                     data-series="${percentage}"
+                                                                                                                     data-progress_variant="true"  data-value="${indicatorScore}" title="" data-weightage="${indicatorWeightage}" data-indicatorId="${indicatorId}"></div>
 
 
-                                                                                <div class="row w-100 align-items-center">
-                                                                                <div class="col-9">
-                                                                                <div class="me-2">
-                                                                                <h6 class="mb-1_5">${indicator.indicator}</h6>
-                                                                                </div>
-                                                                                </div>
+                                                                                                <div class="row w-100 align-items-center">
+                                                                                                <div class="col-9">
+                                                                                                <div class="me-2">
+                                                                                                <h6 class="mb-1_5">${indicator.indicator}</h6>
+                                                                                                </div>
+                                                                                                </div>
 
-                                                                                <div class="col-3 text-end">
-                                                                                <button type="button"
-                                                                                class="btn btn-sm btn-icon btn-label-primary"
-                                                                                role="button"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#${formattedIndicator}"
-                                                                                ${isDisabled ? 'disabled' : ''}>
+                                                                                                <div class="col-3 text-end">
+                                                                                                <button type="button"
+                                                                                                class="btn btn-sm btn-icon btn-label-primary"
+                                                                                                role="button"
+                                                                                                data-bs-toggle="modal"
+                                                                                                data-bs-target="#${formattedIndicator}"
+                                                                                                ${isDisabled ? 'disabled' : ''}>
 
-                                                                                <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                                                                                </button>
-                                                                                </div>
-                                                                                </div>
-                                                                                </li>
-                                                                                `);
+                                                                                                <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
+                                                                                                </button>
+                                                                                                </div>
+                                                                                                </div>
+                                                                                                </li>
+                                                                                                `);
                             });
 
                             initChartProgress(); // re-init charts after AJAX load
