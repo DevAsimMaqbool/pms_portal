@@ -368,11 +368,15 @@ function myClasses($facultyId, $activeRoleId)
     // 1️⃣ Get count and averages in a single query
     $stats = FacultyMemberClass::where('faculty_id', $facultyId)
         ->selectRaw('COUNT(*) as total_courses, 
+        SUM(COALESCE(passing_percentage,0)) as total_pass,
+        SUM(COALESCE(average_marks,0)) as total_average_marks,
         AVG(COALESCE(average_marks,0)) as avg_marks, 
         AVG(COALESCE(passing_percentage,0)) as avg_pass')
         ->first();
 
     $totalCourses = $stats->total_courses;
+    $totalPassPercentage = $stats->total_pass ?? 0;
+    $totalAverageMarks = $stats->total_average_marks ?? 0;
     $averagePassPercentage = $stats->avg_pass ?? 0;
     $averageStudentScore = $stats->avg_marks ?? 0;
 
@@ -409,6 +413,8 @@ function myClasses($facultyId, $activeRoleId)
         'classes' => $classes,
         'totalCourses' => $totalCourses,
         'courseLoadScore' => $courseLoadScore,
+        'totalPassPercentage' => $totalPassPercentage,
+        'totalAverageMarks' => $totalAverageMarks,
         'averagePassPercentage' => $averagePassPercentage,
         'averageStudentScore' => $averageStudentScore,
     ];
@@ -3338,7 +3344,7 @@ function NumberOfKnowledgeProduct($facultyId, $activeRoleId)
 if (!function_exists('lineManagerReviewRatingOnTasks')) {
     function lineManagerReviewRatingOnTasks($facultyId, $activeRoleId)
     {
-        $managerRatings = [];
+        $managerRatings = collect();
         $totalScore = 0;
         $taskCount = 0;
 
@@ -3370,14 +3376,15 @@ if (!function_exists('lineManagerReviewRatingOnTasks')) {
                     $color = 'bg-danger';
                 }
 
-                $managerRatings[] = (object) [
+               
+                 $managerRatings->push((object)[
                     'task' => $task->task,
                     'rating_data' => [
                         'percentage' => $score,
                         'label' => $label,
                         'color' => $color
                     ]
-                ];
+                ]);
             }
         }
         $averageScore = $taskCount > 0 ? round($totalScore / $taskCount, 2) : 0;

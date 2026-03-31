@@ -409,6 +409,7 @@
                                         @php
                                             $att = myClassesAttendanceData(Auth::user()->faculty_id);
                                             $sr = 1;
+                                            $totalAvgPresent = $att->sum('avg_present_percentage');
                                         @endphp
 
                                         @foreach($att as $class)
@@ -440,7 +441,18 @@
                                         @endforeach
                                     @endif
                                 </tbody>
-
+                                  <tfoot>
+                                    <tr class="table-primary">
+                                        <th class="text-end">Total</th>
+                                        <th colspan="6" class="text-end"></th>
+                                        <th>
+                                            <b>
+                                                {{ number_format($totalAvgPresent, 1) }}
+                                            </b>
+                                        </th>
+                                        <th class="text-end text-white"></th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -501,6 +513,8 @@
                                     @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                         @php $sr = 1;
                                             $classes = myClassesAttendanceRecord(Auth::user()->faculty_id, $activeRoleId); 
+                                            // 👇 SUM of held_percentage
+                                            $totalHeldPercentage = $classes->sum('held_percentage');
                                         @endphp
                                         @foreach($classes as $class)
                                             <tr>
@@ -526,6 +540,18 @@
                                         @endforeach
                                     @endif
                                 </tbody>
+                                <tfoot>
+                                    <tr class="table-primary">
+                                        <th class="text-end">Total</th>
+                                        <th colspan="8" class="text-end"></th>
+                                        <th>
+                                            <b>
+                                                {{ number_format($totalHeldPercentage, 1) }}
+                                            </b>
+                                        </th>
+                                        <th class="text-end text-white"></th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -676,6 +702,8 @@
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
     @php
         $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, $activeRoleId, 120);
+        // 👇 SUM of completion_of_Course_folder
+        $totalCompletion = $CompletionofCourseFolders->sum('completion_of_Course_folder');
     @endphp
     @foreach ($CompletionofCourseFolders as $CompletionofCourser)
         <tr>
@@ -706,6 +734,18 @@
     @endforeach
 @endif
                                     </tbody>
+                                     <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="text-end">Total</th>
+                                            <th colspan="3" class="text-end"></th>
+                                            <th>
+                                                <b>
+                                                    {{ number_format($totalCompletion, 1) }}
+                                                </b>
+                                            </th>
+                                            <th class="text-end text-white"></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -1452,6 +1492,18 @@
                                                             @endforelse
                                         @endif
                                                         </tbody>
+                                                         <tfoot>
+                                                            <tr class="table-primary">
+                                                                <th class="text-end">Total</th>
+                                                                <th colspan="5" class="text-end"></th>
+                                                                <th>
+                                                                    <b>
+                                                                        {{ number_format($data['totalPassPercentage'], 1) }}
+                                                                    </b>
+                                                                </th>
+                                                                <th class="text-end text-white"></th>
+                                                            </tr>
+                                                        </tfoot>
                                         
                                 </table>
                             </div>
@@ -1596,6 +1648,18 @@
                                                             @endforelse
                                         @endif
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="text-end">Total</th>
+                                            <th colspan="4" class="text-end"></th>
+                                            <th>
+                                                <b>
+                                                    {{ number_format($data['totalAverageMarks'], 1) }}
+                                                </b>
+                                            </th>
+                                            <th class="text-end text-white"></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -1776,6 +1840,7 @@
                                             @php
                                                 $facultyData = ScopusPublications(Auth::user()->employee_id, $activeRoleId, 128);
                                                 $sr = 1;
+                                                $sumPercentage = collect($facultyData)->sum('percentage');
                                                 if (!function_exists('ratingFunction')) {
                                                     function ratingFunction($average)
                                                     {
@@ -1817,6 +1882,18 @@
                                         @endif
 
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th  colspan="4" class="text-end"></th>
+                                            <th>
+                                                <b>
+                                                    {{ number_format($sumPercentage, 1) }}
+                                                </b>
+                                            </th>
+                                            <th class="text-end text-white"></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -2216,6 +2293,8 @@
                                         @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                              @php
                                                 $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
+                                                // ✅ Fast sum of all rating percentages
+                                                $totalPercentage = $feedbacks->sum(fn($item) => $item->rating_data['percentage']);
                                             @endphp
                                             @forelse($feedbacks as $index => $item)
                                                 <tr>
@@ -2239,6 +2318,18 @@
                                             @endforelse
                                         @endif
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th  class="text-end"></th>
+                                            <th>
+                                                <b>
+                                                    {{ number_format($totalPercentage, 1) }}
+                                                </b>
+                                            </th>
+                                            <th class="text-end text-white"></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -2370,6 +2461,8 @@
                                     @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $feedbacks = lineManagerRatingOnEvents(Auth::user()->employee_id, $activeRoleId);
+                                            // ✅ SUM of all rating percentages
+                                            $totalPercentage = $feedbacks->sum(fn($item) => $item->rating_data['percentage']);
                                         @endphp
                                                 @foreach($feedbacks as $index => $item)
                                                     <tr>
@@ -2389,6 +2482,18 @@
                                                 @endforeach
                                     @endif
                                 </tbody>
+                                <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th  class="text-end"></th>
+                                            <th>
+                                                <b>
+                                                    {{ number_format($totalPercentage, 1) }}
+                                                </b>
+                                            </th>
+                                            <th class="text-end text-white"></th>
+                                        </tr>
+                                    </tfoot>
                             </table>
 
                         </div>

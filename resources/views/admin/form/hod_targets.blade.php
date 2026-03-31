@@ -46,7 +46,6 @@
                         <label class="form-label" for="multicol-language">Name of Faculty Member</label>
                         <select name="faculty_member_id[]" id="select2Success" class="select2 form-select" multiple
                             required>
-                            <option value="">-- Select Faculty Member --</option>
                             @foreach($facultyMembers as $member)
                                 <option value="{{ $member->id }}" data-department="{{ $member->department }}"
                                     data-job_title="{{ $member->job_title }}">
