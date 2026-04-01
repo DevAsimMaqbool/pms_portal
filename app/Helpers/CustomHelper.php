@@ -2076,7 +2076,7 @@ if (!function_exists('saveIndicatorPercentage90Plus')) {
 
 
 function lineManagerRatingOnEvents($facultyId, $activeRoleId)
-{
+{   
     $feedbacks = LineManagerEventFeedback::where('employee_id', $facultyId)->get();
 
     if ($feedbacks->isEmpty()) {

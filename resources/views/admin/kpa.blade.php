@@ -642,7 +642,6 @@ $sumTotalWeight = 0;
 
             const userRole = "{{ activeRole() }}";
             const disabledRoles = [
-                "hod",
                 "dean",
                 "program leader ug",
                 "program leader pg"
