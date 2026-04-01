@@ -642,9 +642,10 @@ $sumTotalWeight = 0;
 
             const userRole = "{{ activeRole() }}";
             const disabledRoles = [
-                "dean",
-                "program leader ug",
-                "program leader pg"
+                "Hod",
+                "Dean",
+                "Program leader ug",
+                "Program leader pg"
             ];
 
             // ✅ Fetch indicators (reusable function)
@@ -672,7 +673,7 @@ $sumTotalWeight = 0;
                                      color = getColorByPercentageForGraph(indicator.percentage); //indicator.color || 'primary';
                                 }
                                 //let formattedIndicator = indicator.indicator.replace(/[\s#']+/g, '');
-                                let formattedIndicator = indicator.indicator.replace(/[\s#'\/\(\)&]+/g, '');
+                                let formattedIndicator = indicator.indicator.replace(/[^a-zA-Z0-9]/g, '')
                                 let percentage = indicator.percentage || 0;
                                 let indicatorScore = indicator.score || 0;
                                 let indicatorWeightage = indicator.weightage || 0;

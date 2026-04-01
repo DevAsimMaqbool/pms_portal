@@ -2076,7 +2076,7 @@ if (!function_exists('saveIndicatorPercentage90Plus')) {
 
 
 function lineManagerRatingOnEvents($facultyId, $activeRoleId)
-{   
+{
     $feedbacks = LineManagerEventFeedback::where('employee_id', $facultyId)->get();
 
     if ($feedbacks->isEmpty()) {
@@ -3149,30 +3149,141 @@ function EmployabilityOfHOD()
 {
     $departmentId = auth()->user()->department_id;
 
-    $records = Employability::where('department_id', $departmentId)
-        ->where('indicator_id', 103)
+    $records = Employability::with(['faculty', 'department', 'program'])
+        ->where('department_id', $departmentId)
         ->get();
 
-    $totalStudents = $records->count();
-
-    if ($totalStudents == 0) {
+    if ($records->count() == 0) {
         return collect();
     }
 
     $results = collect();
 
-    // Role & Employee
     $activeRoleId = getRoleIdByName(activeRole());
     $employeeId = auth()->id();
 
+    $groupedByProgram = $records->groupBy('program_id');
+
+    $programScores = [
+        103 => collect(),
+        104 => collect(),
+        105 => collect(),
+        106 => collect(),
+        107 => collect(),
+    ];
+
     /*
     |--------------------------------------------------------------------------
-    | 1️⃣ Student Employability (103)
+    | PROGRAM LEVEL CALCULATION
+    |--------------------------------------------------------------------------
+    */
+    foreach ($groupedByProgram as $group) {
+
+        $first = $group->first();
+        $total = $group->count();
+
+        // ---------------- 103 Employability ----------------
+        $emp = $total
+            ? round(($group->whereNotNull('date_of_appointment')->count() / $total) * 100, 2)
+            : 0;
+
+        $programScores[103]->push($emp);
+
+        $results->push(makeIndicatorRow(
+            'Student Employability',
+            103,
+            $emp,
+            $first->faculty->name ?? '-',
+            $first->department->name ?? '-',
+            $first->program->program_name ?? '-'
+        ));
+
+        // ---------------- 104 Employer Satisfaction ----------------
+        $score = 0;
+        foreach ($group as $r) {
+            if (!is_null($r->employer_satisfaction)) {
+                $score += $r->employer_satisfaction * 20;
+            }
+        }
+
+        $empSat = $total ? round($score / $total, 2) : 0;
+        $programScores[104]->push($empSat);
+
+        $results->push(makeIndicatorRow(
+            'Employer Satisfaction',
+            104,
+            $empSat,
+            $first->faculty->name ?? '-',
+            $first->department->name ?? '-',
+            $first->program->program_name ?? '-'
+        ));
+
+        // ---------------- 105 Job Relevancy ----------------
+        $job = $total
+            ? round(($group->where('job_relevancy', 'yes')->count() / $total) * 100, 2)
+            : 0;
+
+        $programScores[105]->push($job);
+
+        $results->push(makeIndicatorRow(
+            'Job Relevancy',
+            105,
+            $job,
+            $first->faculty->name ?? '-',
+            $first->department->name ?? '-',
+            $first->program->program_name ?? '-'
+        ));
+
+        // ---------------- 106 Salary ----------------
+        $salaryScore = 0;
+        foreach ($group as $r) {
+            $salaryScore += match ($r->market_competitive_salary) {
+                'Low' => 33,
+                'At Par' => 66,
+                'Above' => 100,
+                default => 0
+            };
+        }
+
+        $salary = $total ? round($salaryScore / $total, 2) : 0;
+        $programScores[106]->push($salary);
+
+        $results->push(makeIndicatorRow(
+            'Market Competitive Salary',
+            106,
+            $salary,
+            $first->faculty->name ?? '-',
+            $first->department->name ?? '-',
+            $first->program->program_name ?? '-'
+        ));
+
+        // ---------------- 107 Graduate Satisfaction ----------------
+        $score = 0;
+        foreach ($group as $r) {
+            if (!is_null($r->graduate_satisfaction)) {
+                $score += $r->graduate_satisfaction * 20;
+            }
+        }
+
+        $gradSat = $total ? round($score / $total, 2) : 0;
+        $programScores[107]->push($gradSat);
+
+        $results->push(makeIndicatorRow(
+            'Graduate Satisfaction',
+            107,
+            $gradSat,
+            $first->faculty->name ?? '-',
+            $first->department->name ?? '-',
+            $first->program->program_name ?? '-'
+        ));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | 🔥 DEPARTMENT LEVEL (CLEAN + FIXED)
     |--------------------------------------------------------------------------
     */
 
-    $employed = $records->whereNotNull('date_of_appointment')->count();
-    $employabilityPercentage = round(($employed / $totalStudents) * 100, 2);
     $weights = [
         'course_load' => getRoleWeightage($activeRoleId, 'indicator', 103)['weightage'],
         'course_104' => getRoleWeightage($activeRoleId, 'indicator', 104)['weightage'],
@@ -3180,98 +3291,60 @@ function EmployabilityOfHOD()
         'course_106' => getRoleWeightage($activeRoleId, 'indicator', 106)['weightage'],
         'course_107' => getRoleWeightage($activeRoleId, 'indicator', 107)['weightage'],
     ];
-    $weightedScore = ($employabilityPercentage * $weights['course_load']) / 100;
-    saveIndicatorPercentage90Plus(
-        $employeeId,
-        $activeRoleId,
-        1, // KPA ID (adjust if dynamic)
-        1, // Category ID (adjust if dynamic)
-        103,
-        $weightedScore
-    );
 
-    $results->push(makeIndicatorRow('Student Employability', 103, $employabilityPercentage));
+    foreach ([103, 104, 105, 106, 107] as $indicator) {
 
+        $avg = $programScores[$indicator]->count()
+            ? round($programScores[$indicator]->avg(), 2)
+            : 0;
 
-    /*
-    |--------------------------------------------------------------------------
-    | 2️⃣ Market Competitive Salary (106)
-    |--------------------------------------------------------------------------
-    */
-
-    $salaryScore = 0;
-    foreach ($records as $r) {
-        $salaryScore += match ($r->market_competitive_salary) {
-            'Low' => 33,
-            'At Par' => 66,
-            'Above' => 100,
-            default => 0
+        // ---------------- correct weight mapping ----------------
+        $weightKey = match ($indicator) {
+            103 => 'course_load',
+            104 => 'course_104',
+            105 => 'course_105',
+            106 => 'course_106',
+            107 => 'course_107',
         };
-    }
 
-    $marketSalaryPercentage = round($salaryScore / $totalStudents, 2);
-    $weightedScore106 = ($marketSalaryPercentage * $weights['course_106']) / 100;
-    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 106, $weightedScore106);
+        $weightedScore = ($avg * $weights[$weightKey]) / 100;
 
-    $results->push(makeIndicatorRow('Market Competitive Salary', 106, $weightedScore106));
+        // ---------------- correct saving logic ----------------
+        $use90Plus = in_array($indicator, [103, 105]);
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | 3️⃣ Job Relevancy (105)
-    |--------------------------------------------------------------------------
-    */
-
-    $relevant = $records->where('job_relevancy', 'yes')->count();
-    $jobRelevancyPercentage = round(($relevant / $totalStudents) * 100, 2);
-    $weightedScore105 = ($jobRelevancyPercentage * $weights['course_105']) / 100;
-    saveIndicatorPercentage90Plus($employeeId, $activeRoleId, 1, 1, 105, $weightedScore105);
-
-    $results->push(makeIndicatorRow('Job Relevancy', 105, $weightedScore105));
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | 4️⃣ Employer Satisfaction (104)
-    |--------------------------------------------------------------------------
-    */
-
-    $score = 0;
-    foreach ($records as $r) {
-        if (!is_null($r->employer_satisfaction)) {
-            $score += $r->employer_satisfaction * 20;
+        if ($use90Plus) {
+            saveIndicatorPercentage90Plus(
+                $employeeId,
+                $activeRoleId,
+                1,
+                1,
+                $indicator,
+                $weightedScore
+            );
+        } else {
+            saveIndicatorPercentage(
+                $employeeId,
+                $activeRoleId,
+                1,
+                1,
+                $indicator,
+                $weightedScore
+            );
         }
+
+        $results->push(makeIndicatorRow(
+            'Overall Department',
+            $indicator,
+            $avg,
+            '',
+            '',
+            ''
+        ));
     }
-
-    $employerSatisfactionPercentage = round($score / $totalStudents, 2);
-    $weightedScore104 = ($employerSatisfactionPercentage * $weights['course_104']) / 100;
-    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 104, $weightedScore104);
-
-    $results->push(makeIndicatorRow('Employer Satisfaction', 104, $weightedScore104));
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | 5️⃣ Graduate Satisfaction (107)
-    |--------------------------------------------------------------------------
-    */
-
-    $score = 0;
-    foreach ($records as $r) {
-        if (!is_null($r->graduate_satisfaction)) {
-            $score += $r->graduate_satisfaction * 20;
-        }
-    }
-
-    $graduateSatisfactionPercentage = round($score / $totalStudents, 2);
-    $weightedScore107 = ($graduateSatisfactionPercentage * $weights['course_107']) / 100;
-    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 107, $weightedScore107);
-
-    $results->push(makeIndicatorRow('Graduate Satisfaction', 107, $weightedScore107));
 
     return $results;
 }
-function makeIndicatorRow($name, $indicatorId, $percentage)
+function makeIndicatorRow($name, $indicatorId, $percentage, $faculty = null, $department = null, $program = null)
 {
     if ($percentage >= 90) {
         $color = '#6EA8FE';
@@ -3296,6 +3369,11 @@ function makeIndicatorRow($name, $indicatorId, $percentage)
         'held_percentage' => $percentage,
         'color' => $color,
         'rating' => $rating,
+
+        // NEW (SAFE)
+        'faculty_name' => $faculty,
+        'department_name' => $department,
+        'program_name' => $program,
     ];
 }
 
