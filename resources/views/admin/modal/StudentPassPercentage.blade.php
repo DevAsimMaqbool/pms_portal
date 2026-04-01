@@ -37,9 +37,9 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());     
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+$activeRoleId = getRoleIdByName(activeRole());
+// Initialize totalFeedback to 0 in case nothing is set later
+$totalFeedback = 0;                                    
  @endphp
  <!-- / Payment Methods modal -->
 <div class="modal fade" id="StudentPassPercentage" tabindex="-1" aria-hidden="true">
@@ -62,7 +62,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#StudentPassPercentage-spring"
                                     aria-controls="StudentPassPercentage-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -87,6 +87,7 @@
                                             <th>Class</th>
                                             <th>Program</th>
                                             <th>Career (PG/UG)</th>
+                                            <th>Avg Class Size</th>
                                             <th>Pass %</th>
                                             <th>Failed %</th>
                                             <th>Score</th>
@@ -94,7 +95,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <td colspan="8">no record found</td>
+                                        <td colspan="9">no record found</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -110,6 +111,7 @@
                                             <th>Class</th>
                                             <th>Program</th>
                                             <th>Career (PG/UG)</th>
+                                            <th>Avg Class Size</th>
                                             <th>Pass %</th>
                                             <th>Failed %</th>
                                             <th>Score</th>
@@ -157,6 +159,7 @@
                                                                     <td>{{ $class->class_name }}</td>
                                                                     <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
                                                                     <td>{{ $class->career_code }}</td>
+                                                                    <td>{{ round($class->attendances->sum('total_students') / $class->attendances->count(), 1) }}</td>
                                                                     {{-- Program name (only if attendance exists) --}}
                                                                     <td>{{ number_format($pass, 1) ?? 'N/A' }}</td>
                                                                     <td>{{ number_format($fail, 1) ?? 'N/A' }}</td>
@@ -182,18 +185,18 @@
                                         @endif
                                                         </tbody>
                                                          @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-                                                         <tfoot>
-                                                            <tr class="table-primary">
-                                                                <th class="text-end">Total</th>
-                                                                <th colspan="5" class="text-end"></th>
-                                                                <th>
-                                                                    <b>
-                                                                        {{ number_format($data['totalPassPercentage'], 1) }}
-                                                                    </b>
-                                                                </th>
-                                                                <th class="text-end text-white"></th>
-                                                            </tr>
-                                                        </tfoot>
+                                                             <tfoot>
+                                                                <tr class="table-primary">
+                                                                    <th class="text-end">Total</th>
+                                                                    <th colspan="6" class="text-end"></th>
+                                                                    <th>
+                                                                        <b>
+                                                                            {{ number_format($data['totalPassPercentage'], 1) }}
+                                                                        </b>
+                                                                    </th>
+                                                                    <th class="text-end text-white"></th>
+                                                                </tr>
+                                                            </tfoot>
                                                         @endif
                                         
                                 </table>

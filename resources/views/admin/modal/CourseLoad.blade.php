@@ -37,7 +37,7 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());     
+    $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
@@ -62,7 +62,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#CourseLoad-spring" aria-controls="CourseLoad-spring"
                                     aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -84,9 +84,10 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Session</th>
-                                            <th>Semester</th>
-                                            <th>Course Name</th>
+                                            <th>Class Name</th>
+                                            <th>Class Code</th>
+                                            <th>Career</th>
+                                            <th>Avg Class Size</th>
                                             <th>Program</th>
 
 
@@ -94,7 +95,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td colspan="5">no record found</td>
+                                            <td colspan="6">no record found</td>
                                         </tr>
 
                                     </tbody>
@@ -130,58 +131,61 @@
                                             <th>Class Name</th>
                                             <th>Class Code</th>
                                             <th>Career</th>
+                                            <th>Avg Class Size</th>
                                             <th>Program</th>
                                         </tr>
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-                                            @php
-                                                $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
-                                                $att = $data['classes'];
-                                                $sr = 1;
-                                            @endphp
-                                                            @foreach($att as $class)
-                                                                @php
-                                                                    // latest attendance or null
-                                                                    $latestAttendance = $class->attendances->first();
-                                                                    $scheduled = $latestAttendance
-                                                                        ? \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y')
-                                                                        : '-';
-                                                                @endphp
+                                                        @php
+                                                            $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
+                                                            $att = $data['classes'];
+                                                            $sr = 1;
+                                                        @endphp
+                                                        @foreach($att as $class)
+                                                            @php
+                                                                // latest attendance or null
+                                                                $latestAttendance = $class->attendances->first();
+                                                                $scheduled = $latestAttendance
+                                                                    ? \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y')
+                                                                    : '-';
+                                                            @endphp
 
-                                                                <tr>
-                                                                    <td>{{ $sr++ }}</td>
-                                                                    <td>{{ $class->class_name }}</td>
-                                                                    <td>{{ $class->code }}</td>
-                                                                    <td>{{ $class->career_code }}</td>
-
-                                                                    {{-- Program name (only if attendance exists) --}}
-                                                                    <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
-
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="table-responsive">
-                                                    <table class="table m-0 table-borderless">
-                                                        <tbody>
                                                             <tr>
-                                                                <td class="align-top pe-6 ps-0 py-6 text-body">Total Courses:
-                                                                    {{ count($att) }}
+                                                                <td>{{ $sr++ }}</td>
+                                                                <td>{{ $class->class_name }}</td>
+                                                                <td>{{ $class->code }}</td>
+                                                                <td>{{ $class->career_code }}</td>
+                                                                <td>{{ round($class->attendances->sum('total_students') / $class->attendances->count(), 1) }}
                                                                 </td>
-                                                                <td class="px-0 w-px-100">
-                                                                    <span class="fw-medium">
-                                                                        <span class="badge bg-{{ count($att) > 3 ? 'danger' : 'success' }}">
-                                                                            {{ count($att) > 3 ? 'Overload' : 'Underload' }}
-                                                                        </span>
-                                                                    </span>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
 
-                                                </div>
+                                                                {{-- Program name (only if attendance exists) --}}
+                                                                <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
+
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table m-0 table-borderless">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="align-top pe-6 ps-0 py-6 text-body">Total Courses:
+                                                                {{ count($att) }}
+                                                            </td>
+                                                            <td class="px-0 w-px-100">
+                                                                <span class="fw-medium">
+                                                                    <span class="badge bg-{{ count($att) > 3 ? 'danger' : 'success' }}">
+                                                                        {{ count($att) > 3 ? 'Overload' : 'Underload' }}
+                                                                    </span>
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
                                         @endif
                         </div>
                     </div>

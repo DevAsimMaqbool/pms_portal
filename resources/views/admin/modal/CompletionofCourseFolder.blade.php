@@ -37,7 +37,7 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());     
+    $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
@@ -62,7 +62,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#completion-course-spring" aria-controls="completion-course-spring"
                                     aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -119,42 +119,42 @@
                                     @endphp
 
                                     <tbody>
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-    @php
-        $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, $activeRoleId, 120);
-        // 👇 SUM of completion_of_Course_folder
-        $totalCompletion = $CompletionofCourseFolders->sum('completion_of_Course_folder');
-    @endphp
-    @foreach ($CompletionofCourseFolders as $CompletionofCourser)
-        <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $CompletionofCourser->facultyClass->code }}</td>
-            <td>{{ $CompletionofCourser->facultyClass?->career_code ?? 'N/A' }}</td>
-            <td>
-                <div class="badge"
-                    style="background-color: {{ $CompletionofCourser->color }}">
-                    {{ $CompletionofCourser->status_folder }}
-                </div>
-            </td>
-            <td>
-                <div class="badge"
-                    style="background-color: {{ $CompletionofCourser->color }}">
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                            @php
+                                                $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, $activeRoleId, 120);
+                                                // 👇 SUM of completion_of_Course_folder
+                                                $totalCompletion = $CompletionofCourseFolders->sum('completion_of_Course_folder');
+                                            @endphp
+                                            @foreach ($CompletionofCourseFolders as $CompletionofCourser)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $CompletionofCourser->facultyClass->code }}</td>
+                                                    <td>{{ $CompletionofCourser->facultyClass?->career_code ?? 'N/A' }}</td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $CompletionofCourser->color }}">
+                                                            {{ $CompletionofCourser->status_folder }}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $CompletionofCourser->color }}">
 
-                    {{ $CompletionofCourser->completion_of_Course_folder }}%
-                </div>
-            </td>
-            <td>
-                <div class="badge"
-                    style="background-color: {{ $CompletionofCourser->color }}">
+                                                            {{ $CompletionofCourser->completion_of_Course_folder }}%
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $CompletionofCourser->color }}">
 
-                    {{ $CompletionofCourser->rating }}
-                </div>
-            </td>
-        </tr>
-    @endforeach
-@endif
+                                                            {{ $CompletionofCourser->rating }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
                                     </tbody>
-                                     <tfoot>
+                                    <tfoot>
                                         <tr class="table-primary">
                                             <th class="text-end">Total</th>
                                             <th colspan="3" class="text-end"></th>

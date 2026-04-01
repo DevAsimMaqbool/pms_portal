@@ -37,7 +37,7 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());     
+    $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
@@ -62,7 +62,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#AverageStudentScore-spring"
                                     aria-controls="AverageStudentScore-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -123,71 +123,71 @@
                                                 $sr = 1;
                                             @endphp
 
-                                                            @forelse($att as $class)
-                                                                @php
-                                                                    // latest attendance or null
-                                                                    $latestAttendance = $class->attendances->first();
-                                                                    $avg = $class->average_marks ?? 0;
-                                                                    // Determine rating
-                                                                    if ($avg >= 90) {
-                                                                        $color = 'primary';
-                                                                        $rating = 'OS';
-                                                                    } elseif ($avg >= 80) {
-                                                                        $color = 'success';
-                                                                        $rating = 'EE';
-                                                                    } elseif ($avg >= 70) {
-                                                                        $color = 'warning';
-                                                                        $rating = 'ME';
-                                                                    } elseif ($avg >= 60) {
-                                                                        $color = 'orange';
-                                                                        $rating = 'NI';
-                                                                    } else {
-                                                                        $color = 'danger';
-                                                                        $rating = 'BE';
-                                                                    }
-                                                                @endphp
+                                            @forelse($att as $class)
+                                                @php
+                                                    // latest attendance or null
+                                                    $latestAttendance = $class->attendances->first();
+                                                    $avg = $class->average_marks ?? 0;
+                                                    // Determine rating
+                                                    if ($avg >= 90) {
+                                                        $color = 'primary';
+                                                        $rating = 'OS';
+                                                    } elseif ($avg >= 80) {
+                                                        $color = 'success';
+                                                        $rating = 'EE';
+                                                    } elseif ($avg >= 70) {
+                                                        $color = 'warning';
+                                                        $rating = 'ME';
+                                                    } elseif ($avg >= 60) {
+                                                        $color = 'orange';
+                                                        $rating = 'NI';
+                                                    } else {
+                                                        $color = 'danger';
+                                                        $rating = 'BE';
+                                                    }
+                                                @endphp
 
 
-                                                                <tr>
-                                                                    <td>{{ $sr++ }}</td>
-                                                                    <td>{{ $class->class_name }}</td>
-                                                                    <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
-                                                                    <td>{{ $class->career_code }}</td>
-                                                                    <td>{{ number_format($avg, 1) }}</td>
-                                                                    <td>
-                                                                        <div class="badge bg-{{ $color }}">
-                                                                            {{ number_format($avg, 1) }}%
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="badge bg-{{ $color }}">
+                                                <tr>
+                                                    <td>{{ $sr++ }}</td>
+                                                    <td>{{ $class->class_name }}</td>
+                                                    <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
+                                                    <td>{{ $class->career_code }}</td>
+                                                    <td>{{ number_format($avg, 1) }}</td>
+                                                    <td>
+                                                        <div class="badge bg-{{ $color }}">
+                                                            {{ number_format($avg, 1) }}%
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="badge bg-{{ $color }}">
 
-                                                                            {{ $rating }}
-                                                                        </div>
-                                                                    </td>
+                                                            {{ $rating }}
+                                                        </div>
+                                                    </td>
 
-                                                                </tr>
-                                                             @empty
-                                                                <tr>
-                                                                        <td colspan="8" class="text-center">No record found</td>
-                                                                                        </tr>
-                                                            @endforelse
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="8" class="text-center">No record found</td>
+                                                </tr>
+                                            @endforelse
                                         @endif
                                     </tbody>
                                     @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-                                    <tfoot>
-                                        <tr class="table-primary">
-                                            <th class="text-end">Total</th>
-                                            <th colspan="4" class="text-end"></th>
-                                            <th>
-                                                <b>
-                                                    {{ number_format($data['totalAverageMarks'], 1) }}
-                                                </b>
-                                            </th>
-                                            <th class="text-end text-white"></th>
-                                        </tr>
-                                    </tfoot>
-                                     @endif
+                                        <tfoot>
+                                            <tr class="table-primary">
+                                                <th class="text-end">Total</th>
+                                                <th colspan="4" class="text-end"></th>
+                                                <th>
+                                                    <b>
+                                                        {{ number_format($data['totalAverageMarks'], 1) }}
+                                                    </b>
+                                                </th>
+                                                <th class="text-end text-white"></th>
+                                            </tr>
+                                        </tfoot>
+                                    @endif
                                 </table>
                             </div>
                         </div>

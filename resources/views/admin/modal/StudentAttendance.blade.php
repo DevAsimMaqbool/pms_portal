@@ -37,7 +37,7 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());     
+    $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
@@ -78,17 +78,17 @@
                                     <th>Class</th>
                                     <th>Program</th>
                                     <th>Career (PG/UG)</th>
-                                    <th>Scheduled</th>
-                                    <th>Present</th>
-                                    <th>Absent</th>
+                                    <th>Avg Class Size</th>
+                                    <th>Avg Present</th>
+                                    <th>Avg Absent</th>
                                     <th>Score</th>
                                     <th>Rating</th>
                                 </tr>
                                 </thead>
-                                    @php
-                                        // Initialize totalFeedback to 0 in case nothing is set later
-                                        $totalAvgPresent = 0;
-                                    @endphp
+                                @php
+                                    // Initialize totalFeedback to 0 in case nothing is set later
+                                    $totalAvgPresent = 0;
+                                @endphp
 
                                 <tbody class="table-border-bottom-0">
                                     @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
@@ -110,7 +110,7 @@
                                                 <td>{{ $class->code }}</td>
                                                 <td>{{ $latestAttendance->program_name }}</td>
                                                 <td>{{ $class->career_code }}</td>
-                                                <td>{{ $class->class_id }}</td>
+                                                <td>{{ round($class->totalStudentsClass / $class->total_classes, 1) }}</td>
                                                 <td>{{ round($class->avg_present_count, 1) }}</td>
                                                 <td>{{ round($class->avg_absent_count, 1) }}</td>
                                                 <td>
@@ -127,7 +127,7 @@
                                         @endforeach
                                     @endif
                                 </tbody>
-                                  <tfoot>
+                                <tfoot>
                                     <tr class="table-primary">
                                         <th class="text-end">Total</th>
                                         <th colspan="6" class="text-end"></th>

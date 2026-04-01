@@ -37,7 +37,7 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());     
+    $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
@@ -61,7 +61,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#LineManagersReview&RatingonTasks-spring"
                                     aria-controls="LineManagersReview&RatingonTasks-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -117,7 +117,7 @@
 
                                     <tbody>
                                         @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-                                             @php
+                                            @php
                                                 $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
                                                 // ✅ Fast sum of all rating percentages
                                                 $totalPercentage = $feedbacks->sum(fn($item) => $item->rating_data['percentage']);
@@ -147,7 +147,7 @@
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
-                                            <th  class="text-end"></th>
+                                            <th class="text-end"></th>
                                             <th>
                                                 <b>
                                                     {{ number_format($totalPercentage, 1) }}

@@ -37,7 +37,7 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());     
+    $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
@@ -62,7 +62,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#student-satisfaction-spring"
                                     aria-controls="student-satisfaction-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -123,7 +123,7 @@
                                     <tbody>
                                         @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                             @php
-                                                $feedbackData  = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
+                                                $feedbackData = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
 
                                                 $classFeedback = $feedbackData['collection'] ?? collect();
                                                 $totalFeedback = $feedbackData['totalFeedback'] ?? 0;

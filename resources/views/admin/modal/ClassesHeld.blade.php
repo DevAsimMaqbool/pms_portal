@@ -37,9 +37,9 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());     
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+$activeRoleId = getRoleIdByName(activeRole());
+// Initialize totalFeedback to 0 in case nothing is set later
+$totalFeedback = 0;                                    
  @endphp
 <!--  Payment Methods modal -->
 
@@ -80,7 +80,7 @@
                                     <th>Program</th>
                                     <th>Career (PG/UG)</th>
                                     <th>Term</th>
-                                    <th>Scheduled</th>
+                                    <th>Total Classes</th>
                                     <th>Held</th>
                                     <th>Not Held</th>
                                     <th>Score</th>
@@ -94,7 +94,7 @@
                                 <tbody class="table-border-bottom-0">
                                     @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                         @php $sr = 1;
-                                            $classes = myClassesAttendanceRecord(Auth::user()->faculty_id, $activeRoleId); 
+                                            $classes = myClassesAttendanceRecord(Auth::user()->faculty_id, $activeRoleId);
                                             // 👇 SUM of held_percentage
                                             $totalHeldPercentage = $classes->sum('held_percentage');
                                         @endphp
@@ -106,7 +106,7 @@
                                                 <td>{{ $class->program ?? '-' }}</td>
                                                 <td>{{ $class->career_code }}</td>
                                                 <td>{{ $class->term }}</td>
-                                                <td>{{ $class->total_rows }}</td>
+                                                <td>{{ $class->total_classes }}</td>
                                                 <td>{{ $class->class_held_count }}</td>
                                                 <td>{{ $class->class_not_held_count }}</td>
                                                 <td>
