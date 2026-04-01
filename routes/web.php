@@ -86,6 +86,7 @@ use App\Http\Controllers\IndustrialVisitController;
 use App\Http\Controllers\PunctualityController;
 use App\Http\Controllers\ResearchConferenceImpactController;
 use App\Http\Controllers\ResearchProductivityOfPGStudentsController;
+use Illuminate\Support\Facades\Auth;
 
 Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
 
@@ -135,9 +136,22 @@ Route::middleware('auth')->group(function () {
 
     // Returns the indicator modal HTML (without initial page include),
     // used for lazy-loading inside `admin/kpa.blade.php`.
-    Route::get('/indicator-modal-html', function () {
-        return view('admin.modal.indicator_modal');
-    })->name('indicator.modal.html');
+
+    Route::get('/indicator-modal-html/{modal}', function ($modal) {
+
+        // allow only valid names (prevent hacking)
+        if (!preg_match('/^[A-Za-z0-9]+$/', $modal)) {
+            abort(403);
+        }
+
+        $view = 'admin.modal.' . $modal;
+
+        if (!view()->exists($view)) {
+            abort(404);
+        }
+
+        return view($view);
+    });
 
     Route::get('/teaching_learning', [AssignUserKpaController::class, 'index']);
     Route::post('/get-indicator-categories', [AssignUserKpaController::class, 'getIndicatorCategories'])->name('indicatorCategory.getIndicatorCategories');
