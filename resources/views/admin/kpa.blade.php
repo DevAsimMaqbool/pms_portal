@@ -268,32 +268,52 @@ $sumTotalWeight = 0;
                                                                                     `;
             $('body').append(loader);
 
-            $(document).on('click', '#indicatorList [data-bs-target]', function (e) {
-                const target = $(this).attr('data-bs-target');
-                if (!target || !target.startsWith('#')) return;
-
-                const modalId = target.slice(1);
-                if (document.getElementById(modalId)) return; // already present
-
-                if (loaded) return; // HTML fetch failed or not found
-
+            $(document).on('click', '.load-modal', function (e) {
                 e.preventDefault();
-                // show loader
+
+                let modalName = $(this).data('modal');       // StudentSatisfaction
+                let target = $(this).data('bs-target');      // #StudentSatisfaction
+
+                if (!modalName || !target) return;
+
+                let modalId = target.replace('#', '');
+
+                // ✅ If already loaded → open directly
+                if (document.getElementById(modalId)) {
+                    let modal = new bootstrap.Modal(document.getElementById(modalId));
+                    modal.show();
+                    return;
+                }
+
                 $('#loader').show();
 
-                $.get('{{ route("indicator.modal.html") }}', function (html) {
-                    $container.html(html);
-                    loaded = true;
+                $.ajax({
+                    url: `/indicator-modal-html/${modalName}`,
+                    type: 'GET',
 
-                    const el = document.getElementById(modalId);
-                    if (el && window.bootstrap?.Modal) {
-                        const modal = window.bootstrap.Modal.getOrCreateInstance(el);
-                        modal.show();
+                    success: function (html) {
+
+                        $container.append(html);
+
+                        let modalEl = document.getElementById(modalId);
+
+                        if (modalEl) {
+                            let modal = new bootstrap.Modal(modalEl);
+                            modal.show();
+                        } else {
+                            console.error('Modal ID not found in HTML');
+                        }
+                    },
+
+                    error: function () {
+                        alert('Modal not found or error loading.');
+                    },
+
+                    complete: function () {
+                        $('#loader').hide();
                     }
-                }).always(function () {
-                    // hide loader
-                    $('#loader').hide();
                 });
+
             });
         })();
 
@@ -652,7 +672,8 @@ $sumTotalWeight = 0;
                                 } else {
                                      color = getColorByPercentageForGraph(indicator.percentage); //indicator.color || 'primary';
                                 }
-                                let formattedIndicator = indicator.indicator.replace(/[\s#']+/g, '');
+                                //let formattedIndicator = indicator.indicator.replace(/[\s#']+/g, '');
+                                let formattedIndicator = indicator.indicator.replace(/[\s#'\/\(\)&]+/g, '');
                                 let percentage = indicator.percentage || 0;
                                 let indicatorScore = indicator.score || 0;
                                 let indicatorWeightage = indicator.weightage || 0;
@@ -675,8 +696,9 @@ $sumTotalWeight = 0;
 
                                                                                                 <div class="col-3 text-end">
                                                                                                 <button type="button"
-                                                                                                class="btn btn-sm btn-icon btn-label-primary"
+                                                                                                class="btn btn-sm btn-icon btn-label-primary load-modal"
                                                                                                 role="button"
+                                                                                                data-modal="${formattedIndicator}"
                                                                                                 data-bs-toggle="modal"
                                                                                                 data-bs-target="#${formattedIndicator}"
                                                                                                 ${isDisabled ? 'disabled' : ''}>
