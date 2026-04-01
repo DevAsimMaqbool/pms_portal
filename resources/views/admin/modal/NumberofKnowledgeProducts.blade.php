@@ -41,82 +41,178 @@
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
+ @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
  <!--  Payment Methods modal -->
 
-<div class="modal fade" id="NumberofKnowledgeProducts" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i
-                            class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Number of Knowledge Products
-                </h3>
-                <div class="card">
+    <div class="modal fade" id="NumberofKnowledgeProducts" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Number of Knowledge Products
+                    </h3>
+                    <div class="card">
 
-                    <div class="card-body">
-                        <div class="table-responsive text-nowrap">
-                            <table class="table table-striped align-middle custom-table">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Target</th>
-                                        <th>Achieved</th>
-                                        <th>Score</th>
-                                        <th>Rating</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Target</th>
+                                            <th>Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                            @php
+                                                $data = NumberOfKnowledgeProduct(Auth::id(), $activeRoleId);
+                                            @endphp
+                                                @if($data['target'] > 0)
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>{{ $data['target'] }}</td>
+                                                        <td>{{ $data['totalAchieved'] }}</td>
+                                                        <td>
+                                                            <div class="badge bg-{{ $data['color'] }}">
+                                                                {{number_format($data['score'], 1) }}%
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="badge bg-{{ $data['color'] }}">
+                                                                {{ $data['rating'] }}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @else
+                                                    <tr>
+                                                        <td colspan="5" class="text-center">No record found</td>
+                                                    </tr>
+                                                @endif
+                                        @endif
+                                    </tbody>
                                     @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-                                        @php
-                                            $data = NumberOfKnowledgeProduct(Auth::id(), $activeRoleId);
-                                        @endphp
-                                            @if($data['target'] > 0)
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>{{ $data['target'] }}</td>
-                                                    <td>{{ $data['totalAchieved'] }}</td>
-                                                    <td>
-                                                        <div class="badge bg-{{ $data['color'] }}">
-                                                            {{number_format($data['score'], 1) }}%
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="badge bg-{{ $data['color'] }}">
-                                                            {{ $data['rating'] }}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @else
-                                                <tr>
-                                                    <td colspan="5" class="text-center">No record found</td>
-                                                </tr>
-                                            @endif
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th colspan="2" class="text-end"></th>
+                                            <th>
+                                                <b>
+                                                    {{number_format($data['score'], 1) }}
+                                                </b>
+                                            </th>
+                                            <th class="text-end text-white"></th>
+                                        </tr>
+                                    </tfoot>
                                     @endif
-                                </tbody>
-                                @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-                                <tfoot>
-                                    <tr class="table-primary">
-                                        <th class="">Total</th>
-                                        <th colspan="2" class="text-end"></th>
-                                        <th>
-                                            <b>
-                                                {{number_format($data['score'], 1) }}
-                                            </b>
-                                        </th>
-                                        <th class="text-end text-white"></th>
-                                    </tr>
-                                </tfoot>
-                                @endif
-                            </table>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- / Payment Methods modal -->
+    <!-- / Payment Methods modal -->
+@endif
+@if(in_array(getRoleName(activeRole()), ['HOD']))
+<!--  Payment Methods modal -->
+
+    <div class="modal fade" id="NumberofKnowledgeProducts" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Number of Knowledge Products
+                    </h3>
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Target</th>
+                                            <th>Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            @php
+                                                $data=departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 32, 194);
+                                                $avg = $data['department_avg_percentage'];
+                                                 if ($avg >= 90) {
+                                                            $color = 'primary';
+                                                            $rating = 'OS';
+                                                        } elseif ($avg >= 80) {
+                                                            $color = 'success';
+                                                            $rating = 'EE';
+                                                        } elseif ($avg >= 70) {
+                                                            $color = 'warning';
+                                                            $rating = 'ME';
+                                                        } elseif ($avg >= 60) {
+                                                            $color = 'orange';
+                                                            $rating = 'NI';
+                                                        } else {
+                                                            $color = 'danger';
+                                                            $rating = 'BE';
+                                                        }
+                                            @endphp
+                                                @if($data['total_target'] > 0)
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>{{ $data['total_target'] }}</td>
+                                                        <td>{{ $data['total_submitted'] }}</td>
+                                                        <td>
+                                                            <div class="badge bg-{{ $color }}">
+                                                                {{number_format($data['department_avg_percentage']) }}%
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="badge bg-{{ $color }}">
+                                                                 {{ $rating }}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @else
+                                                    <tr>
+                                                        <td colspan="5" class="text-center">No record found</td>
+                                                    </tr>
+                                                @endif
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th colspan="2" class="text-end"></th>
+                                            <th>
+                                                <b>
+                                                    {{number_format($data['department_avg_percentage'], 1) }}
+                                                </b>
+                                            </th>
+                                            <th class="text-end text-white"></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / Payment Methods modal -->
+@endif
