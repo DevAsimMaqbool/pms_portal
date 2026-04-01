@@ -363,7 +363,7 @@
                 <!--/fffff-->
             </div>
         </div>
-    </div>
+    </div>                                                      
 </div>
 <!-- / Payment Methods modal -->
 <!--  Payment Methods modal -->

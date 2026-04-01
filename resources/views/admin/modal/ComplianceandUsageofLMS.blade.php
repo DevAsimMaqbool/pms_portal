@@ -41,9 +41,9 @@
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
- @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-<!--  Payment Methods modal -->
-    <div class="modal fade" id="CompletionofCourseFolder" tabindex="-1" aria-hidden="true">
+ @if(in_array(getRoleName(activeRole()), ['Associate Professor', 'Associate Professor', 'Professor']))
+    <!--  Payment Methods modal -->
+    <div class="modal fade" id="ComplianceandUsageofLMS" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
                 <div class="modal-header">
@@ -52,8 +52,8 @@
                 <div class="modal-body p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
-                        <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-folder icon-md"></i>
-                        </div> Completion of Course Folder
+                        <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-rocket icon-md"></i>
+                        </div> Compliance and Usage of LMS
                     </h3>
                     <!-- Tabs -->
                     <div class="nav-align-top nav-tabs-shadow">
@@ -61,15 +61,15 @@
                             <ul class="nav custom-tabs" role="tablist">
                                 <li class="nav-item">
                                     <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                        data-bs-target="#completion-course-spring" aria-controls="completion-course-spring"
-                                        aria-selected="true">
+                                        data-bs-target="#ComplianceandUsageofLMS-spring"
+                                        aria-controls="ComplianceandUsageofLMS-spring" aria-selected="true">
                                         🌸 Spring 2026
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                        data-bs-target="#completion-course-fall" aria-controls="completion-course-fall"
-                                        aria-selected="false">
+                                        data-bs-target="#ComplianceandUsageofLMS-fall"
+                                        aria-controls="ComplianceandUsageofLMS-fall" aria-selected="false">
                                         🍂 Fall 2025
                                     </button>
                                 </li>
@@ -79,7 +79,7 @@
                         <!-- Tab Content -->
                         <div class="tab-content">
                             <!-- Spring -->
-                            <div class="tab-pane fade show active" id="completion-course-spring" role="tabpanel">
+                            <div class="tab-pane fade show active" id="ComplianceandUsageofLMS-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-hover align-middle custom-table">
                                         <thead class="table-primary">
@@ -101,7 +101,7 @@
                             </div>
 
                             <!-- Fall -->
-                            <div class="tab-pane fade" id="completion-course-fall" role="tabpanel">
+                            <div class="tab-pane fade" id="ComplianceandUsageofLMS-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-hover align-middle custom-table">
                                         <thead class="table-primary">
@@ -114,57 +114,40 @@
                                                 <th>Rating</th>
                                             </tr>
                                         </thead>
-                                        @php
-                                            // Initialize totalFeedback to 0 in case nothing is set later
-                                            $totalCompletion = 0;
-                                        @endphp
-
                                         <tbody>
                                                 @php
-                                                    $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, $activeRoleId, 120);
-                                                    // 👇 SUM of completion_of_Course_folder
-                                                    $totalCompletion = $CompletionofCourseFolders->sum('completion_of_Course_folder');
+                                                    $ComplianceandUsageofLMS = ComplianceandUsageofLMS(Auth::user()->employee_id, $activeRoleId, 121);
+
                                                 @endphp
-                                                @foreach ($CompletionofCourseFolders as $CompletionofCourser)
+                                                @foreach ($ComplianceandUsageofLMS as $ComplianceandUsageofLMSData)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $CompletionofCourser->facultyClass->code }}</td>
-                                                        <td>{{ $CompletionofCourser->facultyClass?->career_code ?? 'N/A' }}</td>
+                                                        <td>{{ $ComplianceandUsageofLMSData->facultyClass->code }}</td>
+                                                        <td>{{ $ComplianceandUsageofLMSData->facultyClass?->career_code ?? 'N/A' }}
+                                                        </td>
                                                         <td>
                                                             <div class="badge"
-                                                                style="background-color: {{ $CompletionofCourser->color }}">
-                                                                {{ $CompletionofCourser->status_folder }}
+                                                                style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
+                                                                {{ $ComplianceandUsageofLMSData->status_folder }}
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="badge"
-                                                                style="background-color: {{ $CompletionofCourser->color }}">
+                                                                style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
 
-                                                                {{ $CompletionofCourser->completion_of_Course_folder }}%
+                                                                {{ $ComplianceandUsageofLMSData->compliance_and_usage_of_lms }}%
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="badge"
-                                                                style="background-color: {{ $CompletionofCourser->color }}">
+                                                                style="background-color: {{ $ComplianceandUsageofLMSData->color }}">
 
-                                                                {{ $CompletionofCourser->rating }}
+                                                                {{ $ComplianceandUsageofLMSData->rating }}
                                                             </div>
                                                         </td>
                                                     </tr>
                                                 @endforeach
                                         </tbody>
-                                        <tfoot>
-                                            <tr class="table-primary">
-                                                <th class="text-end">Total</th>
-                                                <th colspan="3" class="text-end"></th>
-                                                <th>
-                                                    <b>
-                                                        {{ number_format($totalCompletion, 1) }}
-                                                    </b>
-                                                </th>
-                                                <th class="text-end text-white"></th>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -176,4 +159,4 @@
     </div>
 
     <!-- / Payment Methods modal -->
-@endif
+ @endif
