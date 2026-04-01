@@ -1064,7 +1064,7 @@
                         <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
 
                         <input type="radio" class="btn-check" name="termRadio" id="spring25">
-                        <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2025</label>
+                        <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2026</label>
 
                         <input type="radio" class="btn-check" name="termRadio" id="fall25">
                         <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>

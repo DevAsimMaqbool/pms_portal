@@ -60,7 +60,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#student-satisfaction-spring"
                                     aria-controls="student-satisfaction-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -117,7 +117,7 @@
                                     <tbody>
                                         @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                             @php
-                                                $feedbackData  = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
+                                                $feedbackData = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
                                                 // Collection of class feedback
                                                 $classFeedback = $feedbackData['collection'];
                                                 // Total feedback sum
@@ -239,7 +239,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#QECObservation/PeerReview-spring"
                                     aria-controls="QECObservation/PeerReview-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -397,7 +397,7 @@
                                     <th>Class</th>
                                     <th>Program</th>
                                     <th>Career (PG/UG)</th>
-                                    <th>Scheduled</th>
+                                    <th>Total Students</th>
                                     <th>Present</th>
                                     <th>Absent</th>
                                     <th>Score</th>
@@ -424,7 +424,7 @@
                                                 <td>{{ $class->code }}</td>
                                                 <td>{{ $latestAttendance->program_name }}</td>
                                                 <td>{{ $class->career_code }}</td>
-                                                <td>{{ $class->class_id }}</td>
+                                                <td>{{ round($class->totalStudentsClass / $class->total_classes, 1) }}</td>
                                                 <td>{{ round($class->avg_present_count, 1) }}</td>
                                                 <td>{{ round($class->avg_absent_count, 1) }}</td>
                                                 <td>
@@ -502,7 +502,7 @@
                                     <th>Program</th>
                                     <th>Career (PG/UG)</th>
                                     <th>Term</th>
-                                    <th>Scheduled</th>
+                                    <th>Total Classes</th>
                                     <th>Held</th>
                                     <th>Not Held</th>
                                     <th>Score</th>
@@ -512,7 +512,7 @@
                                 <tbody class="table-border-bottom-0">
                                     @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                         @php $sr = 1;
-                                            $classes = myClassesAttendanceRecord(Auth::user()->faculty_id, $activeRoleId); 
+                                            $classes = myClassesAttendanceRecord(Auth::user()->faculty_id, $activeRoleId);
                                             // 👇 SUM of held_percentage
                                             $totalHeldPercentage = $classes->sum('held_percentage');
                                         @endphp
@@ -524,7 +524,7 @@
                                                 <td>{{ $class->program ?? '-' }}</td>
                                                 <td>{{ $class->career_code }}</td>
                                                 <td>{{ $class->term }}</td>
-                                                <td>{{ $class->total_rows }}</td>
+                                                <td>{{ $class->total_classes }}</td>
                                                 <td>{{ $class->class_held_count }}</td>
                                                 <td>{{ $class->class_not_held_count }}</td>
                                                 <td>
@@ -647,7 +647,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#completion-course-spring" aria-controls="completion-course-spring"
                                     aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -779,7 +779,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#ComplianceandUsageofLMS-spring"
                                     aria-controls="ComplianceandUsageofLMS-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -951,7 +951,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#SubmissionofExamResults-spring"
                                     aria-controls="SubmissionofExamResults-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -1040,7 +1040,7 @@
                                     data-bs-target="#QualityofAssessment(ExamPaper-Projects-Assignments)-spring"
                                     aria-controls="QualityofAssessment(ExamPaper-Projects-Assignments)-spring"
                                     aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -1122,7 +1122,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#CourseLoad-spring" aria-controls="CourseLoad-spring"
                                     aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -1190,6 +1190,7 @@
                                             <th>Class Name</th>
                                             <th>Class Code</th>
                                             <th>Career</th>
+                                             <th>Avg Class Size</th>
                                             <th>Program</th>
                                         </tr>
                                     </thead>
@@ -1214,6 +1215,7 @@
                                                                     <td>{{ $class->class_name }}</td>
                                                                     <td>{{ $class->code }}</td>
                                                                     <td>{{ $class->career_code }}</td>
+                                                                    <td>{{ round($class->attendances->sum('total_students') / $class->attendances->count(), 1) }}</td>
 
                                                                     {{-- Program name (only if attendance exists) --}}
                                                                     <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
@@ -1373,7 +1375,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#StudentPassPercentage-spring"
                                     aria-controls="StudentPassPercentage-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -1421,6 +1423,7 @@
                                             <th>Class</th>
                                             <th>Program</th>
                                             <th>Career (PG/UG)</th>
+                                            <th>Avg Class Size</th>
                                             <th>Pass %</th>
                                             <th>Failed %</th>
                                             <th>Score</th>
@@ -1468,6 +1471,7 @@
                                                                     <td>{{ $class->class_name }}</td>
                                                                     <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
                                                                     <td>{{ $class->career_code }}</td>
+                                                                    <td>{{ round($class->attendances->sum('total_students') / $class->attendances->count(), 1) }}</td>
                                                                     {{-- Program name (only if attendance exists) --}}
                                                                     <td>{{ number_format($pass, 1) ?? 'N/A' }}</td>
                                                                     <td>{{ number_format($fail, 1) ?? 'N/A' }}</td>
@@ -1495,7 +1499,7 @@
                                                          <tfoot>
                                                             <tr class="table-primary">
                                                                 <th class="text-end">Total</th>
-                                                                <th colspan="5" class="text-end"></th>
+                                                                <th colspan="6" class="text-end"></th>
                                                                 <th>
                                                                     <b>
                                                                         {{ number_format($data['totalPassPercentage'], 1) }}
@@ -1536,7 +1540,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#AverageStudentScore-spring"
                                     aria-controls="AverageStudentScore-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -1691,7 +1695,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#QualitativeFeedbackfromStudents-spring"
                                     aria-controls="QualitativeFeedbackfromStudents-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -2001,7 +2005,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#achievementontasksassignedbythedean-spring"
                                     aria-controls="achievementontasksassignedbythedean-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -2161,7 +2165,7 @@
                                     data-bs-target="#NumberofKnowledgeProducts-PolicyAdvocacy-spring"
                                     aria-controls="NumberofKnowledgeProducts-PolicyAdvocacy-spring"
                                     aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -2240,7 +2244,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#LineManagersReview&RatingonTasks-spring"
                                     aria-controls="LineManagersReview&RatingonTasks-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -2361,7 +2365,7 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#AchievementoftasksStatus-spring"
                                     aria-controls="AchievementoftasksStatus-spring" aria-selected="true">
-                                    🌸 Spring 2025
+                                    🌸 Spring 2026
                                 </button>
                             </li>
                             <li class="nav-item">

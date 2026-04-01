@@ -373,7 +373,11 @@ function myClasses($facultyId, $activeRoleId)
         AVG(COALESCE(average_marks,0)) as avg_marks, 
         AVG(COALESCE(passing_percentage,0)) as avg_pass')
         ->first();
+    // ✅ ADD THESE 2 LINES HERE
+    $stats->total_classes = $stats->attendances->count();
 
+    // Calculate avg_present_percentage
+    $stats->totalStudentsClass = $stats->attendances->sum('total_students');
     $totalCourses = $stats->total_courses;
     $totalPassPercentage = $stats->total_pass ?? 0;
     $totalAverageMarks = $stats->total_average_marks ?? 0;
@@ -405,10 +409,13 @@ function myClasses($facultyId, $activeRoleId)
     });
 
     // 5️⃣ Return minimal class info (load if needed)
-    $classes = FacultyMemberClass::where('faculty_id', $facultyId)
-        ->select('class_id', 'class_name', 'code', 'term', 'career_code', 'average_marks', 'passing_percentage')
+    $classes = FacultyMemberClass::with([
+        'attendances' => function ($query) {
+            $query->orderBy('class_date', 'desc');
+        }
+    ])
+        ->where('faculty_id', $facultyId)
         ->get();
-
     return [
         'classes' => $classes,
         'totalCourses' => $totalCourses,
@@ -443,7 +450,11 @@ function myClassesAttendanceRecord($facultyId, $activeRoleId)
             $class->not_held_percentage = $class->total_rows
                 ? round(($class->class_not_held_count / $class->total_rows) * 100, 2)
                 : 0;
+            // ✅ ADD THESE 2 LINES HERE
+            $class->total_classes = $class->attendances->count();
 
+            // Calculate avg_present_percentage
+            $class->totalStudentsClass = $class->attendances->sum('total_students');
             // Color & rating logic
             if ($class->held_percentage == 100) {
                 $class->color = '#ffcb9a';
@@ -550,14 +561,15 @@ function myClassesAttendanceData($facultyId)
             $class->avg_present_count = 0;
             $class->avg_absent_count = 0;
         }
+        // ✅ ADD THESE 2 LINES HERE
+        $class->total_classes = $class->attendances->count();
 
         // Calculate avg_present_percentage
-        $totalStudentsClass = $class->attendances->sum('total_students');
+        $class->totalStudentsClass = $class->attendances->sum('total_students');
         $totalPresentClass = $class->attendances->sum('present_count');
-        $class->avg_present_percentage = $totalStudentsClass
-            ? round(($totalPresentClass / $totalStudentsClass) * 100, 2)
+        $class->avg_present_percentage = $class->totalStudentsClass
+            ? round(($totalPresentClass / $class->totalStudentsClass) * 100, 2)
             : 0;
-
         // Determine color and rating based on avg_present_percentage
         if ($class->avg_present_percentage >= 90) {
             $class->color = '#6EA8FE';
@@ -3376,8 +3388,8 @@ if (!function_exists('lineManagerReviewRatingOnTasks')) {
                     $color = 'bg-danger';
                 }
 
-               
-                 $managerRatings->push((object)[
+
+                $managerRatings->push((object) [
                     'task' => $task->task,
                     'rating_data' => [
                         'percentage' => $score,

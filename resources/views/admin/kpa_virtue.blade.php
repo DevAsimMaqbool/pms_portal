@@ -68,76 +68,76 @@
         <div class="row g-6">
             <!-- Left card -->
             <div class="col-12 col-md-6">
-                  <div class="card h-100">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="card-title m-0 me-2">Virtue</h5>
-          
-        </div>
-        <div class="table-responsive">
-          <table class="table table-borderless border-top">
-            <thead class="border-bottom">
-              <tr>
-                <th>Virtue</th>
-                <th>Score</th>
-                <th>Rating</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="pt-5">
-                  <div class="d-flex flex-column">
-                    <p class="mb-0 text-heading">Empathy & Compassion</p>
-                  </div>
-                </td>
-                <td class="pt-5"><span class="badge bg-label-warning">67%</span></td>
-                <td class="pt-5"><span class="badge bg-label-warning">NI</span></td>
-              </tr>
-                <tr>
-                <td class="pt-5">
-                  <div class="d-flex flex-column">
-                    <p class="mb-0 text-heading">Humility & Service</p>
-                  </div>
-                </td>
-                <td class="pt-5"><span class="badge bg-label-danger">59%</span></td>
-                <td class="pt-5"><span class="badge bg-label-danger">BE</span></td>
-              </tr>
-                <tr>
-                <td class="pt-5">
-                  <div class="d-flex flex-column">
-                    <p class="mb-0 text-heading">Honesty & Integrity</p>
-                  </div>
-                </td>
-                <td class="pt-5"><span class="badge bg-label-success">88%</span></td>
-                <td class="pt-5"><span class="badge bg-label-success">EE</span></td>
-              </tr>
-                <tr>
-                <td class="pt-5">
-                  <div class="d-flex flex-column">
-                    <p class="mb-0 text-heading">Responsibility & Accountability</p>
-                  </div>
-                </td>
-                <td class="pt-5"><span class="badge bg-label-primary">91%</span></td>
-                <td class="pt-5"><span class="badge bg-label-primary">OS</span></td>
-              </tr>
-            
-             
-             
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title m-0 me-2">Virtue</h5>
 
-            </tbody>
-          </table>
-        </div>
-      </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-borderless border-top">
+                            <thead class="border-bottom">
+                                <tr>
+                                    <th>Virtue</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="pt-5">
+                                        <div class="d-flex flex-column">
+                                            <p class="mb-0 text-heading">Empathy & Compassion</p>
+                                        </div>
+                                    </td>
+                                    <td class="pt-5"><span class="badge bg-label-warning">67%</span></td>
+                                    <td class="pt-5"><span class="badge bg-label-warning">NI</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="pt-5">
+                                        <div class="d-flex flex-column">
+                                            <p class="mb-0 text-heading">Humility & Service</p>
+                                        </div>
+                                    </td>
+                                    <td class="pt-5"><span class="badge bg-label-danger">59%</span></td>
+                                    <td class="pt-5"><span class="badge bg-label-danger">BE</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="pt-5">
+                                        <div class="d-flex flex-column">
+                                            <p class="mb-0 text-heading">Honesty & Integrity</p>
+                                        </div>
+                                    </td>
+                                    <td class="pt-5"><span class="badge bg-label-success">88%</span></td>
+                                    <td class="pt-5"><span class="badge bg-label-success">EE</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="pt-5">
+                                        <div class="d-flex flex-column">
+                                            <p class="mb-0 text-heading">Responsibility & Accountability</p>
+                                        </div>
+                                    </td>
+                                    <td class="pt-5"><span class="badge bg-label-primary">91%</span></td>
+                                    <td class="pt-5"><span class="badge bg-label-primary">OS</span></td>
+                                </tr>
+
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <!-- Right chart -->
             <div class="col-12 col-md-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between"">
-                                                                                    <h5 class=" card-title mb-0">
+                                                                                        <h5 class=" card-title mb-0">
                         {{ $area['performance_area'] }}
                         Performance
                         </h5>
-                        
+
                     </div>
                     <div class="card-body pt-2">
                         {{-- <canvas class="chartjs" id="radarChart" data-height="355"></canvas> --}}
@@ -213,7 +213,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var trendScores = [90, 95]; // ✅ your scores
-            var trendSemesters = ["Spring 2025", "Fall 2025"]; // ✅ your categories
+            var trendSemesters = ["Spring 2026", "Fall 2025"]; // ✅ your categories
 
             var options = {
                 chart: {
@@ -281,13 +281,13 @@
             try {
 
                 var chartLabels = [
-        "Responsibility & Accountability", "Empathy & Compassion",
-        "Humility & Service", "Honesty & Integrity","Inspirational Lead"
-      ];
-      var shortLabels = ["R&A", "E&C", "H&S", "H&I", "IL"];
+                    "Responsibility & Accountability", "Empathy & Compassion",
+                    "Humility & Service", "Honesty & Integrity", "Inspirational Lead"
+                ];
+                var shortLabels = ["R&A", "E&C", "H&S", "H&I", "IL"];
 
                 // ✅ Static dataset values (adjusts automatically to match labels)
-                const staticValues = [70, 90, 85, 80,75];
+                const staticValues = [70, 90, 85, 80, 75];
                 const dataset1 = shortLabels.map((_, i) => staticValues[i % staticValues.length]);
 
                 const g = document.getElementById("radarChart");
@@ -371,25 +371,25 @@
                     chartLabels.forEach((label, i) => {
                         const li = document.createElement("li");
                         li.innerHTML = `
-                    <span style="
-                        display:inline-flex;
-                        align-items:center;
-                        font-size:10px;
-                        margin:0 5px;
-                        cursor:pointer;
-                        color:${labelColors[i % labelColors.length]};
-                    ">
                         <span style="
-                            width:8px;
-                            height:8px;
-                            border-radius:50%;
-                            background-color:${labelColors[i % labelColors.length]};
-                            display:inline-block;
-                            margin-right:5px;
-                        "></span>
-                        ${label}
-                    </span>
-                `;
+                            display:inline-flex;
+                            align-items:center;
+                            font-size:10px;
+                            margin:0 5px;
+                            cursor:pointer;
+                            color:${labelColors[i % labelColors.length]};
+                        ">
+                            <span style="
+                                width:8px;
+                                height:8px;
+                                border-radius:50%;
+                                background-color:${labelColors[i % labelColors.length]};
+                                display:inline-block;
+                                margin-right:5px;
+                            "></span>
+                            ${label}
+                        </span>
+                    `;
                         li.addEventListener("mouseenter", () => {
                             radarChart.setActiveElements([{ datasetIndex: 0, index: i }]);
                             radarChart.update();
@@ -493,22 +493,22 @@
                                 let randomValue = Math.floor(Math.random() * 100) + 1;
                                 let formattedIndicator = indicator.indicator.replace(/[\s#']+/g, '');
                                 $list.append(`
-                                                                                                    <li class="d-flex mb-6">
-                                                                                                        <div class="chart-progress me-4" data-color="${color}" data-series="${randomValue}" data-progress_variant="true"></div>
-                                                                                                        <div class="row w-100 align-items-center">
-                                                                                                            <div class="col-9">
-                                                                                                                <div class="me-2">
-                                                                                                                    <h6 class="mb-1_5">${indicator.indicator}</h6>
+                                                                                                        <li class="d-flex mb-6">
+                                                                                                            <div class="chart-progress me-4" data-color="${color}" data-series="${randomValue}" data-progress_variant="true"></div>
+                                                                                                            <div class="row w-100 align-items-center">
+                                                                                                                <div class="col-9">
+                                                                                                                    <div class="me-2">
+                                                                                                                        <h6 class="mb-1_5">${indicator.indicator}</h6>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="col-3 text-end">
+                                                                                                                    <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
+                                                                                                                        <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
+                                                                                                                    </button>
                                                                                                                 </div>
                                                                                                             </div>
-                                                                                                            <div class="col-3 text-end">
-                                                                                                                <button type="button" class="btn btn-sm btn-icon btn-label-primary" role="button" data-bs-toggle="modal" data-bs-target="#${formattedIndicator}">
-                                                                                                                    <i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-20px"></i>
-                                                                                                                </button>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </li>
-                                                                                                `);
+                                                                                                        </li>
+                                                                                                    `);
                             });
 
                             // ✅ Re-init charts after AJAX load

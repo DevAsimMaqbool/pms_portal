@@ -93,7 +93,7 @@
                                     <select id="term" class="form-select" name="term" required>
                                         <option value="">Select Option</option>
                                         <option value="Fall 2025" {{ isset($records) && $records->first()?->term == 'Fall 2025' ? 'selected' : '' }}>Fall 2025</option>
-                                        <option value="Spring 2025" {{ isset($records) && $records->first()?->term == 'Spring 2025' ? 'selected' : '' }}>Spring 2025
+                                        <option value="Spring 2026" {{ isset($records) && $records->first()?->term == 'Spring 2026' ? 'selected' : '' }}>Spring 2026
                                         </option>
                                     </select>
                                 </div>

@@ -299,7 +299,7 @@ $sumTotalWeight = 0;
 
         document.addEventListener("DOMContentLoaded", function () {
             var trendScores = [90, 95]; // ✅ your scores
-            var trendSemesters = ["Spring 2025", "Fall 2025"]; // ✅ your categories
+            var trendSemesters = ["Spring 2026", "Fall 2025"]; // ✅ your categories
 
             var options = {
                 chart: {
