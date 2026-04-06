@@ -3594,11 +3594,7 @@ function StudentAttendanceOfHOD($employeeId, $activeRoleId)
                 $percentage = ($attendance->present_count / $attendance->total_students) * 100;
             }
 
-            $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 113);
-            $weight = $indicatorWeight['weightage'] ?? 0;
-            $weightedScore = ($percentage * $weight) / 100;
 
-            saveIndicatorPercentage90Plus($employeeId, $activeRoleId, 1, 3, 113, $weightedScore);
 
             // Rating logic example
             if ($percentage >= 90) {
@@ -3644,13 +3640,13 @@ function myDepartmentClassesAttendanceRecordHOD($employeeId, $activeRoleId)
 
     // 1️⃣ Get all faculty in this department
     $facultyMembers = User::where('department_id', $departmentId)
-        ->get(columns: ['id', 'name']);
+        ->get(['id', 'faculty_id', 'name']);
 
     $allClasses = collect();
 
     foreach ($facultyMembers as $faculty) {
 
-        // 2️⃣ Get classes with attendance counts
+        // ✅ FIX: use users.id instead of faculty_id
         $classes = FacultyMemberClass::withCount([
             'attendances as total_rows',
             'attendances as class_held_count' => function ($query) {
@@ -3660,41 +3656,94 @@ function myDepartmentClassesAttendanceRecordHOD($employeeId, $activeRoleId)
                 $query->where('att_marked', 0);
             },
         ])
-            ->where('faculty_id', $faculty->id)
+            ->where('faculty_id', $faculty->faculty_id) // ✅ FIXED HERE
             ->get()
             ->map(function ($class) use ($faculty) {
 
-                // Latest program name from attendances
-                $class->program = $class->attendances()->latest('class_date')->value('program_name');
+                // Latest program name
+                $class->program = $class->attendances()
+                    ->latest('class_date')
+                    ->value('program_name');
 
-                // Held / Not Held percentages
+                // Held %
                 $class->held_percentage = $class->total_rows
                     ? round(($class->class_held_count / $class->total_rows) * 100, 2)
                     : 0;
 
+                // Not Held %
                 $class->not_held_percentage = $class->total_rows
                     ? round(($class->class_not_held_count / $class->total_rows) * 100, 2)
                     : 0;
 
-                // Add faculty info for table
+                // Faculty name
                 $class->faculty_name = $faculty->name;
 
                 return $class;
             });
 
         $allClasses = $allClasses->merge($classes);
-        // Optional: Save overall attendance per faculty
-        saveOverallAttendancePercentage(
-            $employeeId,
-            $classes,
-            $keyPerformanceAreaId = 1,
-            $indicatorCategoryId = 3,
-            $indicatorId = 117,
-            $activeRoleId
-        );
     }
 
+    // ✅ SAVE DEPARTMENT OVERALL (IMPORTANT)
+    saveOverallAttendancePercentageOfHOD(
+        $employeeId,
+        $allClasses,
+        1,
+        3,
+        117,
+        $activeRoleId
+    );
+
     return $allClasses;
+}
+
+function saveOverallAttendancePercentageOfHOD($employeeId, $classes, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $activeRoleId)
+{
+
+    // ✅ CORRECT FORMULA
+    $totalHeld = $classes->sum('class_held_count');
+    $totalClasses = $classes->sum('total_rows');
+
+    if ($totalClasses == 0) {
+        $overallPercentage = 0;
+    } else {
+        $overallPercentage = round(($totalHeld / $totalClasses) * 100, 2);
+    }
+
+    // 🎯 Rating Logic
+    if ($overallPercentage == 100) {
+        $color = 'warning';
+        $rating = 'ME';
+    } elseif ($overallPercentage >= 90) {
+        $color = 'orange';
+        $rating = 'NI';
+    } else {
+        $color = 'danger';
+        $rating = 'BE';
+    }
+
+    // Weight
+    $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 117);
+    $weight = $indicatorWeight['weightage'] ?? 0;
+
+    $weightedScore = ($overallPercentage * $weight) / 100;
+    // Save
+    IndicatorsPercentage::updateOrCreate(
+        [
+            'employee_id' => $employeeId,
+            'role_id' => $activeRoleId,
+            'key_performance_area_id' => $keyPerformanceAreaId,
+            'indicator_category_id' => $indicatorCategoryId,
+            'indicator_id' => $indicatorId,
+        ],
+        [
+            'score' => $weightedScore,
+            'rating' => $rating,
+            'color' => $color,
+        ]
+    );
+
+    return $overallPercentage;
 }
 
 function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)

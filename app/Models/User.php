@@ -147,5 +147,10 @@ class User extends Authenticatable
         return $this->belongsTo(Department::class, 'department_id', 'id');
     }
 
+    public function classes()
+    {
+        return $this->hasMany(FacultyMemberClass::class, 'faculty_id', 'faculty_id');
+    }
+
 
 }
