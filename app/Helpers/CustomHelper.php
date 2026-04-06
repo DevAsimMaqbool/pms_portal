@@ -34,6 +34,7 @@ use App\Models\GoGlobalStreamTarget;
 use App\Models\StudentsGlobalExperience;
 use App\Models\SatisfactionOfInternationalStudent;
 use App\Models\ActiveInternationalResearchPartner;
+use App\Models\AdmissionTargetAchieved;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -4697,17 +4698,19 @@ if (!function_exists('departmentLineManagerReviewRating')) {
         $weightedScore175 = ($departmentAvgScore * $weights['course_load']) / 100;
         $weightedScore188 = ($departmentAvgScore * $weights['course_188']) / 100;
         // Save department-level KPI
-        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore175);
+        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore175,$departmentAvgScore);
         saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $departmentAvgScore);
 
-        return [
-            'department_avg_score' => $departmentAvgScore,
-            'weighted_scores' => [
-                175 => $weightedScore175,
-                188 => $weightedScore188,
-            ],
-            'all_faculty_ratings' => $allRatings
-        ];
+         return [
+                'total_task' => $totalTasks,
+                'total_Score' => $totalScore,
+             'department_avg_score' => $departmentAvgScore,
+             'weighted_scores' => [
+                 175 => $weightedScore175,
+                 188 => $weightedScore188,
+             ],
+             'all_faculty_ratings' => $allRatings
+           ];
     }
 }
 
@@ -4876,69 +4879,41 @@ if (!function_exists('researchProductivityPGStudentsOfHOD')) {
 if (!function_exists('admissionTargetDepartmentAverage')) {
     function admissionTargetDepartmentAverage($employeeId, $activeRoleId, $indicatorId)
     {
-        $departmentId = auth()->user()->department_id;
+       $departmentId = auth()->user()->department_id;
 
-        // 1️⃣ Get all faculty members in this department who have HOD records for this indicator
-        static $facultyMembersMemo = [];
-        if (array_key_exists($departmentId, $facultyMembersMemo)) {
-            $facultyMembers = $facultyMembersMemo[$departmentId];
-        } else {
-            $facultyMembers = User::where('department_id', $departmentId)
-                ->get(['faculty_id', 'name']);
-            $facultyMembersMemo[$departmentId] = $facultyMembers;
-        }
+        $recordsRaw  = AdmissionTargetAchieved::with(['faculty', 'department', 'program'])
+            ->select(
+                'program_id',
+                \DB::raw('SUM(admissions_target) as total_target'),
+                \DB::raw('SUM(achieved_target) as total_achieved')
+            )
+            ->where('department_id', $departmentId)
+            ->groupBy('program_id')
+            ->get();
 
-        $allData = [];
-        $allPercentages = [];
+            $records = [];
+             foreach ($recordsRaw as $record) {
+                $totalTarget = $record->total_target ?? 0;
+                $totalAchieved = $record->total_achieved ?? 0;
+                $programPercentage = $totalTarget > 0 ? ($totalAchieved / $totalTarget) * 100 : 0;
 
-        foreach ($facultyMembers as $faculty) {
-            // 2️⃣ Get all targets for this faculty
-            $facultyTargets = \DB::table('admission_target_achieveds')
-                ->where('department_id', $departmentId)
-                ->where('indicator_id', $indicatorId)
-                ->where('form_status', 'HOD')
-                ->get();
-
-            $facultyPercentages = [];
-
-            foreach ($facultyTargets as $target) {
-                $achieved = $target->achieved_target;
-                $admissionsTarget = $target->admissions_target;
-
-                $percentage = ($admissionsTarget > 0) ? round(($achieved / $admissionsTarget) * 100, 2) : 0;
-                $facultyPercentages[] = $percentage;
-                $allPercentages[] = $percentage;
-
-                // Determine rating
-                if ($percentage >= 90) {
-                    $rating = 'OS';
-                } elseif ($percentage >= 80) {
-                    $rating = 'EE';
-                } elseif ($percentage >= 70) {
-                    $rating = 'ME';
-                } elseif ($percentage >= 60) {
-                    $rating = 'NI';
-                } else {
-                    $rating = 'BE';
-                }
-                $allData[] = [
-                    'faculty_id' => $target->faculty_id,
-                    'program_id' => $target->program_id,
-                    'admissions_campaign' => $target->admissions_campaign,
-                    'admissions_target' => $admissionsTarget,
-                    'achieved_target' => $achieved,
-                    'percentage' => $percentage,
-                    'rating' => $rating,
+                $records[] = [
+                    'program_name' => $record->program->program_name ?? 'N/A',
+                    'total_target' => $totalTarget,
+                    'total_achieved' => $totalAchieved,
+                    'percentage' => round($programPercentage, 1)
                 ];
             }
+            $totalTarget = $recordsRaw ->sum('total_target');
+            $totalAchieved = $recordsRaw ->sum('total_achieved');
+            $avgFacultyPercentage = $totalTarget > 0 ? ($totalAchieved / $totalTarget) * 100 : 0;
+            $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 143);
+            $weight = $indicatorWeight['weightage'] ?? 0;
 
-            // Save individual faculty weighted score
-            $avgFacultyPercentage = count($facultyPercentages)
-                ? round(array_sum($facultyPercentages) / count($facultyPercentages), 2)
-                : 0;
-            $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+            // Weighted score
             $weightedScore = ($avgFacultyPercentage * $weight) / 100;
 
+           
             saveIndicatorPercentage100Plus(
                 $employeeId,
                 $activeRoleId,
@@ -4947,18 +4922,17 @@ if (!function_exists('admissionTargetDepartmentAverage')) {
                 $indicatorId,
                 $weightedScore,
                 $avgFacultyPercentage
-            );
-        }
+            ); 
+            // Return data
+            return [
+                'records' => $records,                  // per program records
+                'total_target' => $totalTarget,         // sum of all targets
+                'total_achieved' => $totalAchieved,     // sum of all achieved
+                'avg_percentage' => round($avgFacultyPercentage, 2), // overall %
+                'weighted_score' => round($weightedScore, 2),        // weighted score
+            ];
 
-        // 3️⃣ Department-level average
-        $departmentAverage = count($allPercentages)
-            ? round(array_sum($allPercentages) / count($allPercentages), 2)
-            : 0;
-
-        return [
-            'data' => $allData,
-            'department_average' => $departmentAverage,
-        ];
+        
     }
 }
 
