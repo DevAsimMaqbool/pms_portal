@@ -28,44 +28,45 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-    @if(in_array(getRoleName(activeRole()), ['Finance']))
-        <div class="card">
-            <div class="card-header d-flex align-items-center justify-content-between">
-                <div class="card-title mb-0">
-                    <h5 class="mb-1">Dropout Rate</h5>
-                </div>
-                <div class="">
-                    <a href="{{ url('kpa/6/category/14/indicator/160') }}" class="btn btn-success">Add</a>
-                </div>
-            </div>
-            <div class="card-datatable table-responsive card-body">
-                @if(in_array(getRoleName(activeRole()), ['Finance']))
-                    <div class="tab-pane fade show" id="form2" role="tabpanel">
-                        <div class="table-responsive text-nowrap">
-                            <table id="achievementTable" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Faculty</th>
-                                        <th>Department</th>
-                                        <th>Program</th>
-                                        <th>Dropout Rate</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
+        @if(in_array(getRoleName(activeRole()), ['Finance']))
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="card-title mb-0">
+                        <h5 class="mb-1">Dropout Rate</h5>
                     </div>
-                @endif
+                    <div class="">
+                        <a href="{{ url('kpa/6/category/14/indicator/160') }}" class="btn btn-success">Add</a>
+                    </div>
+                </div>
+                <div class="card-datatable table-responsive card-body">
+                    @if(in_array(getRoleName(activeRole()), ['Finance']))
+                        <div class="tab-pane fade show" id="form2" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table id="achievementTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Program</th>
+                                            <th>Dropout Rate</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
-        </div>
         @else
-             <div class="misc-wrapper">
+            <div class="misc-wrapper">
                 <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
                 <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
                 <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
                 <div class="mt-12">
-                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                        alt="page-misc-not-authorized" width="170" class="img-fluid" />
                 </div>
             </div>
         @endif
@@ -75,7 +76,7 @@
             <div class="modal-dialog modal-xl modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header text-white">
-                        <h5 class="modal-title" id="updateFormModalLabel">Edit Satisfaction of International Students</h5>
+                        <h5 class="modal-title" id="updateFormModalLabel">Edit Dropout Rate</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -119,10 +120,10 @@
                                         <div class="col-md-4">
                                             <label class="form-label" for="dropout_rate">Dropout Rate (%)</label>
                                             <div class="input-group">
-                                                        <span class="input-group-text" id="basic-addon11">%</span>
-                                            <input type="number" class="form-control" id="dropout_rate" name="dropout_rate"
-                                                required placeholder="Dropout Rate">
-                                             </div>   
+                                                <span class="input-group-text" id="basic-addon11">%</span>
+                                                <input type="number" class="form-control" id="dropout_rate"
+                                                    name="dropout_rate" required placeholder="Dropout Rate">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -168,17 +169,17 @@
                     data: { status: "HOD" },
                     dataType: "json",
                     success: function (data) {
-                        
+
                         const forms = data.forms || [];
 
                         const rowData = forms.map((form, i) => {
-                        
+
                             let editButton = '';
                             let deleteBtn = '';
                             if (parseInt(form.status) === 1) {
                                 editButton = `<button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" data-form='${JSON.stringify(form)}'>Edit</button>`;
                                 deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
-                            } 
+                            }
 
                             return [
                                 i + 1,
@@ -348,8 +349,8 @@
                             $.each(response, function (key, department) {
                                 departmentSelect.append(
                                     `<option value="${department.id}">
-                                                                                                                                                                                                                                                                                                                                                            ${department.name}
-                                                                                                                                                                                                                                                                                                                                                        </option>`
+                                                                                                                                                                                                                                                                                                                                                                    ${department.name}
+                                                                                                                                                                                                                                                                                                                                                                </option>`
                                 );
                             });
 
@@ -379,8 +380,8 @@
                             $.each(response, function (key, program) {
                                 programSelect.append(
                                     `<option value="${program.id}">
-                                                                                                                                                                                                                                                                                                                                                            ${program.program_name}
-                                                                                                                                                                                                                                                                                                                                                        </option>`
+                                                                                                                                                                                                                                                                                                                                                                    ${program.program_name}
+                                                                                                                                                                                                                                                                                                                                                                </option>`
                                 );
                             });
 

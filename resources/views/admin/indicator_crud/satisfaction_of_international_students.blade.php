@@ -28,166 +28,203 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-    @if(in_array(getRoleName(activeRole()), ['International Office']))
-        <div class="card">
-            <div class="card-header d-flex align-items-center justify-content-between">
-                <div class="card-title mb-0">
-                    <h5 class="mb-1">Satisfaction of International Students</h5>
+        @if(in_array(getRoleName(activeRole()), ['International Office']))
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="card-title mb-0">
+                        <h5 class="mb-1">Satisfaction of International Students</h5>
+                    </div>
+                    <div class="">
+                        <a href="{{ url('kpa/4/category/12/indicator/176') }}" class="btn btn-success">Add</a>
+                    </div>
                 </div>
-                <div class="">
-                    <a href="{{ url('kpa/4/category/12/indicator/176') }}" class="btn btn-success">Add</a>
+                <div class="card-datatable table-responsive card-body">
+                    @if(in_array(getRoleName(activeRole()), ['International Office']))
+                        <div class="tab-pane fade show" id="form2" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table id="achievementTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Student Name</th>
+                                            <th>Roll No</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Program</th>
+                                            <th>Program Level</th>
+                                            <th>Country</th>
+                                            <th>Semester / Year</th>
+                                            <th>History</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
-            <div class="card-datatable table-responsive card-body">
-               @if(in_array(getRoleName(activeRole()), ['International Office']))
-                    <div class="tab-pane fade show" id="form2" role="tabpanel">
-                        <div class="table-responsive text-nowrap">
-                            <table id="achievementTable" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Student Name</th>
-                                        <th>Roll No</th>
-                                        <th>Faculty / Program</th>
-                                        <th>Country</th>
-                                        <th>Semester / Year</th>
-                                        <th>History</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
+
+            <!-- Modal -->
+            <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewFormModalLabel">
+                                <i class="icon-base ti tabler-history me-3"></i>History
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered mb-3">
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-left align-items-center">
+                                            <div class="avatar-wrapper">
+                                                <div class="avatar avatar-sm me-3">
+                                                    <span class="avatar-initial rounded-circle bg-label-info">🙍🏻‍♂️</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column gap-50">
+                                                <span class="text-truncate fw-medium text-heading" id="modalCreatedBy">Website
+                                                    SEO</span>
+                                                <small class="text-truncate" id="modalCreatedDate"></small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
                             </table>
+
+                            <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center">
+                                <i class="icon-base ti tabler-history me-3"></i>History
+                            </h5>
+                            <ul class="timeline mb-0" id="modalExtraFieldsHistory"></ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
-                @endif
+                </div>
             </div>
-        </div>
 
-  <!-- Modal -->
-       <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="viewFormModalLabel">
-                <i class="icon-base ti tabler-history me-3"></i>History
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <table class="table table-bordered mb-3"> 
-                <tr>
-                    <td>
-                        <div class="d-flex justify-content-left align-items-center">
-                            <div class="avatar-wrapper">
-                                <div class="avatar avatar-sm me-3">
-                                    <span class="avatar-initial rounded-circle bg-label-info">🙍🏻‍♂️</span>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-column gap-50">
-                                <span class="text-truncate fw-medium text-heading" id="modalCreatedBy">Website SEO</span>
-                                <small class="text-truncate" id="modalCreatedDate"></small>
-                            </div>
+            <!--/ Add Permission Modal -->
+            <!-- Update Form Modal -->
+            <div class="modal fade" id="updateFormModal" tabindex="-1" aria-labelledby="updateFormModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header text-white">
+                            <h5 class="modal-title" id="updateFormModalLabel">Edit Satisfaction of International Students</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                    </td>
-                </tr>
-            </table>
 
-            <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center">
-                <i class="icon-base ti tabler-history me-3"></i>History
-            </h5>
-            <ul class="timeline mb-0" id="modalExtraFieldsHistory"></ul>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-        </div>
-    </div>
-</div>
+                        <div class="modal-body">
+                            <form id="researchForm1" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" id="record_id" name="record_id">
+                                <input type="hidden" name="_method" value="PUT">
 
-        <!--/ Add Permission Modal -->
-        <!-- Update Form Modal -->
-        <div class="modal fade" id="updateFormModal" tabindex="-1" aria-labelledby="updateFormModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header text-white">
-                        <h5 class="modal-title" id="updateFormModalLabel">Edit Satisfaction of International Students</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+                                <div class="row g-6 mt-0">
 
-                    <div class="modal-body">
-                        <form id="researchForm1" enctype="multipart/form-data">
-                            @csrf
-                             <input type="hidden" id="record_id" name="record_id">
-                              <input type="hidden" name="_method" value="PUT">
-
-                            <div class="row g-6 mt-0">
-
-                                <div id="student-satisfaction-container">
-                                    <div class="student-group row g-3 mb-3 border p-3 mt-3 rounded">
-                                        <div class="col-md-4">
-                                            <label class="form-label">Student Name</label>
-                                            <input type="text" name="student_name" class="form-control"
-                                                placeholder="Enter Name">
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <label class="form-label">Student Roll No.</label>
-                                            <input type="text" name="student_roll_no" class="form-control"
-                                                placeholder="Enter Roll No">
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <label class="form-label">Program / Faculty</label>
-                                            <input type="text" name="student_program" class="form-control"
-                                                placeholder="Program Name">
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <label class="form-label">Country of Origin</label>
-                                            <input type="text" name="student_country" class="form-control"
-                                                placeholder="Country">
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <label class="form-label">Semester / Year</label>
-                                            <input type="text" name="student_semester" class="form-control"
-                                                placeholder="e.g., Fall 2025">
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <label class="fw-bold mb-2 d-block">Rating</label>
-                                            <div id="ratingBoxs" class="raty" data-half="true"
-                                                data-score="" data-number="5">
+                                    <div id="student-satisfaction-container">
+                                        <div class="student-group row g-3 mb-3 border p-3 mt-3 rounded">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Student Name</label>
+                                                <input type="text" name="student_name" class="form-control"
+                                                    placeholder="Enter Name">
                                             </div>
 
-                                            <input type="hidden" name="rating" id="rating" value="">
-                                        </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Student Roll No.</label>
+                                                <input type="text" name="student_roll_no" class="form-control"
+                                                    placeholder="Enter Roll No">
+                                            </div>
 
-                                        <div class="col-md-12">
-                                            <label class="form-label">Comments / Suggestions</label>
-                                            <textarea name="student_comments" class="form-control" rows="2"
-                                                placeholder="Optional"></textarea>
+                                            <div class="col-md-4">
+                                                <label for="faculty" class="form-label">Faculty</label>
+                                                <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
+                                                    <option value="">-- Select Faculty --</option>
+                                                    @foreach(get_faculties() as $faculty)
+                                                        <option value="{{ $faculty->id }}">
+                                                            {{ $faculty->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="department" class="form-label">Department</label>
+                                                <select name="department_id" id="department_id" class="select2 form-select"
+                                                    required>
+                                                    <option value="">-- Select Department --</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="program" class="form-label">Program Name</label>
+                                                <select name="program_id" id="program_id" class="select2 form-select program_id"
+                                                    required>
+                                                    <option value="">-- Select Program --</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3 col-md-4">
+                                                <label for="program_level" class="form-label">Program Level</label>
+                                                <select name="program_level" id="program_level"
+                                                    class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Level --</option>
+                                                    <option value="UG">UG</option>
+                                                    <option value="PG">PG</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Country of Origin</label>
+                                                <input type="text" name="student_country" class="form-control"
+                                                    placeholder="Country">
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Semester / Year</label>
+                                                <input type="text" name="student_semester" class="form-control"
+                                                    placeholder="e.g., Fall 2025">
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="fw-bold mb-2 d-block">Rating</label>
+                                                <div id="ratingBoxs" class="raty" data-half="true" data-score=""
+                                                    data-number="5">
+                                                </div>
+
+                                                <input type="hidden" name="rating" id="rating" value="">
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label class="form-label">Comments / Suggestions</label>
+                                                <textarea name="student_comments" class="form-control" rows="2"
+                                                    placeholder="Optional"></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="mt-3 text-end">
-                                <button type="submit" class="btn btn-success">Update</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </form>
+                                <div class="mt-3 text-end">
+                                    <button type="submit" class="btn btn-success">Update</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-         @else
-             <div class="misc-wrapper">
+        @else
+            <div class="misc-wrapper">
                 <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
                 <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
                 <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
                 <div class="mt-12">
-                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                        alt="page-misc-not-authorized" width="170" class="img-fluid" />
                 </div>
             </div>
         @endif
@@ -211,32 +248,32 @@
         window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
     </script>
     <script>
-       let employerRaty;
- document.addEventListener("DOMContentLoaded", function () {
+        let employerRaty;
+        document.addEventListener("DOMContentLoaded", function () {
 
-    // SVG stars
-    const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-    const starHalf = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='halfStarGradient'%3E%3Cstop offset='50%25' style='stop-color:%23FFD700' /%3E%3Cstop offset='50%25' style='stop-color:%239e9e9e' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23halfStarGradient)' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
-    const starOff = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%239e9e9e' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
+            // SVG stars
+            const starOn = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFD700' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
+            const starHalf = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='halfStarGradient'%3E%3Cstop offset='50%25' style='stop-color:%23FFD700' /%3E%3Cstop offset='50%25' style='stop-color:%239e9e9e' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23halfStarGradient)' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
+            const starOff = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%239e9e9e' d='m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z'/%3E%3C/svg%3E";
 
-    // Employer Rating
-     employerRaty = new Raty(document.getElementById("ratingBoxs"), {
-        number: 5,
-        half: true,
-        starOn: starOn,
-        starHalf: starHalf,
-        starOff: starOff,
-        click: function(score) {
-            document.getElementById("rating").value = score;
-        }
-    }).init();
+            // Employer Rating
+            employerRaty = new Raty(document.getElementById("ratingBoxs"), {
+                number: 5,
+                half: true,
+                starOn: starOn,
+                starHalf: starHalf,
+                starOff: starOff,
+                click: function (score) {
+                    document.getElementById("rating").value = score;
+                }
+            }).init();
 
-});
-
-
+        });
 
 
-       </script>
+
+
+    </script>
 @endpush
 
 @push('script')
@@ -252,27 +289,30 @@
                         const forms = data.forms || [];
 
                         const rowData = forms.map((form, i) => {
-                           
+
                             let editButton = '';
                             let deleteBtn = '';
                             if (parseInt(form.status) === 1) {
-                                 editButton = `<button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" data-form='${JSON.stringify(form)}'>Edit</button>`;
+                                editButton = `<button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" data-form='${JSON.stringify(form)}'>Edit</button>`;
                                 deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
-                            } 
+                            }
 
                             return [
                                 i + 1,
                                 form.student_name || 'N/A',
                                 form.student_roll_no,
-                                form.student_program,
+                                form.faculty ? form.faculty.name : 'N/A',
+                                form.department ? form.department.name : 'N/A',
+                                form.program ? form.program.program_name : 'N/A',
+                                form.program_level,
                                 form.student_country,
                                 form.student_semester,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
-                                    data-history='${JSON.stringify(form.update_history)}'
-                                    data-user='${form.creator ? form.creator.name : "N/A"}'
-                                    data-created='${form.created_at}'>
-                                    <span class="icon-xs icon-base ti tabler-history me-2"></span>History
-                                </button>`,
+                                                                                                                                                                    data-history='${JSON.stringify(form.update_history)}'
+                                                                                                                                                                    data-user='${form.creator ? form.creator.name : "N/A"}'
+                                                                                                                                                                    data-created='${form.created_at}'>
+                                                                                                                                                                    <span class="icon-xs icon-base ti tabler-history me-2"></span>History
+                                                                                                                                                                </button>`,
                                 editButton + ' ' + deleteBtn
                             ];
                         });
@@ -287,7 +327,10 @@
                                     { title: "#" },
                                     { title: "Student Name" },
                                     { title: "Roll No" },
-                                    { title: "Program / Faculty" },
+                                    { title: "Faculty" },
+                                    { title: "Department" },
+                                    { title: "Program" },
+                                    { title: "Program Level" },
                                     { title: "Country" },
                                     { title: "Semester" },
                                     { title: "History" },
@@ -309,69 +352,69 @@
                 fetchAchievementForms();
 
                 $(document).on('click', '.view-form-btn', function () {
-                // Clear modal
-                $('#modalExtraFieldsHistory').empty();
-                $('#modalCreatedBy').text('');
-                $('#modalCreatedDate').text('');
+                    // Clear modal
+                    $('#modalExtraFieldsHistory').empty();
+                    $('#modalCreatedBy').text('');
+                    $('#modalCreatedDate').text('');
 
-                // Read data-history
-                let historyData = $(this).attr('data-history'); // raw string
-                let history = [];
+                    // Read data-history
+                    let historyData = $(this).attr('data-history'); // raw string
+                    let history = [];
 
-                try {
-                    // Decode HTML entities first
-                    historyData = historyData.replace(/&quot;/g, '"'); // convert &quot; → "
-                    // Parse JSON (sometimes it's double-encoded)
-                    history = JSON.parse(historyData);
-                    if (typeof history === 'string') {
-                        history = JSON.parse(history); // decode inner string if needed
+                    try {
+                        // Decode HTML entities first
+                        historyData = historyData.replace(/&quot;/g, '"'); // convert &quot; → "
+                        // Parse JSON (sometimes it's double-encoded)
+                        history = JSON.parse(historyData);
+                        if (typeof history === 'string') {
+                            history = JSON.parse(history); // decode inner string if needed
+                        }
+                    } catch (e) {
+                        console.error('Failed to parse history JSON:', e);
+                        history = [];
                     }
-                } catch (e) {
-                    console.error('Failed to parse history JSON:', e);
-                    history = [];
-                }
 
-                // Creator and created date
-                let creator = $(this).data('user') || 'N/A';
-                let created = $(this).data('created') || 'N/A';
-                $('#modalCreatedBy').text(creator);
-                $('#modalCreatedDate').text(new Date(created).toLocaleString());
+                    // Creator and created date
+                    let creator = $(this).data('user') || 'N/A';
+                    let created = $(this).data('created') || 'N/A';
+                    $('#modalCreatedBy').text(creator);
+                    $('#modalCreatedDate').text(new Date(created).toLocaleString());
 
-                // Build timeline
-                if (Array.isArray(history) && history.length > 0) {
-                    let historyHtml = '';
-                    history.forEach(update => {
-                        let histortText = 'N/A';
-                        if (update.role === 'QEC') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
-                        else histortText = update.status || 'N/A';
+                    // Build timeline
+                    if (Array.isArray(history) && history.length > 0) {
+                        let historyHtml = '';
+                        history.forEach(update => {
+                            let histortText = 'N/A';
+                            if (update.role === 'QEC') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
+                            else histortText = update.status || 'N/A';
 
-                        historyHtml += `
-                            <li class="timeline-item timeline-item-transparent optional-field">
-                                <span class="timeline-point timeline-point-primary"></span>
-                                <div class="timeline-event">
-                                    <div class="timeline-header mb-3">
-                                        <h6 class="mb-0">${update.user_name || 'N/A'}</h6>
-                                        <small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-1">
-                                        <div class="badge bg-lighter rounded-3">
-                                            <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
-                                        </div>
-                                        <div class="badge bg-lighter rounded-3 ms-2">
-                                            <span class="h6 mb-0 text-body">${histortText}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        `;
-                    });
-                    $('#modalExtraFieldsHistory').append(historyHtml);
-                } else {
-                    $('#modalExtraFieldsHistory').append(`<li class="optional-field"><span>No History Available</span></li>`);
-                }
+                            historyHtml += `
+                                                                                                                                                            <li class="timeline-item timeline-item-transparent optional-field">
+                                                                                                                                                                <span class="timeline-point timeline-point-primary"></span>
+                                                                                                                                                                <div class="timeline-event">
+                                                                                                                                                                    <div class="timeline-header mb-3">
+                                                                                                                                                                        <h6 class="mb-0">${update.user_name || 'N/A'}</h6>
+                                                                                                                                                                        <small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                                                                                                                                    </div>
+                                                                                                                                                                    <div class="d-flex align-items-center mb-1">
+                                                                                                                                                                        <div class="badge bg-lighter rounded-3">
+                                                                                                                                                                            <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                                                                                                                                        </div>
+                                                                                                                                                                        <div class="badge bg-lighter rounded-3 ms-2">
+                                                                                                                                                                            <span class="h6 mb-0 text-body">${histortText}</span>
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </div>
+                                                                                                                                                                </div>
+                                                                                                                                                            </li>
+                                                                                                                                                        `;
+                        });
+                        $('#modalExtraFieldsHistory').append(historyHtml);
+                    } else {
+                        $('#modalExtraFieldsHistory').append(`<li class="optional-field"><span>No History Available</span></li>`);
+                    }
 
-                $('#viewFormModal').modal('show');
-            });
+                    $('#viewFormModal').modal('show');
+                });
 
                 $(document).on('click', '.edit-form-btn', function () {
                     let form = $(this).data('form');
@@ -387,7 +430,39 @@
                     // Fill text fields
                     $f.find('[name="student_name"]').val(form.student_name);
                     $f.find('[name="student_roll_no"]').val(form.student_roll_no);
-                    $f.find('[name="student_program"]').val(form.student_program);
+                    // Set Faculty first
+                    $f.find('[name="faculty_id"]').val(form.faculty.id).trigger('change');
+
+                    // Load Departments for this faculty, then set Department
+                    $.ajax({
+                        url: "/get-departments/" + form.faculty.id,
+                        type: "GET",
+                        success: function (departments) {
+                            let departmentSelect = $f.find('[name="department_id"]');
+                            departmentSelect.empty().append('<option value="">-- Select Department --</option>');
+                            $.each(departments, function (_, d) {
+                                departmentSelect.append(`<option value="${d.id}">${d.name}</option>`);
+                            });
+
+                            departmentSelect.val(form.department.id).trigger('change');
+
+                            // Load Programs for this department, then set Program
+                            $.ajax({
+                                url: "/get-programs/" + form.department.id,
+                                type: "GET",
+                                success: function (programs) {
+                                    let programSelect = $f.find('[name="program_id"]');
+                                    programSelect.empty().append('<option value="">-- Select Program --</option>');
+                                    $.each(programs, function (_, p) {
+                                        programSelect.append(`<option value="${p.id}">${p.program_name}</option>`);
+                                    });
+
+                                    programSelect.val(form.program.id).trigger('change');
+                                }
+                            });
+                        }
+                    });
+                    $f.find('[name="program_level"]').val(form.program_level).trigger('change');
                     $f.find('[name="student_country"]').val(form.student_country);
                     $f.find('[name="student_semester"]').val(form.student_semester);
                     employerRaty.setScore(form.student_rating);
@@ -398,49 +473,49 @@
                 });
 
                 $('#researchForm1').on('submit', function (e) {
-        e.preventDefault();
-        let form = $(this);
-        let formData = new FormData(this);
-        const recordId = $('#record_id').val();
-        formData.append('status_update_data', true);
-        Swal.fire({
-            title: 'Updating...',
-            allowOutsideClick: false,
-            didOpen: () => Swal.showLoading()
-        });
-
-
-        $.ajax({
-            url: "{{ route('international-st-satisfaction.update', '') }}/" + recordId,
-            method: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            success: function (response) {
-                Swal.close();
-                Swal.fire('Success', response.message, 'success');
-                $('#employabilityFormModal').modal('hide');
-                $('#researchForm1')[0].reset();
-                form.find('.invalid-feedback').remove();
-                form.find('.is-invalid').removeClass('is-invalid');
-                fetchCommercialForms(); // reload table
-            },
-            error: function (xhr) {
-                Swal.close();
-                if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
-                    $.each(errors, function (field, messages) {
-                        let input = $('#researchForm1').find('[name="' + field + '"]');
-                        input.addClass('is-invalid');
-                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
+                    const recordId = $('#record_id').val();
+                    formData.append('status_update_data', true);
+                    Swal.fire({
+                        title: 'Updating...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
                     });
-                } else {
-                    Swal.fire('Error', 'Something went wrong!', 'error');
-                }
-            }
-        });
-    });
+
+
+                    $.ajax({
+                        url: "{{ route('international-st-satisfaction.update', '') }}/" + recordId,
+                        method: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire('Success', response.message, 'success');
+                            $('#employabilityFormModal').modal('hide');
+                            $('#researchForm1')[0].reset();
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            fetchCommercialForms(); // reload table
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                $.each(errors, function (field, messages) {
+                                    let input = $('#researchForm1').find('[name="' + field + '"]');
+                                    input.addClass('is-invalid');
+                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                });
+                            } else {
+                                Swal.fire('Error', 'Something went wrong!', 'error');
+                            }
+                        }
+                    });
+                });
 
                 // Delete
                 $(document).on('click', '.delete-btn', function () {
@@ -460,6 +535,75 @@
                             alert('Failed to delete record.');
                         }
                     });
+                });
+
+                $('#faculty_id').on('change', function () {
+
+                    let facultyId = $(this).val();
+                    let departmentSelect = $('#department_id');
+                    let programSelect = $('#program_id');
+
+                    departmentSelect.html('<option value="">Loading...</option>');
+                    programSelect.html('<option value="">-- Select Program --</option>');
+
+
+                    if (facultyId) {
+                        $.ajax({
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (response) {
+
+                                departmentSelect.empty();
+                                departmentSelect.append('<option value="">-- Select Department --</option>');
+
+                                $.each(response, function (key, department) {
+                                    departmentSelect.append(
+                                        `<option value="${department.id}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ${department.name}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </option>`
+                                    );
+                                });
+
+                                departmentSelect.trigger('change'); // refresh select2
+                            }
+                        });
+                    } else {
+                        departmentSelect.html('<option value="">-- Select Department --</option>');
+                    }
+                });
+                $('#department_id').on('change', function () {
+
+                    let departmentId = $(this).val();
+                    let programSelect = $('#program_id');
+
+                    programSelect.html('<option value="">Loading...</option>');
+
+                    if (departmentId) {
+                        $.ajax({
+                            url: "/get-programs/" + departmentId,
+                            type: "GET",
+                            success: function (response) {
+
+                                programSelect.empty();
+                                programSelect.append('<option value="">-- Select Program --</option>');
+
+                                $.each(response, function (key, program) {
+                                    programSelect.append(
+                                        `<option value="${program.id}">
+                                                                                                                                                        ${program.program_name}
+                                                                                                                                                    </option>`
+                                    );
+                                });
+
+                                programSelect.trigger('change'); // refresh select2
+                            },
+                            error: function () {
+                                programSelect.html('<option value="">Error loading programs</option>');
+                            }
+                        });
+                    } else {
+                        programSelect.html('<option value="">-- Select Program --</option>');
+                    }
                 });
             });
         </script>
