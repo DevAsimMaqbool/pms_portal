@@ -42,29 +42,49 @@
     $totalFeedback = 0;                                    
  @endphp
 @if(in_array(getRoleName(activeRole()), ['HOD']))
-<!--  Payment Methods modal -->
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="ofAdmissionTargetsAchieved" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    % of Admission Targets Achieved
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#ofAdmissionTargetsAchieved-spring"
+                                    aria-controls="ofAdmissionTargetsAchieved-spring" aria-selected="true">
+                                    🌸 Spring {{ date('Y') }}
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#ofAdmissionTargetsAchieved-fall"
+                                    aria-controls="ofAdmissionTargetsAchieved-fall" aria-selected="false">
+                                    🍂 Fall {{ date('Y') }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
 
-    <div class="modal fade" id="ofAdmissionTargetsAchieved" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content custom-modal">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <!-- Title -->
-                    <h3 class="text-center mb-4 fw-bold text-primary">
-                        <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>% of Admission Targets Achieved
-                    </h3>
-                    <div class="card">
-
-                        <div class="card-body">
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="ofAdmissionTargetsAchieved-spring"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-striped align-middle custom-table">
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Program Name</th>
                                             <th>Total Target</th>
                                             <th>Total Achieved</th>
                                             <th>Score</th>
@@ -89,35 +109,81 @@
                                                     }
                                                 }
                                             @endphp
-                                                @foreach($data['records'] as $record)
                                                 @php
-                                                    [$rating, $color] = ratingFunctions($record['percentage']);
+                                                    [$rating, $color] = ratingFunctions($data['records']['Spring']['percentage']);
                                                     
                                                 @endphp
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $record['program_name'] }}</td>
-                                                    <td>{{ $record['total_target'] }}</td>
-                                                    <td>{{ $record['total_achieved'] }}</td>
-                                                    <td><div class="badge bg-{{ $color }}">
-                                                        {{ $record['percentage']}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge bg-label-{{ $color }}">
-
-                                                                {{ $rating }}
-                                                            </div>
-                                                    </td>    
+                                                 <tr>
+                                                    <td>1</td>
+                                                    <td>{{ $data['records']['Spring']['total_target'] }}</td>
+                                                    <td>{{ $data['records']['Spring']['total_achieved'] }}</td>
+                                                    <td><div class="badge bg-{{ $color }}">{{ $data['records']['Spring']['percentage'] }}%</div></td>
+                                                    <td><div class="badge bg-label-{{ $color }}">{{ $rating }}</div></td>
                                                 </tr>
-                                            @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
-                                            <th class=""></th>
-                                            <th class="">{{number_format($data['total_target'], 1) }}</th>
-                                            <th class="">{{number_format($data['total_achieved'], 1) }}</th>
-                                            <th class="">{{number_format($data['avg_percentage'], 1) }}</th>
+                                            <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
+                                            <th class="">Total (S+F){{number_format($data['total_achieved'], 1) }}</th>
+                                            <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }}</th>
+                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                        </tr>
+                                    </tfoot>
+                                    
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="ofAdmissionTargetsAchieved-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                 <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Total Target</th>
+                                            <th>Total Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            @php
+                                                $data=admissionTargetDepartmentAverage(Auth::user()->employee_id, $activeRoleId, 143); 
+                                                if (!function_exists('ratingFunctions')) {
+                                                    function ratingFunctions($average)
+                                                    {
+                                                        if ($average >= 90)
+                                                            return ['OS', 'primary'];
+                                                        if ($average >= 80)
+                                                            return ['EE', 'success'];
+                                                        if ($average >= 70)
+                                                            return ['ME', 'warning'];
+                                                        if ($average >= 60)
+                                                            return ['NI', 'orange'];
+                                                        return ['BE', 'danger'];
+                                                    }
+                                                }
+                                            @endphp
+                                                @php
+                                                    [$rating, $color] = ratingFunctions($data['records']['Fall']['percentage']);
+                                                    
+                                                @endphp
+                                                 <tr>
+                                                    <td>1</td>
+                                                    <td>{{ $data['records']['Fall']['total_target'] }}</td>
+                                                    <td>{{ $data['records']['Fall']['total_achieved'] }}</td>
+                                                    <td><div class="badge bg-{{ $color }}">{{ $data['records']['Fall']['percentage'] }}%</div></td>
+                                                    <td><div class="badge bg-label-{{ $color }}">{{ $rating }}</div></td>
+                                                </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
+                                            <th class="">Total (S+F){{number_format($data['total_achieved'], 1) }}</th>
+                                            <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }}</th>
                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
                                         </tr>
                                     </tfoot>
@@ -130,5 +196,7 @@
             </div>
         </div>
     </div>
-    <!-- / Payment Methods modal -->
+</div>
+
+<!-- / Payment Methods modal -->
 @endif

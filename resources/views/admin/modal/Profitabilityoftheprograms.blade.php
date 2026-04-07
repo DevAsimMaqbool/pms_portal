@@ -40,10 +40,10 @@
     $activeRoleId = getRoleIdByName(activeRole());     
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
- @endphp
+@endphp
 @if(in_array(getRoleName(activeRole()), ['HOD']))
 <!-- / Payment Methods modal -->
-<div class="modal fade" id="Recovery" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="Profitabilityoftheprograms" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content custom-modal">
             <div class="modal-header">
@@ -52,7 +52,7 @@
             <div class="modal-body p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
-                    Recovery%
+                    Profitability of the programs
                 </h3>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
@@ -60,8 +60,8 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#Recovery-spring"
-                                    aria-controls="Recovery-spring" aria-selected="true">
+                                    data-bs-target="#Profitabilityoftheprograms-spring"
+                                    aria-controls="Profitabilityoftheprograms-spring" aria-selected="true">
                                     🌸 Yearly
                                 </button>
                             </li>
@@ -72,7 +72,7 @@
                     <!-- Tab Content -->
                     <div class="tab-content">
                         <!-- Spring -->
-                        <div class="tab-pane fade show active" id="Recovery-spring"
+                        <div class="tab-pane fade show active" id="Profitabilityoftheprograms-spring"
                             role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-striped align-middle custom-table">
@@ -81,14 +81,13 @@
                                             <th>Sr#</th>
                                             <th>Program</th>
                                             <th>Total Target</th>
-                                            <th>Total Achieved</th>
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
                                     </thead>
                                  <tbody>
                                             @php
-                                                $data=recoveryTargetDepartmentAveraget(Auth::user()->employee_id, $activeRoleId, 146); 
+                                                $data=programProfitabilityDepartmentAverage(Auth::user()->employee_id, $activeRoleId, 147); 
                                                 if (!function_exists('ratingFunctions')) {
                                                     function ratingFunctions($average)
                                                     {
@@ -106,16 +105,15 @@
                                             @endphp
                                                 @foreach($data['records'] as $record)
                                                 @php
-                                                    [$rating, $color] = ratingFunctions($record['percentage']);
+                                                    [$rating, $color] = ratingFunctions($record->avg_profitability);
                                                     
                                                 @endphp
                                                 <tr>
                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $record['program_name'] }}</td>
-                                                    <td>{{ $record['total_target'] }}</td>
-                                                    <td>{{ $record['total_achieved'] }}</td>
+                                                    <td>{{ $record->program->program_name }}</td>
+                                                    <td>{{ $record->total_profitability }}</td>
                                                     <td><div class="badge bg-{{ $color }}">
-                                                        {{ $record['percentage']}}%
+                                                        {{ $record->avg_profitability}}%
                                                         </div></td>
                                                     <td>
                                                             <div class="badge bg-label-{{ $color }}">
@@ -131,11 +129,10 @@
                                             <th class="">Total</th>
                                             <th class=""></th>
                                             <th class="">{{number_format($data['total_target'], 1) }}</th>
-                                            <th class="">{{number_format($data['total_achieved'], 1) }}</th>
                                             <th class="">{{number_format($data['avg_percentage'], 1) }}</th>
                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
                                         </tr>
-                                    </tfoot>
+                                    </tfoot> 
                                     
                                 </table>    
                                     
@@ -143,7 +140,7 @@
                         </div>
 
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="Recovery-fall" role="tabpanel">
+                        <div class="tab-pane fade" id="Profitabilityoftheprograms-fall" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                  
                             </div>
