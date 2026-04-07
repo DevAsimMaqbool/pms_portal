@@ -16,28 +16,31 @@ class SatisfactionOfInternationalStudentController extends Controller
         try {
             $user = Auth::user();
             $employee_id = $user->employee_id;
-            if(in_array(getRoleName(activeRole()), ['International Office'])){
+            if (in_array(getRoleName(activeRole()), ['International Office'])) {
                 $status = $request->input('status');
-                if($status=="HOD"){
+                if ($status == "HOD") {
                     $forms = SatisfactionOfInternationalStudent::with([
-                            'creator' => function ($q) {
-                                $q->select('employee_id', 'name');
-                            }
-                        ])->where('created_by', $employee_id)
+                        'faculty',
+                        'department',
+                        'program',
+                        'creator' => function ($q) {
+                            $q->select('employee_id', 'name');
+                        }
+                    ])->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get();
-                }       
+                }
             }
-            if(in_array(getRoleName(activeRole()), ['QEC'])) {
+            if (in_array(getRoleName(activeRole()), ['QEC'])) {
                 $status = $request->input('status');
-                if($status=="HOD"){
+                if ($status == "HOD") {
                     $forms = SatisfactionOfInternationalStudent::with([
-                            'creator' => function ($q) {
-                                $q->select('employee_id', 'name');
-                            }
-                        ])->orderBy('id', 'desc')
+                        'creator' => function ($q) {
+                            $q->select('employee_id', 'name');
+                        }
+                    ])->orderBy('id', 'desc')
                         ->get();
-                }       
+                }
             }
 
             if ($request->ajax()) {
@@ -62,7 +65,10 @@ class SatisfactionOfInternationalStudentController extends Controller
                     'indicator_id' => 'required',
                     'student_name' => 'required|string|max:255',
                     'student_roll_no' => 'required|string|max:255',
-                    'student_program' => 'required|string|max:255',
+                    'faculty_id' => 'required',
+                    'department_id' => 'required',
+                    'program_id' => 'required',
+                    'program_level' => 'required',
                     'student_country' => 'required|string|max:255',
                     'student_semester' => 'required|string|max:255',
                     'score' => 'required|numeric|min:0|max:5',
@@ -108,7 +114,10 @@ class SatisfactionOfInternationalStudentController extends Controller
                 $request->validate([
                     'student_name' => 'required|string|max:255',
                     'student_roll_no' => 'required|string|max:255',
-                    'student_program' => 'required|string|max:255',
+                    'faculty_id' => 'required',
+                    'department_id' => 'required',
+                    'program_id' => 'required',
+                    'program_level' => 'required',
                     'student_country' => 'required|string|max:255',
                     'student_semester' => 'required|string|max:255',
                     'score' => 'required|numeric|min:0|max:5',
@@ -118,7 +127,10 @@ class SatisfactionOfInternationalStudentController extends Controller
                 $data = [
                     'student_name' => $request->student_name,
                     'student_roll_no' => $request->student_roll_no,
-                    'student_program' => $request->student_program,
+                    'faculty_id' => $request->faculty_id,
+                    'department_id' => $request->department_id,
+                    'program_id' => $request->program_id,
+                    'program_level' => $request->program_level,
                     'student_country' => $request->student_country,
                     'student_semester' => $request->student_semester,
                     'student_rating' => $request->score,
@@ -128,8 +140,8 @@ class SatisfactionOfInternationalStudentController extends Controller
 
                 $product->update($data);
 
-                
-                return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $product]);
+
+                return response()->json(['status' => 'success', 'message' => 'Record updated successfully', 'data' => $product]);
             }
             if ($request->has('status_update')) {
                 $request->validate([
@@ -150,10 +162,10 @@ class SatisfactionOfInternationalStudentController extends Controller
                 $lastUpdate = end($history);
                 if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
                     $history[] = [
-                        'user_id'    => $currentUserId,
-                        'user_name'  => $currentUserName,
-                        'status'     => $request->status,
-                        'role'     => $userRoll,
+                        'user_id' => $currentUserId,
+                        'user_name' => $currentUserName,
+                        'status' => $request->status,
+                        'role' => $userRoll,
                         'updated_at' => now()->toDateTimeString(),
                     ];
                 }
