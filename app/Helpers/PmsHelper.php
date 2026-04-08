@@ -643,6 +643,46 @@ if (!function_exists('FacultyLevelToppers')) {
     }
     
 }
+if (!function_exists('ResearchInnovationAndCommercialization')) {
+    function ResearchInnovationAndCommercialization($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
+    {
+        $faculty = auth()->user()->faculty;
+        $hod_ids = User::where('faculty', $faculty)->role('HOD')->pluck('employee_id');
+        $count_hod_ids = $hod_ids->count();   
+        $record = IndicatorsPercentage::with([
+                'user:id,employee_id,department_id,name',
+                'user.department:id,name'
+            ])
+        ->whereIn('employee_id', $hod_ids)
+            ->where('role_id', 22)->where('key_performance_area_id', $KpaId)
+            ->where('indicator_category_id', $categoryId)->where('indicator_id', $indicatorId)
+            ->orderBy('id')
+            ->get();
+       // dd($record);    
+        $sumScore = $record->sum('score');    
+        $avgScore = ($count_hod_ids > 0) ? round(($sumScore / $count_hod_ids), 2) : 0;
+
+        $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId);
+        $weight = $indicatorWeight['weightage'] ?? 0;
+        $weightedScore = ($avgScore * $weight) / 100;
+        
+        saveIndicatorPercentage(
+            $employeeId,
+            $activeRoleId,
+            $KpaId,
+            $categoryId,
+            $indicatorId,
+            $weightedScore,
+            $avgScore
+        );
+
+        return [
+            'records' => $record,
+            'faculty_avg_percentage' => $avgScore,
+            'weighted_score' => $weightedScore,
+        ];
+    }
+}
 
 
 
