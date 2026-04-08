@@ -4666,8 +4666,8 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
         $departmentAvgPercentage = $totalTarget > 0
             ? round(($totalSubmitted / $totalTarget) * 100, 2)
             : 0;
-
-        $weightedScore = ($departmentAvgPercentage * 20) / 100;
+        $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+        $weightedScore = ($departmentAvgPercentage * $weight) / 100;
 
         saveIndicatorPercentage(
             $employeeId,
@@ -6020,47 +6020,46 @@ if (!function_exists('departmentAlumniSatisfactionRateOfHOD')) {
 }
 
 if (!function_exists('departmentEventFeedbackAverage')) {
-    /**
-     * Calculate department-level average rating for Line Manager Event Feedback
-     *
-     * @param int $activeRoleId
-     * @param int $KpaId
-     * @param int $categoryId
-     * @param int $indicatorId
-     * @return array
-     */
+
     function departmentEventFeedbackAverage($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
     {
         $departmentId = auth()->user()->department_id;
 
-        // 1️⃣ Get employee_ids of users in the same department
+        // 1️⃣ Employees of department
         $employeeIds = User::where('department_id', $departmentId)
             ->pluck('employee_id')
-            ->filter() // remove nulls if any
+            ->filter()
             ->toArray();
 
         if (empty($employeeIds)) {
-            return [
-                'department_average' => 0,
-                'weighted_score' => 0
+            return (object) [
+                'rows' => [],
+                'summary' => (object) [
+                    'average' => 0,
+                    'weighted_score' => 0,
+                    'rating' => 'BE',
+                    'color' => '#ff4c51'
+                ]
             ];
         }
 
-        // 2️⃣ Fetch all feedback records for those employees
-        $feedbacks = LineManagerEventFeedback::whereIn('employee_id', $employeeIds)
+        // 2️⃣ Get all feedbacks
+        $records = LineManagerEventFeedback::whereIn('employee_id', $employeeIds)
             ->whereNotNull('rating')
-            ->get('rating');
+            ->get();
 
-        // 3️⃣ Calculate department average
-        $departmentAvg = $feedbacks->count()
-            ? round($feedbacks->avg('rating'), 2)
+        // 3️⃣ Department average (SAVE THIS)
+        $departmentAvg = $records->count()
+            ? round($records->avg('rating'), 2)
             : 0;
 
-        // 4️⃣ Weighted score (example weight 20% if not stored elsewhere)
+        $meta = getRatingMeta($departmentAvg);
+
+        // 4️⃣ Weight
         $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 20;
         $weightedScore = ($departmentAvg * $weight) / 100;
 
-        // 5️⃣ Save or update to prevent duplicate insertion
+        // 5️⃣ Save
         saveIndicatorPercentage(
             $employeeId,
             $activeRoleId,
@@ -6070,9 +6069,35 @@ if (!function_exists('departmentEventFeedbackAverage')) {
             $weightedScore
         );
 
-        return [
-            'department_average' => $departmentAvg,
-            'weighted_score' => $weightedScore
+        // 6️⃣ GROUP BY EVENT (FOR MODAL)
+        $grouped = $records->groupBy('event_name');
+
+        $rows = [];
+
+        foreach ($grouped as $eventName => $items) {
+
+            $avg = round($items->avg('rating'), 2);
+
+            $metaRow = getRatingMeta($avg);
+
+            $rows[] = [
+                'event_name' => $eventName,
+                'total_entries' => $items->count(),
+                'score' => $avg,
+                'rating' => $metaRow->rating,
+                'color' => $metaRow->color,
+            ];
+        }
+
+        // 7️⃣ RETURN
+        return (object) [
+            'rows' => $rows,
+            'summary' => (object) [
+                'average' => $departmentAvg,
+                'weighted_score' => round($weightedScore, 2),
+                'rating' => $meta->rating,
+                'color' => $meta->color
+            ]
         ];
     }
 }
@@ -6089,8 +6114,10 @@ if (!function_exists('calculateLineManagerFeedbackAverage')) {
     {
         // Determine which employees to include
         if ($indicatorId == 177) {
+
             // Dean's Feedback Score: upward (manager)
             $employeeIds = $authUser->manager ? [$authUser->manager->employee_id] : [];
+
         } elseif ($indicatorId == 178) {
             // PLs / Faculty Satisfaction Score: downward (subordinates)
             $employeeIds = $authUser->subordinates
@@ -6104,12 +6131,13 @@ if (!function_exists('calculateLineManagerFeedbackAverage')) {
         if (empty($employeeIds)) {
             return [
                 'department_average' => 0,
-                'weighted_score' => 0
+                'weighted_score' => 0,
+                'categories' => []
             ];
         }
 
         // Fetch all relevant feedback records
-        $feedbacks = LineManagerFeedback::whereIn('created_by', $employeeIds)
+        $feedbacks = LineManagerFeedback::whereIn('employee_id', $employeeIds)
             ->get([
                 'responsibility_accountability_1',
                 'responsibility_accountability_2',
@@ -6126,7 +6154,8 @@ if (!function_exists('calculateLineManagerFeedbackAverage')) {
         if ($feedbacks->isEmpty()) {
             return [
                 'department_average' => 0,
-                'weighted_score' => 0
+                'weighted_score' => 0,
+                'categories' => []
             ];
         }
 
@@ -6156,28 +6185,74 @@ if (!function_exists('calculateLineManagerFeedbackAverage')) {
         $weight165 = getRoleWeightage($activeRoleId, 'indicator', 165)['weightage'] ?? 0;
         $weight166 = getRoleWeightage($activeRoleId, 'indicator', 166)['weightage'] ?? 0;
         $weight180 = getRoleWeightage($activeRoleId, 'indicator', 180)['weightage'] ?? 0;
+        $weight178 = getRoleWeightage($activeRoleId, 'indicator', 178)['weightage'] ?? 0;
+        $weightedScore178 = round(($departmentAvg * $weight178) / 100, 2);
         $weightedScore165 = round(($departmentAvg * $weight165) / 100, 2);
         $weightedScore166 = round(($departmentAvg * $weight166) / 100, 2);
         $weightedScore180 = round(($departmentAvg * $weight180) / 100, 2);
-        // Weighted score example (20% weight)
-        $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
-        $weightedScore = round(($departmentAvg * $weight) / 100, 2);
 
-        saveIndicatorPercentage(
-            $authUser->employee_id,
-            $activeRoleId,
-            7,
-            16,
-            $indicatorId,
-            $weightedScore
-        );
-        saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 165, $weightedScore165);
-        saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 166, $weightedScore166);
-        saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 180, $weightedScore180);
+        // Weighted score example (20% weight)
+        if ($indicatorId == 177) {
+            $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+            $weightedScore = round(($departmentAvg * $weight) / 100, 2);
+
+            saveIndicatorPercentage(
+                $authUser->employee_id,
+                $activeRoleId,
+                7,
+                16,
+                $indicatorId,
+                $weightedScore
+            );
+        } else {
+            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 178, $weightedScore178);
+            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 165, $weightedScore165);
+            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 166, $weightedScore166);
+            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 180, $weightedScore180);
+        }
+
 
         return [
-            'department_average' => $departmentAvg,
-            'weighted_score' => $weightedScore
+            // 'department_average' => $departmentAvg,
+            // 'weighted_score' => $weightedScore,
+
+            // 🔥 NEW: Modal-ready breakdown
+            'categories' => [
+                'Responsibility & Accountability' => round($feedbacks->map(function ($r) {
+                    return collect([
+                        $r->responsibility_accountability_1,
+                        $r->responsibility_accountability_2
+                    ])->filter()->avg();
+                })->filter()->avg(), 2),
+
+                'Empathy & Compassion' => round($feedbacks->map(function ($r) {
+                    return collect([
+                        $r->empathy_compassion_1,
+                        $r->empathy_compassion_2
+                    ])->filter()->avg();
+                })->filter()->avg(), 2),
+
+                'Humility & Service' => round($feedbacks->map(function ($r) {
+                    return collect([
+                        $r->humility_service_1,
+                        $r->humility_service_2
+                    ])->filter()->avg();
+                })->filter()->avg(), 2),
+
+                'Honesty & Integrity' => round($feedbacks->map(function ($r) {
+                    return collect([
+                        $r->honesty_integrity_1,
+                        $r->honesty_integrity_2
+                    ])->filter()->avg();
+                })->filter()->avg(), 2),
+
+                'Inspirational Leadership' => round($feedbacks->map(function ($r) {
+                    return collect([
+                        $r->inspirational_leadership_1,
+                        $r->inspirational_leadership_2
+                    ])->filter()->avg();
+                })->filter()->avg(), 2),
+            ]
         ];
     }
 }
