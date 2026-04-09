@@ -35,23 +35,27 @@
                         <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
                         <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
                         <div class="mt-12">
-                            <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                            <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                                alt="page-misc-not-authorized" width="170" class="img-fluid" />
                         </div>
                     </div>
                 @endif
                 <div class="tab-content">
                     @if(in_array(getRoleName(activeRole()), ['Finance']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            
-                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+
+                            <div
+                                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
                                 <div class="d-flex flex-column justify-content-center">
                                     <h4 class="mb-1">Recovery%</h4>
                                 </div>
                                 <div class="d-flex align-content-center flex-wrap gap-4">
                                     <div class="d-flex gap-4">
-                                    <a class="btn btn-label-primary" href="{{ route('indicators_crud.index', ['slug' => 'recovery', 'id' => $indicatorId]) }}">View</a></div>
+                                        <a class="btn btn-label-primary"
+                                            href="{{ route('indicators_crud.index', ['slug' => 'recovery', 'id' => $indicatorId]) }}">View</a>
+                                    </div>
                                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                                                <i class="bx bx-upload"></i> Import Excel / CSV</button>
+                                        <i class="bx bx-upload"></i> Import Excel / CSV</button>
                                 </div>
                             </div>
                             <form id="researchForm1" enctype="multipart/form-data">
@@ -65,7 +69,8 @@
 
                                             <div class="col-md-4">
                                                 <label class="form-label">Faculty</label>
-                                                <select name="recovery[0][faculty_id]" class="select2 form-select faculty-select">
+                                                <select name="recovery[0][faculty_id]"
+                                                    class="select2 form-select faculty-select">
                                                     <option value="">Select Faculty</option>
                                                     @foreach(get_faculties() as $faculty)
                                                         <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
@@ -75,32 +80,45 @@
 
                                             <div class="col-md-4">
                                                 <label class="form-label">Department</label>
-                                                <select name="recovery[0][department_id]" class="select2 form-select department-select">
+                                                <select name="recovery[0][department_id]"
+                                                    class="select2 form-select department-select">
                                                     <option value="">Select Department</option>
                                                 </select>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <label class="form-label">Program Name</label>
-                                                <select name="recovery[0][program_id]" class="select2 form-select program-select">
+                                                <select name="recovery[0][program_id]"
+                                                    class="select2 form-select program-select">
                                                     <option value="">Select Program</option>
                                                 </select>
                                             </div>
 
-                                
+                                            <div class="col-md-4">
+                                                <label for="program_level" class="form-label">Program Level</label>
+                                                <select name="recovery[0][program_level]" id="program_level"
+                                                    class="select2 form-select faculty-member" required>
+                                                    <option value="">-- Select Level --</option>
+                                                    <option value="UG">UG</option>
+                                                    <option value="PG">PG</option>
+                                                </select>
+                                            </div>
+
+
                                             <div class="col-md-4">
                                                 <label class="form-label">Target Month/Year</label>
-                                                <input type="date" name="recovery[0][target_month_year]" class="form-control" required>
+                                                <input type="date" name="recovery[0][target_month_year]" class="form-control"
+                                                    required>
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">Recovery Target</label>
-                                                <input type="number" name="recovery[0][recovery_target]" class="form-control" min="1"
-                                                    step="1" required>
+                                                <input type="number" name="recovery[0][recovery_target]" class="form-control"
+                                                    min="1" step="1" required>
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">Target Achieved</label>
-                                                <input type="number" name="recovery[0][achieved_target]" class="form-control" min="1"
-                                                    step="1" required>
+                                                <input type="number" name="recovery[0][achieved_target]" class="form-control"
+                                                    min="1" step="1" required>
                                             </div>
 
 
@@ -119,42 +137,42 @@
                             </form>
                         </div>
                     @endif
-                    
+
                 </div>
             </div>
         </div>
 
 
-<!-- Import Modal -->
-<div class="modal fade" id="importModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form id="importForm" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-            <input type="hidden" name="form_status" value="HOD">
+        <!-- Import Modal -->
+        <div class="modal fade" id="importModal" tabindex="-1">
+            <div class="modal-dialog">
+                <form id="importForm" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                    <input type="hidden" name="form_status" value="HOD">
 
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Import Employability Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import Employability Data</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
 
-                <div class="modal-body">
-                    <label class="form-label">Upload Excel / CSV</label>
-                    <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
+                        <div class="modal-body">
+                            <label class="form-label">Upload Excel / CSV</label>
+                            <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
 
-                    <small class="text-muted d-block mt-2">
-                        Allowed: xlsx, xls, csv
-                    </small>
-                </div>
+                            <small class="text-muted d-block mt-2">
+                                Allowed: xlsx, xls, csv
+                            </small>
+                        </div>
 
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
 
     </div>
     <!-- / Content -->
@@ -174,65 +192,74 @@
 @push('script')
     @if(in_array(getRoleName(activeRole()), ['Finance']))
         <script>
-            
+
             $(document).ready(function () {
-                
+
                 let faculties = @json(get_faculties());
                 let pastIndex = 1;
 
                 // Add new author group
                 $('#add-coauthor').click(function () {
-                    
 
-                     let facultyOptions = '<option value="">Select Faculty</option>';
-                        faculties.forEach(function(fac) {
-                            facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
-                        });
+
+                    let facultyOptions = '<option value="">Select Faculty</option>';
+                    faculties.forEach(function (fac) {
+                        facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
+                    });
                     let newGroup = `
-            <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
+                <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
 
                 <div class="col-md-4">
-                    <label class="form-label">Faculty</label>
-                    <select name="recovery[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
-                        ${facultyOptions}
-                    </select>
+                <label class="form-label">Faculty</label>
+                <select name="recovery[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
+                ${facultyOptions}
+                </select>
                 </div>
 
                 <div class="col-md-4">
-                    <label class="form-label">Department</label>
-                     <select name="recovery[${pastIndex}][department_id]" class="select2 form-select department-select">
-                        <option value="">Select Department</option>
-                    </select>
+                <label class="form-label">Department</label>
+                <select name="recovery[${pastIndex}][department_id]" class="select2 form-select department-select">
+                <option value="">Select Department</option>
+                </select>
                 </div>
 
-                 <div class="col-md-4">
-                    <label class="form-label">Program Name</label>
-                    <select name="recovery[${pastIndex}][program_id]" class="select2 form-select program-select">
-                        <option value="">Select Program</option>
-                    </select>
+                <div class="col-md-4">
+                <label class="form-label">Program Name</label>
+                <select name="recovery[${pastIndex}][program_id]" class="select2 form-select program-select">
+                <option value="">Select Program</option>
+                </select>
+                </div>
+                <div class="col-md-4">
+                <label for="program_level" class="form-label">Program Level</label>
+                <select name="recovery[${pastIndex}][program_level]" id="program_level"
+                class="select2 form-select faculty-member" required>
+                <option value="">-- Select Level --</option>
+                <option value="UG">UG</option>
+                <option value="PG">PG</option>
+                </select>
                 </div>
 
-              
+
                 <div class="col-md-4">
-                    <label class="form-label">Target Month/Year</label>
-                    <input type="date" name="recovery[${pastIndex}][target_month_year]" class="form-control" required>
+                <label class="form-label">Target Month/Year</label>
+                <input type="date" name="recovery[${pastIndex}][target_month_year]" class="form-control" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Recovery Target</label>
-                    <input type="number" name="recovery[${pastIndex}][recovery_target]" class="form-control" min="1"
-                        step="1" required>
+                <label class="form-label">Recovery Target</label>
+                <input type="number" name="recovery[${pastIndex}][recovery_target]" class="form-control" min="1"
+                step="1" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Target Achieved</label>
-                    <input type="number" name="recovery[${pastIndex}][achieved_target]" class="form-control" min="1"
-                        step="1" required>
+                <label class="form-label">Target Achieved</label>
+                <input type="number" name="recovery[${pastIndex}][achieved_target]" class="form-control" min="1"
+                step="1" required>
                 </div>
 
-            <div class="col-md-2 d-flex align-items-end">
-            <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
-            </div>
-            </div>`;
+                <div class="col-md-2 d-flex align-items-end">
+                <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
+                </div>
+                </div>`;
 
                     // Convert string → jQuery object
                     let $newBlock = $(newGroup);

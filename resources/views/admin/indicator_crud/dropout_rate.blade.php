@@ -118,6 +118,16 @@
                                         </div>
 
                                         <div class="col-md-4">
+                                            <label for="program_level" class="form-label">Program Level</label>
+                                            <select name="program_level" id="program_level"
+                                                class="select2 form-select faculty-member" required>
+                                                <option value="">-- Select Level --</option>
+                                                <option value="UG">UG</option>
+                                                <option value="PG">PG</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
                                             <label class="form-label" for="dropout_rate">Dropout Rate (%)</label>
                                             <div class="input-group">
                                                 <span class="input-group-text" id="basic-addon11">%</span>
@@ -186,6 +196,7 @@
                                 form.faculty ? form.faculty.name : 'N/A',
                                 form.department ? form.department.name : 'N/A',
                                 form.program ? form.program.program_name : 'N/A',
+                                form.program_level ? form.program_level : 'N/A',
                                 form.dropout_rate + ' %',
                                 editButton + ' ' + deleteBtn
                             ];
@@ -202,6 +213,7 @@
                                     { title: "Faculty" },
                                     { title: "Department" },
                                     { title: "Program" },
+                                    { title: "Program Level" },
                                     { title: "Dropout Rate" },
                                     { title: "Actions" }
                                 ]
@@ -232,6 +244,7 @@
 
                     // Set Faculty first
                     $f.find('[name="faculty_id"]').val(form.faculty.id).trigger('change');
+                    $f.find('[name="program_level"]').val(form.program_level).trigger('change');
 
                     // Load Departments for this faculty, then set Department
                     $.ajax({
@@ -349,8 +362,8 @@
                             $.each(response, function (key, department) {
                                 departmentSelect.append(
                                     `<option value="${department.id}">
-                                                                                                                                                                                                                                                                                                                                                                    ${department.name}
-                                                                                                                                                                                                                                                                                                                                                                </option>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ${department.name}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </option>`
                                 );
                             });
 
@@ -380,8 +393,8 @@
                             $.each(response, function (key, program) {
                                 programSelect.append(
                                     `<option value="${program.id}">
-                                                                                                                                                                                                                                                                                                                                                                    ${program.program_name}
-                                                                                                                                                                                                                                                                                                                                                                </option>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ${program.program_name}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </option>`
                                 );
                             });
 

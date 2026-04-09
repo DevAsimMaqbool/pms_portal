@@ -23,7 +23,8 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs mb-3" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">% of Admission Targets Achieved</a>
+                            <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">% of Admission Targets
+                                Achieved</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Approvals</a>
@@ -35,138 +36,156 @@
                         <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
                         <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
                         <div class="mt-12">
-                            <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                            <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                                alt="page-misc-not-authorized" width="170" class="img-fluid" />
                         </div>
                     </div>
                 @endif
                 <div class="tab-content">
                     @if(auth()->user()->hasRole(['Finance']))
-                        <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            
-                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h4 class="mb-1">% of Admission Targets Achieved</h4>
-                                </div>
-                                <div class="d-flex align-content-center flex-wrap gap-4">
-                                    <div class="d-flex gap-4">
-                                    <a class="btn btn-label-primary" href="{{ route('indicators_crud.index', ['slug' => 'admission_targets_achieved', 'id' => $indicatorId]) }}">View</a></div>
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                                                <i class="bx bx-upload"></i> Import Excel / CSV</button>
-                                </div>
-                            </div>
-                            <form id="researchForm1" enctype="multipart/form-data">
-                                @csrf
-                                <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-                                <input type="hidden" id="form_status" name="form_status" value="HOD">
+                                                                <div class="tab-pane fade show active" id="form1" role="tabpanel">
 
-                                <div class="row g-3">
-                                    <div id="author-past-container">
-                                        <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
+                                                                    <div
+                                                                        class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                                                                        <div class="d-flex flex-column justify-content-center">
+                                                                            <h4 class="mb-1">% of Admission Targets Achieved</h4>
+                                                                        </div>
+                                                                        <div class="d-flex align-content-center flex-wrap gap-4">
+                                                                            <div class="d-flex gap-4">
+                                                                                <a class="btn btn-label-primary"
+                                                                                    href="{{ route('indicators_crud.index', ['slug' => 'admission_targets_achieved', 'id' => $indicatorId]) }}">View</a>
+                                                                            </div>
+                                                                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                                                                <i class="bx bx-upload"></i> Import Excel / CSV</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <form id="researchForm1" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                        <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                                                                        <input type="hidden" id="form_status" name="form_status" value="HOD">
 
-                                            <div class="col-md-4">
-                                                <label class="form-label">Faculty</label>
-                                                <select name="admission[0][faculty_id]" class="select2 form-select faculty-select">
-                                                    <option value="">Select Faculty</option>
-                                                    @foreach(get_faculties() as $faculty)
-                                                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                                                        <div class="row g-3">
+                                                                            <div id="author-past-container">
+                                                                                <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
-                                            <div class="col-md-4">
-                                                <label class="form-label">Department</label>
-                                                <select name="admission[0][department_id]" class="select2 form-select department-select">
-                                                    <option value="">Select Department</option>
-                                                </select>
-                                            </div>
+                                                                                    <div class="col-md-4">
+                                                                                        <label class="form-label">Faculty</label>
+                                                                                        <select name="admission[0][faculty_id]"
+                                                                                            class="select2 form-select faculty-select">
+                                                                                            <option value="">Select Faculty</option>
+                                                                                            @foreach(get_faculties() as $faculty)
+                                                                                                <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
 
-                                            <div class="col-md-4">
-                                                <label class="form-label">Program Name</label>
-                                                <select name="admission[0][program_id]" class="select2 form-select program-select">
-                                                    <option value="">Select Program</option>
-                                                </select>
-                                            </div>
+                                                                                    <div class="col-md-4">
+                                                                                        <label class="form-label">Department</label>
+                                                                                        <select name="admission[0][department_id]"
+                                                                                            class="select2 form-select department-select">
+                                                                                            <option value="">Select Department</option>
+                                                                                        </select>
+                                                                                    </div>
 
-                                
-                                            <div class="col-md-4">
-                                                <label for="admissions_campaign_id" class="form-label">Admissions Campaign</label>
-                                                @php
-                                                    $year = now()->year - 1;
-                                                @endphp
-                                                <select name="admission[0][admissions_campaign]"
-                                                    class="select2 form-select admissions-campaign" required>
-                                                    <option value="">-- Select Campaign --</option>
-                                                     @for($i = 0; $i < 3; $i++)
-                                                        <option value="Fall {{ $year + $i }}">
-                                                            Fall {{ $year + $i }}
-                                                        </option>
-                                                        <option value="Spring {{ $year + $i + 1 }}">
-                                                            Spring {{ $year + $i + 1 }}
-                                                        </option>
-                                                    @endfor
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Admissions Target</label>
-                                                <input type="number" name="admission[0][admissions_target]" class="form-control" min="1"
-                                                    step="1" required>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Target Achieved</label>
-                                                <input type="number" name="admission[0][achieved_target]" class="form-control" min="1"
-                                                    step="1" required>
-                                            </div>
+                                                                                    <div class="col-md-4">
+                                                                                        <label class="form-label">Program Name</label>
+                                                                                        <select name="admission[0][program_id]"
+                                                                                            class="select2 form-select program-select">
+                                                                                            <option value="">Select Program</option>
+                                                                                        </select>
+                                                                                    </div>
+
+                                                                                    <div class="mb-3 col-md-4">
+                                                                                        <label for="program_level" class="form-label">Program Level</label>
+                                                                                        <select name="admission[0][program_level]" id="program_level"
+                                                                                            class="select2 form-select faculty-member" required>
+                                                                                            <option value="">-- Select Level --</option>
+                                                                                            <option value="UG">UG</option>
+                                                                                            <option value="PG">PG</option>
+                                                                                        </select>
+                                                                                    </div>
 
 
-                                        </div>
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <button type="button" class="btn btn-primary waves-effect waves-light"
-                                            id="add-coauthor"><i class="icon-base ti tabler-plus me-1"></i> <span
-                                                class="align-middle">Add</span></button>
-                                    </div>
+                                                                                    <div class="col-md-4">
+                                                                                        <label for="admissions_campaign_id" class="form-label">Admissions
+                                                                                            Campaign</label>
+                                                                                        @php
+                        $year = now()->year - 1;
+                                                                                        @endphp
+                                                                                        <select name="admission[0][admissions_campaign]"
+                                                                                            class="select2 form-select admissions-campaign" required>
+                                                                                            <option value="">-- Select Campaign --</option>
+                                                                                            @for($i = 0; $i < 3; $i++)
+                                                                                                <option value="Fall {{ $year + $i }}">
+                                                                                                    Fall {{ $year + $i }}
+                                                                                                </option>
+                                                                                                <option value="Spring {{ $year + $i + 1 }}">
+                                                                                                    Spring {{ $year + $i + 1 }}
+                                                                                                </option>
+                                                                                            @endfor
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="col-md-4">
+                                                                                        <label class="form-label">Admissions Target</label>
+                                                                                        <input type="number" name="admission[0][admissions_target]" class="form-control"
+                                                                                            min="1" step="1" required>
+                                                                                    </div>
+                                                                                    <div class="col-md-4">
+                                                                                        <label class="form-label">Target Achieved</label>
+                                                                                        <input type="number" name="admission[0][achieved_target]" class="form-control"
+                                                                                            min="1" step="1" required>
+                                                                                    </div>
 
-                                </div>
-                                <div class="mt-3 text-end">
-                                    <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
-                                </div>
-                            </form>
-                        </div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-12 mb-3">
+                                                                                <button type="button" class="btn btn-primary waves-effect waves-light"
+                                                                                    id="add-coauthor"><i class="icon-base ti tabler-plus me-1"></i> <span
+                                                                                        class="align-middle">Add</span></button>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="mt-3 text-end">
+                                                                            <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
                     @endif
                 </div>
             </div>
         </div>
 
-    <!-- Import Modal -->
-<div class="modal fade" id="importModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form id="importForm" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-            <input type="hidden" name="form_status" value="HOD">
+        <!-- Import Modal -->
+        <div class="modal fade" id="importModal" tabindex="-1">
+            <div class="modal-dialog">
+                <form id="importForm" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                    <input type="hidden" name="form_status" value="HOD">
 
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Import Employability Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import Employability Data</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
 
-                <div class="modal-body">
-                    <label class="form-label">Upload Excel / CSV</label>
-                    <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
+                        <div class="modal-body">
+                            <label class="form-label">Upload Excel / CSV</label>
+                            <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
 
-                    <small class="text-muted d-block mt-2">
-                        Allowed: xlsx, xls, csv
-                    </small>
-                </div>
+                            <small class="text-muted d-block mt-2">
+                                Allowed: xlsx, xls, csv
+                            </small>
+                        </div>
 
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
 
 
     </div>
@@ -187,82 +206,92 @@
 @push('script')
     @if(auth()->user()->hasRole(['Finance']))
         <script>
-            
+
             $(document).ready(function () {
-                
+
                 let faculties = @json(get_faculties());
                 let pastIndex = 1;
 
                 // Add new author group
                 $('#add-coauthor').click(function () {
-                    
 
-                     let facultyOptions = '<option value="">Select Faculty</option>';
-                        faculties.forEach(function(fac) {
-                            facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
-                        });
-                       let currentYear = new Date().getFullYear() - 1;
-                        let campaignOptions = `<option value="">-- Select Admission Campaign --</option>`;
 
-                        for (let i = 0; i < 3; i++) {
-                            campaignOptions += `
-                                <option value="Fall ${currentYear + i}">
-                                    Fall ${currentYear + i}
-                                </option>
-                                <option value="Spring ${currentYear + i + 1}">
-                                    Spring ${currentYear + i + 1}
-                                </option>
-                            `;
-                        }
+                    let facultyOptions = '<option value="">Select Faculty</option>';
+                    faculties.forEach(function (fac) {
+                        facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
+                    });
+                    let currentYear = new Date().getFullYear() - 1;
+                    let campaignOptions = `<option value="">-- Select Admission Campaign --</option>`;
+
+                    for (let i = 0; i < 3; i++) {
+                        campaignOptions += `
+                                                                                        <option value="Fall ${currentYear + i}">
+                                                                                            Fall ${currentYear + i}
+                                                                                        </option>
+                                                                                        <option value="Spring ${currentYear + i + 1}">
+                                                                                            Spring ${currentYear + i + 1}
+                                                                                        </option>
+                                                                                    `;
+                    }
                     let newGroup = `
-            <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
+                                                                    <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
 
-                <div class="col-md-4">
-                    <label class="form-label">Faculty</label>
-                    <select name="admission[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
-                        ${facultyOptions}
-                    </select>
-                </div>
+                                                                        <div class="col-md-4">
+                                                                            <label class="form-label">Faculty</label>
+                                                                            <select name="admission[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
+                                                                                ${facultyOptions}
+                                                                            </select>
+                                                                        </div>
 
-                <div class="col-md-4">
-                    <label class="form-label">Department</label>
-                     <select name="admission[${pastIndex}][department_id]" class="select2 form-select department-select">
-                        <option value="">Select Department</option>
-                    </select>
-                </div>
+                                                                        <div class="col-md-4">
+                                                                            <label class="form-label">Department</label>
+                                                                             <select name="admission[${pastIndex}][department_id]" class="select2 form-select department-select">
+                                                                                <option value="">Select Department</option>
+                                                                            </select>
+                                                                        </div>
 
-                 <div class="col-md-4">
-                    <label class="form-label">Program Name</label>
-                    <select name="admission[${pastIndex}][program_id]" class="select2 form-select program-select">
-                        <option value="">Select Program</option>
-                    </select>
-                </div>
+                                                                         <div class="col-md-4">
+                                                                            <label class="form-label">Program Name</label>
+                                                                            <select name="admission[${pastIndex}][program_id]" class="select2 form-select program-select">
+                                                                                <option value="">Select Program</option>
+                                                                            </select>
+                                                                        </div>
 
-               
+                                                                        <div class="mb-3 col-md-4">
+                                                                         <label for="program_level" class="form-label">Program Level</label>
+                                                                        <select name="admission[${pastIndex}][program_level]" id="program_level"
+                                                                            class="select2 form-select faculty-member" required>
+                                                                            <option value="">-- Select Level --</option>
+                                                                            <option value="UG">UG</option>
+                                                                            <option value="PG">PG</option>
+                                                                        </select>
+                                                                    </div>
 
-                 <div class="col-md-4">
-                    <label for="admissions_campaign_id" class="form-label">Admissions Campaign</label>
-                    <select name="admission[${pastIndex}][admissions_campaign]"
-                        class="select2 form-select admissions-campaign" required>
-                        ${campaignOptions}
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Admissions Target</label>
-                    <input type="number" name="admission[${pastIndex}][admissions_target]" class="form-control" min="1"
-                        step="1" required>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Target Achieved</label>
-                    <input type="number" name="admission[${pastIndex}][achieved_target]" class="form-control" min="1"
-                        step="1" required>
-                </div>
 
-            <div class="col-md-2 d-flex align-items-end">
-            <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
-            </div>
-            </div>`;
+
+                                                                         <div class="col-md-4">
+                                                                            <label for="admissions_campaign_id" class="form-label">Admissions Campaign</label>
+                                                                            <select name="admission[${pastIndex}][admissions_campaign]"
+                                                                                class="select2 form-select admissions-campaign" required>
+                                                                                ${campaignOptions}
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label class="form-label">Admissions Target</label>
+                                                                            <input type="number" name="admission[${pastIndex}][admissions_target]" class="form-control" min="1"
+                                                                                step="1" required>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label class="form-label">Target Achieved</label>
+                                                                            <input type="number" name="admission[${pastIndex}][achieved_target]" class="form-control" min="1"
+                                                                                step="1" required>
+                                                                        </div>
+
+                                                                    <div class="col-md-2 d-flex align-items-end">
+                                                                    <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
+                                                                    </div>
+                                                                    </div>`;
 
                     // Convert string → jQuery object
                     let $newBlock = $(newGroup);
@@ -283,7 +312,7 @@
                 $(document).on('click', '.remove-past', function () {
                     $(this).closest('.past-group').remove();
                 });
-                
+
                 $('#researchForm1').on('submit', function (e) {
                     e.preventDefault();
                     if (checkDuplicateAdmissions()) {
@@ -346,10 +375,10 @@
                                         row.addClass('border-danger');
 
                                         row.append(`
-                                            <div class="text-danger duplicate-error mt-2">
-                                                ${messages}
-                                            </div>
-                                        `);
+                                                                                                    <div class="text-danger duplicate-error mt-2">
+                                                                                                        ${messages}
+                                                                                                    </div>
+                                                                                                `);
                                     });
                                 }
 
@@ -484,10 +513,10 @@
 
                             // Show error message only in this row
                             $(this).append(`
-                                <div class="text-danger mt-2 duplicate-error">
-                                    Duplicate record not allowed!
-                                </div>
-                            `);
+                                                                                        <div class="text-danger mt-2 duplicate-error">
+                                                                                            Duplicate record not allowed!
+                                                                                        </div>
+                                                                                    `);
                         } else {
                             records[key] = index;
                         }

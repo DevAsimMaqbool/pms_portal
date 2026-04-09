@@ -33,18 +33,18 @@ class EmployabilityController extends Controller
 
     public function index(Request $request)
     {
-         try {
+        try {
             $user = Auth::user();
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-        if(in_array(getRoleName(activeRole()), ['Employability Center'])) {
+            if (in_array(getRoleName(activeRole()), ['Employability Center'])) {
                 $status = $request->input('status');
-                if($status=="HOD"){
+                if ($status == "HOD") {
                     $forms = Employability::with(['faculty', 'department', 'program'])->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get();
-                }       
+                }
             }
 
             if ($request->ajax()) {
@@ -74,16 +74,17 @@ class EmployabilityController extends Controller
      */
     public function store(Request $request)
     {
-        try { 
-            
-            if($request->form_status=='HOD'){
-                 $rules = [
+        try {
+
+            if ($request->form_status == 'HOD') {
+                $rules = [
                     'indicator_id' => 'required',
                     'period' => 'required|string',
                     'student_name' => 'required|string',
                     'faculty_id' => 'required|integer',
                     'department_id' => 'required|integer',
                     'program_id' => 'required|integer',
+                    'program_level' => 'required|string',
                     'batch' => 'required',
                     'date_of_appointment' => 'required',
                     'proof_salary_and_appointment' => 'required',
@@ -99,16 +100,16 @@ class EmployabilityController extends Controller
                 ];
 
 
-                    $validator = Validator::make($request->all(), $rules);
-                    if ($validator->fails()) {
-                            return response()->json([
-                                'status' => 'error',
-                                'errors' => $validator->errors()
-                            ], 422);
-                        }
-                    $data = $validator->validated();    
+                $validator = Validator::make($request->all(), $rules);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                $data = $validator->validated();
 
-                        
+
 
             }
             $employeeId = Auth::user()->employee_id;
@@ -126,8 +127,8 @@ class EmployabilityController extends Controller
             ]);
 
         } catch (\Exception $e) {
-             DB::rollBack();
-             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+            DB::rollBack();
+            return response()->json(['message' => 'Oops! Something went wrong'], 500);
         }
     }
 
@@ -152,45 +153,57 @@ class EmployabilityController extends Controller
      */
     public function update(Request $request, $id)
     {
-       $record = Employability::findOrFail($id);
+        $record = Employability::findOrFail($id);
 
         $request->validate([
-                'record_id' => 'required',
-                'period' => 'required|string',
-                'student_name' => 'required|string',
-                'faculty_id' => 'required|integer',
-                'department_id' => 'required|integer',
-                'program_id' => 'required|integer',
-                'batch' => 'required',
-                'date_of_appointment' => 'required',
-                'proof_salary_and_appointment' => 'required',
-                'passing_year' => 'required',
-                'employer_name' => 'required|string',
-                'sector' => 'required|string',
-                'salary' => 'required|integer|min:1',
-                'market_competitive_salary' => 'required|in:Above,At Par,Low',
-                'job_relevancy' => 'required|in:yes,no',
-                'employer_satisfaction' => 'nullable|numeric|min:0|max:5',
-                'graduate_satisfaction' => 'nullable|numeric|min:0|max:5',
-    
+            'record_id' => 'required',
+            'period' => 'required|string',
+            'student_name' => 'required|string',
+            'faculty_id' => 'required|integer',
+            'department_id' => 'required|integer',
+            'program_id' => 'required|integer',
+            'program_level' => 'required|string',
+            'batch' => 'required',
+            'date_of_appointment' => 'required',
+            'proof_salary_and_appointment' => 'required',
+            'passing_year' => 'required',
+            'employer_name' => 'required|string',
+            'sector' => 'required|string',
+            'salary' => 'required|integer|min:1',
+            'market_competitive_salary' => 'required|in:Above,At Par,Low',
+            'job_relevancy' => 'required|in:yes,no',
+            'employer_satisfaction' => 'nullable|numeric|min:0|max:5',
+            'graduate_satisfaction' => 'nullable|numeric|min:0|max:5',
+
         ]);
 
         $data = $request->only([
-                        'period', 'student_name', 'faculty_id', 'program_id', 'batch','passing_year',
-                        'employer_name','sector','salary','market_competitive_salary','job_relevancy','employer_satisfaction',
-                        'graduate_satisfaction'
-                    ]);
-                    $data['updated_by'] = Auth::user()->employee_id;
+            'period',
+            'student_name',
+            'faculty_id',
+            'program_id',
+            'program_level',
+            'batch',
+            'passing_year',
+            'employer_name',
+            'sector',
+            'salary',
+            'market_competitive_salary',
+            'job_relevancy',
+            'employer_satisfaction',
+            'graduate_satisfaction'
+        ]);
+        $data['updated_by'] = Auth::user()->employee_id;
 
-                    $record->update($data);
+        $record->update($data);
 
-                    return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+        return response()->json(['status' => 'success', 'message' => 'Record updated successfully', 'data' => $record]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-       public function destroy($id)
+    public function destroy($id)
     {
         $record = Employability::findOrFail($id);
 

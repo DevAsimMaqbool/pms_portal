@@ -5055,14 +5055,60 @@ if (!function_exists('researchProductivityPGStudentsOfHOD')) {
         $weights = [
             'weight133' => getRoleWeightage($activeRoleId, 'indicator', 133)['weightage'],
         ];
+
         $weightedScore133 = ($departmentAvgPercentage * $weights['weight133']) / 100;
         saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 133, $weightedScore133);
+
+        // =======================
+        // ✅ NEW: Department Rows for Modal
+        // =======================
+
+        $groupedData = [];
+
+        $allRecords = ResearchProductivityOfPgStudentTarget::whereIn('created_by', $facultyIds)
+            ->where('indicator_id', $indicatorId)
+            ->where('form_status', 'RESEARCHER')
+            ->where('status', 3)
+            ->get();
+
+        $grouped = $allRecords->groupBy(function ($item) {
+            return $item->target_category . '|' . $item->journal_clasification;
+        });
+
+        foreach ($grouped as $key => $records) {
+
+            [$category, $journal] = explode('|', $key);
+
+            $target = FacultyTarget::whereIn('user_id', $facultyIds)
+                ->where('indicator_id', $indicatorId)
+                ->where('form_status', 'HOD')
+                ->sum('target');
+
+            $achieved = $records->count();
+
+            $percentage = $target > 0 ? ($achieved / $target) * 100 : 0;
+
+            $groupedData[] = [
+                'target_category' => $category,
+                'journal_clasification' => $journal,
+                'value' => $target,
+                'count' => $achieved,
+                'percentage' => $percentage
+            ];
+        }
+
+        // =======================
+        // Final Return
+        // =======================
 
         return [
             'department_avg_percentage' => $departmentAvgPercentage,
             'department_international_fraction' => $departmentInternationalFraction,
             'department_quartile_score' => $totalQuartileScore,
             'department_research_percentage' => $departmentResearchPercentage,
+
+            // ✅ for modal
+            'department_rows' => $groupedData,
         ];
 
     }
@@ -5071,9 +5117,9 @@ if (!function_exists('researchProductivityPGStudentsOfHOD')) {
 if (!function_exists('admissionTargetDepartmentAverage')) {
     function admissionTargetDepartmentAverage($employeeId, $activeRoleId, $indicatorId)
     {
-       $departmentId = auth()->user()->department_id;
-       $currentYear = Carbon::now()->year;
-       // ✅ Campaigns for current year
+        $departmentId = auth()->user()->department_id;
+        $currentYear = Carbon::now()->year;
+        // ✅ Campaigns for current year
         $campaigns = [
             "Spring $currentYear",
             "Fall $currentYear"
@@ -5089,30 +5135,30 @@ if (!function_exists('admissionTargetDepartmentAverage')) {
             ->whereIn('admissions_campaign', $campaigns)
             ->groupBy('admissions_campaign')
             ->get();
-            $records = [
-                'Spring' => ['total_target' => 0, 'total_achieved' => 0, 'percentage' => 0],
-                'Fall'   => ['total_target' => 0, 'total_achieved' => 0, 'percentage' => 0],
-            ];
-             foreach ($recordsRaw as $record) {
-                $totalTarget1 = $record->total_target ?? 0;
-                $totalAchieved1 = $record->total_achieved ?? 0;
-                $percentage = $totalTarget1 > 0 ? ($totalAchieved1 / $totalTarget1) * 100 : 0;
-               
-                if (str_contains($record->admissions_campaign, 'Spring')) {
-                    $records['Spring']['total_target'] = $totalTarget1;
-                    $records['Spring']['total_achieved'] = $totalAchieved1;
-                    $records['Spring']['percentage'] = round($percentage, 1);
-                } else  if (str_contains($record->admissions_campaign, 'Fall')){
-                    $records['Fall']['total_target'] = $totalTarget1;
-                    $records['Fall']['total_achieved'] = $totalAchieved1;
-                    $records['Fall']['percentage'] = round($percentage, 1);
-                }
+        $records = [
+            'Spring' => ['total_target' => 0, 'total_achieved' => 0, 'percentage' => 0],
+            'Fall' => ['total_target' => 0, 'total_achieved' => 0, 'percentage' => 0],
+        ];
+        foreach ($recordsRaw as $record) {
+            $totalTarget1 = $record->total_target ?? 0;
+            $totalAchieved1 = $record->total_achieved ?? 0;
+            $percentage = $totalTarget1 > 0 ? ($totalAchieved1 / $totalTarget1) * 100 : 0;
+
+            if (str_contains($record->admissions_campaign, 'Spring')) {
+                $records['Spring']['total_target'] = $totalTarget1;
+                $records['Spring']['total_achieved'] = $totalAchieved1;
+                $records['Spring']['percentage'] = round($percentage, 1);
+            } else if (str_contains($record->admissions_campaign, 'Fall')) {
+                $records['Fall']['total_target'] = $totalTarget1;
+                $records['Fall']['total_achieved'] = $totalAchieved1;
+                $records['Fall']['percentage'] = round($percentage, 1);
             }
-            $totalTarget = $recordsRaw ->sum('total_target');
-            $totalAchieved = $recordsRaw ->sum('total_achieved');
-            $avgFacultyPercentage = $totalTarget > 0 ? ($totalAchieved / $totalTarget) * 100 : 0;
-            $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 143);
-            $weight = $indicatorWeight['weightage'] ?? 0;
+        }
+        $totalTarget = $recordsRaw->sum('total_target');
+        $totalAchieved = $recordsRaw->sum('total_achieved');
+        $avgFacultyPercentage = $totalTarget > 0 ? ($totalAchieved / $totalTarget) * 100 : 0;
+        $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 143);
+        $weight = $indicatorWeight['weightage'] ?? 0;
 
         // Weighted score
         $weightedScore = ($avgFacultyPercentage * $weight) / 100;
@@ -5146,7 +5192,7 @@ if (!function_exists('recoveryTargetDepartmentAveraget')) {
         $departmentId = auth()->user()->department_id;
         $currentYear = Carbon::now()->year; // e.g., 2026
 
-        $recordsRaw  = Recovery::with(['faculty', 'department', 'program'])
+        $recordsRaw = Recovery::with(['faculty', 'department', 'program'])
             ->select(
                 'program_id',
                 \DB::raw('SUM(recovery_target) as total_target'),
@@ -5157,46 +5203,46 @@ if (!function_exists('recoveryTargetDepartmentAveraget')) {
             ->whereYear('target_month_year', $currentYear)
             ->get();
 
-            $records = [];
-             foreach ($recordsRaw as $record) {
-                $totalTarget1 = $record->total_target ?? 0;
-                $totalAchieved1 = $record->total_achieved ?? 0;
-                $programPercentage = $totalTarget1 > 0 ? ($totalAchieved1 / $totalTarget1) * 100 : 0;
+        $records = [];
+        foreach ($recordsRaw as $record) {
+            $totalTarget1 = $record->total_target ?? 0;
+            $totalAchieved1 = $record->total_achieved ?? 0;
+            $programPercentage = $totalTarget1 > 0 ? ($totalAchieved1 / $totalTarget1) * 100 : 0;
 
-                $records[] = [
-                    'program_name' => $record->program->program_name ?? 'N/A',
-                    'total_target' => $totalTarget1,
-                    'total_achieved' => $totalAchieved1,
-                    'percentage' => round($programPercentage, 1)
-                ];
-            }
-            $totalTarget = $recordsRaw ->sum('total_target');
-            $totalAchieved = $recordsRaw ->sum('total_achieved');
-            $avgFacultyPercentage = $totalTarget > 0 ? ($totalAchieved / $totalTarget) * 100 : 0;
-            $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId);
-            $weight = $indicatorWeight['weightage'] ?? 0;
-
-            // Weighted score
-            $weightedScore = ($avgFacultyPercentage * $weight) / 100;
-
-           
-            saveIndicatorPercentage100Plus(
-                $employeeId,
-                $activeRoleId,
-                3, // Key performance area
-                11, // Indicator category
-                $indicatorId,
-                $weightedScore,
-                $avgFacultyPercentage
-            ); 
-            // Return data
-            return [
-                'records' => $records,                  // per program records
-                'total_target' => $totalTarget,         // sum of all targets
-                'total_achieved' => $totalAchieved,     // sum of all achieved
-                'avg_percentage' => round($avgFacultyPercentage, 2), // overall %
-                'weighted_score' => round($weightedScore, 2),        // weighted score
+            $records[] = [
+                'program_name' => $record->program->program_name ?? 'N/A',
+                'total_target' => $totalTarget1,
+                'total_achieved' => $totalAchieved1,
+                'percentage' => round($programPercentage, 1)
             ];
+        }
+        $totalTarget = $recordsRaw->sum('total_target');
+        $totalAchieved = $recordsRaw->sum('total_achieved');
+        $avgFacultyPercentage = $totalTarget > 0 ? ($totalAchieved / $totalTarget) * 100 : 0;
+        $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId);
+        $weight = $indicatorWeight['weightage'] ?? 0;
+
+        // Weighted score
+        $weightedScore = ($avgFacultyPercentage * $weight) / 100;
+
+
+        saveIndicatorPercentage100Plus(
+            $employeeId,
+            $activeRoleId,
+            3, // Key performance area
+            11, // Indicator category
+            $indicatorId,
+            $weightedScore,
+            $avgFacultyPercentage
+        );
+        // Return data
+        return [
+            'records' => $records,                  // per program records
+            'total_target' => $totalTarget,         // sum of all targets
+            'total_achieved' => $totalAchieved,     // sum of all achieved
+            'avg_percentage' => round($avgFacultyPercentage, 2), // overall %
+            'weighted_score' => round($weightedScore, 2),        // weighted score
+        ];
     }
 }
 
@@ -5206,42 +5252,42 @@ if (!function_exists('programProfitabilityDepartmentAverage')) {
         $departmentId = auth()->user()->department_id;
         $currentYear = Carbon::now()->year; // e.g., 2026
 
-        $recordsRaw  = ProgramProfitability::with(['faculty', 'department', 'program'])
+        $recordsRaw = ProgramProfitability::with(['faculty', 'department', 'program'])
             ->select(
                 'program_id',
                 \DB::raw('SUM(profitability) as total_profitability'),
-                \DB::raw('AVG(profitability) as avg_profitability') ,
+                \DB::raw('AVG(profitability) as avg_profitability'),
             )
             ->where('department_id', $departmentId)
             ->groupBy('program_id')
             ->whereYear('period_date', $currentYear)
             ->get();
 
-            $totalProfitability = $recordsRaw ->sum('total_profitability');
-            $avgtotalProfitability = $recordsRaw ->AVG('total_profitability');
-            $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId);
-            $weight = $indicatorWeight['weightage'] ?? 0;
+        $totalProfitability = $recordsRaw->sum('total_profitability');
+        $avgtotalProfitability = $recordsRaw->AVG('total_profitability');
+        $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId);
+        $weight = $indicatorWeight['weightage'] ?? 0;
 
-            // Weighted score
-            $weightedScore = ($avgtotalProfitability * $weight) / 100;
+        // Weighted score
+        $weightedScore = ($avgtotalProfitability * $weight) / 100;
 
-           
-            saveIndicatorPercentage100Plus(
-                $employeeId,
-                $activeRoleId,
-                3, // Key performance area
-                11, // Indicator category
-                $indicatorId,
-                $weightedScore,
-                $avgtotalProfitability
-            ); 
-            // Return data
-            return [
-                'records' => $recordsRaw,                  // per program records
-                'total_target' => $totalProfitability,         // sum of all targets
-                'avg_percentage' => round($avgtotalProfitability, 2), // overall %
-                'weighted_score' => round($weightedScore, 2),        // weighted score
-            ];
+
+        saveIndicatorPercentage100Plus(
+            $employeeId,
+            $activeRoleId,
+            3, // Key performance area
+            11, // Indicator category
+            $indicatorId,
+            $weightedScore,
+            $avgtotalProfitability
+        );
+        // Return data
+        return [
+            'records' => $recordsRaw,                  // per program records
+            'total_target' => $totalProfitability,         // sum of all targets
+            'avg_percentage' => round($avgtotalProfitability, 2), // overall %
+            'weighted_score' => round($weightedScore, 2),        // weighted score
+        ];
     }
 }
 
@@ -5502,90 +5548,6 @@ if (!function_exists('NoOfStudentsEnrolledIn1MWithGlobalExperienceOfHOD')) {
         return [
             'data' => $allData,
             'department_average' => $departmentAverage,
-        ];
-    }
-}
-
-if (!function_exists('internationalStudentSatisfactionAverage')) {
-
-    function internationalStudentSatisfactionAverage($employeeId, $activeRoleId, $indicatorId)
-    {
-        $departmentId = Auth::user()->department_id;
-
-        // 1️⃣ Get all records (needed for grouping + avg)
-        $records = SatisfactionOfInternationalStudent::with([
-            'faculty',
-            'department',
-            'program'
-        ])
-            ->where('indicator_id', $indicatorId)
-            ->where('department_id', $departmentId)
-            ->where('form_status', 'HOD')
-            ->where('status', 2)
-            ->get();
-
-        // 2️⃣ Department-wise average (ALL ratings)
-        $ratings = $records->pluck('student_rating')->map(fn($r) => (float) $r);
-
-        $avgRating = $ratings->count()
-            ? round($ratings->avg() * 20, 2)
-            : 0;
-
-        // 3️⃣ Rating Meta
-        $meta = getRatingMeta($avgRating);
-        $color = $meta->color;
-        $rating = $meta->rating;
-
-        // 4️⃣ Weightage
-        $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
-
-        $weightedScore = ($avgRating * $weight) / 100;
-
-        // 5️⃣ SAVE (department-wise only once)
-        saveIndicatorPercentage90Plus(
-            $employeeId,
-            $activeRoleId,
-            4,
-            12,
-            $indicatorId,
-            $weightedScore,
-            $avgRating
-        );
-
-        // 6️⃣ Group by PROGRAM for modal
-        $grouped = $records->groupBy('program_id');
-
-        $rows = [];
-
-        foreach ($grouped as $programId => $items) {
-
-            $programRatings = $items->pluck('student_rating')->map(fn($r) => (float) $r);
-
-            $programAvg = $programRatings->count()
-                ? round($programRatings->avg() * 20, 2)
-                : 0;
-
-            $programMeta = getRatingMeta($programAvg);
-
-            $rows[] = [
-                'faculty' => optional($items->first()->faculty)->name,
-                'department' => optional($items->first()->department)->name,
-                'program' => optional($items->first()->program)->program_name,
-                'program_level' => optional($items->first())->program_level,
-                'score' => $programAvg,
-                'rating' => $programMeta->rating,
-                'color' => $programMeta->color,
-            ];
-        }
-
-        return (object) [
-            'rows' => $rows,
-            'summary' => (object) [
-                'average_rating' => $avgRating,
-                'weighted_score' => round($weightedScore, 2),
-                'color' => $color,
-                'rating' => $rating
-            ]
         ];
     }
 }
@@ -6283,7 +6245,7 @@ if (!function_exists('lineManagerReviewRatingOnTasks169')) {
             );
         }
 
-        return ['average_score' => $averageScore,'total_score' => $totalScore, 'ratings' => $managerRatings];
+        return ['average_score' => $averageScore, 'total_score' => $totalScore, 'ratings' => $managerRatings];
     }
 }
 if (!function_exists('facultyPursuingSkills')) {
@@ -6296,20 +6258,20 @@ if (!function_exists('facultyPursuingSkills')) {
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();
-        $totalUserCount = count($employeeIds);    
+        $totalUserCount = count($employeeIds);
 
         if (empty($employeeIds)) {
-            return ['average_score' => 0,'total_user' => 0,'total_fill_user' => 0, 'weighted_score' => 0];
+            return ['average_score' => 0, 'total_user' => 0, 'total_fill_user' => 0, 'weighted_score' => 0];
         }
 
-            
-         
+
+
         $FacultyPursuingSkillcount = FacultyPursuingSkill::whereIn('created_by', $employeeIds)
             ->where('status', 2)
             ->distinct('created_by')
-            ->count('created_by'); 
+            ->count('created_by');
 
-      
+
 
         // 3️⃣ Department-level average
         $averageScore = $FacultyPursuingSkillcount > 0 ? round($totalUserCount / $FacultyPursuingSkillcount, 2) : 0;
@@ -6330,7 +6292,7 @@ if (!function_exists('facultyPursuingSkills')) {
             );
         }
 
-        return ['average_score' => $averageScore,'total_user' => $totalUserCount,'total_fill_user' => $FacultyPursuingSkillcount, 'weighted_score' => $weightedScore];
+        return ['average_score' => $averageScore, 'total_user' => $totalUserCount, 'total_fill_user' => $FacultyPursuingSkillcount, 'weighted_score' => $weightedScore];
     }
 }
 

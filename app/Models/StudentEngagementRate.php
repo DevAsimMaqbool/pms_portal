@@ -18,6 +18,7 @@ class StudentEngagementRate extends Model
         'faculty_id',
         'department_id',
         'program_id',
+        'program_level',
         'participation_target',
         'number_of_students_participated',
         'employer_satisfaction',
@@ -29,10 +30,10 @@ class StudentEngagementRate extends Model
         'created_by',
         'updated_by'
     ];
-     protected $casts = [
+    protected $casts = [
         'event_location' => 'array',
     ];
-     public function faculty()
+    public function faculty()
     {
         return $this->belongsTo(Faculty::class, 'faculty_id');
     }

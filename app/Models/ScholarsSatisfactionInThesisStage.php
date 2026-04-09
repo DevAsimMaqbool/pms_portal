@@ -20,7 +20,7 @@ class ScholarsSatisfactionInThesisStage extends Model
         'created_by',
         'updated_by'
     ];
-     public function faculty()
+    public function faculty()
     {
         return $this->belongsTo(Faculty::class, 'faculty_id');
     }

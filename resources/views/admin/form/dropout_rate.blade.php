@@ -87,14 +87,24 @@
                                                         </select>
                                                     </div>
 
+                                                    <div class="mb-3 col-md-6">
+                                                        <label for="program_level" class="form-label">Program Level</label>
+                                                        <select name="program_level" id="program_level"
+                                                            class="select2 form-select faculty-member" required>
+                                                            <option value="">-- Select Level --</option>
+                                                            <option value="UG">UG</option>
+                                                            <option value="PG">PG</option>
+                                                        </select>
+                                                    </div>
+
 
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label" for="dropout_rate">Dropout Rate (%)</label>
                                                         <div class="input-group">
-                                                        <span class="input-group-text" id="basic-addon11">%</span> 
-                                                        <input type="number" class="form-control" id="dropout_rate"
-                                                            name="dropout_rate" required placeholder="Dropout Rate in %">
-                                                         </div>   
+                                                            <span class="input-group-text" id="basic-addon11">%</span>
+                                                            <input type="number" class="form-control" id="dropout_rate"
+                                                                name="dropout_rate" required placeholder="Dropout Rate in %">
+                                                        </div>
                                                     </div>
                                                     <div class="mt-3 text-end">
                                                         <button type="submit"
@@ -113,17 +123,18 @@
 
                         </div>
                         <!-- /first tab-->
-                        @else
-                            <div class="misc-wrapper">
-                                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
-                                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
-                                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
-                                <div class="mt-12">
-                                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
-                                </div>
+                    @else
+                        <div class="misc-wrapper">
+                            <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                            <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                            <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                            <div class="mt-12">
+                                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                                    alt="page-misc-not-authorized" width="170" class="img-fluid" />
                             </div>
-                        @endif
-                   
+                        </div>
+                    @endif
+
 
                 </div>
                 <!-- /main tab-->
@@ -321,8 +332,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                                                                                                                                                                                                                                                                                    ${department.name}
-                                                                                                                                                                                                                                                                                </option>`
+                                                                                                                                                                                                                                                                                                                            ${department.name}
+                                                                                                                                                                                                                                                                                                                        </option>`
                                     );
                                 });
 
@@ -352,8 +363,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                                                                                                                                                                                                                                                                                    ${program.program_name}
-                                                                                                                                                                                                                                                                                </option>`
+                                                                                                                                                                                                                                                                                                                            ${program.program_name}
+                                                                                                                                                                                                                                                                                                                        </option>`
                                     );
                                 });
 

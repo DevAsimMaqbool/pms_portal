@@ -11,6 +11,7 @@ class AdmissionTargetAchieved extends Model
         'faculty_id',
         'department_id',
         'program_id',
+        'program_level',
         'admissions_campaign',
         'admissions_target',
         'achieved_target',

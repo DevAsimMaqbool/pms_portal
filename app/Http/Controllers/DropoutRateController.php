@@ -57,6 +57,7 @@ class DropoutRateController extends Controller
             'faculty_id' => 'required',
             'department_id' => 'required',
             'program_id' => 'required',
+            'program_level' => 'required',
             'dropout_rate' => 'required',
         ]);
 
@@ -66,6 +67,7 @@ class DropoutRateController extends Controller
             'faculty_id' => $request->faculty_id,
             'department_id' => $request->department_id,
             'program_id' => $request->program_id,
+            'program_level' => $request->program_level,
             'dropout_rate' => $request->dropout_rate,
             'created_by' => $userId,
             'updated_by' => $userId,
@@ -99,6 +101,7 @@ class DropoutRateController extends Controller
             'faculty_id' => 'required',
             'department_id' => 'required',
             'program_id' => 'required',
+            'program_level' => 'required',
             'dropout_rate' => 'required',
         ]);
 
@@ -106,6 +109,7 @@ class DropoutRateController extends Controller
             'faculty_id' => $request->faculty_id,
             'department_id' => $request->department_id,
             'program_id' => $request->program_id,
+            'program_level' => $request->program_level,
             'dropout_rate' => $request->dropout_rate,
             'updated_by' => Auth::id(),
         ];

@@ -251,6 +251,15 @@
                                                         <option value="">-- Select Program --</option>
                                                     </select>
                                                 </div>
+                                                <div class="mb-3">
+                                                    <label for="program_level" class="form-label">Program Level</label>
+                                                    <select name="program_level" id="program_level"
+                                                        class="select2 form-select faculty-member" required>
+                                                        <option value="">-- Select Level --</option>
+                                                        <option value="UG">UG</option>
+                                                        <option value="PG">PG</option>
+                                                    </select>
+                                                </div>
 
 
 
@@ -534,8 +543,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                                                    ${department.name}
-                                                </option>`
+                                                                    ${department.name}
+                                                                </option>`
                                     );
                                 });
 
@@ -565,8 +574,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                                                    ${program.program_name}
-                                                </option>`
+                                                                    ${program.program_name}
+                                                                </option>`
                                     );
                                 });
 

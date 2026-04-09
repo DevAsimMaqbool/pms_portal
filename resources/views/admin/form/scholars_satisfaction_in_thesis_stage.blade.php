@@ -19,112 +19,120 @@
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                
+
                 <div class="tab-content">
                     @if(in_array(getRoleName(activeRole()), ['DOPS']))
-                        <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            
-                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h4 class="mb-1">Scholar's Satisfaction (In Thesis Stage)</h4>
-                                </div>
-                                <div class="d-flex align-content-center flex-wrap gap-4">
-                                    <div class="d-flex gap-4">
-                                    <a class="btn btn-label-primary" href="{{ route('indicators_crud.index', ['slug' => 'scholars_satisfaction_in_thesis_stage', 'id' => $indicatorId]) }}">View</a></div>
-                                    {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                                                <i class="bx bx-upload"></i> Import Excel / CSV</button> --}}
-                                </div>
-                            </div>
-                            <form id="researchForm1" enctype="multipart/form-data">
-                                @csrf
-                                <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-                                <input type="hidden" id="form_status" name="form_status" value="HOD">
+                                    <div class="tab-pane fade show active" id="form1" role="tabpanel">
 
-                                <div class="row g-3">
-                                    <div id="author-past-container">
-                                        <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
-                                            
-                                            <div class="col-md-4">
-                                                <label for="term" class="form-label">Terms</label>
-                                                <select name="scholar_satisfaction[0][term]"
-                                                    class="select2 form-select term" required>
-                                                    <option value="">Select Term</option>
-
-                                                    <?php
-                                                    $currentYear = date('Y');
-                                                    for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
-                                                        echo "<option value='Spring $year'>Spring $year</option>";
-                                                        echo "<option value='Fall $year'>Fall $year</option>";
-                                                    }
-                                                    ?>
-                                                </select>
+                                        <div
+                                            class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h4 class="mb-1">Scholar's Satisfaction (In Thesis Stage)</h4>
                                             </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Faculty</label>
-                                                <select name="scholar_satisfaction[0][faculty_id]" class="select2 form-select faculty-select">
-                                                    <option value="">Select Faculty</option>
-                                                    @foreach(get_faculties() as $faculty)
-                                                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                            <div class="d-flex align-content-center flex-wrap gap-4">
+                                                <div class="d-flex gap-4">
+                                                    <a class="btn btn-label-primary"
+                                                        href="{{ route('indicators_crud.index', ['slug' => 'scholars_satisfaction_in_thesis_stage', 'id' => $indicatorId]) }}">View</a>
+                                                </div>
+                                                {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                                    <i class="bx bx-upload"></i> Import Excel / CSV</button> --}}
                                             </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Department</label>
-                                                <select name="scholar_satisfaction[0][department_id]" class="select2 form-select department-select">
-                                                    <option value="">Select Department</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Program Name</label>
-                                                <select name="scholar_satisfaction[0][program_id]" class="select2 form-select program-select">
-                                                    <option value="">Select Program</option>
-                                                </select>
-                                            </div>
-
-                                
-                                            <div class="col-md-4">
-                                                <label  class="form-label">Career</label>
-                                                <select name="scholar_satisfaction[0][career]" class="select2 form-select career" required>
-                                                    <option value="">-- Select Career --</option>
-                                                    <option value="PG">PG</option>
-                                                    <option value="UG">UG</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Satisfaction Score</label>
-                                                <input type="number" name="scholar_satisfaction[0][satisfaction_score]" class="form-control" min="1"
-                                                    step="1" required>
-                                            </div>
-                                            
-
-
                                         </div>
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <button type="button" class="btn btn-primary waves-effect waves-light"
-                                            id="add-coauthor"><i class="icon-base ti tabler-plus me-1"></i> <span
-                                                class="align-middle">Add</span></button>
-                                    </div>
+                                        <form id="researchForm1" enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                                            <input type="hidden" id="form_status" name="form_status" value="HOD">
 
-                                </div>
-                                <div class="mt-3 text-end" style="margin-left: -19px !important;">
-                                    <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
-                                </div>
-                            </form>
-                        </div>
+                                            <div class="row g-3">
+                                                <div id="author-past-container">
+                                                    <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
+
+                                                        <div class="col-md-4">
+                                                            <label for="term" class="form-label">Terms</label>
+                                                            <select name="scholar_satisfaction[0][term]" class="select2 form-select term"
+                                                                required>
+                                                                <option value="">Select Term</option>
+
+                                                                <?php
+                        $currentYear = date('Y');
+                        for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
+                            echo "<option value='Spring $year'>Spring $year</option>";
+                            echo "<option value='Fall $year'>Fall $year</option>";
+                        }
+                                                                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Faculty</label>
+                                                            <select name="scholar_satisfaction[0][faculty_id]"
+                                                                class="select2 form-select faculty-select">
+                                                                <option value="">Select Faculty</option>
+                                                                @foreach(get_faculties() as $faculty)
+                                                                    <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Department</label>
+                                                            <select name="scholar_satisfaction[0][department_id]"
+                                                                class="select2 form-select department-select">
+                                                                <option value="">Select Department</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Program Name</label>
+                                                            <select name="scholar_satisfaction[0][program_id]"
+                                                                class="select2 form-select program-select">
+                                                                <option value="">Select Program</option>
+                                                            </select>
+                                                        </div>
+
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Program Level</label>
+                                                            <select name="scholar_satisfaction[0][career]"
+                                                                class="select2 form-select career" required>
+                                                                <option value="">-- Select Career --</option>
+                                                                <option value="PG">PG</option>
+                                                                <option value="UG">UG</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Satisfaction Score</label>
+                                                            <input type="number" name="scholar_satisfaction[0][satisfaction_score]"
+                                                                class="form-control" min="1" step="1" required>
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <button type="button" class="btn btn-primary waves-effect waves-light"
+                                                        id="add-coauthor"><i class="icon-base ti tabler-plus me-1"></i> <span
+                                                            class="align-middle">Add</span></button>
+                                                </div>
+
+                                            </div>
+                                            <div class="mt-3 text-end" style="margin-left: -19px !important;">
+                                                <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
+                                            </div>
+                                        </form>
+                                    </div>
                     @else
                         <div class="misc-wrapper">
                             <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
                             <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
                             <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
                             <div class="mt-12">
-                                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                                    alt="page-misc-not-authorized" width="170" class="img-fluid" />
                             </div>
                         </div>
                     @endif
-                   
+
                 </div>
             </div>
         </div>
@@ -148,22 +156,22 @@
 @push('script')
     @if(in_array(getRoleName(activeRole()), ['DOPS']))
         <script>
-            
+
             $(document).ready(function () {
-                
+
                 let faculties = @json(get_faculties());
                 let pastIndex = 1;
-                
+
 
                 // Add new author group
                 $('#add-coauthor').click(function () {
-                    
 
-                     let facultyOptions = '<option value="">Select Faculty</option>';
-                        faculties.forEach(function(fac) {
-                            facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
-                        });
-                         // Generate Spring/Fall options dynamically
+
+                    let facultyOptions = '<option value="">Select Faculty</option>';
+                    faculties.forEach(function (fac) {
+                        facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
+                    });
+                    // Generate Spring/Fall options dynamically
                     let currentYear = new Date().getFullYear();
                     let termOptions = '<option value="">-- Select Term --</option>';
 
@@ -172,57 +180,57 @@
                         termOptions += `<option value="Fall ${year}">Fall ${year}</option>`;
                     }
                     let newGroup = `
-            <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
+                                    <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
 
-               <div class="col-md-4">
-                    <label for="term" class="form-label">Terms</label>
-                    <select name="scholar_satisfaction[${pastIndex}][term]"
-                        class="select2 form-select term" required>
-                        ${termOptions}
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Faculty</label>
-                    <select name="scholar_satisfaction[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
-                        ${facultyOptions}
-                    </select>
-                </div>
+                                       <div class="col-md-4">
+                                            <label for="term" class="form-label">Terms</label>
+                                            <select name="scholar_satisfaction[${pastIndex}][term]"
+                                                class="select2 form-select term" required>
+                                                ${termOptions}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Faculty</label>
+                                            <select name="scholar_satisfaction[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
+                                                ${facultyOptions}
+                                            </select>
+                                        </div>
 
-                <div class="col-md-4">
-                    <label class="form-label">Department</label>
-                     <select name="scholar_satisfaction[${pastIndex}][department_id]" class="select2 form-select department-select">
-                        <option value="">Select Department</option>
-                    </select>
-                </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Department</label>
+                                             <select name="scholar_satisfaction[${pastIndex}][department_id]" class="select2 form-select department-select">
+                                                <option value="">Select Department</option>
+                                            </select>
+                                        </div>
 
-                 <div class="col-md-4">
-                    <label class="form-label">Program Name</label>
-                    <select name="scholar_satisfaction[${pastIndex}][program_id]" class="select2 form-select program-select">
-                        <option value="">Select Program</option>
-                    </select>
-                </div>
+                                         <div class="col-md-4">
+                                            <label class="form-label">Program Name</label>
+                                            <select name="scholar_satisfaction[${pastIndex}][program_id]" class="select2 form-select program-select">
+                                                <option value="">Select Program</option>
+                                            </select>
+                                        </div>
 
-               
 
-                  <div class="col-md-4">
-                    <label  class="form-label">Career</label>
-                    <select name="scholar_satisfaction[${pastIndex}][career]" class="select2 form-select career" required>
-                        <option value="">-- Select Career --</option>
-                        <option value="PG">PG</option>
-                        <option value="UG">UG</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Satisfaction Score</label>
-                    <input type="number" name="scholar_satisfaction[${pastIndex}][satisfaction_score]" class="form-control" min="1"
-                        step="1" required>
-                </div>
 
-            <div class="col-md-2 d-flex align-items-end">
-            <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
-            </div>
-            </div>`;
+                                          <div class="col-md-4">
+                                            <label  class="form-label">Program Level</label>
+                                            <select name="scholar_satisfaction[${pastIndex}][career]" class="select2 form-select career" required>
+                                                <option value="">-- Select Career --</option>
+                                                <option value="PG">PG</option>
+                                                <option value="UG">UG</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Satisfaction Score</label>
+                                            <input type="number" name="scholar_satisfaction[${pastIndex}][satisfaction_score]" class="form-control" min="1"
+                                                step="1" required>
+                                        </div>
+
+                                    <div class="col-md-2 d-flex align-items-end">
+                                    <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
+                                    </div>
+                                    </div>`;
 
                     // Convert string → jQuery object
                     let $newBlock = $(newGroup);

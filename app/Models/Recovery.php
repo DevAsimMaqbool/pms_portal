@@ -11,6 +11,7 @@ class Recovery extends Model
         'faculty_id',
         'department_id',
         'program_id',
+        'program_level',
         'target_month_year',
         'recovery_target',
         'achieved_target',

@@ -21,7 +21,7 @@ class ResearchProductivityOfPGStudentsController extends Controller
             $user = Auth::user();
             $userId = Auth::id();
             $employee_id = $user->employee_id;
-            if(in_array(getRoleName(activeRole()), ['Teacher','Program Leader UG','Program Leader PG'])) {
+            if (in_array(getRoleName(activeRole()), ['Teacher', 'Program Leader UG', 'Program Leader PG'])) {
 
                 $status = $request->input('status');
                 if ($status == "Teacher") {
@@ -37,7 +37,7 @@ class ResearchProductivityOfPGStudentsController extends Controller
                 }
 
             }
-            if(in_array(getRoleName(activeRole()), ['ORIC'])) {
+            if (in_array(getRoleName(activeRole()), ['ORIC'])) {
                 $forms = ResearchProductivityOfPgStudentTarget::with([
                     'creator' => function ($q) {
                         $q->select('employee_id', 'name');

@@ -42,41 +42,41 @@
     $totalFeedback = 0;                                    
  @endphp
 @if(in_array(getRoleName(activeRole()), ['Associate Professor', 'Associate Professor', 'Professor']))
-<!-- / Payment Methods modal -->
-<div class="modal fade" id="ResearchProductivityofPGStudentsMSMPhilPhD" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    Research Productivity of PG Students(MS / MPhil / PhD)
-                </h3>
-                <!-- Tabs -->
-                <div class="nav-align-top nav-tabs-shadow">
-                    <!-- Tab Content -->
-                    <div class="tab-content">
-                        <!-- Fall -->
-                        <div class="tab-pane fade show active" id="ResearchProductivityofPGStudents(MS/MPhil/PhD)-fall"
-                            role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
+    <!-- / Payment Methods modal -->
+    <div class="modal fade" id="ResearchProductivityofPGStudentsMSMPhilPhD" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        Research Productivity of PG Students(MS / MPhil / PhD)
+                    </h3>
+                    <!-- Tabs -->
+                    <div class="nav-align-top nav-tabs-shadow">
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <!-- Fall -->
+                            <div class="tab-pane fade show active" id="ResearchProductivityofPGStudents(MS/MPhil/PhD)-fall"
+                                role="tabpanel">
+                                <div class="table-responsive text-nowrap">
+                                    <table class="table table-hover align-middle custom-table">
 
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Category</th>
-                                            <th>Journal Rank</th>
-                                            <th>Target</th>
-                                            <th>Achieved</th>
-                                            <th>Student</th>
-                                            <th>Career</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Category</th>
+                                                <th>Journal Rank</th>
+                                                <th>Target</th>
+                                                <th>Achieved</th>
+                                                <th>Student</th>
+                                                <th>Career</th>
+                                                <th>Score</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             @php
                                                 $ResearchProductivityofPGStudents = ResearchProductivityofPGStudents(Auth::user()->employee_id, $activeRoleId, 133);
                                             @endphp
@@ -103,8 +103,9 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -112,34 +113,81 @@
             </div>
         </div>
     </div>
-</div>
 
-<!-- / Payment Methods modal -->
+    <!-- / Payment Methods modal -->
 @endif
 @if(in_array(getRoleName(activeRole()), ['HOD']))
-<!-- / Payment Methods modal -->
-<div class="modal fade" id="ResearchProductivityofPGStudentsMSMPhilPhD" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    Research Productivity of PG Students(MS / MPhil / PhD)
-                </h3>
-                <!-- Tabs -->
-                
+    <!-- / Payment Methods modal -->
+    <div class="modal fade" id="ResearchProductivityofPGStudentsMSMPhilPhD" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        Research Productivity of PG Students(MS / MPhil / PhD)
+                    </h3>
+                    <!-- Tabs -->
+                    <div class="nav-align-top nav-tabs-shadow">
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <!-- Fall -->
+                            <div class="tab-pane fade show active" id="ResearchProductivityofPGStudents(MS/MPhil/PhD)-fall"
+                                role="tabpanel">
+                                <div class="table-responsive text-nowrap">
+                                    <table class="table table-hover align-middle custom-table">
+
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Category</th>
+                                                <th>Journal Rank</th>
+                                                <th>Target</th>
+                                                <th>Achieved</th>
+                                                <th>Score</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $data = researchProductivityPGStudentsOfHOD($activeRoleId, 133);
+                                            @endphp
+                                            @foreach ($data['department_rows'] as $row)
+                                                <tr>
+                                                    <td>{{ $row['target_category'] }}</td>
+                                                    <td>{{ $row['journal_clasification'] }}</td>
+                                                    <td>{{ $row['value'] }}</td>
+                                                    <td>{{ $row['count'] }}</td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ getRatingMeta($row['percentage'])->color }}">
+                                                            {{ number_format($row['percentage'], 1) }}%
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ getRatingMeta($row['percentage'])->color }}">
+                                                            {{ getRatingMeta($row['percentage'])->rating }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- / Payment Methods modal -->
+    <!-- / Payment Methods modal -->
 @endif
 @if(in_array(getRoleName(activeRole()), ['Dean']))
-<!--  Payment Methods modal -->
+    <!--  Payment Methods modal -->
 
     <div class="modal fade" id="ResearchProductivityofPGStudentsMSMPhilPhD" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -151,7 +199,8 @@
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Research Productivity of PG Students(MS / MPhil / PhD)
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Research Productivity of PG
+                        Students(MS / MPhil / PhD)
                     </h3>
                     <div class="card">
 
@@ -167,34 +216,36 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
-                                                $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 2, 6, 133);
-                        
-                                            @endphp
-                                                @foreach($data['records'] as $record)
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge bg-{{ $record->color }}">
-                                                        {{ $record->score}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge bg-label-{{ $record->color }}">
+                                        @php
+                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 2, 6, 133);
 
-                                                                {{ $record->rating }}
-                                                            </div>
-                                                    </td>    
-                                                </tr>
-                                            @endforeach
+                                        @endphp
+                                        @foreach($data['records'] as $record)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td> {{ $record->user?->department?->name ?? '' }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ $record->color }}">
+                                                        {{ $record->score}}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-label-{{ $record->color }}">
+
+                                                        {{ $record->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
                                             <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
                                         </tr>
-                                    </tfoot> 
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

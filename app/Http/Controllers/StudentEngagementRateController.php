@@ -14,17 +14,17 @@ class StudentEngagementRateController extends Controller
 {
     public function index(Request $request)
     {
-         try {
+        try {
             $user = Auth::user();
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-                $status = $request->input('status');
-                if($status=="HOD"){
-                        $forms = StudentEngagementRate::with(['faculty', 'department', 'program'])->where('created_by', $employee_id)
-                        ->orderBy('id', 'desc')
-                        ->get();
-                }
+            $status = $request->input('status');
+            if ($status == "HOD") {
+                $forms = StudentEngagementRate::with(['faculty', 'department', 'program'])->where('created_by', $employee_id)
+                    ->orderBy('id', 'desc')
+                    ->get();
+            }
 
             if ($request->ajax()) {
                 return response()->json([
@@ -41,10 +41,10 @@ class StudentEngagementRateController extends Controller
     }
     public function store(Request $request)
     {
-        try { 
-             $data = [];
-            if($request->form_status=='HOD'){
-                 $rules = [
+        try {
+            $data = [];
+            if ($request->form_status == 'HOD') {
+                $rules = [
                     'indicator_id' => 'required',
                     'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
 
@@ -58,12 +58,13 @@ class StudentEngagementRateController extends Controller
                     'title_of_the_event' => 'nullable|string',
                     'brief_description_of_activity' => 'nullable|string',
                     'event_start_date' => 'required|date',
-                    'event_end_date'   => 'required|date|after_or_equal:event_start_date',
+                    'event_end_date' => 'required|date|after_or_equal:event_start_date',
 
                     // Program Info
                     'faculty_id' => 'required|integer',
                     'department_id' => 'required|integer',
                     'program_id' => 'required|integer',
+                    'program_level' => 'required|string',
 
                     // Participation
                     'participation_target' => 'nullable|integer',
@@ -72,21 +73,21 @@ class StudentEngagementRateController extends Controller
                 ];
 
 
-                    $validator = Validator::make($request->all(), $rules);
-                    if ($validator->fails()) {
-                            return response()->json([
-                                'status' => 'error',
-                                'errors' => $validator->errors()
-                            ], 422);
-                        }
-                    
-                    $data = $validator->validated(); 
-                     // ✅ Convert checkbox array to JSON
-                    $data['event_location'] = isset($data['event_location'])
-                        ? json_encode($data['event_location'])
-                        : null; 
+                $validator = Validator::make($request->all(), $rules);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
 
-                        
+                $data = $validator->validated();
+                // ✅ Convert checkbox array to JSON
+                $data['event_location'] = isset($data['event_location'])
+                    ? json_encode($data['event_location'])
+                    : null;
+
+
 
             }
             $employeeId = Auth::user()->employee_id;
@@ -104,17 +105,18 @@ class StudentEngagementRateController extends Controller
             ]);
 
         } catch (\Exception $e) {
-             DB::rollBack();
-             return response()->json(['message' => $e->getMessage()], 500);
+            DB::rollBack();
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
     public function update(Request $request, $id)
-    {   try { 
+    {
+        try {
             $data = [];
             if ($request->has('status_update_data')) {
                 $record = StudentEngagementRate::findOrFail($id);
-                
+
                 $rules = [
                     // Engagement
                     'nature_of_event' => 'required|string',
@@ -126,12 +128,13 @@ class StudentEngagementRateController extends Controller
                     'title_of_the_event' => 'nullable|string',
                     'brief_description_of_activity' => 'nullable|string',
                     'event_start_date' => 'required|date',
-                    'event_end_date'   => 'required|date|after_or_equal:event_start_date',
+                    'event_end_date' => 'required|date|after_or_equal:event_start_date',
 
                     // Program Info
                     'faculty_id' => 'required|integer',
                     'department_id' => 'required|integer',
                     'program_id' => 'required|integer',
+                    'program_level' => 'required|string',
 
                     // Participation
                     'participation_target' => 'nullable|integer',
@@ -140,42 +143,35 @@ class StudentEngagementRateController extends Controller
                 ];
 
 
-                    $validator = Validator::make($request->all(), $rules);
-                    if ($validator->fails()) {
-                            return response()->json([
-                                'status' => 'error',
-                                'errors' => $validator->errors()
-                            ], 422);
-                        }
-                    
-                    $data = $validator->validated(); 
-                     // ✅ Convert checkbox array to JSON
-                    $data['event_location'] = isset($data['event_location'])
-                        ? json_encode($data['event_location'])
-                        : null;
+                $validator = Validator::make($request->all(), $rules);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
 
-                    // ✅ If "Other" selected — override value
-                    if ($request->nature_of_event != 'Other') {
-                        $data['other_event_detail'] = null;
-                    } 
-                
+                $data = $validator->validated();
+                // ✅ Convert checkbox array to JSON
+                $data['event_location'] = isset($data['event_location'])
+                    ? json_encode($data['event_location'])
+                    : null;
+
+                // ✅ If "Other" selected — override value
+                if ($request->nature_of_event != 'Other') {
+                    $data['other_event_detail'] = null;
+                }
+
                 $data['updated_by'] = Auth::user()->employee_id;
-
                 $record->update($data);
-
-                return response()->json(['status' => 'success','message' => 'Record updated successfully', 'data' => $record]);
+                return response()->json(['status' => 'success', 'message' => 'Record updated successfully', 'data' => $record]);
             }
-
-
-
-
-
             if ($request->has('status_update')) {
-               
+
             }
         } catch (\Exception $e) {
-             DB::rollBack();
-             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+            DB::rollBack();
+            return response()->json(['message' => 'Oops! Something went wrong'], 500);
         }
     }
     // Destroy single or bulk records

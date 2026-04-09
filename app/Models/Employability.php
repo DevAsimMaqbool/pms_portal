@@ -13,6 +13,7 @@ class Employability extends Model
         'faculty_id',
         'department_id',
         'program_id',
+        'program_level',
         'period',
         'batch',
         'passing_year',
@@ -31,7 +32,7 @@ class Employability extends Model
         'created_by',
         'updated_by'
     ];
-     public function faculty()
+    public function faculty()
     {
         return $this->belongsTo(Faculty::class, 'faculty_id');
     }

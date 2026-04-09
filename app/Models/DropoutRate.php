@@ -11,6 +11,7 @@ class DropoutRate extends Model
         'faculty_id',
         'department_id',
         'program_id',
+        'program_level',
         'dropout_rate',
         'form_status',
         'status',
