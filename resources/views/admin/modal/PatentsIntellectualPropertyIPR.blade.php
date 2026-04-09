@@ -133,7 +133,7 @@ $totalFeedback = 0;
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
                                 class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Patents/Intellectual Property (IPR)
-                        Income
+
                     </h3>
                     <div class="card">
 
@@ -214,3 +214,70 @@ $totalFeedback = 0;
     </div>
 @endif
 <!-- / Payment Methods modal -->
+@if(in_array(getRoleName(activeRole()), ['Dean']))
+<!--  Payment Methods modal -->
+
+    <div class="modal fade" id="PatentsIntellectualPropertyIPR" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Patents/Intellectual Property (IPR)
+                    </h3>
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Department</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            @php
+                                                $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 2, 8, 138);
+                        
+                                            @endphp
+                                                @foreach($data['records'] as $record)
+                                                <tr>
+                                                   <td>{{ $loop->iteration }}</td>
+                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
+                                                    <td><div class="badge bg-{{ $record->color }}">
+                                                        {{ $record->score}}%
+                                                        </div></td>
+                                                    <td>
+                                                            <div class="badge bg-label-{{ $record->color }}">
+
+                                                                {{ $record->rating }}
+                                                            </div>
+                                                    </td>    
+                                                </tr>
+                                            @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th class=""></th>
+                                            <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
+                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                        </tr>
+                                    </tfoot> 
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / Payment Methods modal -->
+@endif

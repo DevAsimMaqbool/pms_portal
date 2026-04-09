@@ -2110,6 +2110,7 @@ if (!function_exists('saveIndicatorPercentage90Plus')) {
             ],
             [
                 'score' => number_format($score, 2),
+                'with_out_weight_score' => number_format($withOutWeightScore, 2),
                 'color' => $color,
                 'rating' => $rating,
             ]
@@ -6777,19 +6778,24 @@ if (!function_exists('recoveryTargetAverageForPL')) {
 
 if (!function_exists('programProfitabilityAverageForPL')) {
 
-    function programProfitabilityAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId)
+    function programProfitabilityAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId,$ProgramLevel)
     {
-        $programIds = Program::where('leader_id', $employeeId)
-            ->pluck('id');
-        $stats = DB::table('program_profitabilities')
+        $currentYear = Carbon::now()->year;
+        $programIds = Program::where('leader_id', $employeeId)->pluck('id');
+        
+        $recordsRaw  = ProgramProfitability::with(['program'])
             ->whereIn('program_id', $programIds)
-            ->selectRaw('
-        AVG(profitability) as profit
-    ')->first();
+            ->whereYear('period_date', $currentYear)
+            ->where('program_level', $ProgramLevel)
+            ->get();
+
+        $totalProfitability = $recordsRaw ->sum('profitability');
+        $avgtotalProfitability = $recordsRaw ->AVG('profitability');
+    
 
         $weight123 = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
         // 5️⃣ Calculate weighted score
-        $weightedScore123 = round(($stats->profit * $weight123) / 100, 2);
+        $weightedScore123 = round(($avgtotalProfitability * $weight123) / 100, 2);
         // Save result
         saveIndicatorPercentage90Plus(
             $employeeId,
@@ -6797,8 +6803,15 @@ if (!function_exists('programProfitabilityAverageForPL')) {
             $kpaId,
             $categoryId,
             $indicatorId,
-            $weightedScore123
+            $weightedScore123,
+            $avgtotalProfitability
         );
+        return [
+                'records' => $recordsRaw,                  // per program records
+                'total_target' => $totalProfitability,         // sum of all targets
+                'avg_percentage' => round($avgtotalProfitability, 2), // overall %
+                'weighted_score' => round($weightedScore123, 2),        // weighted score
+            ];
     }
 }
 
@@ -7117,6 +7130,7 @@ if (!function_exists('scholarsSatisfactionAverageForPL')) {
             $weightedScore123
         );
     }
+    
 }
 
 if (!function_exists('lineManagerRatingOnEventsForPL')) {
