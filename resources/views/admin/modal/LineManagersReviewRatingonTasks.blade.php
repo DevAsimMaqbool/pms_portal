@@ -59,47 +59,26 @@
                         <ul class="nav custom-tabs" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#LineManagersReview&RatingonTasks-spring"
-                                    aria-controls="LineManagersReview&RatingonTasks-spring" aria-selected="true">
-                                    🌸 Spring 2026
+                                    data-bs-target="#LineManagersReviewRatingonTasks-spring"
+                                    aria-controls="LineManagersReviewRatingonTasks-spring" aria-selected="true">
+                                    @php
+                                        $currentYear = \Carbon\Carbon::now()->year;
+                                        $currentAcademic = ($currentYear - 1) . '-' . $currentYear;
+                                    @endphp
+
+                                    {{ $currentAcademic }}
                                 </button>
                             </li>
-                            <li class="nav-item">
-                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#LineManagersReview&RatingonTasks-fall"
-                                    aria-controls="LineManagersReview&RatingonTasks-fall" aria-selected="false">
-                                    🍂 Fall 2025
-                                </button>
-                            </li>
+                           
                         </ul>
                     </div>
 
                     <!-- Tab Content -->
                     <div class="tab-content">
-                        <!-- Spring -->
-                        <div class="tab-pane fade show active" id="LineManagersReview&RatingonTasks-spring"
-                            role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Virtue</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="4">no record found</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                       
 
                         <!-- Fall -->
-                        <div class="tab-pane fade" id="LineManagersReview&RatingonTasks-fall" role="tabpanel">
+                        <div class="tab-pane fade show active" id="LineManagersReviewRatingonTasks-spring" role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-striped align-middle custom-table">
                                     <thead class="table-primary">
@@ -116,7 +95,7 @@
                                     @endphp
 
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor','Program Leader UG','Program Leader PG']))
                                             @php
                                                 $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
                                                 // ✅ Fast sum of all rating percentages
