@@ -267,4 +267,184 @@
     </div>
     <!-- / Payment Methods modal -->
 @endif
+@if(in_array(getRoleName(activeRole()), ['Program Leader UG','Program Leader PG']))
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="ofAdmissionTargetsAchieved" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    % of Admission Targets Achieved
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#ofAdmissionTargetsAchieved-spring"
+                                    aria-controls="ofAdmissionTargetsAchieved-spring" aria-selected="true">
+                                    🌸 Spring {{ date('Y') }}
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#ofAdmissionTargetsAchieved-fall"
+                                    aria-controls="ofAdmissionTargetsAchieved-fall" aria-selected="false">
+                                    🍂 Fall {{ date('Y') }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="ofAdmissionTargetsAchieved-spring"
+                            role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Program</th>
+                                            <th>Total Target</th>
+                                            <th>Total Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            @php
+                                                $roleName = getRoleName(activeRole());
+                                                $value = match($roleName) {
+                                                    'Program Leader UG' => 'UG',
+                                                    'Program Leader PG' => 'PG',
+                                                    default => ''
+                                                };
+                                                $data=admissionTargetAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 10, 143, $value); 
+                                                if (!function_exists('ratingFunctions')) {
+                                                    function ratingFunctions($average)
+                                                    {
+                                                        if ($average >= 90)
+                                                            return ['OS', 'primary'];
+                                                        if ($average >= 80)
+                                                            return ['EE', 'success'];
+                                                        if ($average >= 70)
+                                                            return ['ME', 'warning'];
+                                                        if ($average >= 60)
+                                                            return ['NI', 'orange'];
+                                                        return ['BE', 'danger'];
+                                                    }
+                                                }
+                                            @endphp
+                                                @foreach($data['records']['Spring'] ?? [] as $index => $Spring)
+                                                    @php
+                                                        [$rating, $color] = ratingFunctions($Spring['percentage']);
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $index + 1 }}</td>
+                                                        <td>{{ $Spring['program'] }}</td>
+                                                        <td>{{ $Spring['target'] }}</td>
+                                                        <td>{{ $Spring['achieved'] }}</td>
+                                                        <td><div class="badge bg-{{ $color }}">{{ $Spring['percentage'] }}%</div></td>
+                                                        <td><div class="badge bg-label-{{ $color }}">{{ $rating }}</div></td>
+                                                    </tr>
+                                                @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th class=""></th>
+                                            <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
+                                            <th class="">Total (S+F){{number_format($data['total_achieved'], 1) }}</th>
+                                            <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }}</th>
+                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                        </tr>
+                                    </tfoot>
+                                    
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="ofAdmissionTargetsAchieved-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                 <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Program</th>
+                                            <th>Total Target</th>
+                                            <th>Total Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            @php
+                                                $roleName = getRoleName(activeRole());
+                                                $value = match($roleName) {
+                                                    'Program Leader UG' => 'UG',
+                                                    'Program Leader PG' => 'PG',
+                                                    default => ''
+                                                };
+                                                $data=admissionTargetAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 10, 143, $value);  
+                                                if (!function_exists('ratingFunctions')) {
+                                                    function ratingFunctions($average)
+                                                    {
+                                                        if ($average >= 90)
+                                                            return ['OS', 'primary'];
+                                                        if ($average >= 80)
+                                                            return ['EE', 'success'];
+                                                        if ($average >= 70)
+                                                            return ['ME', 'warning'];
+                                                        if ($average >= 60)
+                                                            return ['NI', 'orange'];
+                                                        return ['BE', 'danger'];
+                                                    }
+                                                }
+                                            @endphp
+                                                @foreach($data['records']['Fall'] ?? [] as $index => $fall)
+                                                @php
+                                                    [$rating, $color] = ratingFunctions($fall['percentage']);
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $fall['program'] }}</td>
+                                                    <td>{{ $fall['target'] }}</td>
+                                                    <td>{{ $fall['achieved'] }}</td>
+                                                    <td><div class="badge bg-{{ $color }}">{{ $fall['percentage'] }}%</div></td>
+                                                    <td><div class="badge bg-label-{{ $color }}">{{ $rating }}</div></td>
+                                                </tr>
+                                            @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th class=""></th>
+                                            <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
+                                            <th class="">Total (S+F){{number_format($data['total_achieved'], 1) }}</th>
+                                            <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }}</th>
+                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                        </tr>
+                                    </tfoot>
+                                    
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+@endif
+
 
