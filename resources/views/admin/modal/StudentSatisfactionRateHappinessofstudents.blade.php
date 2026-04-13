@@ -37,9 +37,9 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+$activeRoleId = getRoleIdByName(activeRole());
+// Initialize totalFeedback to 0 in case nothing is set later
+$totalFeedback = 0;                                    
  @endphp
  @if(in_array(getRoleName(activeRole()), ['HOD']))
 <!--  Payment Methods modal -->
@@ -62,7 +62,7 @@
                         <div class="table-responsive text-nowrap">
 
                             @php
-                                $data = StudentSatisfactionRateForHOD($activeRoleId, 123);
+    $data = StudentSatisfactionRateForHOD($activeRoleId, 123);
                             @endphp
 
                             <table class="table table-striped align-middle custom-table">
@@ -149,7 +149,7 @@
                                     </thead>
                                     <tbody>
                                             @php
-                                                $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 4, 124);
+    $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 4, 124);
                         
                                             @endphp
                                                 @foreach($data['records'] as $record)
@@ -176,6 +176,81 @@
                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
                                         </tr>
                                     </tfoot> 
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / Payment Methods modal -->
+@endif
+@if(in_array(getRoleName(activeRole()), ['Program Leader UG', 'Program Leader PG']))
+    <!--  Payment Methods modal -->
+
+    <div class="modal fade" id="StudentSatisfactionRateHappinessofstudents" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Student Satisfaction Rate / Happiness of students
+                    </h3>
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Program</th>
+                                            <th>Career</th>
+                                            <th>Student Satisfaction</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    @php
+    $programLevel = match (getRoleName(activeRole())) {
+        'Program Leader UG' => 'UG',
+        'Program Leader PG' => 'PG',
+        default => ''
+    };
+
+    $data = calculateStudentEngagementRateFromPL(Auth::user()->employee_id, $activeRoleId, 1, 4, 123, $programLevel);
+                                    @endphp
+                                    <tbody>
+                                        @foreach($data as $index => $row)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $row->faculty->name ?? '-' }}</td>
+                                                <td>{{ $row->department->name ?? '-' }}</td>
+                                                <td>{{ $row->program->program_name ?? '-' }}</td>
+                                                <td>{{ $row->program_level ?? '-' }}</td>
+                                                <td>{{ $row->student_satisfaction_rate ?? '-' }}</td>
+                                                <td>
+                                                    <div class="badge"
+                                                        style="background-color: {{ getRatingMeta($row->student_satisfaction_rate * 20)->color }}">
+                                                        {{ number_format($row->student_satisfaction_rate * 20, 1) }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ getRatingMeta($row->student_satisfaction_rate * 20)->color }}">
+
+                                                        {{ getRatingMeta($row->student_satisfaction_rate * 20)->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

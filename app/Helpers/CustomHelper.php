@@ -6461,26 +6461,50 @@ if (!function_exists('calculateDeanPercentagesFastDiffFromHOD')) {
 }
 
 //------------------------------------------- Program Leader -------------------------------------------------
-
 if (!function_exists('calculateStudentEngagementRateFromPL')) {
 
-    function calculateStudentEngagementRateFromPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId)
+    function calculateStudentEngagementRateFromPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId, $programLevel)
     {
-        $programIds = Program::where('leader_id', $employeeId)
-            ->pluck('id');
-        $stats = DB::table('student_engagement_rate')
+        $currentYear = Carbon::now()->year;
+
+        $programIds = Program::where('leader_id', $employeeId)->pluck('id');
+
+        // ✅ Program-wise data for modal
+        $stats = StudentEngagementRate::with(['faculty', 'department', 'program'])
             ->whereIn('program_id', $programIds)
+            ->where('program_level', $programLevel)
+            ->whereYear('event_start_date', $currentYear)
+            ->whereYear('event_end_date', $currentYear)
+            ->where('participation_target', '>', 0)
+            ->where('number_of_students_participated', '>=', 0)
             ->selectRaw('
-        AVG((number_of_students_participated / participation_target) * 100) as avg_participation,
-        AVG(employer_satisfaction) as student_satisfaction_rate
-    ')->first();
+                program_id,
+                faculty_id,
+                department_id,
+                program_level,
+                SUM(participation_target) as total_target,
+                SUM(number_of_students_participated) as total_participated,
+                AVG((number_of_students_participated * 100.0) / participation_target) as avg_participation,
+                AVG(employer_satisfaction) as student_satisfaction_rate
+            ')
+            ->groupBy('program_id', 'faculty_id', 'department_id', 'program_level')
+            ->get();
+
+        // ✅ OVERALL CALCULATION (correct weighted average)
+        $overallParticipation = $stats->sum('total_participated') > 0
+            ? ($stats->sum('total_participated') * 100) / $stats->sum('total_target')
+            : 0;
+
+        $overallSatisfaction = $stats->avg('student_satisfaction_rate');
 
         $weight123 = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
         $weight124 = getRoleWeightage($activeRoleId, 'indicator', 124)['weightage'] ?? 0;
-        // 5️⃣ Calculate weighted score
-        $weightedScore123 = round(($stats->avg_participation * $weight123) / 100, 2);
-        $weightedScore124 = round((($stats->student_satisfaction_rate * $weight124) / 100) * 20, 2);
-        // Save result
+
+        // ✅ FINAL SINGLE SCORES
+        $weightedScore123 = round(($overallParticipation * $weight123) / 100, 2);
+        $weightedScore124 = round((($overallSatisfaction * $weight124) / 100) * 20, 2);
+
+        // ✅ SAVE ONLY ONCE (NO LOOP)
         saveIndicatorPercentage(
             $employeeId,
             $activeRoleId,
@@ -6498,6 +6522,9 @@ if (!function_exists('calculateStudentEngagementRateFromPL')) {
             124,
             $weightedScore124
         );
+
+        // ✅ RETURN FOR MODAL (program-wise)
+        return $stats;
     }
 }
 
@@ -6922,8 +6949,10 @@ function QECAuditRatingOfPL($employeeId, $activeRoleId, $programLevel)
     $programIds = Program::where('leader_id', $employeeId)->pluck('id');
 
     $records = QecAuditRating::with([
-        'details' => function ($q) use ($programIds) {
+        'details' => function ($q) use ($programIds, $programLevel, $year) {
             $q->whereIn('program_id', $programIds)
+                ->where('program_level', $programLevel)   // ✅ add this
+                ->where('audit_term', $year)              // ✅ add this
                 ->where('total_score', '>', 0)
                 ->with(['faculty', 'department', 'program']);
         }
@@ -6935,6 +6964,7 @@ function QECAuditRatingOfPL($employeeId, $activeRoleId, $programLevel)
                 ->where('total_score', '>', 0);
         })
         ->get();
+    //dd($records);
     $data = [];
 
     foreach ($records as $record) {
