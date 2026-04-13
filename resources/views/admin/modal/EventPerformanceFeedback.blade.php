@@ -41,7 +41,7 @@
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor','Program Leader PG','Program Leader UG']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="EventPerformanceFeedback" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -83,8 +83,11 @@
                                     <tbody class="table-border-bottom-0">
                                         @php
                                             $feedbacks = lineManagerRatingOnEvents(Auth::user()->employee_id, $activeRoleId);
+                                            $totalPercentage = 0;
                                             // ✅ SUM of all rating percentages
-                                            $totalPercentage = $feedbacks->sum(fn($item) => $item->rating_data['percentage']);
+                                            if (!empty($feedbacks)) {
+                                              $totalPercentage = $feedbacks->sum(fn($item) => $item->rating_data['percentage']); 
+                                            }
                                         @endphp
                                         @foreach($feedbacks as $index => $item)
                                             <tr>
