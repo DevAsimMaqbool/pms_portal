@@ -3194,11 +3194,11 @@ function EmployabilityOfHOD()
     $departmentId = auth()->user()->department_id;
     $currentYear = Carbon::now()->year;
     $previousYear = Carbon::now()->year - 1;
-        // ✅ Campaigns for current year
-        $campaigns = [
-            "Spring $currentYear",
-            "Fall $previousYear"
-        ];
+    // ✅ Campaigns for current year
+    $campaigns = [
+        "Spring $currentYear",
+        "Fall $previousYear"
+    ];
 
     $records = Employability::with(['faculty', 'department', 'program'])
         ->where('department_id', $departmentId)
@@ -6501,12 +6501,294 @@ if (!function_exists('calculateStudentEngagementRateFromPL')) {
     }
 }
 
-function EmployabilityOfPL($employeeId)
+function EmployabilityOfPL($employeeId, $ProgramLevel)
 {
-    $programIds = Program::where('leader_id', $employeeId)
-        ->pluck('id');
+    $currentYear = Carbon::now()->year;
+    $previousYear = Carbon::now()->year - 1;
+    // ✅ Campaigns for current year
+    $campaigns = [
+        "Spring $currentYear",
+        "Fall $previousYear"
+    ];
+    $programIds = Program::where('leader_id', $employeeId)->pluck('id');
 
-    $records = Employability::whereIn('program_id', $programIds)
+    $records = Employability::with(['program'])
+        ->whereIn('program_id', $programIds)
+        ->whereIn('batch', $campaigns)
+        ->where('program_level', $ProgramLevel)
+        ->get();
+
+    $totalStudents = $records->count();
+
+    if ($totalStudents == 0) {
+        return collect();
+    }
+
+    $results = collect();
+
+    $activeRoleId = getRoleIdByName(activeRole());
+    $employeeId = auth()->id();
+
+    $weights = [
+        'course_103' => getRoleWeightage($activeRoleId, 'indicator', 103)['weightage'],
+        'course_104' => getRoleWeightage($activeRoleId, 'indicator', 104)['weightage'],
+        'course_105' => getRoleWeightage($activeRoleId, 'indicator', 105)['weightage'],
+        'course_106' => getRoleWeightage($activeRoleId, 'indicator', 106)['weightage'],
+        'course_107' => getRoleWeightage($activeRoleId, 'indicator', 107)['weightage'],
+        'course_157' => getRoleWeightage($activeRoleId, 'indicator', 157)['weightage'],
+    ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | 1️⃣ Student Employability (103)
+    |--------------------------------------------------------------------------
+    */
+    $employed = $records->whereNotNull('date_of_appointment')->count();
+    $employabilityPercentage = round(($employed / $totalStudents) * 100, 2);
+
+    $weightedScore103 = ($employabilityPercentage * $weights['course_103']) / 100;
+
+    saveIndicatorPercentage90Plus($employeeId, $activeRoleId, 1, 1, 103, $weightedScore103);
+
+    $results->push([
+        'indicator' => 'Student Employability',
+        'indicator_id' => 103,
+        'percentage' => $employabilityPercentage,
+        'weighted_score' => $weightedScore103,
+        'details' => [
+            'total_students' => $totalStudents,
+            'employed' => $employed,
+            'unemployed' => $totalStudents - $employed,
+        ],
+    ]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | 2️⃣ Market Competitive Salary (106)
+    |--------------------------------------------------------------------------
+    */
+    $salaryScore = 0;
+
+    foreach ($records as $r) {
+        $salaryScore += match ($r->market_competitive_salary) {
+            'Low' => 33,
+            'At Par' => 66,
+            'Above' => 100,
+            default => 0
+        };
+    }
+
+    $marketSalaryPercentage = round($salaryScore / $totalStudents, 2);
+    $weightedScore106 = ($marketSalaryPercentage * $weights['course_106']) / 100;
+
+    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 106, $weightedScore106);
+
+    /*
+|--------------------------------------------------------------------------
+| ✅ PROGRAM-WISE BREAKDOWN (FOR MODAL)
+|--------------------------------------------------------------------------
+*/
+
+    $programBreakdown = $records->groupBy('program_id')->map(function ($items) {
+
+        $total = $items->count();
+
+        $salaryScore = 0;
+
+        foreach ($items as $r) {
+            $salaryScore += match ($r->market_competitive_salary) {
+                'Low' => 33,
+                'At Par' => 66,
+                'Above' => 100,
+                default => 0
+            };
+        }
+
+        $score = $total > 0 ? round($salaryScore / $total, 1) : 0;
+
+        return [
+            'program_name' => optional($items->first()->program)->program_name,
+            'total_students' => $total,
+            'score' => $score,
+            'low' => $items->where('market_competitive_salary', 'Low')->count(),
+            'at_par' => $items->where('market_competitive_salary', 'At Par')->count(),
+            'above' => $items->where('market_competitive_salary', 'Above')->count(),
+        ];
+    });
+
+    $results->push([
+        'indicator' => 'Market Competitive Salary',
+        'indicator_id' => 106,
+        'percentage' => $marketSalaryPercentage,
+        'weighted_score' => $weightedScore106,
+        'details' => $programBreakdown->values(), // ✅ IMPORTANT FIX
+    ]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | 3️⃣ Job Relevancy (105)
+    |--------------------------------------------------------------------------
+    */
+    $relevant = $records->where('job_relevancy', 'yes')->count();
+    $jobRelevancyPercentage = round(($relevant / $totalStudents) * 100, 2);
+
+    $weightedScore105 = ($jobRelevancyPercentage * $weights['course_105']) / 100;
+
+    saveIndicatorPercentage90Plus($employeeId, $activeRoleId, 1, 1, 105, $weightedScore105);
+
+    /*
+|--------------------------------------------------------------------------
+| ✅ PROGRAM-WISE BREAKDOWN (FIX FOR MODAL)
+|--------------------------------------------------------------------------
+*/
+
+    $programBreakdown = $records->groupBy('program_id')->map(function ($items) {
+
+        $total = $items->count();
+
+        $relevant = $items->where('job_relevancy', 'yes')->count();
+
+        $score = $total > 0
+            ? round(($relevant / $total) * 100, 1)
+            : 0;
+
+        return [
+            'program_name' => optional($items->first()->program)->program_name,
+            'total_students' => $total,
+            'score' => $score,
+            'relevant_jobs' => $relevant,
+            'non_relevant_jobs' => $total - $relevant,
+        ];
+    });
+
+    $results->push([
+        'indicator' => 'Job Relevancy',
+        'indicator_id' => 105,
+        'percentage' => $jobRelevancyPercentage,
+        'weighted_score' => $weightedScore105,
+        'details' => $programBreakdown->values(), // ✅ IMPORTANT
+    ]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | 4️⃣ Employer Satisfaction (104)
+    |--------------------------------------------------------------------------
+    */
+    $score104 = 0;
+
+    foreach ($records as $r) {
+        if (!is_null($r->employer_satisfaction)) {
+            $score104 += $r->employer_satisfaction * 20;
+        }
+    }
+
+    $employerSatisfactionPercentage = round($score104 / $totalStudents, 2);
+
+    $weightedScore104 = ($employerSatisfactionPercentage * $weights['course_104']) / 100;
+    $weightedScore157 = ($employerSatisfactionPercentage * $weights['course_157']) / 100;
+
+    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 104, $weightedScore104);
+    saveIndicatorPercentage($employeeId, $activeRoleId, 6, 14, 157, $weightedScore157);
+
+    $programBreakdown = $records->groupBy('program_id')->map(function ($items) {
+
+        $total = $items->count();
+
+        $score = $total > 0
+            ? round(
+                ($items->whereNotNull('employer_satisfaction')->sum('employer_satisfaction') * 20) / $total,
+                1
+            )
+            : 0;
+
+        return [
+            'program_name' => optional($items->first()->program)->program_name,
+            'total_students' => $total,
+            'score' => $score,
+        ];
+    });
+
+    $results->push([
+        'indicator' => 'Employer Satisfaction',
+        'indicator_id' => 104,
+        'percentage' => $employerSatisfactionPercentage,
+        'weighted_score' => $weightedScore104,
+        'details' => $programBreakdown->values(), // ✅ IMPORTANT FIX
+    ]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | 5️⃣ Graduate Satisfaction (107)
+    |--------------------------------------------------------------------------
+    */
+    $score107 = 0;
+
+    foreach ($records as $r) {
+        if (!is_null($r->graduate_satisfaction)) {
+            $score107 += $r->graduate_satisfaction * 20;
+        }
+    }
+
+    $graduateSatisfactionPercentage = round($score107 / $totalStudents, 2);
+
+    $weightedScore107 = ($graduateSatisfactionPercentage * $weights['course_107']) / 100;
+
+    saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 107, $weightedScore107);
+
+    /*
+|--------------------------------------------------------------------------
+| ✅ PROGRAM-WISE BREAKDOWN (FOR MODAL)
+|--------------------------------------------------------------------------
+*/
+
+    $programBreakdown = $records->groupBy('program_id')->map(function ($items) {
+
+        $total = $items->count();
+
+        $sum = 0;
+
+        foreach ($items as $r) {
+            if (!is_null($r->graduate_satisfaction)) {
+                $sum += $r->graduate_satisfaction * 20;
+            }
+        }
+
+        $score = $total > 0 ? round($sum / $total, 1) : 0;
+
+        return [
+            'program_name' => optional($items->first()->program)->program_name,
+            'total_students' => $total,
+            'score' => $score,
+            'avg_rating' => round($sum / ($total * 20), 2),
+        ];
+    });
+
+    $results->push([
+        'indicator' => 'Graduate Satisfaction',
+        'indicator_id' => 107,
+        'percentage' => $graduateSatisfactionPercentage,
+        'weighted_score' => $weightedScore107,
+        'details' => $programBreakdown->values(),
+    ]);
+
+    return $results;
+}
+
+function EmployabilityOfPLBKK($employeeId, $ProgramLevel)
+{
+    $currentYear = Carbon::now()->year;
+    $previousYear = Carbon::now()->year - 1;
+    // ✅ Campaigns for current year
+    $campaigns = [
+        "Spring $currentYear",
+        "Fall $previousYear"
+    ];
+    $programIds = Program::where('leader_id', $employeeId)->pluck('id');
+
+    $records = Employability::with(['program'])
+        ->whereIn('program_id', $programIds)
+        ->whereIn('batch', $campaigns)
+        ->where('program_level', $ProgramLevel)
         ->get();
 
     $totalStudents = $records->count();
@@ -6631,8 +6913,12 @@ function EmployabilityOfPL($employeeId)
     return $results;
 }
 
-function QECAuditRatingOfPL($employeeId, $activeRoleId)
+function QECAuditRatingOfPL($employeeId, $activeRoleId, $programLevel)
 {
+    $currentYear = Carbon::now()->year;
+    $previousYear = Carbon::now()->year - 1;
+    $year = $previousYear . '-' . $currentYear;
+
     $programIds = Program::where('leader_id', $employeeId)->pluck('id');
 
     $records = QecAuditRating::with([
@@ -6642,12 +6928,13 @@ function QECAuditRatingOfPL($employeeId, $activeRoleId)
                 ->with(['faculty', 'department', 'program']);
         }
     ])
-        ->whereHas('details', function ($q) use ($programIds) {
+        ->whereHas('details', function ($q) use ($programIds, $programLevel, $year) {
             $q->whereIn('program_id', $programIds)
+                ->where('program_level', $programLevel)
+                ->where('audit_term', $year)
                 ->where('total_score', '>', 0);
         })
         ->get();
-
     $data = [];
 
     foreach ($records as $record) {
@@ -6733,18 +7020,18 @@ if (!function_exists('lineManagerReviewRatingOnTasksOfPL')) {
 
 if (!function_exists('admissionTargetAverageForPL')) {
 
-    function admissionTargetAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId,$ProgramLevel)
+    function admissionTargetAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId, $ProgramLevel)
     {
         $currentYear = Carbon::now()->year;
         $previousYear = Carbon::now()->year - 1;
-            // ✅ Campaigns for current year
-            $campaigns = [
-                "Spring $currentYear",
-                "Fall $previousYear"
-            ];
+        // ✅ Campaigns for current year
+        $campaigns = [
+            "Spring $currentYear",
+            "Fall $previousYear"
+        ];
         $programIds = Program::where('leader_id', $employeeId)->pluck('id');
-        
-        $recordsRaw  = AdmissionTargetAchieved::with(['program'])
+
+        $recordsRaw = AdmissionTargetAchieved::with(['program'])
             ->whereIn('program_id', $programIds)
             ->whereIn('admissions_campaign', $campaigns)
             ->where('program_level', $ProgramLevel)
@@ -6752,7 +7039,7 @@ if (!function_exists('admissionTargetAverageForPL')) {
         $records = [
             'Spring' => [],
             'Fall' => []
-        ];   
+        ];
         foreach ($recordsRaw as $record) {
             $totalTarget1 = $record->admissions_target ?? 0;
             $totalAchieved1 = $record->achieved_target ?? 0;
@@ -6765,17 +7052,17 @@ if (!function_exists('admissionTargetAverageForPL')) {
                 'percentage' => round($percentage, 1),
             ];
 
-           if (str_contains($record->admissions_campaign, 'Spring')) {
+            if (str_contains($record->admissions_campaign, 'Spring')) {
                 $records['Spring'][] = $data; // push multiple
             } elseif (str_contains($record->admissions_campaign, 'Fall')) {
                 $records['Fall'][] = $data; // push multiple
             }
-        } 
+        }
 
-        $totalTarget = $recordsRaw ->sum('admissions_target');
-        $totalAchieved = $recordsRaw ->sum('achieved_target');
+        $totalTarget = $recordsRaw->sum('admissions_target');
+        $totalAchieved = $recordsRaw->sum('achieved_target');
         $avgadmissionTarget = $totalTarget > 0 ? ($totalAchieved / $totalTarget) * 100 : 0;
-    
+
 
         $weight123 = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
         // 5️⃣ Calculate weighted score
@@ -6791,12 +7078,12 @@ if (!function_exists('admissionTargetAverageForPL')) {
             $avgadmissionTarget
         );
         return [
-                'records' => $records,                  // per program records
-                'total_target' => $totalTarget,         // sum of all targets
-                'total_achieved' => $totalAchieved,  
-                'avg_percentage' => round($avgadmissionTarget, 2), // overall %
-                'weighted_score' => round($weightedScore123, 2),        // weighted score
-            ];
+            'records' => $records,                  // per program records
+            'total_target' => $totalTarget,         // sum of all targets
+            'total_achieved' => $totalAchieved,
+            'avg_percentage' => round($avgadmissionTarget, 2), // overall %
+            'weighted_score' => round($weightedScore123, 2),        // weighted score
+        ];
     }
 }
 
@@ -6829,20 +7116,20 @@ if (!function_exists('recoveryTargetAverageForPL')) {
 
 if (!function_exists('programProfitabilityAverageForPL')) {
 
-    function programProfitabilityAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId,$ProgramLevel)
+    function programProfitabilityAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId, $ProgramLevel)
     {
         $currentYear = Carbon::now()->year;
         $programIds = Program::where('leader_id', $employeeId)->pluck('id');
-        
-        $recordsRaw  = ProgramProfitability::with(['program'])
+
+        $recordsRaw = ProgramProfitability::with(['program'])
             ->whereIn('program_id', $programIds)
             ->whereYear('period_date', $currentYear)
             ->where('program_level', $ProgramLevel)
             ->get();
 
-        $totalProfitability = $recordsRaw ->sum('profitability');
-        $avgtotalProfitability = $recordsRaw ->AVG('profitability');
-    
+        $totalProfitability = $recordsRaw->sum('profitability');
+        $avgtotalProfitability = $recordsRaw->AVG('profitability');
+
 
         $weight123 = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
         // 5️⃣ Calculate weighted score
@@ -6858,11 +7145,11 @@ if (!function_exists('programProfitabilityAverageForPL')) {
             $avgtotalProfitability
         );
         return [
-                'records' => $recordsRaw,                  // per program records
-                'total_target' => $totalProfitability,         // sum of all targets
-                'avg_percentage' => round($avgtotalProfitability, 2), // overall %
-                'weighted_score' => round($weightedScore123, 2),        // weighted score
-            ];
+            'records' => $recordsRaw,                  // per program records
+            'total_target' => $totalProfitability,         // sum of all targets
+            'avg_percentage' => round($avgtotalProfitability, 2), // overall %
+            'weighted_score' => round($weightedScore123, 2),        // weighted score
+        ];
     }
 }
 
@@ -7181,7 +7468,7 @@ if (!function_exists('scholarsSatisfactionAverageForPL')) {
             $weightedScore123
         );
     }
-    
+
 }
 
 if (!function_exists('lineManagerRatingOnEventsForPL')) {
