@@ -35,6 +35,7 @@ use App\Models\StudentsGlobalExperience;
 use App\Models\SatisfactionOfInternationalStudent;
 use App\Models\ActiveInternationalResearchPartner;
 use App\Models\AdmissionTargetAchieved;
+use App\Models\AlumniSatisfactionRate;
 use App\Models\DropoutRate;
 use App\Models\FacultyPursuingSkill;
 use App\Models\Recovery;
@@ -7613,19 +7614,24 @@ if (!function_exists('dropOutRateAverageForPL')) {
 }
 if (!function_exists('alumniSatisfactionRateAverageForPL')) {
 
-    function alumniSatisfactionRateAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId)
+    function alumniSatisfactionRateAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId, $ProgramLevel)
     {
-        $programIds = Program::where('leader_id', $employeeId)
-            ->pluck('id');
-        $stats = DB::table('alumni_satisfaction_rates')
+        $currentYear = Carbon::now()->year;
+        $programIds = Program::where('leader_id', $employeeId)->pluck('id');
+
+        $recordsRaw = AlumniSatisfactionRate::with(['program'])
             ->whereIn('program_id', $programIds)
-            ->selectRaw('
-        AVG(satisfaction_rate) as satisfaction
-    ')->first();
+            ->whereYear('graduation_year', $currentYear)
+            ->where('program_level', $ProgramLevel)
+            ->get();
+
+        $totalProfitability = $recordsRaw->sum('satisfaction_rate');
+        $avgtotalProfitability = $recordsRaw->AVG('satisfaction_rate');
+
 
         $weight123 = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
         // 5️⃣ Calculate weighted score
-        $weightedScore123 = round(($stats->satisfaction * $weight123) / 100, 2);
+        $weightedScore123 = round(($avgtotalProfitability * $weight123) / 100, 2);
         // Save result
         saveIndicatorPercentage(
             $employeeId,
@@ -7633,37 +7639,18 @@ if (!function_exists('alumniSatisfactionRateAverageForPL')) {
             $kpaId,
             $categoryId,
             $indicatorId,
-            $weightedScore123
+            $weightedScore123,
+            $avgtotalProfitability
         );
+        return [
+            'records' => $recordsRaw,                  // per program records
+            'total_target' => $totalProfitability,         // sum of all targets
+            'avg_percentage' => round($avgtotalProfitability, 2), // overall %
+            'weighted_score' => round($weightedScore123, 2),        // weighted score
+        ];
     }
 }
 
-if (!function_exists('alumniSatisfactionRateAverageForPL')) {
-
-    function alumniSatisfactionRateAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId)
-    {
-        $programIds = Program::where('leader_id', $employeeId)
-            ->pluck('id');
-        $stats = DB::table('alumni_satisfaction_rates')
-            ->whereIn('program_id', $programIds)
-            ->selectRaw('
-        AVG(satisfaction_rate) as satisfaction
-    ')->first();
-
-        $weight123 = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
-        // 5️⃣ Calculate weighted score
-        $weightedScore123 = round(($stats->satisfaction * $weight123) / 100, 2);
-        // Save result
-        saveIndicatorPercentage(
-            $employeeId,
-            $activeRoleId,
-            $kpaId,
-            $categoryId,
-            $indicatorId,
-            $weightedScore123
-        );
-    }
-}
 if (!function_exists('scholarsSatisfactionAverageForPL')) {
 
     function scholarsSatisfactionAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId, $ProgramLevel)
