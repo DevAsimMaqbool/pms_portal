@@ -35,6 +35,7 @@ use App\Models\StudentsGlobalExperience;
 use App\Models\SatisfactionOfInternationalStudent;
 use App\Models\ActiveInternationalResearchPartner;
 use App\Models\AdmissionTargetAchieved;
+use App\Models\DropoutRate;
 use App\Models\FacultyPursuingSkill;
 use App\Models\Recovery;
 use Illuminate\Support\Facades\DB;
@@ -7412,19 +7413,24 @@ if (!function_exists('targetIndicatorsAnalysisOfPL')) {
 
 if (!function_exists('dropOutRateAverageForPL')) {
 
-    function dropOutRateAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId)
+    function dropOutRateAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId, $ProgramLevel)
     {
-        $programIds = Program::where('leader_id', $employeeId)
-            ->pluck('id');
-        $stats = DB::table('dropout_rates')
+        $currentYear = Carbon::now()->year;
+        $programIds = Program::where('leader_id', $employeeId)->pluck('id');
+
+        $recordsRaw = DropoutRate::with(['program'])
             ->whereIn('program_id', $programIds)
-            ->selectRaw('
-        AVG(dropout_rate) as dropout
-    ')->first();
+            ->whereYear('created_at', $currentYear)
+            ->where('program_level', $ProgramLevel)
+            ->get();
+
+        $totalProfitability = $recordsRaw->sum('dropout_rate');
+        $avgtotalProfitability = $recordsRaw->AVG('dropout_rate');
+
 
         $weight123 = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
         // 5️⃣ Calculate weighted score
-        $weightedScore123 = round(($stats->dropout * $weight123) / 100, 2);
+        $weightedScore123 = round(($avgtotalProfitability * $weight123) / 100, 2);
         // Save result
         saveIndicatorPercentage(
             $employeeId,
@@ -7432,8 +7438,15 @@ if (!function_exists('dropOutRateAverageForPL')) {
             $kpaId,
             $categoryId,
             $indicatorId,
-            $weightedScore123
+            $weightedScore123,
+            $avgtotalProfitability
         );
+        return [
+            'records' => $recordsRaw,                  // per program records
+            'total_target' => $totalProfitability,         // sum of all targets
+            'avg_percentage' => round($avgtotalProfitability, 2), // overall %
+            'weighted_score' => round($weightedScore123, 2),        // weighted score
+        ];
     }
 }
 if (!function_exists('alumniSatisfactionRateAverageForPL')) {
