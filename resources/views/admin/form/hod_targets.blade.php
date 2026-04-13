@@ -34,6 +34,7 @@
                             <option value="199">Products Delivered to Industry (I&C)</option>
                             <option value="194">Number of Knowledge Products (I&C)</option>
                             <option value="197">Industrial Visits (I&C)</option>
+                            <option value="155">No of Professional Memberships attained vs targets</option>
                         </select>
                         <div class="invalid-feedback" id="indicatorError"></div>
                     </div>

@@ -41,7 +41,7 @@
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;
 @endphp
-@if(in_array(getRoleName(activeRole()), ['HOD']))
+@if(in_array(getRoleName(activeRole()), ['HOD','Program Leader UG', 'Program Leader PG']))
 <!--  Payment Methods modal -->
 
 <div class="modal fade" id="NoofProgramsaccreditedoraffiliatednationallyInternationallyandranking" tabindex="-1"
