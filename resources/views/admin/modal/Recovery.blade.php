@@ -224,3 +224,118 @@
     </div>
     <!-- / Payment Methods modal -->
 @endif
+@if(in_array(getRoleName(activeRole()), ['Program Leader UG','Program Leader PG']))
+
+<!-- / Payment Methods modal -->
+<div class="modal fade" id="Recovery" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Recovery%
+                </h3>
+                <!-- Tabs -->
+                <div class="nav-align-top nav-tabs-shadow">
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#Recovery-spring"
+                                    aria-controls="Recovery-spring" aria-selected="true">
+                                    🌸 Yearly
+                                </button>
+                            </li>
+                            
+                        </ul>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+                        <!-- Spring -->
+                        <div class="tab-pane fade show active" id="Recovery-spring"
+                            role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Total Target</th>
+                                            <th>Total Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                 <tbody>
+                                            @php
+                                            $roleName = getRoleName(activeRole());
+                                            $value = match($roleName) {
+                                                'Program Leader UG' => 'UG',
+                                                'Program Leader PG' => 'PG',
+                                                default => ''
+                                            }; 
+                                            $data=recoveryTargetAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 11, 146,$value); 
+                                            $avg = $data['avg_percentage'];
+                                            if ($avg >= 90) {
+                                                $color = 'primary';
+                                                $rating = 'OS';
+                                            } elseif ($avg >= 80) {
+                                                $color = 'success';
+                                                $rating = 'EE';
+                                            } elseif ($avg >= 70) {
+                                                $color = 'warning';
+                                                $rating = 'ME';
+                                            } elseif ($avg >= 60) {
+                                                $color = 'orange';
+                                                $rating = 'NI';
+                                            } else {
+                                                $color = 'danger';
+                                                $rating = 'BE';
+                                            }
+                                        @endphp
+                                        @if($data['total_target'] > 0)
+                                            <tr>
+                                                <td>1</td>
+                                                <td>{{ $data['total_target'] }}</td>
+                                                <td>{{ $data['total_achieved'] }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ $color }}">
+                                                        {{number_format($data['avg_percentage']) }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-{{ $color }}">
+                                                        {{ $rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @else
+                                            <tr>
+                                                <td colspan="5" class="text-center">No record found</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    
+                                </table>    
+                                    
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="Recovery-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+@endif
