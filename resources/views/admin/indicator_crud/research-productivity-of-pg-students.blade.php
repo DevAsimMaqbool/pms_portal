@@ -27,232 +27,242 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-    @if(in_array(getRoleName(activeRole()), ['Teacher','Program Leader UG','Program Leader PG','ORIC']))
-        <!-- Multi Column with Form Separator -->
-        <div class="card">
-            <div class="card-header d-flex align-items-center justify-content-between">
-                <div class="card-title mb-0">
-                    <h5 class="mb-1">Research Productivity of PG Students (MS/MPhil/PhD)</h5>
+        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Program Leader UG', 'Program Leader PG', 'ORIC']))
+            <!-- Multi Column with Form Separator -->
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="card-title mb-0">
+                        <h5 class="mb-1">Research Productivity of PG Students (MS/MPhil/PhD)</h5>
+                    </div>
+                    <div>
+                        <a href="{{ url('kpa/2/category/6/indicator/133') }}" class="btn btn-success">Add</a>
+                    </div>
                 </div>
-                <div>
-                     <a href="{{ url('kpa/2/category/6/indicator/133') }}" class="btn btn-success">Add</a>
-                </div>
-            </div>
-            <div class="card-datatable table-responsive card-body">
-                @if(in_array(getRoleName(activeRole()), ['Teacher','Program Leader UG','Program Leader PG']))
-                    <div class="tab-pane fade show" id="form2" role="tabpanel">
-                        <div class="table-responsive text-nowrap">
-                            <table id="achievementTable" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Indicator Category</th>
-                                        <th>Classification</th>
-                                        <th>Na /International</th>
-                                        <th>Created Date</th>
-                                        <th>History</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                <div class="card-datatable table-responsive card-body">
+                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Program Leader UG', 'Program Leader PG']))
+                        <div class="tab-pane fade show" id="form2" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table id="achievementTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Indicator Category</th>
+                                            <th>Classification</th>
+                                            <th>Na /International</th>
+                                            <th>Created Date</th>
+                                            <th>History</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                @endif
+                    @endif
 
+                </div>
             </div>
-        </div>
-        <!-- Update Intellectual Property Modal -->
-        <!-- Update Form Modal -->
-        <div class="modal fade" id="updateFormModal" tabindex="-1" aria-labelledby="updateFormModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header text-white">
-                        <h5 class="modal-title" id="updateFormModalLabel">Edit Research Productivity of PG Students</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+            <!-- Update Intellectual Property Modal -->
+            <!-- Update Form Modal -->
+            <div class="modal fade" id="updateFormModal" tabindex="-1" aria-labelledby="updateFormModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header text-white">
+                            <h5 class="modal-title" id="updateFormModalLabel">Edit Research Productivity of PG Students</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
 
-                    <div class="modal-body">
-                        <!-- Form -->
-                        <form id="researchForm1" enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" name="indicator_id" value="">
-                            <input type="hidden" name="_method" value="PUT">
-                            <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
+                        <div class="modal-body">
+                            <!-- Form -->
+                            <form id="researchForm1" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="indicator_id" value="">
+                                <input type="hidden" name="_method" value="PUT">
+                                <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
 
-                            <div class="row g-6 mt-0">
-                                <div class="col-12 col-lg-12">
-                                    <!-- Main Info Card -->
-                                    <div class="card shadow-none bg-transparent border border-primary mb-4">
-                                        <div class="card-body">
-                                            <div class="row g-6">
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Journal Category</label>
-                                                    <select name="target_category" class="form-select">
-                                                        <option value="">Select Target Category</option>
-                                                        <option value="Scopus-Indexed">Scopus Indexed</option>
-                                                        <option value="HEC">HEC</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Publications Link</label>
-                                                    <input type="url" name="link_of_publications" class="form-control">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Journal Classification</label>
-                                                    <select name="journal_clasification" class="form-select">
-                                                        <option value="">Select Journal Classification</option>
-                                                        <option value="Q1">Q1</option>
-                                                        <option value="Q2">Q2</option>
-                                                        <option value="Q3">Q3</option>
-                                                        <option value="Q4">Q4</option>
-                                                        <option value="W">W</option>
-                                                        <option value="X">X</option>
-                                                        <option value="Y">Y</option>
-                                                        <option value="Medical">Medical</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card shadow-none bg-transparent border border-primary mt-6">
-                                        <div class="card-body">
-                                            <div class="row g-6">
-
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Student Name</label>
-                                                    <input type="text" name="student_name" class="form-control">
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Student Roll No.</label>
-                                                    <input type="text" name="roll_no" class="form-control">
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Student Rank (As Author)</label>
-                                                    <input type="number" name="as_author_your_rank" class="form-control">
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Faculty</label>
-                                                    <select name="faculty_id" class="select2 form-select faculty-select">
-                                                        <option value="">Select Faculty</option>
-                                                        @foreach(get_faculties() as $faculty)
-                                                            <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Department</label>
-                                                    <select name="department_id"
-                                                        class="select2 form-select department-select">
-                                                        <option value="">Select Department</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Program Name</label>
-                                                    <select name="program_id" class="select2 form-select program-select">
-                                                        <option value="">Select Program</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label d-block">Is there at least 1 international
-                                                        co-author?</label>
-                                                    <div>
-                                                        <input type="radio" name="nationality" id="national"
-                                                            value="National">
-                                                        <label for="national">No</label>
-
-                                                        <input type="radio" name="nationality" id="international"
-                                                            value="International" checked>
-                                                        <label for="international">Yes</label>
+                                <div class="row g-6 mt-0">
+                                    <div class="col-12 col-lg-12">
+                                        <!-- Main Info Card -->
+                                        <div class="card shadow-none bg-transparent border border-primary mb-4">
+                                            <div class="card-body">
+                                                <div class="row g-6">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Journal Category</label>
+                                                        <select name="target_category" class="form-select">
+                                                            <option value="">Select Target Category</option>
+                                                            <option value="Scopus-Indexed">Scopus Indexed</option>
+                                                            <option value="HEC">HEC</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Publications Link</label>
+                                                        <input type="url" name="link_of_publications" class="form-control">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Journal Classification</label>
+                                                        <select name="journal_clasification" class="form-select">
+                                                            <option value="">Select Journal Classification</option>
+                                                            <option value="Q1">Q1</option>
+                                                            <option value="Q2">Q2</option>
+                                                            <option value="Q3">Q3</option>
+                                                            <option value="Q4">Q4</option>
+                                                            <option value="W">W</option>
+                                                            <option value="X">X</option>
+                                                            <option value="Y">Y</option>
+                                                            <option value="Medical">Medical</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Co-Authors -->
-                                    <div class="card shadow-none bg-transparent border border-primary mt-6">
-                                        <div class="card-body" id="grant-details-container">
-                                            <!-- Co-author rows will be added dynamically -->
+                                        <div class="card shadow-none bg-transparent border border-primary mt-6">
+                                            <div class="card-body">
+                                                <div class="row g-6">
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Student Name</label>
+                                                        <input type="text" name="student_name" class="form-control">
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Student Roll No.</label>
+                                                        <input type="text" name="roll_no" class="form-control">
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Student Rank (As Author)</label>
+                                                        <input type="number" name="as_author_your_rank" class="form-control">
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Faculty</label>
+                                                        <select name="faculty_id" class="select2 form-select faculty-select">
+                                                            <option value="">Select Faculty</option>
+                                                            @foreach(get_faculties() as $faculty)
+                                                                <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Department</label>
+                                                        <select name="department_id"
+                                                            class="select2 form-select department-select">
+                                                            <option value="">Select Department</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Program Name</label>
+                                                        <select name="program_id" class="select2 form-select program-select">
+                                                            <option value="">Select Program</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="program_level" class="form-label">Program Level</label>
+                                                        <select name="program_level" id="program_level"
+                                                            class="select2 form-select faculty-member" required>
+                                                            <option value="">-- Select Level --</option>
+                                                            <option value="UG">UG</option>
+                                                            <option value="PG">PG</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label d-block">Is there at least 1 international
+                                                            co-author?</label>
+                                                        <div>
+                                                            <input type="radio" name="nationality" id="national"
+                                                                value="National">
+                                                            <label for="national">No</label>
+
+                                                            <input type="radio" name="nationality" id="international"
+                                                                value="International" checked>
+                                                            <label for="international">Yes</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="card-footer bg-light">
-                                            <button type="button" class="btn btn-primary mt-6" id="add-grant">
-                                                </i> Add Co-Author
-                                            </button>
+
+                                        <!-- Co-Authors -->
+                                        <div class="card shadow-none bg-transparent border border-primary mt-6">
+                                            <div class="card-body" id="grant-details-container">
+                                                <!-- Co-author rows will be added dynamically -->
+                                            </div>
+                                            <div class="card-footer bg-light">
+                                                <button type="button" class="btn btn-primary mt-6" id="add-grant">
+                                                    </i> Add Co-Author
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="mt-3 text-end">
-                                <button type="submit" class="btn btn-success">Update</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </form>
+                                <div class="mt-3 text-end">
+                                    <button type="submit" class="btn btn-success">Update</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- / model -->
-        <!-- Modal -->
-        <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="viewFormModalLabel">
-                            <i class="icon-base ti tabler-history me-3"></i>History
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered mb-3">
-                            <tr>
-                                <td>
-                                    <div class="d-flex justify-content-left align-items-center">
-                                        <div class="avatar-wrapper">
-                                            <div class="avatar avatar-sm me-3">
-                                                <span class="avatar-initial rounded-circle bg-label-info">🙍🏻‍♂️</span>
+            <!-- / model -->
+            <!-- Modal -->
+            <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewFormModalLabel">
+                                <i class="icon-base ti tabler-history me-3"></i>History
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered mb-3">
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-left align-items-center">
+                                            <div class="avatar-wrapper">
+                                                <div class="avatar avatar-sm me-3">
+                                                    <span class="avatar-initial rounded-circle bg-label-info">🙍🏻‍♂️</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column gap-50">
+                                                <span class="text-truncate fw-medium text-heading" id="modalCreatedBy">Website
+                                                    SEO</span>
+                                                <small class="text-truncate" id="modalCreatedDate"></small>
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column gap-50">
-                                            <span class="text-truncate fw-medium text-heading" id="modalCreatedBy">Website
-                                                SEO</span>
-                                            <small class="text-truncate" id="modalCreatedDate"></small>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                                    </td>
+                                </tr>
+                            </table>
 
-                        <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center">
-                            <i class="icon-base ti tabler-history me-3"></i>History
-                        </h5>
-                        <ul class="timeline mb-0" id="modalExtraFieldsHistory"></ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center">
+                                <i class="icon-base ti tabler-history me-3"></i>History
+                            </h5>
+                            <ul class="timeline mb-0" id="modalExtraFieldsHistory"></ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!--/ Add Permission Modal -->
-         @else
+            <!--/ Add Permission Modal -->
+        @else
             <div class="misc-wrapper">
-            <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
-            <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
-            <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
-            <div class="mt-12">
-                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                        alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
             </div>
-        </div>
-    @endif
+        @endif
 
     </div>
     <!-- / Content -->
@@ -273,7 +283,7 @@
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['Teacher','Program Leader UG','Program Leader PG']))
+    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Program Leader UG', 'Program Leader PG']))
         <script>
             function fetchAchievementForms() {
                 $.ajax({
@@ -294,10 +304,10 @@
                             let editButton = '';
                             if (parseInt(form.status) === 1) {
                                 editButton = `
-                                                                                                                                                                                                                                                            <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
-                                                                                                                                                                                                                                                                data-form='${JSON.stringify(form)}'>
-                                                                                                                                                                                                                                                                <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
-                                                                                                                                                                                                                                                            </button>`;
+                                                                                                                                                                                                                                                                                                            <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
+                                                                                                                                                                                                                                                                                                                data-form='${JSON.stringify(form)}'>
+                                                                                                                                                                                                                                                                                                                <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
+                                                                                                                                                                                                                                                                                                            </button>`;
                             }
 
                             // Pass entire form as JSON in button's data attribute
@@ -308,11 +318,11 @@
                                 form.nationality || 'N/A',
                                 createdAt,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
-                                                                                                                                                                                                                                                            data-history='${JSON.stringify(form.update_history)}'
-                                                                                                                                                                                                                                                            data-user='${form.creator ? form.creator.name : "N/A"}'
-                                                                                                                                                                                                                                                            data-created='${form.created_at}'>
-                                                                                                                                                                                                                                                            <span class="icon-xs icon-base ti tabler-history me-2"></span>History
-                                                                                                                                                                                                                                                        </button>`,
+                                                                                                                                                                                                                                                                                                            data-history='${JSON.stringify(form.update_history)}'
+                                                                                                                                                                                                                                                                                                            data-user='${form.creator ? form.creator.name : "N/A"}'
+                                                                                                                                                                                                                                                                                                            data-created='${form.created_at}'>
+                                                                                                                                                                                                                                                                                                            <span class="icon-xs icon-base ti tabler-history me-2"></span>History
+                                                                                                                                                                                                                                                                                                        </button>`,
                                 editButton
                             ];
                         });
@@ -455,6 +465,7 @@
                     $('#researchForm1 [name="hec_x"]').val(form.hec_x);
                     $('#researchForm1 [name="hec_y"]').val(form.hec_y);
                     $('#researchForm1 [name="medical_recognized"]').val(form.medical_recognized);
+                    $('#researchForm1 [name="program_level"]').val(form.program_level).trigger('change');
 
                     // ================================
                     // Faculty → Department → Program
@@ -561,24 +572,24 @@
                             else histortText = update.status || 'N/A';
 
                             historyHtml += `
-                                                                                                                                                                                                                                        <li class="timeline-item timeline-item-transparent optional-field">
-                                                                                                                                                                                                                                            <span class="timeline-point timeline-point-primary"></span>
-                                                                                                                                                                                                                                            <div class="timeline-event">
-                                                                                                                                                                                                                                                <div class="timeline-header mb-3">
-                                                                                                                                                                                                                                                    <h6 class="mb-0">${update.user_name || 'N/A'}</h6>
-                                                                                                                                                                                                                                                    <small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
-                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                <div class="d-flex align-items-center mb-1">
-                                                                                                                                                                                                                                                    <div class="badge bg-lighter rounded-3">
-                                                                                                                                                                                                                                                        <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
-                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                    <div class="badge bg-lighter rounded-3 ms-2">
-                                                                                                                                                                                                                                                        <span class="h6 mb-0 text-body">${histortText}</span>
-                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                        </li>
-                                                                                                                                                                                                                                    `;
+                                                                                                                                                                                                                                                                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                                                                                                                                                                                                                                                                            <span class="timeline-point timeline-point-primary"></span>
+                                                                                                                                                                                                                                                                                            <div class="timeline-event">
+                                                                                                                                                                                                                                                                                                <div class="timeline-header mb-3">
+                                                                                                                                                                                                                                                                                                    <h6 class="mb-0">${update.user_name || 'N/A'}</h6>
+                                                                                                                                                                                                                                                                                                    <small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                <div class="d-flex align-items-center mb-1">
+                                                                                                                                                                                                                                                                                                    <div class="badge bg-lighter rounded-3">
+                                                                                                                                                                                                                                                                                                        <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                                                                                                                                                                                                                                                                        <span class="h6 mb-0 text-body">${histortText}</span>
+                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                        </li>
+                                                                                                                                                                                                                                                                                    `;
                         });
                         $('#modalExtraFieldsHistory').append(historyHtml);
                     } else {
@@ -643,81 +654,81 @@
 
                     // HTML for co-author row
                     let html = `
-                                                                                                                                                                                                                            <div class="row g-6 grant-group mt-4">
-                                                                                                                                                                                                                                <hr>
-                                                                                                                                                                                                                                <div class="col-md-6">
-                                                                                                                                                                                                                                    <input type="hidden" name="co_author[${i}][id]" value="${author.id || ''}">
-                                                                                                                                                                                                                                    <label class="form-label">Co-Author Name</label>
-                                                                                                                                                                                                                                    <input type="text" name="co_author[${i}][name]" class="form-control" value="${author.name || ''}">
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                <div class="col-md-6">
-                                                                                                                                                                                                                                    <label class="form-label">Rank</label>
-                                                                                                                                                                                                                                    <input type="number" name="co_author[${i}][rank]" class="form-control" value="${author.rank || ''}">
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                <div class="col-md-6">
-                                                                                                                                                                                                                                    <label class="form-label">University Name</label>
-                                                                                                                                                                                                                                    <select name="co_author[${i}][univeristy_name]" class="univeristy-dropdown select2 form-select">
-                                                                                                                                                                                                                                        ${uniOptions}
-                                                                                                                                                                                                                                    </select>
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                <div class="col-md-6">
-                                                                                                                                                                                                                                    <label class="form-label">Country</label>
-                                                                                                                                                                                                                                    <select name="co_author[${i}][country]" class="country-dropdown select2 form-select">
-                                                                                                                                                                                                                                        ${countryOptions}
-                                                                                                                                                                                                                                    </select>
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                <div class="col-md-6">
-                                                                                                                                                                                                                                    <label class="form-label d-block">Co-Author Role</label>
-                                                                                                                                                                                                                                    <div>
-                                                                                                                                                                                                                                        <input type="radio" name="co_author[${i}][your_role]" id="student_${i}" value="Student" ${author.your_role === 'Student' || !author.your_role ? 'checked' : ''}>
-                                                                                                                                                                                                                                        <label for="student_${i}">Student</label>
+                                                                                                                                                                                                                                                                            <div class="row g-6 grant-group mt-4">
+                                                                                                                                                                                                                                                                                <hr>
+                                                                                                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                                                                                                    <input type="hidden" name="co_author[${i}][id]" value="${author.id || ''}">
+                                                                                                                                                                                                                                                                                    <label class="form-label">Co-Author Name</label>
+                                                                                                                                                                                                                                                                                    <input type="text" name="co_author[${i}][name]" class="form-control" value="${author.name || ''}">
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                                                                                                    <label class="form-label">Rank</label>
+                                                                                                                                                                                                                                                                                    <input type="number" name="co_author[${i}][rank]" class="form-control" value="${author.rank || ''}">
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                                                                                                    <label class="form-label">University Name</label>
+                                                                                                                                                                                                                                                                                    <select name="co_author[${i}][univeristy_name]" class="univeristy-dropdown select2 form-select">
+                                                                                                                                                                                                                                                                                        ${uniOptions}
+                                                                                                                                                                                                                                                                                    </select>
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                                                                                                    <label class="form-label">Country</label>
+                                                                                                                                                                                                                                                                                    <select name="co_author[${i}][country]" class="country-dropdown select2 form-select">
+                                                                                                                                                                                                                                                                                        ${countryOptions}
+                                                                                                                                                                                                                                                                                    </select>
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                                                                                                    <label class="form-label d-block">Co-Author Role</label>
+                                                                                                                                                                                                                                                                                    <div>
+                                                                                                                                                                                                                                                                                        <input type="radio" name="co_author[${i}][your_role]" id="student_${i}" value="Student" ${author.your_role === 'Student' || !author.your_role ? 'checked' : ''}>
+                                                                                                                                                                                                                                                                                        <label for="student_${i}">Student</label>
 
-                                                                                                                                                                                                                                        <input type="radio" name="co_author[${i}][your_role]" id="researcher_${i}" value="Researcher" ${author.your_role === 'Researcher' ? 'checked' : ''}>
-                                                                                                                                                                                                                                        <label for="researcher_${i}">Researcher</label>
+                                                                                                                                                                                                                                                                                        <input type="radio" name="co_author[${i}][your_role]" id="researcher_${i}" value="Researcher" ${author.your_role === 'Researcher' ? 'checked' : ''}>
+                                                                                                                                                                                                                                                                                        <label for="researcher_${i}">Researcher</label>
 
-                                                                                                                                                                                                                                        <input type="radio" name="co_author[${i}][your_role]" id="professional_${i}" value="Professional" ${author.your_role === 'Professional' ? 'checked' : ''}>
-                                                                                                                                                                                                                                        <label for="professional_${i}">Professional</label>
-                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                <div class="col-md-6" style="display:none">
-                                                                                                                                                                                                                                    <label class="form-label">Designation</label>
-                                                                                                                                                                                                                                    <input type="text" name="co_author[${i}][designation]" class="form-control" value="${author.designation || ''}">
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                <div class="col-md-6">
-                                                                                                                                                                                                                                    <label class="form-label">Student Roll Number</label>
-                                                                                                                                                                                                                                    <input type="text" name="co_author[${i}][student_roll_no]" class="form-control" value="${author.student_roll_no || ''}">
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                <div class="col-md-6">
-                                                                                                                                                                                                                                    <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
-                                                                                                                                                                                                                                    <input type="number" name="co_author[${i}][no_paper_past]" class="form-control" value="${author.no_paper_past || ''}">
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                <div class="col-md-6">
-                                                                                                                                                                                                                                    <label class="form-label">Co-Author Email</label>
-                                                                                                                                                                                                                                    <input type="email" name="co_author[${i}][co_author_email]" class="form-control" value="${author.co_author_email || ''}">
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                <div class="col-md-6">
-                                                                                                                                                                                                                                    <label class="form-label d-block">Is the student first Co-author?</label>
-                                                                                                                                                                                                                                    <div>
-                                                                                                                                                                                                                                        <input type="radio" name="co_author[${i}][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_yes_${i}" value="YES" ${author.is_the_student_fitst_coauthor === 'YES' ? 'checked' : ''}>
-                                                                                                                                                                                                                                        <label for="is_the_student_fitst_coauthor_yes_${i}">Yes</label>
+                                                                                                                                                                                                                                                                                        <input type="radio" name="co_author[${i}][your_role]" id="professional_${i}" value="Professional" ${author.your_role === 'Professional' ? 'checked' : ''}>
+                                                                                                                                                                                                                                                                                        <label for="professional_${i}">Professional</label>
+                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                <div class="col-md-6" style="display:none">
+                                                                                                                                                                                                                                                                                    <label class="form-label">Designation</label>
+                                                                                                                                                                                                                                                                                    <input type="text" name="co_author[${i}][designation]" class="form-control" value="${author.designation || ''}">
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                                                                                                    <label class="form-label">Student Roll Number</label>
+                                                                                                                                                                                                                                                                                    <input type="text" name="co_author[${i}][student_roll_no]" class="form-control" value="${author.student_roll_no || ''}">
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                                                                                                    <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
+                                                                                                                                                                                                                                                                                    <input type="number" name="co_author[${i}][no_paper_past]" class="form-control" value="${author.no_paper_past || ''}">
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                                                                                                    <label class="form-label">Co-Author Email</label>
+                                                                                                                                                                                                                                                                                    <input type="email" name="co_author[${i}][co_author_email]" class="form-control" value="${author.co_author_email || ''}">
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                                                                                                    <label class="form-label d-block">Is the student first Co-author?</label>
+                                                                                                                                                                                                                                                                                    <div>
+                                                                                                                                                                                                                                                                                        <input type="radio" name="co_author[${i}][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_yes_${i}" value="YES" ${author.is_the_student_fitst_coauthor === 'YES' ? 'checked' : ''}>
+                                                                                                                                                                                                                                                                                        <label for="is_the_student_fitst_coauthor_yes_${i}">Yes</label>
 
-                                                                                                                                                                                                                                        <input type="radio" name="co_author[${i}][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_no_${i}" value="NO" ${author.is_the_student_fitst_coauthor !== 'YES' ? 'checked' : ''}>
-                                                                                                                                                                                                                                        <label for="is_the_student_fitst_coauthor_no_${i}">No</label>
-                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                <div class="col-md-6">
-                                                                                                                                                                                                                                    <label class="form-label">Career</label>
-                                                                                                                                                                                                                                    <select name="co_author[${i}][career]" class="form-select">
-                                                                                                                                                                                                                                        <option value="">Select Career</option>
-                                                                                                                                                                                                                                        <option value="PG" ${author.career === 'PG' ? 'selected' : ''}>PG</option>
-                                                                                                                                                                                                                                        <option value="MS" ${author.career === 'MS' ? 'selected' : ''}>MS</option>
-                                                                                                                                                                                                                                    </select>
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                <div class="col-md-12 mt-2">
-                                                                                                                                                                                                                                    <button type="button" class="btn btn-danger remove-grant">Remove</button>
-                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                            `;
+                                                                                                                                                                                                                                                                                        <input type="radio" name="co_author[${i}][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_no_${i}" value="NO" ${author.is_the_student_fitst_coauthor !== 'YES' ? 'checked' : ''}>
+                                                                                                                                                                                                                                                                                        <label for="is_the_student_fitst_coauthor_no_${i}">No</label>
+                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                                                                                                    <label class="form-label">Career</label>
+                                                                                                                                                                                                                                                                                    <select name="co_author[${i}][career]" class="form-select">
+                                                                                                                                                                                                                                                                                        <option value="">Select Career</option>
+                                                                                                                                                                                                                                                                                        <option value="PG" ${author.career === 'PG' ? 'selected' : ''}>PG</option>
+                                                                                                                                                                                                                                                                                        <option value="MS" ${author.career === 'MS' ? 'selected' : ''}>MS</option>
+                                                                                                                                                                                                                                                                                    </select>
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                <div class="col-md-12 mt-2">
+                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-danger remove-grant">Remove</button>
+                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                            `;
 
                     $('#grant-details-container').append(html);
 

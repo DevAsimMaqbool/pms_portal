@@ -40,7 +40,7 @@
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
- @endphp
+@endphp
 @if(in_array(getRoleName(activeRole()), ['Associate Professor', 'Associate Professor', 'Professor']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="ResearchProductivityofPGStudentsMSMPhilPhD" tabindex="-1" aria-hidden="true">
@@ -246,6 +246,102 @@
                                             <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
                                         </tr>
                                     </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / Payment Methods modal -->
+@endif
+@if(in_array(getRoleName(activeRole()), ['Program Leader UG', 'Program Leader PG']))
+    <!--  Payment Methods modal -->
+
+    <div class="modal fade" id="ResearchProductivityofPGStudentsMSMPhilPhD" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Research Productivity of PG
+                        Students (MS/MPhil/PhD)
+                    </h3>
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Program</th>
+                                            <th>Career</th>
+                                            <th>Target</th>
+                                            <th>Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    @php
+                                        $programLevel = match (getRoleName(activeRole())) {
+                                            'Program Leader UG' => 'UG',
+                                            'Program Leader PG' => 'PG',
+                                            default => ''
+                                        };
+
+                                        $data = ResearchProductivityofPGStudentsOfPL(
+                                            Auth::user()->id,
+                                            $activeRoleId,
+                                            133,
+                                            $programLevel
+                                        );
+                                    @endphp
+                                    <tbody>
+                                        @forelse($data as $index => $row)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+
+                                                <td>{{ $row['faculty_name'] }}</td>
+
+                                                <td>{{ $row['department_name'] }}</td>
+
+                                                <td>{{ $row['program_name'] }}</td>
+
+                                                <td>{{ $row['student_career'] }}</td>
+
+                                                <td>{{ $row['value'] }}</td>
+
+                                                <td>{{ $row['count'] }}</td>
+
+
+                                                <td>
+                                                    <div class="badge"
+                                                        style="background-color: {{ getRatingMeta($row['percentage'])->color }}">
+                                                        {{ number_format($row['percentage'], 1) }}%
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="badge"
+                                                        style="background-color: {{ getRatingMeta($row['percentage'])->color }}">
+                                                        {{ getRatingMeta($row['percentage'])->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="9" class="text-center">No Data Found</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

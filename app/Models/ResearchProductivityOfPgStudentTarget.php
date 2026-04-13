@@ -18,6 +18,7 @@ class ResearchProductivityOfPgStudentTarget extends Model
         'faculty_id',
         'department_id',
         'program_id',
+        'program_level',
         'nationality',
         'scopus_q1',
         'scopus_q2',

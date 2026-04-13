@@ -37,9 +37,9 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+$activeRoleId = getRoleIdByName(activeRole());
+// Initialize totalFeedback to 0 in case nothing is set later
+$totalFeedback = 0;                                    
  @endphp
 <!--  Payment Methods modal -->
 @if(in_array(getRoleName(activeRole()), ['HOD']))
@@ -71,14 +71,14 @@
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-                                            $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
+    $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
 
                                         @endphp
 
                                         @foreach($data['categories'] as $label => $avg)
 
                                             @php
-                                                $meta = getRatingMeta($avg);
+        $meta = getRatingMeta($avg);
                                             @endphp
 
                                             <tr>
@@ -142,7 +142,7 @@
                                     </thead>
                                     <tbody>
                                             @php
-                                                $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 7, 16, 165);
+    $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 7, 16, 165);
                         
                                             @endphp
                                                 @foreach($data['records'] as $record)
@@ -178,4 +178,72 @@
         </div>
     </div>
     <!-- / Payment Methods modal -->
+@endif
+@if(in_array(getRoleName(activeRole()), ['Program Leader PG', 'Program Leader UG']))
+<div class="modal fade" id="RectorsFeedbackScore" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        Rector’s Feedback Score
+                    </h3>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class=" table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Category</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-border-bottom-0">
+                                        @php
+    $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
+
+                                        @endphp
+
+                                        @foreach($data['categories'] as $label => $avg)
+
+                                            @php
+        $meta = getRatingMeta($avg);
+                                            @endphp
+
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $label }}</td>
+
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $meta->color }}">
+                                                        {{ number_format($avg, 1) }}%
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge" style="background-color: {{ $meta->color }}">
+                                                        {{ $meta->rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+
+                                        @endforeach
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endif

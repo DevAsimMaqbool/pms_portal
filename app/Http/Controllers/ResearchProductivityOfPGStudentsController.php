@@ -192,6 +192,7 @@ class ResearchProductivityOfPGStudentsController extends Controller
                 'faculty_id',
                 'department_id',
                 'program_id',
+                'program_level',
                 'nationality',
                 'scopus_q1',
                 'scopus_q2',
@@ -335,6 +336,7 @@ class ResearchProductivityOfPGStudentsController extends Controller
             'faculty_id' => 'required|integer',
             'department_id' => 'required|integer',
             'program_id' => 'required|integer',
+            'program_level' => 'required|string',
             'nationality' => 'required|string|max:255',
             'co_author.*.id' => 'nullable|exists:research_productivity_of_pg_students,id',
             'co_author.*.name' => 'required_with:co_author|string|max:255',
@@ -361,6 +363,7 @@ class ResearchProductivityOfPGStudentsController extends Controller
             'faculty_id',
             'department_id',
             'program_id',
+            'program_level',
             'nationality',
         ]));
 
