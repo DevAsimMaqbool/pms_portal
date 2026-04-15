@@ -89,6 +89,8 @@
                                  <tbody>
                                             @php
                                                 $data=recoveryTargetDepartmentAveraget(Auth::user()->employee_id, $activeRoleId, 146); 
+                                                $avg_percentage = $data['avg_percentage'] ?? 0;
+                                                $meta_avg_percentage = getRatingMeta($avg_percentage);
                                                 if (!function_exists('ratingFunctions')) {
                                                     function ratingFunctions($average)
                                                     {
@@ -132,8 +134,13 @@
                                             <th class=""></th>
                                             <th class="">{{number_format($data['total_target'], 1) }}</th>
                                             <th class="">{{number_format($data['total_achieved'], 1) }}</th>
-                                            <th class="">{{number_format($data['avg_percentage'], 1) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg_percentage->color }}">{{number_format($avg_percentage, 1) }}</span></th>
+                                           {{-- <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                           <th class="fs-6 text-white">
+                                                 <span class="badge" style="background-color: {{ $meta_avg_percentage->color }}">
+                                                                 {{ $meta_avg_percentage->rating }}
+                                                 </span>
+                                            </th>
                                         </tr>
                                     </tfoot>
                                     
@@ -188,7 +195,8 @@
                                     <tbody>
                                             @php
                                                 $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 3, 11, 146);
-                        
+                                                $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
+                                                $meta_avg = getRatingMeta($faculty_avg_percentage);
                                             @endphp
                                                 @foreach($data['records'] as $record)
                                                 <tr>
@@ -210,8 +218,10 @@
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
-                                            <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
+                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
                                         </tr>
                                     </tfoot> 
                                 </table>
@@ -278,23 +288,9 @@
                                                 default => ''
                                             }; 
                                             $data=recoveryTargetAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 11, 146,$value); 
-                                            $avg = $data['avg_percentage'];
-                                            if ($avg >= 90) {
-                                                $color = 'primary';
-                                                $rating = 'OS';
-                                            } elseif ($avg >= 80) {
-                                                $color = 'success';
-                                                $rating = 'EE';
-                                            } elseif ($avg >= 70) {
-                                                $color = 'warning';
-                                                $rating = 'ME';
-                                            } elseif ($avg >= 60) {
-                                                $color = 'orange';
-                                                $rating = 'NI';
-                                            } else {
-                                                $color = 'danger';
-                                                $rating = 'BE';
-                                            }
+
+                                            $avg = $data['avg_percentage'] ?? 0;
+                                            $meta_avg = getRatingMeta($avg);
                                         @endphp
                                         @if($data['total_target'] > 0)
                                             <tr>
@@ -302,14 +298,14 @@
                                                 <td>{{ $data['total_target'] }}</td>
                                                 <td>{{ $data['total_achieved'] }}</td>
                                                 <td>
-                                                    <div class="badge bg-{{ $color }}">
-                                                        {{number_format($data['avg_percentage']) }}%
-                                                    </div>
+                                                    <span class="badge" style="background-color: {{ $meta_avg->color }}">
+                                                        {{number_format($avg) }}%
+                                                    </span>
                                                 </td>
                                                 <td>
-                                                    <div class="badge bg-{{ $color }}">
-                                                        {{ $rating }}
-                                                    </div>
+                                                    <span class="badge" style="background-color: {{ $meta_avg->color }}">
+                                                        {{ $meta_avg->rating }}
+                                                    </span>
                                                 </td>
                                             </tr>
                                         @else

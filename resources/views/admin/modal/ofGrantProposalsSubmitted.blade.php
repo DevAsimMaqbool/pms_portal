@@ -136,23 +136,9 @@
                                     <tbody>
                                             @php
                                                 $data=departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 135);
-                                                $avg = $data['department_avg_percentage'];
-                                                 if ($avg >= 90) {
-                                                            $color = 'primary';
-                                                            $rating = 'OS';
-                                                        } elseif ($avg >= 80) {
-                                                            $color = 'success';
-                                                            $rating = 'EE';
-                                                        } elseif ($avg >= 70) {
-                                                            $color = 'warning';
-                                                            $rating = 'ME';
-                                                        } elseif ($avg >= 60) {
-                                                            $color = 'orange';
-                                                            $rating = 'NI';
-                                                        } else {
-                                                            $color = 'danger';
-                                                            $rating = 'BE';
-                                                        }
+                                                $avg = $data['department_avg_percentage'] ?? 0;
+                                                $meta = getRatingMeta($avg);
+                                                 
                                             @endphp
                                                 @if($data['total_target'] > 0)
                                                     <tr>
@@ -160,14 +146,14 @@
                                                         <td>{{ $data['total_target'] }}</td>
                                                         <td>{{ $data['total_submitted'] }}</td>
                                                         <td>
-                                                            <div class="badge bg-{{ $color }}">
-                                                                {{number_format($data['department_avg_percentage']) }}%
-                                                            </div>
+                                                            <span class="badge" style="background-color: {{ $meta->color }}">
+                                                                {{number_format($avg) }}%
+                                                            </span>
                                                         </td>
                                                         <td>
-                                                            <div class="badge bg-{{ $color }}">
-                                                                 {{ $rating }}
-                                                            </div>
+                                                            <span class="badge" style="background-color: {{ $meta->color }}">
+                                                                 {{ $meta->rating }}
+                                                            </span>
                                                         </td>
                                                     </tr>
                                                 @else
@@ -180,12 +166,14 @@
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th colspan="2" class="text-end"></th>
-                                            <th>
-                                                <b>
-                                                    {{number_format($data['department_avg_percentage'], 1) }}
-                                                </b>
+                                            <th class="fs-6">
+                                                <span class="badge" style="background-color: {{ $meta->color }}">
+                                                    {{number_format($avg, 1) }}
+                                                </span>
                                             </th>
-                                            <th class="text-end text-white"></th>
+                                            <th class="fs-6 text-white"><span class="badge" style="background-color: {{ $meta->color }}">
+                                                                 {{ $meta->rating }}
+                                                            </span></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -229,7 +217,8 @@
                                     <tbody>
                                             @php
                                                 $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 2, 8, 135);
-                        
+                                                $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
+                                                $meta_avg = getRatingMeta($faculty_avg_percentage);
                                             @endphp
                                                 @foreach($data['records'] as $record)
                                                 <tr>
@@ -251,8 +240,11 @@
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
-                                            <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
+                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
+                                       
                                         </tr>
                                     </tfoot> 
                                 </table>

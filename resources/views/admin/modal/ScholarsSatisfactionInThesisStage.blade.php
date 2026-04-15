@@ -43,6 +43,11 @@
  @endphp
 
 @if(in_array(getRoleName(activeRole()), ['HOD']))
+@php
+    $data=scholarsSatisfactionAverageOfHOD($activeRoleId); 
+    $avg_percentage = $data['avg_percentage'] ?? 0;
+    $meta = getRatingMeta($avg_percentage);
+@endphp
 <!-- / Payment Methods modal -->
 <div class="modal fade" id="ScholarsSatisfactionInThesisStage" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -93,42 +98,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
-                                                $data=scholarsSatisfactionAverageOfHOD($activeRoleId);
-                                                if (!function_exists('ratingFunctions')) {
-                                                    function ratingFunctions($average)
-                                                    {
-                                                        if ($average >= 90)
-                                                            return ['OS', 'primary'];
-                                                        if ($average >= 80)
-                                                            return ['EE', 'success'];
-                                                        if ($average >= 70)
-                                                            return ['ME', 'warning'];
-                                                        if ($average >= 60)
-                                                            return ['NI', 'orange'];
-                                                        return ['BE', 'danger'];
-                                                    }
-                                                }
+                                             @php
+                                                $records_Spring_avg = $data['records']['Spring']['avg'] ?? 0;
+                                                $meta_Spring_avg = getRatingMeta($records_Spring_avg);
+                                                
                                             @endphp
-                                                @php
-                                                    [$rating, $color] = ratingFunctions($data['records']['Spring']['avg']);
-                                                    
-                                                @endphp
+                                                
                                                  <tr>
                                                     <td>1</td>
                                                     <td>{{ $data['records']['Spring']['sum'] }}</td>
                                                     <td>{{ $data['records']['Spring']['count'] }}</td>
-                                                    <td><div class="badge bg-{{ $color }}">{{ $data['records']['Spring']['avg'] }}%</div></td>
-                                                    <td><div class="badge bg-label-{{ $color }}">{{ $rating }}</div></td>
+                                                     <td><span class="badge" style="background-color: {{ $meta_Spring_avg->color }}">{{ $records_Spring_avg }}%</span></td>
+                                                    <td><span class="badge" style="background-color: {{ $meta_Spring_avg->color }}">{{ $meta_Spring_avg->rating }}</span></td>
                                                 </tr>
                                     </tbody>
                                     <tfoot>
-                                        <tr class="table-primary">
+                                         <tr class="table-primary">
                                             <th class="">Total</th>
-                                            <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
-                                            <th class="">Total (S+F){{number_format($data['total_target_count'], 1) }}</th>
-                                            <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class=""></th>
+                                            <th class="">AVG (S+F)-></th>
+                                            {{-- <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
+                                             <th class="">Total (S+F){{number_format($data['total_target_count'], 1) }}</th> --}}
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta->color }}">{{number_format($avg_percentage, 1) }}</span></th>
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta->color }}">
+                                                        {{ $meta->rating }}
+                                                    </span></th>
+                                           {{-- <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
                                         </tr>
                                     </tfoot>
                                     
@@ -151,41 +146,30 @@
                                     </thead>
                                     <tbody>
                                             @php
-                                                $data=scholarsSatisfactionAverageOfHOD($activeRoleId); 
-                                                if (!function_exists('ratingFunctions')) {
-                                                    function ratingFunctions($average)
-                                                    {
-                                                        if ($average >= 90)
-                                                            return ['OS', 'primary'];
-                                                        if ($average >= 80)
-                                                            return ['EE', 'success'];
-                                                        if ($average >= 70)
-                                                            return ['ME', 'warning'];
-                                                        if ($average >= 60)
-                                                            return ['NI', 'orange'];
-                                                        return ['BE', 'danger'];
-                                                    }
-                                                }
+                                                $records_fall_avg = $data['records']['Fall']['avg'] ?? 0;
+                                                $meta_fall_avg = getRatingMeta($records_fall_avg);
+                                                
                                             @endphp
-                                                @php
-                                                    [$rating, $color] = ratingFunctions($data['records']['Fall']['avg']);
-                                                    
-                                                @endphp
                                                  <tr>
                                                     <td>1</td>
                                                     <td>{{ $data['records']['Fall']['sum'] }}</td>
                                                     <td>{{ $data['records']['Fall']['count'] }}</td>
-                                                    <td><div class="badge bg-{{ $color }}">{{ $data['records']['Fall']['avg'] }}%</div></td>
-                                                    <td><div class="badge bg-label-{{ $color }}">{{ $rating }}</div></td>
+                                                    <td><span class="badge" style="background-color: {{ $meta_fall_avg->color }}">{{ $records_fall_avg }}%</span></td>
+                                                    <td><span class="badge" style="background-color: {{ $meta_fall_avg->color }}">{{ $meta_fall_avg->rating }}</span></td>
                                                 </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
-                                            <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
-                                             <th class="">Total (S+F){{number_format($data['total_target_count'], 1) }}</th>
-                                            <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class=""></th>
+                                            <th class="">AVG (S+F)-></th>
+                                            {{-- <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
+                                             <th class="">Total (S+F){{number_format($data['total_target_count'], 1) }}</th> --}}
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta->color }}">{{number_format($avg_percentage, 1) }}</span></th>
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta->color }}">
+                                                        {{ $meta->rating }}
+                                                    </span></th>
+                                           {{-- <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
                                         </tr>
                                     </tfoot>
                                     
@@ -232,6 +216,8 @@
                                     <tbody>
                                             @php
                                                 $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 2, 6, 132);
+                                                $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
+                                                $meta_avg = getRatingMeta($faculty_avg_percentage);
                         
                                             @endphp
                                                 @foreach($data['records'] as $record)
@@ -253,9 +239,9 @@
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
-                                            <th class=""></th>
-                                            <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class="">AVG-></th>
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
                                         </tr>
                                     </tfoot> 
                                 </table>
@@ -277,20 +263,7 @@
         default => ''
     }; 
     $data=scholarsSatisfactionAverageForPL(Auth::user()->employee_id, $activeRoleId, 2, 6, 132,$value);
-    if (!function_exists('ratingFunctions')) {
-        function ratingFunctions($average)
-        {
-            if ($average >= 90)
-                return ['OS', 'primary'];
-            if ($average >= 80)
-                return ['EE', 'success'];
-            if ($average >= 70)
-                return ['ME', 'warning'];
-            if ($average >= 60)
-                return ['NI', 'orange'];
-            return ['BE', 'danger'];
-        }
-    }
+   
 @endphp
 <!-- / Payment Methods modal -->
 <div class="modal fade" id="ScholarsSatisfactionInThesisStage" tabindex="-1" aria-hidden="true">
@@ -343,13 +316,14 @@
                                     <tbody>
                                                 @foreach($data['records']['Spring'] ?? [] as $index => $Spring)
                                                     @php
-                                                        [$rating, $color] = ratingFunctions($Spring['score']);
+                                                        $score_spring = $Spring['score'] ?? 0;
+                                                        $meta_score_spring = getRatingMeta($score_spring);
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $index + 1 }}</td>
                                                         <td>{{ $Spring['program'] }}</td>
-                                                        <td><div class="badge bg-{{ $color }}">{{ $Spring['score'] }}%</div></td>
-                                                        <td><div class="badge bg-label-{{ $color }}">{{ $rating }}</div></td>
+                                                        <td><span class="badge" style="background-color: {{ $meta_score_spring->color }}">{{ $score_spring }}%</span></td>
+                                                        <td><span class="badge" style="background-color: {{ $meta_score_spring->color }}">{{ $meta_score_spring->rating }}</span></td>
                                                     </tr>
                                                 @endforeach
                                     </tbody>
@@ -381,14 +355,15 @@
                                     <tbody>
                                                 @foreach($data['records']['Fall'] ?? [] as $index => $fall)
                                                 @php
-                                                    [$rating, $color] = ratingFunctions($fall['score']);
+                                                     $score_fall = $fall['score'] ?? 0;
+                                                     $meta_score_fall = getRatingMeta($score_fall);
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $index + 1 }}</td>
                                                     <td>{{ $fall['program'] }}</td>
-                                                    <td><div class="badge bg-{{ $color }}">{{ $fall['score'] }}%</div></td>
-                                                    <td><div class="badge bg-label-{{ $color }}">{{ $rating }}</div></td>
-                                                </tr>
+                                                    <td><span class="badge" style="background-color: {{ $meta_score_fall->color }}">{{ $score_fall }}%</span></td>
+                                                    <td><span class="badge" style="background-color: {{ $meta_score_fall->color }}">{{ $meta_score_fall->rating }}</span></td>
+                                                   </tr>
                                             @endforeach
                                     </tbody>
                                     <tfoot>

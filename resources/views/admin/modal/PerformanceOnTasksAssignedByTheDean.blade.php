@@ -102,6 +102,7 @@
                                                 $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
                                                 // ✅ Fast sum of all rating percentages
                                                 $totalPercentage = $feedbacks->sum(fn($item) => $item->rating_data['percentage']);
+                                                $meta_totalPercentage = getRatingMeta($totalPercentage);
                                             @endphp
                                             @forelse($feedbacks as $index => $item)
                                                 <tr>
@@ -129,12 +130,16 @@
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class="text-end"></th>
-                                            <th>
-                                                <b>
+                                            <th class="fs-6 text-white">
+                                                <span class="badge" style="background-color: {{ $meta_totalPercentage->color }}">
                                                     {{ number_format($totalPercentage, 1) }}
-                                                </b>
+                                                </span>
                                             </th>
-                                            <th class="text-end text-white"></th>
+                                            <th class="fs-6 text-white">
+                                                 <span class="badge" style="background-color: {{ $meta_totalPercentage->color }}">
+                                                                 {{ $meta_totalPercentage->rating }}
+                                                 </span>
+                                            </th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -182,23 +187,8 @@
                                  <tbody>
                                             @php
                                                 $data=departmentLineManagerReviewRating(Auth::user()->employee_id, $activeRoleId);
-                                                $avg = $data['department_avg_score'];
-                                                 if ($avg >= 90) {
-                                                            $color = 'primary';
-                                                            $rating = 'OS';
-                                                        } elseif ($avg >= 80) {
-                                                            $color = 'success';
-                                                            $rating = 'EE';
-                                                        } elseif ($avg >= 70) {
-                                                            $color = 'warning';
-                                                            $rating = 'ME';
-                                                        } elseif ($avg >= 60) {
-                                                            $color = 'orange';
-                                                            $rating = 'NI';
-                                                        } else {
-                                                            $color = 'danger';
-                                                            $rating = 'BE';
-                                                        }
+                                                $avg = $data['department_avg_score'] ?? 0;
+                                                $meta = getRatingMeta($avg);
                                             @endphp
                                                 @if(!empty($data))
                                                     <tr>
@@ -207,13 +197,13 @@
                                                         <td>{{ $data['total_Score'] }}</td>
                                                         <td>{{ $data['weighted_scores']['175'] }}</td>
                                                         <td>
-                                                            <div class="badge bg-{{ $color }}">
-                                                                {{number_format($data['department_avg_score']) }}%
+                                                            <div class="badge" style="background-color: {{ $meta->color }}">
+                                                                {{number_format($avg) }}%
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <div class="badge bg-{{ $color }}">
-                                                                 {{ $rating }}
+                                                            <div class="badge" style="background-color: {{ $meta->color }}">
+                                                                 {{ $meta->rating }}
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -223,6 +213,22 @@
                                                     </tr>
                                                 @endif
                                     </tbody>
+                                     <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th colspan="3" class="text-end"></th>
+                                            <th class="fs-6">
+                                                <span class="badge" style="background-color: {{ $meta->color }}">
+                                                    {{number_format($avg, 1) }}
+                                                </span>
+                                            </th>
+                                            <th class="fs-6 text-white">
+                                             <span class="badge" style="background-color: {{ $meta->color }}">
+                                                                 {{ $meta->rating }}
+                                                            </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                             </table>
                         </div>
                     </div>
