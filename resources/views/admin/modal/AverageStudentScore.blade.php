@@ -37,11 +37,11 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+$activeRoleId = getRoleIdByName(activeRole());
+// Initialize totalFeedback to 0 in case nothing is set later
+$totalFeedback = 0;                                    
  @endphp
- @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
     <div class="modal fade" id="AverageStudentScore" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -119,33 +119,36 @@
                                         <tbody>
                                             @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
                                                 @php
-                                                    $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
-                                                    $att = $data['classes'];
-                                                    $sr = 1;
+        $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
+        $att = $data['classes'];
+        $sr = 1;
+        $avgScore = $att->isNotEmpty()
+            ? $att->avg(fn($c) => (float) ($c->average_marks ?? 0))
+            : 0;
                                                 @endphp
 
                                                 @forelse($att as $class)
                                                     @php
-                                                        // latest attendance or null
-                                                        $latestAttendance = $class->attendances->first();
-                                                        $avg = $class->average_marks ?? 0;
-                                                        // Determine rating
-                                                        if ($avg >= 90) {
-                                                            $color = 'primary';
-                                                            $rating = 'OS';
-                                                        } elseif ($avg >= 80) {
-                                                            $color = 'success';
-                                                            $rating = 'EE';
-                                                        } elseif ($avg >= 70) {
-                                                            $color = 'warning';
-                                                            $rating = 'ME';
-                                                        } elseif ($avg >= 60) {
-                                                            $color = 'orange';
-                                                            $rating = 'NI';
-                                                        } else {
-                                                            $color = 'danger';
-                                                            $rating = 'BE';
-                                                        }
+            // latest attendance or null
+            $latestAttendance = $class->attendances->first();
+            $avg = $class->average_marks ?? 0;
+            // Determine rating
+            if ($avg >= 90) {
+                $color = 'primary';
+                $rating = 'OS';
+            } elseif ($avg >= 80) {
+                $color = 'success';
+                $rating = 'EE';
+            } elseif ($avg >= 70) {
+                $color = 'warning';
+                $rating = 'ME';
+            } elseif ($avg >= 60) {
+                $color = 'orange';
+                $rating = 'NI';
+            } else {
+                $color = 'danger';
+                $rating = 'BE';
+            }
                                                     @endphp
 
 
@@ -180,12 +183,15 @@
                                                 <tr class="table-primary">
                                                     <th class="text-end">Total</th>
                                                     <th colspan="4" class="text-end"></th>
-                                                    <th>
-                                                        <b>
-                                                            {{ number_format($data['totalAverageMarks'], 1) }}
+                                                    <th style="font-size: 0.960rem;">
+                                                        <b class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
+                                                            {{ number_format($avgScore, 1) }}%
                                                         </b>
                                                     </th>
-                                                    <th class="text-end text-white"></th>
+                                                    <th class="text-end" style="font-size: 0.960rem;"><b
+                                                            class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
+                                                            {{ getRatingMeta($avgScore)->rating }}
+                                                        </b></th>
                                                 </tr>
                                             </tfoot>
                                         @endif
@@ -200,4 +206,4 @@
     </div>
 
     <!-- / Payment Methods modal -->
- @endif
+@endif

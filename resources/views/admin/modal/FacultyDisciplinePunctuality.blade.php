@@ -40,11 +40,11 @@
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
-@endphp
+ @endphp
 @if(in_array(getRoleName(activeRole()), ['HOD']))
     <!--  Payment Methods modal -->
 
-    <div class="modal fade" id="RetentionRateofFaculty" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="FacultyDisciplinePunctuality" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
                 <div class="modal-header">
@@ -54,7 +54,7 @@
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Retention Rate of Faculty
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> Faculty Discipline / Punctuality
                     </h3>
                     <div class="card">
                         <div class="card-body">
@@ -64,30 +64,16 @@
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Faculty</th>
-                                            <th>Score</th>
+                                            <th>Department</th>
+                                            <th>Program</th>
+                                            <th>Punctuality %</th>
                                             <th>Rating</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                            $data = retentionRateofFaculty(Auth::user()->employee_id, $activeRoleId, 6, 15, 162);
-                                        @endphp
-
                                         <tr>
-                                            <td>1</td>
-
-                                            <td>{{ getFacultyName($data->faculty_id) }}</td>
-
-                                            <td>
-                                                <div class="badge" style="background-color: {{ $data->color }}">
-                                                    {{ number_format($data->average_rating, 1) }}%
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <span class="badge" style="background-color: {{ $data->color }}">
-                                                    {{ $data->rating }}
-                                                </span>
+                                            <td colspan="6" class="text-center text-muted">
+                                                No data found
                                             </td>
                                         </tr>
                                     </tbody>
@@ -105,7 +91,7 @@
 @if(in_array(getRoleName(activeRole()), ['Dean']))
     <!--  Payment Methods modal -->
 
-    <div class="modal fade" id="RetentionRateofFaculty" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="FacultyDisciplinePunctuality" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
                 <div class="modal-header">
@@ -115,53 +101,75 @@
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Retention Rate of Faculty
-
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> Faculty Discipline / Punctuality
                     </h3>
                     <div class="card">
-
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-striped align-middle custom-table">
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
+                                            <th>Faculty</th>
                                             <th>Department</th>
-                                            <th>Score</th>
+                                            <th>Program</th>
+                                            <th>Punctuality %</th>
                                             <th>Rating</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 6, 15, 162);
-
-                                        @endphp
-                                        @foreach($data['records'] as $record)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                <td>
-                                                    <div class="badge bg-{{ $record->color }}">
-                                                        {{ $record->score}}%
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="badge bg-label-{{ $record->color }}">
-
-                                                        {{ $record->rating }}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th class=""></th>
-                                            <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">
+                                                No data found
+                                            </td>
                                         </tr>
-                                    </tfoot>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / Payment Methods modal -->
+@endif
+@if(in_array(getRoleName(activeRole()), ['Program Leader UG', 'Program Leader PG']))
+    <!--  Payment Methods modal -->
+
+    <div class="modal fade" id="FacultyDisciplinePunctuality" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> Faculty Discipline / Punctuality
+                    </h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Program</th>
+                                            <th>Punctuality %</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">
+                                                No data found
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

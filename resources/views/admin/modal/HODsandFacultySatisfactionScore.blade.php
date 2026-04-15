@@ -60,7 +60,7 @@ $totalFeedback = 0;
                         </div>
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
-                                <table class="table table-striped align-middle custom-table">
+                                 <table class="table table-striped align-middle custom-table">
                                     <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
@@ -71,14 +71,18 @@ $totalFeedback = 0;
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-    $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
+                                            $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
+                                            // Use RAW values (NO rounding here)
+                                            $categories = collect($data['categories']);
+                                            // SINGLE SOURCE → SAME RESULT ALWAYS
+                                            $overallAvg = round($categories->avg(), 1);
 
                                         @endphp
 
                                         @foreach($data['categories'] as $label => $avg)
 
                                             @php
-        $meta = getRatingMeta($avg);
+                                                $meta = getRatingMeta($avg);
                                             @endphp
 
                                             <tr>
@@ -101,6 +105,22 @@ $totalFeedback = 0;
                                         @endforeach
 
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th>Overall</th>
+                                            <th colspan="1" class="text-end"></th>
+                                            <th style="font-size: 0.960rem;">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ number_format($overallAvg, 1) }}%
+                                                </b>
+                                            </th>
+                                            <th style="font-size: 0.960rem;"><b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ getRatingMeta($overallAvg)->rating }}
+                                                </b></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

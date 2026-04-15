@@ -40,159 +40,166 @@
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
- @endphp
-<!--  Payment Methods modal -->
-<div class="modal fade" id="CourseLoad" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-loader-3 icon-md"></i>
-                    </div> Course Load
-                </h3>
-                <!-- Tabs -->
-                <div class="nav-align-top nav-tabs-shadow">
-                    <div class="d-flex justify-content-center mb-3 mt-3">
-                        <ul class="nav custom-tabs" role="tablist">
-                            <li class="nav-item">
-                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#CourseLoad-spring" aria-controls="CourseLoad-spring"
-                                    aria-selected="true">
-                                    🌸 Spring 2026
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#CourseLoad-fall" aria-controls="CourseLoad-fall"
-                                    aria-selected="false">
-                                    🍂 Fall 2025
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Tab Content -->
-                    <div class="tab-content">
-                        <!-- Spring -->
-                        <div class="tab-pane fade show active" id="CourseLoad-spring" role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Class Name</th>
-                                            <th>Class Code</th>
-                                            <th>Career</th>
-                                            <th>Avg Class Size</th>
-                                            <th>Program</th>
-
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="6">no record found</td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table m-0 table-borderless">
-                                    <tbody>
-                                        <tr>
-                                            <td class="align-top pe-6 ps-0 py-6 text-body">
-                                            </td>
-                                            <td class="px-0 w-px-100">
-                                                <p class="fw-medium mb-2">Total Courses:</p>
-                                                <!-- <p class="fw-medium mb-2">Overload By</p> -->
-                                            </td>
-                                            <td class="px-0 w-px-100 fw-medium text-heading">
-                                                <p class="fw-medium mb-2"> 0 </p>
-                                                <!-- <p class="fw-medium mb-2">0</p> -->
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+@endphp
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+    <!--  Payment Methods modal -->
+    <div class="modal fade" id="CourseLoad" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-loader-3 icon-md"></i>
+                        </div> Course Load
+                    </h3>
+                    <!-- Tabs -->
+                    <div class="nav-align-top nav-tabs-shadow">
+                        <div class="d-flex justify-content-center mb-3 mt-3">
+                            <ul class="nav custom-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                        data-bs-target="#CourseLoad-spring" aria-controls="CourseLoad-spring"
+                                        aria-selected="true">
+                                        🌸 Spring 2026
+                                    </button>
+                                </li>
+                                <li class="nav-item">
+                                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                        data-bs-target="#CourseLoad-fall" aria-controls="CourseLoad-fall"
+                                        aria-selected="false">
+                                        🍂 Fall 2025
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
 
-                        <!-- Fall -->
-                        <div class="tab-pane fade" id="CourseLoad-fall" role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Class Name</th>
-                                            <th>Class Code</th>
-                                            <th>Career</th>
-                                            <th>Avg Class Size</th>
-                                            <th>Program</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="table-border-bottom-0">
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-                                                        @php
-                                                            $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
-                                                            $att = $data['classes'];
-                                                            $sr = 1;
-                                                        @endphp
-                                                        @foreach($att as $class)
-                                                            @php
-                                                                // latest attendance or null
-                                                                $latestAttendance = $class->attendances->first();
-                                                                $scheduled = $latestAttendance
-                                                                    ? \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y')
-                                                                    : '-';
-                                                            @endphp
-
-                                                            <tr>
-                                                                <td>{{ $sr++ }}</td>
-                                                                <td>{{ $class->class_name }}</td>
-                                                                <td>{{ $class->code }}</td>
-                                                                <td>{{ $class->career_code }}</td>
-                                                                <td>{{ round($class->attendances->sum('total_students') / $class->attendances->count(), 1) }}
-                                                                </td>
-
-                                                                {{-- Program name (only if attendance exists) --}}
-                                                                <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
-
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table m-0 table-borderless">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="align-top pe-6 ps-0 py-6 text-body">Total Courses:
-                                                                {{ count($att) }}
-                                                            </td>
-                                                            <td class="px-0 w-px-100">
-                                                                <span class="fw-medium">
-                                                                    <span class="badge bg-{{ count($att) > 3 ? 'danger' : 'success' }}">
-                                                                        {{ count($att) > 3 ? 'Overload' : 'Underload' }}
-                                                                    </span>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-
-                                            </div>
-                                        @endif
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <!-- Spring -->
+                            <div class="tab-pane fade show active" id="CourseLoad-spring" role="tabpanel">
+                                <div class="table-responsive text-nowrap">
+                                    <table class="table table-hover align-middle custom-table">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Sr#</th>
+                                                <th>Class Name</th>
+                                                <th>Class Code</th>
+                                                <th>Career</th>
+                                                <th>Avg Class Size</th>
+                                                <th>Program</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="6">no record found</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table m-0 table-borderless">
+                                        <tbody>
+                                            <tr>
+                                                <td class="align-top pe-6 ps-0 py-6 text-body">
+                                                </td>
+                                                <td class="px-0 w-px-100">
+                                                    <p class="fw-medium mb-2">Total Courses:</p>
+                                                    <!-- <p class="fw-medium mb-2">Overload By</p> -->
+                                                </td>
+                                                <td class="px-0 w-px-100 fw-medium text-heading">
+                                                    <p class="fw-medium mb-2"> 0 </p>
+                                                    <!-- <p class="fw-medium mb-2">0</p> -->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Fall -->
+                            <div class="tab-pane fade" id="CourseLoad-fall" role="tabpanel">
+                                <div class="table-responsive text-nowrap">
+                                    <table class="table table-hover align-middle custom-table">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Sr#</th>
+                                                <th>Class Name</th>
+                                                <th>Class Code</th>
+                                                <th>Career</th>
+                                                <th>Avg Class Size</th>
+                                                <th>Program</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-border-bottom-0">
+                                            @php
+                                                $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
+                                                $att = $data['classes'];
+                                                $sr = 1;
+                                            @endphp
+                                            @foreach($att as $class)
+                                                @php
+                                                    // latest attendance or null
+                                                    $latestAttendance = $class->attendances->first();
+                                                    $scheduled = $latestAttendance
+                                                        ? \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y')
+                                                        : '-';
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ $sr++ }}</td>
+                                                    <td>{{ $class->class_name }}</td>
+                                                    <td>{{ $class->code }}</td>
+                                                    <td>{{ $class->career_code }}</td>
+                                                    <td>{{ round($class->attendances->sum('total_students') / $class->attendances->count(), 1) }}
+                                                    </td>
+                                                    {{-- Program name (only if attendance exists) --}}
+                                                    <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="table-primary">
+                                                <th class="text-end">Total</th>
+                                                <th colspan="3" class="text-end"></th>
+                                                <th style="font-size: 0.960rem;">
+                                                    <b class="badge"
+                                                        style="background-color: {{ getRatingMeta($data['courseLoadScore'])->color }}">
+                                                        {{ number_format($data['courseLoadScore'], 1) }}%
+                                                    </b>
+                                                </th>
+                                                <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
+                                                        style="background-color: {{ getRatingMeta($data['courseLoadScore'])->color }}">
+                                                        {{ getRatingMeta($data['courseLoadScore'])->rating }}
+                                                    </b></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table m-0 table-borderless">
+                                        <tbody>
+                                            <tr>
+                                                <td class="align-top pe-6 ps-0 py-6 text-body">Total Courses:
+                                                    {{ count($att) }}
+                                                </td>
+                                                <td class="px-0 w-px-100">
+                                                    <span class="fw-medium">
+                                                        <span class="badge bg-{{ count($att) > 3 ? 'danger' : 'success' }}">
+                                                            {{ count($att) > 3 ? 'Overload' : 'Underload' }}
+                                                        </span>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<!-- / Payment Methods modal -->
+    <!-- / Payment Methods modal -->
+@endif

@@ -62,6 +62,7 @@
 
                                 @php
                                     $data = StudentEngagementRateForHOD($activeRoleId, 123);
+                                    $overallAvg = collect($data)->avg('participation_percentage');
                                 @endphp
 
                                 <table class="table table-striped align-middle custom-table">
@@ -105,6 +106,22 @@
                                             </tr>
                                         @endforelse
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th>Total</th>
+                                            <th colspan="3" class="text-end"></th>
+                                            <th style="font-size: 0.960rem;">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ number_format($overallAvg, 1) }}%
+                                                </b>
+                                            </th>
+                                            <th style="font-size: 0.960rem;"><b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ getRatingMeta($overallAvg)->rating }}
+                                                </b></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
 
                             </div>

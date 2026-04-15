@@ -146,6 +146,61 @@ if (!function_exists('getRatingMeta')) {
         }
     }
 }
+if (!function_exists('getRatingMeta100')) {
+
+    function getRatingMeta100($percentage)
+    {
+        if ($percentage == 100) {
+            return (object) [
+                'color' => '#ffcb9a',
+                'rating' => 'ME'
+            ];
+        } elseif ($percentage >= 90 && $percentage <= 100) {
+            return (object) [
+                'color' => '#fd7e13',
+                'rating' => 'NI'
+            ];
+        } else {
+            return (object) [
+                'color' => '#ff4c51',
+                'rating' => 'BE'
+            ];
+        }
+    }
+}
+
+if (!function_exists('getRatingMetaAsBg')) {
+
+    function getRatingMetaAsBg($percentage)
+    {
+        if ($percentage >= 90) {
+            return (object) [
+                'color' => 'primary',
+                'rating' => 'OS'
+            ];
+        } elseif ($percentage >= 80) {
+            return (object) [
+                'color' => 'success',
+                'rating' => 'EE'
+            ];
+        } elseif ($percentage >= 70) {
+            return (object) [
+                'color' => 'warning',
+                'rating' => 'ME'
+            ];
+        } elseif ($percentage >= 60) {
+            return (object) [
+                'color' => 'orange',
+                'rating' => 'NI'
+            ];
+        } else {
+            return (object) [
+                'color' => 'danger',
+                'rating' => 'BE'
+            ];
+        }
+    }
+}
 
 function getUserTree($UserID, $level, $manager)
 {
@@ -3940,21 +3995,26 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
 {
     $departmentId = auth()->user()->department_id;
 
+    // Get faculty employee_ids
     $facultyMembers = User::where('department_id', $departmentId)
-        ->pluck('id', 'employee_id');
+        ->pluck('employee_id');
 
     $records = CompletionOfCourseFolder::with(['facultyClass'])
         ->whereIn('faculty_member_id', $facultyMembers)
         ->where('status', 2)
+        ->where('form_status', 'HOD') // ✅ important
         ->where('completion_of_course_folder_indicator_id', $indicator_id)
+        ->latest()
         ->get();
+
+    $scores = [];
 
     foreach ($records as $row) {
 
-        $value = $row->completion_of_course_folder ?? 0;
+        // ✅ correct attribute access
+        $value = (int) ($row->completion_of_Course_folder ?? 0);
 
-        // ✅ SAFE RELATION
-        $programId = optional($row->facultyClass)->program_id ?? 0;
+        $programId = optional($row->facultyClass)->career_id ?? 0;
 
         // Rating logic
         if ($value == 100) {
@@ -3971,10 +4031,38 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
             $row->status_folder = 'Not Completed';
         }
 
+        // Collect scores
+        $scores[] = $value;
+
+        // Extra fields for blade
+        $row->score = $value;
+        $row->weighted_score = $value;
         $row->program_id = $programId;
     }
 
-    // ✅ GROUP BY PROGRAM
+    // ✅ Calculate avg BEFORE unique
+    $avgPercentage = count($scores) > 0
+        ? round(array_sum($scores) / count($scores), 1)
+        : 0;
+
+    // ✅ Apply unique AFTER avg
+    $records = $records->unique('class_cod');
+
+    // Weightage
+    $weightage = getRoleWeightage($activeRoleId, 'indicator', $indicator_id)['weightage'] ?? 0;
+    $weightedScore = ($avgPercentage * $weightage) / 100;
+
+    $facultyId = auth()->user()->employee_id;
+    // Save
+    saveIndicatorPercentage100Plus(
+        $facultyId,
+        $activeRoleId,
+        1,
+        3,
+        $indicator_id,
+        $weightedScore
+    );
+
     return $records->groupBy('program_id');
 }
 
@@ -5737,7 +5825,7 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
     {
         $departmentId = Auth::user()->department_id;
 
-        // 1️⃣ Get all records (needed for grouping + avg)
+        // 1️⃣ Get all records
         $records = SatisfactionOfInternationalStudent::with([
             'faculty',
             'department',
@@ -5749,11 +5837,15 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
             ->where('status', 2)
             ->get();
 
-        // 2️⃣ Department-wise average (ALL ratings)
-        $ratings = $records->pluck('student_rating')->map(fn($r) => (float) $r);
+        // 2️⃣ 🔥 FIXED: Program-wise average calculation
+        $grouped = $records->groupBy('program_id');
 
-        $avgRating = $ratings->count()
-            ? round($ratings->avg() * 20, 2)
+        $programAverages = $grouped->map(function ($items) {
+            return $items->avg('student_rating') * 20;
+        });
+
+        $avgRating = $programAverages->count()
+            ? round($programAverages->avg(), 2)
             : 0;
 
         // 3️⃣ Rating Meta
@@ -5777,9 +5869,7 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
             $avgRating
         );
 
-        // 6️⃣ Group by PROGRAM for modal
-        $grouped = $records->groupBy('program_id');
-
+        // 6️⃣ Group by PROGRAM for modal table
         $rows = [];
 
         foreach ($grouped as $programId => $items) {
@@ -5803,6 +5893,7 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
             ];
         }
 
+        // 7️⃣ Return response
         return (object) [
             'rows' => $rows,
             'summary' => (object) [
@@ -5827,9 +5918,15 @@ if (!function_exists('departmentEmployerSatisfactionOfHOD')) {
             ->whereNotNull('employer_satisfaction')
             ->get();
 
-        // 2️⃣ Department AVG (SAVE KPI)
-        $departmentAvg = $records->count()
-            ? round($records->avg('employer_satisfaction') * 20, 2)
+        // 2️⃣ 🔥 PROGRAM-WISE AVERAGE (FIXED LOGIC)
+        $grouped = $records->groupBy('program_id');
+
+        $programAverages = $grouped->map(function ($items) {
+            return $items->avg('employer_satisfaction') * 20;
+        });
+
+        $departmentAvg = $programAverages->count()
+            ? round($programAverages->avg(), 2)
             : 0;
 
         $meta = getRatingMeta($departmentAvg);
@@ -5849,16 +5946,13 @@ if (!function_exists('departmentEmployerSatisfactionOfHOD')) {
             $departmentAvg
         );
 
-        // 5️⃣ GROUP BY PROGRAM (MODAL)
-        $grouped = $records->groupBy('program_id');
-
+        // 5️⃣ GROUP BY PROGRAM (MODAL TABLE)
         $rows = [];
 
         foreach ($grouped as $programId => $items) {
 
-            $programAvg = $items->count()
-                ? round($items->avg('employer_satisfaction') * 20, 2)
-                : 0;
+            $programAvg = $items->avg('employer_satisfaction') * 20;
+            $programAvg = round($programAvg, 2);
 
             $metaP = getRatingMeta($programAvg);
 
@@ -6270,7 +6364,20 @@ if (!function_exists('calculateLineManagerFeedbackAverage')) {
         });
 
         // Department-level average
-        $departmentAvg = round($allAverages->avg(), 2);
+        $categoryAverages = collect($feedbacks)->map(function ($r) {
+
+            return collect([
+                collect([$r->responsibility_accountability_1, $r->responsibility_accountability_2])->filter()->avg(),
+                collect([$r->empathy_compassion_1, $r->empathy_compassion_2])->filter()->avg(),
+                collect([$r->humility_service_1, $r->humility_service_2])->filter()->avg(),
+                collect([$r->honesty_integrity_1, $r->honesty_integrity_2])->filter()->avg(),
+                collect([$r->inspirational_leadership_1, $r->inspirational_leadership_2])->filter()->avg(),
+            ])->filter()->avg();
+
+        });
+
+        // FINAL MASTER AVERAGE (SAME FOR BOTH)
+        $departmentAvg = round($categoryAverages->avg(), 1);
         $weight165 = getRoleWeightage($activeRoleId, 'indicator', 165)['weightage'] ?? 0;
         $weight166 = getRoleWeightage($activeRoleId, 'indicator', 166)['weightage'] ?? 0;
         $weight180 = getRoleWeightage($activeRoleId, 'indicator', 180)['weightage'] ?? 0;

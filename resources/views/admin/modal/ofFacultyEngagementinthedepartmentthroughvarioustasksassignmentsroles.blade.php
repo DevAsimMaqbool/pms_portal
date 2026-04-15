@@ -37,14 +37,15 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());     
+    $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
 @if(in_array(getRoleName(activeRole()), ['HOD']))
-<!--  Payment Methods modal -->
+    <!--  Payment Methods modal -->
 
-    <div class="modal fade" id="ofFacultyEngagementinthedepartmentthroughvarioustasksassignmentsroles" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="ofFacultyEngagementinthedepartmentthroughvarioustasksassignmentsroles" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
                 <div class="modal-header">
@@ -54,7 +55,8 @@
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>% of Faculty Engagement in the department (through various tasks/assignments/roles)
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>% of Faculty Engagement in the
+                        department (through various tasks/assignments/roles)
                     </h3>
                     <div class="card">
 
@@ -70,43 +72,48 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
-                                                $data=lineManagerReviewRatingOnTasks169(Auth::user()->employee_id, $activeRoleId);
-                                               
-                                            @endphp
-                                            @foreach($data['ratings'] as $record)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $record->task }}</td>
-                                                    <td>
-                                                        <div class="badge {{ $record->rating_data['color'] }}">
-                                                            {{ $record->rating_data['percentage'] }}%
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="badge bg-label-{{ str_replace('bg-', '', $record->rating_data['color']) }}">
-                                                            {{ $record->rating_data['label'] }}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                        @php
+                                            $data = lineManagerReviewRatingOnTasks169(Auth::user()->employee_id, $activeRoleId);
+                                            // ALWAYS use same source field
+                                            $percentages = collect($data['ratings'])->map(function ($record) {
+                                                return $record->rating_data['percentage'] ?? 0;
+                                            });
+
+                                            $overallAvg = number_format($percentages->avg(), 1);
+                                        @endphp
+                                        @foreach($data['ratings'] as $record)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $record->task }}</td>
+                                                <td>
+                                                    <div class="badge {{ $record->rating_data['color'] }}">
+                                                        {{ $record->rating_data['percentage'] }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div
+                                                        class="badge bg-label-{{ str_replace('bg-', '', $record->rating_data['color']) }}">
+                                                        {{ $record->rating_data['label'] }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
 
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th colspan="" class="text-end"></th>
-                                            <th>
-                                                <b>
-                                                    {{number_format($data['total_score'], 1) }}
+                                            <th>Overall</th>
+                                            <th colspan="1" class="text-end"></th>
+                                            <th style="font-size: 0.960rem;">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ number_format($overallAvg, 1) }}%
                                                 </b>
                                             </th>
-                                            <th>
-                                                <b>
-                                                    AVG: {{number_format($data['average_score'], 1) }}
-                                                </b>
-                                            </th>
-                                            <th class="text-end text-white"></th>
+                                            <th style="font-size: 0.960rem;"><b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ getRatingMeta($overallAvg)->rating }}
+                                                </b></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -120,9 +127,10 @@
     <!-- / Payment Methods modal -->
 @endif
 @if(in_array(getRoleName(activeRole()), ['Dean']))
-<!--  Payment Methods modal -->
+    <!--  Payment Methods modal -->
 
-    <div class="modal fade" id="ofFacultyEngagementinthedepartmentthroughvarioustasksassignmentsroles" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="ofFacultyEngagementinthedepartmentthroughvarioustasksassignmentsroles" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
                 <div class="modal-header">
@@ -132,7 +140,8 @@
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>% of Faculty Engagement in the department (through various tasks/assignments/roles)
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>% of Faculty Engagement in the
+                        department (through various tasks/assignments/roles)
                     </h3>
                     <div class="card">
 
@@ -148,34 +157,36 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
-                                                $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 7, 17, 169);
-                        
-                                            @endphp
-                                                @foreach($data['records'] as $record)
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge bg-{{ $record->color }}">
-                                                        {{ $record->score}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge bg-label-{{ $record->color }}">
+                                        @php
+                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 7, 17, 169);
 
-                                                                {{ $record->rating }}
-                                                            </div>
-                                                    </td>    
-                                                </tr>
-                                            @endforeach
+                                        @endphp
+                                        @foreach($data['records'] as $record)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td> {{ $record->user?->department?->name ?? '' }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ $record->color }}">
+                                                        {{ $record->score}}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-label-{{ $record->color }}">
+
+                                                        {{ $record->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
                                             <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
                                         </tr>
-                                    </tfoot> 
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

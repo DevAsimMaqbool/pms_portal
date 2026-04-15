@@ -37,10 +37,10 @@
     }
 </style>
 @php
-$activeRoleId = getRoleIdByName(activeRole());
-// Initialize totalFeedback to 0 in case nothing is set later
-$totalFeedback = 0;                                    
- @endphp
+    $activeRoleId = getRoleIdByName(activeRole());
+    // Initialize totalFeedback to 0 in case nothing is set later
+    $totalFeedback = 0;                                    
+@endphp
 <!--  Payment Methods modal -->
 @if(in_array(getRoleName(activeRole()), ['HOD']))
     <div class="modal fade" id="RectorsFeedbackScore" tabindex="-1" aria-hidden="true">
@@ -71,14 +71,18 @@ $totalFeedback = 0;
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-    $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
+                                            $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
+                                            // Use RAW values (NO rounding here)
+                                            $categories = collect($data['categories']);
+                                            // SINGLE SOURCE → SAME RESULT ALWAYS
+                                            $overallAvg = round($categories->avg(), 1);
 
                                         @endphp
 
                                         @foreach($data['categories'] as $label => $avg)
 
                                             @php
-        $meta = getRatingMeta($avg);
+                                                $meta = getRatingMeta($avg);
                                             @endphp
 
                                             <tr>
@@ -101,6 +105,22 @@ $totalFeedback = 0;
                                         @endforeach
 
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th>Overall</th>
+                                            <th colspan="1" class="text-end"></th>
+                                            <th style="font-size: 0.960rem;">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ number_format($overallAvg, 1) }}%
+                                                </b>
+                                            </th>
+                                            <th style="font-size: 0.960rem;"><b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ getRatingMeta($overallAvg)->rating }}
+                                                </b></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -113,7 +133,7 @@ $totalFeedback = 0;
 
 <!-- / Payment Methods modal -->
 @if(in_array(getRoleName(activeRole()), ['Dean']))
-<!--  Payment Methods modal -->
+    <!--  Payment Methods modal -->
 
     <div class="modal fade" id="RectorsFeedbackScore" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -141,34 +161,36 @@ $totalFeedback = 0;
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
-    $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 7, 16, 165);
-                        
-                                            @endphp
-                                                @foreach($data['records'] as $record)
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge bg-{{ $record->color }}">
-                                                        {{ $record->score}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge bg-label-{{ $record->color }}">
+                                        @php
+                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 7, 16, 165);
 
-                                                                {{ $record->rating }}
-                                                            </div>
-                                                    </td>    
-                                                </tr>
-                                            @endforeach
+                                        @endphp
+                                        @foreach($data['records'] as $record)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td> {{ $record->user?->department?->name ?? '' }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ $record->color }}">
+                                                        {{ $record->score}}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-label-{{ $record->color }}">
+
+                                                        {{ $record->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
                                             <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
                                         </tr>
-                                    </tfoot> 
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -180,7 +202,7 @@ $totalFeedback = 0;
     <!-- / Payment Methods modal -->
 @endif
 @if(in_array(getRoleName(activeRole()), ['Program Leader PG', 'Program Leader UG']))
-<div class="modal fade" id="RectorsFeedbackScore" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="RectorsFeedbackScore" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
                 <div class="modal-header">
@@ -208,14 +230,17 @@ $totalFeedback = 0;
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-    $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
+                                            $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178);
+                                            $overallAvg = count($data['categories'])
+                                                ? array_sum($data['categories']) / count($data['categories'])
+                                                : 0;
 
                                         @endphp
 
                                         @foreach($data['categories'] as $label => $avg)
 
                                             @php
-        $meta = getRatingMeta($avg);
+                                                $meta = getRatingMeta($avg);
                                             @endphp
 
                                             <tr>
@@ -238,6 +263,22 @@ $totalFeedback = 0;
                                         @endforeach
 
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th>Overall</th>
+                                            <th colspan="2" class="text-end"></th>
+                                            <th style="font-size: 0.960rem;">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ number_format($overallAvg, 1) }}%
+                                                </b>
+                                            </th>
+                                            <th style="font-size: 0.960rem;"><b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ getRatingMeta($overallAvg)->rating }}
+                                                </b></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

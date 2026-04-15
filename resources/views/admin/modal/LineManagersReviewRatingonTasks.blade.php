@@ -69,16 +69,17 @@
                                     {{ $currentAcademic }}
                                 </button>
                             </li>
-                           
+
                         </ul>
                     </div>
 
                     <!-- Tab Content -->
                     <div class="tab-content">
-                       
+
 
                         <!-- Fall -->
-                        <div class="tab-pane fade show active" id="LineManagersReviewRatingonTasks-spring" role="tabpanel">
+                        <div class="tab-pane fade show active" id="LineManagersReviewRatingonTasks-spring"
+                            role="tabpanel">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-striped align-middle custom-table">
                                     <thead class="table-primary">
@@ -95,11 +96,11 @@
                                     @endphp
 
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor','Program Leader UG','Program Leader PG']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG']))
                                             @php
                                                 $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
                                                 // ✅ Fast sum of all rating percentages
-                                                $totalPercentage = $feedbacks->sum(fn($item) => $item->rating_data['percentage']);
+                                                $totalPercentage = $feedbacks->avg(fn($item) => $item->rating_data['percentage']);
                                             @endphp
                                             @forelse($feedbacks as $index => $item)
                                                 <tr>
@@ -125,14 +126,18 @@
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th class="text-end"></th>
-                                            <th>
-                                                <b>
-                                                    {{ number_format($totalPercentage, 1) }}
+                                            <th class="text-end">Total</th>
+                                            <th colspan="" class="text-end"></th>
+                                            <th style="font-size: 0.960rem;">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMeta($totalPercentage)->color }}">
+                                                    {{ number_format($totalPercentage, 1) }}%
                                                 </b>
                                             </th>
-                                            <th class="text-end text-white"></th>
+                                            <th style="font-size: 0.960rem;"><b class="badge"
+                                                    style="background-color: {{ getRatingMeta($totalPercentage)->color }}">
+                                                    {{ getRatingMeta($totalPercentage)->rating }}
+                                                </b></th>
                                         </tr>
                                     </tfoot>
                                 </table>

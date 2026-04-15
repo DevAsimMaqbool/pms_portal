@@ -61,6 +61,9 @@
                             <div class="table-responsive text-nowrap">
                                 @php
                                     $data = EmployabilityOfHOD()->where('indicator_id', 103);
+                                    $avgScore = $data->isNotEmpty()
+                                        ? $data->avg(fn($r) => (float) $r->held_percentage)
+                                        : 0;
                                 @endphp
 
                                 <table class="table table-striped align-middle custom-table">

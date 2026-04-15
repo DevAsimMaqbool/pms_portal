@@ -40,8 +40,8 @@
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
- @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor','Program Leader PG','Program Leader UG']))
+@endphp
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor', 'Program Leader PG', 'Program Leader UG']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="EventPerformanceFeedback" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -58,16 +58,16 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0 fw-bold text-primary"></h4>
                             <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-                                                                                <input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
-                                                                                <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
+                                                                                                <input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
+                                                                                                <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
 
-                                                                                <input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
-                                                                                <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
-                                                                                    Semesterly</label>
+                                                                                                <input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
+                                                                                                <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
+                                                                                                    Semesterly</label>
 
-                                                                                <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
-                                                                                <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
-                                                                            </div> -->
+                                                                                                <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
+                                                                                                <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
+                                                                                            </div> -->
                         </div>
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
@@ -86,7 +86,7 @@
                                             $totalPercentage = 0;
                                             // ✅ SUM of all rating percentages
                                             if (!empty($feedbacks)) {
-                                              $totalPercentage = $feedbacks->sum(fn($item) => $item->rating_data['percentage']); 
+                                                $totalPercentage = $feedbacks->avg(fn($item) => $item->rating_data['percentage']);
                                             }
                                         @endphp
                                         @foreach($feedbacks as $index => $item)
@@ -109,14 +109,18 @@
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th class="text-end"></th>
-                                            <th>
-                                                <b>
-                                                    {{ number_format($totalPercentage, 1) }}
+                                            <th class="text-end">Total</th>
+                                            <th colspan="" class="text-end"></th>
+                                            <th style="font-size: 0.960rem;">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMeta($totalPercentage)->color }}">
+                                                    {{ number_format($totalPercentage, 1) }}%
                                                 </b>
                                             </th>
-                                            <th class="text-end text-white"></th>
+                                            <th style="font-size: 0.960rem;"><b class="badge"
+                                                    style="background-color: {{ getRatingMeta($totalPercentage)->color }}">
+                                                    {{ getRatingMeta($totalPercentage)->rating }}
+                                                </b></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -146,16 +150,16 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0 fw-bold text-primary"></h4>
                             <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-                                        <input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
-                                        <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
+                                                        <input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
+                                                        <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
 
-                                        <input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
-                                        <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
-                                            Semesterly</label>
+                                                        <input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
+                                                        <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
+                                                            Semesterly</label>
 
-                                        <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
-                                        <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
-                                    </div> -->
+                                                        <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
+                                                        <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
+                                                    </div> -->
                         </div>
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
@@ -172,6 +176,8 @@
                                     <tbody class="table-border-bottom-0">
                                         @php
                                             $data = departmentEventFeedbackAverage(Auth::user()->employee_id, $activeRoleId, 13, 28, 189);
+                                            $rows = $data->rows ?? [];
+                                            $totalPercentage = collect($rows)->avg('score');
                                         @endphp
                                         @foreach($data->rows as $index => $row)
                                             <tr>
@@ -194,6 +200,22 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="text-end">Overall</th>
+                                            <th colspan="2" class="text-end"></th>
+                                            <th style="font-size: 0.960rem;">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMeta($totalPercentage)->color }}">
+                                                    {{ number_format($totalPercentage, 1) }}%
+                                                </b>
+                                            </th>
+                                            <th style="font-size: 0.960rem;"><b class="badge"
+                                                    style="background-color: {{ getRatingMeta($totalPercentage)->color }}">
+                                                    {{ getRatingMeta($totalPercentage)->rating }}
+                                                </b></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
 
                             </div>

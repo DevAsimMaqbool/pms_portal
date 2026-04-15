@@ -18,7 +18,11 @@ class CompletionOfCourseFolder extends Model
         'created_by',
         'updated_by',
     ];
-    public $timestamps = true; 
+    public $timestamps = true;
+    public function getCompletionScoreAttribute()
+    {
+        return $this->attributes['completion_of_Course_folder'] ?? 0;
+    }
 
     public function facultyMember()
     {
@@ -31,7 +35,7 @@ class CompletionOfCourseFolder extends Model
     {
         return $this->belongsTo(FacultyMemberClass::class, 'class_cod', 'class_id');
     }
-     public function creator()
+    public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'employee_id');
     }

@@ -40,92 +40,12 @@
 $activeRoleId = getRoleIdByName(activeRole());
 // Initialize totalFeedback to 0 in case nothing is set later
 $totalFeedback = 0;                                    
- @endphp
- @if(in_array(getRoleName(activeRole()), ['HOD']))
-<!--  Payment Methods modal -->
+@endphp
+@if(in_array(getRoleName(activeRole()), ['HOD']))
+    <!--  Payment Methods modal -->
 
-<div class="modal fade" id="oftargetachievementofActiveInternationalAcademicResearchPartners" tabindex="-1"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i
-                            class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % of target achievement of
-                    Active International Academic / Research Partners
-                </h3>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive text-nowrap">
-                            <table class="table table-striped align-middle custom-table">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Deliverable</th>
-                                        <th>Target</th>
-                                        <th>Achieved</th>
-                                        <th>Score</th>
-                                        <th>Rating</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-$data = ActiveInternationalResearchPartnerOfHOD(
-    Auth::user()->employee_id,
-    $activeRoleId,
-    4,
-    12,
-    148
-);
-                                    @endphp
-
-                                    @foreach($data->rows as $index => $row)
-                                                                                                                                                    @php
-                                        $percentage = ($row->target > 0)
-                                            ? ($row->achieved_target / $row->target) * 100
-                                            : 0;
-
-                                        $percentage = round($percentage, 1);
-                                                                                                                                                    @endphp
-                                                                                                                                                    <tr>
-                                                                                                                                                        <td>{{ $index + 1 }}</td>
-                                                                                                                                                        <td>{{ $row->deliverables }}</td>
-                                                                                                                                                        <td>{{ $row->target }}</td>
-                                                                                                                                                        <td>{{ $row->achieved_target }}</td>
-                                                                                                                                                        <td>
-                                                                                                                                                            <div class="badge"
-                                                                                                                                                                style="background-color: {{ getRatingMeta($percentage)->color }}">
-                                                                                                                                                                {{ $percentage }}%
-                                                                                                                                                            </div>
-                                                                                                                                                        </td>
-                                                                                                                                                        <td>
-                                                                                                                                                            <span class="badge"
-                                                                                                                                                               style="background-color: {{ getRatingMeta($percentage)->color }}">
-                                                                                                                                                                {{ getRatingMeta($percentage)->rating }}
-                                                                                                                                                            </span>
-                                                                                                                                                        </td>
-                                                                                                                                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- / Payment Methods modal -->
-@endif
-@if(in_array(getRoleName(activeRole()), ['Dean']))
-<!--  Payment Methods modal -->
-
-    <div class="modal fade" id="oftargetachievementofActiveInternationalAcademicResearchPartners" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="oftargetachievementofActiveInternationalAcademicResearchPartners" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
                 <div class="modal-header">
@@ -135,7 +55,115 @@ $data = ActiveInternationalResearchPartnerOfHOD(
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>% of target achievement of Active International Academic / Research Partners
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % of target achievement of
+                        Active International Academic / Research Partners
+                    </h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Deliverable</th>
+                                            <th>Target</th>
+                                            <th>Achieved</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+    $data = ActiveInternationalResearchPartnerOfHOD(
+        Auth::user()->employee_id,
+        $activeRoleId,
+        4,
+        12,
+        148
+    );
+                                        @endphp
+
+                                        @foreach($data->rows as $index => $row)
+                                            @php
+        $percentage = ($row->target > 0)
+            ? ($row->achieved_target / $row->target) * 100
+            : 0;
+
+        $percentage = round($percentage, 1);
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $row->deliverables }}</td>
+                                                <td>{{ $row->target }}</td>
+                                                <td>{{ $row->achieved_target }}</td>
+                                                <td>
+                                                    <div class="badge"
+                                                        style="background-color: {{ getRatingMeta($percentage)->color }}">
+                                                        {{ $percentage }}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge"
+                                                        style="background-color: {{ getRatingMeta($percentage)->color }}">
+                                                        {{ getRatingMeta($percentage)->rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    <tfoot>
+                                        @php
+                                            $totalTarget = collect($data->rows)->sum('target');
+                                            $totalAchieved = collect($data->rows)->sum('achieved_target');
+
+                                            $overallAvg = $totalTarget > 0
+                                                ? ($totalAchieved / $totalTarget) * 100
+                                                : 0;
+
+                                            $overallAvg = round($overallAvg, 1);
+                                        @endphp
+                                        <tr class="table-primary">
+                                            <th>Total</th>
+                                            <th colspan="3" class="text-end"></th>
+                                            <th style="font-size: 0.960rem;">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ number_format($overallAvg, 1) }}%
+                                                </b>
+                                            </th>
+                                            <th style="font-size: 0.960rem;"><b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ getRatingMeta($overallAvg)->rating }}
+                                                </b></th>
+                                        </tr>
+                                    </tfoot>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- / Payment Methods modal -->
+@endif
+@if(in_array(getRoleName(activeRole()), ['Dean']))
+    <!--  Payment Methods modal -->
+
+    <div class="modal fade" id="oftargetachievementofActiveInternationalAcademicResearchPartners" tabindex="-1"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>% of target achievement of Active
+                        International Academic / Research Partners
                     </h3>
                     <div class="card">
 
@@ -151,34 +179,36 @@ $data = ActiveInternationalResearchPartnerOfHOD(
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
-                                                $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 4, 12, 148);
-                        
-                                            @endphp
-                                                @foreach($data['records'] as $record)
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge bg-{{ $record->color }}">
-                                                        {{ $record->score}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge bg-label-{{ $record->color }}">
+                                        @php
+    $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 4, 12, 148);
 
-                                                                {{ $record->rating }}
-                                                            </div>
-                                                    </td>    
-                                                </tr>
-                                            @endforeach
+                                        @endphp
+                                        @foreach($data['records'] as $record)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td> {{ $record->user?->department?->name ?? '' }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ $record->color }}">
+                                                        {{ $record->score}}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-label-{{ $record->color }}">
+
+                                                        {{ $record->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
                                             <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
                                         </tr>
-                                    </tfoot> 
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

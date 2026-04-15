@@ -42,89 +42,89 @@
     $totalFeedback = 0;                                    
 @endphp
 @if(in_array(getRoleName(activeRole()), ['HOD']))
-<!--  Payment Methods modal -->
+    <!--  Payment Methods modal -->
 
-<div class="modal fade" id="NetPromoterScoreofFaculty" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i
-                            class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> Net Promoter Score of Faculty
-                </h3>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive text-nowrap">
-                            <table class="table table-striped align-middle custom-table">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Faculty</th>
-                                        <th>Department</th>
-                                        <th>Program</th>
-                                        <th>Score</th>
-                                        <th>Rating</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $data = departmentPromotersPercentageOfHOD(Auth::user()->employee_id, $activeRoleId, 6, 15, 161);
-                                    @endphp
-
-                                    @foreach($data->rows as $index => $row)
+    <div class="modal fade" id="NetPromoterScoreofFaculty" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> Net Promoter Score of Faculty
+                    </h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
                                         <tr>
-                                            <td>{{ $index + 1 }}</td>
+                                            <th>Sr#</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Program</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $data = departmentPromotersPercentageOfHOD(Auth::user()->employee_id, $activeRoleId, 6, 15, 161);
+                                        @endphp
 
-                                            <td>{{ $row['faculty'] }}</td>
-                                            <td>{{ $row['department'] }}</td>
-                                            <td>{{ $row['program'] }}</td>
+                                        @foreach($data->rows as $index => $row)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+
+                                                <td>{{ $row['faculty'] }}</td>
+                                                <td>{{ $row['department'] }}</td>
+                                                <td>{{ $row['program'] }}</td>
+
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $row['color'] }}">
+                                                        {{ number_format($row['score'], 1) }}%
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge" style="background-color: {{ $row['color'] }}">
+                                                        {{ $row['rating'] }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        <tr class="table-primary fw-bold">
+                                            <td colspan="4">Overall</td>
 
                                             <td>
-                                                <div class="badge" style="background-color: {{ $row['color'] }}">
-                                                    {{ number_format($row['score'], 1) }}%
-                                                </div>
+                                                <span class="badge" style="background-color: {{ $data->summary->color }}">
+                                                    {{ number_format($data->summary->average, 1) }}%
+                                                </span>
                                             </td>
 
                                             <td>
-                                                <span class="badge" style="background-color: {{ $row['color'] }}">
-                                                    {{ $row['rating'] }}
+                                                <span class="badge" style="background-color: {{ $data->summary->color }}">
+                                                    {{ $data->summary->rating }}
                                                 </span>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                    <!-- <tr class="table-primary fw-bold">
-<td colspan="5">Overall Department</td>
-
-<td>
-<span class="badge" style="background-color: {{ $data->summary->color }}">
-{{ number_format($data->summary->average, 1) }}%
-</span>
-</td>
-
-<td>
-<span class="badge" style="background-color: {{ $data->summary->color }}">
-{{ $data->summary->rating }}
-</span>
-</td>
-</tr> -->
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- / Payment Methods modal -->
+    <!-- / Payment Methods modal -->
 @endif
 @if(in_array(getRoleName(activeRole()), ['Dean']))
-<!--  Payment Methods modal -->
+    <!--  Payment Methods modal -->
 
     <div class="modal fade" id="NetPromoterScoreofFaculty" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -153,34 +153,36 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
-                                                $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 6, 15, 161);
-                        
-                                            @endphp
-                                                @foreach($data['records'] as $record)
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge bg-{{ $record->color }}">
-                                                        {{ $record->score}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge bg-label-{{ $record->color }}">
+                                        @php
+                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 6, 15, 161);
 
-                                                                {{ $record->rating }}
-                                                            </div>
-                                                    </td>    
-                                                </tr>
-                                            @endforeach
+                                        @endphp
+                                        @foreach($data['records'] as $record)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td> {{ $record->user?->department?->name ?? '' }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ $record->color }}">
+                                                        {{ $record->score}}%
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-label-{{ $record->color }}">
+
+                                                        {{ $record->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
                                             <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
                                         </tr>
-                                    </tfoot> 
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -191,4 +193,3 @@
     </div>
     <!-- / Payment Methods modal -->
 @endif
-

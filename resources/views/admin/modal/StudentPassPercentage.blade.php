@@ -40,7 +40,7 @@
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
- @endphp
+@endphp
 <!-- / Payment Methods modal -->
 <div class="modal fade" id="StudentPassPercentage" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -124,6 +124,9 @@
                                                 $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
                                                 $att = $data['classes'];
                                                 $sr = 1;
+                                                $avgScore = $att->isNotEmpty()
+                                                    ? $att->avg(fn($c) => (float) ($c->passing_percentage ?? 0))
+                                                    : 0;
                                             @endphp
 
                                             @forelse($att as $class)
@@ -164,12 +167,12 @@
                                                     <td>{{ number_format($pass, 1) ?? 'N/A' }}</td>
                                                     <td>{{ number_format($fail, 1) ?? 'N/A' }}</td>
                                                     <td>
-                                                        <div class="badge" style="background-color: {{$color }}">
+                                                        <div class="badge bg-label-{{$color }}">
                                                             {{ number_format($pass, 1) }}%
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <div class="badge" style="background-color: {{ $color }}">
+                                                        <div class="badge bg-label-{{$color }}">
 
                                                             {{ $rating }}
                                                         </div>
@@ -189,12 +192,15 @@
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
                                                 <th colspan="6" class="text-end"></th>
-                                                <th>
-                                                    <b>
-                                                        {{ number_format($data['totalPassPercentage'], 1) }}
+                                                <th style="font-size: 0.960rem;">
+                                                    <b class="badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
+                                                        {{ number_format($avgScore, 1) }}%
                                                     </b>
                                                 </th>
-                                                <th class="text-end text-white"></th>
+                                                <th class="text-end" style="font-size: 0.960rem;"><b
+                                                        class="badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
+                                                        {{ getRatingMeta($avgScore)->rating }}
+                                                    </b></th>
                                             </tr>
                                         </tfoot>
                                     @endif

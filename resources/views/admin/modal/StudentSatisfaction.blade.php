@@ -37,175 +37,183 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+$activeRoleId = getRoleIdByName(activeRole());
+// Initialize totalFeedback to 0 in case nothing is set later
+$totalFeedback = 0;                                    
  @endphp
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-    <!--  Payment Methods modal -->
-    <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content custom-modal">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <!-- Title -->
-                    <h3 class="text-center mb-4 fw-bold text-primary">
-                        <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-rewind-backward-50 icon-md"></i></div> Student Satisfaction
-                    </h3>
-                    <!-- Tabs -->
-                    <div class="nav-align-top nav-tabs-shadow">
-                        <div class="d-flex justify-content-center mb-3 mt-3">
-                            <ul class="nav custom-tabs" role="tablist">
-                                <li class="nav-item">
-                                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                        data-bs-target="#student-satisfaction-spring"
-                                        aria-controls="student-satisfaction-spring" aria-selected="true">
-                                        🌸 Spring 2026
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                        data-bs-target="#student-satisfaction-fall"
-                                        aria-controls="student-satisfaction-fall" aria-selected="false">
-                                        🍂 Fall 2025
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <!-- Tab Content -->
-                        <div class="tab-content">
-                            <!-- Spring -->
-                            <div class="tab-pane fade show active" id="student-satisfaction-spring" role="tabpanel">
-                                <div class="table-responsive text-nowrap">
-                                    <table class="table table-hover align-middle custom-table">
-                                        <thead class="table-primary">
-                                            <tr>
-                                                <th>Sr#</th>
-                                                <th>Class</th>
-                                                <th>Program</th>
-                                                <th>Career (PG/UG)</th>
-                                                <th>Strength</th>
-                                                <th>Respondent</th>
-                                                <th>Score</th>
-                                                <th>Rating</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <td colspan="8">no record found</td>
-                                        </tbody>
-                                    </table>
-                                </div>
+        <!--  Payment Methods modal -->
+        <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content custom-modal">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <!-- Title -->
+                        <h3 class="text-center mb-4 fw-bold text-primary">
+                            <div class="badge bg-label-primary rounded p-2"><i
+                                    class="icon-base ti tabler-rewind-backward-50 icon-md"></i></div> Student Satisfaction
+                        </h3>
+                        <!-- Tabs -->
+                        <div class="nav-align-top nav-tabs-shadow">
+                            <div class="d-flex justify-content-center mb-3 mt-3">
+                                <ul class="nav custom-tabs" role="tablist">
+                                    <li class="nav-item">
+                                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                            data-bs-target="#student-satisfaction-spring"
+                                            aria-controls="student-satisfaction-spring" aria-selected="true">
+                                            🌸 Spring 2026
+                                        </button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                            data-bs-target="#student-satisfaction-fall"
+                                            aria-controls="student-satisfaction-fall" aria-selected="false">
+                                            🍂 Fall 2025
+                                        </button>
+                                    </li>
+                                </ul>
                             </div>
 
-                            <!-- Fall -->
-                            <div class="tab-pane fade" id="student-satisfaction-fall" role="tabpanel">
-                                <div class="table-responsive text-nowrap">
-                                    <table class="table table-hover align-middle custom-table">
-                                        <thead class="table-primary">
-                                            <tr>
-                                                <th>Sr#</th>
-                                                <th>Class</th>
-                                                <th>Program</th>
-                                                <th>Career (PG/UG)</th>
-                                                <th>Strength</th>
-                                                <th>Respondent</th>
-                                                <th>Score</th>
-                                                <th>Rating</th>
-                                            </tr>
-                                        </thead>
-                                        @php
-                                            // Initialize totalFeedback to 0 in case nothing is set later
-                                            $totalFeedback = 0;
-                                        @endphp
-                                        <tbody>
+                            <!-- Tab Content -->
+                            <div class="tab-content">
+                                <!-- Spring -->
+                                <div class="tab-pane fade show active" id="student-satisfaction-spring" role="tabpanel">
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="table table-hover align-middle custom-table">
+                                            <thead class="table-primary">
+                                                <tr>
+                                                    <th>Sr#</th>
+                                                    <th>Class</th>
+                                                    <th>Program</th>
+                                                    <th>Career (PG/UG)</th>
+                                                    <th>Strength</th>
+                                                    <th>Respondent</th>
+                                                    <th>Score</th>
+                                                    <th>Rating</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <td colspan="8">no record found</td>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Fall -->
+                                <div class="tab-pane fade" id="student-satisfaction-fall" role="tabpanel">
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="table table-hover align-middle custom-table">
+                                            <thead class="table-primary">
+                                                <tr>
+                                                    <th>Sr#</th>
+                                                    <th>Class</th>
+                                                    <th>Program</th>
+                                                    <th>Career (PG/UG)</th>
+                                                    <th>Strength</th>
+                                                    <th>Respondent</th>
+                                                    <th>Score</th>
+                                                    <th>Rating</th>
+                                                </tr>
+                                            </thead>
                                             @php
-                                                $feedbackData = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
-
-                                                $classFeedback = $feedbackData['collection'] ?? collect();
-                                                $totalFeedback = $feedbackData['totalFeedback'] ?? 0;
-                                                if (!function_exists('ratingMeta')) {
-                                                    function ratingMeta($average)
-                                                    {
-                                                        if ($average >= 90)
-                                                            return ['OS', 'primary'];
-                                                        if ($average >= 80)
-                                                            return ['EE', 'success'];
-                                                        if ($average >= 70)
-                                                            return ['ME', 'warning'];
-                                                        if ($average >= 60)
-                                                            return ['NI', 'orange'];
-                                                        return ['BE', 'danger'];
-                                                    }
-                                                }
+    // Initialize totalFeedback to 0 in case nothing is set later
+    $totalFeedback = 0;
                                             @endphp
-
-                                            @forelse ($classFeedback as $index => $feedback)
-
+                                            <tbody>
                                                 @php
-                                                    $average = (float) $feedback->feedback;
-                                                    [$rating, $color] = ratingMeta($average);
+    $feedbackData = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
+
+    $classFeedback = $feedbackData['collection'] ?? collect();
+    $totalFeedback = $feedbackData['totalFeedback'] ?? 0;
+    $avgScore = $classFeedback->isNotEmpty()
+        ? $classFeedback->avg(fn($f) => (float) $f->feedback)
+        : 0;
+    if (!function_exists('ratingMeta')) {
+        function ratingMeta($average)
+        {
+            if ($average >= 90)
+                return ['OS', 'primary'];
+            if ($average >= 80)
+                return ['EE', 'success'];
+            if ($average >= 70)
+                return ['ME', 'warning'];
+            if ($average >= 60)
+                return ['NI', 'orange'];
+            return ['BE', 'danger'];
+        }
+    }
                                                 @endphp
 
-                                                <tr>
-                                                    <td>{{ $index + 1 }}</td>
+                                                @forelse ($classFeedback as $index => $feedback)
 
-                                                    {{-- Class Code --}}
-                                                    <td>{{ $feedback->class_code }}</td>
+                                                    @php
+        $average = (float) $feedback->feedback;
+        [$rating, $color] = ratingMeta($average);
+                                                    @endphp
 
-                                                    {{-- Program --}}
-                                                    <td>{{ $feedback->program ?? '—' }}</td>
+                                                    <tr>
+                                                        <td>{{ $index + 1 }}</td>
 
-                                                    {{-- Career --}}
-                                                    <td>{{ $feedback->career_code ?? 'UG' }}</td>
+                                                        {{-- Class Code --}}
+                                                        <td>{{ $feedback->class_code }}</td>
 
-                                                    {{-- Strength --}}
-                                                    <td>{{ $feedback->registered_students ?? 0 }}</td>
+                                                        {{-- Program --}}
+                                                        <td>{{ $feedback->program ?? '—' }}</td>
 
-                                                    {{-- Respondent --}}
-                                                    <td>{{ $feedback->attempts ?? 0 }}</td>
+                                                        {{-- Career --}}
+                                                        <td>{{ $feedback->career_code ?? 'UG' }}</td>
 
-                                                    {{-- Score --}}
-                                                    <td>
-                                                        <span class="badge bg-label-{{ $color }}">
-                                                            {{ number_format($average, 1) }}%
+                                                        {{-- Strength --}}
+                                                        <td>{{ $feedback->registered_students ?? 0 }}</td>
+
+                                                        {{-- Respondent --}}
+                                                        <td>{{ $feedback->attempts ?? 0 }}</td>
+
+                                                        {{-- Score --}}
+                                                        <td>
+                                                            <span class="badge bg-label-{{ $color }}">
+                                                                {{ number_format($average, 1) }}%
+                                                            </span>
+                                                        </td>
+
+                                                        {{-- Rating --}}
+                                                        <td>
+                                                            <span class="badge bg-label-{{ $color }}">
+                                                                {{ $rating }}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="8" class="text-center text-muted">
+                                                            No class-wise feedback found
+                                                        </td>
+                                                    </tr>
+                                                @endforelse
+
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="table-primary">
+                                                    <th class="text-end">Total</th>
+                                                    <th colspan="5" class="text-end"></th>
+                                                    <th style="font-size: 0.960rem;">
+                                                        <span class="text-end badge bg-label-{{ $color }}">
+                                                            {{ number_format($avgScore, 1) }}%
                                                         </span>
-                                                    </td>
-
-                                                    {{-- Rating --}}
-                                                    <td>
-                                                        <span class="badge bg-label-{{ $color }}">
-                                                            {{ $rating }}
-                                                        </span>
-                                                    </td>
+                                                    </th>
+                                                    <th style="font-size: 0.960rem;">
+                                                            <span class="text-end badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
+                                                                {{ getRatingMetaAsBg($avgScore)->rating }}
+                                                            </span>
+                                                    </th>
                                                 </tr>
+                                            </tfoot>
 
-                                            @empty
-                                                <tr>
-                                                    <td colspan="8" class="text-center text-muted">
-                                                        No class-wise feedback found
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-
-                                        </tbody>
-                                        <tfoot>
-                                            <tr class="table-primary">
-                                                <th class="text-end">Total</th>
-                                                <th colspan="5" class="text-end"></th>
-                                                <th>
-                                                    <b>
-                                                        {{ number_format($totalFeedback, 1) }}
-                                                    </b>
-                                                </th>
-                                                <th class="text-end text-white"></th>
-                                            </tr>
-                                        </tfoot>
-
-                                    </table>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -213,7 +221,6 @@
                 </div>
             </div>
         </div>
-    </div>
 @endif
 
 @if(in_array(getRoleName(activeRole()), ['HOD']))
@@ -294,31 +301,34 @@
                                         <tbody>
 
                                             @php
-                                                $feedbackData = getDepartmentFacultyFeedbackForHOD($activeRoleId);
+    $feedbackData = getDepartmentFacultyFeedbackForHOD($activeRoleId);
 
-                                                $classFeedback = $feedbackData['collection'] ?? collect();
-                                                $totalFeedback = $feedbackData['totalFeedback'] ?? 0;
-                                                if (!function_exists('ratingMeta')) {
-                                                    function ratingMeta($average)
-                                                    {
-                                                        if ($average >= 90)
-                                                            return ['OS', 'primary'];
-                                                        if ($average >= 80)
-                                                            return ['EE', 'success'];
-                                                        if ($average >= 70)
-                                                            return ['ME', 'warning'];
-                                                        if ($average >= 60)
-                                                            return ['NI', 'orange'];
-                                                        return ['BE', 'danger'];
-                                                    }
-                                                }
+    $classFeedback = $feedbackData['collection'] ?? collect();
+    $totalFeedback = $feedbackData['totalFeedback'] ?? 0;
+    $avgScore = $classFeedback->isNotEmpty()
+        ? $classFeedback->avg(fn($f) => (float) $f->feedback)
+        : 0;
+    if (!function_exists('ratingMeta')) {
+        function ratingMeta($average)
+        {
+            if ($average >= 90)
+                return ['OS', 'primary'];
+            if ($average >= 80)
+                return ['EE', 'success'];
+            if ($average >= 70)
+                return ['ME', 'warning'];
+            if ($average >= 60)
+                return ['NI', 'orange'];
+            return ['BE', 'danger'];
+        }
+    }
                                             @endphp
 
                                             @forelse ($classFeedback as $index => $feedback)
 
                                                 @php
-                                                    $average = (float) $feedback->feedback;
-                                                    [$rating, $color] = ratingMeta($average);
+        $average = (float) $feedback->feedback;
+        [$rating, $color] = ratingMeta($average);
                                                 @endphp
 
                                                 <tr>
@@ -358,8 +368,23 @@
                                                     </td>
                                                 </tr>
                                             @endforelse
-
                                         </tbody>
+                                        <tfoot>
+                                            <tr class="table-primary">
+                                                <th class="text-end">Total</th>
+                                                <th colspan="4" class="text-end"></th>
+                                                <th style="font-size: 0.960rem;">
+                                                    <span class="text-end badge bg-label-{{ $color }}">
+                                                        {{ number_format($avgScore, 1) }}%
+                                                    </span>
+                                                </th>
+                                                <th style="font-size: 0.960rem;">
+                                                    <span class="text-end badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
+                                                        {{ getRatingMetaAsBg($avgScore)->rating }}
+                                                    </span>
+                                                </th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -372,7 +397,7 @@
 @endif
 <!-- / Payment Methods modal -->
 @if(in_array(getRoleName(activeRole()), ['Dean']))
-<!--  Payment Methods modal -->
+    <!--  Payment Methods modal -->
 
     <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -400,34 +425,44 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
-                                                $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 23, 182);
-                        
-                                            @endphp
-                                                @foreach($data['records'] as $record)
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge bg-{{ $record->color }}">
+                                        @php
+                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 23, 182);
+                                            $avgScore = $data['records']->isNotEmpty() ? $data['records']->avg(fn($r) => (float) $r->score) : 0;
+                                        @endphp
+                                        @foreach($data['records'] as $record)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td> {{ $record->user?->department?->name ?? '' }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ getRatingMetaAsBg($record->score)->color }}">
                                                         {{ $record->score}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge bg-label-{{ $record->color }}">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-label-{{ getRatingMetaAsBg($record->score)->color }}">
 
-                                                                {{ $record->rating }}
-                                                            </div>
-                                                    </td>    
-                                                </tr>
-                                            @endforeach
+                                                        {{ $record->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th class=""></th>
-                                            <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class="text-end">Total</th>
+                                            <th class="text-end"></th>
+                                            <th style="font-size: 0.960rem;">
+                                                <span class="text-end badge bg-{{ getRatingMetaAsBg($avgScore)->color }}">
+                                                    {{ number_format($avgScore, 1) }}%
+                                                </span>
+                                            </th>
+                                            <th style="font-size: 0.960rem;">
+                                                <span class="text-end badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
+                                                    {{ getRatingMetaAsBg($avgScore)->rating }}
+                                                </span>
+                                            </th>
                                         </tr>
-                                    </tfoot> 
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -438,4 +473,3 @@
     </div>
     <!-- / Payment Methods modal -->
 @endif
-
