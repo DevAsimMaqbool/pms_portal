@@ -88,38 +88,27 @@
                                  <tbody>
                                             @php
                                                 $data=programProfitabilityDepartmentAverage(Auth::user()->employee_id, $activeRoleId, 147); 
-                                                if (!function_exists('ratingFunctions')) {
-                                                    function ratingFunctions($average)
-                                                    {
-                                                        if ($average >= 90)
-                                                            return ['OS', 'primary'];
-                                                        if ($average >= 80)
-                                                            return ['EE', 'success'];
-                                                        if ($average >= 70)
-                                                            return ['ME', 'warning'];
-                                                        if ($average >= 60)
-                                                            return ['NI', 'orange'];
-                                                        return ['BE', 'danger'];
-                                                    }
-                                                }
+                                                $avg_percentage = $data['avg_percentage'] ?? 0;
+                                                $meta_avg_percentage = getRatingMeta($avg_percentage);
+                                                
                                             @endphp
                                                 @foreach($data['records'] as $record)
                                                 @php
-                                                    [$rating, $color] = ratingFunctions($record->avg_profitability);
+                                                    $record_avg_profitability = $record->avg_profitability ?? 0;
+                                                    $meta_profitability = getRatingMeta($record_avg_profitability);
                                                     
                                                 @endphp
                                                 <tr>
                                                    <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $record->program->program_name }}</td>
                                                     <td>{{ $record->total_profitability }}</td>
-                                                    <td><div class="badge bg-{{ $color }}">
+                                                    <td><span class="badge" style="background-color: {{ $meta_profitability->color }}">
                                                         {{ $record->avg_profitability}}%
-                                                        </div></td>
+                                                        </span></td>
                                                     <td>
-                                                            <div class="badge bg-label-{{ $color }}">
-
-                                                                {{ $rating }}
-                                                            </div>
+                                                            <span class="badge" style="background-color: {{ $meta_profitability->color }}">
+                                                                {{ $meta_profitability->rating }}
+                                                            </span>
                                                     </td>    
                                                 </tr>
                                             @endforeach
@@ -129,8 +118,10 @@
                                             <th class="">Total</th>
                                             <th class=""></th>
                                             <th class="">{{number_format($data['total_target'], 1) }}</th>
-                                            <th class="">{{number_format($data['avg_percentage'], 1) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class=""><span class="badge" style="background-color: {{ $meta_avg_percentage->color }}">{{number_format($avg_percentage, 1) }}</span></th>
+                                            <th class=""><span class="badge" style="background-color: {{ $meta_avg_percentage->color }}">
+                                                                {{ $meta_avg_percentage->rating }}
+                                                            </span></th>
                                         </tr>
                                     </tfoot> 
                                     
@@ -185,6 +176,8 @@
                                     <tbody>
                                             @php
                                                 $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 3, 11, 147);
+                                                $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
+                                                $meta_avg = getRatingMeta($faculty_avg_percentage);
                         
                                             @endphp
                                                 @foreach($data['records'] as $record)
@@ -207,8 +200,11 @@
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
-                                            <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
+                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
+                                        
                                         </tr>
                                     </tfoot> 
                                 </table>
@@ -273,38 +269,25 @@
                                                     default => ''
                                                 };
                                                 $data=programProfitabilityAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 11, 147, $value);
+                                                
                                                
-                                                if (!function_exists('ratingFunctions')) {
-                                                    function ratingFunctions($average)
-                                                    {
-                                                        if ($average >= 90)
-                                                            return ['OS', 'primary'];
-                                                        if ($average >= 80)
-                                                            return ['EE', 'success'];
-                                                        if ($average >= 70)
-                                                            return ['ME', 'warning'];
-                                                        if ($average >= 60)
-                                                            return ['NI', 'orange'];
-                                                        return ['BE', 'danger'];
-                                                    }
-                                                }
                                             @endphp
                                                 @foreach($data['records'] as $record)
                                                 @php
-                                                    [$rating, $color] = ratingFunctions($record->profitability);
+                                                    $record_profitability = $record->profitability ?? 0;
+                                                    $meta_re_profitability = getRatingMeta($record_profitability);
                                                     
                                                 @endphp
                                                 <tr>
                                                    <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $record->program->program_name }}</td>
-                                                    <td><div class="badge bg-{{ $color }}">
+                                                    <td><span class="badge" style="background-color: {{ $meta_re_profitability->color }}">
                                                         {{ $record->profitability}}%
-                                                        </div></td>
+                                                        </span></td>
                                                     <td>
-                                                            <div class="badge bg-label-{{ $color }}">
-
-                                                                {{ $rating }}
-                                                            </div>
+                                                            <span class="badge" style="background-color: {{ $meta_re_profitability->color }}">
+                                                                {{ $meta_re_profitability->rating }}
+                                                            </span>
                                                     </td> 
                                                 </tr>
                                             @endforeach

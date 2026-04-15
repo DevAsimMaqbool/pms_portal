@@ -103,12 +103,15 @@
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th colspan="2" class="text-end"></th>
-                                            <th>
-                                                <b>
-                                                    {{number_format($data['score'], 1) }}
-                                                </b>
+                                            <th class="fs-6">
+                                                
+                                                 <div class="badge bg-{{ $data['color'] }}">
+                                                    {{number_format($data['score'], 1) }}%
+                                                 </div>
                                             </th>
-                                            <th class="text-end text-white"></th>
+                                            <th class="text-white fs-6"><div class="badge bg-{{ $data['color'] }}">
+                                                                {{ $data['rating'] }}
+                                                            </div></th>
                                         </tr>
                                     </tfoot>
                                     @endif
@@ -198,12 +201,14 @@
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th colspan="2" class="text-end"></th>
-                                            <th>
-                                                <b>
-                                                    {{number_format($data['department_avg_percentage'], 1) }}
-                                                </b>
+                                            <th class="fs-6">
+                                               <div class="badge bg-{{ $color }}">
+                                                                {{number_format($data['department_avg_percentage']) }}%
+                                                            </div>
                                             </th>
-                                            <th class="text-end text-white"></th>
+                                            <th class="text-white fs-6"><div class="badge bg-{{ $color }}">
+                                                                 {{ $rating }}
+                                                </div></th>
                                         </tr>
                                     </tfoot>
                                 </table>

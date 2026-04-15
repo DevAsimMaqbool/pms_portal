@@ -152,6 +152,9 @@
                                         <tbody>
                                             @php
                                                 $data = researchProductivityPGStudentsOfHOD($activeRoleId, 133);
+                                                $department_avg_percentage = $data['department_avg_percentage'] ?? 0;
+                                                $meta_avg = getRatingMeta($department_avg_percentage);
+                                                
                                             @endphp
                                             @foreach ($data['department_rows'] as $row)
                                                 <tr>
@@ -174,6 +177,24 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
+                                        <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th class="text-end"></th>
+                                            <th class="text-end"></th>
+                                            <th class="text-end"></th>
+                                            <th class="fs-6 text-white">
+                                                <span class="badge" style="background-color: {{ $meta_avg->color }}">
+                                                    {{ number_format($department_avg_percentage, 1) }}
+                                                </span>
+                                            </th>
+                                            <th class="fs-6 text-white">
+                                                 <span class="badge" style="background-color: {{ $meta_avg->color }}">
+                                                                 {{ $meta_avg->rating }}
+                                                 </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -218,6 +239,8 @@
                                     <tbody>
                                         @php
                                             $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 2, 6, 133);
+                                            $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
+                                            $meta_avg = getRatingMeta($faculty_avg_percentage);
 
                                         @endphp
                                         @foreach($data['records'] as $record)
@@ -242,8 +265,10 @@
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
-                                            <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
+                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
                                         </tr>
                                     </tfoot>
                                 </table>
