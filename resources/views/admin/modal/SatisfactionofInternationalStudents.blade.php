@@ -161,8 +161,9 @@ $totalFeedback = 0;
                                     </thead>
                                     <tbody>
                                             @php
-    $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 4, 12, 176);
-                        
+                                             $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 4, 12, 176);
+                                             $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
+                                             $meta_avg = getRatingMeta($faculty_avg_percentage);
                                             @endphp
                                                 @foreach($data['records'] as $record)
                                                 <tr>
@@ -184,8 +185,10 @@ $totalFeedback = 0;
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
-                                            <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
+                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
                                         </tr>
                                     </tfoot> 
                                 </table>
