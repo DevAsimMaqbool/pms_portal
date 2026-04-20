@@ -169,8 +169,12 @@
                                             <th class=""></th>
                                             {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
                                             <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span>
+                                            </th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">
+                                                    {{ $meta_avg->rating }} </span></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -216,6 +220,10 @@
                                         ->firstWhere('indicator_id', 107);
 
                                     $programBreakdown = collect($graduateIndicator['details'] ?? []);
+                                    $avgStudents = $programBreakdown->sum('total_students') ?? 0;
+                                    $rating = $programBreakdown->avg('avg_rating') ?? 0;
+                                    $avgRating = round($rating * 20, 1);
+                                    $avgScore = $programBreakdown->avg('score') ?? 0;
                                 @endphp
 
                                 <table class="table table-striped align-middle custom-table">
@@ -270,7 +278,33 @@
                                             </tr>
                                         @endforelse
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th colspan="2" class="text-end">Average</th>
 
+                                            <!-- Avg Students -->
+                                            <th>{{ number_format($avgStudents, 1) }}</th>
+
+                                            <!-- Avg Rating (Out of 5) -->
+                                            <th>{{ number_format($avgRating, 1) }}</th>
+
+                                            <!-- Avg Score -->
+                                            <th>
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgScore)->color }}">
+                                                    {{ number_format($avgScore, 1) }}%
+                                                </span>
+                                            </th>
+
+                                            <!-- Rating -->
+                                            <th>
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgScore)->color }}">
+                                                    {{ getRatingMeta($avgScore)->rating }}
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
 
                             </div>

@@ -173,8 +173,12 @@
                                             <th class=""></th>
                                             {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
                                             <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span>
+                                            </th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">
+                                                    {{ $meta_avg->rating }} </span></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -245,6 +249,10 @@
                                             'rating' => $rating,
                                         ]);
                                     }
+                                    $avgStudents = collect($modalData)->sum('total_students') ?? 0;
+                                    $avgEmployed = collect($modalData)->sum('employed') ?? 0;
+                                    $avgUnemployed = collect($modalData)->sum('unemployed') ?? 0;
+                                    $avgScore = collect($modalData)->avg('score') ?? 0;
                                 @endphp
 
                                 <table class="table table-striped align-middle custom-table">
@@ -286,6 +294,36 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th colspan="2" class="text-end">Total</th>
+
+                                            <!-- Avg Total Students -->
+                                            <th>{{ number_format($avgStudents, 1) }}</th>
+
+                                            <!-- Avg Employed -->
+                                            <th>{{ number_format($avgEmployed, 1) }}</th>
+
+                                            <!-- Avg Unemployed -->
+                                            <th>{{ number_format($avgUnemployed, 1) }}</th>
+
+                                            <!-- Avg Score -->
+                                            <th style="font-size: 0.960rem;">
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgScore)->color }}">
+                                                    {{ number_format($avgScore, 1) }}%
+                                                </span>
+                                            </th>
+
+                                            <!-- Rating -->
+                                            <th style="font-size: 0.960rem;">
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgScore)->color }}">
+                                                    {{ getRatingMeta($avgScore)->rating }}
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

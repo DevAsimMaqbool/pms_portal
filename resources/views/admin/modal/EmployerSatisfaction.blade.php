@@ -37,82 +37,82 @@
     }
 </style>
 @php
-$activeRoleId = getRoleIdByName(activeRole());
-// Initialize totalFeedback to 0 in case nothing is set later
-$totalFeedback = 0;                                    
+    $activeRoleId = getRoleIdByName(activeRole());
+    // Initialize totalFeedback to 0 in case nothing is set later
+    $totalFeedback = 0;                                    
  @endphp
- @if(in_array(getRoleName(activeRole()), ['HOD']))
-<!--  Payment Methods modal -->
+@if(in_array(getRoleName(activeRole()), ['HOD']))
+    <!--  Payment Methods modal -->
 
-<div class="modal fade" id="EmployerSatisfaction" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    <div class="badge bg-label-primary rounded p-2"><i
-                            class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % Employer Satisfaction
-                </h3>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive text-nowrap">
-                            @php
-    $data = EmployabilityOfHOD()->where('indicator_id', 104);
-                            @endphp
+    <div class="modal fade" id="EmployerSatisfaction" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % Employer Satisfaction
+                    </h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                @php
+                                    $data = EmployabilityOfHOD()->where('indicator_id', 104);
+                                @endphp
 
-                            <table class="table table-striped align-middle custom-table">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Sr#</th>
-                                        <th>Faculty</th>
-                                        <th>Department</th>
-                                        <th>Program</th>
-                                        <th>Score</th>
-                                        <th>Rating</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach($data as $index => $row)
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
                                         <tr>
-                                            <td>
-                                                {{ $row->class_name == 'Overall Department' ? 'Overall Department' : $index + 1 }}
-                                            </td>
-
-                                            <td>{{ $row->faculty_name }}</td>
-                                            <td>{{ $row->department_name }}</td>
-                                            <td>{{ $row->program_name }}</td>
-
-                                            <td>
-                                                <div class="badge" style="background-color: {{ $row->color }}">
-                                                    {{ number_format($row->held_percentage, 1) }}%
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <span class="badge" style="background-color: {{ $row->color }}">
-                                                    {{ $row->rating }}
-                                                </span>
-                                            </td>
+                                            <th>Sr#</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Program</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach($data as $index => $row)
+                                            <tr>
+                                                <td>
+                                                    {{ $row->class_name == 'Overall Department' ? 'Overall Department' : $index + 1 }}
+                                                </td>
+
+                                                <td>{{ $row->faculty_name }}</td>
+                                                <td>{{ $row->department_name }}</td>
+                                                <td>{{ $row->program_name }}</td>
+
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ number_format($row->held_percentage, 1) }}%
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge" style="background-color: {{ $row->color }}">
+                                                        {{ $row->rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- / Payment Methods modal -->
+    <!-- / Payment Methods modal -->
 @endif
 @if(in_array(getRoleName(activeRole()), ['Dean']))
-<!--  Payment Methods modal -->
+    <!--  Payment Methods modal -->
 
     <div class="modal fade" id="EmployerSatisfaction" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -140,37 +140,43 @@ $totalFeedback = 0;
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
+                                        @php
                                             $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 1, 104);
                                             $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
                                             $meta_avg = getRatingMeta($faculty_avg_percentage);
-                                            @endphp
-                                                @foreach($data['records'] as $record)
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge bg-{{ $record->color }}">
+                                        @endphp
+                                        @foreach($data['records'] as $record)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td> {{ $record->user?->department?->name ?? '' }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ $record->color }}">
                                                         {{ $record->score}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge bg-label-{{ $record->color }}">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-label-{{ $record->color }}">
 
-                                                                {{ $record->rating }}
-                                                            </div>
-                                                    </td>    
-                                                </tr>
-                                            @endforeach
+                                                        {{ $record->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
                                             {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
+                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span>
+                                            </th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">
+                                                    {{ $meta_avg->rating }} </span></th>
                                         </tr>
-                                    </tfoot> 
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -182,101 +188,126 @@ $totalFeedback = 0;
     <!-- / Payment Methods modal -->
 @endif
 @if(in_array(getRoleName(activeRole()), ['Program Leader UG', 'Program Leader PG']))
-<!--  Payment Methods modal -->
+    <!--  Payment Methods modal -->
 
-<div class="modal fade" id="EmployerSatisfaction" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-xl modal-dialog-centered">
-<div class="modal-content custom-modal">
-<div class="modal-header">
-<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-</div>
-<div class="modal-body p-4">
-<!-- Title -->
-<h3 class="text-center mb-4 fw-bold text-primary">
-<div class="badge bg-label-primary rounded p-2"><i
-class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % Employer Satisfaction
-</h3>
-<div class="card">
-<div class="card-body">
-<div class="table-responsive text-nowrap">
+    <div class="modal fade" id="EmployerSatisfaction" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> % Employer Satisfaction
+                    </h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
 
-@php
-$programLevel = match (getRoleName(activeRole())) {
-'Program Leader UG' => 'UG',
-'Program Leader PG' => 'PG',
-default => ''
-};
+                                @php
+                                    $programLevel = match (getRoleName(activeRole())) {
+                                        'Program Leader UG' => 'UG',
+                                        'Program Leader PG' => 'PG',
+                                        default => ''
+                                    };
 
-$data = EmployabilityOfPL(Auth::id(), $programLevel);
+                                    $data = EmployabilityOfPL(Auth::id(), $programLevel);
 
-$employerSatisfaction = collect($data)
-->firstWhere('indicator_id', 104);
+                                    $employerSatisfaction = collect($data)
+                                        ->firstWhere('indicator_id', 104);
 
-$programBreakdown = collect($employerSatisfaction['details'] ?? []);
-@endphp
+                                    $programBreakdown = collect($employerSatisfaction['details'] ?? []);
+                                    // ✅ Averages
+                                    $avgStudents = $programBreakdown->sum('total_students') ?? 0;
+                                    $avgScore = $programBreakdown->avg('score') ?? 0;
+                                @endphp
 
-<table class="table table-striped align-middle custom-table">
-<thead class="table-primary">
-<tr>
-<th>Sr#</th>
-<th>Program</th>
-<th>Total Students</th>
-<th>Score %</th>
-<th>Rating</th>
-</tr>
-</thead>
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Program</th>
+                                            <th>Total Students</th>
+                                            <th>Score %</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
 
-<tbody>
-@forelse($programBreakdown as $index => $row)
+                                    <tbody>
+                                        @forelse($programBreakdown as $index => $row)
 
-@php
-$score = (float) ($row['score'] ?? 0);
-$total = (int) ($row['total_students'] ?? 0);
+                                            @php
+                                                $score = (float) ($row['score'] ?? 0);
+                                                $total = (int) ($row['total_students'] ?? 0);
 
-$meta = getRatingMeta($score);
-$color = $meta->color ?? '#6c757d';
-$rating = $meta->rating ?? '-';
-@endphp
+                                                $meta = getRatingMeta($score);
+                                                $color = $meta->color ?? '#6c757d';
+                                                $rating = $meta->rating ?? '-';
+                                            @endphp
 
-<tr>
-<td>{{ $index + 1 }}</td>
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
 
-<td>{{ $row['program_name'] ?? '-' }}</td>
+                                                <td>{{ $row['program_name'] ?? '-' }}</td>
 
-<td>{{ $total }}</td>
+                                                <td>{{ $total }}</td>
 
-<td>
-<div class="badge" style="background-color: {{ $color }}">
-{{ number_format($score, 1) }}%
-</div>
-</td>
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $color }}">
+                                                        {{ number_format($score, 1) }}%
+                                                    </div>
+                                                </td>
 
-<td>
-<span class="badge" style="background-color: {{ $color }}">
-{{ $rating }}
-</span>
-</td>
-</tr>
+                                                <td>
+                                                    <span class="badge" style="background-color: {{ $color }}">
+                                                        {{ $rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
 
-@empty
-<tr>
-<td colspan="5" class="text-center text-muted">
-No data available
-</td>
-</tr>
-@endforelse
-</tbody>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center text-muted">
+                                                    No data available
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th colspan="2" class="text-end">Total</th>
 
-</table>
+                                            <!-- Avg Students -->
+                                            <th>{{ number_format($avgStudents, 1) }}</th>
 
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+                                            <!-- Avg Score -->
+                                            <th>
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgScore)->color }}">
+                                                    {{ number_format($avgScore, 1) }}%
+                                                </span>
+                                            </th>
 
-<!-- / Payment Methods modal -->
+                                            <!-- Rating -->
+                                            <th>
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgScore)->color }}">
+                                                    {{ getRatingMeta($avgScore)->rating }}
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- / Payment Methods modal -->
 @endif
-
