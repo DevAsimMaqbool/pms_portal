@@ -247,7 +247,8 @@
                                                     default => ''
                                                 };
                                                 $data = dropOutRateAverageForPL(Auth::user()->employee_id, $activeRoleId, 6, 14, 160, $value);
-
+                                                $avg_percentage = $data['avg_percentage'] ?? 0;
+                                                $meta_avg_percentage = getRatingMeta($avg_percentage);
                                                 if (!function_exists('ratingFunctions')) {
                                                     function ratingFunctions($average)
                                                     {
@@ -288,11 +289,18 @@
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="">Total</th>
-                                                <th class=""></th>
-                                                <th class="">{{number_format($data['total_target'], 1) }}</th>
+                                                <th class="">AVG-></th>
+                                                {{-- <th class="">{{number_format($data['total_target'], 1) }}</th>
                                                 <th class="">AVG: {{number_format($data['avg_percentage'], 1) }} W:
                                                     {{number_format($data['weighted_score'], 1) }}
+                                                </th> --}}
+                                                <th class="fs-6">
+                                                    <span class="badge" style="background-color: {{ $meta_avg_percentage->color }}">
+                                                        {{number_format($avg_percentage, 1) }}
+                                                    </span>
                                                 </th>
+                                                <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg_percentage->color }}">  {{ $meta_avg_percentage->rating }} </span></th>
+                                                
                                             </tr>
                                         </tfoot>
 
