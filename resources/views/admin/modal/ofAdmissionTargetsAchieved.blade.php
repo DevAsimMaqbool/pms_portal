@@ -42,6 +42,12 @@
     $totalFeedback = 0;                                    
  @endphp
 @if(in_array(getRoleName(activeRole()), ['HOD']))
+ @php
+    $data=admissionTargetDepartmentAverage(Auth::user()->employee_id, $activeRoleId, 143); 
+    $leader_avg_percentage = $data['avg_percentage'] ?? 0;
+    $meta_leader_avg_percentage = getRatingMeta($leader_avg_percentage);
+    
+@endphp
 <!-- / Payment Methods modal -->
 <div class="modal fade" id="ofAdmissionTargetsAchieved" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -92,33 +98,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
-                                                $data=admissionTargetDepartmentAverage(Auth::user()->employee_id, $activeRoleId, 143); 
-                                                if (!function_exists('ratingFunctions')) {
-                                                    function ratingFunctions($average)
-                                                    {
-                                                        if ($average >= 90)
-                                                            return ['OS', 'primary'];
-                                                        if ($average >= 80)
-                                                            return ['EE', 'success'];
-                                                        if ($average >= 70)
-                                                            return ['ME', 'warning'];
-                                                        if ($average >= 60)
-                                                            return ['NI', 'orange'];
-                                                        return ['BE', 'danger'];
-                                                    }
-                                                }
-                                            @endphp
+                                            
                                                 @php
-                                                    [$rating, $color] = ratingFunctions($data['records']['Spring']['percentage']);
+                                                    $spring_avg_percentage = $data['records']['Spring']['percentage'] ?? 0;
+                                                    $meta_spring_avg = getRatingMeta($spring_avg_percentage);
                                                     
                                                 @endphp
                                                  <tr>
                                                     <td>1</td>
                                                     <td>{{ $data['records']['Spring']['total_target'] }}</td>
                                                     <td>{{ $data['records']['Spring']['total_achieved'] }}</td>
-                                                    <td><div class="badge bg-{{ $color }}">{{ $data['records']['Spring']['percentage'] }}%</div></td>
-                                                    <td><div class="badge bg-label-{{ $color }}">{{ $rating }}</div></td>
+                                                    <td><div class="badge" style="background-color: {{ $meta_spring_avg->color }}">{{ $spring_avg_percentage }}%</div></td>
+                                                    <td><div class="badge" style="background-color: {{ $meta_spring_avg->color }}">{{ $meta_spring_avg->rating }}</div></td>
                                                 </tr>
                                     </tbody>
                                     <tfoot>
@@ -126,8 +117,11 @@
                                             <th class="">Total</th>
                                             <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
                                             <th class="">Total (S+F){{number_format($data['total_achieved'], 1) }}</th>
-                                            <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            {{-- <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }}</th>
+                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_leader_avg_percentage->color }}">{{number_format($leader_avg_percentage, 1) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_leader_avg_percentage->color }}">  {{ $meta_leader_avg_percentage->rating }} </span></th>
+                                       
                                         </tr>
                                     </tfoot>
                                     
@@ -149,33 +143,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
-                                                $data=admissionTargetDepartmentAverage(Auth::user()->employee_id, $activeRoleId, 143); 
-                                                if (!function_exists('ratingFunctions')) {
-                                                    function ratingFunctions($average)
-                                                    {
-                                                        if ($average >= 90)
-                                                            return ['OS', 'primary'];
-                                                        if ($average >= 80)
-                                                            return ['EE', 'success'];
-                                                        if ($average >= 70)
-                                                            return ['ME', 'warning'];
-                                                        if ($average >= 60)
-                                                            return ['NI', 'orange'];
-                                                        return ['BE', 'danger'];
-                                                    }
-                                                }
-                                            @endphp
+                                           
                                                 @php
-                                                    [$rating, $color] = ratingFunctions($data['records']['Fall']['percentage']);
+                                                    $fall_avg_percentage = $data['records']['Fall']['percentage'] ?? 0;
+                                                    $meta_fall_avg = getRatingMeta($fall_avg_percentage);
                                                     
                                                 @endphp
                                                  <tr>
                                                     <td>1</td>
                                                     <td>{{ $data['records']['Fall']['total_target'] }}</td>
                                                     <td>{{ $data['records']['Fall']['total_achieved'] }}</td>
-                                                    <td><div class="badge bg-{{ $color }}">{{ $data['records']['Fall']['percentage'] }}%</div></td>
-                                                    <td><div class="badge bg-label-{{ $color }}">{{ $rating }}</div></td>
+                                                    <td><div class="badge" style="background-color: {{ $meta_fall_avg->color }}">{{ $fall_avg_percentage }}%</div></td>
+                                                    <td><div class="badge" style="background-color: {{ $meta_fall_avg->color }}">{{ $meta_fall_avg->rating }}</div></td>
                                                 </tr>
                                     </tbody>
                                     <tfoot>
@@ -183,8 +162,10 @@
                                             <th class="">Total</th>
                                             <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
                                             <th class="">Total (S+F){{number_format($data['total_achieved'], 1) }}</th>
-                                            <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            {{-- <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }}</th>
+                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_leader_avg_percentage->color }}">{{number_format($leader_avg_percentage, 1) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_leader_avg_percentage->color }}">  {{ $meta_leader_avg_percentage->rating }} </span></th>
                                         </tr>
                                     </tfoot>
                                     

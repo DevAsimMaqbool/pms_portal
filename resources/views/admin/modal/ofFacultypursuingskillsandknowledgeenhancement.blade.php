@@ -74,23 +74,8 @@
                                     <tbody>
                                             @php
                                                 $data=facultyPursuingSkills(Auth::user()->employee_id, $activeRoleId); 
-                                                $avg = $data['average_score'];
-                                                 if ($avg >= 90) {
-                                                            $color = 'primary';
-                                                            $rating = 'OS';
-                                                        } elseif ($avg >= 80) {
-                                                            $color = 'success';
-                                                            $rating = 'EE';
-                                                        } elseif ($avg >= 70) {
-                                                            $color = 'warning';
-                                                            $rating = 'ME';
-                                                        } elseif ($avg >= 60) {
-                                                            $color = 'orange';
-                                                            $rating = 'NI';
-                                                        } else {
-                                                            $color = 'danger';
-                                                            $rating = 'BE';
-                                                        }
+                                                $avg = $data['average_score'] ?? 0;
+                                                $meta_avg = getRatingMeta($avg);
                                             @endphp
                                                 @if(!empty($data))
                                                     <tr>
@@ -99,14 +84,14 @@
                                                         <td>{{ $data['total_fill_user'] }}</td>
                                                         <td>{{ $data['weighted_score'] }}</td>
                                                         <td>
-                                                            <div class="badge bg-{{ $color }}">
-                                                                {{number_format($data['average_score']) }}%
-                                                            </div>
+                                                            <span class="badge" style="background-color: {{ $meta_avg->color }}">
+                                                                {{number_format($avg) }}%
+                                                            </span>
                                                         </td>
                                                         <td>
-                                                            <div class="badge bg-{{ $color }}">
-                                                                 {{ $rating }}
-                                                            </div>
+                                                            <span class="badge" style="background-color: {{ $meta_avg->color }}">
+                                                                 {{ $meta_avg->rating }}
+                                                            </span>
                                                         </td>
                                                     </tr>
                                                 @else
@@ -115,6 +100,15 @@
                                                     </tr>
                                                 @endif
                                     </tbody>
+                                     <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th class="" colspan="3"></th>
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($avg) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
+                                       
+                                        </tr>
+                                    </tfoot>
                                     
                                 </table>
                             </div>
