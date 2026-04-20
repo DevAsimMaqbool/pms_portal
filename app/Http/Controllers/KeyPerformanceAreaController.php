@@ -282,7 +282,7 @@ class KeyPerformanceAreaController extends Controller
                 $saved = $savedScores[$indicator->id];
 
                 // ✅ Raw score (WITHOUT division)
-                $indicator->score = round($saved->score, 1);
+                $indicator->score = round($saved->score, 2);
                 $indicator->weightage = $weightage;
                 $indicator->indicatorId = $indicator->id;
 

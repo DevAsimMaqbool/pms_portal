@@ -37,9 +37,9 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+$activeRoleId = getRoleIdByName(activeRole());
+// Initialize totalFeedback to 0 in case nothing is set later
+$totalFeedback = 0;                                    
 @endphp
 @if(in_array(getRoleName(activeRole()), ['HOD']))
     <!--  Payment Methods modal -->
@@ -79,8 +79,8 @@
                                     <tbody class="table-border-bottom-0">
                                         @if(in_array(getRoleName(activeRole()), ['HOD']))
                                             @php
-                                                $feedbacks = QECAuditRatingOfHOD(Auth::user()->employee_id, $activeRoleId);
-                                                $sr = 1;
+        $feedbacks = QECAuditRatingOfHOD(Auth::user()->employee_id, $activeRoleId);
+        $sr = 1;
                                             @endphp
 
                                             @foreach($feedbacks as $class)
@@ -148,9 +148,9 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 3, 110);
-                                            $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
-                                            $meta_avg = getRatingMeta($faculty_avg_percentage);
+    $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 3, 110);
+    $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
+    $meta_avg = getRatingMeta($faculty_avg_percentage);
                                         @endphp
                                         @foreach($data['records'] as $record)
                                             <tr>
@@ -176,8 +176,12 @@
                                             <th class=""></th>
                                             {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
                                             <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span>
+                                            </th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">
+                                                    {{ $meta_avg->rating }} </span></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -224,13 +228,23 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $programLevel = match (getRoleName(activeRole())) {
-                                                'Program Leader UG' => 'UG',
-                                                'Program Leader PG' => 'PG',
-                                                default => ''
-                                            };
-                                            $data = QECAuditRatingOfPL(Auth::user()->employee_id, $activeRoleId, $programLevel);
+    $programLevel = match (getRoleName(activeRole())) {
+        'Program Leader UG' => 'UG',
+        'Program Leader PG' => 'PG',
+        default => ''
+    };
+    $data = QECAuditRatingOfPL(Auth::user()->employee_id, $activeRoleId, $programLevel);
+    $avgTotalScore = collect($data)->avg(function ($item) {
+        return (float) ($item->total_score ?? 0);
+    }) ?? 0;
 
+    $avgObtainedScore = collect($data)->avg(function ($item) {
+        return (float) ($item->obtained_score ?? 0);
+    }) ?? 0;
+
+    $avgScore = collect($data)->avg(function ($item) {
+        return (float) ($item->percentage ?? 0);
+    }) ?? 0;
                                         @endphp
                                         @foreach($data as $index => $record)
                                             <tr>
@@ -245,8 +259,8 @@
 
                                                 <td>
                                                     @php
-                                                        $percentage = (float) ($record->percentage ?? 0);
-                                                        $meta = getRatingMeta($percentage);
+        $percentage = (float) ($record->percentage ?? 0);
+        $meta = getRatingMeta($percentage);
                                                     @endphp
 
                                                     <div class="badge" style="background-color: {{ $meta->color }}">
@@ -262,6 +276,35 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th colspan="6" class="text-end">Average</th>
+
+                                            <!-- Avg Total Score -->
+                                            <th>
+                                                {{ number_format($avgTotalScore, 1) }}
+                                            </th>
+
+                                            <!-- Avg Obtained Score -->
+                                            <th>
+                                                {{ number_format($avgObtainedScore, 1) }}
+                                            </th>
+
+                                            <!-- Avg Percentage -->
+                                            <th style="font-size: 0.960rem;">
+                                                <span class="badge bg-{{ getRatingMetaAsBg($avgScore)->color }}">
+                                                    {{ number_format(($avgObtainedScore / $avgTotalScore) * 100, 1) }}%
+                                                </span>
+                                            </th>
+
+                                            <!-- Rating -->
+                                            <th style="font-size: 0.960rem;">
+                                                <span class="badge bg-{{ getRatingMetaAsBg($avgScore)->color }}">
+                                                    {{ getRatingMetaAsBg($avgScore)->rating }}
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

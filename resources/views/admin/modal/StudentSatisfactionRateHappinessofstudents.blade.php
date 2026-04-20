@@ -37,11 +37,11 @@
     }
 </style>
 @php
-$activeRoleId = getRoleIdByName(activeRole());
-// Initialize totalFeedback to 0 in case nothing is set later
-$totalFeedback = 0;                                    
- @endphp
- @if(in_array(getRoleName(activeRole()), ['HOD']))
+    $activeRoleId = getRoleIdByName(activeRole());
+    // Initialize totalFeedback to 0 in case nothing is set later
+    $totalFeedback = 0;                                    
+@endphp
+@if(in_array(getRoleName(activeRole()), ['HOD']))
     <!--  Payment Methods modal -->
 
     <div class="modal fade" id="StudentSatisfactionRateHappinessofstudents" tabindex="-1" aria-hidden="true">
@@ -112,7 +112,8 @@ $totalFeedback = 0;
                                             <th>Total</th>
                                             <th colspan="3" class="text-end"></th>
                                             <th style="font-size: 0.960rem;">
-                                                <b class="badge" style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
                                                     {{ number_format($overallAvg, 1) }}%
                                                 </b>
                                             </th>
@@ -134,7 +135,7 @@ $totalFeedback = 0;
     <!-- / Payment Methods modal -->
 @endif
 @if(in_array(getRoleName(activeRole()), ['Dean']))
-<!--  Payment Methods modal -->
+    <!--  Payment Methods modal -->
 
     <div class="modal fade" id="StudentSatisfactionRateHappinessofstudents" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -147,7 +148,7 @@ $totalFeedback = 0;
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
                                 class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Student Satisfaction Rate /
-                    Happiness of students
+                        Happiness of students
                     </h3>
                     <div class="card">
 
@@ -163,38 +164,44 @@ $totalFeedback = 0;
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
+                                        @php
                                             $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 4, 124);
                                             $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
                                             $meta_avg = getRatingMeta($faculty_avg_percentage);
-                                            @endphp
-                                                @foreach($data['records'] as $record)
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge bg-{{ $record->color }}">
+                                        @endphp
+                                        @foreach($data['records'] as $record)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td> {{ $record->user?->department?->name ?? '' }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ $record->color }}">
                                                         {{ $record->score}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge bg-label-{{ $record->color }}">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-label-{{ $record->color }}">
 
-                                                                {{ $record->rating }}
-                                                            </div>
-                                                    </td>    
-                                                </tr>
-                                            @endforeach
+                                                        {{ $record->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
                                             {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
-                                       
+                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span>
+                                            </th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">
+                                                    {{ $meta_avg->rating }} </span></th>
+
                                         </tr>
-                                    </tfoot> 
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -218,7 +225,8 @@ $totalFeedback = 0;
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Student Satisfaction Rate / Happiness of students
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Student Satisfaction Rate /
+                        Happiness of students
                     </h3>
                     <div class="card">
 
@@ -238,13 +246,21 @@ $totalFeedback = 0;
                                         </tr>
                                     </thead>
                                     @php
-    $programLevel = match (getRoleName(activeRole())) {
-        'Program Leader UG' => 'UG',
-        'Program Leader PG' => 'PG',
-        default => ''
-    };
+                                        $programLevel = match (getRoleName(activeRole())) {
+                                            'Program Leader UG' => 'UG',
+                                            'Program Leader PG' => 'PG',
+                                            default => ''
+                                        };
 
-    $data = calculateStudentEngagementRateFromPL(Auth::user()->employee_id, $activeRoleId, 1, 4, 123, $programLevel);
+                                        $data = calculateStudentEngagementRateFromPL(Auth::user()->employee_id, $activeRoleId, 1, 4, 123, $programLevel);
+
+                                        $avgSatisfaction = collect($data)->avg(function ($item) {
+                                            return (float) ($item->student_satisfaction_rate ?? 0);
+                                        }) ?? 0;
+
+                                        // convert to percentage (same as row logic)
+                                        $avgSatisfactionPercent = $avgSatisfaction * 20;
+
                                     @endphp
                                     <tbody>
                                         @foreach($data as $index => $row)
@@ -262,7 +278,8 @@ $totalFeedback = 0;
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="badge" style="background-color: {{ getRatingMeta($row->student_satisfaction_rate * 20)->color }}">
+                                                    <div class="badge"
+                                                        style="background-color: {{ getRatingMeta($row->student_satisfaction_rate * 20)->color }}">
 
                                                         {{ getRatingMeta($row->student_satisfaction_rate * 20)->rating }}
                                                     </div>
@@ -270,6 +287,32 @@ $totalFeedback = 0;
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th colspan="5" class="text-end">Average</th>
+
+                                            <!-- Avg Score (raw) -->
+                                            <th>
+                                                {{ number_format($avgSatisfaction, 1) }}
+                                            </th>
+
+                                            <!-- Avg % -->
+                                            <th style="font-size: 0.960rem;">
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgSatisfactionPercent)->color }}">
+                                                    {{ number_format($avgSatisfactionPercent, 1) }}%
+                                                </span>
+                                            </th>
+
+                                            <!-- Rating -->
+                                            <th style="font-size: 0.960rem;">
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgSatisfactionPercent)->color }}">
+                                                    {{ getRatingMeta($avgSatisfactionPercent)->rating }}
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -280,4 +323,3 @@ $totalFeedback = 0;
     </div>
     <!-- / Payment Methods modal -->
 @endif
-

@@ -192,8 +192,12 @@
                                             <th class=""></th>
                                             {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
                                             <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                             <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span>
+                                            </th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">
+                                                    {{ $meta_avg->rating }} </span></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -247,6 +251,17 @@
                                         };
 
                                         $data = calculateStudentEngagementRateFromPL(Auth::user()->employee_id, $activeRoleId, 1, 4, 123, $programLevel);
+                                        $avgTarget = collect($data)->avg(function ($item) {
+                                            return (float) ($item->total_target ?? 0);
+                                        }) ?? 0;
+
+                                        $avgParticipated = collect($data)->avg(function ($item) {
+                                            return (float) ($item->total_participated ?? 0);
+                                        }) ?? 0;
+
+                                        $avgParticipationRate = collect($data)->avg(function ($item) {
+                                            return (float) ($item->avg_participation ?? 0);
+                                        }) ?? 0;
                                     @endphp
                                     <tbody>
                                         @foreach($data as $index => $row)
@@ -274,6 +289,33 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th colspan="5" class="text-end">Average</th>
+
+                                            <!-- Avg Target -->
+                                            <th>{{ number_format($avgTarget, 1) }}</th>
+
+                                            <!-- Avg Participated -->
+                                            <th>{{ number_format($avgParticipated, 1) }}</th>
+
+                                            <!-- Avg % -->
+                                            <th style="font-size: 0.960rem;">
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgParticipationRate)->color }}">
+                                                    {{ number_format($avgParticipationRate, 1) }}%
+                                                </span>
+                                            </th>
+
+                                            <!-- Rating -->
+                                            <th style="font-size: 0.960rem;">
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgParticipationRate)->color }}">
+                                                    {{ getRatingMeta($avgParticipationRate)->rating }}
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
