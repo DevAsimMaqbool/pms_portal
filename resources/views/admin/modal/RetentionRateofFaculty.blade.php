@@ -91,6 +91,15 @@
                                             </td>
                                         </tr>
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th class="" colspan=""></th>
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $data->color }}">{{number_format($data->average_rating, 1) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $data->color }}">  {{ $data->rating }} </span></th>
+                                       
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
