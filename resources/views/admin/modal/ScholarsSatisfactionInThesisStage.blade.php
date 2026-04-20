@@ -263,6 +263,8 @@
         default => ''
     }; 
     $data=scholarsSatisfactionAverageForPL(Auth::user()->employee_id, $activeRoleId, 2, 6, 132,$value);
+    $scho_avg_percentage = $data['avg_percentage'] ?? 0;
+    $meta_scho_avg_percentage = getRatingMeta($scho_avg_percentage);
    
 @endphp
 <!-- / Payment Methods modal -->
@@ -330,9 +332,12 @@
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
-                                            <th class=""></th>
-                                            <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
-                                           <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }} W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class="">AVG-></th>
+                                            {{-- <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
+                                           <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }} W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_scho_avg_percentage->color }}">{{number_format($scho_avg_percentage, 1) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_scho_avg_percentage->color }}">  {{ $meta_scho_avg_percentage->rating }} </span></th>
+                                       
                                         </tr>
                                     </tfoot>
                                     
@@ -369,9 +374,11 @@
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
-                                            <th class=""></th>
-                                            <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
-                                           <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }} W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class="">AVG-></th>
+                                            {{-- <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
+                                           <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }} W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_scho_avg_percentage->color }}">{{number_format($scho_avg_percentage, 1) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_scho_avg_percentage->color }}">  {{ $meta_scho_avg_percentage->rating }} </span></th>
                                         </tr>
                                     </tfoot>
                                     

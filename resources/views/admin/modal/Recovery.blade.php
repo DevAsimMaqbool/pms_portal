@@ -314,6 +314,24 @@
                                             </tr>
                                         @endif
                                     </tbody>
+                                     <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th class=""></th>
+                                            <th class=""></th>
+                                            <th class="fs-6">
+                                                <span class="badge" style="background-color: {{ $meta_avg->color }}">
+                                                    {{number_format($avg) }}%
+                                                </span>
+                                            </th>
+                                            <th class="fs-6">
+                                                <span class="badge" style="background-color: {{ $meta_avg->color }}">
+                                                    {{ $meta_avg->rating }}
+                                                </span>
+                                            </th>
+                                       
+                                        </tr>
+                                    </tfoot>
                                     
                                 </table>    
                                     

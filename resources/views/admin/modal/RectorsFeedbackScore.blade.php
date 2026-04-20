@@ -269,7 +269,7 @@
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th>Overall</th>
-                                            <th colspan="2" class="text-end"></th>
+                                            <th colspan="1" class="text-end"></th>
                                             <th style="font-size: 0.960rem;">
                                                 <b class="badge"
                                                     style="background-color: {{ getRatingMeta($overallAvg)->color }}">
