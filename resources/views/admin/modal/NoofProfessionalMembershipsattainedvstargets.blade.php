@@ -87,7 +87,7 @@
                                         {{-- SCORE --}}
                                         <td>
                                             <div class="badge" style="background-color: {{ $data['color'] }}">
-                                                {{ number_format($data['average_rating'], 2) }}%
+                                                {{ number_format($data['average_rating'], 1) }}%
                                             </div>
                                         </td>
 
@@ -99,6 +99,25 @@
                                         </td>
                                     </tr>
                                 </tbody>
+                                 <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th class=""></th>
+                                            <th class="">AVG-></th>
+                                            <th class="fs-6">
+                                                <div class="badge" style="background-color: {{ $data['color'] }}">
+                                                    {{ number_format($data['average_rating'], 1) }}
+                                                </div>
+                                            </th>
+
+                                            {{-- RATING --}}
+                                            <th class="fs-6">
+                                                <span class="badge" style="background-color: {{ $data['color'] }}">
+                                                    {{ $data['rating'] }}
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                             </table>
                         </div>
                     </div>

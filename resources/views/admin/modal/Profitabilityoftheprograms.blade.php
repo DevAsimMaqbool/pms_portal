@@ -269,6 +269,8 @@
                                                     default => ''
                                                 };
                                                 $data=programProfitabilityAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 11, 147, $value);
+                                                $profit_avg_percentage = $data['avg_percentage'] ?? 0;
+                                                $meta_profit_avg_percentage = getRatingMeta($profit_avg_percentage);
                                                 
                                                
                                             @endphp
@@ -295,9 +297,12 @@
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
-                                            <th class=""></th>
-                                            <th class="">{{number_format($data['total_target'], 1) }}</th>
-                                            <th class="">AVG: {{number_format($data['avg_percentage'], 1) }} W: {{number_format($data['weighted_score'], 1) }}</th>
+                                            <th class="">AVG-></th>
+                                            {{-- <th class="">{{number_format($data['total_target'], 1) }}</th>
+                                            <th class="">AVG: {{number_format($data['avg_percentage'], 1) }} W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_profit_avg_percentage->color }}">{{number_format($profit_avg_percentage, 1) }}</span></th>
+                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_profit_avg_percentage->color }}">  {{ $meta_profit_avg_percentage->rating }} </span></th>
+                                       
                                         </tr>
                                     </tfoot> 
                                     

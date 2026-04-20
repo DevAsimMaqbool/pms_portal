@@ -112,22 +112,24 @@
                                     @endforeach
 
                                     {{-- SUMMARY --}}
-                                    <!-- <tr class="table-primary fw-bold">
-                                        <td colspan="5">Overall Department</td>
-                                        <td colspan="2">—</td>
+                                    <tfoot>
+                                        <tr class="table-primary fw-bold">
+                                            <td colspan="5">Overall Department</td>
+                                            <td colspan="2">—</td>
 
-                                        <td>
-                                            <span class="badge" style="background-color: {{ $data->summary->color }}">
-                                                {{ number_format($data->summary->average_rating, 2) }}%
-                                            </span>
-                                        </td>
+                                            <td>
+                                                <span class="badge" style="background-color: {{ $data->summary->color }}">
+                                                    {{ number_format($data->summary->average_rating, 2) }}%
+                                                </span>
+                                            </td>
 
-                                        <td>
-                                            <span class="badge" style="background-color: {{ $data->summary->color }}">
-                                                {{ $data->summary->rating }}
-                                            </span>
-                                        </td>
-                                    </tr> -->
+                                            <td>
+                                                <span class="badge" style="background-color: {{ $data->summary->color }}">
+                                                    {{ $data->summary->rating }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
                                 </tbody>
                             </table>
                         </div>

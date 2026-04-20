@@ -249,39 +249,23 @@
                                                 $data = dropOutRateAverageForPL(Auth::user()->employee_id, $activeRoleId, 6, 14, 160, $value);
                                                 $avg_percentage = $data['avg_percentage'] ?? 0;
                                                 $meta_avg_percentage = getRatingMeta($avg_percentage);
-                                                if (!function_exists('ratingFunctions')) {
-                                                    function ratingFunctions($average)
-                                                    {
-                                                        if ($average >= 90)
-                                                            return ['OS', 'primary'];
-                                                        if ($average >= 80)
-                                                            return ['EE', 'success'];
-                                                        if ($average >= 70)
-                                                            return ['ME', 'warning'];
-                                                        if ($average >= 60)
-                                                            return ['NI', 'orange'];
-                                                        return ['BE', 'danger'];
-                                                    }
-                                                }
                                             @endphp
                                             @foreach($data['records'] as $record)
                                                 @php
-                                                    [$rating, $color] = ratingFunctions($record->dropout_rate);
+                                                    $avg_dropout_rate = $record->dropout_rate ?? 0;
+                                                    $meta_avg_dropout_rate = getRatingMeta($avg_dropout_rate);
 
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $record->program->program_name }}</td>
                                                     <td>
-                                                        <div class="badge bg-{{ $color }}">
-                                                            {{ $record->dropout_rate}}%
-                                                        </div>
+                                                        <span class="badge" style="background-color: {{ $meta_avg_dropout_rate->color }}">
+                                                            {{number_format($avg_dropout_rate, 1) }}%
+                                                        </span>
                                                     </td>
                                                     <td>
-                                                        <div class="badge bg-label-{{ $color }}">
-
-                                                            {{ $rating }}
-                                                        </div>
+                                                        <span class="badge" style="background-color: {{ $meta_avg_dropout_rate->color }}">  {{ $meta_avg_dropout_rate->rating }} </span>
                                                     </td>
                                                 </tr>
                                             @endforeach

@@ -109,13 +109,13 @@
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
-                                            <th class="text-end">Total</th>
+                                            <th class="text-center">Total</th>
                                             <th colspan="" class="text-end"></th>
                                             <th style="font-size: 0.960rem;">
-                                                <b class="badge"
+                                                <span class="badge"
                                                     style="background-color: {{ getRatingMeta($totalPercentage)->color }}">
                                                     {{ number_format($totalPercentage, 1) }}%
-                                                </b>
+                                                </span>
                                             </th>
                                             <th style="font-size: 0.960rem;"><b class="badge"
                                                     style="background-color: {{ getRatingMeta($totalPercentage)->color }}">
