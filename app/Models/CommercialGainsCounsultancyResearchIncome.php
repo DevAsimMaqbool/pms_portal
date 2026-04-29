@@ -16,6 +16,8 @@ class CommercialGainsCounsultancyResearchIncome extends Model
         'consultancy_fee',
         'consultancy_file',
         'status',
+        'reject_status',
+        'reject_status_remarks',
         'update_history',
         'created_by',
         'updated_by',

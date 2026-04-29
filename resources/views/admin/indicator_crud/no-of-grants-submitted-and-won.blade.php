@@ -37,6 +37,7 @@
                                                         <th>Created By</th>
                                                         <th>Name</th>
                                                         <th>Created Date</th>
+                                                        <th>Status</th>
                                                         <th>History</th>
                                                         <th>Actions</th>
                                                     </tr>
@@ -203,6 +204,35 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            let statusText = 'N/A';
+                            if (form.status == 1) {
+                                if (form.reject_status == 1) {
+                                    statusText = `<span class="badge bg-label-danger" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    data-bs-custom-class="tooltip-danger" 
+                                                    data-bs-original-title="${form.reject_status_remarks}">
+                                                    Reject by HOD
+                                                </span>`;
+                                } else if (form.reject_status == 2) {
+                                    statusText = `<span class="badge bg-label-danger" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    data-bs-custom-class="tooltip-danger" 
+                                                    data-bs-original-title="${form.reject_status_remarks}">
+                                                    Reject by ORIC
+                                                </span>`;
+                                } else {
+                                    statusText = '<span class="badge bg-label-warning">Unverified</span>';
+                                }
+                            } 
+                            else if (form.status == 2){
+                                 statusText = '<span class="badge bg-label-success">Verified by HOD</span>';
+                            } 
+                            else if (form.status == 3){
+                                 statusText = '<span class="badge bg-label-success">Verified by ORIC</span>';
+                            }
+
                             let editButton = '';
                             if (parseInt(form.status) === 1) {
                                 editButton = `
@@ -218,6 +248,7 @@
                                 form.creator ? form.creator.name : 'N/A',
                                 form.name || 'N/A',
                                 createdAt,
+                                statusText,
                                  `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
                                     data-history='${JSON.stringify(form.update_history)}'
                                     data-user='${form.creator ? form.creator.name : "N/A"}'
@@ -239,10 +270,18 @@
                                     { title: "Created By" },
                                     { title: "Name" },
                                     { title: "Created Date" },
+                                    { title: "Status" },
                                     { title: "History" },
                                     { title: "Actions" }
                                 ]
                             });
+                            // ✅ IMPORTANT: Initialize Bootstrap tooltips AFTER table render
+                            setTimeout(function () {
+                                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                                tooltipTriggerList.forEach(function (el) {
+                                    new bootstrap.Tooltip(el);
+                                });
+                            }, 200);
                         } else {
                             $('#intellectualTable').DataTable().clear().rows.add(rowData).draw();
                         }
@@ -291,9 +330,17 @@
                     let historyHtml = '';
                     history.forEach(update => {
                         let histortText = 'N/A';
-                        if (update.role === 'HOD') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
-                        else if (update.role === 'ORIC') histortText = update.status == '2' ? 'Unverified' : (update.status == '3' ? 'Verified' : update.status);
-                        else histortText = update.status || 'N/A';
+                        // Role-based status mapping
+                        if (update.role === 'HOD') {
+                            if (update.status == '0') histortText = 'Reject';
+                            else if (update.status == '1') histortText = 'unapproved';
+                                else if (update.status == '2') histortText = 'Approved';
+                        } else if (update.role === 'ORIC') {
+                            if (update.status == '0') histortText = 'Reject';
+                            else if (update.status == '2') histortText = 'unapproved';
+                            else if (update.status == '3') histortText = 'Approved';
+                        }
+                        else { histortText = update.status || 'N/A'; }
 
                         historyHtml += `
                             <li class="timeline-item timeline-item-transparent optional-field">
@@ -309,6 +356,11 @@
                                         </div>
                                         <div class="badge bg-lighter rounded-3 ms-2">
                                             <span class="h6 mb-0 text-body">${histortText}</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-1">
+                                        <div class="badge bg-danger rounded-3 ms-2">
+                                        <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
                                         </div>
                                     </div>
                                 </div>

@@ -39,6 +39,7 @@
                                                         <th>Scope</th>
                                                         <th>Validity From</th>
                                                         <th>Validity To</th>
+                                                        <th>Status</th>
                                                         <th>History</th>
                                                         <th>Actions</th>
                                                     </tr>
@@ -343,6 +344,24 @@
 
                         const rowData = forms.map((form, i) => {
 
+                            let statusText = 'N/A';
+                            if (form.status == 1) {
+                                if (form.reject_status == 1) {
+                                    statusText = `<span class="badge bg-label-danger" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    data-bs-custom-class="tooltip-danger" 
+                                                    data-bs-original-title="${form.reject_status_remarks}">
+                                                    Reject by QEC
+                                                </span>`;
+                                } else {
+                                    statusText = '<span class="badge bg-label-warning">Unverified</span>';
+                                }
+                            } 
+                            else if (form.status == 2){
+                                 statusText = '<span class="badge bg-label-success">Verified by HOD</span>';
+                            } 
+
                             let editButton = '';
                             let deleteBtn = '';
                             if (parseInt(form.status) === 1) {
@@ -362,6 +381,7 @@
                                 form.scope || 'N/A',
                                 form.validity_from || 'N/A',
                                 form.validity_to || 'N/A',
+                                statusText,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
                                             data-history='${JSON.stringify(form.update_history)}'
                                             data-user='${form.creator ? form.creator.name : "N/A"}'
@@ -385,10 +405,18 @@
                                     { title: "Scope" },
                                     { title: "Validity From" },
                                     { title: "Validity To" },
+                                    { title: "Status" },
                                     { title: "History" },
                                     { title: "Actions" }
                                 ]
                             });
+                            // ✅ IMPORTANT: Initialize Bootstrap tooltips AFTER table render
+                            setTimeout(function () {
+                                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                                tooltipTriggerList.forEach(function (el) {
+                                    new bootstrap.Tooltip(el);
+                                });
+                            }, 200);
                         } else {
                             $('#intellectualTable').DataTable().clear().rows.add(rowData).draw();
                         }
@@ -493,6 +521,13 @@
                         if (update.role === 'QEC') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
                         else histortText = update.status || 'N/A';
 
+                        if (update.role === 'QEC') {
+                            if (update.status == '0') histortText = 'Reject';
+                            else if (update.status == '1') histortText = 'unapproved';
+                                else if (update.status == '2') histortText = 'Approved';
+                        }
+                        else { histortText = update.status || 'N/A'; }
+
                         historyHtml += `
                             <li class="timeline-item timeline-item-transparent optional-field">
                                 <span class="timeline-point timeline-point-primary"></span>
@@ -508,8 +543,15 @@
                                         <div class="badge bg-lighter rounded-3 ms-2">
                                             <span class="h6 mb-0 text-body">${histortText}</span>
                                         </div>
-                                    </li>
-                                `;
+                                    </div>
+                                    <div class="d-flex align-items-center mb-1">
+                                        <div class="badge bg-danger rounded-3 ms-2">
+                                        <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        `;
                         });
                         $('#modalExtraFieldsHistory').append(historyHtml);
                     } else {

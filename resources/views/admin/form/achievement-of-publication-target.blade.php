@@ -1530,8 +1530,8 @@
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="d-flex align-items-center mb-1">
-                                                                                                            <div class="badge bg-lighter rounded-3 ms-2">
-                                                                                                            <span class="h6 mb-0 text-body">${update.remarks || ''}<span>
+                                                                                                            <div class="badge bg-danger rounded-3 ms-2">
+                                                                                                            <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
@@ -1821,6 +1821,11 @@
                                                                                                              <span class="h6 mb-0 text-body">${histortText}</span>
                                                                                                             </div>
                                                                                                         </div>
+                                                                                                        <div class="d-flex align-items-center mb-1">
+                                                                                                            <div class="badge bg-danger rounded-3 ms-2">
+                                                                                                            <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
+                                                                                                            </div>
+                                                                                                        </div>
                                                                                                     </div>
                                                                                                 </li>
                                                                                             `;
@@ -2105,8 +2110,8 @@
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="d-flex align-items-center mb-1">
-                                                                                                            <div class="badge bg-lighter rounded-3 ms-2">
-                                                                                                            <span class="h6 mb-0 text-body">${update.remarks || ''}<span>
+                                                                                                            <div class="badge bg-danger rounded-3 ms-2">
+                                                                                                            <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
