@@ -17,7 +17,15 @@
 
         <!-- Multi Column with Form Separator -->
         <div class="card">
+
             <div class="card-datatable table-responsive card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="mb-1">Spin Offs</h5>
+                    </div>
+                    <!-- <a href="{{ route('indicators_crud.index', ['slug' => 'spin-offs', 'id' => $indicatorId]) }}"
+                            class="btn rounded-pill btn-outline-primary waves-effect"> View</a> -->
+                </div>
                 @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor']))
                     <form id="researchForm1" enctype="multipart/form-data" class="row">
                         @csrf

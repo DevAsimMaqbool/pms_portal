@@ -829,7 +829,7 @@
                 <tbody>
                     <tr>
                         @php
-                            $kpaResult = kpaAvgScoreForReport(1, Auth::user()->employee_id);
+                            $kpaResult = kpaAvgScoreForReport(1, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $target = $kpaResult['target'];
                             $rating = $kpaResult['rating'];
@@ -842,7 +842,7 @@
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = kpaAvgScoreForReport(2, Auth::user()->employee_id);
+                            $kpaResult = kpaAvgScoreForReport(2, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $target = $kpaResult['target'];
                             $rating = $kpaResult['rating'];
@@ -855,7 +855,7 @@
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = kpaAvgScoreForReport(13, Auth::user()->employee_id);
+                            $kpaResult = kpaAvgScoreForReport(13, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $target = $kpaResult['target'];
                             $rating = $kpaResult['rating'];
@@ -952,7 +952,7 @@
                 <tbody>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(23, 1, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(23, 1, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
@@ -965,7 +965,7 @@
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(3, 1, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(3, 1, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
@@ -978,7 +978,7 @@
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(25, 1, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(25, 1, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
@@ -1001,8 +1001,8 @@
             </div> -->
         </section>
         @php
-            $noteable = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, 1);
-            $areaOfDevelopment = getIndicatorsByScore('<', 70, Auth::user()->employee_id, 1);
+            $noteable = getIndicatorsByScore('>=', 80, $user->employee_id, 1, null, 1);
+            $areaOfDevelopment = getIndicatorsByScore('<', 70, $user->employee_id, 1, null, 1);
         @endphp
 
         <section class="achievements">
@@ -1082,7 +1082,7 @@
                 <tbody>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(5, 2, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(5, 2, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
@@ -1095,7 +1095,7 @@
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(32, 2, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(32, 2, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
@@ -1108,7 +1108,7 @@
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(34, 2, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(34, 2, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
@@ -1121,7 +1121,7 @@
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(8, 2, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(8, 2, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
@@ -1145,8 +1145,8 @@
         </section>
 
         @php
-            $noteable = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, 2);
-            $areaOfDevelopment = getIndicatorsByScore('<', 70, Auth::user()->employee_id, 2);
+            $noteable = getIndicatorsByScore('>=', 80, $user->employee_id, 2, null, 1);
+            $areaOfDevelopment = getIndicatorsByScore('<', 70, $user->employee_id, 2, null, 1);
         @endphp
 
         <section class="achievements">
@@ -1228,7 +1228,7 @@
                 <tbody>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(27, 13, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(27, 13, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
@@ -1241,7 +1241,7 @@
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(28, 13, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(28, 13, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
@@ -1265,8 +1265,8 @@
         </section>
 
         @php
-            $noteable = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, 13);
-            $areaOfDevelopment = getIndicatorsByScore('<', 70, Auth::user()->employee_id, 13);
+            $noteable = getIndicatorsByScore('>=', 80, $user->employee_id, 13, null, 1);
+            $areaOfDevelopment = getIndicatorsByScore('<', 70, $user->employee_id, 13, null, 1);
         @endphp
 
         <section class="achievements">
@@ -1320,7 +1320,7 @@
             <section class="achievements">
                 <div class="achievement-tags">
                     @php
-                        $remarks = lineManagerRemarksOnTasks(Auth::user()->employee_id);
+                        $remarks = lineManagerRemarksOnTasks($user->employee_id);
                     @endphp
 
                     <span class="tag-pill-remarks">

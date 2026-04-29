@@ -2714,9 +2714,15 @@ function indicatorAvgScore($indicator_id, $emp_id)
     ];
 }
 
-function indicatorCategoryAvgScore($category_id, $kpa_id, $emp_id)
+function indicatorCategoryAvgScore($category_id, $kpa_id, $emp_id, $member = null)
 {
-    $roleId = getRoleIdByName(activeRole());
+    if ($member) {
+        $user = User::find($emp_id);
+        $roleId = $user->roles->first()?->id;
+    } else {
+        // Get employee role
+        $roleId = getRoleIdByName(activeRole());
+    }
     $avgs = IndicatorsPercentage::where('employee_id', $emp_id)
         ->where('key_performance_area_id', $kpa_id)
         ->where('indicator_category_id', $category_id)
@@ -2873,9 +2879,15 @@ function Research_Innovation_Commercialization($facultyId, $activeRoleId, $indic
 
 
 if (!function_exists('getIndicatorsByScore')) {
-    function getIndicatorsByScore($scoreCompare, $scoreValue, $employeeId = null, $kpaId = null, $isBadge = null)
+    function getIndicatorsByScore($scoreCompare, $scoreValue, $employeeId = null, $kpaId = null, $isBadge = null, $member = null)
     {
-        $roleId = getRoleIdByName(activeRole());
+        if ($member) {
+            $user = User::find($employeeId);
+            $roleId = $user->roles->first()?->id;
+        } else {
+            // Get employee role
+            $roleId = getRoleIdByName(activeRole());
+        }
         $query = IndicatorsPercentage::with([
             'kpa:id,short_code',
             'category:id,cat_short_code',
@@ -3002,8 +3014,10 @@ if (!function_exists('lineManagerRemarksOnTasks')) {
 if (!function_exists('getTopIndicatorsOfEmployee')) {
     function getTopIndicatorsOfEmployee($employeeId)
     {
+        $activeRoleId = getRoleIdByName(activeRole());
         $indicators = IndicatorsPercentage::with('kpa:id,performance_area,short_code,icon')
             ->where('employee_id', $employeeId)
+            ->where('role_id', $activeRoleId)
             ->get([
                 'key_performance_area_id',
                 'score'
@@ -7953,11 +7967,15 @@ if (!function_exists('saveIndicatorPercentage100Plus')) {
     }
 }
 
-function kpaAvgScoreForReport($kpa_id, $emp_id)
+function kpaAvgScoreForReport($kpa_id, $emp_id, $member = null)
 {
-    // Get employee role
-    $roleId = getRoleIdByName(activeRole());
-
+    if ($member) {
+        $user = User::find($emp_id);
+        $roleId = $user->roles->first()?->id;
+    } else {
+        // Get employee role
+        $roleId = getRoleIdByName(activeRole());
+    }
     // Get KPA target weightage
     $target = RoleKpaAssignment::where('role_id', $roleId)
         ->where('key_performance_area_id', $kpa_id)

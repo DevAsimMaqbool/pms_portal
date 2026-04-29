@@ -1,0 +1,489 @@
+@extends('layouts.app')
+@push('style')
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
+    <link rel="stylesheet"
+        href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/%40form-validation/form-validation.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/animate-css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
+@endpush
+@section('content')
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Professor', 'Assistant Professor', 'Associate Professor']))
+            <!-- Multi Column with Form Separator -->
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="card-title mb-0">
+                        <h5 class="mb-1">Spin Offs</h5>
+                    </div>
+                    <div class="">
+                        <a href="{{ url('kpa/2/category/8/indicator/139') }}" class="btn btn-success">Add</a>
+                    </div>
+                </div>
+                <div class="card-datatable table-responsive card-body">
+                    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Professor', 'Assistant Professor', 'Associate Professor']))
+                        <div class="tab-pane fade show" id="form2" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table id="intellectualTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Created By</th>
+                                            <th>Project Name</th>
+                                            <th>Created Date</th>
+                                            <th>Status</th>
+                                            <th>History</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
+            <!-- Update Intellectual Property Modal -->
+            <!-- Modal -->
+            <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewFormModalLabel">
+                                <i class="icon-base ti tabler-history me-3"></i>History
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered mb-3">
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-left align-items-center">
+                                            <div class="avatar-wrapper">
+                                                <div class="avatar avatar-sm me-3">
+                                                    <span class="avatar-initial rounded-circle bg-label-info">🙍🏻‍♂️</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column gap-50">
+                                                <span class="text-truncate fw-medium text-heading" id="modalCreatedBy">Website
+                                                    SEO</span>
+                                                <small class="text-truncate" id="modalCreatedDate"></small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center">
+                                <i class="icon-base ti tabler-history me-3"></i>History
+                            </h5>
+                            <ul class="timeline mb-0" id="modalExtraFieldsHistory"></ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--/ Add Permission Modal -->
+            <!-- Update commercial gain Modal -->
+            <div class="modal fade" id="multidisciplinaryProjectFormModal" tabindex="-1"
+                aria-labelledby="commericaGainFormModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Commercial Consultancy/Research Income
+                                1</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="researchForm1" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" id="record_id" name="record_id">
+                                <input type="hidden" name="_method" value="PUT">
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="name_of_faculty_member" class="form-label">Name of faculty member</label>
+                                        <input type="text" id="name_of_faculty_member" name="name_of_faculty_member"
+                                            class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="spin_off_form_submission" class="form-label">Spin off form
+                                            submission</label>
+                                        <input type="text" id="spin_off_form_submission" name="spin_off_form_submission"
+                                            class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="status_of_spin_off_feasibility" class="form-label">Status of Spin off
+                                            feasibility</label>
+                                        <input type="text" id="status_of_spin_off_feasibility"
+                                            name="status_of_spin_off_feasibility" class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="work_plan_for_the_spin_off" class="form-label">Work plan for the spin
+                                            off</label>
+                                        <input type="text" id="work_plan_for_the_spin_off" name="work_plan_for_the_spin_off"
+                                            class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="name_of_pre_spin_off" class="form-label">Name of pre-spin off</label>
+                                        <input type="text" id="name_of_pre_spin_off" name="name_of_pre_spin_off"
+                                            class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="total_revenue_generated" class="form-label">Total revenue generated so
+                                            far</label>
+                                        <input type="text" id="total_revenue_generated" name="total_revenue_generated"
+                                            class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="annual_revenue_generated" class="form-label">Annual revenue
+                                            generated</label>
+                                        <input type="text" id="annual_revenue_generated" name="annual_revenue_generated"
+                                            class="form-control">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="rev_current_financial_year" class="form-label">Revenue target for current
+                                            financial
+                                            year</label>
+                                        <input type="text" id="rev_current_financial_year" name="rev_current_financial_year"
+                                            class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 text-end">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @else
+            <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                        alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
+
+    </div>
+    <!-- / Content -->
+@endsection
+@push('script')
+    <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/popular.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/bootstrap5.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/auto-focus.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/extended-ui-sweetalert2.js') }}"></script>
+
+    <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
+    <script>
+        window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+    </script>
+@endpush
+@push('script')
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Professor', 'Assistant Professor', 'Associate Professor']))
+        <script>
+            function fetchCommercialForms() {
+                $.ajax({
+                    url: "{{ route('spin-offs.index') }}",
+                    method: "GET",
+                    data: {
+                        status: "Teacher" // you can send more values
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
+
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
+
+                            let statusText = 'N/A';
+                            if (form.status == 1) {
+                                if (form.reject_status == 1) {
+                                    statusText = `<span class="badge bg-label-danger" 
+        data-bs-toggle="tooltip" 
+        data-bs-placement="top" 
+        data-bs-custom-class="tooltip-danger" 
+        data-bs-original-title="${form.reject_status_remarks}">
+        Reject by HOD
+        </span>`;
+                                } else if (form.reject_status == 2) {
+                                    statusText = `<span class="badge bg-label-danger" 
+        data-bs-toggle="tooltip" 
+        data-bs-placement="top" 
+        data-bs-custom-class="tooltip-danger" 
+        data-bs-original-title="${form.reject_status_remarks}">
+        Reject by ORIC
+        </span>`;
+                                } else {
+                                    statusText = '<span class="badge bg-label-warning">Unverified</span>';
+                                }
+                            }
+                            else if (form.status == 2) {
+                                statusText = '<span class="badge bg-label-success">Verified by HOD</span>';
+                            }
+                            else if (form.status == 3) {
+                                statusText = '<span class="badge bg-label-success">Verified by ORIC</span>';
+                            }
+                            let editButton = '';
+                            if (parseInt(form.status) === 1) {
+                                editButton = `
+        <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
+        data-form='${JSON.stringify(form)}'>
+        <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
+        </button>`;
+                            }
+
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                i + 1,
+                                form.creator ? form.creator.name : 'N/A',
+                                form.project_name || 'N/A',
+                                createdAt,
+                                statusText,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
+        data-history='${JSON.stringify(form.update_history)}'
+        data-user='${form.creator ? form.creator.name : "N/A"}'
+        data-created='${form.created_at}'>
+        <span class="icon-xs icon-base ti tabler-history me-2"></span>History
+        </button>`,
+                                editButton
+                            ];
+                        });
+
+                        if (!$.fn.DataTable.isDataTable('#intellectualTable')) {
+                            $('#intellectualTable').DataTable({
+                                data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
+                                columns: [
+                                    { title: "#" },
+                                    { title: "Created By" },
+                                    { title: "Project Name" },
+                                    { title: "Created Date" },
+                                    { title: "Status" },
+                                    { title: "History" },
+                                    { title: "Actions" }
+                                ]
+                            });
+                            // ✅ IMPORTANT: Initialize Bootstrap tooltips AFTER table render
+                            setTimeout(function () {
+                                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                                tooltipTriggerList.forEach(function (el) {
+                                    new bootstrap.Tooltip(el);
+                                });
+                            }, 200);
+                        } else {
+                            $('#intellectualTable').DataTable().clear().rows.add(rowData).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
+                });
+            }
+
+
+            $(document).ready(function () {
+                fetchCommercialForms();
+                $(document).on('click', '.view-form-btn', function () {
+                    // Clear modal
+                    $('#modalExtraFieldsHistory').empty();
+                    $('#modalCreatedBy').text('');
+                    $('#modalCreatedDate').text('');
+
+                    // Read data-history
+                    let historyData = $(this).attr('data-history'); // raw string
+                    let history = [];
+
+                    try {
+                        // Decode HTML entities first
+                        historyData = historyData.replace(/&quot;/g, '"'); // convert &quot; → "
+                        // Parse JSON (sometimes it's double-encoded)
+                        history = JSON.parse(historyData);
+                        if (typeof history === 'string') {
+                            history = JSON.parse(history); // decode inner string if needed
+                        }
+                    } catch (e) {
+                        console.error('Failed to parse history JSON:', e);
+                        history = [];
+                    }
+
+                    // Creator and created date
+                    let creator = $(this).data('user') || 'N/A';
+                    let created = $(this).data('created') || 'N/A';
+                    $('#modalCreatedBy').text(creator);
+                    $('#modalCreatedDate').text(new Date(created).toLocaleString());
+
+                    // Build timeline
+                    if (Array.isArray(history) && history.length > 0) {
+                        let historyHtml = '';
+                        history.forEach(update => {
+                            let histortText = 'N/A';
+
+                            // Role-based status mapping
+                            if (update.role === 'HOD') {
+                                if (update.status == '0') histortText = 'Reject';
+                                else if (update.status == '1') histortText = 'unapproved';
+                                else if (update.status == '2') histortText = 'Approved';
+                            } else if (update.role === 'ORIC') {
+                                if (update.status == '0') histortText = 'Reject';
+                                else if (update.status == '2') histortText = 'unapproved';
+                                else if (update.status == '3') histortText = 'Approved';
+                            }
+                            else { histortText = update.status || 'N/A'; }
+
+                            historyHtml += `
+        <li class="timeline-item timeline-item-transparent optional-field">
+        <span class="timeline-point timeline-point-primary"></span>
+        <div class="timeline-event">
+        <div class="timeline-header mb-3">
+        <h6 class="mb-0">${update.user_name || 'N/A'}</h6>
+        <small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+        </div>
+        <div class="d-flex align-items-center mb-1">
+        <div class="badge bg-lighter rounded-3">
+        <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+        </div>
+        <div class="badge bg-lighter rounded-3 ms-2">
+        <span class="h6 mb-0 text-body">${histortText}</span>
+        </div>
+        </div>
+        <div class="d-flex align-items-center mb-1">
+        <div class="badge bg-danger rounded-3 ms-2">
+        <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
+        </div>
+        </div>
+        </div>
+        </li>
+        `;
+                        });
+                        $('#modalExtraFieldsHistory').append(historyHtml);
+                    } else {
+                        $('#modalExtraFieldsHistory').append(`<li class="optional-field"><span>No History Available</span></li>`);
+                    }
+
+                    $('#viewFormModal').modal('show');
+                });
+                $(document).on('click', '.edit-form-btn', function () {
+                    const form = $(this).data('form');
+                    $('#researchForm1 #record_id').val(form.id);
+                    $('#researchForm1 #project_name').val(form.project_name);
+                    $('#researchForm1 #other_disciplines').val(form.other_disciplines);
+                    $('#researchForm1 #partner_industry').val(form.partner_industry);
+                    $('#researchForm1 #identified_public_sector_entity').val(form.identified_public_sector_entity);
+                    $('#researchForm1 #completion_time_of_project').val(form.completion_time_of_project);
+                    $('#researchForm1 #provide_details').val(form.provide_details);
+
+                    // ✅ Radio: Prototype/Product Developed
+                    $('input[name="product_developed"][value="' + form.product_developed + '"]')
+                        .prop('checked', true);
+
+                    // ✅ Radio: Third Party Validation
+                    $('input[name="third_party_validation"][value="' + form.third_party_validation + '"]')
+                        .prop('checked', true);
+
+                    // ✅ Radio: IP Claim
+                    $('input[name="ip_claim"][value="' + form.ip_claim + '"]')
+                        .prop('checked', true);
+
+                    // ✅ Show/Hide Provide Details on Edit
+                    if (form.ip_claim === 'YES') {
+                        $('#extra_select_container').show();
+                    } else {
+                        $('#extra_select_container').hide();
+                        $('#provide_details').val('');
+                    }
+
+
+                    $('#multidisciplinaryProjectFormModal').modal('show');
+                });
+                $('input[name="ip_claim"]').on('change', function () {
+                    if ($(this).val() === 'YES') {
+                        $('#extra_select_container').show();
+                    } else {
+                        $('#extra_select_container').hide();
+                        $('#provide_details').val(''); // clear selection if hidden
+                    }
+                });
+                // Submit updated data
+                $('#researchForm1').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
+                    const recordId = $('#record_id').val();
+                    Swal.fire({
+                        title: 'Updating...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+
+
+                    $.ajax({
+                        url: "{{ route('multidisciplinary.update', '') }}/" + recordId,
+                        method: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire('Success', response.message, 'success');
+                            $('#multidisciplinaryProjectFormModal').modal('hide');
+                            $('#researchForm1')[0].reset();
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            fetchCommercialForms(); // reload table
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                $.each(errors, function (field, messages) {
+                                    let input = $('#researchForm1').find('[name="' + field + '"]');
+                                    input.addClass('is-invalid');
+                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                });
+                            } else {
+                                Swal.fire('Error', 'Something went wrong!', 'error');
+                            }
+                        }
+                    });
+                });
+
+
+            });
+
+        </script>
+    @endif
+@endpush

@@ -109,7 +109,7 @@ class UserController extends Controller
                 <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteUser(' . $user->id . ')">
                     <i class="icon-base ti tabler-trash icon-md"></i>
                 </a>
-                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/user_report/' . $user->id . '" target="_blank">
+                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/team_member_report/' . $user->id . '" target="_blank">
                     <i class="icon-base ti tabler-eye icon-md"></i>
                 </a>';
 
@@ -266,6 +266,46 @@ class UserController extends Controller
 
 
         return view('admin.report', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional', 'noteable', 'areaOfDevelopment'));
+    }
+
+    public function teamMemberReport($id)
+    {
+        $user = User::findOrFail($id);
+
+        $kpaIds = [1, 2, 13];
+        $catIds = [3, 23, 25];
+        $researchIds = [5, 6, 8, 32];
+        $institutionalIds = [27, 28];
+
+        $dataset1 = [];
+        $datasetTeaching = [];
+        $datasetResearch = [];
+        $datasetInstitutional = [];
+
+        foreach ($kpaIds as $kpaId) {
+            $result = kpaAvgScoreForReport($kpaId, $id, 1);
+            $dataset1[] = $result['avg'];    // only avg
+        }
+        foreach ($catIds as $catId) {
+            $teaching = indicatorCategoryAvgScore($catId, 1, $id, 1);
+            $datasetTeaching[] = $teaching['avg'];    // only avg
+        }
+
+        foreach ($researchIds as $researchId) {
+            $research = indicatorCategoryAvgScore($researchId, 2, $id, 1);
+            $datasetResearch[] = $research['avg'];    // only avg
+        }
+
+        foreach ($institutionalIds as $institutionalId) {
+            $institutional = indicatorCategoryAvgScore($institutionalId, 13, $id, 1);
+            $datasetInstitutional[] = $institutional['avg'];    // only avg
+        }
+
+        $noteable = getIndicatorsByScore('>=', 80, $id, null, null, 1);
+        $areaOfDevelopment = getIndicatorsByScore('<', 70, $id, null, null, 1);
+
+
+        return view('admin.team_report', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional', 'noteable', 'areaOfDevelopment'));
     }
 
     public function userVirtueReport($id)
