@@ -445,19 +445,19 @@
 
                               <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
                                 <div class="mb-1">
-                                  <span class="fw-semibold">Score </span> <span
+                                  <span class="fw-semibold text-white">Score </span> <span
                                     class="badge bg-label-{{ $color }}">{{ number_format($avg, 1) }}%</span>
                                 </div>
                                 <div class="mb-1">
-                                  <span class="fw-semibold">Rating </span> <span
+                                  <span class="fw-semibold text-white">Rating </span> <span
                                     class="badge bg-label-{{ $color }}">{{ $rating }}</span>
                                 </div>
                                 <div class="mb-1">
-                                  <span class="fw-semibold">Weight </span> <span
+                                  <span class="fw-semibold text-white">Weight </span> <span
                                     class="badge bg-label-{{ $color }}">{{ number_format($weight, 1) }}%</span>
                                 </div>
                                 <div>
-                                  <span class="fw-semibold">Weighted Score </span> <span
+                                  <span class="fw-semibold text-white">Weighted Score </span> <span
                                     class="badge bg-label-{{ $color }}">{{ number_format($weight_ss, 1) }}%</span>
                                 </div>
                               </div>

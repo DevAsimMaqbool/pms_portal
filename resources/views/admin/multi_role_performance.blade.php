@@ -195,7 +195,7 @@
 @section('content')
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="row g-6">
+    {{-- <div class="row g-6">
        @php
           $colors_cards = ['warning', 'info', 'info', 'primary', 'danger'];
           $icon_cards = ['user', 'school', 'info', 'primary', 'danger'];
@@ -240,7 +240,162 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> --}}
+
+    <div class="row g-6">
+       @php
+          $colors_cards = ['warning', 'info', 'info', 'primary', 'danger'];
+          $icon_cards = ['user', 'school', 'info', 'primary', 'danger'];
+      @endphp
+      @foreach($scores as $index => $data)
+      @php
+        $scorerating = $data['percentage_score'] ?? 0;
+        $meta_avg = getRatingMeta($scorerating);
+        $color_res = $colors_cards[$index % count($colors_cards)];
+        $icon_res = $icon_cards[$index % count($icon_cards)];
+      @endphp
+
+        <div class="col-md-6 col-xxl-4 mb-6">
+        <div class="card h-100">
+          <div class="card-header d-flex justify-content-between">
+            <div class="card-title m-0 me-2">
+              <h5 class="mb-1 text-{{ $color_res }}">As {{ $data['role_name'] }}</h5>
+            </div>
+          </div>
+          <div class="card-body">
+            <ul class="p-0 m-0">
+              <li class="d-flex mb-3 pb-1 align-items-center">
+                <div class="badge bg-label-{{ $color_res }} me-4 rounded p-1_5">
+                  <i class="icon-base ti tabler-receipt icon-md"></i>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <h6 class="mb-0">Total Score</h6>
+                  </div>
+                  <div class="user-progress d-flex align-items-center gap-1">
+                    <h6 class="mb-0 text-{{ $color_res }}">{{ $data['weight'] }}%</h6>
+                  </div>
+                </div>
+              </li>
+              <li class="d-flex mb-3 pb-1 align-items-center">
+                <div class="badge bg-label-{{ $color_res }} me-4 rounded p-1_5">
+                  <i class="icon-base ti tabler-scoreboard icon-md"></i>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <h6 class="mb-0">Your Obtained</h6>
+                  </div>
+                  <div class="user-progress d-flex align-items-center gap-1">
+                    <h6 class="mb-0 text-{{ $color_res }}">{{ $data['score'] }}%</h6>
+                  </div>
+                </div>
+              </li>
+              <li class="d-flex mb-3 pb-1 align-items-center">
+                <div class="badge bg-label-{{ $color_res }} me-4 rounded p-1_5">
+                  <i class="icon-base ti tabler-percentage-40 icon-md"></i>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <h6 class="mb-0">Percentage Obtained</h6>
+                  </div>
+                  <div class="user-progress d-flex align-items-center gap-1">
+                    <h6 class="mb-0 text-{{ $color_res }}"> {{ number_format($data['percentage_score'], 1) }}%</h6>
+                  </div>
+                </div>
+              </li>
+              <li class="d-flex mb-3 pb-1 align-items-center">
+                <div class="badge bg-label-{{ $color_res }} me-4 rounded p-1_5">
+                  <i class="icon-base ti tabler-star-half-filled icon-md"></i>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <h6 class="mb-0">Rating</h6>
+                  </div>
+                  <div class="user-progress d-flex align-items-center gap-1">
+                    <span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      @endforeach 
+       @php
+        $totalWeight = collect($scores)->sum('weight');
+        $totalscore = collect($scores)->sum('score');
+        $overallpercentage=($combinedScore /$totalWeight) *100;
+        $totalweighted_score = collect($scores)->sum('percentage_score');
+
+        $meta_avg_combine = getRatingMeta($overallpercentage);
+      @endphp
+       <div class="col-md-6 col-xxl-4 mb-6">
+        <div class="card h-100">
+          <div class="card-header d-flex justify-content-between">
+            <div class="card-title m-0 me-2">
+              <h5 class="mb-1 text-success">Overall</h5>
+            </div>
+          </div>
+          <div class="card-body">
+            <ul class="p-0 m-0">
+              <li class="d-flex mb-3 pb-1 align-items-center">
+                <div class="badge bg-label-success me-4 rounded p-1_5">
+                  <i class="icon-base ti tabler-receipt icon-md"></i>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <h6 class="mb-0">Total Score</h6>
+                  </div>
+                  <div class="user-progress d-flex align-items-center gap-1">
+                    <h6 class="mb-0 text-success">{{ $totalWeight }}</h6>
+                  </div>
+                </div>
+              </li>
+              <li class="d-flex mb-3 pb-1 align-items-center">
+                <div class="badge bg-label-success me-4 rounded p-1_5">
+                  <i class="icon-base ti tabler-scoreboard icon-md"></i>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <h6 class="mb-0">Your Obtained</h6>
+                  </div>
+                  <div class="user-progress d-flex align-items-center gap-1">
+                    <h6 class="mb-0 text-success">{{ $combinedScore }}%</h6>
+                  </div>
+                </div>
+              </li>
+              <li class="d-flex mb-3 pb-1 align-items-center">
+                <div class="badge bg-label-success me-4 rounded p-1_5">
+                  <i class="icon-base ti tabler-percentage-40 icon-md"></i>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <h6 class="mb-0">Percentage Obtained</h6>
+                  </div>
+                  <div class="user-progress d-flex align-items-center gap-1">
+                    <h6 class="mb-0 text-success">{{ number_format($overallpercentage, 1) }}%</h6>
+                  </div>
+                </div>
+              </li>
+              <li class="d-flex mb-3 pb-1 align-items-center">
+                <div class="badge bg-label-success me-4 rounded p-1_5">
+                  <i class="icon-base ti tabler-star-half-filled icon-md"></i>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                  <div class="me-2">
+                    <h6 class="mb-0">Rating</h6>
+                  </div>
+                  <div class="user-progress d-flex align-items-center gap-1">
+                    <span class="badge" style="background-color: {{ $meta_avg_combine->color }}">  {{ $meta_avg_combine->rating }} </span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      </div>
+
 
   </div>
   <!-- / Content -->
