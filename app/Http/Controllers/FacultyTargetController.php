@@ -236,7 +236,7 @@ class FacultyTargetController extends Controller
                                     ->where('key_performance_area_id', $kpaId)
                                     ->where('indicator_category_id', $indicatorCategoryId)
                                     ->count();
-                                $weightage = 10 / $count;
+                                $weightage = round(10 / $count,2);
                                 DB::table('role_kpa_assignments')
                                     ->where('role_id', $roleId)
                                     ->where('key_performance_area_id', $kpaId)

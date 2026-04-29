@@ -29,6 +29,8 @@ class ProgramAccreditation extends Model
         'document_link',
         'remarks',
         'status',
+        'reject_status',
+        'reject_status_remarks',
         'update_history',
         'created_by',
         'updated_by',

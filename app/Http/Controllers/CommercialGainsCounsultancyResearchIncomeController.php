@@ -243,39 +243,85 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
      */
     public function update(Request $request, $id)
     {   
-        $request->validate([
-            'status' => 'required|in:1,2,3,4,5,6'
-        ]);
+         if ($request->has('status_update')) {
+            $request->validate([
+                'status' => 'required|in:1,2,3,4,5,6'
+            ]);
 
-        $target = CommercialGainsCounsultancyResearchIncome::findOrFail($id);
+            $target = CommercialGainsCounsultancyResearchIncome::findOrFail($id);
 
-        // Get current update history
-        $history = $target->update_history ? json_decode($target->update_history, true) : [];
+            // Get current update history
+            $history = $target->update_history ? json_decode($target->update_history, true) : [];
 
-        // Get current user info
-        $currentUserId = Auth::id();
-        $currentUserName = Auth::user()->name;
-        $userRoll = getRoleName(activeRole()) ?? 'N/A';
+            // Get current user info
+            $currentUserId = Auth::id();
+            $currentUserName = Auth::user()->name;
+            $userRoll = getRoleName(activeRole()) ?? 'N/A';
 
-        // Avoid duplicate consecutive updates by the same user with the same status
-        $lastUpdate = end($history);
-        if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
-            $history[] = [
-                'user_id'    => $currentUserId,
-                'user_name'  => $currentUserName,
-                'status'     => $request->status,
-                'role'     => $userRoll,
-                'updated_at' => now()->toDateTimeString(),
-            ];
-        }
+            // Avoid duplicate consecutive updates by the same user with the same status
+            $lastUpdate = end($history);
+            if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+                $history[] = [
+                    'user_id'    => $currentUserId,
+                    'user_name'  => $currentUserName,
+                    'status'     => $request->status,
+                    'role'     => $userRoll,
+                    'remarks'     => null,
+                    'updated_at' => now()->toDateTimeString(),
+                ];
+            }
 
 
-        $target->status = $request->status;
-        $target->update_history = json_encode($history);
-        $target->updated_by = $currentUserId;
-        $target->save();
+            $target->status = $request->status;
+            $target->reject_status = '0';
+            $target->reject_status_remarks = null;
+            $target->update_history = json_encode($history);
+            $target->updated_by = $currentUserId;
+            $target->save();
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true]);
+         }
+         if ($request->has('status_reject_update')) {
+                $request->validate([
+                    'status' => 'required|in:0,1,2,3,4,5,6'
+                ]);
+
+                $target = CommercialGainsCounsultancyResearchIncome::findOrFail($id);
+
+                // Get current update history
+                $history = $target->update_history ? json_decode($target->update_history, true) : [];
+
+                // Get current user info
+                $currentUserId = Auth::id();
+                $currentUserName = Auth::user()->name;
+                $userRoll = getRoleName(activeRole()) ?? 'N/A';
+
+                // Avoid duplicate consecutive updates by the same user with the same status
+                $lastUpdate = end($history);
+                if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+                    $history[] = [
+                        'user_id'    => $currentUserId,
+                        'user_name'  => $currentUserName,
+                        'status'     => 0,
+                        'role'     => $userRoll,
+                        'remarks'     => $request->reject_status_remarks,
+                        'updated_at' => now()->toDateTimeString(),
+                    ];
+                }
+
+
+
+
+
+                $target->status = 1;
+                $target->reject_status = $request->status;
+                $target->reject_status_remarks = $request->reject_status_remarks;
+                $target->update_history = json_encode($history);
+                $target->updated_by = $currentUserId;
+                $target->save();
+
+                return response()->json(['success' => true]);
+            }
     }
 
     /**
@@ -314,6 +360,10 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                             $path = $file->storeAs('consultancy_file', $fileName, 'public');
                             $data['consultancy_file'] = $path;
                         }
+                     
+                    $data['status'] = 1;
+                    $data['reject_status'] = '0';
+                    $data['reject_status_remarks'] = null;    
                     $data['updated_by'] = Auth::user()->employee_id;
 
                     $record->update($data);
