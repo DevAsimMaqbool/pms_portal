@@ -56,16 +56,19 @@
             <div class="tab-content">
 
                 {{-- ================= FORM 1 ================= --}}
-                @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor','Professor','Associate Professor']))
+                @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor', 'Professor', 'Associate Professor']))
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
 
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                        <div
+                            class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
                             <div class="d-flex flex-column justify-content-center">
                                 <h4 class="mb-1">Research Publication</h4>
                             </div>
                             <div class="d-flex align-content-center flex-wrap gap-4">
                                 <div class="d-flex gap-4">
-                                <a class="btn rounded-pill btn-outline-primary waves-effect" href="{{ route('indicators_crud.index', ['slug' => 'achievement-of-publication-target', 'id' => $indicatorId]) }}">View</a></div>
+                                    <a class="btn rounded-pill btn-outline-primary waves-effect"
+                                        href="{{ route('indicators_crud.index', ['slug' => 'achievement-of-publication-target', 'id' => $indicatorId]) }}">View</a>
+                                </div>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
                                     <i class="bx bx-upload"></i> Import Excel / CSV</button>
                             </div>
@@ -558,7 +561,7 @@
                             <tr id="status-approval">
                                 <th>Status</th>
                                 <td>
-                                    
+
                                 </td>
                             </tr>
                             <tr>
@@ -629,38 +632,38 @@
         window.activeUserRole = "{{ getRoleName(activeRole()) }}";
 
         // ✅ Reusable function for single update
-            function updaterejectStatus(id, status,remarks = null) {
-                $.ajax({
-                    url: `/indicator-form/${id}`,
-                    type: 'POST',                            // POST with _method PUT
-                    data: {
-                        _method: 'PUT',
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        status: status,
-                        reject_status_remarks: remarks,
-                        status_reject_update: true
-                    },
-                    success: function (res) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Updated',
-                            text: res.message || 'Status updated successfully!'
-                        });
-                        
-                        fetchIndicatorForms3();
-                    },
-                    error: function (xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON?.message || 'Something went wrong!'
-                        });
-                    }
-                });
-            }
+        function updaterejectStatus(id, status, remarks = null) {
+            $.ajax({
+                url: `/indicator-form/${id}`,
+                type: 'POST',                            // POST with _method PUT
+                data: {
+                    _method: 'PUT',
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    status: status,
+                    reject_status_remarks: remarks,
+                    status_reject_update: true
+                },
+                success: function (res) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Updated',
+                        text: res.message || 'Status updated successfully!'
+                    });
+
+                    fetchIndicatorForms3();
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: xhr.responseJSON?.message || 'Something went wrong!'
+                    });
+                }
+            });
+        }
     </script>
-    
-    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor','Professor','Associate Professor']))
+
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor', 'Professor', 'Associate Professor']))
         <script>
             $(document).ready(function () {
                 $(document).on('change', 'select[name="target_category"]', function () {
@@ -823,91 +826,91 @@
                     // Build options
                     countries.forEach(function (con) {
                         options += `<option value="${con['code']}">
-                                                                                ${con['name']}
-                                                                            </option>`;
+                                                                                                                        ${con['name']}
+                                                                                                                    </option>`;
                     });
                     universities.forEach(function (uni) {
                         optionsUni += `<option value="${uni['University Name']}">
-                                                                                ${uni['University Name']}
-                                                                            </option>`;
+                                                                                                                        ${uni['University Name']}
+                                                                                                                    </option>`;
                     });
 
 
                     let newGroup = `
-                                                            <div class="row g-6 grant-group mt-4">
-                                                                <hr>
-                                                                <div class="col-md-6">
-                                                                    <label class="form-label">Co-Author Name</label>
-                                                                    <input type="text" name="co_author[${grantIndex}][name]" class="form-control" >
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label class="form-label">Rank</label>
-                                                                    <input type="number" name="co_author[${grantIndex}][rank]" class="form-control" >
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label class="form-label">University Name</label>
-                                                                    <select name="co_author[${grantIndex}][univeristy_name]" class="univeristy-dropdown select2 form-select">
-                                                                            ${optionsUni}
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label class="form-label">Country</label>
-                                                                    <select name="co_author[${grantIndex}][country]" class="country-dropdown select2 form-select">
-                                                                            ${options}
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label class="form-label d-block">Co-Author Role</label>
-                                                                    <div>
-                                                                        <input type="radio" name="co_author[${grantIndex}][your_role]" id="student_${grantIndex}" value="Student" checked>
-                                                                        <label for="student_${grantIndex}">Student</label>
+                                                                                                    <div class="row g-6 grant-group mt-4">
+                                                                                                        <hr>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label">Co-Author Name</label>
+                                                                                                            <input type="text" name="co_author[${grantIndex}][name]" class="form-control" >
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label">Rank</label>
+                                                                                                            <input type="number" name="co_author[${grantIndex}][rank]" class="form-control" >
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label">University Name</label>
+                                                                                                            <select name="co_author[${grantIndex}][univeristy_name]" class="univeristy-dropdown select2 form-select">
+                                                                                                                    ${optionsUni}
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label">Country</label>
+                                                                                                            <select name="co_author[${grantIndex}][country]" class="country-dropdown select2 form-select">
+                                                                                                                    ${options}
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label d-block">Co-Author Role</label>
+                                                                                                            <div>
+                                                                                                                <input type="radio" name="co_author[${grantIndex}][your_role]" id="student_${grantIndex}" value="Student" checked>
+                                                                                                                <label for="student_${grantIndex}">Student</label>
 
-                                                                        <input type="radio" name="co_author[${grantIndex}][your_role]" id="researcher_${grantIndex}" value="Researcher">
-                                                                        <label for="other_${grantIndex}">Researcher</label>
+                                                                                                                <input type="radio" name="co_author[${grantIndex}][your_role]" id="researcher_${grantIndex}" value="Researcher">
+                                                                                                                <label for="other_${grantIndex}">Researcher</label>
 
-                                                                        <input type="radio" name="co_author[${grantIndex}][your_role]" id="professional_${grantIndex}" value="Professional">
-                                                                        <label for="other_${grantIndex}">Professional</label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6" style="display:none">
-                                                                    <label class="form-label">Designation</label>
-                                                                    <input type="text" name="co_author[${grantIndex}][designation]" class="form-control" >
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label class="form-label">Student Roll Number</label>
-                                                                    <input type="text" name="co_author[${grantIndex}][student_roll_no]" class="form-control" >
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
-                                                                    <input type="number" name="co_author[${grantIndex}][no_paper_past]" class="form-control" >
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label class="form-label">Co-Author Email</label>
-                                                                    <input type="email" name="co_author[${grantIndex}][co_author_email]" class="form-control" >
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label class="form-label d-block">Is the student first Co-author?</label>
-                                                                    <div>
-                                                                        <input type="radio" name="co_author[${grantIndex}][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_yes_${grantIndex}" value="YES">
-                                                                        <label for="is_the_student_fitst_coauthor_yes_${grantIndex}">Yes</label>
+                                                                                                                <input type="radio" name="co_author[${grantIndex}][your_role]" id="professional_${grantIndex}" value="Professional">
+                                                                                                                <label for="other_${grantIndex}">Professional</label>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6" style="display:none">
+                                                                                                            <label class="form-label">Designation</label>
+                                                                                                            <input type="text" name="co_author[${grantIndex}][designation]" class="form-control" >
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label">Student Roll Number</label>
+                                                                                                            <input type="text" name="co_author[${grantIndex}][student_roll_no]" class="form-control" >
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
+                                                                                                            <input type="number" name="co_author[${grantIndex}][no_paper_past]" class="form-control" >
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label">Co-Author Email</label>
+                                                                                                            <input type="email" name="co_author[${grantIndex}][co_author_email]" class="form-control" >
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label d-block">Is the student first Co-author?</label>
+                                                                                                            <div>
+                                                                                                                <input type="radio" name="co_author[${grantIndex}][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_yes_${grantIndex}" value="YES">
+                                                                                                                <label for="is_the_student_fitst_coauthor_yes_${grantIndex}">Yes</label>
 
-                                                                        <input type="radio" name="co_author[${grantIndex}][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_no_${grantIndex}" value="NO" checked>
-                                                                        <label for="is_the_student_fitst_coauthor_no_${grantIndex}">No</label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label class="form-label">Career</label>
-                                                                    <select name="co_author[${grantIndex}][career]" class="form-select">
-                                                                        <option value="">Select Career</option>
-                                                                        <option value="PG">PG</option>
-                                                                        <option value="MS">MS</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-12 mt-2">
-                                                                    <button type="button" class="btn btn-danger remove-grant">Remove</button>
-                                                                </div>
-                                                            </div>
-                                                            `;
+                                                                                                                <input type="radio" name="co_author[${grantIndex}][is_the_student_fitst_coauthor]" id="is_the_student_fitst_coauthor_no_${grantIndex}" value="NO" checked>
+                                                                                                                <label for="is_the_student_fitst_coauthor_no_${grantIndex}">No</label>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label">Career</label>
+                                                                                                            <select name="co_author[${grantIndex}][career]" class="form-select">
+                                                                                                                <option value="">Select Career</option>
+                                                                                                                <option value="PG">PG</option>
+                                                                                                                <option value="MS">MS</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="col-md-12 mt-2">
+                                                                                                            <button type="button" class="btn btn-danger remove-grant">Remove</button>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    `;
 
                     $('#grant-details-container').append(newGroup);
                     $('#grant-details-container').find('select.country-dropdown').last().select2({
@@ -1109,7 +1112,7 @@
             });
         </script>
     @endif
-     @if(in_array(getRoleName(activeRole()), ['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['HOD']))
         <script>
             function fetchHodTarget() {
                 $.ajax({
@@ -1118,7 +1121,7 @@
                     data: {
                         status: "HOD",
                         indicator: {{ $indicatorId }}
-                                                                            },
+                                                                                                                    },
                     dataType: "json",
                     success: function (data) {
                         //alert(data.forms);
@@ -1200,14 +1203,14 @@
                                 : 'N/A';
 
                             let statusText = 'N/A';
-                            if (form.status == 1){
-                                if (form.reject_status == 1){
+                            if (form.status == 1) {
+                                if (form.reject_status == 1) {
                                     statusText = '<span class="badge bg-label-danger">Reject</span>';
-                                }else{
+                                } else {
                                     statusText = '<span class="badge bg-label-warning">Unverified</span>';
                                 }
-                               
-                            } 
+
+                            }
                             else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>';
 
                             // Pass entire form as JSON in button's data attribute
@@ -1377,37 +1380,37 @@
 
                         // Create Approve radio
                         const approveRadio = $(`
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input status-radio" type="radio" 
-                                    name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
-                                    data-id="${form.id}" value="approve">
-                                <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
-                            </div>
-                        `);
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input status-radio" type="radio" 
+                                                                            name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
+                                                                            data-id="${form.id}" value="approve">
+                                                                        <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
+                                                                    </div>
+                                                                `);
 
                         // Create Reject radio
                         const rejectRadio = $(`
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input status-radio" type="radio" 
-                                    name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
-                                    data-id="${form.id}" value="reject">
-                                <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
-                            </div>
-                        `);
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input status-radio" type="radio" 
+                                                                            name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
+                                                                            data-id="${form.id}" value="reject">
+                                                                        <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
+                                                                    </div>
+                                                                `);
                         // Create Reject radio
                         const emptyRadio = $(`
-                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by ORI.</span>
-                        `);
+                                                                    <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by ORI.</span>
+                                                                `);
 
-                       
-                        
+
+
                         // Pre-select based on existing status
-                        if(form.reject_status == 2){
-                             // Append to cell
-                              statusCell.append(emptyRadio);
-                        }else{
-                             // Append to cell
-                             statusCell.append(approveRadio, rejectRadio);
+                        if (form.reject_status == 2) {
+                            // Append to cell
+                            statusCell.append(emptyRadio);
+                        } else {
+                            // Append to cell
+                            statusCell.append(approveRadio, rejectRadio);
                             if (form.reject_status == 1) {
                                 rejectRadio.find('input').prop('checked', true);
                             } else if (form.status == 2) {
@@ -1468,28 +1471,28 @@
 
                         form.co_authors.forEach((coAuthor, index) => {
                             $('#modalExtraFields').append(`
-                                                                                        <tr class="optional-field">
-                                                                                            <th>co Author ${index + 1}</th>
-                                                                                            <td>
-                                                                                                <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
-                                                                                                <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
-                                                                                                <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
-                                                                                                <strong>country:</strong> ${coAuthor.country || 'N/A'}<br>
-                                                                                                <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
-                                                                                                ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
-                                                                                                ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
-                                                                                                ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    `);
+                                                                                                                                <tr class="optional-field">
+                                                                                                                                    <th>co Author ${index + 1}</th>
+                                                                                                                                    <td>
+                                                                                                                                        <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
+                                                                                                                                        <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
+                                                                                                                                        <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
+                                                                                                                                        <strong>Country:</strong> ${coAuthor.country || 'N/A'}<br>
+                                                                                                                                        <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
+                                                                                                                                        ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                                                                                                                        ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
+                                                                                                                                        ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+                                                                                                                            `);
                         });
                     } else {
                         $('#modalExtraFields').append(`
-                                                                                    <tr class="optional-field">
-                                                                                        <th>co Author</th>
-                                                                                        <td>No co Author available</td>
-                                                                                    </tr>
-                                                                                `);
+                                                                                                                            <tr class="optional-field">
+                                                                                                                                <th>co Author</th>
+                                                                                                                                <td>No co Author available</td>
+                                                                                                                            </tr>
+                                                                                                                        `);
                     }
                     if (form.update_history) {
                         // Parse JSON string if it's a string
@@ -1506,7 +1509,7 @@
                                 if (update.role === 'HOD') {
                                     if (update.status == '0') histortText = 'Reject';
                                     else if (update.status == '1') histortText = 'unapproved';
-                                        else if (update.status == '2') histortText = 'Approved';
+                                    else if (update.status == '2') histortText = 'Approved';
                                 } else if (update.role === 'ORIC') {
                                     if (update.status == '0') histortText = 'Reject';
                                     else if (update.status == '2') histortText = 'unapproved';
@@ -1515,28 +1518,28 @@
                                     histortText = update.status; // fallback
                                 }
                                 historyHtml += `
-                                                                                                <li class="timeline-item timeline-item-transparent optional-field">
-                                                                                                    <span class="timeline-point timeline-point-primary"></span>
-                                                                                                    <div class="timeline-event">
-                                                                                                        <div class="timeline-header mb-3">
-                                                                                                            <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
-                                                                                                        </div>
-                                                                                                        <div class="d-flex align-items-center mb-1">
-                                                                                                            <div class="badge bg-lighter rounded-3">
-                                                                                                             <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
-                                                                                                            </div>
-                                                                                                            <div class="badge bg-lighter rounded-3 ms-2">
-                                                                                                             <span class="h6 mb-0 text-body">${histortText}</span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="d-flex align-items-center mb-1">
-                                                                                                            <div class="badge bg-lighter rounded-3 ms-2">
-                                                                                                            <span class="h6 mb-0 text-body">${update.remarks || ''}<span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
-                                                                                            `;
+                                                                                                                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                                                                                                                            <span class="timeline-point timeline-point-primary"></span>
+                                                                                                                                            <div class="timeline-event">
+                                                                                                                                                <div class="timeline-header mb-3">
+                                                                                                                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="d-flex align-items-center mb-1">
+                                                                                                                                                    <div class="badge bg-lighter rounded-3">
+                                                                                                                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                                                                                                                    </div>
+                                                                                                                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                                                                                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="d-flex align-items-center mb-1">
+                                                                                                                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                                                                                                                    <span class="h6 mb-0 text-body">${update.remarks || ''}<span>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        </li>
+                                                                                                                                    `;
                             });
 
                             $('#modalExtraFieldsHistory').append(historyHtml);
@@ -1544,14 +1547,14 @@
                     }
                     else {
                         $('#modalExtraFieldsHistory').append(`
-                                                                                        <li class="optional-field">
-                                                                                            <th>No History Avalable</th>
-                                                                                        </li>
-                                                                                    `);
+                                                                                                                                <li class="optional-field">
+                                                                                                                                    <th>No History Avalable</th>
+                                                                                                                                </li>
+                                                                                                                            `);
                     }
                     $('#viewFormModal').modal('show');
                 });
-                 // ✅ Handle radio button change
+                // ✅ Handle radio button change
                 $(document).on('change', '.status-radio', function () {
                     const id = $(this).data('id');
                     const value = $(this).val(); // "approve" or "reject"
@@ -1759,28 +1762,28 @@
 
                         form.co_authors.forEach((coAuthor, index) => {
                             $('#modalExtraFields').append(`
-                                                                                        <tr class="optional-field">
-                                                                                            <th>co Author ${index + 1}</th>
-                                                                                            <td>
-                                                                                                <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
-                                                                                                <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
-                                                                                                <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
-                                                                                                <strong>country:</strong> ${coAuthor.country || 'N/A'}<br>
-                                                                                                <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
-                                                                                                ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
-                                                                                                ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
-                                                                                                ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    `);
+                                                                                                                                <tr class="optional-field">
+                                                                                                                                    <th>co Author ${index + 1}</th>
+                                                                                                                                    <td>
+                                                                                                                                        <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
+                                                                                                                                        <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
+                                                                                                                                        <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
+                                                                                                                                        <strong>Country:</strong> ${coAuthor.country || 'N/A'}<br>
+                                                                                                                                        <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
+                                                                                                                                        ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                                                                                                                        ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
+                                                                                                                                        ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+                                                                                                                            `);
                         });
                     } else {
                         $('#modalExtraFields').append(`
-                                                                                    <tr class="optional-field">
-                                                                                        <th>co Author</th>
-                                                                                        <td>No co Author available</td>
-                                                                                    </tr>
-                                                                                `);
+                                                                                                                            <tr class="optional-field">
+                                                                                                                                <th>co Author</th>
+                                                                                                                                <td>No co Author available</td>
+                                                                                                                            </tr>
+                                                                                                                        `);
                     }
                     if (form.update_history) {
                         // Parse JSON string if it's a string
@@ -1798,7 +1801,7 @@
                                 if (update.role === 'HOD') {
                                     if (update.status == '0') histortText = 'Reject';
                                     else if (update.status == '1') histortText = 'unapproved';
-                                        else if (update.status == '2') histortText = 'Approved';
+                                    else if (update.status == '2') histortText = 'Approved';
                                 } else if (update.role === 'ORIC') {
                                     if (update.status == '0') histortText = 'Reject';
                                     else if (update.status == '2') histortText = 'unapproved';
@@ -1807,23 +1810,23 @@
                                     histortText = update.status; // fallback
                                 }
                                 historyHtml += `
-                                                                                                <li class="timeline-item timeline-item-transparent optional-field">
-                                                                                                    <span class="timeline-point timeline-point-primary"></span>
-                                                                                                    <div class="timeline-event">
-                                                                                                        <div class="timeline-header mb-3">
-                                                                                                            <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
-                                                                                                        </div>
-                                                                                                        <div class="d-flex align-items-center mb-1">
-                                                                                                            <div class="badge bg-lighter rounded-3">
-                                                                                                             <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
-                                                                                                            </div>
-                                                                                                            <div class="badge bg-lighter rounded-3 ms-2">
-                                                                                                             <span class="h6 mb-0 text-body">${histortText}</span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
-                                                                                            `;
+                                                                                                                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                                                                                                                            <span class="timeline-point timeline-point-primary"></span>
+                                                                                                                                            <div class="timeline-event">
+                                                                                                                                                <div class="timeline-header mb-3">
+                                                                                                                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="d-flex align-items-center mb-1">
+                                                                                                                                                    <div class="badge bg-lighter rounded-3">
+                                                                                                                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                                                                                                                    </div>
+                                                                                                                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                                                                                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        </li>
+                                                                                                                                    `;
                             });
 
                             $('#modalExtraFieldsHistory').append(historyHtml);
@@ -1831,10 +1834,10 @@
                     }
                     else {
                         $('#modalExtraFieldsHistory').append(`
-                                                                                        <li class="optional-field">
-                                                                                            <th>No History Avalable</th>
-                                                                                        </li>
-                                                                                    `);
+                                                                                                                                <li class="optional-field">
+                                                                                                                                    <th>No History Avalable</th>
+                                                                                                                                </li>
+                                                                                                                            `);
                     }
 
 
@@ -1866,16 +1869,16 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
-                            
+
                             let statusText = 'N/A';
-                            if (form.status == 2){
-                                if (form.reject_status == 2){
+                            if (form.status == 2) {
+                                if (form.reject_status == 2) {
                                     statusText = '<span class="badge bg-label-danger">Reject</span>';
-                                }else{
+                                } else {
                                     statusText = '<span class="badge bg-label-warning">Unverified</span>';
                                 }
-                               
-                            } 
+
+                            }
                             else if (form.status == 3) statusText = '<span class="badge bg-label-success">Verified</span>';
 
                             // Pass entire form as JSON in button's data attribute
@@ -1964,23 +1967,23 @@
 
                         // Create Approve radio
                         const approveRadio = $(`
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input status-radio" type="radio" 
-                                    name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
-                                    data-id="${form.id}" value="approve">
-                                <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
-                            </div>
-                        `);
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input status-radio" type="radio" 
+                                                                            name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
+                                                                            data-id="${form.id}" value="approve">
+                                                                        <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
+                                                                    </div>
+                                                                `);
 
                         // Create Reject radio
                         const rejectRadio = $(`
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input status-radio" type="radio" 
-                                    name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
-                                    data-id="${form.id}" value="reject">
-                                <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
-                            </div>
-                        `);
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input status-radio" type="radio" 
+                                                                            name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
+                                                                            data-id="${form.id}" value="reject">
+                                                                        <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
+                                                                    </div>
+                                                                `);
 
                         // Append to cell
                         statusCell.append(approveRadio, rejectRadio);
@@ -2042,28 +2045,28 @@
 
                         form.co_authors.forEach((coAuthor, index) => {
                             $('#modalExtraFields').append(`
-                                                                                            <tr class="optional-field">
-                                                                                                <th>co Author ${index + 1}</th>
-                                                                                                <td>
-                                                                                                    <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
-                                                                                                    <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
-                                                                                                    <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
-                                                                                                    <strong>country:</strong> ${coAuthor.country || 'N/A'}<br>
-                                                                                                    <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
-                                                                                                    ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
-                                                                                                    ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
-                                                                                                    ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
-                                                                                                </td>
-                                                                                            </tr>
-                                                                                        `);
+                                                                                                                                    <tr class="optional-field">
+                                                                                                                                        <th>co Author ${index + 1}</th>
+                                                                                                                                        <td>
+                                                                                                                                            <strong>Name:</strong> ${coAuthor.name || 'N/A'}<br>
+                                                                                                                                            <strong>Rank:</strong> ${coAuthor.rank || 'N/A'}<br>
+                                                                                                                                            <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
+                                                                                                                                            <strong>Country:</strong> ${coAuthor.country || 'N/A'}<br>
+                                                                                                                                            <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
+                                                                                                                                            ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                                                                                                                            ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
+                                                                                                                                            ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
+                                                                                                                                        </td>
+                                                                                                                                    </tr>
+                                                                                                                                `);
                         });
                     } else {
                         $('#modalExtraFields').append(`
-                                                                                        <tr class="optional-field">
-                                                                                            <th>co Author</th>
-                                                                                            <td>No co Author available</td>
-                                                                                        </tr>
-                                                                                    `);
+                                                                                                                                <tr class="optional-field">
+                                                                                                                                    <th>co Author</th>
+                                                                                                                                    <td>No co Author available</td>
+                                                                                                                                </tr>
+                                                                                                                            `);
                     }
 
                     if (form.update_history) {
@@ -2079,39 +2082,39 @@
 
                                 // Role-based status mapping
                                 if (update.role === 'HOD') {
-                                     if (update.status == '0') histortText = 'Reject';
+                                    if (update.status == '0') histortText = 'Reject';
                                     else if (update.status == '1') histortText = 'unapproved';
                                     else if (update.status == '2') histortText = 'Approved';
                                 } else if (update.role === 'ORIC') {
-                                     if (update.status == '0') histortText = 'Reject';
-                                     else if (update.status == '2') histortText = 'unapproved';
+                                    if (update.status == '0') histortText = 'Reject';
+                                    else if (update.status == '2') histortText = 'unapproved';
                                     else if (update.status == '3') histortText = 'Approved';
                                 } else {
                                     histortText = update.status; // fallback
                                 }
                                 historyHtml += `
-                                                                                                <li class="timeline-item timeline-item-transparent optional-field">
-                                                                                                    <span class="timeline-point timeline-point-primary"></span>
-                                                                                                    <div class="timeline-event">
-                                                                                                        <div class="timeline-header mb-3">
-                                                                                                            <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
-                                                                                                        </div>
-                                                                                                        <div class="d-flex align-items-center mb-1">
-                                                                                                            <div class="badge bg-lighter rounded-3">
-                                                                                                             <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
-                                                                                                            </div>
-                                                                                                            <div class="badge bg-lighter rounded-3 ms-2">
-                                                                                                             <span class="h6 mb-0 text-body">${histortText}</span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="d-flex align-items-center mb-1">
-                                                                                                            <div class="badge bg-lighter rounded-3 ms-2">
-                                                                                                            <span class="h6 mb-0 text-body">${update.remarks || ''}<span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
-                                                                                            `;
+                                                                                                                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                                                                                                                            <span class="timeline-point timeline-point-primary"></span>
+                                                                                                                                            <div class="timeline-event">
+                                                                                                                                                <div class="timeline-header mb-3">
+                                                                                                                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="d-flex align-items-center mb-1">
+                                                                                                                                                    <div class="badge bg-lighter rounded-3">
+                                                                                                                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                                                                                                                    </div>
+                                                                                                                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                                                                                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="d-flex align-items-center mb-1">
+                                                                                                                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                                                                                                                    <span class="h6 mb-0 text-body">${update.remarks || ''}<span>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        </li>
+                                                                                                                                    `;
                             });
 
                             $('#modalExtraFieldsHistory').append(historyHtml);
@@ -2119,10 +2122,10 @@
                     }
                     else {
                         $('#modalExtraFieldsHistory').append(`
-                                                                                        <li class="optional-field">
-                                                                                            <th>No History Avalable</th>
-                                                                                        </li>
-                                                                                    `);
+                                                                                                                                <li class="optional-field">
+                                                                                                                                    <th>No History Avalable</th>
+                                                                                                                                </li>
+                                                                                                                            `);
                     }
 
 
@@ -2132,7 +2135,7 @@
 
 
 
-                                 // ✅ Handle radio button change
+                // ✅ Handle radio button change
                 $(document).on('change', '.status-radio', function () {
                     const id = $(this).data('id');
                     const value = $(this).val(); // "approve" or "reject"
