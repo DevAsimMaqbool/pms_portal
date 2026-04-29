@@ -20,6 +20,8 @@ class IntellectualProperty extends Model
         'date_of_filing_registration',
         'supporting_docs_as_attachment',
         'status',
+        'reject_status',
+        'reject_status_remarks',
         'update_history',
         'created_by',
         'updated_by',
