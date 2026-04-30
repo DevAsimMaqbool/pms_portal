@@ -37,9 +37,9 @@
     }
 </style>
 @php
-$activeRoleId = getRoleIdByName(activeRole());
-// Initialize totalFeedback to 0 in case nothing is set later
-$totalFeedback = 0;                                    
+    $activeRoleId = getRoleIdByName(activeRole());
+    // Initialize totalFeedback to 0 in case nothing is set later
+    $totalFeedback = 0;                                    
 @endphp
 @if(in_array(getRoleName(activeRole()), ['HOD']))
     <!--  Payment Methods modal -->
@@ -79,8 +79,20 @@ $totalFeedback = 0;
                                     <tbody class="table-border-bottom-0">
                                         @if(in_array(getRoleName(activeRole()), ['HOD']))
                                             @php
-        $feedbacks = QECAuditRatingOfHOD(Auth::user()->employee_id, $activeRoleId);
-        $sr = 1;
+                                                $feedbacks = QECAuditRatingOfHOD(Auth::user()->employee_id, $activeRoleId);
+                                                $sr = 1;
+                                                $count = count($feedbacks);
+
+                                                $avgTotalScore = $count > 0
+                                                    ? collect($feedbacks)->avg('total_score')
+                                                    : 0;
+
+                                                $avgObtainedScore = $count > 0
+                                                    ? collect($feedbacks)->avg('obtained_score')
+                                                    : 0;
+                                                $avgPercentage = $count > 0
+                                                    ? collect($feedbacks)->avg('percentage')
+                                                    : 0;
                                             @endphp
 
                                             @foreach($feedbacks as $class)
@@ -91,11 +103,11 @@ $totalFeedback = 0;
                                                     <td>{{ $class->department }}</td>
                                                     <td>{{ $class->program }}</td>
                                                     <td>{{ $class->career }}</td>
-                                                    <td>{{ $class->total_score }}</td>
-                                                    <td>{{ $class->obtained_score }}</td>
+                                                    <td>{{ number_format($class->total_score, 1) }}%</td>
+                                                    <td>{{ number_format($class->obtained_score, 1) }}%</td>
                                                     <td>
                                                         <span class="badge" style="background-color: {{ $class->color }}">
-                                                            {{ $class->percentage }}%
+                                                            {{ number_format($class->percentage, 1) }}%
                                                         </span>
                                                     </td>
                                                     <td>
@@ -107,6 +119,27 @@ $totalFeedback = 0;
                                             @endforeach
                                         @endif
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th colspan="5"></th>
+                                            {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
+                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgTotalScore)->color }}">{{number_format($avgTotalScore, 1) }}%</span>
+                                            </th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgObtainedScore)->color }}">{{number_format($avgObtainedScore, 1) }}%</span>
+                                            </th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgPercentage)->color }}">{{number_format($avgPercentage, 1) }}%</span>
+                                            </th>
+
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
+                                                    {{ getRatingMeta($avgPercentage)->rating }} </span></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -148,9 +181,9 @@ $totalFeedback = 0;
                                     </thead>
                                     <tbody>
                                         @php
-    $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 3, 110);
-    $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
-    $meta_avg = getRatingMeta($faculty_avg_percentage);
+                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 3, 110);
+                                            $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
+                                            $meta_avg = getRatingMeta($faculty_avg_percentage);
                                         @endphp
                                         @foreach($data['records'] as $record)
                                             <tr>
@@ -228,23 +261,23 @@ $totalFeedback = 0;
                                     </thead>
                                     <tbody>
                                         @php
-    $programLevel = match (getRoleName(activeRole())) {
-        'Program Leader UG' => 'UG',
-        'Program Leader PG' => 'PG',
-        default => ''
-    };
-    $data = QECAuditRatingOfPL(Auth::user()->employee_id, $activeRoleId, $programLevel);
-    $avgTotalScore = collect($data)->avg(function ($item) {
-        return (float) ($item->total_score ?? 0);
-    }) ?? 0;
+                                            $programLevel = match (getRoleName(activeRole())) {
+                                                'Program Leader UG' => 'UG',
+                                                'Program Leader PG' => 'PG',
+                                                default => ''
+                                            };
+                                            $data = QECAuditRatingOfPL(Auth::user()->employee_id, $activeRoleId, $programLevel);
+                                            $avgTotalScore = collect($data)->avg(function ($item) {
+                                                return (float) ($item->total_score ?? 0);
+                                            }) ?? 0;
 
-    $avgObtainedScore = collect($data)->avg(function ($item) {
-        return (float) ($item->obtained_score ?? 0);
-    }) ?? 0;
+                                            $avgObtainedScore = collect($data)->avg(function ($item) {
+                                                return (float) ($item->obtained_score ?? 0);
+                                            }) ?? 0;
 
-    $avgScore = collect($data)->avg(function ($item) {
-        return (float) ($item->percentage ?? 0);
-    }) ?? 0;
+                                            $avgScore = collect($data)->avg(function ($item) {
+                                                return (float) ($item->percentage ?? 0);
+                                            }) ?? 0;
                                         @endphp
                                         @foreach($data as $index => $record)
                                             <tr>
@@ -259,8 +292,8 @@ $totalFeedback = 0;
 
                                                 <td>
                                                     @php
-        $percentage = (float) ($record->percentage ?? 0);
-        $meta = getRatingMeta($percentage);
+                                                        $percentage = (float) ($record->percentage ?? 0);
+                                                        $meta = getRatingMeta($percentage);
                                                     @endphp
 
                                                     <div class="badge" style="background-color: {{ $meta->color }}">

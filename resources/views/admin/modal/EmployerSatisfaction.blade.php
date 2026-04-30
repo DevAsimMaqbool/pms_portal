@@ -37,9 +37,9 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+$activeRoleId = getRoleIdByName(activeRole());
+// Initialize totalFeedback to 0 in case nothing is set later
+$totalFeedback = 0;                                    
  @endphp
 @if(in_array(getRoleName(activeRole()), ['HOD']))
     <!--  Payment Methods modal -->
@@ -60,7 +60,14 @@
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
                                 @php
-                                    $data = EmployabilityOfHOD()->where('indicator_id', 104);
+    $data = EmployabilityOfHOD()->where('indicator_id', 104);
+    $filtered = collect($data)->where('class_name', '!=', 'Overall Department');
+    $avgHeldPercentage = $filtered->count() > 0
+        ? $filtered->avg('held_percentage')
+        : 0;
+
+    // Rating + color (reuse your helper if available)
+    $meta = getRatingMeta($avgHeldPercentage);
                                 @endphp
 
                                 <table class="table table-striped align-middle custom-table">
@@ -100,6 +107,25 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th colspan="4">Average</th>
+
+                                            <!-- Avg % -->
+                                            <th>
+                                                <span class="badge" style="background-color: {{ $meta->color }}">
+                                                    {{ number_format($avgHeldPercentage, 2) }}%
+                                                </span>
+                                            </th>
+
+                                            <!-- Rating -->
+                                            <th>
+                                                <span class="badge" style="background-color: {{ $meta->color }}">
+                                                    {{ $meta->rating }}
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -141,9 +167,9 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 1, 104);
-                                            $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
-                                            $meta_avg = getRatingMeta($faculty_avg_percentage);
+    $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 1, 104);
+    $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
+    $meta_avg = getRatingMeta($faculty_avg_percentage);
                                         @endphp
                                         @foreach($data['records'] as $record)
                                             <tr>
@@ -207,21 +233,21 @@
                             <div class="table-responsive text-nowrap">
 
                                 @php
-                                    $programLevel = match (getRoleName(activeRole())) {
-                                        'Program Leader UG' => 'UG',
-                                        'Program Leader PG' => 'PG',
-                                        default => ''
-                                    };
+    $programLevel = match (getRoleName(activeRole())) {
+        'Program Leader UG' => 'UG',
+        'Program Leader PG' => 'PG',
+        default => ''
+    };
 
-                                    $data = EmployabilityOfPL(Auth::id(), $programLevel);
+    $data = EmployabilityOfPL(Auth::id(), $programLevel);
 
-                                    $employerSatisfaction = collect($data)
-                                        ->firstWhere('indicator_id', 104);
+    $employerSatisfaction = collect($data)
+        ->firstWhere('indicator_id', 104);
 
-                                    $programBreakdown = collect($employerSatisfaction['details'] ?? []);
-                                    // ✅ Averages
-                                    $avgStudents = $programBreakdown->sum('total_students') ?? 0;
-                                    $avgScore = $programBreakdown->avg('score') ?? 0;
+    $programBreakdown = collect($employerSatisfaction['details'] ?? []);
+    // ✅ Averages
+    $avgStudents = $programBreakdown->sum('total_students') ?? 0;
+    $avgScore = $programBreakdown->avg('score') ?? 0;
                                 @endphp
 
                                 <table class="table table-striped align-middle custom-table">
@@ -239,12 +265,12 @@
                                         @forelse($programBreakdown as $index => $row)
 
                                             @php
-                                                $score = (float) ($row['score'] ?? 0);
-                                                $total = (int) ($row['total_students'] ?? 0);
+        $score = (float) ($row['score'] ?? 0);
+        $total = (int) ($row['total_students'] ?? 0);
 
-                                                $meta = getRatingMeta($score);
-                                                $color = $meta->color ?? '#6c757d';
-                                                $rating = $meta->rating ?? '-';
+        $meta = getRatingMeta($score);
+        $color = $meta->color ?? '#6c757d';
+        $rating = $meta->rating ?? '-';
                                             @endphp
 
                                             <tr>
