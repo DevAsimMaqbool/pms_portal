@@ -689,14 +689,23 @@
                             </div>
                         `);
 
-                        // Append to cell
-                        statusCell.append(approveRadio, rejectRadio);
+                        // Create Reject radio
+                        const emptyRadio = $(`
+                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by ORI.</span>
+                        `);
 
                         // Pre-select based on existing status
-                        if (form.reject_status == 1) {
-                            rejectRadio.find('input').prop('checked', true);
-                        } else if (form.status == 2) {
-                            approveRadio.find('input').prop('checked', true);
+                        if(form.reject_status == 1){
+                             // Append to cell
+                              statusCell.append(emptyRadio);
+                        }else{
+                             // Append to cell
+                             statusCell.append(approveRadio, rejectRadio);
+                            if (form.reject_status == 1) {
+                                rejectRadio.find('input').prop('checked', true);
+                            } else if (form.status == 2) {
+                                approveRadio.find('input').prop('checked', true);
+                            }
                         }
                     }  else {
                         $('#approveCheckbox').closest('.form-check-input').hide();

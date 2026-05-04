@@ -25,6 +25,8 @@ class ProfessionalMembership extends Model
         'document_link',
         'declaration',
         'status',
+        'reject_status',
+        'reject_status_remarks',
         'update_history',
         'created_by',
         'updated_by',

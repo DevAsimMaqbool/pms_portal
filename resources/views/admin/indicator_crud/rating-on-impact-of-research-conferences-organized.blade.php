@@ -39,6 +39,8 @@
                                                         <th>Conference Name</th>
                                                         <th>Conference Theme</th>
                                                         <th>Created Date</th>
+                                                        <th>Status</th>
+                                                        <th>History</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -327,7 +329,34 @@
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';       
                               
-
+                            let statusText = 'N/A';
+                            if (form.status == 1) {
+                                if (form.reject_status == 1) {
+                                    statusText = `<span class="badge bg-label-danger" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    data-bs-custom-class="tooltip-danger" 
+                                                    data-bs-original-title="${form.reject_status_remarks}">
+                                                    Reject by HOD
+                                                </span>`;
+                                } else if (form.reject_status == 2) {
+                                    statusText = `<span class="badge bg-label-danger" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    data-bs-custom-class="tooltip-danger" 
+                                                    data-bs-original-title="${form.reject_status_remarks}">
+                                                    Reject by ORIC
+                                                </span>`;
+                                } else {
+                                    statusText = '<span class="badge bg-label-warning">Unverified</span>';
+                                }
+                            } 
+                            else if (form.status == 2){
+                                 statusText = '<span class="badge bg-label-success">Verified by HOD</span>';
+                            } 
+                            else if (form.status == 3){
+                                 statusText = '<span class="badge bg-label-success">Verified by ORIC</span>';
+                            }
                             let editButton = '';
                             let deleteBtn = '';
                             if (parseInt(form.status) === 1) {
@@ -346,6 +375,13 @@
                                 form.conference_name || 'N/A',
                                 form.conference_theme || 'N/A',
                                 createdAt,
+                                statusText,
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
+                                    data-history='${JSON.stringify(form.update_history)}'
+                                    data-user='${form.creator ? form.creator.name : "N/A"}'
+                                    data-created='${form.created_at}'>
+                                    <span class="icon-xs icon-base ti tabler-history me-2"></span>History
+                                </button>`,
                                 editButton+ ' ' + deleteBtn
                             ];
                         });
@@ -362,9 +398,18 @@
                                     { title: "Conference Name" },
                                     { title: "Conference Theme" },
                                     { title: "Created Date" },
+                                     { title: "Status" },
+                                    { title: "History" },
                                     { title: "Actions" }
                                 ]
                             });
+                             // ✅ IMPORTANT: Initialize Bootstrap tooltips AFTER table render
+                            setTimeout(function () {
+                                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                                tooltipTriggerList.forEach(function (el) {
+                                    new bootstrap.Tooltip(el);
+                                });
+                            }, 200);
                         } else {
                             $('#intellectualTable').DataTable().clear().rows.add(rowData).draw();
                         }
@@ -488,6 +533,84 @@ $(document).on('click','.edit-form-btn',function(){
     reinitializeSelect2();
     $('#multidisciplinaryProjectFormModal').modal('show');
 });
+$(document).on('click', '.view-form-btn', function () {
+        // Clear modal
+        $('#modalExtraFieldsHistory').empty();
+        $('#modalCreatedBy').text('');
+        $('#modalCreatedDate').text('');
+
+        // Read data-history
+        let historyData = $(this).attr('data-history'); // raw string
+        let history = [];
+
+        try {
+            // Decode HTML entities first
+            historyData = historyData.replace(/&quot;/g, '"'); // convert &quot; → "
+            // Parse JSON (sometimes it's double-encoded)
+            history = JSON.parse(historyData);
+            if (typeof history === 'string') {
+                history = JSON.parse(history); // decode inner string if needed
+            }
+        } catch (e) {
+            console.error('Failed to parse history JSON:', e);
+            history = [];
+        }
+
+        // Creator and created date
+        let creator = $(this).data('user') || 'N/A';
+        let created = $(this).data('created') || 'N/A';
+        $('#modalCreatedBy').text(creator);
+        $('#modalCreatedDate').text(new Date(created).toLocaleString());
+
+        // Build timeline
+        if (Array.isArray(history) && history.length > 0) {
+            let historyHtml = '';
+            history.forEach(update => {
+                let histortText = 'N/A';
+                // Role-based status mapping
+                    if (update.role === 'HOD') {
+                        if (update.status == '0') histortText = 'Reject';
+                        else if (update.status == '1') histortText = 'unapproved';
+                            else if (update.status == '2') histortText = 'Approved';
+                    } else if (update.role === 'ORIC') {
+                        if (update.status == '0') histortText = 'Reject';
+                        else if (update.status == '2') histortText = 'unapproved';
+                        else if (update.status == '3') histortText = 'Approved';
+                    }
+                    else { histortText = update.status || 'N/A'; }
+
+                historyHtml += `
+                    <li class="timeline-item timeline-item-transparent optional-field">
+                        <span class="timeline-point timeline-point-primary"></span>
+                        <div class="timeline-event">
+                            <div class="timeline-header mb-3">
+                                <h6 class="mb-0">${update.user_name || 'N/A'}</h6>
+                                <small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                            </div>
+                            <div class="d-flex align-items-center mb-1">
+                                <div class="badge bg-lighter rounded-3">
+                                    <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                </div>
+                                <div class="badge bg-lighter rounded-3 ms-2">
+                                    <span class="h6 mb-0 text-body">${histortText}</span>
+                                </div>
+                            </div>
+                                <div class="d-flex align-items-center mb-1">
+                                <div class="badge bg-danger rounded-3 ms-2">
+                                <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                `;
+            });
+            $('#modalExtraFieldsHistory').append(historyHtml);
+        } else {
+            $('#modalExtraFieldsHistory').append(`<li class="optional-field"><span>No History Available</span></li>`);
+        }
+
+        $('#viewFormModal').modal('show');
+    });
 
 // ================= Initialize on page load =================
             $(document).ready(function () {

@@ -255,10 +255,9 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
                         $path = $file->storeAs('program_accreditation_doc', $fileName, 'public');
                         $data['document_link'] = $path;
                     }
-                $data['status'] = 1;
-                $data['reject_status'] = '0';
-                $data['reject_status_remarks'] = null;    
-                $data['updated_by'] = Auth::user()->employee_id;
+                $record->status = 1;
+                $record->reject_status = '0';
+                $record->reject_status_remarks = null;    
 
                 $record->update($validated);
 

@@ -115,7 +115,7 @@
                         
                         <div class="col-md-6">
                             <label for="duration_of_consultancy" class="form-label">Duration Of Consultancy</label>
-                            <input type="text" id="duration_of_consultancy" name="duration_of_consultancy" class="form-control" required>
+                            <input type="number" id="duration_of_consultancy" name="duration_of_consultancy" class="form-control" required>
                         </div>
                         <div class="col-md-6">
                             <label for="name_of_client_organization" class="form-label">Name Of Client Organization</label>
