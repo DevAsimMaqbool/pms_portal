@@ -19,6 +19,8 @@ class ActiveInternationalResearchPartner extends Model
         'achieved_target',
         'update_history',
         'status',
+        'reject_status',
+        'reject_status_remarks',
         'created_by',
         'updated_by'
     ];

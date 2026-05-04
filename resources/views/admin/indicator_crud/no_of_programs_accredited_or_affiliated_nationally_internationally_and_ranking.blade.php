@@ -359,7 +359,7 @@
                                 }
                             } 
                             else if (form.status == 2){
-                                 statusText = '<span class="badge bg-label-success">Verified by HOD</span>';
+                                 statusText = '<span class="badge bg-label-success">Verified by QEC</span>';
                             } 
 
                             let editButton = '';
@@ -518,8 +518,6 @@
                     let historyHtml = '';
                     history.forEach(update => {
                         let histortText = 'N/A';
-                        if (update.role === 'QEC') histortText = update.status == '1' ? 'unapproved' : (update.status == '2' ? 'Approved' : update.status);
-                        else histortText = update.status || 'N/A';
 
                         if (update.role === 'QEC') {
                             if (update.status == '0') histortText = 'Reject';
