@@ -29,6 +29,7 @@
                             <th>Class Code</th>
                             <th>Status</th>
                             <th>Score</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -48,6 +49,7 @@
                                     $color = '#000000';
                                     $status = 'NA';
                                 }
+                                
                             @endphp
                             <tr>
                                 <td>{{ $index + 1 }}</td>
@@ -55,6 +57,23 @@
                                 <td>{{ $key->facultyClass->code ?? 'N/A' }}</td>
                                 <td style="color: {{ $color }}">{{ $status }}</td>
                                 <td>{{ $key->completion_of_Course_folder ?? 'N/A' }}</td>
+                                <td>  @if($key->status == 1)
+                                        @if($key->reject_status == 1)
+                                            <span class="badge bg-label-danger"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top" 
+                                                data-bs-custom-class="tooltip-danger" 
+                                                title="{{ $key->reject_status_remarks }}">
+                                                Reject by QEC
+                                            </span>
+                                        @else
+                                            <span class="badge bg-label-warning">Unverified</span>
+                                        @endif
+                                    @elseif($key->status == 2)
+                                        <span class="badge bg-label-success">Verified by QEC</span>
+                                    @else
+                                        N/A
+                                    @endif</td>
                                 <td>
                                 @if($key->status == 1)
                                     <a href="{{ route('completion-of-course-folder.edit', $key->id) }}"
@@ -66,9 +85,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
-                                <td colspan="10" class="text-center">No Records Found</td>
-                            </tr>
+                            
                         @endforelse
                     </tbody>
 
@@ -113,7 +130,7 @@
                 paging: true,
                 searching: true,
                 info: true,
-                autoWidth: false
+                autoWidth: true
             });
         }
     });
