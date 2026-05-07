@@ -309,6 +309,7 @@ function MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, $indicato
     $facultyTargets = FacultyTarget::withCount([
         'achievementOfMultidisciplinaryProjectsTarget as multidisciplinary_projects_count' => function ($query) use ($indicatorId) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 3)
                 ->where('indicator_id', $indicatorId);
         }
     ])
@@ -386,6 +387,7 @@ function CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeR
     $facultyTargets = FacultyTarget::withCount([
         'commercialGainsCounsultancyTargets as commercialGainsCounsultancy_count' => function ($query) use ($indicatorId) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 3)
                 ->where('indicator_id', $indicatorId);
         }
     ])
@@ -463,6 +465,7 @@ function PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, $indica
     $facultyTargets = FacultyTarget::withCount([
         'intellectualPropertyTargets as intellectualProperty_count' => function ($query) use ($indicatorId) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 3)
                 ->where('indicator_id', $indicatorId);
         }
     ])
@@ -540,6 +543,7 @@ function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId)
     $facultyTargets = FacultyTarget::withCount([
         'researchPublicationTargets as researchPublication_count' => function ($query) use ($indicatorId) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 3)
                 ->where('indicator_id', $indicatorId);
         }
     ])

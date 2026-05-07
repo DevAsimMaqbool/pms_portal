@@ -1250,7 +1250,7 @@ function PatentsIntellectualProperty($facultyId, $activeRoleId, $indicator_id)
     $facultyTargets = FacultyTarget::with([
         'intellectualPropertyTargets' => function ($query) use ($indicator_id) {
             $query->where('form_status', 'RESEARCHER')
-                ->where('status', 2)
+                ->where('status', 3)
                 ->where('indicator_id', $indicator_id);
         }
     ])
@@ -1320,7 +1320,7 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, $i
     $commercial = FacultyTarget::with([
         'commercialGainsCounsultancyTargets' => function ($query) use ($indicator_id) {
             $query->where('form_status', 'RESEARCHER')
-                ->where('status', 2)
+                ->where('status', 3)
                 ->where('indicator_id', $indicator_id);
         }
     ])
@@ -1393,7 +1393,7 @@ function MultidisciplinaryProjects($facultyId, $activeRoleId, $indicatorId)
     $facultyTargets = FacultyTarget::with([
         'achievementOfMultidisciplinaryProjectsTarget' => function ($query) use ($indicatorId) {
             $query->where('form_status', 'RESEARCHER')
-                ->where('status', 2)
+                ->where('status', 3)
                 ->where('indicator_id', $indicatorId);
         }
     ])
@@ -1476,7 +1476,7 @@ function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id)
     $facultyTargets = FacultyTarget::with([
         'noofGrantsWonTarget' => function ($query) use ($indicator_id, $status) {
             $query->where('form_status', 'RESEARCHER')
-                ->where('status', 2)
+                ->where('status', 3)
                 ->where('indicator_id', $indicator_id)
                 ->where('grant_status', $status);
         }
@@ -1625,7 +1625,7 @@ function IndustrialProjects($facultyId, $activeRoleId, $indicator_id)
     $commercial = FacultyTarget::with([
         'industrialProjectsTarget' => function ($query) use ($indicator_id) {
             $query->where('form_status', 'RESEARCHER')
-                ->where('status', 2)
+                ->where('status', 3)
                 ->where('indicator_id', $indicator_id);
         }
     ])
@@ -4513,6 +4513,7 @@ if (!function_exists('departmentScopusPublicationsOfHOD')) {
         // Count distinct faculty who submitted Scopus publications
         $totalSubmitted = AchievementOfResearchPublicationsTarget::where('indicator_id', $indicatorId)
             ->where('form_status', 'RESEARCHER')
+            ->where('status', 3)
             ->whereNotNull('journal_clasification')
             ->whereIn('created_by', $facultyTargetUserIds)
             ->distinct('created_by')
@@ -4616,6 +4617,7 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
                 $facultyRecords = AchievementOfResearchPublicationsTarget::where('created_by', $facultyId)
                     ->where('indicator_id', $indicatorId)
                     ->where('form_status', 'RESEARCHER')
+                    ->where('status', 3)
                     ->get();
 
                 // Count co-author publications
@@ -4842,16 +4844,19 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
 
             135 => [
                 'model' => \App\Models\NoOfGrantsSubmitAndWon::class,
-                'filter' => ['grant_status' => 'Submitted']
+                'filter' => ['grant_status' => 'Submitted'],
+                'status' => 3
             ],
 
             202 => [
                 'model' => \App\Models\NoOfGrantsSubmitAndWon::class,
-                'filter' => ['grant_status' => 'Won']
+                'filter' => ['grant_status' => 'Won'],
+                'status' => 3
             ],
 
             136 => [
-                'model' => \App\Models\NoAchievementOfMultidisciplinaryProjectsTarget::class
+                'model' => \App\Models\NoAchievementOfMultidisciplinaryProjectsTarget::class,
+                'status' => 3
             ],
 
             197 => [
@@ -4859,7 +4864,8 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
             ],
 
             198 => [
-                'model' => \App\Models\IndustrialProjects::class
+                'model' => \App\Models\IndustrialProjects::class,
+                'status' => 3
             ],
 
             139 => [
@@ -4871,15 +4877,18 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
             ],
 
             137 => [
-                'model' => \App\Models\CommercialGainsCounsultancyResearchIncome::class
+                'model' => \App\Models\CommercialGainsCounsultancyResearchIncome::class,
+                'status' => 3
             ],
 
             138 => [
-                'model' => \App\Models\IntellectualProperty::class
+                'model' => \App\Models\IntellectualProperty::class,
+                'status' => 3
             ],
 
             194 => [
-                'model' => \App\Models\NumberOfKnowledgeProduct::class
+                'model' => \App\Models\NumberOfKnowledgeProduct::class,
+                'status' => 2
             ],
 
             154 => [
@@ -4898,6 +4907,7 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
 
         $modelClass = $indicators[$indicatorId]['model'];
         $filter = $indicators[$indicatorId]['filter'] ?? [];
+        $modelstatus = $indicators[$indicatorId]['status'] ?? null;
 
         // Faculty targets
         $totalTarget = FacultyTarget::whereIn('user_id', $userIds)
@@ -4911,6 +4921,9 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
                 foreach ($filter as $key => $value) {
                     $q->where($key, $value);
                 }
+            })
+            ->when(!is_null($modelstatus), function ($q) use ($modelstatus) {
+                $q->where('status', $modelstatus);
             })
             ->count();
 
@@ -7572,16 +7585,19 @@ if (!function_exists('targetIndicatorsAnalysisOfPL')) {
 
             135 => [
                 'model' => \App\Models\NoOfGrantsSubmitAndWon::class,
-                'filter' => ['grant_status' => 'Submitted']
+                'filter' => ['grant_status' => 'Submitted'],
+                'status' => 3
             ],
 
             202 => [
                 'model' => \App\Models\NoOfGrantsSubmitAndWon::class,
-                'filter' => ['grant_status' => 'Won']
+                'filter' => ['grant_status' => 'Won'],
+                'status' => 3
             ],
 
             136 => [
-                'model' => \App\Models\NoAchievementOfMultidisciplinaryProjectsTarget::class
+                'model' => \App\Models\NoAchievementOfMultidisciplinaryProjectsTarget::class,
+                'status' => 3
             ],
 
             197 => [
@@ -7589,7 +7605,8 @@ if (!function_exists('targetIndicatorsAnalysisOfPL')) {
             ],
 
             198 => [
-                'model' => \App\Models\IndustrialProjects::class
+                'model' => \App\Models\IndustrialProjects::class,
+                'status' => 3
             ],
 
             139 => [
@@ -7601,15 +7618,18 @@ if (!function_exists('targetIndicatorsAnalysisOfPL')) {
             ],
 
             137 => [
-                'model' => \App\Models\CommercialGainsCounsultancyResearchIncome::class
+                'model' => \App\Models\CommercialGainsCounsultancyResearchIncome::class,
+                'status' => 3
             ],
 
             138 => [
-                'model' => \App\Models\IntellectualProperty::class
+                'model' => \App\Models\IntellectualProperty::class,
+                'status' => 3
             ],
 
             194 => [
-                'model' => \App\Models\NumberOfKnowledgeProduct::class
+                'model' => \App\Models\NumberOfKnowledgeProduct::class,
+                'status' => 2
             ],
 
             154 => [
@@ -7628,6 +7648,7 @@ if (!function_exists('targetIndicatorsAnalysisOfPL')) {
 
         $modelClass = $indicators[$indicatorId]['model'];
         $filter = $indicators[$indicatorId]['filter'] ?? [];
+        $modelstatus = $indicators[$indicatorId]['status'] ?? null;
 
         // 2️⃣ Get employee_ids (created_by) from indicator tables for leader's programs
         $employeeIds = $modelClass::whereIn('program_id', $programIds)
@@ -7636,6 +7657,9 @@ if (!function_exists('targetIndicatorsAnalysisOfPL')) {
                 foreach ($filter as $key => $value) {
                     $q->where($key, $value);
                 }
+            })
+            ->when(!is_null($modelstatus), function ($q) use ($modelstatus) {
+                $q->where('status', $modelstatus);
             })
             ->distinct()
             ->pluck('created_by');
