@@ -119,7 +119,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                             @php
                                                 $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
                                                 $att = $data['classes'];
@@ -187,7 +187,7 @@
                                             @endforelse
                                         @endif
                                     </tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>

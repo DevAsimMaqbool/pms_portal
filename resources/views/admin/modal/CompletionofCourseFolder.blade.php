@@ -37,11 +37,11 @@
     }
 </style>
 @php
-    $activeRoleId = getRoleIdByName(activeRole());
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+$activeRoleId = getRoleIdByName(activeRole());
+// Initialize totalFeedback to 0 in case nothing is set later
+$totalFeedback = 0;                                    
 @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
     <div class="modal fade" id="CompletionofCourseFolder" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -115,44 +115,54 @@
                                             </tr>
                                         </thead>
                                         @php
-                                            // Initialize totalFeedback to 0 in case nothing is set later
-                                            $totalCompletion = 0;
+    // Initialize totalFeedback to 0 in case nothing is set later
+    $totalCompletion = 0;
                                         @endphp
 
                                         <tbody>
                                             @php
-                                                $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, $activeRoleId, 120);
-                                                // 👇 SUM of completion_of_Course_folder
-                                                $totalCompletion = $CompletionofCourseFolders->avg('completion_of_Course_folder');
+    $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, $activeRoleId, 120);
+    // 👇 SUM of completion_of_Course_folder
+    $totalCompletion = $CompletionofCourseFolders->avg('completion_of_Course_folder');
                                             @endphp
-                                            @foreach ($CompletionofCourseFolders as $CompletionofCourser)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $CompletionofCourser->facultyClass->code }}</td>
-                                                    <td>{{ $CompletionofCourser->facultyClass?->career_code ?? 'N/A' }}</td>
-                                                    <td>
-                                                        <div class="badge"
-                                                            style="background-color: {{ $CompletionofCourser->color }}">
-                                                            {{ $CompletionofCourser->status_folder }}
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="badge"
-                                                            style="background-color: {{ $CompletionofCourser->color }}">
+                                            @forelse ($CompletionofCourseFolders as $CompletionofCourser)
+    <tr>
+        <td>{{ $loop->iteration }}</td>
 
-                                                            {{ number_format($CompletionofCourser->completion_of_Course_folder, 1) }}%
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="badge"
-                                                            style="background-color: {{ $CompletionofCourser->color }}">
+        <td>{{ $CompletionofCourser->facultyClass->code ?? 'N/A' }}</td>
 
-                                                            {{ $CompletionofCourser->rating }}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+        <td>{{ $CompletionofCourser->facultyClass?->career_code ?? 'N/A' }}</td>
+
+        <td>
+            <div class="badge"
+                style="background-color: {{ $CompletionofCourser->color ?? '#6c757d' }}">
+                {{ $CompletionofCourser->status_folder ?? 'N/A' }}
+            </div>
+        </td>
+
+        <td>
+            <div class="badge"
+                style="background-color: {{ $CompletionofCourser->color ?? '#6c757d' }}">
+                {{ number_format($CompletionofCourser->completion_of_Course_folder ?? 0, 1) }}%
+            </div>
+        </td>
+
+        <td>
+            <div class="badge"
+                style="background-color: {{ $CompletionofCourser->color ?? '#6c757d' }}">
+                {{ $CompletionofCourser->rating ?? 'N/A' }}
+            </div>
+        </td>
+    </tr>
+@empty
+    <tr>
+        <td colspan="6" class="text-center text-muted">
+            no record found
+        </td>
+    </tr>
+@endforelse
                                         </tbody>
+                                        @if($CompletionofCourseFolders->isNotEmpty())
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
@@ -169,6 +179,7 @@
                                                     </b></th>
                                             </tr>
                                         </tfoot>
+                                        @endif
                                     </table>
                                 </div>
                             </div>
@@ -223,14 +234,14 @@
                             <div class="tab-pane fade show" id="completion-course-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     @php
-                                        $CompletionofCourseFolders = CompletionOfCourseFolderForHOD($activeRoleId, 120);
+    $CompletionofCourseFolders = CompletionOfCourseFolderForHOD($activeRoleId, 120);
                                     @endphp
 
                                     @foreach ($CompletionofCourseFolders as $programId => $records)
 
                                         @php
-                                            $avg = $records->avg('completion_of_course_folder');
-                                            $weightedScore = $records->avg('weighted_score');
+        $avg = $records->avg('completion_of_course_folder');
+        $weightedScore = $records->avg('weighted_score');
                                         @endphp
 
                                         <table class="table table-hover align-middle custom-table">
@@ -250,7 +261,7 @@
                                                 @forelse ($records as $row)
 
                                                     @php
-                                                        $class = optional($row->facultyClass);
+            $class = optional($row->facultyClass);
                                                     @endphp
 
                                                     <tr>

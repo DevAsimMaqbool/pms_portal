@@ -41,7 +41,7 @@
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
 @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor', 'Program Leader PG', 'Program Leader UG']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader PG', 'Program Leader UG']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="EventPerformanceFeedback" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -58,16 +58,16 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0 fw-bold text-primary"></h4>
                             <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-                                                                                                <input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
-                                                                                                <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
+                                                                                                    <input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
+                                                                                                    <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
 
-                                                                                                <input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
-                                                                                                <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
-                                                                                                    Semesterly</label>
+                                                                                                    <input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
+                                                                                                    <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
+                                                                                                        Semesterly</label>
 
-                                                                                                <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
-                                                                                                <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
-                                                                                            </div> -->
+                                                                                                    <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
+                                                                                                    <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
+                                                                                                </div> -->
                         </div>
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
@@ -150,16 +150,16 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0 fw-bold text-primary"></h4>
                             <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-                                                        <input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
-                                                        <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
+                                                            <input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
+                                                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
 
-                                                        <input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
-                                                        <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
-                                                            Semesterly</label>
+                                                            <input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
+                                                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
+                                                                Semesterly</label>
 
-                                                        <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
-                                                        <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
-                                                    </div> -->
+                                                            <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
+                                                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
+                                                        </div> -->
                         </div>
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">

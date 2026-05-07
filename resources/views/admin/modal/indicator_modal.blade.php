@@ -122,7 +122,7 @@
                                         $totalFeedback = 0;
                                     @endphp
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                             @php
                                                 $feedbackData = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
 
@@ -416,7 +416,7 @@
                                     @endphp
 
                                 <tbody class="table-border-bottom-0">
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $att = myClassesAttendanceData(Auth::user()->faculty_id);
                                             $sr = 1;
@@ -525,7 +525,7 @@
                                     $totalHeldPercentage = 0;
                                 @endphp
                                 <tbody class="table-border-bottom-0">
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         @php $sr = 1;
                                             $classes = myClassesAttendanceRecord(Auth::user()->faculty_id, $activeRoleId);
                                             // 👇 SUM of held_percentage
@@ -605,7 +605,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $data = NumberOfKnowledgeProduct(Auth::id(), $activeRoleId);
                                         @endphp
@@ -632,7 +632,7 @@
                                             @endif
                                     @endif
                                 </tbody>
-                                @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
@@ -733,7 +733,7 @@
                                     @endphp
 
                                     <tbody>
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     @php
         $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, $activeRoleId, 120);
         // 👇 SUM of completion_of_Course_folder
@@ -1229,7 +1229,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-border-bottom-0">
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                             @php
                                                 $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
                                                 $att = $data['classes'];
@@ -1465,7 +1465,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                             @php
                                                 $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
                                                 $att = $data['classes'];
@@ -1530,7 +1530,7 @@
                                                             @endforelse
                                         @endif
                                                         </tbody>
-                                                         @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                                         @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                                              <tfoot>
                                                                 <tr class="table-primary">
                                                                     <th class="text-end">Total</th>
@@ -1630,7 +1630,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                             @php
                                                 $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
                                                 $att = $data['classes'];
@@ -1688,7 +1688,7 @@
                                                             @endforelse
                                         @endif
                                     </tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
@@ -1882,7 +1882,7 @@
                                         $sumPercentage = 0;
                                     @endphp
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                             @php
                                                 $facultyData = ScopusPublications(Auth::user()->employee_id, $activeRoleId, 128);
                                                 $sr = 1;
@@ -2341,7 +2341,7 @@
                                     @endphp
 
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                              @php
                                                 $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
                                                 // ✅ Fast sum of all rating percentages
@@ -2509,7 +2509,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $feedbacks = lineManagerRatingOnEvents(Auth::user()->employee_id, $activeRoleId);
                                             // ✅ SUM of all rating percentages
@@ -2791,7 +2791,7 @@
                                 @endphp
 
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $data = MultidisciplinaryProjects(Auth::user()->employee_id, $activeRoleId, 136);
                                             $sumMultidisciplinaryProjects = collect($data)->sum('percentage');
@@ -2933,7 +2933,7 @@
                                 @endphp
 
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $data = PatentsIntellectualProperty(Auth::user()->employee_id, $activeRoleId, 138);
                                             $sumPatentsIntellectualProperty = collect($data)->sum('percentage');
@@ -3007,7 +3007,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id, $activeRoleId, 'Submitted', 135);
                                         @endphp
@@ -3133,7 +3133,7 @@
                                     $sumIndustrialVisits = 0;
                                 @endphp
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $IndustrialVisits = IndustrialVisits(Auth::user()->employee_id, $activeRoleId, 197);
                                             $sumIndustrialVisits = collect($IndustrialVisits)->sum('percentage'); 
@@ -3372,7 +3372,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         @php
                                             $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
                                             $totalPercentage = $feedbacks->sum(fn($item) => $item->rating_data['percentage']);

@@ -42,7 +42,7 @@ $activeRoleId = getRoleIdByName(activeRole());
 $totalFeedback = 0;                                    
 @endphp
 <!--  Payment Methods modal -->
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <div class="modal fade" id="StudentAttendance" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">

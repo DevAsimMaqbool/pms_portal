@@ -41,68 +41,68 @@
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
- @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-<!-- / Payment Methods modal -->
-<div class="modal fade" id="ofGrantProposalsSubmitted" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    # of Grant Proposals Submitted
-                </h3>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive text-nowrap">
-                            <table class="table table-striped align-middle custom-table"">
-                                <thead class=" table-primary">
-                                <tr>
-                                    <th>Sr#</th>
-                                    <th>Target</th>
-                                    <th>Achived</th>
-                                    <th>Score</th>
-                                    <th>Rating</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
-                                        @php
-                                            $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id, $activeRoleId, 'Submitted', 135);
-                                        @endphp
-                                        @foreach ($noofGrantsWon as $noofGrantsWon_row)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $noofGrantsWon_row->target }}</td> <!-- Required target -->
-                                                <td>{{ $noofGrantsWon_row->achieved_count }}</td> <!-- Achieved count -->
-                                                <td>
-                                                    <div class="badge"
-                                                        style="background-color: {{ $noofGrantsWon_row->color }}">
-                                                        {{ number_format($noofGrantsWon_row->percentage, 1) }}%
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="badge"
-                                                        style="background-color: {{ $noofGrantsWon_row->color }}">
+ @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+    <!-- / Payment Methods modal -->
+    <div class="modal fade" id="ofGrantProposalsSubmitted" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        # of Grant Proposals Submitted
+                    </h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table"">
+                                    <thead class=" table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Target</th>
+                                        <th>Achived</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                            @php
+                                                $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id, $activeRoleId, 'Submitted', 135);
+                                            @endphp
+                                            @foreach ($noofGrantsWon as $noofGrantsWon_row)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $noofGrantsWon_row->target }}</td> <!-- Required target -->
+                                                    <td>{{ $noofGrantsWon_row->achieved_count }}</td> <!-- Achieved count -->
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $noofGrantsWon_row->color }}">
+                                                            {{ number_format($noofGrantsWon_row->percentage, 1) }}%
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $noofGrantsWon_row->color }}">
 
-                                                        {{ $noofGrantsWon_row->rating }}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
+                                                            {{ $noofGrantsWon_row->rating }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- / Payment Methods modal -->
+    <!-- / Payment Methods modal -->
  @endif
  @if(in_array(getRoleName(activeRole()), ['HOD']))
 <!--  Payment Methods modal -->

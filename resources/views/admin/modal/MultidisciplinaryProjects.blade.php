@@ -41,7 +41,7 @@
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="MultidisciplinaryProjects" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -58,7 +58,7 @@
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-striped align-middle custom-table"">
-                                                <thead class=" table-primary">
+                                                    <thead class=" table-primary">
                                     <tr>
                                         <th>Sr#</th>
                                         <th>Target</th>
@@ -214,7 +214,7 @@
 @endif
 <!-- / Payment Methods modal -->
 @if(in_array(getRoleName(activeRole()), ['Dean']))
-<!--  Payment Methods modal -->
+    <!--  Payment Methods modal -->
 
     <div class="modal fade" id="MultidisciplinaryProjects" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -242,37 +242,43 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @php
-                                                $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 2, 8, 136);
-                                                $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
-                                                $meta_avg = getRatingMeta($faculty_avg_percentage);
-                                            @endphp
-                                                @foreach($data['records'] as $record)
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge bg-{{ $record->color }}">
+                                        @php
+                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 2, 8, 136);
+                                            $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
+                                            $meta_avg = getRatingMeta($faculty_avg_percentage);
+                                        @endphp
+                                        @foreach($data['records'] as $record)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td> {{ $record->user?->department?->name ?? '' }}</td>
+                                                <td>
+                                                    <div class="badge bg-{{ $record->color }}">
                                                         {{ $record->score}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge bg-label-{{ $record->color }}">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="badge bg-label-{{ $record->color }}">
 
-                                                                {{ $record->rating }}
-                                                            </div>
-                                                    </td>    
-                                                </tr>
-                                            @endforeach
+                                                        {{ $record->rating }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
                                             <th class=""></th>
                                             {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
+                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span>
+                                            </th>
+                                            <th class="fs-6"><span class="badge"
+                                                    style="background-color: {{ $meta_avg->color }}">
+                                                    {{ $meta_avg->rating }} </span></th>
                                         </tr>
-                                    </tfoot> 
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

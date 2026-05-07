@@ -41,7 +41,7 @@ $activeRoleId = getRoleIdByName(activeRole());
 // Initialize totalFeedback to 0 in case nothing is set later
 $totalFeedback = 0;                                    
  @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
     <div class="modal fade" id="AverageStudentScore" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -117,7 +117,7 @@ $totalFeedback = 0;
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                                 @php
         $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
         $att = $data['classes'];
@@ -178,7 +178,7 @@ $totalFeedback = 0;
                                                 @endforelse
                                             @endif
                                         </tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                             <tfoot>
                                                 <tr class="table-primary">
                                                     <th class="text-end">Total</th>

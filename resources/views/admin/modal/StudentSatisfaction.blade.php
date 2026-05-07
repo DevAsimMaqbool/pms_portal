@@ -41,7 +41,7 @@ $activeRoleId = getRoleIdByName(activeRole());
 // Initialize totalFeedback to 0 in case nothing is set later
 $totalFeedback = 0;                                    
 @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
     <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -123,18 +123,23 @@ $totalFeedback = 0;
                                         @endphp
                                         <tbody>
                                             @php
-    $feedbackData = getFacultyClassWiseFeedback(Auth::user()->faculty_id);
+    $feedbackData = getFacultyClassWiseFeedback(Auth::user()->faculty_id ?? null);
 
     $classFeedback = $feedbackData['collection'] ?? collect();
     $totalFeedback = $feedbackData['totalFeedback'] ?? 0;
+
     $avgScore = $classFeedback->isNotEmpty()
-        ? $classFeedback->avg(fn($f) => (float) $f->feedback) : 0;
+        ? $classFeedback->avg(fn($f) => (float) $f->feedback)
+        : 0;
+
     $totalStudents = $classFeedback->isNotEmpty()
         ? $classFeedback->sum(fn($f) => (float) $f->registered_students)
         : 0;
+
     $attempStudents = $classFeedback->isNotEmpty()
         ? $classFeedback->sum(fn($f) => (float) $f->attempts)
         : 0;
+
     if (!function_exists('ratingMeta')) {
         function ratingMeta($average)
         {
@@ -149,57 +154,51 @@ $totalFeedback = 0;
             return ['BE', 'danger'];
         }
     }
+
+    // 🔥 SAFE DEFAULT (prevents undefined variable errors)
+    $color = 'secondary';
+    $rating = 'N/A';
                                             @endphp
 
                                             @forelse ($classFeedback as $index => $feedback)
 
-                                                @php
-        $average = (float) $feedback->feedback;
+    @php
+        $average = (float) ($feedback->feedback ?? 0);
+
         [$rating, $color] = ratingMeta($average);
-                                                @endphp
+    @endphp
 
-                                                <tr>
-                                                    <td>{{ $index + 1 }}</td>
+    <tr>
+        <td>{{ $index + 1 }}</td>
+        <td>{{ $feedback->class_code ?? '—' }}</td>
+        <td>{{ $feedback->program ?? '—' }}</td>
+        <td>{{ $feedback->career_code ?? 'UG' }}</td>
+        <td>{{ $feedback->registered_students ?? 0 }}</td>
+        <td>{{ $feedback->attempts ?? 0 }}</td>
 
-                                                    {{-- Class Code --}}
-                                                    <td>{{ $feedback->class_code }}</td>
+        <td>
+            <span class="badge bg-label-{{ $color }}">
+                {{ number_format($average, 1) }}%
+            </span>
+        </td>
 
-                                                    {{-- Program --}}
-                                                    <td>{{ $feedback->program ?? '—' }}</td>
+        <td>
+            <span class="badge bg-label-{{ $color }}">
+                {{ $rating }}
+            </span>
+        </td>
+    </tr>
 
-                                                    {{-- Career --}}
-                                                    <td>{{ $feedback->career_code ?? 'UG' }}</td>
-
-                                                    {{-- Strength --}}
-                                                    <td>{{ $feedback->registered_students ?? 0 }}</td>
-
-                                                    {{-- Respondent --}}
-                                                    <td>{{ $feedback->attempts ?? 0 }}</td>
-
-                                                    {{-- Score --}}
-                                                    <td>
-                                                        <span class="badge bg-label-{{ $color }}">
-                                                            {{ number_format($average, 1) }}%
-                                                        </span>
-                                                    </td>
-
-                                                    {{-- Rating --}}
-                                                    <td>
-                                                        <span class="badge bg-label-{{ $color }}">
-                                                            {{ $rating }}
-                                                        </span>
-                                                    </td>
-                                                </tr>
-
-                                            @empty
-                                                <tr>
-                                                    <td colspan="8" class="text-center text-muted">
-                                                        No class-wise feedback found
-                                                    </td>
-                                                </tr>
-                                            @endforelse
+@empty
+    <tr>
+        <td colspan="8" class="text-center text-muted">
+            no record found
+        </td>
+    </tr>
+@endforelse
 
                                         </tbody>
+                                        @if($classFeedback->isNotEmpty())
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
@@ -227,7 +226,7 @@ $totalFeedback = 0;
                                                 </th>
                                             </tr>
                                         </tfoot>
-
+@endif
                                     </table>
                                 </div>
                             </div>
@@ -380,11 +379,12 @@ $totalFeedback = 0;
                                             @empty
                                                 <tr>
                                                     <td colspan="8" class="text-center text-muted">
-                                                        No class-wise feedback found
+                                                        No data found
                                                     </td>
                                                 </tr>
                                             @endforelse
                                         </tbody>
+                                        @if($classFeedback->isNotEmpty())
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
@@ -402,6 +402,7 @@ $totalFeedback = 0;
                                                 </th>
                                             </tr>
                                         </tfoot>
+                                        @endif
                                     </table>
                                 </div>
                             </div>
@@ -446,7 +447,7 @@ $totalFeedback = 0;
     $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 23, 182);
     $avgScore = $data['records']->isNotEmpty() ? $data['records']->avg(fn($r) => (float) $r->score) : 0;
                                         @endphp
-                                        @foreach($data['records'] as $record)
+                                        @forelse($data['records'] as $record)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td> {{ $record->user?->department?->name ?? '' }}</td>
@@ -462,8 +463,15 @@ $totalFeedback = 0;
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                                <tr>
+                                                    <td colspan="4" class="text-center text-muted">
+                                                        No data found
+                                                    </td>
+                                                </tr>
+                                            @endforelse
                                     </tbody>
+                                    @if($data['records']->isNotEmpty())
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="text-end">Total</th>
@@ -481,6 +489,7 @@ $totalFeedback = 0;
                                             </th>
                                         </tr>
                                     </tfoot>
+                                    @endif
                                 </table>
                             </div>
                         </div>

@@ -96,7 +96,7 @@
                                     @endphp
 
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Associate Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG']))
                                             @php
                                                 $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
                                                 // ✅ Fast sum of all rating percentages
