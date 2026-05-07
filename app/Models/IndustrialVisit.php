@@ -28,6 +28,8 @@ class IndustrialVisit extends Model
         'visit_report_submitted',
         'report_submission_date',
         'status',
+        'reject_status',
+        'reject_status_remarks',
         'update_history',
         'created_by',
         'updated_by',

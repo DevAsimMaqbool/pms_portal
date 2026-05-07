@@ -15,6 +15,9 @@ class CompletionOfCourseFolder extends Model
         'compliance_and_usage_of_lms',
         'compliance_and_usage_of_lms_indicator_id',
         'status',
+        'reject_status',
+        'reject_status_remarks',
+        'update_history',
         'created_by',
         'updated_by',
     ];
