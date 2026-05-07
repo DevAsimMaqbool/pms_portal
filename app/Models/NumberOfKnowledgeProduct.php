@@ -13,6 +13,8 @@ class NumberOfKnowledgeProduct extends Model
         'attach_evidence',
         'form_status',
         'status',
+        'reject_status',
+        'reject_status_remarks',
         'update_history',
         'created_by',
         'updated_by'

@@ -289,9 +289,7 @@
 
                                 // Loop through all validation errors
                                 $.each(errors, function (field, messages) {
-                                    let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
-                                    fieldName = fieldName.replace('[]]', ']');
-                                    let input = form.find('[name="' + fieldName + '"]');
+                                    let input = form.find('[name="' + field + '"]');
 
                                     if (input.length) {
                                         input.addClass('is-invalid');

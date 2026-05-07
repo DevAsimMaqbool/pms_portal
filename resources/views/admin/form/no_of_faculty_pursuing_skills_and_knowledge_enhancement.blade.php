@@ -135,7 +135,6 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Created By</th>
-                                            <th>Status</th>
                                             <th>Created Date</th>
                                             <th>Actions</th>
                                         </tr>
@@ -149,7 +148,6 @@
                                     <select id="bulkAction" class="form-select w-auto me-2">
                                         <option value="">-- Select Action --</option>
                                         <option value="2">Verified</option>
-                                        <option value="1">UnVerified</option>
                                     </select>
                                     <button id="bulkSubmit" class="btn btn-primary">Submit</button>
                                 </div>
@@ -188,13 +186,19 @@
                                 <th>Created By</th>
                                 <td id="modalCreatedBy"></td>
                             </tr>
-                            <tr id="status-approval">
+                            {{-- <tr id="status-approval">
                                 <th>Status</th>
                                 <td>
                                     <div class="form-check form-switch mb-2">
                                         <input class="form-check-input" type="checkbox" id="approveCheckbox">
                                         <label class="form-check-label" for="approveCheckbox">Approved</label>
                                     </div>
+                                </td>
+                            </tr> --}}
+                            <tr id="status-approval">
+                                <th>Status</th>
+                                <td>
+                                    
                                 </td>
                             </tr>
                             <tr>
@@ -241,6 +245,35 @@
     <script>
         window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
         window.activeUserRole = "{{ getRoleName(activeRole()) }}";
+        function updaterejectStatus(id, status,remarks = null) {
+                $.ajax({
+                    url: `/faculty-pursuing-skills/${id}`,
+                    type: 'POST',                            // POST with _method PUT
+                    data: {
+                        _method: 'PUT',
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: status,
+                        reject_status_remarks: remarks,
+                        status_reject_update: true
+                    },
+                    success: function (res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Updated',
+                            text: res.message || 'Status updated successfully!'
+                        });
+                        
+                        fetchIndicatorForms3();
+                    },
+                    error: function (xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Something went wrong!'
+                        });
+                    }
+                });
+            }
     </script>
 @endpush
 @push('script')
@@ -477,7 +510,6 @@
                                 i + 1,
                                 form.creator ? form.creator.name : 'N/A',
                                 form.cpd_type || 'N/A',
-                                `<span class="badge bg-label-primary">${statusText}</span>`,
                                 createdAt,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
@@ -493,7 +525,6 @@
                                     { title: "#" },
                                     { title: "Created By" },
                                     { title: "CPD Type" },
-                                    { title: "Status" },
                                     { title: "Created Date" },
                                     { title: "Actions" }
                                 ]
@@ -525,8 +556,8 @@
                         $('#status-approval').hide();
                         $('label[for="approveCheckbox"]').hide();
                         $('#approveCheckbox').closest('.form-check-input').hide();
-                    }  else {
-                        
+                    } else {
+
                     }
                     if (form.cpd_type) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>CPD Type</th><td>${form.cpd_type}</td></tr>`);
@@ -587,13 +618,17 @@
                                 history.forEach(update => {
                                     let histortText = 'N/A';
 
-                                    // Role-based status mapping
+                                    
+
+                                     // Role-based status mapping
                                     if (update.role === 'Dean') {
-                                        if (update.status == '1') histortText = 'unapproved';
-                                        else if (update.status == '2') histortText = 'Approved';
+                                        if (update.status == '0') histortText = 'Reject';
+                                        else if (update.status == '1') histortText = 'unapproved';
+                                            else if (update.status == '2') histortText = 'Approved';
                                     } else if (update.role === 'ORIC') {
-                                        if (update.status == '2') histortText = 'Unverified';
-                                        else if (update.status == '3') histortText = 'Verified';
+                                        if (update.status == '0') histortText = 'Reject';
+                                        else if (update.status == '2') histortText = 'unapproved';
+                                        else if (update.status == '3') histortText = 'Approved';
                                     } else {
                                         histortText = update.status; // fallback
                                     }
@@ -610,6 +645,11 @@
                                                     </div>
                                                     <div class="badge bg-lighter rounded-3 ms-2">
                                                      <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-danger rounded-3 ms-2">
+                                                    <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -653,8 +693,15 @@
                                 : 'N/A';   
 
                             let statusText = 'N/A';
-                            if (form.status == 1) statusText = 'Unverified';
-                            else if (form.status == 2) statusText = 'Verified';    
+                            if (form.status == 1){
+                                if (form.reject_status == 1){
+                                    statusText = '<span class="badge bg-label-danger">Reject</span>';
+                                }else{
+                                    statusText = '<span class="badge bg-label-warning">Unverified</span>';
+                                }
+                               
+                            } 
+                            else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>';  
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -662,7 +709,7 @@
                                 i + 1,
                                 form.creator ? form.creator.name : 'N/A',
                                 form.cpd_type || 'N/A',
-                                `<span class="badge bg-label-primary">${statusText}</span>`,
+                                statusText,
                                 createdAt,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
@@ -736,17 +783,47 @@
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                     if (window.activeUserRole === 'Dean') {
-                        $('#approveCheckbox').prop('checked', form.status == 2);
-                        $('#approveCheckbox').data('id', form.id).data('table_status', form.form_status);
-                        // Label text for HOD
-                        let statusLabel = "Pending";
-                        if (form.status == 1) {
-                            statusLabel = "Verified";
-                        } else if (form.status == 2) {
-                            statusLabel = "Verified";
+                    if (window.activeUserRole === 'Dean') {
+                        const statusCell = $('#status-approval td');
+                        statusCell.empty(); // clear old checkbox if any
+
+                        // Create Approve radio
+                        const approveRadio = $(`
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input status-radio" type="radio" 
+                                    name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
+                                    data-id="${form.id}" value="approve">
+                                <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
+                            </div>
+                        `);
+
+                        // Create Reject radio
+                        const rejectRadio = $(`
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input status-radio" type="radio" 
+                                    name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
+                                    data-id="${form.id}" value="reject">
+                                <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
+                            </div>
+                        `);
+                        // Create Reject radio
+                        const emptyRadio = $(`
+                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by International Office.</span>
+                        `);
+
+                        // Pre-select based on existing status
+                        if(form.reject_status == 1){
+                             // Append to cell
+                              statusCell.append(emptyRadio);
+                        }else{
+                             // Append to cell
+                             statusCell.append(approveRadio, rejectRadio);
+                            if (form.reject_status == 1) {
+                                rejectRadio.find('input').prop('checked', true);
+                            } else if (form.status == 2) {
+                                approveRadio.find('input').prop('checked', true);
+                            }
                         }
-                        $('label[for="approveCheckbox"]').text(statusLabel);
                     }  else {
                         $('#approveCheckbox').closest('.form-check-input').hide();
 
@@ -821,13 +898,11 @@
                                 history.forEach(update => {
                                     let histortText = 'N/A';
 
-                                    // Role-based status mapping
+                                     // Role-based status mapping
                                     if (update.role === 'Dean') {
-                                        if (update.status == '1') histortText = 'unapproved';
+                                        if (update.status == '0') histortText = 'Reject';
+                                        else if (update.status == '1') histortText = 'unapproved';
                                         else if (update.status == '2') histortText = 'Approved';
-                                    } else if (update.role === 'ORIC') {
-                                        if (update.status == '2') histortText = 'Unverified';
-                                        else if (update.status == '3') histortText = 'Verified';
                                     } else {
                                         histortText = update.status; // fallback
                                     }
@@ -844,6 +919,11 @@
                                                     </div>
                                                     <div class="badge bg-lighter rounded-3 ms-2">
                                                      <span class="h6 mb-0 text-body">${histortText}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="badge bg-danger rounded-3 ms-2">
+                                                    <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -863,11 +943,44 @@
                         }
                     $('#viewFormModal').modal('show');
                 });
-                 // ✅ Single checkbox status change
-                $(document).on('change', '#approveCheckbox', function () {
+                $(document).on('change', '.status-radio', function () { 
                     const id = $(this).data('id');
-                    const status = $(this).is(':checked') ? 2 : 1;
-                    updateSingleStatus(id, status);
+                    const value = $(this).val(); // "approve" or "reject"
+
+                    if (value === 'reject') {
+                        // Ask for rejection remarks first
+                        // Hide current modal temporarily
+                        const bootstrapModal = bootstrap.Modal.getInstance(document.getElementById('viewFormModal'));
+                        bootstrapModal.hide();
+                        Swal.fire({
+                            title: 'Add Remarks for Rejection',
+                            input: 'textarea',
+                            inputPlaceholder: 'Enter remarks...',
+                            showCancelButton: true,
+                            confirmButtonText: 'Submit',
+                            cancelButtonText: 'Cancel',
+                            preConfirm: (remarks) => {
+                                if (!remarks) {
+                                    Swal.showValidationMessage('Remarks are required for rejection');
+                                }
+                                return remarks;
+                            }
+                        }).then((result) => {
+                            // Show modal again
+                            bootstrapModal.show();
+
+                            if (result.isConfirmed) {
+                                const remarks = result.value;
+                                updaterejectStatus(id, 1, remarks); // 2 for reject
+                            } else {
+                                // If canceled, uncheck the radio
+                                $(`input[name="statusRadio-${id}"]`).prop('checked', false);
+                            }
+                        });
+                    } else if (value === 'approve') {
+                        // Approve directly
+                        updateSingleStatus(id, 2); // 2 for approve
+                    }
                 });
 
                 // ✅ Bulk submit button
