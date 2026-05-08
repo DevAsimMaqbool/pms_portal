@@ -75,7 +75,7 @@
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#ScholarsSatisfactionInThesisStage-fall"
                                     aria-controls="ScholarsSatisfactionInThesisStage-fall" aria-selected="false">
-                                    🍂 Fall {{ date('Y') }}
+                                    🍂 Fall {{ date('Y') - 1 }}
                                 </button>
                             </li>
                         </ul>
