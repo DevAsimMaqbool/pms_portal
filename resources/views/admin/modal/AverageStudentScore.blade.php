@@ -43,6 +43,21 @@ $totalFeedback = 0;
  @endphp
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
+    @php   
+        $currentYear = now()->year;
+        $previousYear = now()->year - 1;                                    
+        $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
+        $att = $data['classes'];
+        $spring = $att->filter(function ($c) use ($currentYear) {
+                return $c->term === "Spring $currentYear";
+        });
+        $fall = $att->filter(function ($c) use ($previousYear) {
+            return $c->term === "FALL $previousYear";
+        });
+        $avgScore = $att->isNotEmpty()
+            ? $att->avg(fn($c) => (float) ($c->average_marks ?? 0))
+            : 0;
+    @endphp
     <div class="modal fade" id="AverageStudentScore" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
@@ -63,14 +78,14 @@ $totalFeedback = 0;
                                     <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                         data-bs-target="#AverageStudentScore-spring"
                                         aria-controls="AverageStudentScore-spring" aria-selected="true">
-                                        🌸 Spring 2026
+                                        🌸 Spring {{ date('Y') }}
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                         data-bs-target="#AverageStudentScore-fall" aria-controls="AverageStudentScore-fall"
                                         aria-selected="false">
-                                        🍂 Fall 2025
+                                        🍂 Fall {{ date('Y') - 1 }}
                                     </button>
                                 </li>
                             </ul>
@@ -81,7 +96,7 @@ $totalFeedback = 0;
                             <!-- Spring -->
                             <div class="tab-pane fade show active" id="AverageStudentScore-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
-                                    <table class="table table-hover align-middle custom-table">
+                                     <table class="table table-hover align-middle custom-table">
                                         <thead class="table-primary">
                                             <tr>
                                                 <th>Sr#</th>
@@ -94,9 +109,76 @@ $totalFeedback = 0;
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <td colspan="7">no record found</td>
+                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
 
+                                                @forelse($spring as $class)
+                                                    @php
+                                                        // latest attendance or null
+                                                        $latestAttendance = $class->attendances->first();
+                                                        $avg = $class->average_marks ?? 0;
+                                                        // Determine rating
+                                                        if ($avg >= 90) {
+                                                            $color = 'primary';
+                                                            $rating = 'OS';
+                                                        } elseif ($avg >= 80) {
+                                                            $color = 'success';
+                                                            $rating = 'EE';
+                                                        } elseif ($avg >= 70) {
+                                                            $color = 'warning';
+                                                            $rating = 'ME';
+                                                        } elseif ($avg >= 60) {
+                                                            $color = 'orange';
+                                                            $rating = 'NI';
+                                                        } else {
+                                                            $color = 'danger';
+                                                            $rating = 'BE';
+                                                        }
+                                                    @endphp
+
+
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $class->class_name }}</td>
+                                                        <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
+                                                        <td>{{ $class->career_code }}</td>
+                                                        <td>{{ number_format($avg, 1) }}</td>
+                                                        <td>
+                                                            <div class="badge bg-{{ $color }}">
+                                                                {{ number_format($avg, 1) }}%
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="badge bg-{{ $color }}">
+
+                                                                {{ $rating }}
+                                                            </div>
+                                                        </td>
+
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="8" class="text-center">No record found</td>
+                                                    </tr>
+                                                @endforelse
+                                            @endif
                                         </tbody>
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                            <tfoot>
+                                                <tr class="table-primary">
+                                                    <th class="text-end">Total</th>
+                                                    <th colspan="4" class="text-end"></th>
+                                                    <th style="font-size: 0.960rem;">
+                                                        <b class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
+                                                            {{ number_format($avgScore, 1) }}%
+                                                        </b>
+                                                    </th>
+                                                    <th class="text-end" style="font-size: 0.960rem;"><b
+                                                            class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
+                                                            {{ getRatingMeta($avgScore)->rating }}
+                                                        </b></th>
+                                                </tr>
+                                            </tfoot>
+                                        @endif
                                     </table>
                                 </div>
                             </div>
@@ -118,42 +200,34 @@ $totalFeedback = 0;
                                         </thead>
                                         <tbody>
                                             @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
-                                                @php
-        $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
-        $att = $data['classes'];
-        $sr = 1;
-        $avgScore = $att->isNotEmpty()
-            ? $att->avg(fn($c) => (float) ($c->average_marks ?? 0))
-            : 0;
-                                                @endphp
 
-                                                @forelse($att as $class)
+                                                @forelse($fall as $class)
                                                     @php
-            // latest attendance or null
-            $latestAttendance = $class->attendances->first();
-            $avg = $class->average_marks ?? 0;
-            // Determine rating
-            if ($avg >= 90) {
-                $color = 'primary';
-                $rating = 'OS';
-            } elseif ($avg >= 80) {
-                $color = 'success';
-                $rating = 'EE';
-            } elseif ($avg >= 70) {
-                $color = 'warning';
-                $rating = 'ME';
-            } elseif ($avg >= 60) {
-                $color = 'orange';
-                $rating = 'NI';
-            } else {
-                $color = 'danger';
-                $rating = 'BE';
-            }
+                                                        // latest attendance or null
+                                                        $latestAttendance = $class->attendances->first();
+                                                        $avg = $class->average_marks ?? 0;
+                                                        // Determine rating
+                                                        if ($avg >= 90) {
+                                                            $color = 'primary';
+                                                            $rating = 'OS';
+                                                        } elseif ($avg >= 80) {
+                                                            $color = 'success';
+                                                            $rating = 'EE';
+                                                        } elseif ($avg >= 70) {
+                                                            $color = 'warning';
+                                                            $rating = 'ME';
+                                                        } elseif ($avg >= 60) {
+                                                            $color = 'orange';
+                                                            $rating = 'NI';
+                                                        } else {
+                                                            $color = 'danger';
+                                                            $rating = 'BE';
+                                                        }
                                                     @endphp
 
 
                                                     <tr>
-                                                        <td>{{ $sr++ }}</td>
+                                                        <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $class->class_name }}</td>
                                                         <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
                                                         <td>{{ $class->career_code }}</td>

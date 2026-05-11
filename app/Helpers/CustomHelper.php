@@ -462,11 +462,18 @@ function myClassesBK27Feb($facultyId, $activeRoleId)
     return $classes;
 }
 
-function myClasses($facultyId, $activeRoleId)
+function myClasses($facultyId, $activeRoleId, $term = null)
 {
+    $currentYear = Carbon::now()->year;
+    $previousYear = Carbon::now()->year - 1;
+    $campaigns = [
+            "Spring $currentYear",
+            "Fall $previousYear"
+        ];
 
     // 1️⃣ Get count and averages in a single query
     $stats = FacultyMemberClass::where('faculty_id', $facultyId)
+        ->whereIn('term', $campaigns)
         ->selectRaw('COUNT(*) as total_courses, 
         SUM(COALESCE(passing_percentage,0)) as total_pass,
         SUM(COALESCE(average_marks,0)) as total_average_marks,
@@ -515,6 +522,9 @@ function myClasses($facultyId, $activeRoleId)
         }
     ])
         ->where('faculty_id', $facultyId)
+        ->when($term !== null, function ($query) use ($term) {
+            $query->where('term', $term);
+        })
         ->get();
     return [
         'classes' => $classes,
@@ -1838,11 +1848,21 @@ function ProductsDeliveredToIndustry($facultyId, $activeRoleId, $indicator_id)
 
 function CompletionofCourseFolder($facultyId, $activeRoleId, $indicator_id)
 {
+    $currentYear = Carbon::now()->year;
+    $previousYear = Carbon::now()->year - 1;
+    // ✅ Campaigns for current year
+    $campaigns = [
+        "Spring $currentYear",
+        "Fall $previousYear"
+    ];
     $CompletionOfCourseFolder = CompletionOfCourseFolder::with(['facultyMember', 'facultyClass'])
         ->where('faculty_member_id', $facultyId)
         ->where('form_status', 'HOD')
         ->where('status', 2)
         ->where('completion_of_Course_folder_indicator_id', $indicator_id)
+        ->whereHas('facultyClass', function ($q) use ($campaigns) {
+            $q->whereIn('term', $campaigns);
+        })
         ->get();
 
     $totalScore = 0;
@@ -3221,11 +3241,18 @@ if (!function_exists('getStudentFeedbackForTeacher')) {
 }
 
 if (!function_exists('getFacultyClassWiseFeedback')) {
-    function getFacultyClassWiseFeedback(?int $facultyId , $term)
+    function getFacultyClassWiseFeedback(?int $facultyId)
     {
+        $currentYear = Carbon::now()->year;
+        $previousYear = Carbon::now()->year - 1;
+        // ✅ Campaigns for current year
+        $campaigns = [
+            "Spring $currentYear",
+            "Fall $previousYear"
+        ];
         static $memo = [];
-        // $key = (string) $facultyId;
-        $key = $facultyId . '_' . $term;
+        $key = (string) $facultyId;
+        //$key = $facultyId . '_' . $term;
         if (array_key_exists($key, $memo)) {
             return $memo[$key];
         }
@@ -3238,11 +3265,12 @@ if (!function_exists('getFacultyClassWiseFeedback')) {
                 'student_feedback_class_wises.component_class'
             )
             ->where('faculty_member_classes.faculty_id', $facultyId)
-            ->where('faculty_member_classes.term', $term) // add term condition
+            ->whereIn('faculty_member_classes.term', $campaigns)
             ->select(
                 'student_feedback_class_wises.*',
                 'faculty_member_classes.code as class_code',
-                'faculty_member_classes.faculty_id'
+                'faculty_member_classes.faculty_id',
+                'faculty_member_classes.term'
             )
             ->get();
         // Calculate sum of feedback (numeric)
@@ -3258,7 +3286,7 @@ if (!function_exists('getFacultyClassWiseFeedback')) {
         ];
 
         $memo[$key] = $data;
-
+       // dd($data);
         return $data;
     }
 }
