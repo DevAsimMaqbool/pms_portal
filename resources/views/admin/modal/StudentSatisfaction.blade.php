@@ -63,14 +63,14 @@ $totalFeedback = 0;
                                     <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                         data-bs-target="#student-satisfaction-spring"
                                         aria-controls="student-satisfaction-spring" aria-selected="true">
-                                        🌸 Spring 2026
+                                        🌸 Spring {{ date('Y') }}
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                         data-bs-target="#student-satisfaction-fall"
                                         aria-controls="student-satisfaction-fall" aria-selected="false">
-                                        🍂 Fall 2025
+                                        🍂 Fall {{ date('Y') - 1 }}
                                     </button>
                                 </li>
                             </ul>
@@ -81,7 +81,7 @@ $totalFeedback = 0;
                             <!-- Spring -->
                             <div class="tab-pane fade show active" id="student-satisfaction-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
-                                    <table class="table table-hover align-middle custom-table">
+                                     <table class="table table-hover align-middle custom-table">
                                         <thead class="table-primary">
                                             <tr>
                                                 <th>Sr#</th>
@@ -94,9 +94,118 @@ $totalFeedback = 0;
                                                 <th>Rating</th>
                                             </tr>
                                         </thead>
+                                        @php
+    // Initialize totalFeedback to 0 in case nothing is set later
+    $totalFeedback = 0;
+                                        @endphp
                                         <tbody>
-                                            <td colspan="8">no record found</td>
+                                            @php
+    $currentYears =  date('Y');
+    $termcurrentYear= "Spring $currentYears";
+    $feedbackDataspring = getFacultyClassWiseFeedback(Auth::user()->faculty_id ?? null , $termcurrentYear);
+
+    $classFeedback1 = $feedbackDataspring['collection'] ?? collect();
+    $totalFeedback = $feedbackDataspring['totalFeedback'] ?? 0;
+
+    $avgScore = $classFeedback1->isNotEmpty()
+        ? $classFeedback1->avg(fn($f) => (float) $f->feedback)
+        : 0;
+
+    $totalStudents = $classFeedback1->isNotEmpty()
+        ? $classFeedback1->sum(fn($f) => (float) $f->registered_students)
+        : 0;
+
+    $attempStudents = $classFeedback1->isNotEmpty()
+        ? $classFeedback1->sum(fn($f) => (float) $f->attempts)
+        : 0;
+
+    if (!function_exists('ratingMeta')) {
+        function ratingMeta($average)
+        {
+            if ($average >= 90)
+                return ['OS', 'primary'];
+            if ($average >= 80)
+                return ['EE', 'success'];
+            if ($average >= 70)
+                return ['ME', 'warning'];
+            if ($average >= 60)
+                return ['NI', 'orange'];
+            return ['BE', 'danger'];
+        }
+    }
+
+    // 🔥 SAFE DEFAULT (prevents undefined variable errors)
+    $color = 'secondary';
+    $rating = 'N/A';
+                                            @endphp
+
+                                            @forelse ($classFeedback1 as $index => $feedback1)
+
+    @php
+        $average = (float) ($feedback1->feedback ?? 0);
+
+        [$rating, $color] = ratingMeta($average);
+    @endphp
+
+    <tr>
+        <td>{{ $index + 1 }}</td>
+        <td>{{ $feedback1->class_code ?? '—' }}</td>
+        <td>{{ $feedback1->program ?? '—' }}</td>
+        <td>{{ $feedback1->career_code ?? 'UG' }}</td>
+        <td>{{ $feedback1->registered_students ?? 0 }}</td>
+        <td>{{ $feedback1->attempts ?? 0 }}</td>
+
+        <td>
+            <span class="badge bg-label-{{ $color }}">
+                {{ number_format($average, 1) }}%
+            </span>
+        </td>
+
+        <td>
+            <span class="badge bg-label-{{ $color }}">
+                {{ $rating }}
+            </span>
+        </td>
+    </tr>
+
+@empty
+    <tr>
+        <td colspan="8" class="text-center text-muted">
+            no record found
+        </td>
+    </tr>
+@endforelse
+
                                         </tbody>
+                                        @if($classFeedback1->isNotEmpty())
+                                        <tfoot>
+                                            <tr class="table-primary">
+                                                <th class="text-end">Total</th>
+                                                <th colspan="3" class="text-end"></th>
+                                                <th style="font-size: 0.960rem;">
+                                                    <span class="text-end badge bg-label-{{ $color }}">
+                                                        {{ number_format($totalStudents, 1) }}
+                                                    </span>
+                                                </th>
+                                                <th style="font-size: 0.960rem;">
+                                                    <span class="text-end badge bg-label-{{ $color }}">
+                                                        {{ number_format($attempStudents, 1) }}
+                                                    </span>
+                                                </th>
+                                                <th style="font-size: 0.960rem;">
+                                                    <span class="text-end badge bg-label-{{ $color }}">
+                                                        {{ number_format($avgScore, 1) }}%
+                                                    </span>
+                                                </th>
+                                                <th style="font-size: 0.960rem;">
+                                                    <span
+                                                        class="text-end badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
+                                                        {{ getRatingMetaAsBg($avgScore)->rating }}
+                                                    </span>
+                                                </th>
+                                            </tr>
+                                        </tfoot>
+@endif
                                     </table>
                                 </div>
                             </div>
@@ -123,7 +232,9 @@ $totalFeedback = 0;
                                         @endphp
                                         <tbody>
                                             @php
-    $feedbackData = getFacultyClassWiseFeedback(Auth::user()->faculty_id ?? null);
+    $previousYear =  date('Y') - 1;
+    $termpreviousYear= "Fall $previousYear";
+    $feedbackData = getFacultyClassWiseFeedback(Auth::user()->faculty_id ?? null,$termpreviousYear);
 
     $classFeedback = $feedbackData['collection'] ?? collect();
     $totalFeedback = $feedbackData['totalFeedback'] ?? 0;

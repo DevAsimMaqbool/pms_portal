@@ -3221,10 +3221,11 @@ if (!function_exists('getStudentFeedbackForTeacher')) {
 }
 
 if (!function_exists('getFacultyClassWiseFeedback')) {
-    function getFacultyClassWiseFeedback(?int $facultyId)
+    function getFacultyClassWiseFeedback(?int $facultyId , $term)
     {
         static $memo = [];
-        $key = (string) $facultyId;
+        // $key = (string) $facultyId;
+        $key = $facultyId . '_' . $term;
         if (array_key_exists($key, $memo)) {
             return $memo[$key];
         }
@@ -3237,6 +3238,7 @@ if (!function_exists('getFacultyClassWiseFeedback')) {
                 'student_feedback_class_wises.component_class'
             )
             ->where('faculty_member_classes.faculty_id', $facultyId)
+            ->where('faculty_member_classes.term', $term) // add term condition
             ->select(
                 'student_feedback_class_wises.*',
                 'faculty_member_classes.code as class_code',
