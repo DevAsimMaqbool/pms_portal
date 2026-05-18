@@ -39,7 +39,20 @@
 @php
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+    $totalFeedback = 0;   
+    $currentYear = now()->year;
+    $previousYear = now()->year - 1; 
+    $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
+    $att = $data['classes'];
+    $spring = $att->filter(function ($c) use ($currentYear) {
+            return $c->term === "Spring $currentYear";
+    });
+    $fall = $att->filter(function ($c) use ($previousYear) {
+        return $c->term === "FALL $previousYear";
+    });
+    $avgScore = $att->isNotEmpty()
+        ? $att->avg(fn($c) => (float) ($c->passing_percentage ?? 0))
+        : 0;                                
 @endphp
 <!-- / Payment Methods modal -->
 <div class="modal fade" id="StudentPassPercentage" tabindex="-1" aria-hidden="true">
@@ -62,14 +75,14 @@
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#StudentPassPercentage-spring"
                                     aria-controls="StudentPassPercentage-spring" aria-selected="true">
-                                    🌸 Spring 2026
+                                    🌸 Spring {{ date('Y') }}
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#StudentPassPercentage-fall"
                                     aria-controls="StudentPassPercentage-fall" aria-selected="false">
-                                    🍂 Fall 2025
+                                    🍂 Fall {{ date('Y') - 1 }}
                                 </button>
                             </li>
                         </ul>
@@ -95,41 +108,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <td colspan="9">no record found</td>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Fall -->
-                        <div class="tab-pane fade" id="StudentPassPercentage-fall" role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-hover align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Class</th>
-                                            <th>Program</th>
-                                            <th>Career (PG/UG)</th>
-                                            <th>Avg Class Size</th>
-                                            <th>Pass %</th>
-                                            <th>Failed %</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
                                         @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
-                                            @php
-                                                $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
-                                                $att = $data['classes'];
-                                                $sr = 1;
-                                                $avgScore = $att->isNotEmpty()
-                                                    ? $att->avg(fn($c) => (float) ($c->passing_percentage ?? 0))
-                                                    : 0;
-                                            @endphp
 
-                                            @forelse($att as $class)
+                                            @forelse($spring as $class)
                                                 @php
                                                     // latest attendance or null
                                                     $latestAttendance = $class->attendances->first();
@@ -158,7 +139,107 @@
                                                 @endphp
 
                                                 <tr>
-                                                    <td>{{ $sr++ }}</td>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $class->class_name }}</td>
+                                                    <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
+                                                    <td>{{ $class->career_code }}</td>
+                                                    <td>{{ round($class->attendances->sum('total_students') / $class->attendances->count(), 1) }}
+                                                    </td>
+                                                    <td>{{ number_format($pass, 1) ?? 'N/A' }}</td>
+                                                    <td>{{ number_format($fail, 1) ?? 'N/A' }}</td>
+                                                    <td>
+                                                        <div class="badge bg-label-{{$color }}">
+                                                            {{ number_format($pass, 1) }}%
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="badge bg-label-{{$color }}">
+
+                                                            {{ $rating }}
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+
+                                            @empty
+                                                <tr>
+                                                    <td colspan="8" class="text-center">No record found</td>
+                                                </tr>
+                                            @endforelse
+                                        @endif
+                                    </tbody>
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                        <tfoot>
+                                            <tr class="table-primary">
+                                                <th class="text-end">Total</th>
+                                                <th colspan="6" class="text-end"></th>
+                                                <th style="font-size: 0.960rem;">
+                                                    <b class="badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
+                                                        {{ number_format($avgScore, 1) }}%
+                                                    </b>
+                                                </th>
+                                                <th class="text-end" style="font-size: 0.960rem;"><b
+                                                        class="badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
+                                                        {{ getRatingMeta($avgScore)->rating }}
+                                                    </b></th>
+                                            </tr>
+                                        </tfoot>
+                                    @endif
+
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fall -->
+                        <div class="tab-pane fade" id="StudentPassPercentage-fall" role="tabpanel">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-hover align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Class</th>
+                                            <th>Program</th>
+                                            <th>Career (PG/UG)</th>
+                                            <th>Avg Class Size</th>
+                                            <th>Pass %</th>
+                                            <th>Failed %</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+
+                                            @forelse($fall as $class)
+                                                @php
+                                                    // latest attendance or null
+                                                    $latestAttendance = $class->attendances->first();
+                                                    $scheduled = $latestAttendance
+                                                        ? \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y')
+                                                        : '-';
+                                                    $pass = $class->passing_percentage ?? 0;
+                                                    $fail = max(0, 100 - $pass);
+                                                    // Determine rating
+                                                    if ($pass >= 95) {
+                                                        $color = 'primary';
+                                                        $rating = 'OS';
+                                                    } elseif ($pass >= 90) {
+                                                        $color = 'success';
+                                                        $rating = 'EE';
+                                                    } elseif ($pass >= 80) {
+                                                        $color = 'warning';
+                                                        $rating = 'ME';
+                                                    } elseif ($pass >= 70) {
+                                                        $color = 'orange';
+                                                        $rating = 'NI';
+                                                    } else {
+                                                        $color = 'danger';
+                                                        $rating = 'BE';
+                                                    }
+                                                @endphp
+
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $class->class_name }}</td>
                                                     <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
                                                     <td>{{ $class->career_code }}</td>
