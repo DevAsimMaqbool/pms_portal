@@ -86,6 +86,7 @@ use App\Http\Controllers\IndustrialVisitController;
 use App\Http\Controllers\PunctualityController;
 use App\Http\Controllers\ResearchConferenceImpactController;
 use App\Http\Controllers\ResearchProductivityOfPGStudentsController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
 
 Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
@@ -450,7 +451,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/nomination/update/{id}', [SelfNominationController::class, 'update'])->name('nomination.update');
     Route::delete('/nomination/delete/{id}', [SelfNominationController::class, 'destroy'])->name('nomination.destroy');
 
+    Route::post(
+        '/notifications/read/{id}',
+        [NotificationController::class, 'markAsRead']
+    )->name('notifications.read');
 
+    Route::post(
+        '/notifications/read-all',
+        [NotificationController::class, 'markAllAsRead']
+    )->name('notifications.read.all');
+
+    Route::get(
+        '/notifications',
+        [NotificationController::class, 'index']
+    )->name('notifications.index');
 
 
 

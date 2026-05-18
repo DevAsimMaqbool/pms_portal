@@ -15,7 +15,7 @@
 
       <li><button type="button" class="btn rounded-pill btn-label-primary waves-effect">
           {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}, As
-          {{strtoupper(Auth::user()->job_title)}}</button></li>
+          {{strtoupper(getRoleName(activeRole()))}}</button></li>
 
       <!-- Style Switcher -->
       <li class="nav-item dropdown">
@@ -102,80 +102,194 @@
       <!-- Quick links -->
 
       <!-- Notification -->
-      {{-- <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+      @php
+
+        $notifications = auth()->user()
+          ->unreadNotifications()
+          ->latest()
+          ->take(10)
+          ->get();
+
+        $notificationCount = auth()->user()
+          ->unreadNotifications()
+          ->count();
+
+      @endphp
+
+      <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+
         <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
           href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
           <span class="position-relative">
+
             <i class="icon-base ti tabler-bell icon-22px text-heading"></i>
-            <span class="badge rounded-pill bg-danger badge-dot badge-notifications border"></span>
+
+            @if($notificationCount > 0)
+
+              <span class="badge rounded-pill bg-danger badge-dot badge-notifications border">
+              </span>
+
+            @endif
+
           </span>
         </a>
+
         <ul class="dropdown-menu dropdown-menu-end p-0">
+
+          <!-- Header -->
+
           <li class="dropdown-menu-header border-bottom">
+
             <div class="dropdown-header d-flex align-items-center py-3">
-              <h6 class="mb-0 me-auto">Notification</h6>
+
+              <h6 class="mb-0 me-auto">
+                Notifications
+              </h6>
+
               <div class="d-flex align-items-center h6 mb-0">
-                <span class="badge bg-label-primary me-2">8 New</span>
-                <a href="javascript:void(0)" class="dropdown-notifications-all p-2 btn btn-icon"
-                  data-bs-toggle="tooltip" data-bs-placement="top" title="Mark all as read"><i
-                    class="icon-base ti tabler-mail-opened text-heading"></i></a>
+
+                <span class="badge bg-label-primary me-2">
+
+                  {{ $notificationCount }} New
+
+                </span>
+
+                @if($notificationCount > 0)
+
+                  <form action="{{ route('notifications.read.all') }}" method="POST">
+
+                    @csrf
+
+                    <button type="submit" class="dropdown-notifications-all p-2 btn btn-icon border-0 bg-transparent">
+
+                      <i class="icon-base ti tabler-mail-opened text-heading"></i>
+
+                    </button>
+
+                  </form>
+
+                @endif
+
               </div>
             </div>
           </li>
+
+          <!-- Notifications -->
+
           <li class="dropdown-notifications-list scrollable-container">
+
             <ul class="list-group list-group-flush">
-              <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                <div class="d-flex">
-                  <div class="flex-shrink-0 me-3">
-                    <div class="avatar">
-                      <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt class="rounded-circle" />
+
+              @forelse($notifications as $notification)
+
+                <li class="list-group-item list-group-item-action dropdown-notifications-item">
+
+                  <div class="d-flex">
+
+                    <!-- Avatar -->
+
+                    <div class="flex-shrink-0 me-3">
+
+                      <div class="avatar">
+
+                        <span class="avatar-initial rounded-circle bg-label-primary">
+
+                          <i class="icon-base ti tabler-bell"></i>
+
+                        </span>
+
+                      </div>
                     </div>
-                  </div>
-                  <div class="flex-grow-1">
-                    <h6 class="small mb-1">Congratulation Lettie 🎉</h6>
-                    <small class="mb-1 d-block text-body">Won the monthly best seller gold badge</small>
-                    <small class="text-body-secondary">1h ago</small>
-                  </div>
-                  <div class="flex-shrink-0 dropdown-notifications-actions">
-                    <a href="javascript:void(0)" class="dropdown-notifications-read"><span
-                        class="badge badge-dot"></span></a>
-                    <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
-                        class="icon-base ti tabler-x"></span></a>
-                  </div>
-                </div>
-              </li>
-              <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
-                <div class="d-flex">
-                  <div class="flex-shrink-0 me-3">
-                    <div class="avatar">
-                      <span class="avatar-initial rounded-circle bg-label-warning"><i
-                          class="icon-base ti tabler-alert-triangle"></i></span>
+
+                    <!-- Content -->
+
+                    <div class="flex-grow-1">
+
+                      <a href="{{ $notification->data['action_url'] ?? '#' }}" class="text-decoration-none text-dark">
+
+                        <h6 class="small mb-1">
+
+                          {{ $notification->data['title'] ?? 'Notification' }}
+
+                        </h6>
+
+                        <small class="mb-1 d-block text-body">
+
+                          {{ $notification->data['message'] ?? '' }}
+
+                        </small>
+
+                        <small class="text-body-secondary">
+
+                          {{ $notification->created_at->diffForHumans() }}
+
+                        </small>
+
+                      </a>
                     </div>
+
+                    <!-- Actions -->
+
+                    <div class="flex-shrink-0 dropdown-notifications-actions">
+
+                      <!-- Mark As Read -->
+
+                      <form action="{{ route('notifications.read', $notification->id) }}" method="POST">
+
+                        @csrf
+
+                        <button type="submit" class="dropdown-notifications-read border-0 bg-transparent">
+
+                          <span class="badge badge-dot"></span>
+
+                        </button>
+
+                      </form>
+
+                    </div>
+
                   </div>
-                  <div class="flex-grow-1">
-                    <h6 class="mb-1 small">CPU is running high</h6>
-                    <small class="mb-1 d-block text-body">CPU Utilization Percent is currently at 88.63%,</small>
-                    <small class="text-body-secondary">5 days ago</small>
-                  </div>
-                  <div class="flex-shrink-0 dropdown-notifications-actions">
-                    <a href="javascript:void(0)" class="dropdown-notifications-read"><span
-                        class="badge badge-dot"></span></a>
-                    <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
-                        class="icon-base ti tabler-x"></span></a>
-                  </div>
-                </div>
-              </li>
+                </li>
+
+              @empty
+
+                <li class="list-group-item text-center py-4">
+
+                  <small class="text-muted">
+
+                    No notifications found
+
+                  </small>
+
+                </li>
+
+              @endforelse
+
             </ul>
           </li>
+
+          <!-- Footer -->
+
           <li class="border-top">
+
             <div class="d-grid p-4">
-              <a class="btn btn-primary btn-sm d-flex" href="javascript:void(0);">
-                <small class="align-middle">View all notifications</small>
+
+              <a class="btn btn-primary btn-sm d-flex justify-content-center" href="{{ route('notifications.index') }}">
+
+                <small class="align-middle">
+
+                  View all notifications
+
+                </small>
+
               </a>
             </div>
           </li>
+
         </ul>
-      </li> --}}
+
+      </li>
       <!--/ Notification -->
 
       <!-- User -->
@@ -260,4 +374,30 @@
   </div>
 </nav>
 
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+
+    window.Echo.private(
+      'notifications.{{ auth()->id() }}'
+    )
+
+      .listen('.new.notification', (e) => {
+
+        console.log(e);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Option 1
+        |--------------------------------------------------------------------------
+        | Simple
+        */
+
+        location.reload();
+
+      });
+
+  });
+
+</script>
 <!-- / Navbar -->
