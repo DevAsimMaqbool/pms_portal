@@ -176,7 +176,7 @@
                                             </div>
                                             <div class="col-md-12">
                                                  <label class="form-label" for="promoters_percentage">Promoters Percentage (%)</label>
-                                                <input type="text" class="form-control" id="promoters_percentage" placeholder="Number of Promoters" name="promoters_percentage"">
+                                                <input type="number" class="form-control" id="promoters_percentage" placeholder="Number of Promoters" name="promoters_percentage"">
                                             </div>
             
                         
