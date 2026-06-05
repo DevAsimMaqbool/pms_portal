@@ -218,6 +218,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 'journal_clasification' => 'required',
                 'nationality' => 'required|string|max:255',
                 'as_author_your_rank' => 'required|integer|min:0',
+                'publication_date' => 'required|date',
+                'affiliated_with_superior' => 'required|boolean',
                 'scopus_q1' => 'nullable|integer|min:0',
                 'scopus_q2' => 'nullable|integer|min:0',
                 'scopus_q3' => 'nullable|integer|min:0',
@@ -264,6 +266,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 'journal_clasification',
                 'nationality',
                 'as_author_your_rank',
+                'publication_date',
+                'affiliated_with_superior',
                 'scopus_q1',
                 'scopus_q2',
                 'scopus_q3',
@@ -451,6 +455,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'journal_clasification' => 'required',
             'nationality' => 'required|string|max:255',
             'as_author_your_rank' => 'required|integer|min:0',
+            'publication_date' => 'required|date',
+            'affiliated_with_superior' => 'required|boolean',
             'co_author.*.id' => 'nullable|exists:achievement_of_research_publications_target_co_author,id',
             'co_author.*.name' => '',
             'co_author.*.rank' => '',
@@ -483,7 +489,9 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'link_of_publications',
             'journal_clasification',
             'nationality',
-            'as_author_your_rank'
+            'as_author_your_rank',
+            'publication_date',
+            'affiliated_with_superior'
             ]));
         $form->status = 1;
         $form->reject_status = '0';

@@ -12,7 +12,7 @@ class AchievementOfResearchPublicationsTarget extends Model
      protected $fillable = [
         'indicator_id','target_category','link_of_publications','journal_clasification', 'nationality',
         'scopus_q1','scopus_q2','scopus_q3','scopus_q4',
-        'hec_w','hec_x','hec_y','medical_recognized','as_author_your_rank',
+        'hec_w','hec_x','hec_y','medical_recognized','as_author_your_rank','affiliated_with_superior','publication_date',
         'form_status','status','update_history','reject_status','reject_status_remarks','created_by','updated_by'
     ];
     protected $casts = [
