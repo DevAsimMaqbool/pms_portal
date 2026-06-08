@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label for="url" class="form-label">Link/URL</label>
-                                    <input type="text" name="url" id="url" class="form-control" placeholder="Enter URL"
+                                    <input type="url" name="url" id="url" class="form-control" placeholder="Enter URL"
                                         required>
                                 </div>
 

@@ -87,7 +87,7 @@
                                     <div class="col-md-6">
                                         <label for="completion_time_of_project" class="form-label">Target Completion Time Of The
                                             Project</label>
-                                        <input type="text" id="completion_time_of_project" name="completion_time_of_project"
+                                        <input type="datetime-local" id="completion_time_of_project" name="completion_time_of_project"
                                             class="form-control">
                                     </div>
 

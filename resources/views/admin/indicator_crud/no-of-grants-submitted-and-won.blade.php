@@ -121,7 +121,7 @@
 
                                     <div class="col-md-6">
                                         <label for="volume" class="form-label">Grant Volume</label>
-                                        <input type="text" id="volume" name="volume" class="form-control">
+                                        <input type="number" id="volume" name="volume" class="form-control">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label" for="role" >Your Role</label>

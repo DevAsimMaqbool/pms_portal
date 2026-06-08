@@ -114,6 +114,21 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
+                                                    <label class="form-label">Publication Date</label>
+                                                    <input type="date" name="publication_date" class="form-control">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label d-block">Affiliated with Superior?</label>
+                                                    <div>
+                                                        <input type="radio" name="affiliated_with_superior" id="affiliated_no" value="0">
+                                                        <label for="national">No</label>
+
+                                                        <input type="radio" name="affiliated_with_superior" id="affiliated_yes"
+                                                            value="1" checked>
+                                                        <label for="international">Yes</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
                                                     <label class="form-label d-block">Is there at least 1 international
                                                         co-author?</label>
                                                     <div>
@@ -391,6 +406,8 @@
                     $('#researchForm1 [name="link_of_publications"]').val(form.link_of_publications);
                     $('#researchForm1 [name="journal_clasification"]').val(form.journal_clasification);
                     $('#researchForm1 [name="nationality"][value="' + form.nationality + '"]').prop('checked', true);
+                    $('#researchForm1 [name="publication_date"]').val(form.publication_date);
+                    $('#researchForm1 [name="affiliated_with_superior"][value="' + form.affiliated_with_superior + '"]').prop('checked', true);
                     $('#researchForm1 [name="as_author_your_rank"]').val(form.as_author_your_rank);
                     $('#researchForm1 [name="scopus_q1"]').val(form.scopus_q1);
                     $('#researchForm1 [name="scopus_q2"]').val(form.scopus_q2);
