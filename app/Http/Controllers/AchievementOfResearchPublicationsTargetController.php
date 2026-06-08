@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Services\WorkflowService;
 
 class AchievementOfResearchPublicationsTargetController extends Controller
 {
@@ -24,7 +25,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-            if(in_array(getRoleName(activeRole()), ['Dean'])) {   
+            if (in_array(getRoleName(activeRole()), ['Dean'])) {
                 $status = $request->input('status');
                 $hod_ids = User::where('manager_id', $employee_id)
                     ->role('HOD')->pluck('employee_id');
@@ -47,7 +48,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
                 if ($status == "RESEARCHER") {
                     $teacher_id = User::whereIn('manager_id', $hod_ids)
-                        ->role(['Teacher','Assistant Professor','Professor','Associate Professor'])->pluck('employee_id');
+                        ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor'])->pluck('employee_id');
                     $all_ids = $teacher_id->merge($hod_ids);
                     $forms = AchievementOfResearchPublicationsTarget::with([
                         'creator' => function ($q) {
@@ -62,7 +63,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
 
             }
-            if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Assistant Professor','Professor','Associate Professor'])) {  
+            if (in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor', 'Professor', 'Associate Professor'])) {
 
                 $status = $request->input('status');
                 if ($status == "Teacher") {
@@ -79,8 +80,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
                 if ($status == "HOD") {
                     $employeeIds = User::where('manager_id', $employee_id)
-                        ->role(['Teacher','Assistant Professor','Professor','Associate Professor'])->pluck('employee_id');
-                        $all_ids = $employeeIds->merge($employee_id);
+                        ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor'])->pluck('employee_id');
+                    $all_ids = $employeeIds->merge($employee_id);
                     $forms = AchievementOfResearchPublicationsTarget::with([
                         'creator' => function ($q) {
                             $q->select('employee_id', 'name');
@@ -95,7 +96,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
 
             }
-            if(in_array(getRoleName(activeRole()), ['ORIC'])) {
+            if (in_array(getRoleName(activeRole()), ['ORIC'])) {
                 $forms = AchievementOfResearchPublicationsTarget::with([
                     'creator' => function ($q) {
                         $q->select('employee_id', 'name');
@@ -108,7 +109,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                     ->get();
 
             }
-            if(in_array(getRoleName(activeRole()), ['Human Resources'])) {
+            if (in_array(getRoleName(activeRole()), ['Human Resources'])) {
                 $status = $request->input('status');
                 if ($status == "HOD") {
                     $forms = AchievementOfResearchPublicationsTarget::with([
@@ -243,12 +244,12 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             if ($validator->fails()) {
                 return response()->json(['status' => 'error', 'errors' => $validator->errors()], 422);
             }
-            
+
 
             $employeeId = Auth::user()->employee_id;
             $exists = AchievementOfResearchPublicationsTarget::where('created_by', $employeeId)
-                            ->where('link_of_publications', $request->link_of_publications)
-                            ->exists();
+                ->where('link_of_publications', $request->link_of_publications)
+                ->exists();
 
             if ($exists) {
                 return response()->json([
@@ -287,6 +288,29 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                     $co['updated_by'] = $employeeId;
                     AchievementOfResearchPublicationTargetCoAuthor::create($co);
                 }
+            }
+            $user = Auth::user();
+            $hod = User::where(
+                'employee_id',
+                $user->manager_id
+            )
+                ->role('HOD')
+                ->first();
+
+            if ($hod) {
+
+                WorkflowService::notify(
+
+                    users: $hod,
+
+                    title: 'Research Publication Submitted',
+
+                    message: 'A new publication requires review.',
+
+                    module: 'research-publications',
+
+                    recordId: $target->id
+                );
             }
 
             return response()->json(['status' => 'success', 'message' => 'Record saved successfully', 'data' => $target->load('coAuthors')]);
@@ -342,7 +366,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                     'user_name' => $currentUserName,
                     'status' => $request->status,
                     'role' => $userRoll,
-                    'remarks'     => null,
+                    'remarks' => null,
                     'updated_at' => now()->toDateTimeString(),
                 ];
             }
@@ -359,46 +383,46 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             return response()->json(['success' => true]);
         }
         if ($request->has('status_reject_update')) {
-                $request->validate([
-                    'status' => 'required|in:0,1,2,3,4,5,6'
-                ]);
+            $request->validate([
+                'status' => 'required|in:0,1,2,3,4,5,6'
+            ]);
 
-                $target = AchievementOfResearchPublicationsTarget::findOrFail($id);
+            $target = AchievementOfResearchPublicationsTarget::findOrFail($id);
 
-                // Get current update history
-                $history = $target->update_history ? json_decode($target->update_history, true) : [];
+            // Get current update history
+            $history = $target->update_history ? json_decode($target->update_history, true) : [];
 
-                // Get current user info
-                $currentUserId = Auth::id();
-                $currentUserName = Auth::user()->name;
-                $userRoll = getRoleName(activeRole()) ?? 'N/A';
+            // Get current user info
+            $currentUserId = Auth::id();
+            $currentUserName = Auth::user()->name;
+            $userRoll = getRoleName(activeRole()) ?? 'N/A';
 
-                // Avoid duplicate consecutive updates by the same user with the same status
-                $lastUpdate = end($history);
-                if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
-                    $history[] = [
-                        'user_id'    => $currentUserId,
-                        'user_name'  => $currentUserName,
-                        'status'     => 0,
-                        'role'     => $userRoll,
-                        'remarks'     => $request->reject_status_remarks,
-                        'updated_at' => now()->toDateTimeString(),
-                    ];
-                }
-
-
-
-
-
-                $target->status = 1;
-                $target->reject_status = $request->status;
-                $target->reject_status_remarks = $request->reject_status_remarks;
-                $target->update_history = json_encode($history);
-                $target->updated_by = $currentUserId;
-                $target->save();
-
-                return response()->json(['success' => true]);
+            // Avoid duplicate consecutive updates by the same user with the same status
+            $lastUpdate = end($history);
+            if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+                $history[] = [
+                    'user_id' => $currentUserId,
+                    'user_name' => $currentUserName,
+                    'status' => 0,
+                    'role' => $userRoll,
+                    'remarks' => $request->reject_status_remarks,
+                    'updated_at' => now()->toDateTimeString(),
+                ];
             }
+
+
+
+
+
+            $target->status = 1;
+            $target->reject_status = $request->status;
+            $target->reject_status_remarks = $request->reject_status_remarks;
+            $target->update_history = json_encode($history);
+            $target->updated_by = $currentUserId;
+            $target->save();
+
+            return response()->json(['success' => true]);
+        }
     }
 
     /**
@@ -477,14 +501,14 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         }
 
         // Update main form fields
-       
-         $form->fill($request->only([
+
+        $form->fill($request->only([
             'target_category',
             'link_of_publications',
             'journal_clasification',
             'nationality',
             'as_author_your_rank'
-            ]));
+        ]));
         $form->status = 1;
         $form->reject_status = '0';
         $form->reject_status_remarks = null;
