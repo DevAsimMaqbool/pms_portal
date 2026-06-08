@@ -39,10 +39,57 @@
 @php
 $activeRoleId = getRoleIdByName(activeRole());
 // Initialize totalFeedback to 0 in case nothing is set later
-$totalFeedback = 0;                                    
+    $totalFeedback = 0;                              
 @endphp
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
+    @php
+    $currentYear = now()->year;
+    $previousYear = now()->year - 1; 
+    $feedbackDataspring = getFacultyClassWiseFeedback(Auth::user()->faculty_id ?? null);
+
+    $classFeedback1 = $feedbackDataspring['collection'] ?? collect();
+    $totalFeedback = $feedbackDataspring['totalFeedback'] ?? 0;
+
+    $avgScore = $classFeedback1->isNotEmpty()
+        ? $classFeedback1->avg(fn($f) => (float) $f->feedback)
+        : 0;
+
+    $totalStudents = $classFeedback1->isNotEmpty()
+        ? $classFeedback1->sum(fn($f) => (float) $f->registered_students)
+        : 0;
+
+    $attempStudents = $classFeedback1->isNotEmpty()
+        ? $classFeedback1->sum(fn($f) => (float) $f->attempts)
+        : 0;
+    // ✅ Spring Data
+    $springData = $classFeedback1->filter(function ($item) use ($currentYear) {
+        return $item->term === "Spring $currentYear";
+    });
+
+    $fallData = $classFeedback1->filter(function ($item) use ($previousYear) {
+        return $item->term === "FALL $previousYear";
+    });   
+
+    if (!function_exists('ratingMeta')) {
+        function ratingMeta($average)
+        {
+            if ($average >= 90)
+                return ['OS', 'primary'];
+            if ($average >= 80)
+                return ['EE', 'success'];
+            if ($average >= 70)
+                return ['ME', 'warning'];
+            if ($average >= 60)
+                return ['NI', 'orange'];
+            return ['BE', 'danger'];
+        }
+    }
+
+    // 🔥 SAFE DEFAULT (prevents undefined variable errors)
+    $color = 'secondary';
+    $rating = 'N/A';                                
+@endphp
     <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
@@ -96,50 +143,11 @@ $totalFeedback = 0;
                                         </thead>
                                         @php
     // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;
+    
                                         @endphp
                                         <tbody>
-                                            @php
-    $currentYears =  date('Y');
-    $termcurrentYear= "Spring $currentYears";
-    $feedbackDataspring = getFacultyClassWiseFeedback(Auth::user()->faculty_id ?? null , $termcurrentYear);
 
-    $classFeedback1 = $feedbackDataspring['collection'] ?? collect();
-    $totalFeedback = $feedbackDataspring['totalFeedback'] ?? 0;
-
-    $avgScore = $classFeedback1->isNotEmpty()
-        ? $classFeedback1->avg(fn($f) => (float) $f->feedback)
-        : 0;
-
-    $totalStudents = $classFeedback1->isNotEmpty()
-        ? $classFeedback1->sum(fn($f) => (float) $f->registered_students)
-        : 0;
-
-    $attempStudents = $classFeedback1->isNotEmpty()
-        ? $classFeedback1->sum(fn($f) => (float) $f->attempts)
-        : 0;
-
-    if (!function_exists('ratingMeta')) {
-        function ratingMeta($average)
-        {
-            if ($average >= 90)
-                return ['OS', 'primary'];
-            if ($average >= 80)
-                return ['EE', 'success'];
-            if ($average >= 70)
-                return ['ME', 'warning'];
-            if ($average >= 60)
-                return ['NI', 'orange'];
-            return ['BE', 'danger'];
-        }
-    }
-
-    // 🔥 SAFE DEFAULT (prevents undefined variable errors)
-    $color = 'secondary';
-    $rating = 'N/A';
-                                            @endphp
-
-                                            @forelse ($classFeedback1 as $index => $feedback1)
+                                            @forelse ($springData as $index => $feedback1)
 
     @php
         $average = (float) ($feedback1->feedback ?? 0);
@@ -182,12 +190,12 @@ $totalFeedback = 0;
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
                                                 <th colspan="3" class="text-end"></th>
-                                                <th style="font-size: 0.960rem;">
+                                                <th style="font-size: 0.960rem;">(S+F)
                                                     <span class="text-end badge bg-label-{{ $color }}">
                                                         {{ number_format($totalStudents, 1) }}
                                                     </span>
                                                 </th>
-                                                <th style="font-size: 0.960rem;">
+                                                <th style="font-size: 0.960rem;">(S+F)
                                                     <span class="text-end badge bg-label-{{ $color }}">
                                                         {{ number_format($attempStudents, 1) }}
                                                     </span>
@@ -213,7 +221,7 @@ $totalFeedback = 0;
                             <!-- Fall -->
                             <div class="tab-pane fade" id="student-satisfaction-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
-                                    <table class="table table-hover align-middle custom-table">
+                                      <table class="table table-hover align-middle custom-table">
                                         <thead class="table-primary">
                                             <tr>
                                                 <th>Sr#</th>
@@ -228,64 +236,25 @@ $totalFeedback = 0;
                                         </thead>
                                         @php
     // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;
+    
                                         @endphp
                                         <tbody>
-                                            @php
-    $previousYear =  date('Y') - 1;
-    $termpreviousYear= "Fall $previousYear";
-    $feedbackData = getFacultyClassWiseFeedback(Auth::user()->faculty_id ?? null,$termpreviousYear);
 
-    $classFeedback = $feedbackData['collection'] ?? collect();
-    $totalFeedback = $feedbackData['totalFeedback'] ?? 0;
-
-    $avgScore = $classFeedback->isNotEmpty()
-        ? $classFeedback->avg(fn($f) => (float) $f->feedback)
-        : 0;
-
-    $totalStudents = $classFeedback->isNotEmpty()
-        ? $classFeedback->sum(fn($f) => (float) $f->registered_students)
-        : 0;
-
-    $attempStudents = $classFeedback->isNotEmpty()
-        ? $classFeedback->sum(fn($f) => (float) $f->attempts)
-        : 0;
-
-    if (!function_exists('ratingMeta')) {
-        function ratingMeta($average)
-        {
-            if ($average >= 90)
-                return ['OS', 'primary'];
-            if ($average >= 80)
-                return ['EE', 'success'];
-            if ($average >= 70)
-                return ['ME', 'warning'];
-            if ($average >= 60)
-                return ['NI', 'orange'];
-            return ['BE', 'danger'];
-        }
-    }
-
-    // 🔥 SAFE DEFAULT (prevents undefined variable errors)
-    $color = 'secondary';
-    $rating = 'N/A';
-                                            @endphp
-
-                                            @forelse ($classFeedback as $index => $feedback)
+                                            @forelse ($fallData as $index => $feedback1)
 
     @php
-        $average = (float) ($feedback->feedback ?? 0);
+        $average = (float) ($feedback1->feedback ?? 0);
 
         [$rating, $color] = ratingMeta($average);
     @endphp
 
     <tr>
         <td>{{ $index + 1 }}</td>
-        <td>{{ $feedback->class_code ?? '—' }}</td>
-        <td>{{ $feedback->program ?? '—' }}</td>
-        <td>{{ $feedback->career_code ?? 'UG' }}</td>
-        <td>{{ $feedback->registered_students ?? 0 }}</td>
-        <td>{{ $feedback->attempts ?? 0 }}</td>
+        <td>{{ $feedback1->class_code ?? '—' }}</td>
+        <td>{{ $feedback1->program ?? '—' }}</td>
+        <td>{{ $feedback1->career_code ?? 'UG' }}</td>
+        <td>{{ $feedback1->registered_students ?? 0 }}</td>
+        <td>{{ $feedback1->attempts ?? 0 }}</td>
 
         <td>
             <span class="badge bg-label-{{ $color }}">
@@ -309,17 +278,17 @@ $totalFeedback = 0;
 @endforelse
 
                                         </tbody>
-                                        @if($classFeedback->isNotEmpty())
+                                        @if($classFeedback1->isNotEmpty())
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
                                                 <th colspan="3" class="text-end"></th>
-                                                <th style="font-size: 0.960rem;">
+                                                <th style="font-size: 0.960rem;">(S+F)
                                                     <span class="text-end badge bg-label-{{ $color }}">
                                                         {{ number_format($totalStudents, 1) }}
                                                     </span>
                                                 </th>
-                                                <th style="font-size: 0.960rem;">
+                                                <th style="font-size: 0.960rem;">(S+F)
                                                     <span class="text-end badge bg-label-{{ $color }}">
                                                         {{ number_format($attempStudents, 1) }}
                                                     </span>

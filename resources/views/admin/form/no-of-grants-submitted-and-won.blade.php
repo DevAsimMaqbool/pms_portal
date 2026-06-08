@@ -70,7 +70,7 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">Grant Volume</label>
-                                                <input type="text" name="grants[0][volume]" class="form-control" required>
+                                                <input type="number" name="grants[0][volume]" class="form-control" required>
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">Your Role</label>
@@ -348,7 +348,7 @@
                                                                                                                                                                                     </div>
                                                                                                                                                                                     <div class="col-md-4">
                                                                                                                                                                                         <label class="form-label">Grant Volume</label>
-                                                                                                                                                                                        <input type="text" name="grants[${grantIndex}][volume]" class="form-control" required>
+                                                                                                                                                                                        <input type="number" name="grants[${grantIndex}][volume]" class="form-control" required>
                                                                                                                                                                                     </div>
                                                                                                                                                                                     <div class="col-md-4">
                                                                                                                                                                                         <label class="form-label">Your Role</label>

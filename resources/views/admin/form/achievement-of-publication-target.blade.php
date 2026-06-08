@@ -113,6 +113,21 @@
 
 
                                                 </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Publication Date</label>
+                                                    <input type="date" name="publication_date" class="form-control">
+                                                </div>
+                                                 <div class="col-md-6">
+                                                    <label class="form-label d-block">Affiliated with Superior?</label>
+                                                    <div>
+                                                        <input type="radio" name="affiliated_with_superior" id="affiliated_no" value="0">
+                                                        <label for="national">No</label>
+
+                                                        <input type="radio" name="affiliated_with_superior" id="affiliated_yes"
+                                                            value="1" checked>
+                                                        <label for="international">Yes</label>
+                                                    </div>
+                                                </div>
 
 
 
