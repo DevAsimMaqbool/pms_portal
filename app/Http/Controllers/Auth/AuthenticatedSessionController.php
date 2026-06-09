@@ -102,16 +102,20 @@ class AuthenticatedSessionController extends Controller
     //     return redirect()->route('login'); // or redirect('/')
 
     // }
-    public function loginByEmail($email)
+    public function loginByEmail($encodedEmail)
     {
-        if (!str_ends_with(strtolower($email), '@superior.edu.pk')) {
-            abort(404);
+        $email = base64_decode($encodedEmail);
+
+        if (!$email) {
+            return redirect()->route('login')
+                ->with('error', 'Invalid login link.');
         }
 
         $user = User::where('email', $email)->first();
 
         if (!$user) {
-            abort(404, 'User not found');
+            return redirect()->route('login')
+                ->with('error', 'No user account found.');
         }
 
         Auth::login($user);
@@ -120,7 +124,7 @@ class AuthenticatedSessionController extends Controller
 
         indicatorsPercentageStatus($user);
 
-        if ($user->is_first_time_login == 1) {
+        if ($user->is_first_time_login) {
             session(['show_password_popup' => true]);
         }
 

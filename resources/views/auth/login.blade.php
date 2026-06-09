@@ -1,6 +1,11 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     <h5 class=" text-center" style="color: #701b73;">My Performance Hub</h5>
     <!-- <p class="mb-6">Make your app management easy and fun!</p> -->
     <form method="POST" action="{{ route('login') }}" id="formAuthentication" class="mb-4">
