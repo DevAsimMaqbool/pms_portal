@@ -49,6 +49,7 @@ class User extends Authenticatable
         'status',
         'as_teacher_score',
         'as_admin_score',
+        'is_first_time_login',
         'password',
     ];
     public $incrementing = false;

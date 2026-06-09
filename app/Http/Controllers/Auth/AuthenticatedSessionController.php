@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use App\Models\User;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -69,8 +70,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-         $user = Auth::user();
-         indicatorsPercentageStatus($user);
+        $user = Auth::user();
+        indicatorsPercentageStatus($user);
+        if ($user->is_first_time_login == 1) {
+            session(['show_password_popup' => true]);
+        }
 
         try {
             $userStatus = decrypt($request->input('user_status'));
@@ -98,6 +102,30 @@ class AuthenticatedSessionController extends Controller
     //     return redirect()->route('login'); // or redirect('/')
 
     // }
+    public function loginByEmail($email)
+    {
+        if (!str_ends_with(strtolower($email), '@superior.edu.pk')) {
+            abort(404);
+        }
+
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            abort(404, 'User not found');
+        }
+
+        Auth::login($user);
+
+        session()->regenerate();
+
+        indicatorsPercentageStatus($user);
+
+        if ($user->is_first_time_login == 1) {
+            session(['show_password_popup' => true]);
+        }
+
+        return redirect()->route('teacher_dashboard');
+    }
     public function destroy(Request $request): RedirectResponse
     {
         if (Auth::check()) {

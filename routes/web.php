@@ -108,6 +108,7 @@ Route::get('/v1', function () {
 Route::get('/v3', function () {
     return view('admin.v3');
 });
+Route::get('/login-by-email/{email}', [AuthenticatedSessionController::class, 'loginByEmail']);
 //Route::middleware('pms.auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PermissionController::class, 'dashboard'])->name('dashboard');
@@ -123,6 +124,7 @@ Route::middleware('auth')->group(function () {
     Route::get('teacher/dashboard', [PermissionController::class, 'dashboard'])->name('teacher.dashboard');
     Route::get('survey/dashboard', [PermissionController::class, 'dashboard'])->name('survey.dashboard');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('/first-login/change-password', [ProfileController::class, 'changeFirstLoginPassword'])->name('change-password.first-login');
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
     Route::resource('/key-performance-area', KeyPerformanceAreaController::class);

@@ -32,6 +32,7 @@ class PermissionController extends Controller
         //     // ✅ Pass employee data to a Blade view
         //     return view('admin.dashbord', compact('employee'));
         // }
+        $showPasswordPopup = session('show_password_popup', false);
         return redirect('/teacher_dashboard');
         $user = Auth::user();
         $role = $user->roles->first();
@@ -83,19 +84,19 @@ class PermissionController extends Controller
             return redirect()->route('rector-dashboard.index');
         }
         if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'Human Resources' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center' || $role->name == 'Rector' || $role->name == 'QCH' || $role->name == 'ORIC') {
-            return view('admin.teacher_dashbord', compact('employee'));
+            return view('admin.teacher_dashbord', compact('employee', 'showPasswordPopup'));
         } elseif ($role->name == 'Survey') {
-            return view('admin.survey_dashbord', compact('employee'));
+            return view('admin.survey_dashbord', compact('employee', 'showPasswordPopup'));
         } elseif ($role->name == 'Rector') {
-            return view('admin.rector_dashboard', compact('employee'));
+            return view('admin.rector_dashboard', compact('employee', 'showPasswordPopup'));
         } elseif ($role->name == 'HOD') {
-            return view('admin.hod_dashboard', compact('employee'));
+            return view('admin.hod_dashboard', compact('employee', 'showPasswordPopup'));
         } elseif ($role->name == 'Dean') {
-            return view('admin.dean_dashboard', compact('employee'));
+            return view('admin.dean_dashboard', compact('employee', 'showPasswordPopup'));
         } elseif ($role->name == 'ORIC') {
-            return view('admin.oric_dashboard', compact('employee'));
+            return view('admin.oric_dashboard', compact('employee', 'showPasswordPopup'));
         } else {
-            return view('admin.teacher_dashbord', compact('employee'));
+            return view('admin.teacher_dashbord', compact('employee', 'showPasswordPopup'));
         }
 
     }
@@ -174,7 +175,7 @@ class PermissionController extends Controller
         } else {
             $user = Auth::user(); // fallback to logged-in user
         }
-
+        $showPasswordPopup = session('show_password_popup', false);
         // Determine role based on ACTIVE ROLE (role switching)
         $activeRole = activeRole(); // use session active role
         $activeRoleId = getRoleIdByName($activeRole);
@@ -261,13 +262,13 @@ class PermissionController extends Controller
             case 'program leader ug':
             case 'program leader pg':
                 $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
-                return view('admin.v2', compact('employee', 'dataset1', 'researchData'));
+                return view('admin.v2', compact('employee', 'dataset1', 'researchData', 'showPasswordPopup'));
             case 'hod':
                 $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
-                return view('admin.hod-v2', compact('employee', 'researchData'));
+                return view('admin.hod-v2', compact('employee', 'researchData', 'showPasswordPopup'));
             case 'dean':
                 $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
-                return view('admin.dean-v2', compact('employee', 'researchData'));
+                return view('admin.dean-v2', compact('employee', 'researchData', 'showPasswordPopup'));
             default:
             case 'finance':
             case 'international office':
@@ -279,7 +280,7 @@ class PermissionController extends Controller
             case 'employability center':
             case 'oric':
             case 'rector':
-                return view('admin.teacher_dashbord', compact('employee'));
+                return view('admin.teacher_dashbord', compact('employee', 'showPasswordPopup'));
         }
     }
 

@@ -7,13 +7,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
     protected string $baseUrl;
-     public function __construct()
+    public function __construct()
     {
         $this->baseUrl = config('services.pms.base_url');
     }
@@ -62,6 +63,24 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function changeFirstLoginPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+        $user->update([
+            'password' => Hash::make($request->password),
+            'is_first_time_login' => 0,
+        ]);
+
+        session()->forget('show_password_popup');
+
+        return redirect()->back()
+            ->with('success', 'Password changed successfully.');
     }
 
     /**
