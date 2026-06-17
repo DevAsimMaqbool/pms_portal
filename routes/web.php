@@ -82,11 +82,14 @@ use App\Http\Controllers\DropoutRateController;
 use App\Http\Controllers\AlumniSatisfactionRateController;
 use App\Http\Controllers\LineManagerReviewRatingController;
 use App\Http\Controllers\ComplianceAndUsageOfLMSController;
+use App\Http\Controllers\GoalsAsignController;
+use App\Http\Controllers\GoalsController;
 use App\Http\Controllers\IndustrialVisitController;
 use App\Http\Controllers\PunctualityController;
 use App\Http\Controllers\ResearchConferenceImpactController;
 use App\Http\Controllers\ResearchProductivityOfPGStudentsController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\S2RDriverController;
 use Illuminate\Support\Facades\Auth;
 
 Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
@@ -136,6 +139,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/indicator-categories/{kpaId}', [IndicatorController::class, 'getCategoriesByKPA'])->name('indicators.categories');
     Route::get('/performance/{id}', [KeyPerformanceAreaController::class, 'report'])->name('performance.report');
     Route::get('/kpa/{id}', [KeyPerformanceAreaController::class, 'kpa'])->name('kpa.report');
+
+    Route::resource('s2r-drivers', S2RDriverController::class);
+    Route::get('s2r-drivers-list', [S2RDriverController::class, 'list'])
+    ->name('s2r-drivers.list');
+    Route::resource('goals', GoalsController::class);
+    Route::resource('goals-assign', GoalsAsignController::class);
 
     // Returns the indicator modal HTML (without initial page include),
     // used for lazy-loading inside `admin/kpa.blade.php`.

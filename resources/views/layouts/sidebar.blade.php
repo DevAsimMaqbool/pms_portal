@@ -176,6 +176,31 @@
           <div data-i18n="Students">Students</div>
         </a>
       </li>
+      <li class="menu-item">
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class="menu-icon icon-base ti tabler-report"></i>
+          <div data-i18n="Goal Statement">Goal Statement</div>
+        </a>
+
+        <ul class="menu-sub">
+          <li class="menu-item {{ route('s2r-drivers.index') }}">
+            <a href="{{ route('s2r-drivers.index') }}" class="menu-link">
+              <div data-i18n="S2R">S2R</div>
+            </a>
+          </li>
+          <li class="menu-item {{ route('goals.index') }}">
+            <a href="{{ route('goals.index') }}" class="menu-link">
+              <div data-i18n="GOAL">GOAL</div>
+            </a>
+          </li>
+          <li class="menu-item {{ route('goals-assign.index') }}">
+            <a href="{{ route('goals-assign.index') }}"  class="menu-link">
+              <div data-i18n="Assign GOAL">Assign GOAL</div>
+            </a>
+          </li>
+        </ul>
+
+      </li>
       <li class="menu-item {{ request()->routeIs('terms.index') ? 'active' : '' }}">
         <a href="{{ route('terms.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-calendar-stats"></i>

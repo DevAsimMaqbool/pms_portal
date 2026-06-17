@@ -11,6 +11,7 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
+    @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor']))
         <div class="card">
             <!-- Header with Add Feedback Button -->
             <div class="d-flex justify-content-between align-items-center p-3">
@@ -18,7 +19,7 @@
                 <a href="{{ url('kpa/1/category/3/indicator/121') }}" class="btn btn-success">Add</a>
             </div>
 
-            <div class="card-datatable">
+            <div class="card-datatable table-responsive card-body">
                 <table class="table" id="userTable">
                     <thead class="border-top">
                         <tr>
@@ -27,6 +28,7 @@
                             <th>Class Code</th>
                             <th>Status</th>
                             <th>Score</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -53,12 +55,31 @@
                                 <td>{{ $key->facultyClass->code ?? 'N/A' }}</td>
                                 <td style="color: {{ $color }}">{{ $status }}</td>
                                 <td>{{ $key->compliance_and_usage_of_lms ?? 'N/A' }}</td>
+                                 <td>  @if($key->status == 1)
+                                        @if($key->reject_status == 1)
+                                            <span class="badge bg-label-danger"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top" 
+                                                data-bs-custom-class="tooltip-danger" 
+                                                title="{{ $key->reject_status_remarks }}">
+                                                Reject by QEC
+                                            </span>
+                                        @else
+                                            <span class="badge bg-label-warning">Unverified</span>
+                                        @endif
+                                    @elseif($key->status == 2)
+                                        <span class="badge bg-label-success">Verified by QEC</span>
+                                    @else
+                                        N/A
+                                    @endif</td>
+                                @if($key->status == 1)
                                 <td>
                                     <a href="{{ route('compliance-usage-of-lms.edit', $key->id) }}"
-                                        class="btn btn-sm btn-primary">
+                                        class="btn btn-sm btn-warning">
                                         Edit
                                     </a>
                                 </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
@@ -72,6 +93,17 @@
                 </table>
             </div>
         </div>
+
+        @else
+             <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+        @endif
     </div>
 @endsection
 
@@ -80,30 +112,26 @@
     <script src="{{ asset('admin/assets/vendor/libs/datatables/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/datatables-responsive/dataTables.responsive.js') }}"></script>
-
     <script>
-        $(document).ready(function () {
-            $(function () {
+    $(document).ready(function () {
+        let table = $('#userTable');
 
-                let table = $('#userTable');
+        if (table.length) {
+            // Destroy existing instance if any
+            if ($.fn.DataTable.isDataTable('#userTable')) {
+                table.DataTable().destroy();
+            }
 
-                if (table.length) {
-
-                    if ($.fn.DataTable.isDataTable('#userTable')) {
-                        table.DataTable().destroy();
-                    }
-
-                    table.DataTable({
-                        responsive: true,
-                        ordering: true,
-                        paging: true,
-                        searching: true,
-                        info: true,
-                        autoWidth: false
-                    });
-
-                }
-
+            // Initialize DataTable
+            table.DataTable({
+                responsive: true,
+                ordering: true,
+                paging: true,
+                searching: true,
+                info: true,
+                autoWidth: true
             });
-    </script>
+        }
+    });
+</script>
 @endpush
