@@ -12,8 +12,15 @@
     <div class="container-xxl flex-grow-1 container-p-y">
 
         <div class="card">
-            <div class="card-header">
+
+            <div class="card-header d-flex justify-content-between">
+
                 <h4>Goal Assignments</h4>
+
+                <a href="{{ route('goals-assign.create') }}" class="btn btn-primary">
+                    Assign Goal
+                </a>
+
             </div>
 
             <div class="card-body">
