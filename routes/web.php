@@ -157,6 +157,7 @@ Route::middleware('auth')->group(function () {
         'goals-assign/update-group',
         [GoalsAsignController::class, 'updateGroup']
     )->name('goals-assign.update-group');
+    Route::get('view-assign-goal',[GoalsAsignController::class, 'viewAssignGoal'])->name('view-assign-goal');
 
     // Returns the indicator modal HTML (without initial page include),
     // used for lazy-loading inside `admin/kpa.blade.php`.
