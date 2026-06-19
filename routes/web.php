@@ -142,9 +142,21 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('s2r-drivers', S2RDriverController::class);
     Route::get('s2r-drivers-list', [S2RDriverController::class, 'list'])
-    ->name('s2r-drivers.list');
+        ->name('s2r-drivers.list');
     Route::resource('goals', GoalsController::class);
     Route::resource('goals-assign', GoalsAsignController::class);
+    Route::get(
+        'goals-assign/{role_id}/{goal_id}/{kpa_id}/edit',
+        [GoalsAsignController::class, 'edit']
+    )->name('goals-assign.edit');
+    Route::delete(
+        'goals-assign/group-delete',
+        [GoalsAsignController::class, 'destroyGroup']
+    )->name('goals-assign.destroyGroup');
+    Route::post(
+        'goals-assign/update-group',
+        [GoalsAsignController::class, 'updateGroup']
+    )->name('goals-assign.update-group');
 
     // Returns the indicator modal HTML (without initial page include),
     // used for lazy-loading inside `admin/kpa.blade.php`.

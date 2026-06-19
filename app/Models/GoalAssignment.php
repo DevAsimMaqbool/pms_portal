@@ -22,13 +22,22 @@ class GoalAssignment extends Model
     protected $casts = [
         'kpi_ids' => 'array'
     ];
-    public function dimension()
-    {
-        return $this->belongsTo(Dimension::class, 'dimension_id', 'id');
-    }
+
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
+    public function goal()
+    {
+        return $this->belongsTo(Goal::class);
+    }
+    public function objective()
+    {
+        return $this->belongsTo(Objective::class);
+    }
+    public function dimension()
+    {
+        return $this->belongsTo(Dimension::class, 'dimension_id', 'id');
     }
     // KPA Relation
     public function kpa()
