@@ -251,4 +251,37 @@ class GoalsAsignController extends Controller
             'success' => true
         ]);
     }
+    public function viewAssignGoal()
+{
+    $data = GoalAssignment::select(
+            'role_id',
+            'goal_id',
+            'kpa_id'
+        )
+        ->groupBy(
+            'role_id',
+            'goal_id',
+            'kpa_id'
+        )
+        ->get();
+
+    $assignments = [];
+
+    foreach ($data as $row) {
+
+        $assignments[] = [
+            'role_id' => $row->role_id,
+            'goal_id' => $row->goal_id,
+            'kpa_id'  => $row->kpa_id,
+
+            'data' => GoalAssignment::where([
+                'role_id' => $row->role_id,
+                'goal_id' => $row->goal_id,
+                'kpa_id'  => $row->kpa_id
+            ])->get()
+        ];
+    }
+
+    return view('admin.goals_assign.view', compact('assignments'));
+}
 }

@@ -158,6 +158,7 @@ Route::middleware('auth')->group(function () {
         'goals-assign/update-group',
         [GoalsAsignController::class, 'updateGroup']
     )->name('goals-assign.update-group');
+    Route::get('view-assign-goal',[GoalsAsignController::class, 'viewAssignGoal'])->name('view-assign-goal');
 
     Route::get('/reports/goal-mapping-pdf', [GoalReportController::class, 'pdf'])
         ->name('goal.mapping.pdf');
