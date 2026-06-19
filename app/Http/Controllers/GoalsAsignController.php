@@ -51,7 +51,7 @@ class GoalsAsignController extends Controller
                 ->addColumn('action', function ($row) {
 
                     $edit = route(
-                        'goals-assign.edit',
+                        'goals-assign.group.edit',
                         [
                             'role_id' => $row->role_id,
                             'goal_id' => $row->goal_id,
