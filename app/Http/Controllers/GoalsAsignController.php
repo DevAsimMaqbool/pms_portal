@@ -105,8 +105,20 @@ class GoalsAsignController extends Controller
             'kpa_id' => 'required',
             'goals' => 'required|array|min:1',
         ]);
+        $existing = GoalAssignment::where('role_id', $request->role_id)
+            ->where('kpa_id', $request->kpa_id)
+            ->pluck('goal_id')
+            ->toArray();
+
+        $skippedGoals = [];
 
         foreach ($request->goals as $goalId => $goalData) {
+
+            // collect duplicates instead of silent skip
+            if (in_array($goalId, $existing)) {
+                $skippedGoals[] = $goalId;
+                continue;
+            }
 
             foreach ($goalData['objectives'] as $objId => $objData) {
 
@@ -137,7 +149,19 @@ class GoalsAsignController extends Controller
             }
         }
 
-        return response()->json(['success' => true]);
+        if (!empty($skippedGoals)) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Saved successfully, but some goals were already assigned.',
+                'skipped_goals' => $skippedGoals
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'All goals assigned successfully.'
+        ]);
     }
 
 

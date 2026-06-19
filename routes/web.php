@@ -90,6 +90,7 @@ use App\Http\Controllers\ResearchConferenceImpactController;
 use App\Http\Controllers\ResearchProductivityOfPGStudentsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\S2RDriverController;
+use App\Http\Controllers\GoalReportController;
 use Illuminate\Support\Facades\Auth;
 
 Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
@@ -157,6 +158,9 @@ Route::middleware('auth')->group(function () {
         'goals-assign/update-group',
         [GoalsAsignController::class, 'updateGroup']
     )->name('goals-assign.update-group');
+
+    Route::get('/reports/goal-mapping-pdf', [GoalReportController::class, 'pdf'])
+        ->name('goal.mapping.pdf');
 
     // Returns the indicator modal HTML (without initial page include),
     // used for lazy-loading inside `admin/kpa.blade.php`.

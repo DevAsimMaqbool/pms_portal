@@ -139,18 +139,18 @@
                     if (!goal) return;
 
                     let html = `
-                                                    <div class="card shadow-sm mb-4 border-0">
-                                                        <div class="card-header bg-primary text-white">
-                                                            <strong>${goal.goal_name}</strong>
-                                                        </div>
-                                                        <div class="card-body">
-                                                    `;
+    <div class="card shadow-sm mb-4 border-0">
+    <div class="card-header bg-primary text-white">
+    <strong>${goal.goal_name}</strong>
+    </div>
+    <div class="card-body">
+    `;
 
                     goal.objectives.forEach(obj => {
 
                         html += `<div class="mt-2 badge bg-label-success">
-                                                                    Objective: ${obj.title}
-                                                                 </div>`;
+    Objective: ${obj.title}
+    </div>`;
 
                         obj.dimensions.forEach(dim => {
 
@@ -175,45 +175,45 @@
                                 let selected = k.map(String).includes(String(item.id)) ? 'selected' : '';
 
                                 options += `
-                                                                    <option value="${item.id}" ${selected}>
-                                                                        ${item.indicator_category}
-                                                                    </option>
-                                                                `;
+    <option value="${item.id}" ${selected}>
+    ${item.indicator_category}
+    </option>
+    `;
                             });
 
                             html += `
-                                                            <div class="row align-items-center mb-3 border p-2">
+    <div class="row align-items-center mb-3 border p-2">
 
-                                                                <div class="col-md-12">
-                                                                    <strong>${dim.name}</strong>
-                                                                </div>
+    <div class="col-md-12">
+    <strong>${dim.name}</strong>
+    </div>
 
-                                                                <div class="col-md-6">
-                                                                    <label>Target</label>
-                                                                    <input type="text"
-                                                                        value="${t}"
-                                                                        name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][dimension_target]"
-                                                                                                                class="form-control target">
-                                                                </div>
+    <div class="col-md-6">
+    <label>Target</label>
+    <input type="text"
+    value="${t}"
+    name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][dimension_target]"
+    class="form-control target">
+    </div>
 
-                                                                <div class="col-md-6">
-                                                                    <label>Weight</label>
-                                                                    <input type="text"
-                                                                        value="${w}"
-                                                                        name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][dimension_weight]"
-                                                                                                                        class="form-control weight">
-                                                                </div>
+    <div class="col-md-6">
+    <label>Weight</label>
+    <input type="text"
+    value="${w}"
+    name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][dimension_weight]"
+    class="form-control weight">
+    </div>
 
-                                                                <div class="col-md-12 mt-2">
-                                                                    <select multiple
-                                                                        class="form-select kpi-select"
-                                                                        name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][kpis][]">
-                                                                        ${options}
-                                                                    </select>
-                                                                </div>
+    <div class="col-md-12 mt-2">
+    <select multiple
+    class="form-select kpi-select"
+    name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][kpis][]">
+    ${options}
+    </select>
+    </div>
 
-                                                            </div>
-                                                            `;
+    </div>
+    `;
                         });
                     });
 

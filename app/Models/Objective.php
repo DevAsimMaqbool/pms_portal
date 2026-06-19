@@ -22,4 +22,13 @@ class Objective extends Model
     {
         return $this->hasMany(Dimension::class);
     }
+
+    public function assignments()
+    {
+        return $this->hasMany(
+            GoalAssignment::class,
+            'objective_id',
+            'id'
+        );
+    }
 }

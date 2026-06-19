@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Goal extends Model
 {
-     protected $fillable = [
+    protected $fillable = [
         'goal_name',
         'goal_cod',
         's2r_driver_id',
@@ -20,6 +20,10 @@ class Goal extends Model
     }
     public function driver()
     {
-        return $this->belongsTo(S2RDriver::class,'s2r_driver_id');
+        return $this->belongsTo(S2RDriver::class, 's2r_driver_id');
+    }
+    public function assignments()
+    {
+        return $this->hasMany(GoalAssignment::class);
     }
 }
