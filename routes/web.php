@@ -148,7 +148,7 @@ Route::middleware('auth')->group(function () {
     Route::get(
         'goals-assign/{role_id}/{goal_id}/{kpa_id}/edit',
         [GoalsAsignController::class, 'edit']
-    )->name('goals-assign.edit');
+    )->name('goals-assign.group.edit');
     Route::delete(
         'goals-assign/group-delete',
         [GoalsAsignController::class, 'destroyGroup']
