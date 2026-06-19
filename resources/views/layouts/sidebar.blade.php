@@ -198,6 +198,11 @@
               <div data-i18n="Assign GOAL">Assign GOAL</div>
             </a>
           </li>
+          <li class="menu-item {{ route('view-assign-goal') }}">
+            <a href="{{ route('view-assign-goal') }}" class="menu-link">
+              <div data-i18n="View Assign Goal">View Assign Goal</div>
+            </a>
+          </li>
         </ul>
 
       </li>
