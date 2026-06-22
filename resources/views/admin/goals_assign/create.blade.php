@@ -129,12 +129,12 @@
                     if (!goal) return;
 
                     let html = `
-                                            <div class="card shadow-sm mb-4 border-0">
-                                                <div class="card-header bg-primary text-white">
-                                                    <strong>${goal.goal_name}</strong>
-                                                </div>
-                                                <div class="card-body">
-                                            `;
+                                                        <div class="card shadow-sm mb-4 border-0">
+                                                            <div class="card-header bg-primary text-white">
+                                                                <strong>${goal.goal_name}</strong>
+                                                            </div>
+                                                            <div class="card-body">
+                                                        `;
 
                     goal.objectives.forEach(obj => {
 
@@ -148,36 +148,36 @@
                             });
 
                             html += `
-                                                    <div class="row align-items-center mb-3 border p-2">
+                                                                <div class="row align-items-center mb-3 border p-2">
 
-                                                        <div class="col-md-12">
-                                                            <strong>${dim.name}</strong>
-                                                        </div>
+                                                                    <div class="col-md-12">
+                                                                        <strong>${dim.name}</strong>
+                                                                    </div>
 
-                                                        <div class="col-md-6">
-                                                            <label>Target</label>
-                                                            <input type="text"
-                                                                name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][target]"
-                                                                class="form-control target">
-                                                        </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Target</label>
+                                                                        <input type="text"
+                                                                            name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][target]"
+                                                                            class="form-control target">
+                                                                    </div>
 
-                                                        <div class="col-md-6">
-                                                            <label>Weight</label>
-                                                            <input type="text"
-                                                                name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][weight]"
-                                                                class="form-control weight">
-                                                        </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Weight</label>
+                                                                        <input type="text"
+                                                                            name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][weight]"
+                                                                            class="form-control weight">
+                                                                    </div>
 
-                                                        <div class="col-md-12 mt-2">
-                                                            <select multiple
-                                                                class="form-select kpi-select"
-                                                                name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][kpis][]">
-                                                                ${options}
-                                                            </select>
-                                                        </div>
+                                                                    <div class="col-md-12 mt-2">
+                                                                        <select multiple
+                                                                            class="form-select kpi-select"
+                                                                            name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][kpis][]">
+                                                                            ${options}
+                                                                        </select>
+                                                                    </div>
 
-                                                    </div>
-                                                    `;
+                                                                </div>
+                                                                `;
                         });
                     });
 
@@ -264,7 +264,16 @@
                             msg += "\n\n⚠ Skipped Goals: " + res.skipped_goals.join(', ');
                         }
 
-                        alert(msg);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: msg
+                        }).then(() => {
+
+                            window.location.href =
+                                "{{ route('goals-assign.index') }}";
+
+                        });
 
                         $('#mappingForm')[0].reset();
                         $('#goalContainer').html('');
