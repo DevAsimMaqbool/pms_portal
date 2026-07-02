@@ -82,6 +82,7 @@ use App\Http\Controllers\DropoutRateController;
 use App\Http\Controllers\AlumniSatisfactionRateController;
 use App\Http\Controllers\LineManagerReviewRatingController;
 use App\Http\Controllers\ComplianceAndUsageOfLMSController;
+use App\Http\Controllers\EmployeeTaskController;
 use App\Http\Controllers\GoalsAsignController;
 use App\Http\Controllers\GoalsController;
 use App\Http\Controllers\IndustrialVisitController;
@@ -91,6 +92,7 @@ use App\Http\Controllers\ResearchProductivityOfPGStudentsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\S2RDriverController;
 use App\Http\Controllers\GoalReportController;
+use App\Http\Controllers\ManagerTaskController;
 use Illuminate\Support\Facades\Auth;
 
 Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
@@ -358,6 +360,8 @@ Route::middleware('auth')->group(function () {
         Route::put('/no-Of-GrantSubmit-And-Won/update/{id}', [NoOfGrantsSubmitAndWonController::class, 'updateNoOfGrantsSubmitAndWon'])->name('noofgrantssubmit.update');
         Route::put('/industrial-visits/update/{id}', [IndustrialVisitController::class, 'updateIndustrialVisit'])->name('industrial-visits.update');
         Route::put('/conference-impacts/update/{id}', [ResearchConferenceImpactController::class, 'updateResearchConferenceImpact'])->name('conference-impacts.update');
+        Route::resource('employee-tasks', EmployeeTaskController::class);
+        Route::resource('manage-employee-tasks', ManagerTaskController::class);
 
 
     });
