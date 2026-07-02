@@ -65,6 +65,7 @@ class ManagerTaskController extends Controller
                                 data-deliverables="'.$row->output_deliverables.'"
                                 data-taskstatus="'.$row->task_status.'"
                                 data-updatehistory="'.htmlspecialchars($row->update_history, ENT_QUOTES, 'UTF-8').'"
+                                data-manager_completion="'.$row->manager_completion.'"
 
                                 data-bs-toggle="modal"
                                 data-bs-target="#viewFormModal"
@@ -108,7 +109,7 @@ class ManagerTaskController extends Controller
                 'status'     => $request->action_type,
                 'role'     => $userRoll,
                 'remarks'     => $request->reject_remarks,
-                'self_completion' => $request->self_completion,
+                'manager_completion' => $request->self_completion,
                 'updated_at' => now()->toDateTimeString(),
             ];
         }
@@ -119,7 +120,7 @@ class ManagerTaskController extends Controller
                 'task_status' => '2',
                 'reject_status' => '0',
                 'reject_status_remarks' => null,
-                'self_completion' => $request->self_completion,
+                'manager_completion' => $request->self_completion,
                 'update_history' => json_encode($history),
                 'updated_by' => Auth::id()
             ]);
@@ -138,7 +139,7 @@ class ManagerTaskController extends Controller
                 'task_status' => '3',
                 'reject_status' => '1',
                 'reject_status_remarks' => $request->reject_remarks,
-                'self_completion' => $request->self_completion,
+                'manager_completion' => $request->self_completion,
                 'update_history' => json_encode($history),
                 'updated_by' => Auth::id()
             ]);

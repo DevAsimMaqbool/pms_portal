@@ -55,6 +55,8 @@ class EmployeeTaskController extends Controller
                                 data-date="'.$row->task_date.'"
                                 data-status="'.$row->status.'"
                                 data-priority="'.$row->priority.'"
+                                data-ownership="'.$row->ownership.'"
+                                data-task_nature="'.$row->nature_of_task.'"
                                 data-location="'.$row->location.'"
                                 data-hours="'.$row->hours_worked.'"
                                 data-estimated="'.$row->estimated_hours.'"
@@ -65,19 +67,21 @@ class EmployeeTaskController extends Controller
                                 data-bs-toggle="modal"
                                 data-bs-target="#viewFormModal"
                             >  <i class="icon-base ti tabler-eye"></i>
-                            </button>
+                            </button>';
+                        if ($row->task_status != '2') {
+                        
+                            $btn .= '
+                                <a href="'.$editUrl.'"
+                                class="btn btn-icon">
+                                    <i class="icon-base ti tabler-pencil"></i>
+                                </a>
 
-                        <a href="'.$editUrl.'"
-                        class="btn btn-icon">
-                             <i class="icon-base ti tabler-pencil"></i>
-                        </a>
-
-                        <button
-                            class="btn btn-icon deleteBtn"
-                            data-id="'.$row->id.'">
-                            <i class="icon-base ti tabler-trash"></i>
-                        </button>
-                    ';
+                                <button
+                                    class="btn btn-icon deleteBtn"
+                                    data-id="'.$row->id.'">
+                                    <i class="icon-base ti tabler-trash"></i>
+                                </button>
+                        '; }
 
                     return $btn;
                 })
@@ -128,7 +132,12 @@ public function store(Request $request)
             'nature_of_task' => 'required',
             'priority' => 'required',
             'ownership' => 'required',
+            'kpa_id' => 'required',
+            'kpi_id' => 'required',
+            'indicator_id' => 'required',
+            'goal_id' => 'required',
             'output_deliverables' => 'required',
+            'self_completion' => 'required|numeric|min:0|max:100',
 
             'status' => 'required',
 
@@ -181,9 +190,13 @@ public function store(Request $request)
 
             'kpi_id' => $request->kpi_id,
 
+            'indicator_id' => $request->indicator_id,
+
             'goal_id' => $request->goal_id,
 
             'self_completion' => $request->self_completion,
+
+            'manager_completion' => $request->self_completion,
 
             'status' => $request->status,
 
@@ -252,7 +265,7 @@ public function store(Request $request)
     {
         $employeeId = Auth::user()->employee_id;
         // Optional security check
-        if ($employeeTask->employee_id != $employeeId) {
+        if ($employeeTask->employee_id != $employeeId || $employeeTask->task_status == 2) {
             abort(403, 'Unauthorized access.');
         }
         $goals = Goal::with('objectives')->get();
@@ -298,11 +311,17 @@ public function store(Request $request)
 
                 'nature_of_task' => 'required',
 
+                'kpa_id' => 'required',
+                'kpi_id' => 'required',
+                'indicator_id' => 'required',
+                'goal_id' => 'required',
+
                 'priority' => 'required',
 
                 'ownership' => 'required',
 
                 'output_deliverables' => 'required',
+                'self_completion' => 'required|numeric|min:0|max:100',
 
                 'status' => 'required',
 
@@ -367,9 +386,13 @@ public function store(Request $request)
 
                 'kpi_id' => $request->kpi_id,
 
+                'indicator_id' => $request->indicator_id,
+
                 'goal_id' => $request->goal_id,
 
                 'self_completion' => $request->self_completion,
+
+                'manager_completion' => $request->self_completion,
 
                 'status' => $request->status,
 

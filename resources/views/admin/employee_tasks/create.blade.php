@@ -136,9 +136,14 @@
 
                                                                  <div class="col-md-12 mb-3">
                                                                         <label class="form-label">Select KPI</label>
-                                                                        <select class="select2 form-select kpi-select" name="kpi_id">
+                                                                        <select class="select2 form-select kpi-select" name="kpi_id" id="kpi_id">
                                                                         </select>
-                                                                    </div>
+                                                                 </div>
+                                                                <div class="col-md-12 mb-3">
+                                                                        <label class="form-label">Select KPI Indicator</label>
+                                                                        <select class="select2 form-select indicator-select" name="indicator_id" id="indicator_id">
+                                                                        </select>
+                                                                </div>    
 
                                                                 
                                                                 {{-- GOALS --}}
@@ -173,7 +178,7 @@
 
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="self_completion" class="form-label">Self Completion %</label>
-                                                                    <input type="number" name="self_completion" id="self_completion" class="form-control" placeholder="Estimated Hours" required>
+                                                                    <input type="number" name="self_completion" id="self_completion" class="form-control" placeholder="Estimated Hours" min="0" max="100" required>
                                                                 </div>
 
                                                                 <div class="col-md-6 mb-3">
@@ -420,42 +425,116 @@
     });
 
             let goals = @json($goals);
-            let kpiCategories = [];
 
             $('#goalSelector').select2({
                 placeholder: "Select Goals",
                 width: '100%'
             });
 
-            // =========================
-            // LOAD KPI BY KPA
-            // =========================
-            $('#kpa_id').on('change', function () {
 
-                let kpaId = $(this).val();
-                kpiCategories = [];
 
-                if (!kpaId) {
-                    $('.kpi-select').html('');
-                    return;
-                }
+    $('#kpa_id, #kpi_id, #indicator_id').select2({
+        width: '100%'
+    });
 
-                $.ajax({
-                    url: "{{ route('indicators.categories', ':kpaId') }}".replace(':kpaId', kpaId),
-                    type: 'GET',
-                    success: function (response) {
+    // =========================
+    // LOAD KPI CATEGORY BY KPA
+    // =========================
+    $('#kpa_id').on('change', function () {
 
-                        kpiCategories = response;
+        let kpaId = $(this).val();
 
-                        let options = '';
-                        $.each(response, function (i, item) {
-                            options += `<option value="${item.id}">${item.indicator_category}</option>`;
-                        });
+        // Reset dropdowns
+        $('#kpi_id').html('<option value="">Loading...</option>');
+        $('#indicator_id').html('<option value="">Select Indicator</option>');
 
-                        $('.kpi-select').html(options).trigger('change');
-                    }
+        if (!kpaId) {
+
+            $('#kpi_id').html('<option value="">Select KPI</option>');
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('indicators.categories', ':kpaId') }}"
+                    .replace(':kpaId', kpaId),
+
+            type: 'GET',
+
+            success: function (response) {
+
+                let options = '<option value="">Select KPI</option>';
+
+                $.each(response, function (i, item) {
+
+                    options += `
+                        <option value="${item.id}">
+                            ${item.indicator_category}
+                        </option>
+                    `;
                 });
-            });
+
+                $('#kpi_id').html(options).trigger('change');
+            },
+
+            error: function () {
+
+                $('#kpi_id').html('<option value="">No KPI Found</option>');
+            }
+        });
+    });
+
+
+    // =========================
+    // LOAD INDICATORS BY CATEGORY
+    // =========================
+    $('#kpi_id').on('change', function () {
+
+        let categoryId = $(this).val();
+
+        $('#indicator_id').html('<option value="">Loading...</option>');
+
+        if (!categoryId) {
+
+            $('#indicator_id').html('<option value="">Select Indicator</option>');
+            return;
+        }
+
+        $.ajax({
+
+            url: "{{ route('indicator.getIndicators') }}",
+
+            type: 'POST',
+
+            data: {
+                _token: '{{ csrf_token() }}',
+                category_ids: [categoryId]
+            },
+
+            success: function (response) {
+
+                let options = '<option value="">Select Indicator</option>';
+
+                $.each(response, function (i, item) {
+
+                    options += `
+                        <option value="${item.id}">
+                            ${item.indicator}
+                        </option>
+                    `;
+                });
+
+                $('#indicator_id').html(options).trigger('change');
+            },
+
+            error: function () {
+
+                $('#indicator_id').html('<option value="">No Indicator Found</option>');
+            }
+        });
+    });
+
+           
+
 
 
 $('#researchForm').submit(function(e){

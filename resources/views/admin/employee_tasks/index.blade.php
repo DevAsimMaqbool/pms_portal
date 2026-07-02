@@ -86,13 +86,8 @@
                         </tr>
 
                         <tr>
-                            <th>Status</th>
+                            <th>Status Planned / Unplanned</th>
                             <td id="task_status"></td>
-                        </tr>
-
-                        <tr>
-                            <th>Priority</th>
-                            <td id="task_priority"></td>
                         </tr>
 
                         <tr>
@@ -111,6 +106,18 @@
                         </tr>
 
                         <tr>
+                            <th>Nature of Task</th>
+                            <td id="task_nature"></td>
+                        </tr>
+                        <tr>
+                            <th>Ownership</th>
+                            <td id="task_ownership"></td>
+                        </tr>
+                        <tr>
+                            <th>Priority</th>
+                            <td id="task_priority"></td>
+                        </tr>
+                         <tr>
                             <th>Deliverables</th>
                             <td id="task_deliverables"></td>
                         </tr>
@@ -152,6 +159,9 @@ $(document).on('click', '.view-form-btn', function () {
     $('#task_hours').text($(this).data('hours'));
     $('#task_estimated').text($(this).data('estimated'));
     $('#task_deliverables').text($(this).data('deliverables'));
+
+    $('#task_ownership').text($(this).data('ownership'));
+    $('#task_nature').text($(this).data('task_nature'));
     let taskStatus = $(this).data('taskstatus');
     // Approved 
     if (taskStatus == 2) { $('input[name="task_action"][value="approve"]') .prop('checked', true); } 
@@ -181,11 +191,7 @@ $(document).on('click', '.view-form-btn', function () {
 
                         remarksBadge = `
                             <div class="d-flex align-items-center mb-1">
-                                <div class="badge bg-danger rounded-3 ms-2">
-                                    <span class="text-white">
-                                        ${update.remarks}
-                                    </span>
-                                </div>
+                                 <p class="mb-2">Remarks:  ${update.remarks}</p>
                             </div>
                         `;
                     }
