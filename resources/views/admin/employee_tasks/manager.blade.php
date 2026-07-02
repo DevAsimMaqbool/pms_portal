@@ -16,7 +16,7 @@
 
         <div class="card-header d-flex justify-content-between">
 
-            <h4>Enterprise Task Management & Performance Monitoring System 1111</h4>
+            <h4>Enterprise Task Management & Performance Monitoring System</h4>
 
         </div>
 
@@ -131,6 +131,10 @@
                             <th>Deliverables</th>
                             <td id="task_deliverables"></td>
                         </tr>
+                         <tr>
+                            <th>Manager Completion</th>
+                            <td id="manager_completion"></td>
+                        </tr>
 
                     </table>
                     <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center"><i
@@ -227,6 +231,8 @@ $(document).on('click', '.view-form-btn', function () {
     $('#task_hours').text($(this).data('hours'));
     $('#task_estimated').text($(this).data('estimated'));
     $('#task_deliverables').text($(this).data('deliverables'));
+    $('#manager_completion').text($(this).data('manager_completion'));
+    $('#task_id').attr( 'data-manager_completion', $(this).data('manager_completion') );
     let taskStatus = $(this).data('taskstatus');
     // Approved 
     if (taskStatus == 2) { $('input[name="task_action"][value="approve"]') .prop('checked', true); } 
@@ -256,11 +262,7 @@ $(document).on('click', '.view-form-btn', function () {
 
                         remarksBadge = `
                             <div class="d-flex align-items-center mb-1">
-                                <div class="badge bg-danger rounded-3 ms-2">
-                                    <span class="text-white">
-                                        ${update.remarks}
-                                    </span>
-                                </div>
+                                <p class="mb-2">Remarks:  ${update.remarks}</p>
                             </div>
                         `;
                     }
@@ -343,6 +345,7 @@ $(document).on('change', 'input[name="task_action"]', function () {
     let value = $(this).val();
 
     let taskId = $('#task_id').val();
+    let manager_completion = $('#task_id').attr('data-manager_completion');
 
     const bootstrapModal = bootstrap.Modal.getInstance(
         document.getElementById('viewFormModal')
@@ -372,6 +375,7 @@ $(document).on('change', 'input[name="task_action"]', function () {
                         placeholder="Enter completion %"
                         min="0"
                         max="100"
+                        value="${manager_completion}"
                         required>
 
                 </div>
@@ -480,6 +484,7 @@ $(document).on('change', 'input[name="task_action"]', function () {
                         placeholder="Enter completion %"
                         min="0"
                         max="100"
+                        value="${manager_completion}"
                         required>
 
                 </div>
