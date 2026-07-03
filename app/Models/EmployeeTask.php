@@ -39,4 +39,14 @@ class EmployeeTask extends Model
         'created_by',
         'updated_by'
     ];
+    public function employee() { return $this->belongsTo( User::class, 'employee_id', 'id' ); }
+    // ========================================= // KPA RELATION // ========================================= 
+    public function kpa() { return $this->belongsTo( KeyPerformanceArea::class, 'kpa_id', 'id' ); }
+     // ========================================= // KPI CATEGORY RELATION // ========================================= 
+     public function kpi() { return $this->belongsTo( IndicatorCategory::class, 'kpi_id', 'id' ); } 
+     // ========================================= // INDICATOR RELATION // ========================================= 
+     public function indicator() { return $this->belongsTo( Indicator::class, 'indicator_id', 'id' ); }
+     // ========================================= // Goal // ========================================= 
+     public function goal() { return $this->belongsTo( Goal::class, 'goal_id', 'id' ); }
+
 }

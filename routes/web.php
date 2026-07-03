@@ -363,6 +363,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/conference-impacts/update/{id}', [ResearchConferenceImpactController::class, 'updateResearchConferenceImpact'])->name('conference-impacts.update');
         Route::resource('employee-tasks', EmployeeTaskController::class);
         Route::resource('manage-employee-tasks', ManagerTaskController::class);
+        Route::get('/all-employee-tasks', [ManagerTaskController::class, 'allEmployeeTasks'])->name('alltask.get');
 
 
     });
