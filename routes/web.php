@@ -93,6 +93,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\S2RDriverController;
 use App\Http\Controllers\GoalReportController;
 use App\Http\Controllers\ManagerTaskController;
+use App\Http\Controllers\ManagerEmployeeTaskController;
 use Illuminate\Support\Facades\Auth;
 
 Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
@@ -160,7 +161,7 @@ Route::middleware('auth')->group(function () {
         'goals-assign/update-group',
         [GoalsAsignController::class, 'updateGroup']
     )->name('goals-assign.update-group');
-    Route::get('view-assign-goal',[GoalsAsignController::class, 'viewAssignGoal'])->name('view-assign-goal');
+    Route::get('view-assign-goal', [GoalsAsignController::class, 'viewAssignGoal'])->name('view-assign-goal');
 
     Route::get('/reports/goal-mapping-pdf', [GoalReportController::class, 'pdf'])
         ->name('goal.mapping.pdf');
@@ -367,6 +368,14 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:user')->group(function () {
+        Route::resource('manager-view-tasks', ManagerEmployeeTaskController::class);
+        Route::get(
+            '/manager-verification-summary',
+            [ManagerEmployeeTaskController::class, 'managerVerificationSummary']
+        )->name('manager-verification-summary');
+        Route::get('/productivity-dashboard', [ManagerEmployeeTaskController::class, 'MonthlyTeamProductivity'])
+            ->name('productivity.dashboard');
+
         Route::get('/nomination', [SelfNominationController::class, 'index'])->name('nomination.index');
         Route::get('//nomination/show/{id}', [SelfNominationController::class, 'show'])->name('nomination.show');
         Route::get('/nomination/{id}/download', [SelfNominationController::class, 'download'])->name('nomination.download');
