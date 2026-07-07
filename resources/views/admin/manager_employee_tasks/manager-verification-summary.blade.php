@@ -16,7 +16,7 @@
 
             <div class="card-header d-flex justify-content-between">
 
-                <h4>Daily Team Productivity Dashboard</h4>
+                <h4>Manager Verification Summary — monthly view</h4>
 
             </div>
 
