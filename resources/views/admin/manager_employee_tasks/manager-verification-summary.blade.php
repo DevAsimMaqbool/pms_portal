@@ -59,7 +59,7 @@
 
                             <th class="bg-danger">Avg Mgr %</th>
 
-                            <th class="bg-secondary">Score Variance</th>
+                            <th class="bg-secondary">Score Variance %</th>
 
                             <th class="bg-success">Days Aligned</th>
 
