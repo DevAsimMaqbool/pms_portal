@@ -6,12 +6,21 @@
 
     <div class="card">
 
-        <div class="card-header">
-            <h4>
-                Enterprise Task Management &
-                Performance Monitoring System
-            </h4>
-        </div>
+        <div class="card-header d-flex justify-content-between align-items-center">
+
+        <h4>
+            Enterprise Task Management &
+            Performance Monitoring System
+        </h4>
+
+        <a href="{{ route('employee.tasks.export', request()->query()) }}"
+        class="btn btn-success">
+
+            Export Excel
+
+        </a>
+
+    </div>
 
         <div class="card-body">
 
@@ -30,13 +39,30 @@
                                placeholder="Task Title"
                                value="{{ request('task_title') }}">
                     </div>
+                    <div class="col-md-2">
+
+                        <label class="form-label">
+                            Start Date
+                        </label>
+
+                        <input type="date"
+                            name="start_date"
+                            class="form-control"
+                            value="{{ request('start_date') }}">
+
+                    </div>
 
                     <div class="col-md-2">
-                    <label class="form-label">Task Date</label>
+
+                        <label class="form-label">
+                            End Date
+                        </label>
+
                         <input type="date"
-                               name="task_date"
-                               class="form-control"
-                               value="{{ request('task_date') }}">
+                            name="end_date"
+                            class="form-control"
+                            value="{{ request('end_date') }}">
+
                     </div>
 
                     <div class="col-md-2">
@@ -48,7 +74,7 @@
                                value="{{ request('hours_worked') }}">
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                      <label class="form-label">Status</label>
                         <select name="status"
                                 class="form-select">
@@ -150,13 +176,28 @@
 
                         </select>
                     </div>
+                    <div class="col-md-3">
+                       <label class="form-label">Employee Name</label>
+                        <input type="text"
+                               name="employee_name"
+                               class="form-control"
+                               placeholder="Employee Name"
+                               value="{{ request('employee_name') }}">
+                    </div>
+                     <div class="col-md-3">
+                        <label class="form-label">Select KPA</label>
+                        <select id="kpa_id" name="kpa_id" class="select2 form-select">
+                            <option value="">Select KPA</option>
+                            @foreach($kpas as $kpa)
+                                <option value="{{ $kpa->id }}">{{ $kpa->performance_area }}</option>
+                            @endforeach
+                        </select>
+                    </div>  
 
 
                     
-                    <div class="col-md-1">
-                        <button class="btn btn-primary w-100">
-                            Filter
-                        </button>
+                    <div class="col-md-1 col-md-1 d-flex align-items-end">
+                        <button class="btn btn-primary w-100">Filter</button>
                     </div>
 
                 </div>

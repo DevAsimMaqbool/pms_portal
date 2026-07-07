@@ -247,8 +247,9 @@ class GoalsAsignController extends Controller
             'kpa_id' => $request->kpa_id
         ])->delete();
 
-        return response()->json([
-            'success' => true
+         return response()->json([
+            'success' => true,
+            'message' => 'Group deleted successfully'
         ]);
     }
     public function viewAssignGoal()

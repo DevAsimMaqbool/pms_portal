@@ -154,7 +154,7 @@ Route::middleware('auth')->group(function () {
         [GoalsAsignController::class, 'edit']
     )->name('goals-assign.group.edit');
     Route::delete(
-        'goals-assign/group-delete',
+        'goals-assigns/group-delete',
         [GoalsAsignController::class, 'destroyGroup']
     )->name('goals-assign.destroyGroup');
     Route::post(
@@ -364,6 +364,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('employee-tasks', EmployeeTaskController::class);
         Route::resource('manage-employee-tasks', ManagerTaskController::class);
         Route::get('/all-employee-tasks', [ManagerTaskController::class, 'allEmployeeTasks'])->name('alltask.get');
+        Route::get('/employee-tasks-export',[ManagerTaskController::class, 'exportExcel'])->name('employee.tasks.export');
 
 
     });

@@ -54,7 +54,7 @@
     <script>
         $(function () {
 
-            $('.yajra-datatable').DataTable({
+           let table = $('.yajra-datatable').DataTable({
                 processing: true,
                 serverSide: true,
 
@@ -92,8 +92,38 @@
                 ]
             });
 
+            // DELETE AJAX
+        $(document).on('click', '.deleteBtn', function () {
+
+            let url = $(this).data('url');
+
+            if (confirm('Are you sure you want to delete this group?')) {
+
+                $.ajax({
+                    url: url,
+                    type: "DELETE",
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+
+                    success: function (response) {
+
+                        alert(response.message);
+
+                        table.ajax.reload();
+                    },
+
+                    error: function (xhr) {
+
+                        alert('Something went wrong!');
+                    }
+                });
+            }
+        });
+
         });
 
     </script>
+    
 
 @endpush
