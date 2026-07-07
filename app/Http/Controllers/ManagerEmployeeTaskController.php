@@ -198,7 +198,7 @@ class ManagerEmployeeTaskController extends Controller
                         'coverage' => $coverage,
                         'avg_self' => $avgSelf,
                         'avg_mgr' => $avgMgr,
-                        'variance' => round($avgMgr - $avgSelf, 2),
+                        'variance' => round($avgSelf - $avgMgr, 2),
                         'aligned' => $rows->where('aligned', 1)->count(),
                         'mismatch' => $rows->where('aligned', 0)->count(),
                         'status' => $daysVerified == $daysLogged
