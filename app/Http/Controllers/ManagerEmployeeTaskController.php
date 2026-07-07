@@ -504,4 +504,254 @@ class ManagerEmployeeTaskController extends Controller
         //
     }
 
+    public function mainDashboard(Request $request)
+    {
+        $month = $request->month ?? date('Y-m');
+
+        $year = Carbon::parse($month)->year;
+        $monthNumber = Carbon::parse($month)->month;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Employees
+        |--------------------------------------------------------------------------
+        */
+
+        $employees = User::whereIn('employee_id', function ($q) use ($year, $monthNumber) {
+
+            $q->select('employee_id')
+                ->from('employee_tasks')
+                ->whereYear('task_date', $year)
+                ->whereMonth('task_date', $monthNumber);
+
+        })->orderBy('name')->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+
+        $tasks = EmployeeTask::whereYear('task_date', $year)
+            ->whereMonth('task_date', $monthNumber);
+
+        /*
+        |--------------------------------------------------------------------------
+        | KPI CARDS
+        |--------------------------------------------------------------------------
+        */
+
+        $departmentSelfAvg = round((clone $tasks)->avg('self_completion'), 1);
+
+        $departmentManagerAvg = round((clone $tasks)->avg('manager_completion'), 1);
+
+        $totalHours = round((clone $tasks)->sum('hours_worked'), 2);
+
+        $totalActivities = (clone $tasks)->count();
+
+        $verifiedTasks = (clone $tasks)
+            ->whereNotNull('manager_completion')
+            ->count();
+
+        $verificationCoverage = $totalActivities
+            ? round(($verifiedTasks / $totalActivities) * 100)
+            : 0;
+
+        $daysAligned = (clone $tasks)
+            ->whereColumn('self_completion', 'manager_completion')
+            ->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Daily Trend Chart
+        |--------------------------------------------------------------------------
+        */
+
+        $dailyTrend = (clone $tasks)
+
+            ->select(
+
+                DB::raw('DAY(task_date) day'),
+
+                DB::raw('AVG(self_completion) self_avg'),
+
+                DB::raw('AVG(manager_completion) manager_avg')
+
+            )
+
+            ->groupBy(DB::raw('DAY(task_date)'))
+
+            ->orderBy('day')
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Employee Productivity
+        |--------------------------------------------------------------------------
+        */
+
+        $employeeProductivity = (clone $tasks)
+
+            ->join('users', 'users.employee_id', '=', 'employee_tasks.employee_id')
+
+            ->select(
+
+                'users.name',
+
+                DB::raw('AVG(self_completion) self_avg'),
+
+                DB::raw('AVG(manager_completion) manager_avg')
+
+            )
+
+            ->groupBy('users.name')
+
+            ->orderBy('users.name')
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Verification Status
+        |--------------------------------------------------------------------------
+        */
+
+        $verification = (clone $tasks)
+
+            ->join('users', 'users.employee_id', '=', 'employee_tasks.employee_id')
+
+            ->select(
+
+                'users.name',
+
+                DB::raw('SUM(CASE WHEN self_completion=manager_completion THEN 1 ELSE 0 END) aligned'),
+
+                DB::raw('SUM(CASE WHEN self_completion<>manager_completion THEN 1 ELSE 0 END) mismatch'),
+
+                DB::raw('SUM(CASE WHEN manager_completion IS NULL THEN 1 ELSE 0 END) awaiting')
+
+            )
+
+            ->groupBy('users.name')
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Hours Per Employee
+        |--------------------------------------------------------------------------
+        */
+
+        $hoursPerEmployee = (clone $tasks)
+
+            ->join('users', 'users.employee_id', '=', 'employee_tasks.employee_id')
+
+            ->select(
+
+                'users.name',
+
+                DB::raw('SUM(hours_worked) total_hours')
+
+            )
+
+            ->groupBy('users.name')
+
+            ->orderByDesc('total_hours')
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Priority Distribution
+        |--------------------------------------------------------------------------
+        */
+
+        $priorityData = (clone $tasks)
+
+            ->select(
+
+                'priority',
+
+                DB::raw('SUM(hours_worked) total_hours')
+
+            )
+
+            ->groupBy('priority')
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Employee Summary Table
+        |--------------------------------------------------------------------------
+        */
+
+        $summary = (clone $tasks)
+
+            ->join('users', 'users.employee_id', '=', 'employee_tasks.employee_id')
+
+            ->select(
+
+                'users.name',
+
+                DB::raw('SUM(hours_worked) hours'),
+
+                DB::raw('COUNT(*) activities'),
+
+                DB::raw('SUM(CASE WHEN self_completion=manager_completion THEN 1 ELSE 0 END) aligned'),
+
+                DB::raw('SUM(CASE WHEN self_completion<>manager_completion THEN 1 ELSE 0 END) mismatch'),
+
+                DB::raw('SUM(CASE WHEN manager_completion IS NULL THEN 1 ELSE 0 END) awaiting'),
+
+                DB::raw('AVG(self_completion) self_avg'),
+
+                DB::raw('AVG(manager_completion) manager_avg')
+
+            )
+
+            ->groupBy('users.name')
+
+            ->orderBy('users.name')
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Return
+        |--------------------------------------------------------------------------
+        */
+
+        return view('admin.manager_employee_tasks.visual-dashboard', compact(
+
+            'month',
+
+            'departmentSelfAvg',
+
+            'departmentManagerAvg',
+
+            'totalHours',
+
+            'totalActivities',
+
+            'verificationCoverage',
+
+            'daysAligned',
+
+            'dailyTrend',
+
+            'employeeProductivity',
+
+            'verification',
+
+            'hoursPerEmployee',
+
+            'priorityData',
+
+            'summary'
+
+        ));
+    }
+
 }

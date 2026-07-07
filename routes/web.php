@@ -376,6 +376,8 @@ Route::middleware('auth')->group(function () {
         )->name('manager-verification-summary');
         Route::get('/productivity-dashboard', [ManagerEmployeeTaskController::class, 'MonthlyTeamProductivity'])
             ->name('productivity.dashboard');
+        Route::get('/main-dashboard', [ManagerEmployeeTaskController::class, 'mainDashboard'])
+            ->name('main.dashboard');
 
         Route::get('/nomination', [SelfNominationController::class, 'index'])->name('nomination.index');
         Route::get('//nomination/show/{id}', [SelfNominationController::class, 'show'])->name('nomination.show');
