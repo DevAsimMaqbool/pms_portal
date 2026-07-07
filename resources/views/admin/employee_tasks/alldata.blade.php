@@ -302,7 +302,7 @@
                                         data-kpa="{{ $task->kpa->performance_area }}"
                                         data-kpi="{{ $task->kpi->indicator_category }}"
                                         data-indicator="{{ $task->indicator->indicator }}"
-                                        data-goal="{{ $task->goal->goal_name }}"
+                                        data-goal="{{ $task->goal?->goal_name }}"
                                         data-faculty="{{ $task->employee->facultyyy->name }}"
                                         data-department="{{ $task->employee->departmentttt->name }}"
                                         data-updatehistory='@json(json_decode($task->update_history, true))'
