@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\EmployeeTask;
 use App\Models\Goal;
+use App\Models\KeyPerformanceArea;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use App\Exports\EmployeeTasksExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ManagerTaskController extends Controller
 {
@@ -176,9 +179,23 @@ public function allEmployeeTasks(Request $request)
     // FILTER BY DATE
     // =========================================
 
-    if ($request->filled('task_date')) {
+    if ($request->filled('start_date') || $request->filled('end_date')) {
+            $query->when(
 
-         $query->when( $request->filled('task_date'), fn ($q) => $q->where( 'task_date', $request->task_date ) );
+                $request->filled('start_date') &&
+                $request->filled('end_date'),
+
+                function ($q) use ($request) {
+
+                    $q->whereBetween('task_date', [
+
+                        $request->start_date,
+
+                        $request->end_date
+
+                    ]);
+                }
+            );
     }
 
     // =========================================
@@ -233,6 +250,20 @@ public function allEmployeeTasks(Request $request)
          $query->when( $request->filled('task_status'), fn ($q) => $q->where( 'task_status', $request->task_status ) );
      }
 
+     // ===================================================== 
+     // DEPARTMENT FILTER 
+     // =====================================================
+      if ($request->filled('employee_name')) { 
+        $query->whereHas('employee', function ($q) use ($request) { 
+            $q->where( 'name','like', '%' . $request->employee_name . '%' ); 
+            });    
+        }
+
+    // ===================================================== 
+    // KPA FILTER 
+    // ===================================================== 
+    if ($request->filled('kpa_id')) { $query->where( 'kpa_id', $request->kpa_id ); }    
+
 
     // =========================================
     // PAGINATION
@@ -243,10 +274,18 @@ public function allEmployeeTasks(Request $request)
         ->paginate(10)
         ->withQueryString();
     $goals = Goal::with('objectives')->get();    
+    $kpas = KeyPerformanceArea::all();
 
     return view(
         'admin.employee_tasks.alldata',
-        compact('tasks','goals')
+        compact('tasks','goals','kpas')
+    );
+}
+public function exportExcel(Request $request)
+{
+    return Excel::download(
+        new EmployeeTasksExport($request),
+        'employee_tasks_report.xlsx'
     );
 }
 
