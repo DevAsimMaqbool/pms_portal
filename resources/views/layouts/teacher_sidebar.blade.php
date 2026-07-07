@@ -7,7 +7,6 @@
       <img style="width: 175px;" src="{{ asset('admin/assets/img/avatars/superior.svg') }}">
     </a>
 
-
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
       <i class="icon-base ti menu-toggle-icon d-none d-xl-block"></i>
       <i class="icon-base ti tabler-x d-block d-xl-none"></i>
@@ -61,11 +60,11 @@
         </a>
       </li>
       <!-- <li class="menu-item" {{ request()->routeIs('pip.index') ? 'active' : '' }}>
-                                                                                                                                                                                                    <a href="{{ route('pip.index') }}" class="menu-link">
-                                                                                                                                                                                                    <i class="menu-icon icon-base ti tabler-report-analytics"></i>
-                                                                                                                                                                                                    <div data-i18n="PIP">PIP</div>
-                                                                                                                                                                                                    </a>
-                                                                                                                                                                                                    </li> -->
+                                                                                                                                                                                                                      <a href="{{ route('pip.index') }}" class="menu-link">
+                                                                                                                                                                                                                      <i class="menu-icon icon-base ti tabler-report-analytics"></i>
+                                                                                                                                                                                                                      <div data-i18n="PIP">PIP</div>
+                                                                                                                                                                                                                      </a>
+                                                                                                                                                                                                                      </li> -->
       <li class="menu-item {{ request()->routeIs('self-assessment.index') ? 'active' : '' }}">
         <a href="{{ route('self-assessment.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-clipboard-check"></i>
@@ -86,17 +85,17 @@
       </li>
 
       <!-- <li class="menu-item">
-                                                                                                                                                                                                                                  <a href="{{ route('dashboard_v1') }}"" class=" menu-link">
-                                                                                                                                                                                                                                    <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
-                                                                                                                                                                                                                                    <div data-i18n="v1">v1</div>
-                                                                                                                                                                                                                                  </a>
-                                                                                                                                                                                                                                </li>
-                                                                                                                                                                                                                                <li class="menu-item">
-                                                                                                                                                                                                                                  <a href="{{ route('teacher_dashboard') }}"" class=" menu-link">
-                                                                                                                                                                                                                                    <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
-                                                                                                                                                                                                                                    <div data-i18n="v2">v2</div>
-                                                                                                                                                                                                                                  </a>
-                                                                                                                                                                                                                                </li> -->
+                                                                                                                                                                                                                                                    <a href="{{ route('dashboard_v1') }}"" class=" menu-link">
+                                                                                                                                                                                                                                                      <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
+                                                                                                                                                                                                                                                      <div data-i18n="v1">v1</div>
+                                                                                                                                                                                                                                                    </a>
+                                                                                                                                                                                                                                                  </li>
+                                                                                                                                                                                                                                                  <li class="menu-item">
+                                                                                                                                                                                                                                                    <a href="{{ route('teacher_dashboard') }}"" class=" menu-link">
+                                                                                                                                                                                                                                                      <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
+                                                                                                                                                                                                                                                      <div data-i18n="v2">v2</div>
+                                                                                                                                                                                                                                                    </a>
+                                                                                                                                                                                                                                                  </li> -->
       @php
         // $result = getRoleAssignments(Auth::user()->getRoleNames()->first(), null, 1);
         $result = getSidbarRoleAssignments(getRoleName(activeRole()), null, 1);
@@ -163,7 +162,12 @@
           </li>
         </ul>
       </li>
-
+      <li class="menu-item {{ request()->routeIs('employee-tasks.index') ? 'active' : '' }}">
+        <a href="{{ route('employee-tasks.index') }}"" class=" menu-link">
+          <i class="menu-icon icon-base ti tabler-calendar-check"></i>
+          <div data-i18n="Task Management">Task Management</div>
+        </a>
+      </li>
       <li class="menu-item {{ request()->routeIs('pms.downloads') ? 'active' : '' }}">
         <a href="{{ route('pms.downloads') }}"" class=" menu-link">
           <i class="menu-icon icon-base ti tabler-download"></i>
@@ -254,11 +258,11 @@
         </a>
       </li>
       <!-- <li class="menu-item {{ request()->routeIs('assigndepartment.index') ? 'active' : '' }}">
-                                                                                                                                                                                                                                                                                                                          <a href="{{ route('assigndepartment.index') }}" class="menu-link">
-                                                                                                                                                                                                                                                                                                                          <i class="menu-icon icon-base ti tabler-message-heart"></i>
-                                                                                                                                                                                                                                                                                                                          <div data-i18n="Assign Department">Assign Department</div>
-                                                                                                                                                                                                                                                                                                                          </a>
-                                                                                                                                                                                                                                                                                                                          </li> -->
+                                                                                                                                                                                                                                                                                                                                <a href="{{ route('assigndepartment.index') }}" class="menu-link">
+                                                                                                                                                                                                                                                                                                                                <i class="menu-icon icon-base ti tabler-message-heart"></i>
+                                                                                                                                                                                                                                                                                                                                <div data-i18n="Assign Department">Assign Department</div>
+                                                                                                                                                                                                                                                                                                                                </a>
+                                                                                                                                                                                                                                                                                                                                </li> -->
       <li class="menu-item {{ request()->routeIs('students.index') ? 'active' : '' }}">
         <a href="{{ route('students.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-message-heart"></i>

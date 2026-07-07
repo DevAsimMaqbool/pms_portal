@@ -7,7 +7,6 @@
             <img style="width: 175px;" src="{{ asset('admin/assets/img/avatars/superior.svg') }}">
         </a>
 
-
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
             <i class="icon-base ti menu-toggle-icon d-none d-xl-block"></i>
             <i class="icon-base ti tabler-x d-block d-xl-none"></i>
@@ -48,6 +47,12 @@
             <a href="{{ route('users.index') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-users"></i>
                 <div data-i18n="Team Performance">Team Performance</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('manage-employee-tasks.index') ? 'active' : '' }}">
+            <a href="{{ route('manage-employee-tasks.index') }}"" class=" menu-link">
+                <i class="menu-icon icon-base ti tabler-calendar-check"></i>
+                <div data-i18n="Task Management">Task Management</div>
             </a>
         </li>
         {{-- <li class="menu-item {{ request()->routeIs('survey.report') ? 'active' : '' }}">

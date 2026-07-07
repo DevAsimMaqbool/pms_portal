@@ -204,7 +204,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/assignments/edit', [RoleKpaAssignmentController::class, 'edit'])
         ->name('assignments.edit');
 
-
     // For dependent dropdowns
     Route::get('/categories/{kpaId}', [RoleKpaAssignmentController::class, 'getCategories']);
     Route::get('/indicators/{categoryId}', [RoleKpaAssignmentController::class, 'getIndicators']);
@@ -251,9 +250,6 @@ Route::middleware('auth')->group(function () {
     //Route::post('/employabilities', [EmployabilityController::class, 'store'])->name('employability.store');
     Route::get('/hod-departments-overview', [PermissionController::class, 'hodDepartmentsOverview']);
     Route::get('/multi-role-performance', [PermissionController::class, 'MultiRolePerformance'])->name('multi-role-performance');
-
-
-
 
     Route::middleware('role:Teacher|HOD|ORIC|Dean|Human Resources|Assistant Professor|Professor|International Office|QEC|Finance|OEC|Employability Center|Program Leader UG|Program Leader PG|DOPS|Alumni Office|Associate Professor')->group(function () {
         Route::get('/view-forms', [IndicatorController::class, 'indicator_form_show'])->name('indicatorForm.show');
@@ -317,12 +313,6 @@ Route::middleware('auth')->group(function () {
             [CompletionOfCourseFolderController::class, 'updatestatusverification']
         )->name('completion.folder.verification');
 
-
-
-
-
-
-
         // routes/import excel file
         Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');
         Route::post('/student-engagement-rate/import', [StudentEngagementRateController::class, 'import'])->name('student-engagement-rate.import');
@@ -340,7 +330,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('completion-of-course-folder', CompletionOfCourseFolderController::class);
         Route::resource('compliance-usage-of-lms', ComplianceAndUsageOfLMSController::class);
         Route::get('/get-faculty-classes/{faculty_id}', [CompletionOfCourseFolderController::class, 'getFacultyClasses']);
-
 
         //form crud
         Route::put('/indicator-form/update/{id}', [AchievementOfResearchPublicationsTargetController::class, 'updateResearchPublication'])->name('research.update');
@@ -363,10 +352,6 @@ Route::middleware('auth')->group(function () {
         Route::put('/conference-impacts/update/{id}', [ResearchConferenceImpactController::class, 'updateResearchConferenceImpact'])->name('conference-impacts.update');
         Route::resource('employee-tasks', EmployeeTaskController::class);
         Route::resource('manage-employee-tasks', ManagerTaskController::class);
-        Route::get('/all-employee-tasks', [ManagerTaskController::class, 'allEmployeeTasks'])->name('alltask.get');
-        Route::get('/employee-tasks-export',[ManagerTaskController::class, 'exportExcel'])->name('employee.tasks.export');
-
-
     });
 
     Route::middleware('role:user')->group(function () {
@@ -379,6 +364,9 @@ Route::middleware('auth')->group(function () {
             ->name('productivity.dashboard');
         Route::get('/main-dashboard', [ManagerEmployeeTaskController::class, 'mainDashboard'])
             ->name('main.dashboard');
+
+        Route::get('/all-employee-tasks', [ManagerTaskController::class, 'allEmployeeTasks'])->name('alltask.get');
+        Route::get('/employee-tasks-export', [ManagerTaskController::class, 'exportExcel'])->name('employee.tasks.export');
 
         Route::get('/nomination', [SelfNominationController::class, 'index'])->name('nomination.index');
         Route::get('//nomination/show/{id}', [SelfNominationController::class, 'show'])->name('nomination.show');
@@ -426,7 +414,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/get-departments/{facultyId}', [DepartmentController::class, 'getDepartments'])->name('get.departments');
     Route::get('/get-programs/{departmentId}', [ProgramController::class, 'getPrograms'])->name('get.programs');
 
-
     Route::middleware('role:HOD')->group(function () {
         Route::get('/hod-target', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
     });
@@ -466,10 +453,8 @@ Route::middleware('auth')->group(function () {
         return response()->json($assignments);
     })->name('assignments.byRole');
 
-
     Route::post('/assignments/weightage/save', [RoleKpaAssignmentController::class, 'saveWeightage'])
         ->name('assignments.weightage.save');
-
 
     Route::prefix('rating-rules')->group(function () {
         Route::get('/', [RatingRuleController::class, 'index']);
@@ -510,8 +495,6 @@ Route::middleware('auth')->group(function () {
         '/notifications',
         [NotificationController::class, 'index']
     )->name('notifications.index');
-
-
 
 });
 require __DIR__ . '/auth.php';
