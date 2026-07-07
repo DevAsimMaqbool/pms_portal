@@ -412,6 +412,9 @@
                                             <ul>
 
                                                 @foreach($rows as $row)
+                                                @php
+                                                    $dimension = \App\Models\Dimension::find($row->dimension_id);
+                                                @endphp
 
                                                 <li>
 
@@ -426,7 +429,7 @@
                                                             <div class="me-2">
 
                                                                 <h6 class="mb-0">
-                                                                    {{ $kpa?->performance_area }}
+                                                                    {{ $dimension?->name }}
                                                                 </h6>
 
                                                                 <small class="text-body">
