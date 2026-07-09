@@ -94,6 +94,22 @@
             font-weight: bold;
             margin-bottom: 15px;
         }
+        .chart-card1{
+             background: #fff;
+             border: 1px solid #ddd;
+            height: 520px;          /* Same height for both cards */
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            margin-top: 25px;
+        }
+
+
+        .chart-card1 canvas{
+            flex: 1;
+            width: 100% !important;
+            height: 100% !important;
+        }
     </style>
 
     <div class="container-fluid">
@@ -299,64 +315,71 @@
         {{-- Chart 1 --}}
         {{-- ========================= --}}
 
-        <div class="chart-card">
+        <div class="card mt-6">
 
-            <div class="chart-title">
+            <div class="card-header">
 
                 Daily Team Productivity Trend
                 (Self vs Manager Verified)
 
             </div>
-
-            <canvas id="dailyTrendChart" height="90"></canvas>
-
-        </div>
-
-        {{-- ========================= --}}
-        {{-- Chart 2 --}}
-        {{-- ========================= --}}
-
-        <div class="chart-card">
-
-            <div class="chart-title">
-
-                Average Productivity Per Employee
-
+            <div class="card-body">
+              <canvas id="dailyTrendChart" height="90"></canvas>
             </div>
 
-            <canvas id="employeeChart" height="120"></canvas>
-
         </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                {{-- ========================= --}}
+                {{-- Chart 2 --}}
+                {{-- ========================= --}}
+                <div class="card">
 
-        {{-- ========================= --}}
-        {{-- Chart 3 --}}
-        {{-- ========================= --}}
+                    <div class="card-header">
 
-        <div class="chart-card">
+                        Average Productivity Per Employee
 
-            <div class="chart-title">
+                    </div>
+                    <div class="card-body">
+                     <canvas id="employeeChart"></canvas>
+                    </div>
 
-                Verification Status Per Employee
-
+                </div>
             </div>
+            <div class="col-md-6">
+                {{-- ========================= --}}
+                {{-- Chart 3 --}}
+                {{-- ========================= --}}
 
-            <canvas id="verificationChart" height="120"></canvas>
+                <div class="card">
 
+                    <div class="card-header">
+
+                        Verification Status Per Employee
+
+                    </div>
+                    <div class="card-body">
+                     <canvas id="verificationChart"></canvas>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
         <div class="row mt-4">
 
             <div class="col-md-6">
 
-                <div class="chart-card">
+                <div class="card h-100">
 
-                    <div class="chart-title">
+                    <div class="card-header">
 
                         Total Hours Logged Per Employee
 
                     </div>
-
-                    <canvas id="hoursChart"></canvas>
+                    <div class="card-body">
+                      <canvas id="hoursChart" height=""></canvas>
+                    </div>
 
                 </div>
 
@@ -364,15 +387,16 @@
 
             <div class="col-md-6">
 
-                <div class="chart-card">
+                <div class="card">
 
-                    <div class="chart-title">
+                    <div class="card-header">
 
                         Time Allocation By Priority
 
                     </div>
-
-                    <canvas id="priorityChart"></canvas>
+                    <div class="card-body">
+                      <canvas id="priorityChart" height="300" ></canvas>
+                    </div>
 
                 </div>
 
@@ -802,6 +826,7 @@
                 options: {
 
                     responsive: true,
+                    maintainAspectRatio: false,
 
                     plugins: {
 
