@@ -5,9 +5,6 @@
 @section('content')
 
     <style>
-        body {
-            background: #f5f7fa;
-        }
 
         .dashboard-title {
 
@@ -80,36 +77,6 @@
             margin-bottom: 20px;
         }
 
-        .chart-card {
-
-            background: #fff;
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-top: 25px;
-        }
-
-        .chart-title {
-
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        .chart-card1{
-             background: #fff;
-             border: 1px solid #ddd;
-            height: 520px;          /* Same height for both cards */
-            display: flex;
-            flex-direction: column;
-            padding: 15px;
-            margin-top: 25px;
-        }
-
-
-        .chart-card1 canvas{
-            flex: 1;
-            width: 100% !important;
-            height: 100% !important;
-        }
     </style>
 
     <div class="container-fluid">
