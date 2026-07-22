@@ -33,7 +33,6 @@
                             <th>Role</th>
                             <th>Goal</th>
                             <th>KPA</th>
-                            <th>Total Dimensions</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -80,10 +79,6 @@
                         name: 'kpa'
                     },
                     {
-                        data: 'total_dimensions',
-                        name: 'total_dimensions'
-                    },
-                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
@@ -92,34 +87,35 @@
                 ]
             });
 
-            // DELETE AJAX
-        $(document).on('click', '.deleteBtn', function () {
+          $(document).on('click', '.deleteBtn', function () {
 
-            let url = $(this).data('url');
+    let url = $(this).data('url');
 
-            if (confirm('Are you sure you want to delete this group?')) {
+    if(confirm('Are you sure?')){
 
-                $.ajax({
-                    url: url,
-                    type: "DELETE",
-                    data: {
-                        _token: "{{ csrf_token() }}"
-                    },
+        $.ajax({
 
-                    success: function (response) {
+            url: url,
 
-                        alert(response.message);
+            type: "DELETE",
 
-                        table.ajax.reload();
-                    },
+            data:{
+                _token:"{{ csrf_token() }}"
+            },
 
-                    error: function (xhr) {
+            success:function(response){
 
-                        alert('Something went wrong!');
-                    }
-                });
+                alert(response.message);
+
+                table.ajax.reload();
+
             }
+
         });
+
+    }
+
+});
 
         });
 
