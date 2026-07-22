@@ -311,165 +311,222 @@
 
                     <ul>
 
-                        @foreach($assignments as $assign)
+                       @foreach($assignments as $assign)
 
-                        @php
-                            $role = \App\Models\Role::find($assign['role_id']);
-
-                            $goal = \App\Models\Goal::find($assign['goal_id']);
-
-                            $kpa = \App\Models\KeyPerformanceArea::find($assign['kpa_id']);
-                            $S2Rdriver = \App\Models\S2RDriver::find($goal['s2r_driver_id']);
-
-                            $objectives = collect($assign['data'])
-                                            ->groupBy('objective_id');
-                        @endphp
-
-                        <!-- GOAL -->
                         <li>
 
-                            <div class="d-flex align-items-center goal tree-node bg-label-warning"
-                                 onclick="toggleBox('goal{{ $assign['goal_id'] }}{{ $assign['role_id'] }}')">
 
-                                <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
-                                    <i class="icon-base ti tabler-shadow icon-md"></i>
-                                </div>
+                        <!-- GOAL -->
+                        <div class="d-flex align-items-center goal tree-node bg-label-warning"
+                        onclick="toggleBox('goal{{$assign->id}}')">
 
-                                <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
 
-                                    <div class="me-2">
+                        <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
+                        <i class="icon-base ti tabler-shadow icon-md"></i>
+                        </div>
 
-                                        <h6 class="mb-0">
-                                            {{ $goal?->goal_name }}
-                                        </h6>
 
-                                        <small class="text-body">
-                                            Role:
-                                            {{ $role?->name }} | Cod: {{ $goal?->goal_cod }} | S2Rdriver: {{ $S2Rdriver?->driver_name }}
-                                        </small>
+                        <div class="d-flex justify-content-between w-100">
 
-                                    </div>
 
-                                    <div class="d-flex align-items-center">
-                                        <div class="badge bg-warning text-dark">
-                                            Goal
-                                        </div>
-                                    </div>
+                        <div>
 
-                                </div>
+                        <h6 class="mb-0">
 
-                            </div>
+                        {{ $assign->goal?->goal_name }}
 
-                            <div id="goal{{ $assign['goal_id'] }}{{ $assign['role_id'] }}"
-                                 class="collapse-box show">
+                        </h6>
 
-                                <ul>
 
-                                    @foreach($objectives as $objectiveId => $rows)
+                        <small>
 
-                                    @php
-                                        $objective = \App\Models\Objective::find($objectiveId);
-                                    @endphp
+                        Role:
+                        {{ $assign->role?->name }}
 
-                                    <!-- OBJECTIVE -->
-                                    <li>
+                        |
 
-                                        <div class="d-flex align-items-center objective tree-node bg-label-info"
-                                             onclick="toggleBox('obj{{ $objectiveId }}')">
+                        Code:
+                        {{ $assign->goal?->goal_cod }}
 
-                                            <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
-                                                <i class="icon-base ti tabler-shadow icon-md"></i>
-                                            </div>
+                        |
 
-                                            <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
+                        Driver:
+                        {{ $assign->goal?->driver?->driver_name }}
 
-                                                <div class="me-2">
+                        </small>
 
-                                                    <h6 class="mb-0">
-                                                        {{ $objective?->title }}
-                                                    </h6>
 
-                                                    <small class="text-body">
-                                                        Objective Cod:
-                                                        {{ $objective?->objective_cod }}
-                                                    </small>
+                        </div>
 
-                                                </div>
 
-                                                <div class="d-flex align-items-center">
-                                                    <div class="badge bg-info">
-                                                        Objective
-                                                    </div>
-                                                </div>
+                        <span class="badge bg-warning text-dark">
+                        Goal
+                        </span>
 
-                                            </div>
 
-                                        </div>
+                        </div>
 
-                                        <div id="obj{{ $objectiveId }}"
-                                             class="collapse-box show">
 
-                                            <ul>
+                        </div>
 
-                                                @foreach($rows as $row)
-                                                @php
-                                                    $dimension = \App\Models\Dimension::find($row->dimension_id);
-                                                @endphp
 
-                                                <li>
 
-                                                    <div class="d-flex align-items-center kpi tree-node bg-label-danger">
+                        <div id="goal{{$assign->id}}" class="collapse-box show">
 
-                                                        <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
-                                                            <i class="icon-base ti tabler-shadow icon-md"></i>
-                                                        </div>
 
-                                                        <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
+                        <ul>
 
-                                                            <div class="me-2">
 
-                                                                <h6 class="mb-0">
-                                                                    {{ $dimension?->name }}
-                                                                </h6>
+                        @foreach($assign->details as $detail)
 
-                                                                <small class="text-body">
 
-                                                                    Target:
-                                                                    {{ $row->dimension_target }}
 
-                                                                    |
+                        <li>
 
-                                                                    Weight:
-                                                                    {{ $row->dimension_weight }}
 
-                                                                </small>
 
-                                                            </div>
+                        <!-- OBJECTIVE -->
 
-                                                        </div>
+                        <div class="d-flex align-items-center objective tree-node bg-label-info"
+                        onclick="toggleBox('objective{{$detail->id}}')">
 
-                                                    </div>
 
-                                                </li>
+                        <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
 
-                                                @endforeach
+                        <i class="icon-base ti tabler-shadow icon-md"></i>
 
-                                            </ul>
+                        </div>
 
-                                        </div>
 
-                                    </li>
+                        <div class="w-100">
 
-                                    @endforeach
 
-                                </ul>
+                        <h6 class="mb-0">
 
-                            </div>
+                        {{ $detail->objective?->title }}
+
+                        </h6>
+
+
+                        <small>
+
+                        Code:
+                        {{ $detail->objective?->objective_cod }}
+
+                        </small>
+
+
+                        </div>
+
+
+                        <span class="badge bg-info">
+                        Objective
+                        </span>
+
+
+                        </div>
+
+
+
+
+                        <div id="objective{{$detail->id}}" 
+                        class="collapse-box show">
+
+
+                        <ul>
+
+
+                        @foreach($detail->indicators as $assignmentIndicator)
+
+
+
+                        <li>
+
+
+
+                        <!-- KPI -->
+
+                        <div class="d-flex align-items-center kpi tree-node bg-label-danger">
+
+
+                        <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
+
+                        <i class="icon-base ti tabler-shadow icon-md"></i>
+
+                        </div>
+
+
+
+                        <div class="w-100">
+
+
+                        <h6 class="mb-0">
+
+                        {{ $assignmentIndicator->indicator?->name }}
+
+                        </h6>
+
+
+                        <small>
+
+                        Dimension:
+                        {{ $detail->dimension?->name }}
+
+                        |
+
+                        Target:
+                        {{ $detail->dimension_target }}
+
+                        |
+
+                        Weight:
+                        {{ $detail->dimension_weight }}
+
+                        </small>
+
+
+                        </div>
+
+
+                        <span class="badge bg-danger">
+                        KPI
+                        </span>
+
+
+                        </div>
+
 
                         </li>
 
+
+
                         @endforeach
 
+
+                        </ul>
+
+
+                        </div>
+
+
+                        </li>
+
+
+                        @endforeach
+
+
+
+                        </ul>
+
+
+                        </div>
+
+
+
+                        </li>
+
+
+                        @endforeach
                     </ul>
 
                 </div>

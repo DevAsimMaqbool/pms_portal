@@ -6,89 +6,72 @@ use App\Models\Goal;
 use App\Models\KeyPerformanceArea;
 use Illuminate\Http\Request;
 use App\Models\GoalAssignment;
+use App\Models\GoalAssignmentDetail;
+use App\Models\GoalAssignmentIndicator;
+use App\Models\GoalAssignmentUser;
 use App\Models\Role;
+use App\Models\User;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 
 class GoalsAsignController extends Controller
 {
-    public function index(Request $request)
-    {
-        if ($request->ajax()) {
+   public function index(Request $request)
+{
+    if ($request->ajax()) {
 
-            $data = GoalAssignment::select(
-                'role_id',
-                'goal_id',
-                'kpa_id'
-            )
-                ->selectRaw('COUNT(*) as total_dimensions')
-                ->groupBy(
-                    'role_id',
-                    'goal_id',
-                    'kpa_id'
-                );
+        $data = GoalAssignment::with(['role', 'goal', 'kpa']);
 
-            return DataTables::of($data)
+        return DataTables::of($data)
 
-                ->addIndexColumn()
+            ->addIndexColumn()
 
-                ->addColumn('role', function ($row) {
-                    return Role::find($row->role_id)?->name;
-                })
+            ->addColumn('role', function ($row) {
+                return optional($row->role)->name;
+            })
 
-                ->addColumn('goal', function ($row) {
-                    return Goal::find($row->goal_id)?->goal_name;
-                })
+            ->addColumn('goal', function ($row) {
+                return optional($row->goal)->goal_name;
+            })
 
-                ->addColumn('kpa', function ($row) {
-                    return KeyPerformanceArea::find($row->kpa_id)?->performance_area;
-                })
+            ->addColumn('kpa', function ($row) {
+                return optional($row->kpa)->performance_area;
+            })
 
-                ->addColumn('dimensions', function ($row) {
-                    return $row->total_dimensions;
-                })
+            ->addColumn('dimensions', function ($row) {
 
-                ->addColumn('action', function ($row) {
+                return GoalAssignmentDetail::where(
+                    'goal_assignment_id',
+                    $row->id
+                )->count();
 
-                    $edit = route(
-                        'goals-assign.group.edit',
-                        [
-                            'role_id' => $row->role_id,
-                            'goal_id' => $row->goal_id,
-                            'kpa_id' => $row->kpa_id
-                        ]
-                    );
+            })
 
-                    $delete = route(
-                        'goals-assign.destroyGroup',
-                        [
-                            'role_id' => $row->role_id,
-                            'goal_id' => $row->goal_id,
-                            'kpa_id' => $row->kpa_id
-                        ]
-                    );
+            ->addColumn('action', function ($row) {
 
-                    return '
-        <a href="' . $edit . '"
-           class="btn btn-sm btn-primary">
-           Edit
-        </a>
+                $edit = route('goals-assign.edit', $row->id);
 
-        <button
-            class="btn btn-sm btn-danger deleteBtn"
-            data-url="' . $delete . '">
-            Delete
-        </button>
-    ';
-                })
+                $delete = route('goals-assign.destroy', $row->id);
 
-                ->rawColumns(['action'])
-                ->make(true);
-        }
+                return '
+                    <a href="'.$edit.'" class="btn btn-sm btn-primary">
+                        Edit
+                    </a>
 
-        return view('admin.goals_assign.index');
+                    <button
+                        class="btn btn-sm btn-danger deleteBtn"
+                        data-url="'.$delete.'">
+                        Delete
+                    </button>
+                ';
+            })
+
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
+    return view('admin.goals_assign.index');
+}
     public function create()
     {
 
@@ -101,168 +84,390 @@ class GoalsAsignController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'role_id' => 'required|exists:roles,id',
+            'role_id' => 'required',
             'kpa_id' => 'required',
-            'goals' => 'required|array|min:1',
+            'kpi_id' => 'required',
+            'employee_ids' => 'required|array',
         ]);
-        $existing = GoalAssignment::where('role_id', $request->role_id)
-            ->where('kpa_id', $request->kpa_id)
-            ->pluck('goal_id')
-            ->toArray();
 
-        $skippedGoals = [];
+        DB::beginTransaction();
 
-        foreach ($request->goals as $goalId => $goalData) {
+        try {
 
-            // collect duplicates instead of silent skip
-            if (in_array($goalId, $existing)) {
-                $skippedGoals[] = $goalId;
-                continue;
-            }
+            /*
+            |--------------------------------------------------------------------------
+            | One Assignment Per Goal
+            |--------------------------------------------------------------------------
+            */
 
-            foreach ($goalData['objectives'] as $objId => $objData) {
+            foreach ($request->goals as $goalId => $goalData) {
 
-                foreach ($objData['dimensions'] as $dimId => $dimData) {
+                /*
+                |--------------------------------------------------------------------------
+                | Save Master
+                |--------------------------------------------------------------------------
+                */
 
-                    if (
-                        empty($dimData['target']) ||
-                        empty($dimData['weight']) ||
-                        empty($dimData['kpis'])
-                    ) {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'All fields are required in each dimension'
-                        ], 422);
+                $assignment = GoalAssignment::create([
+
+                    'role_id'    => $request->role_id,
+
+                    'goal_id'    => $goalId,
+
+                    'kpa_id'     => $request->kpa_id,
+
+                    'kpa_cid'    => $request->kpi_id,
+
+                    'validate'   => 1,
+
+                    'status'     => 'Active',
+
+                    'created_by' => auth()->id(),
+
+                    'updated_by' => auth()->id(),
+
+                ]);
+
+                /*
+                |--------------------------------------------------------------------------
+                | Employees
+                |--------------------------------------------------------------------------
+                */
+
+                foreach ($request->employee_ids as $employeeId) {
+
+                    GoalAssignmentUser::create([
+
+                        'goal_assignment_id' => $assignment->id,
+
+                        'user_id'            => $employeeId,
+
+                    ]);
+
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Objectives
+                |--------------------------------------------------------------------------
+                */
+
+                if (!isset($goalData['objectives'])) {
+                    continue;
+                }
+
+                foreach ($goalData['objectives'] as $objectiveId => $objective) {
+
+                    if (!isset($objective['dimensions'])) {
+                        continue;
                     }
 
-                    GoalAssignment::create([
-                        'role_id' => $request->role_id,
-                        'goal_id' => $goalId,
-                        'objective_id' => $objId,
-                        'dimension_id' => $dimId,
-                        'kpa_id' => $request->kpa_id,
-                        'dimension_target' => $dimData['target'],
-                        'dimension_weight' => $dimData['weight'],
-                        'kpi_ids' => $dimData['kpis'],
-                    ]);
-                }
-            }
-        }
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Dimensions
+                    |--------------------------------------------------------------------------
+                    */
 
-        if (!empty($skippedGoals)) {
+                    foreach ($objective['dimensions'] as $dimensionId => $dimension) {
+
+                        $detail = GoalAssignmentDetail::create([
+
+                            'goal_assignment_id' => $assignment->id,
+
+                            'goal_id'            => $goalId,
+
+                            'objective_id'       => $objectiveId,
+
+                            'dimension_id'       => $dimensionId,
+
+                            'dimension_target'             => $dimension['target'] ?? 0,
+
+                            'dimension_weight'             => $dimension['weight'] ?? 0,
+
+                        ]);
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Indicators
+                        |--------------------------------------------------------------------------
+                        */
+
+                        if (!empty($dimension['kpis'])) {
+
+                            foreach ($dimension['kpis'] as $indicatorId) {
+
+                                GoalAssignmentIndicator::create([
+
+                                    'goal_assignment_detail_id' => $detail->id,
+
+                                    'indicator_id'              => $indicatorId,
+
+                                ]);
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            DB::commit();
 
             return response()->json([
-                'success' => true,
-                'message' => 'Saved successfully, but some goals were already assigned.',
-                'skipped_goals' => $skippedGoals
+                'status' => true,
+                'message' => 'Goal Assignment Saved Successfully.'
             ]);
-        }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'All goals assigned successfully.'
-        ]);
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
-
-    public function edit($roleId, $goalId, $kpaId)
+    public function edit($id)
     {
-        $assignments = GoalAssignment::where([
-            'role_id' => $roleId,
-            'goal_id' => $goalId,
-            'kpa_id' => $kpaId
-        ])->get();
+        $assignment = GoalAssignment::with([
+            'users.user',
+            'details.indicators',
+        ])->findOrFail($id);
 
         $roles = Role::all();
+
         $kpas = KeyPerformanceArea::all();
 
         $goals = Goal::with([
             'objectives.dimensions'
         ])->get();
 
-        // ✅ THIS IS WHAT YOU MISSED
-        $mapped = [];
-
-        foreach ($assignments as $a) {
-            $mapped[$a->goal_id]
-            [$a->objective_id]
-            [$a->dimension_id] = [
-                'dimension_target' => $a->dimension_target,
-                'dimension_weight' => $a->dimension_weight,
-                'kpis' => $a->kpi_ids ?? []
-            ];
-        }
-
         return view('admin.goals_assign.edit', compact(
-            'assignments',
+            'assignment',
             'roles',
             'kpas',
-            'goals',
-            'mapped',
-            'roleId',
-            'goalId',
-            'kpaId'
+            'goals'
         ));
     }
-    public function updateGroup(Request $request)
-    {
-        // STEP 1: delete old group
-        GoalAssignment::where([
-            'role_id' => $request->old_role_id,
-            'goal_id' => $request->old_goal_id,
-            'kpa_id' => $request->old_kpa_id,
-        ])->delete();
+   public function update(Request $request, $id)
+{
+    $request->validate([
+        'role_id' => 'required',
+        'kpa_id' => 'required',
+        'kpi_id' => 'required',
+        'employee_ids' => 'required|array',
+        'goals' => 'required|array',
+    ]);
 
-        // STEP 2: insert new structure
-        foreach ($request->goals as $goalId => $goalData) {
+    DB::beginTransaction();
 
-            foreach ($goalData['objectives'] as $objId => $objData) {
+    try {
 
-                foreach ($objData['dimensions'] as $dimId => $dimData) {
+        $assignment = GoalAssignment::findOrFail($id);
 
-                    GoalAssignment::create([
-                        'role_id' => $request->role_id,
-                        'goal_id' => $goalId,
-                        'objective_id' => $objId,
-                        'dimension_id' => $dimId,
-                        'kpa_id' => $request->kpa_id,
-                        'dimension_target' => $dimData['dimension_target'] ?? null,
-                        'dimension_weight' => $dimData['dimension_weight'] ?? null,
-                        'kpi_ids' => $dimData['kpis'] ?? [],
-                    ]);
-                }
-            }
+        //=========================================
+        // Get Goal ID
+        //=========================================
+
+        $goalId = array_key_first($request->goals);
+
+        //=========================================
+        // Update Master
+        //=========================================
+
+        $assignment->update([
+            'role_id'    => $request->role_id,
+            'goal_id'    => $goalId,
+            'kpa_id'     => $request->kpa_id,
+            'kpa_cid'    => $request->kpi_id,
+            'updated_by' => auth()->id(),
+        ]);
+
+        //=========================================
+        // Delete Old Employees
+        //=========================================
+
+        GoalAssignmentUser::where(
+            'goal_assignment_id',
+            $assignment->id
+        )->delete();
+
+        //=========================================
+        // Save Employees
+        //=========================================
+
+        foreach ($request->employee_ids as $employeeId) {
+
+            GoalAssignmentUser::create([
+                'goal_assignment_id' => $assignment->id,
+                'user_id' => $employeeId,
+            ]);
+
         }
+
+        //=========================================
+        // Delete Old Indicators
+        //=========================================
+
+        $detailIds = GoalAssignmentDetail::where(
+            'goal_assignment_id',
+            $assignment->id
+        )->pluck('id');
+
+        GoalAssignmentIndicator::whereIn(
+            'goal_assignment_detail_id',
+            $detailIds
+        )->delete();
+
+        GoalAssignmentDetail::where(
+            'goal_assignment_id',
+            $assignment->id
+        )->delete();
+
+        //=========================================
+        // Save Details
+        //=========================================
+
+        foreach ($request->goals as $goalId => $goal) {
+
+            if (!isset($goal['objectives'])) {
+                continue;
+            }
+
+            foreach ($goal['objectives'] as $objectiveId => $objective) {
+
+                if (!isset($objective['dimensions'])) {
+                    continue;
+                }
+
+                foreach ($objective['dimensions'] as $dimensionId => $dimension) {
+
+                    $detail = GoalAssignmentDetail::create([
+
+                        'goal_assignment_id' => $assignment->id,
+
+                        'goal_id' => $goalId,
+
+                        'objective_id' => $objectiveId,
+
+                        'dimension_id' => $dimensionId,
+
+                        'dimension_target' => $dimension['target'] ?? 0,
+
+                        'dimension_weight' => $dimension['weight'] ?? 0,
+
+                    ]);
+
+                    if (!empty($dimension['kpis']) && is_array($dimension['kpis'])) {
+
+                        foreach ($dimension['kpis'] as $indicatorId) {
+
+                            GoalAssignmentIndicator::create([
+
+                                'goal_assignment_detail_id' => $detail->id,
+
+                                'indicator_id' => $indicatorId,
+
+                            ]);
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Goal Assignment Updated Successfully.'
+        ]);
+
+    } catch (\Exception $e) {
+
+        DB::rollBack();
+
+        return response()->json([
+            'status' => false,
+            'message' => $e->getMessage(),
+        ], 500);
+
+    }
+}
+    public function destroy($id)
+{
+    DB::beginTransaction();
+
+    try {
+
+        $assignment = GoalAssignment::findOrFail($id);
+
+        // Delete indicators
+        $detailIds = GoalAssignmentDetail::where(
+            'goal_assignment_id',
+            $assignment->id
+        )->pluck('id');
+
+        GoalAssignmentIndicator::whereIn(
+            'goal_assignment_detail_id',
+            $detailIds
+        )->delete();
+
+        // Delete details
+        GoalAssignmentDetail::where(
+            'goal_assignment_id',
+            $assignment->id
+        )->delete();
+
+        // Delete employees
+        GoalAssignmentUser::where(
+            'goal_assignment_id',
+            $assignment->id
+        )->delete();
+
+        // Delete assignment
+        $assignment->delete();
+
+        DB::commit();
 
         return response()->json([
             'success' => true,
-            'message' => 'Updated successfully'
+            'message' => 'Goal Assignment deleted successfully.'
         ]);
-    }
-    public function destroyGroup(Request $request)
-    {
-        GoalAssignment::where([
-            'role_id' => $request->role_id,
-            'goal_id' => $request->goal_id,
-            'kpa_id' => $request->kpa_id
-        ])->delete();
 
-         return response()->json([
-            'success' => true,
-            'message' => 'Group deleted successfully'
-        ]);
+    } catch (\Exception $e) {
+
+        DB::rollBack();
+
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ],500);
+
     }
-    public function viewAssignGoal()
+}
+    public function viewAssignGoal11()
 {
     $data = GoalAssignment::select(
             'role_id',
             'goal_id',
-            'kpa_id'
+            'kpa_id',
+            'kpa_cid'
         )
         ->groupBy(
             'role_id',
             'goal_id',
-            'kpa_id'
+            'kpa_id',
+            'kpa_cid'
         )
         ->get();
 
@@ -274,15 +479,54 @@ class GoalsAsignController extends Controller
             'role_id' => $row->role_id,
             'goal_id' => $row->goal_id,
             'kpa_id'  => $row->kpa_id,
+            'kpa_cid'  => $row->kpa_cid,
 
             'data' => GoalAssignment::where([
                 'role_id' => $row->role_id,
                 'goal_id' => $row->goal_id,
-                'kpa_id'  => $row->kpa_id
+                'kpa_id'  => $row->kpa_id,
+                'kpa_cid'  => $row->kpa_cid
             ])->get()
         ];
     }
 
     return view('admin.goals_assign.view', compact('assignments'));
+}
+public function viewAssignGoal()
+{
+
+    $assignments = GoalAssignment::with([
+
+        'role',
+
+        'goal.driver',
+
+        'details.objective',
+
+        'details.dimension',
+
+        'details.indicators.indicator'
+
+
+    ])->get();
+
+
+
+    return view(
+        'admin.goals_assign.view',
+        compact('assignments')
+    );
+
+}
+public function getEmployees($roleId)
+{
+    $role = Role::findOrFail($roleId);
+
+    $users = User::role($role->name)
+        ->select('id', 'name', 'email')
+        ->orderBy('name')
+        ->get();
+
+    return response()->json($users);
 }
 }

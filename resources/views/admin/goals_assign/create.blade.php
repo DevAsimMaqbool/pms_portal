@@ -21,20 +21,29 @@
                     {{-- KPA --}}
                     <div class="mb-3">
                         <label class="form-label">Select Role</label>
-                        <select id="role_id" name="role_id" class="form-select">
+                        <select id="role_id" name="role_id" class="form-select" required>
                             <option value="">Select Role</option>
                             @foreach($roles as $role)
                                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                             @endforeach
                         </select>
                     </div>
+
+                    <div id="selectedEmployees" class="mt-2"></div>
+
+                    <div id="employeeInputs"></div>
                     <div class="mb-3">
                         <label class="form-label">Select KPA</label>
-                        <select id="kpa_id" name="kpa_id" class="form-select">
+                        <select id="kpa_id" name="kpa_id" class="form-select" required>
                             <option value="">Select KPA</option>
                             @foreach($kpas as $kpa)
                                 <option value="{{ $kpa->id }}">{{ $kpa->performance_area }}</option>
                             @endforeach
+                        </select>
+                    </div>
+                      <div class="col-md-12 mb-3">
+                        <label class="form-label">Select KPI</label>
+                        <select class="select2 form-select kpi_id" name="kpi_id" id="kpi_id" required>
                         </select>
                     </div>
 
@@ -42,7 +51,7 @@
                     <div class="mb-3">
                         <label class="form-label fw-bold">Select Goals</label>
 
-                        <select id="goalSelector" class="form-select" multiple>
+                        <select id="goalSelector" class="form-select" multiple required>
                             @foreach($goals as $goal)
                                 <option value="{{ $goal->id }}">{{ $goal->goal_name }}</option>
                             @endforeach
@@ -66,6 +75,49 @@
             </div>
 
         </div>
+
+        <div class="modal fade" id="employeeModal" tabindex="-1">
+
+            <div class="modal-dialog modal-lg">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <h5>Select Employees</h5>
+
+                        <button class="btn-close" data-bs-dismiss="modal"></button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <input
+                            type="text"
+                            class="form-control mb-3"
+                            id="employeeSearch"
+                            placeholder="Search employee...">
+
+                        <div id="employeeList" style="max-height:450px;overflow:auto"></div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="saveEmployees">
+                            Done
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
     </div>
 @endsection
 @push('script')
@@ -83,32 +135,99 @@
                 width: '100%'
             });
 
-            // =========================
-            // LOAD KPI BY KPA
-            // =========================
-            $('#kpa_id').on('change', function () {
+                // =========================
+    // LOAD KPI CATEGORY BY KPA
+    // =========================
+    $('#kpa_id').on('change', function () {
 
-                let kpaId = $(this).val();
+        let kpaId = $(this).val();
+
+        // Reset dropdowns
+        $('#kpi_id').html('<option value="">Loading...</option>');
+        $('#indicator_id').html('<option value="">Select Indicator</option>');
+
+        if (!kpaId) {
+
+            $('#kpi_id').html('<option value="">Select KPI</option>');
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('indicators.categories', ':kpaId') }}"
+                    .replace(':kpaId', kpaId),
+
+            type: 'GET',
+
+            success: function (response) {
+
+                let options = '<option value="">Select KPI</option>';
+
+                $.each(response, function (i, item) {
+
+                    options += `
+                        <option value="${item.id}">
+                            ${item.indicator_category}
+                        </option>
+                    `;
+                });
+
+                $('#kpi_id').html(options).trigger('change');
+            },
+
+            error: function () {
+
+                $('#kpi_id').html('<option value="">No KPI Found</option>');
+            }
+        });
+    });
+
+            
+
+            // =========================
+            // LOAD INDICATORS BY CATEGORY
+            // =========================
+            $('#kpi_id').on('change', function () {
+
+                let categoryId = $(this).val();
                 kpiCategories = [];
 
-                if (!kpaId) {
+                if (!categoryId) {
                     $('.kpi-select').html('');
                     return;
                 }
 
-                $.ajax({
-                    url: "{{ route('indicators.categories', ':kpaId') }}".replace(':kpaId', kpaId),
-                    type: 'GET',
-                    success: function (response) {
+               
 
+                $.ajax({
+
+                    url: "{{ route('indicator.getIndicators') }}",
+
+                    type: 'POST',
+
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        category_ids: [categoryId]
+                    },
+
+                    success: function (response) {
                         kpiCategories = response;
 
-                        let options = '';
-                        $.each(response, function (i, item) {
-                            options += `<option value="${item.id}">${item.indicator_category}</option>`;
-                        });
+                        let options = '<option value="">Select Indicator</option>';
 
+                        $.each(response, function (i, item) {
+
+                            options += `
+                                <option value="${item.id}">
+                                    ${item.indicator}
+                                </option>
+                            `;
+                        });
                         $('.kpi-select').html(options).trigger('change');
+                    },
+
+                    error: function () {
+
+                        $('.kpi-select').html('<option value="">No Indicator Found</option>');
                     }
                 });
             });
@@ -138,13 +257,13 @@
 
                     goal.objectives.forEach(obj => {
 
-                        html += `<div class="mt-2 badge bg-label-success">Objective: ${obj.title}</div>`;
+                        html += `<div class="mt-2 bg-label-success">Objective: ${obj.title}</div>`;
 
                         obj.dimensions.forEach(dim => {
 
                             let options = '';
                             $.each(kpiCategories, function (i, item) {
-                                options += `<option value="${item.id}">${item.indicator_category}</option>`;
+                                options += `<option value="${item.id}">${item.indicator}</option>`;
                             });
 
                             html += `
@@ -156,14 +275,14 @@
 
                                                                     <div class="col-md-6">
                                                                         <label>Target</label>
-                                                                        <input type="text"
+                                                                        <input type="number"
                                                                             name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][target]"
                                                                             class="form-control target">
                                                                     </div>
 
                                                                     <div class="col-md-6">
                                                                         <label>Weight</label>
-                                                                        <input type="text"
+                                                                        <input type="number"
                                                                             name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][weight]"
                                                                             class="form-control weight">
                                                                     </div>
@@ -206,6 +325,11 @@
                 // KPA validation
                 if (!$('#kpa_id').val()) {
                     $('#kpa_id').addClass('is-invalid');
+                    isValid = false;
+                }
+
+                if (!$('#kpi_id').val()) {
+                    $('#kpi_id').addClass('is-invalid');
                     isValid = false;
                 }
 
@@ -286,6 +410,111 @@
                 });
 
             });
+
+            let selectedEmployees = [];
+
+$('#role_id').on('change', function () {
+
+    let roleId = $(this).val();
+
+    $('#employeeInputs').html('');
+    $('#selectedEmployees').html('');
+
+    if (!roleId) {
+        return;
+    }
+
+    $.ajax({
+        url: "/roles/" + roleId + "/employees",
+        type: "GET",
+
+        success: function (users) {
+
+            let html = '';
+
+            users.forEach(function (user) {
+
+                let checked = selectedEmployees.includes(user.id.toString()) ? 'checked' : '';
+
+                html += `
+                    <div class="form-check employee-item mb-2">
+
+                        <input
+                            class="form-check-input employee-checkbox"
+                            type="checkbox"
+                            value="${user.id}"
+                            id="emp_${user.id}"
+                            ${checked}
+                        >
+
+                        <label class="form-check-label" for="emp_${user.id}">
+                            <strong>${user.name}</strong><br>
+                            <small>${user.email}</small>
+                        </label>
+
+                    </div>
+                `;
+
+            });
+
+            $('#employeeList').html(html);
+
+            $('#employeeSearch').val('');
+
+            // Bootstrap 5
+            var modal = new bootstrap.Modal(document.getElementById('employeeModal'));
+            modal.show();
+
+        }
+    });
+
+});
+$('#employeeSearch').on('keyup', function () {
+
+    let value = $(this).val().toLowerCase();
+
+    $('.employee-item').filter(function () {
+
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+
+    });
+
+});
+$('#saveEmployees').on('click', function () {
+
+    selectedEmployees = [];
+
+    $('#employeeInputs').html('');
+
+    let badges = '';
+
+    $('.employee-checkbox:checked').each(function () {
+
+        let id = $(this).val();
+        let name = $(this).siblings('label').find('strong').text();
+
+        selectedEmployees.push(id);
+
+        badges += `
+            <span class="badge bg-primary me-1 mb-1">
+                ${name}
+            </span>
+        `;
+
+        $('#employeeInputs').append(`
+            <input
+                type="hidden"
+                name="employee_ids[]"
+                value="${id}">
+        `);
+
+    });
+
+    $('#selectedEmployees').html(badges);
+
+    bootstrap.Modal.getInstance(document.getElementById('employeeModal')).hide();
+
+});
 
         });
     </script>

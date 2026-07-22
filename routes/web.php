@@ -150,7 +150,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('goals', GoalsController::class);
     Route::resource('goals-assign', GoalsAsignController::class);
     Route::get(
-        'goals-assign/{role_id}/{goal_id}/{kpa_id}/edit',
+        'goals-assign/{role_id}/{goal_id}/{kpa_id}/{kpa_cid}edit',
         [GoalsAsignController::class, 'edit']
     )->name('goals-assign.group.edit');
     Route::delete(
@@ -161,6 +161,8 @@ Route::middleware('auth')->group(function () {
         'goals-assign/update-group',
         [GoalsAsignController::class, 'updateGroup']
     )->name('goals-assign.update-group');
+    Route::get('/roles/{role}/employees', [GoalsAsignController::class, 'getEmployees'])
+    ->name('roles.employees');
     Route::get('view-assign-goal', [GoalsAsignController::class, 'viewAssignGoal'])->name('view-assign-goal');
 
     Route::get('/reports/goal-mapping-pdf', [GoalReportController::class, 'pdf'])

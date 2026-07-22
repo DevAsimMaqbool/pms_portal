@@ -26,4 +26,5 @@ class Goal extends Model
     {
         return $this->hasMany(GoalAssignment::class);
     }
+    
 }
