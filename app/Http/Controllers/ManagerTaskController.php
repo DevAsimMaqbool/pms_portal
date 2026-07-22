@@ -25,51 +25,58 @@ class ManagerTaskController extends Controller
                 ->pluck('employee_id')
                 ->toArray();
 
-            $tasks = EmployeeTask::whereIn('employee_id', $allmanageremploy)
-                ->latest()
+            // $tasks = EmployeeTask::whereIn('employee_id', $allmanageremploy)
+            //     ->latest()
+            //     ->get();
+
+            $tasks = EmployeeTask::select('employee_tasks.*', 'users.name as employee_name')
+                ->join('users', 'users.employee_id', '=', 'employee_tasks.employee_id')
+                ->whereIn('employee_tasks.employee_id', $allmanageremploy)
+                ->latest('employee_tasks.id')
                 ->get();
 
+            return DataTables::of($tasks)
 
-                return DataTables::of($tasks)
+                ->addIndexColumn()
+                ->addColumn('employee_name', function ($row) {
+                    return $row->employee_name;
+                })
+                ->editColumn('status', function ($row) {
 
-                    ->addIndexColumn()
+                    if ($row->task_status == '2') {
 
-                    ->editColumn('status', function ($row) {
+                        return '<span class="badge bg-success">Approved</span>';
 
-                        if ($row->task_status == '2') {
+                    } elseif ($row->task_status == '3') {
 
-                            return '<span class="badge bg-success">Approved</span>';
+                        return '<span class="badge bg-danger">Rejected</span>';
 
-                        } elseif ($row->task_status == '3') {
+                    } else {
 
-                            return '<span class="badge bg-danger">Rejected</span>';
+                        return '<span class="badge bg-warning">Pending</span>';
+                    }
+                })
 
-                        } else {
+                ->addColumn('action', function ($row) {
 
-                            return '<span class="badge bg-warning">Pending</span>';
-                        }
-                    })
-
-                    ->addColumn('action', function ($row) {
-
-                        return '
+                    return '
                             <button
                                 type="button"
                                 class="btn btn-outline-primary btn-sm view-form-btn"
 
-                                data-id="'.$row->id.'"
-                                data-title="'.$row->task_title.'"
-                                data-description="'.$row->task_description.'"
-                                data-date="'.$row->task_date.'"
-                                data-status="'.$row->status.'"
-                                data-priority="'.$row->priority.'"
-                                data-location="'.$row->location.'"
-                                data-hours="'.$row->hours_worked.'"
-                                data-estimated="'.$row->estimated_hours.'"
-                                data-deliverables="'.$row->output_deliverables.'"
-                                data-taskstatus="'.$row->task_status.'"
-                                data-updatehistory="'.htmlspecialchars($row->update_history, ENT_QUOTES, 'UTF-8').'"
-                                data-manager_completion="'.$row->manager_completion.'"
+                                data-id="' . $row->id . '"
+                                data-title="' . $row->task_title . '"
+                                data-description="' . $row->task_description . '"
+                                data-date="' . $row->task_date . '"
+                                data-status="' . $row->status . '"
+                                data-priority="' . $row->priority . '"
+                                data-location="' . $row->location . '"
+                                data-hours="' . $row->hours_worked . '"
+                                data-estimated="' . $row->estimated_hours . '"
+                                data-deliverables="' . $row->output_deliverables . '"
+                                data-taskstatus="' . $row->task_status . '"
+                                data-updatehistory="' . htmlspecialchars($row->update_history, ENT_QUOTES, 'UTF-8') . '"
+                                data-manager_completion="' . $row->manager_completion . '"
 
                                 data-bs-toggle="modal"
                                 data-bs-target="#viewFormModal"
@@ -77,18 +84,16 @@ class ManagerTaskController extends Controller
                                 View
                             </button>
                         ';
-                    })
+                })
 
-                    ->rawColumns(['action', 'status'])
+                ->rawColumns(['action', 'status'])
 
-                    ->make(true);
+                ->make(true);
 
         }
 
         return view('admin.employee_tasks.manager');
     }
-
-
 
     public function update(Request $request, $id)
     {
@@ -108,11 +113,11 @@ class ManagerTaskController extends Controller
         $lastUpdate = end($history);
         if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->action_type) {
             $history[] = [
-                'user_id'    => $currentUserId,
-                'user_name'  => $currentUserName,
-                'status'     => $request->action_type,
-                'role'     => $userRoll,
-                'remarks'     => $request->reject_remarks,
+                'user_id' => $currentUserId,
+                'user_name' => $currentUserName,
+                'status' => $request->action_type,
+                'role' => $userRoll,
+                'remarks' => $request->reject_remarks,
                 'manager_completion' => $request->self_completion,
                 'updated_at' => now()->toDateTimeString(),
             ];
@@ -154,32 +159,32 @@ class ManagerTaskController extends Controller
             'message' => 'Task status updated successfully'
         ]);
     }
-public function allEmployeeTasks(Request $request)
-{
-    $query = EmployeeTask::with([
-        'employee',
-        'employee.facultyyy',
-        'employee.departmentttt',
-        'kpa',
-        'kpi',
-        'indicator',
-        'goal'
-    ]);
+    public function allEmployeeTasks(Request $request)
+    {
+        $query = EmployeeTask::with([
+            'employee',
+            'employee.facultyyy',
+            'employee.departmentttt',
+            'kpa',
+            'kpi',
+            'indicator',
+            'goal'
+        ]);
 
-    // =========================================
-    // FILTER BY TASK TITLE
-    // =========================================
+        // =========================================
+        // FILTER BY TASK TITLE
+        // =========================================
 
-    if ($request->filled('task_title')) {
+        if ($request->filled('task_title')) {
 
-        $query->when( $request->filled('task_title'), fn ($q) => $q->where('task_title','like', '%' . $request->task_title . '%') );
-    }
+            $query->when($request->filled('task_title'), fn($q) => $q->where('task_title', 'like', '%' . $request->task_title . '%'));
+        }
 
-    // =========================================
-    // FILTER BY DATE
-    // =========================================
+        // =========================================
+        // FILTER BY DATE
+        // =========================================
 
-    if ($request->filled('start_date') || $request->filled('end_date')) {
+        if ($request->filled('start_date') || $request->filled('end_date')) {
             $query->when(
 
                 $request->filled('start_date') &&
@@ -196,98 +201,98 @@ public function allEmployeeTasks(Request $request)
                     ]);
                 }
             );
-    }
-
-    // =========================================
-    // FILTER BY HOURS WORKED
-    // =========================================
-
-    if ($request->filled('hours_worked')) {
-
-        $query->when( $request->filled('hours_worked'), fn ($q) => $q->where( 'hours_worked', $request->hours_worked ) );
-    }
-
-    // =========================================
-    // FILTER BY TASK STATUS
-    // =========================================
-
-    if ($request->filled('status')) {
-
-        $query->when( $request->filled('status'), fn ($q) => $q->where( 'status', $request->status ) );
-    }
-    // =====================================================
-    // GOAL FILTER 
-    // =====================================================
-     if ($request->filled('goal_id')) {
-         $query->when( $request->filled('goal_id'), fn ($q) => $q->where( 'goal_id', $request->goal_id ) );
-    }
-
-    // =====================================================
-    // NATURE OF TASK FILTER 
-    // =====================================================
-    if ($request->filled('nature_of_task')) { 
-        $query->when( $request->filled('nature_of_task'), fn ($q) => $q->where( 'nature_of_task', $request->nature_of_task ) );
-    }
-
-    // =====================================================
-    // PRIORITY FILTER 
-    // ===================================================== 
-    if ($request->filled('priority')) {
-         $query->when( $request->filled('priority'), fn ($q) => $q->where( 'priority', $request->priority ) );
-    }
-
-    // ===================================================== 
-    // PLANNED / UNPLANNED FILTER 
-    // =====================================================
-    if ($request->filled('planned_type')) {
-          $query->when( $request->filled('planned_type'), fn ($q) => $q->where( 'planned_type', $request->planned_type ) );
-    }
-
-    // =====================================================
-     // TASK STATUS FILTER 
-     // =====================================================
-      if ($request->filled('task_status')) {
-         $query->when( $request->filled('task_status'), fn ($q) => $q->where( 'task_status', $request->task_status ) );
-     }
-
-     // ===================================================== 
-     // DEPARTMENT FILTER 
-     // =====================================================
-      if ($request->filled('employee_name')) { 
-        $query->whereHas('employee', function ($q) use ($request) { 
-            $q->where( 'name','like', '%' . $request->employee_name . '%' ); 
-            });    
         }
 
-    // ===================================================== 
-    // KPA FILTER 
-    // ===================================================== 
-    if ($request->filled('kpa_id')) { $query->where( 'kpa_id', $request->kpa_id ); }    
+        // =========================================
+        // FILTER BY HOURS WORKED
+        // =========================================
 
+        if ($request->filled('hours_worked')) {
 
-    // =========================================
-    // PAGINATION
-    // =========================================
+            $query->when($request->filled('hours_worked'), fn($q) => $q->where('hours_worked', $request->hours_worked));
+        }
 
-    $tasks = $query
-        ->latest()
-        ->paginate(10)
-        ->withQueryString();
-    $goals = Goal::with('objectives')->get();    
-    $kpas = KeyPerformanceArea::all();
+        // =========================================
+        // FILTER BY TASK STATUS
+        // =========================================
 
-    return view(
-        'admin.employee_tasks.alldata',
-        compact('tasks','goals','kpas')
-    );
-}
-public function exportExcel(Request $request)
-{
-    return Excel::download(
-        new EmployeeTasksExport($request),
-        'employee_tasks_report.xlsx'
-    );
-}
+        if ($request->filled('status')) {
 
+            $query->when($request->filled('status'), fn($q) => $q->where('status', $request->status));
+        }
+        // =====================================================
+        // GOAL FILTER 
+        // =====================================================
+        if ($request->filled('goal_id')) {
+            $query->when($request->filled('goal_id'), fn($q) => $q->where('goal_id', $request->goal_id));
+        }
+
+        // =====================================================
+        // NATURE OF TASK FILTER 
+        // =====================================================
+        if ($request->filled('nature_of_task')) {
+            $query->when($request->filled('nature_of_task'), fn($q) => $q->where('nature_of_task', $request->nature_of_task));
+        }
+
+        // =====================================================
+        // PRIORITY FILTER 
+        // ===================================================== 
+        if ($request->filled('priority')) {
+            $query->when($request->filled('priority'), fn($q) => $q->where('priority', $request->priority));
+        }
+
+        // ===================================================== 
+        // PLANNED / UNPLANNED FILTER 
+        // =====================================================
+        if ($request->filled('planned_type')) {
+            $query->when($request->filled('planned_type'), fn($q) => $q->where('planned_type', $request->planned_type));
+        }
+
+        // =====================================================
+        // TASK STATUS FILTER 
+        // =====================================================
+        if ($request->filled('task_status')) {
+            $query->when($request->filled('task_status'), fn($q) => $q->where('task_status', $request->task_status));
+        }
+
+        // ===================================================== 
+        // DEPARTMENT FILTER 
+        // =====================================================
+        if ($request->filled('employee_name')) {
+            $query->whereHas('employee', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->employee_name . '%');
+            });
+        }
+
+        // ===================================================== 
+        // KPA FILTER 
+        // ===================================================== 
+        if ($request->filled('kpa_id')) {
+            $query->where('kpa_id', $request->kpa_id);
+        }
+
+        // =========================================
+        // PAGINATION
+        // =========================================
+
+        $tasks = $query
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+        $goals = Goal::with('objectives')->get();
+        $kpas = KeyPerformanceArea::all();
+
+        return view(
+            'admin.employee_tasks.alldata',
+            compact('tasks', 'goals', 'kpas')
+        );
+    }
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(
+            new EmployeeTasksExport($request),
+            'employee_tasks_report.xlsx'
+        );
+    }
 
 }

@@ -153,5 +153,4 @@ class User extends Authenticatable
         return $this->hasMany(FacultyMemberClass::class, 'faculty_id', 'faculty_id');
     }
 
-
 }

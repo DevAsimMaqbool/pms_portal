@@ -83,11 +83,11 @@
 
                                                                   <div class="col-md-6 mb-3">
                                                                     <label for="actual_start_time" class="form-label">Actual Start Time</label>
-                                                                    <input type="time" name="actual_start_time" id="actual_start_time" class="form-control" value="{{ $employeeTask->actual_start_time }}" required>
+                                                                    <input type="datetime-local" name="actual_start_time" id="actual_start_time" class="form-control" value="{{ $employeeTask->actual_start_time }}" required>
                                                                 </div>
                                                                  <div class="col-md-6 mb-3">
                                                                     <label for="actual_end_time" class="form-label">Actual End Time</label>
-                                                                    <input type="time" name="actual_end_time" id="actual_end_time" class="form-control" value="{{ $employeeTask->actual_end_time }}" required>
+                                                                    <input type="datetime-local" name="actual_end_time" id="actual_end_time" class="form-control" value="{{ $employeeTask->actual_end_time }}" required>
                                                                 </div>
 
                                                                 <div class="col-md-6 mb-3">
@@ -99,14 +99,10 @@
                                                                     <input type="number" name="estimated_hours" id="estimated_hours" class="form-control" placeholder="Estimated Hours" value="{{ $employeeTask->estimated_hours }}" required>
                                                                 </div>
 
-
                                                                  <div class="col-md-6 mb-3">
                                                                     <label for="location" class="form-label">Location</label>
                                                                     <input type="text" name="location" id="location" class="form-control" placeholder="Location" value="{{ $employeeTask->location }}" required>
                                                                 </div>
-
-                        
-                                            
 
                                                             </div>
                                                             <!-- Description -->
@@ -114,7 +110,6 @@
                                                         </div>
                                                     </div>
                                                     <!-- /Product Information -->
-
 
                                                      <!-- Product Information -->
                                                     <div class="card mb-6">
@@ -145,7 +140,6 @@
                                                                         </select>
                                                                 </div>     
 
-                                                                
                                                                 {{-- GOALS --}}
                                                                 <div class="col-md-12 mb-3">
                                                                     <label class="form-label">Select Goals</label>
@@ -156,10 +150,6 @@
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
-
-
-                        
-                                            
 
                                                             </div>
                                                             <!-- Description -->
@@ -194,7 +184,6 @@
                                                                     </select>
                                                                  </div>   
 
-                                                                
                                                                 <div class="col-md-12 mb-3">
                                                                     <label for="output_deliverables" class="form-label">Output / Deliverables</label>
                                                                      <textarea class="form-control" id="output_deliverables" name="output_deliverables" rows="3">{{ $employeeTask->output_deliverables }}</textarea>
@@ -259,16 +248,12 @@
 
                                                                 </div>
 
-                        
-                                            
-
                                                             </div>
                                                             <!-- Description -->
 
                                                         </div>
                                                     </div>
                                                     <!-- /Product Information -->
-
 
                                                 </div>
                                                 <!-- /Second column -->
@@ -297,12 +282,9 @@
                                                             <input type="text" class="form-control"  placeholder="Department"   value="{{ auth()->user()->department }}"  readonly>
                                                           </div>
 
-
                                                         </div>
                                                         
                                                     </div>
-
-
 
                                                       <!-- Pricing Card -->
                                                     <div class="card mb-3">
@@ -357,12 +339,10 @@
                                                                     </select>
                                                                 </div>
 
-
                                                         </div>
                                                         
                                                     </div>
 
-                                                    
                                                     <!-- /Pricing Card -->
                                                     <div class="text-end">
                                                         <button type="submit"
@@ -377,16 +357,12 @@
                                     </div>
                                     <!-- /first tab-->
                     
-
-
                 </div>
                 <!-- /main tab-->
 
             </div>
             <!-- tab open-->
         </div>
-
-
 
         <!-- / close new design -->
 <div class="modal fade"
@@ -424,7 +400,6 @@
     </div>
 
 </div>
-
 
     </div>
     <!-- / Content -->
@@ -502,7 +477,6 @@ function loadPlannedFields(type, startDate = '', endDate = '')
 
     let selectedIndicator = "{{ $employeeTask->indicator_id ?? '' }}";
 
-
     // =========================================
     // LOAD KPI CATEGORIES
     // =========================================
@@ -550,7 +524,6 @@ function loadPlannedFields(type, startDate = '', endDate = '')
                     .html(options)
                     .trigger('change');
 
-
                 // AUTO LOAD INDICATORS ON EDIT
                 if (selectedKpi) {
 
@@ -562,7 +535,6 @@ function loadPlannedFields(type, startDate = '', endDate = '')
             }
         });
     }
-
 
     // =========================================
     // LOAD INDICATORS
@@ -618,7 +590,6 @@ function loadPlannedFields(type, startDate = '', endDate = '')
         });
     }
 
-
     // =========================================
     // KPA CHANGE EVENT
     // =========================================
@@ -634,7 +605,6 @@ function loadPlannedFields(type, startDate = '', endDate = '')
         loadKpis(kpaId);
     });
 
-
     // =========================================
     // KPI CHANGE EVENT
     // =========================================
@@ -646,7 +616,6 @@ function loadPlannedFields(type, startDate = '', endDate = '')
         loadIndicators(categoryId);
     });
 
-
     // =========================================
     // AUTO LOAD DATA ON EDIT PAGE
     // =========================================
@@ -655,9 +624,6 @@ function loadPlannedFields(type, startDate = '', endDate = '')
 
         loadKpis(selectedKpa, selectedKpi);
     }
-
-
-
 
     let selectedType = $('#planned_type').val();
 
@@ -680,29 +646,71 @@ function loadPlannedFields(type, startDate = '', endDate = '')
         plannedEndDate);
     });
 
-     $('#actual_start_time, #actual_end_time').on('change', function () {
+    //  $('#actual_start_time, #actual_end_time').on('change', function () {
 
-        let startTime = $('#actual_start_time').val();
+    //     let startTime = $('#actual_start_time').val();
 
-        let endTime = $('#actual_end_time').val();
+    //     let endTime = $('#actual_end_time').val();
 
-        if (startTime && endTime) {
+    //     if (startTime && endTime) {
 
-            let start = new Date('2000-01-01 ' + startTime);
+    //         let start = new Date('2000-01-01 ' + startTime);
 
-            let end = new Date('2000-01-01 ' + endTime);
+    //         let end = new Date('2000-01-01 ' + endTime);
 
-            let diff = (end - start) / 1000 / 60 / 60;
+    //         let diff = (end - start) / 1000 / 60 / 60;
 
-            if (diff < 0) {
+    //         if (diff < 0) {
 
-                diff = 0;
-            }
+    //             diff = 0;
+    //         }
 
-            $('#hours_worked').val(diff.toFixed(2));
+    //         $('#hours_worked').val(diff.toFixed(2));
 
-        }
-    });
+    //     }
+    // });
+
+    $('#actual_start_time, #actual_end_time').on('change', function () {
+
+    let startVal = $('#actual_start_time').val();
+    let endVal = $('#actual_end_time').val();
+
+    if (!startVal || !endVal) return;
+
+    let start = new Date(startVal);
+    let end = new Date(endVal);
+
+    if (end <= start) {
+        $('#hours_worked').val('0.00');
+        return;
+    }
+
+    let totalHours = 0;
+
+    let current = new Date(start);
+
+    while (current.toDateString() !== end.toDateString()) {
+
+        // End of current day
+        let endOfDay = new Date(current);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        let hours = (endOfDay - current) / (1000 * 60 * 60);
+
+        totalHours += Math.min(hours, 8);
+
+        // Move to next day
+        current = new Date(endOfDay);
+        current.setMilliseconds(current.getMilliseconds() + 1);
+    }
+
+    // Last day
+    let lastDayHours = (end - current) / (1000 * 60 * 60);
+    totalHours += Math.min(lastDayHours, 8);
+
+    $('#hours_worked').val(totalHours.toFixed(2));
+
+});
 
             let goals = @json($goals);
             let kpiCategories = [];
@@ -712,7 +720,6 @@ function loadPlannedFields(type, startDate = '', endDate = '')
                 width: '100%'
             });
 
-            
 $('#researchForm').submit(function(e){
 
     e.preventDefault();
@@ -784,10 +791,6 @@ $('#researchForm').submit(function(e){
         }
     });
 });
-
-            
-
-           
 
         });
     </script>
