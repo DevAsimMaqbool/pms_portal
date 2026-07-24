@@ -73,14 +73,41 @@ class GoalsAsignController extends Controller
 
     return view('admin.goals_assign.index');
 }
-    public function create()
+    public function creates($id = null)
+    {
+        $userId = Auth::id();
+        $goals = Goal::with('objectives.dimensions')->get();
+        $kpas = KeyPerformanceArea::all();
+        $roles = Role::all();
+        $assignment = null;
+        if ($id) {
+
+            $query = GoalAssignment::with([
+                'users.user',
+                'details.indicators',
+            ])->where('id', $id);
+
+            if ($userId) {
+                $query->whereHas('users', function ($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                });
+            }
+
+            $assignment = $query->firstOrFail();
+        }
+
+
+        return view('admin.goals_assign.create', compact('goals', 'kpas', 'roles','assignment'));
+    }
+    public function show()
     {
 
         $goals = Goal::with('objectives.dimensions')->get();
         $kpas = KeyPerformanceArea::all();
         $roles = Role::all();
+        $assignment = null;
 
-        return view('admin.goals_assign.create', compact('goals', 'kpas', 'roles'));
+        return view('admin.goals_assign.create', compact('goals', 'kpas', 'roles','assignment'));
     }
     public function store(Request $request)
     {

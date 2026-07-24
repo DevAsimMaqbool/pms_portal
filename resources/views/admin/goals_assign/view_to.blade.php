@@ -433,10 +433,9 @@
                                                         </small>
 
                                                     </div>
-
-                                                    <span class="badge bg-primary">
-                                                        User
-                                                    </span>
+                                                    <a class="badge bg-success" href="{{ route('goals-assign.create.custom', $assign->id) }}">
+                                                        Ckick to assign
+                                                    </a>
 
                                                 </div>
 
