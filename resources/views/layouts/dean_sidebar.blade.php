@@ -127,6 +127,36 @@
                     </li>
                 </ul>
             </li>
+             <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon icon-base ti tabler-report"></i>
+                <div data-i18n="Goal Statement">Goal Statement</div>
+                </a>
+
+                <ul class="menu-sub">
+                <li class="menu-item {{ route('goals-assign.index') }}">
+                    <a href="{{ route('goals-assign.index') }}" class="menu-link">
+                    <div data-i18n="Assign GOAL">Assign GOAL</div>
+                    </a>
+                </li>
+                 <li class="menu-item {{ route('view-assign-to-goal') }}">
+                    <a href="{{ route('view-assign-to-goal') }}" class="menu-link">
+                    <div data-i18n="View From Assign Goal">View From Assign Goal</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ route('view-assign-goal') }}">
+                    <a href="{{ route('view-assign-goal') }}" class="menu-link">
+                    <div data-i18n="View To Assign Goal">View To Assign Goal</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ route('goal.mapping.pdf') }}">
+                    <a href="{{ route('goal.mapping.pdf') }}" class="menu-link">
+                    <div data-i18n="View Assign Report">View Assign Report</div>
+                    </a>
+                </li>
+                </ul>
+
+            </li>
         @endif
     </ul>
 

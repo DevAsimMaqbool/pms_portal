@@ -11,6 +11,7 @@ use App\Models\GoalAssignmentIndicator;
 use App\Models\GoalAssignmentUser;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 
@@ -19,8 +20,8 @@ class GoalsAsignController extends Controller
    public function index(Request $request)
 {
     if ($request->ajax()) {
-
-        $data = GoalAssignment::with(['role', 'goal', 'kpa']);
+        $userId = Auth::id();
+        $data = GoalAssignment::with(['role', 'goal', 'kpa'])->where('created_by',  $userId) ->get();
 
         return DataTables::of($data)
 
@@ -494,29 +495,47 @@ class GoalsAsignController extends Controller
 }
 public function viewAssignGoal()
 {
+    $userId = Auth::id();
+    $assignments = GoalAssignment::with([
+        'role',
+        'goal.driver',
+        'users.user',
+        'details.objective',
+        'details.dimension',
+        'details.indicators.indicator'
+    ])->where('created_by', $userId)->get();
+
+    // Group details by objective_id
+    $assignments->each(function ($assignment) {
+        $assignment->groupedObjectives = $assignment->details->groupBy('objective_id');
+    });
+
+    return view('admin.goals_assign.view', compact('assignments'));
+}
+public function viewAssignToGoal()
+{
+    $userId = Auth::id();
 
     $assignments = GoalAssignment::with([
-
         'role',
-
         'goal.driver',
-
         'details.objective',
-
         'details.dimension',
+        'details.indicators.indicator',
+        'users' => function ($q) use ($userId) {
+            $q->where('user_id', $userId)->with('user');
+        }
+    ])
+    ->whereHas('users', function ($q) use ($userId) {
+        $q->where('user_id', $userId);
+    })
+    ->get();
 
-        'details.indicators.indicator'
+    $assignments->each(function ($assignment) {
+        $assignment->groupedObjectives = $assignment->details->groupBy('objective_id');
+    });
 
-
-    ])->get();
-
-
-
-    return view(
-        'admin.goals_assign.view',
-        compact('assignments')
-    );
-
+    return view('admin.goals_assign.view_to', compact('assignments'));
 }
 public function getEmployees($roleId)
 {
