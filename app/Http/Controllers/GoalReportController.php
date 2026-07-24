@@ -7,6 +7,7 @@ use App\Models\Goal;
 use App\Models\GoalAssignment;
 use App\Models\IndicatorCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GoalReportController extends Controller
 {
@@ -15,9 +16,10 @@ class GoalReportController extends Controller
         $query = GoalAssignment::with([
             'role',
             'goal.driver',
-            'objective',
-            'dimension',
-            'kpa'
+            'kpa',
+            'details.objective',
+            'details.dimension',
+            'details.indicators.indicator'
         ]);
 
         if ($role_id) {
@@ -31,46 +33,19 @@ class GoalReportController extends Controller
         if ($kpa_id) {
             $query->where('kpa_id', $kpa_id);
         }
+        $userId = Auth::id();
 
         $assignments = $query
-            ->orderBy('goal_id')
-            ->orderBy('objective_id')
-            ->orderBy('dimension_id')
+            ->where('created_by',  $userId)->orderBy('goal_id')
             ->get();
-
-        /*
-        |--------------------------------------------------------------------------
-        | KPI Mapping
-        |--------------------------------------------------------------------------
-        */
-
-        $allKpiIds = $assignments
-            ->pluck('kpi_ids')
-            ->flatten()
-            ->filter()
-            ->unique()
-            ->toArray();
-
-        $kpis = IndicatorCategory::whereIn('id', $allKpiIds)
-            ->pluck('indicator_category', 'id');
-
-        /*
-        |--------------------------------------------------------------------------
-        | IMPORTANT FIX:
-        | DO NOT groupBy — instead group manually in Blade or map properly
-        |--------------------------------------------------------------------------
-        */
-
-        $goals = $assignments->groupBy('goal_id')->map(function ($items) {
-            return $items->first()->goal;
-        });
+            
 
         $pdf = PDF::loadView(
             'admin.goals_assign.goal-mapping-pdf',
-            compact('assignments', 'goals', 'kpis')
+            compact('assignments')
         );
 
-        return $pdf->setPaper('a4', 'landscape')
-            ->stream('goal-mapping-report.pdf');
+        return $pdf->setPaper('a4','landscape')
+                ->stream('goal-mapping-report.pdf');
     }
 }

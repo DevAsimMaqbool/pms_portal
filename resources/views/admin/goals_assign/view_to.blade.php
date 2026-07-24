@@ -281,8 +281,8 @@
                 <div class="d-flex align-items-center root tree-node bg-label-primary"
                      onclick="toggleBox('g1')">
 
-                    <div class="badge bg-primary p-2 me-4 rounded">
-                        <i class="icon-base ti tabler-star icon-md"></i>
+                    <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
+                        <i class="icon-base ti tabler-shadow icon-md"></i>
                     </div>
 
                     <div class="d-flex justify-content-between w-100 flex-wrap gap-2">
@@ -321,8 +321,8 @@
                         onclick="toggleBox('goal{{$assign->id}}')">
 
 
-                        <div class="badge bg-warning p-2 me-4 rounded">
-                        <i class="icon-base ti tabler-trophy icon-md"></i>
+                        <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
+                        <i class="icon-base ti tabler-circle-letter-g icon-md"></i>
                         </div>
 
 
@@ -381,7 +381,7 @@
                                 <div class="d-flex align-items-center tree-node bg-label-success"
                                     onclick="toggleBox('users{{ $assign->id }}')">
 
-                                    <div class="badge bg-success p-2 me-4 rounded">
+                                    <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
                                         <i class="icon-base ti tabler-users icon-md"></i>
                                     </div>
 
@@ -418,7 +418,7 @@
 
                                                 <div class="d-flex align-items-center tree-node bg-label-secondary">
 
-                                                    <div class="badge bg-secondary p-2 me-4 rounded">
+                                                    <div class="badge bg-label-primary text-body p-2 me-4 rounded">
                                                         <i class="icon-base ti tabler-user icon-md"></i>
                                                     </div>
 
@@ -470,8 +470,8 @@
                                 <div class="d-flex align-items-center objective tree-node bg-label-info"
                                     onclick="toggleBox('objective{{ $assign->id }}{{ $objectiveId }}')">
 
-                                    <div class="badge bg-info p-2 me-4 rounded">
-                                        <i class="icon-base ti tabler-target-arrow icon-md"></i>
+                                    <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
+                                        <i class="icon-base ti tabler-circle-letter-o icon-md"></i>
                                     </div>
 
                                     <div class="w-100">
@@ -504,8 +504,8 @@
 
                                                     <div class="d-flex align-items-center kpi tree-node bg-label-danger">
 
-                                                        <div class="badge bg-danger p-2 me-4 rounded">
-                                                            <i class="icon-base ti tabler-notes icon-md"></i>
+                                                        <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
+                                                            <i class="icon-base ti tabler-circle-letter-d icon-md"></i>
                                                         </div>
 
                                                         <div class="w-100">

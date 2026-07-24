@@ -168,6 +168,21 @@
           <div data-i18n="Task Management">Task Management</div>
         </a>
       </li>
+      <li class="menu-item">
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon icon-base ti tabler-report"></i>
+        <div data-i18n="Goal Statement">Goal Statement</div>
+        </a>
+
+        <ul class="menu-sub">
+        <li class="menu-item {{ route('view-assign-to-goal') }}">
+            <a href="{{ route('view-assign-to-goal') }}" class="menu-link">
+            <div data-i18n="View From Assign Goal">View From Assign Goal</div>
+            </a>
+        </li>
+        </ul>
+
+    </li>
       <li class="menu-item {{ request()->routeIs('pms.downloads') ? 'active' : '' }}">
         <a href="{{ route('pms.downloads') }}"" class=" menu-link">
           <i class="menu-icon icon-base ti tabler-download"></i>

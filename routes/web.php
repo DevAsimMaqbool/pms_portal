@@ -164,6 +164,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/roles/{role}/employees', [GoalsAsignController::class, 'getEmployees'])
     ->name('roles.employees');
     Route::get('view-assign-goal', [GoalsAsignController::class, 'viewAssignGoal'])->name('view-assign-goal');
+    Route::get('view-assign-to-goal', [GoalsAsignController::class, 'viewAssignToGoal'])->name('view-assign-to-goal');
 
     Route::get('/reports/goal-mapping-pdf', [GoalReportController::class, 'pdf'])
         ->name('goal.mapping.pdf');
