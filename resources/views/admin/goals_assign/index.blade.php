@@ -17,7 +17,7 @@
 
                 <h4>Goal Assignments</h4>
 
-                <a href="{{ route('goals-assign.create') }}" class="btn btn-primary">
+                <a href="{{ route('goals-assign.create.custom') }}" class="btn btn-primary">
                     Assign Goal
                 </a>
 

@@ -295,9 +295,17 @@
 
                 });
 
-                $('.kpi-select').html(options);
+               $('.kpi-select').each(function () {
 
-                $('.kpi-select').trigger('change');
+                    $(this).html(options);
+
+                    let selected = $(this).data('selected');
+
+                    if (selected) {
+                        $(this).val(selected).trigger('change');
+                    }
+
+                });
 
             }
 
@@ -403,15 +411,11 @@ $('#goalSelector').on('change', function () {
 
                 $.each(kpiCategories, function (i, item) {
 
-                    let selected = selectedIndicators.includes(item.id.toString())
-                        ? 'selected'
-                        : '';
-
                     options += `
-                        <option value="${item.id}" ${selected}>
+                        <option value="${item.id}">
                             ${item.indicator}
                         </option>
-                    `;
+                        `;
 
                 });
 
@@ -465,6 +469,7 @@ $('#goalSelector').on('change', function () {
 
                             <select
                                 multiple
+                                data-selected='${JSON.stringify(selectedIndicators)}'
                                 class="form-select kpi-select"
                                 name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][kpis][]">
 
@@ -493,10 +498,17 @@ $('#goalSelector').on('change', function () {
     //----------------------------------------------------
 
     $('.kpi-select').select2({
-
         placeholder: 'Select Indicator',
-
         width: '100%'
+    });
+
+    $('.kpi-select').each(function () {
+
+        let selected = $(this).data('selected');
+
+        if (selected) {
+            $(this).val(selected).trigger('change');
+        }
 
     });
 
@@ -598,7 +610,7 @@ function renderSelectedEmployees(){
 //==========================================
 
 $('#role_id').on('change', function () {
-     selectedEmployees = [];
+    // selectedEmployees = [];
      loadEmployees($(this).val());
 
 

@@ -149,6 +149,7 @@ Route::middleware('auth')->group(function () {
         ->name('s2r-drivers.list');
     Route::resource('goals', GoalsController::class);
     Route::resource('goals-assign', GoalsAsignController::class);
+    Route::get('goals-assign/creates/{id?}', [GoalsAsignController::class, 'creates'])->name('goals-assign.create.custom');
     Route::get(
         'goals-assign/{role_id}/{goal_id}/{kpa_id}/{kpa_cid}edit',
         [GoalsAsignController::class, 'edit']
