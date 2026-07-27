@@ -43,4 +43,9 @@ class GoalAssignment extends Model
         return $this->hasMany(GoalAssignmentDetail::class, 'goal_assignment_id');
     }
 
+    public function userDetails()
+    {
+        return $this->hasMany(GoalAssignmentUserDetail::class);
+    }
+
 }

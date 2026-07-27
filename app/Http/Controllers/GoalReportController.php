@@ -19,7 +19,8 @@ class GoalReportController extends Controller
             'kpa',
             'details.objective',
             'details.dimension',
-            'details.indicators.indicator'
+            'details.indicators.indicator',
+            'details.userDetails'
         ]);
 
         if ($role_id) {
@@ -36,16 +37,15 @@ class GoalReportController extends Controller
         $userId = Auth::id();
 
         $assignments = $query
-            ->where('created_by',  $userId)->orderBy('goal_id')
+            ->where('created_by', $userId)->orderBy('goal_id')
             ->get();
-            
 
         $pdf = PDF::loadView(
             'admin.goals_assign.goal-mapping-pdf',
             compact('assignments')
         );
 
-        return $pdf->setPaper('a4','landscape')
-                ->stream('goal-mapping-report.pdf');
+        return $pdf->setPaper('a4', 'landscape')
+            ->stream('goal-mapping-report.pdf');
     }
 }

@@ -153,4 +153,12 @@ class User extends Authenticatable
         return $this->hasMany(FacultyMemberClass::class, 'faculty_id', 'faculty_id');
     }
 
+    public function goalAssignmentUserDetail()
+    {
+        return $this->hasMany(
+            GoalAssignmentUserDetail::class,
+            'user_id'
+        );
+    }
+
 }

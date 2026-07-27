@@ -94,6 +94,7 @@ use App\Http\Controllers\S2RDriverController;
 use App\Http\Controllers\GoalReportController;
 use App\Http\Controllers\ManagerTaskController;
 use App\Http\Controllers\ManagerEmployeeTaskController;
+use App\Http\Controllers\ViewAsignedGoalsController;
 use Illuminate\Support\Facades\Auth;
 
 Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
@@ -163,12 +164,27 @@ Route::middleware('auth')->group(function () {
         [GoalsAsignController::class, 'updateGroup']
     )->name('goals-assign.update-group');
     Route::get('/roles/{role}/employees', [GoalsAsignController::class, 'getEmployees'])
-    ->name('roles.employees');
+        ->name('roles.employees');
     Route::get('view-assign-goal', [GoalsAsignController::class, 'viewAssignGoal'])->name('view-assign-goal');
     Route::get('view-assign-to-goal', [GoalsAsignController::class, 'viewAssignToGoal'])->name('view-assign-to-goal');
 
     Route::get('/reports/goal-mapping-pdf', [GoalReportController::class, 'pdf'])
         ->name('goal.mapping.pdf');
+
+    Route::resource('view-assign-goals', ViewAsignedGoalsController::class);
+    Route::get(
+        'view-assign-goals/{role_id}/{goal_id}/{kpa_id}/{kpa_cid}edit',
+        [ViewAsignedGoalsController::class, 'edit']
+    )->name('view-assign-goals.group.edit');
+
+    Route::get(
+        'manager-verify-targets/{id}',
+        [ViewAsignedGoalsController::class, 'managerVerifcation']
+    )->name('manager-targets.verify');
+    Route::post(
+        'manager-update-targets/{id}',
+        [ViewAsignedGoalsController::class, 'managerVerify']
+    )->name('manager-targets.update');
 
     // Returns the indicator modal HTML (without initial page include),
     // used for lazy-loading inside `admin/kpa.blade.php`.
