@@ -170,6 +170,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/reports/goal-mapping-pdf', [GoalReportController::class, 'pdf'])
         ->name('goal.mapping.pdf');
+    Route::get('/reports/assign-goal-mapping-pdf', [GoalReportController::class, 'pdfuser'])
+        ->name('assign.goal.mapping.pdf');    
 
     Route::resource('view-assign-goals', ViewAsignedGoalsController::class);
     Route::get(
