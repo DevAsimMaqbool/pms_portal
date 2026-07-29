@@ -187,6 +187,8 @@ Route::middleware('auth')->group(function () {
         'manager-update-targets/{id}',
         [ViewAsignedGoalsController::class, 'managerVerify']
     )->name('manager-targets.update');
+    Route::get('performance-hub', [ViewAsignedGoalsController::class, 'goalperformance'])->name('goalperformance.get');
+    
 
     // Returns the indicator modal HTML (without initial page include),
     // used for lazy-loading inside `admin/kpa.blade.php`.

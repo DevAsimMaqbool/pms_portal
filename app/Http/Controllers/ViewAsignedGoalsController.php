@@ -243,5 +243,25 @@ class ViewAsignedGoalsController extends Controller
 
         }
     }
+    public function goalperformance()
+    {
+        $userId = Auth::id();
+
+        $assignments = GoalAssignment::with([
+            'goal',
+            'details.userDetails',
+        ])
+        ->whereHas('users', function ($q) use ($userId) {
+            $q->where('user_id', $userId);
+        })
+        ->get()
+        ->map(function ($assignment) {
+            $assignment->avg_weight = round($assignment->details->avg('dimension_weight'), 2);
+
+            return $assignment;
+        });   
+        dd($assignments);
+       return view('admin.goal_dashboard',compact('assignments'));
+    }
 
 }
