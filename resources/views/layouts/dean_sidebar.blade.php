@@ -154,6 +154,11 @@
                     <div data-i18n="View Assign Report">View Assign Report</div>
                     </a>
                 </li>
+                 <li class="menu-item {{ route('assign.goal.mapping.pdf') }}">
+                    <a href="{{ route('assign.goal.mapping.pdf') }}" class="menu-link">
+                    <div data-i18n="View From Assign Report">View From Assign Report</div>
+                    </a>
+                </li>
                 </ul>
 
             </li>

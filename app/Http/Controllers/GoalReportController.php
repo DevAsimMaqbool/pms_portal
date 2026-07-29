@@ -48,4 +48,55 @@ class GoalReportController extends Controller
         return $pdf->setPaper('a4', 'landscape')
             ->stream('goal-mapping-report.pdf');
     }
+    public function pdfuser($role_id = null, $goal_id = null, $kpa_id = null)
+    {
+        $userId = Auth::id();
+
+        $query = GoalAssignment::with([
+            'role',
+            'goal.driver',
+            'kpa',
+            'details.objective',
+            'details.dimension',
+            'details.indicators.indicator',
+            'details.userDetails',   // Add this
+            'users' => function ($q) use ($userId) {
+                $q->where('user_id', $userId)
+                ->with('user');
+            }
+        ])
+        ->whereHas('users', function ($q) use ($userId) {
+            $q->where('user_id', $userId);
+        });
+
+        // Optional Filters
+        if ($role_id) {
+            $query->where('role_id', $role_id);
+        }
+
+        if ($goal_id) {
+            $query->where('goal_id', $goal_id);
+        }
+
+        if ($kpa_id) {
+            $query->where('kpa_id', $kpa_id);
+        }
+
+        $assignments = $query
+            ->orderBy('goal_id')
+            ->get();
+
+        // Group objectives like your view method
+        $assignments->each(function ($assignment) {
+            $assignment->groupedObjectives = $assignment->details->groupBy('objective_id');
+        });
+
+        $pdf = PDF::loadView(
+            'admin.goals_assign.user-goal-mapping-pdf',
+            compact('assignments')
+        );
+
+        return $pdf->setPaper('a4', 'landscape')
+            ->stream('goal-mapping-report.pdf');
+    }
 }

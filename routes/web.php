@@ -170,6 +170,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/reports/goal-mapping-pdf', [GoalReportController::class, 'pdf'])
         ->name('goal.mapping.pdf');
+    Route::get('/reports/assign-goal-mapping-pdf', [GoalReportController::class, 'pdfuser'])
+        ->name('assign.goal.mapping.pdf');    
 
     Route::resource('view-assign-goals', ViewAsignedGoalsController::class);
     Route::get(
@@ -185,6 +187,8 @@ Route::middleware('auth')->group(function () {
         'manager-update-targets/{id}',
         [ViewAsignedGoalsController::class, 'managerVerify']
     )->name('manager-targets.update');
+    Route::get('performance-hub', [ViewAsignedGoalsController::class, 'goalperformance'])->name('goalperformance.get');
+    
 
     // Returns the indicator modal HTML (without initial page include),
     // used for lazy-loading inside `admin/kpa.blade.php`.
