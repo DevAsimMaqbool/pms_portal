@@ -260,7 +260,6 @@ class ViewAsignedGoalsController extends Controller
 
             return $assignment;
         });   
-        dd($assignments);
        return view('admin.goal_dashboard',compact('assignments'));
     }
 
