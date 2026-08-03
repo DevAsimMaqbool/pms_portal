@@ -257,6 +257,9 @@ class="country-dropdown select2 form-select" required>
 @if(in_array(getRoleName(activeRole()), ['QEC']))
     <div class="tab-pane fade show {{ in_array(getRoleName(activeRole()), ['QEC']) ? 'active' : '' }}"
         id="form2" role="tabpanel">
+        <div class="card-title mb-0">
+                    <h5 class="mb-1">No of Professional Memberships attained vs targets</h5>
+                </div>
             <div class="d-flex">
                 <select id="bulkAction" class="form-select w-auto me-2">
                     <option value="">-- Select Action --</option>

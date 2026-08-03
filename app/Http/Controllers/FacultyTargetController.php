@@ -42,13 +42,21 @@ class FacultyTargetController extends Controller
 
             }
             if ($user->hasRole('Dean')) {
-                $hod_ids = User::where('manager_id', $employee_id)
-                    ->role('HOD')->pluck('employee_id');
-                $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
-                    ->whereIn('created_by', $hod_ids)
-                    ->whereIn('status', [1, 2])
-                    ->whereIn('form_status', ['OTHER', 'HOD'])
-                    ->get();
+                $status = $request->input('status');
+                if ($status == "DEAN") {
+                         $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
+                        ->where('created_by', $employee_id)
+                        ->where('form_status', 'DEAN')
+                        ->get();    }
+                if ($status == "HOD") {              
+                        
+                 $hod_ids = User::where('manager_id', $employee_id)->role('HOD')->pluck('employee_id');
+                 $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
+                     ->whereIn('created_by', $hod_ids)
+                     ->whereIn('status', [1, 2])
+                     ->whereIn('form_status', ['OTHER', 'HOD'])
+                     ->get();
+                }
             }
             if ($user->hasRole('ORIC')) {
 
@@ -153,7 +161,7 @@ class FacultyTargetController extends Controller
                 ]);
 
             }
-            if ($request->form_status == 'OTHER') {
+            if (in_array($request->form_status, ['OTHER', 'DEAN'])) {
                 $rules = [
                     'indicator_id' => 'required|array',
                     'indicator_id.*' => 'integer',

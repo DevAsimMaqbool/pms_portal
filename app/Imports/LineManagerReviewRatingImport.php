@@ -32,6 +32,7 @@ class LineManagerReviewRatingImport implements ToCollection, WithHeadingRow
             $validator = Validator::make($row->toArray(), [
                 'employee_id' => 'required|integer',
                 'year' => 'required|string',
+                'kpa_category' => 'required',
                 'task' => 'required|string',
                 'linemanager_rating' => 'required',
                 'remarks' => 'required',
@@ -48,6 +49,7 @@ class LineManagerReviewRatingImport implements ToCollection, WithHeadingRow
                 'form_status' => $this->formStatus,
                 'employee_id' => $row['employee_id'],
                 'year' => $row['year'],
+                'kpa_category' => $row['kpa_category'],
                 'remarks' => $row['remarks'],
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),

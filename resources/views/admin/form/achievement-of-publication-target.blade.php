@@ -88,6 +88,7 @@
                                                         <option value="">Select Target Category</option>
                                                         <option value="Scopus-Indexed">Scopus Indexed</option>
                                                         <option value="HEC">HEC</option>
+                                                        <option value="WoS">WoS</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
@@ -109,6 +110,10 @@
                                                         <option value="Y" class="hec hec-y-1">Y</option>
                                                         <option value="Medical" class="hec medical-recognized-1">Medical
                                                         </option>
+                                                        <option value="SSCI" class="WoS">SSCI</option>
+                                                        <option value="AHCI" class="WoS">AHCI</option>
+                                                        <option value="SCIE" class="WoS">SCIE</option>
+                                                        <option value="ESCI" class="WoS">ESCI</option>
                                                     </select>
 
 
@@ -735,6 +740,8 @@
                             }*/
                             $(this).show();
                         });
+                    }else if (category === "WoS") {
+                            journalSelect.find('.WoS').show();
                     }
                 });
 

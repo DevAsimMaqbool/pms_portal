@@ -275,7 +275,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/hod-departments-overview', [PermissionController::class, 'hodDepartmentsOverview']);
     Route::get('/multi-role-performance', [PermissionController::class, 'MultiRolePerformance'])->name('multi-role-performance');
 
-    Route::middleware('role:Teacher|HOD|ORIC|Dean|Human Resources|Assistant Professor|Professor|International Office|QEC|Finance|OEC|Employability Center|Program Leader UG|Program Leader PG|DOPS|Alumni Office|Associate Professor')->group(function () {
+    Route::middleware('role:Teacher|HOD|ORIC|Dean|Human Resources|Assistant Professor|Professor|International Office|QEC|Finance|OEC|Employability Center|Program Leader UG|Program Leader PG|DOPS|Alumni Office|Associate Professor|QCH')->group(function () {
         Route::get('/view-forms', [IndicatorController::class, 'indicator_form_show'])->name('indicatorForm.show');
         Route::post('/achievement-of-research-publications-target/{id}/update-status', [IndicatorController::class, 'updateStatus']);
         Route::post('/achievement-of-research-publications-target/bulk-update-status', [IndicatorController::class, 'bulkUpdateStatus'])->name('indicatorForm.bulkUpdateStatus');
@@ -452,6 +452,7 @@ Route::middleware('auth')->group(function () {
     });
     Route::middleware('role:Dean')->group(function () {
         Route::get('/dean-target', [FormBuilderController::class, 'DeanTargetForms'])->name('dean.target');
+        Route::get('/dean-target-verify', [FormBuilderController::class, 'DeanTargetVerifyForms'])->name('dean.target.verify');
     });
     Route::middleware('role:ORIC')->group(function () {
         Route::get('/oric-target', [FormBuilderController::class, 'OricTargetForms'])->name('oric.target');
