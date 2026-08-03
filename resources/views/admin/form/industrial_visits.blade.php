@@ -56,6 +56,7 @@
                             </div>  
                             
                             <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
+                            <p class="" id="indicatorDescription"></p>
                             <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
@@ -442,12 +443,17 @@
                         success: function(res) {
                             if (res.target) {
                                 $('#indicatorTarget').text('Target: ' + res.target);
+                                 $('#indicatorDescription').text(
+                                    'Description: ' + (res.data && res.data.description ? res.data.description : 'N/A')
+                                );
                             } else {
                                 $('#indicatorTarget').text('Target: N/A');
+                                 $('#indicatorDescription').text('Description: N/A');
                             }
                         },
                         error: function() {
                             $('#indicatorTarget').text('Target: N/A');
+                             $('#indicatorDescription').text('Description: N/A');
                         }
                     });
                 }

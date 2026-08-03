@@ -117,7 +117,7 @@ class FormBuilderController extends Controller
         $user = Auth::user();
         $departmentId = $user->department_id;
         $employee_id = $user->employee_id;
-        $facultyMembers = User::where('department_id', $departmentId)
+        $facultyMembers = User::with('roles')->where('department_id', $departmentId)
      ->get(['id', 'name', 'department', 'job_title']);
         return view('admin.form.hod_targets', compact('facultyMembers'));
     }

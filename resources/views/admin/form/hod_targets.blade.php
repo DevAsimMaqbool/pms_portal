@@ -50,10 +50,24 @@
                             @foreach($facultyMembers as $member)
                                 <option value="{{ $member->id }}" data-department="{{ $member->department }}"
                                     data-job_title="{{ $member->job_title }}">
-                                    {{ $member->name }}
+                                    {{ $member->name }} / 
+                                    @if($member->roles->isNotEmpty())
+                                        ({{ $member->roles->first()->name }})
+                                    @endif
                                 </option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="description" class="form-label">Description</label>
+
+                        <textarea
+                            class="form-control"
+                            id="description"
+                            name="description"
+                            rows="4"
+                            placeholder="Enter description"></textarea>
+
                     </div>
                 </div>
                 <div class="pt-6">
@@ -71,6 +85,7 @@
                             <th>#</th>
                             <th>User</th>
                             <th>Indicator</th>
+                            <th>Description</th>
                             <th>Target</th>
                         </tr>
                     </thead>
@@ -118,6 +133,7 @@
                                 i + 1,
                                 form.user ? form.user.name : 'N/A',
                                 form.indicator ? form.indicator.indicator : 'N/A',
+                                form.description || 'N/A',
                                 form.target || 'N/A'
                             ];
                         });
@@ -129,6 +145,7 @@
                                     { title: "#" },
                                     { title: "User" },
                                     { title: "Indicator" },
+                                    { title: "Description" },
                                     { title: "Target" },
                                 ]
                             });

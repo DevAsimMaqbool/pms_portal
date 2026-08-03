@@ -99,6 +99,7 @@ class FacultyTargetController extends Controller
             if ($request->form_status == 'HOD') {
                 $rules = [
                     'indicator_id' => 'required',
+                    'description' => 'required',
                     'faculty_member_id' => 'required|array',
                     'national' => 'required|integer',
                     'international' => 'required|integer',
@@ -117,6 +118,7 @@ class FacultyTargetController extends Controller
                 $data = [
                     'indicator_id' => $request->indicator_id,
                     'target' => $request->target,
+                    'description' => $request->description,
                     'form_status' => $request->form_status,
                     'scopus_q1' => $request->scopus_q1,
                     'scopus_q2' => $request->scopus_q2,
@@ -157,6 +159,7 @@ class FacultyTargetController extends Controller
                     'indicator_id.*' => 'integer',
                     'faculty_member_id' => 'required|array',
                     'target' => 'required|integer',
+                    'description' => 'required',
                     'faculty_member_id.*' => 'integer|exists:users,id',
                     'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                 ];
@@ -211,6 +214,7 @@ class FacultyTargetController extends Controller
                             // 🔄 UPDATE EXISTING RECORD
                             $existing->update([
                                 'target' => $request->target,
+                                'description' => $request->description,
                                 'form_status' => $request->form_status,
                                 'updated_by' => $employeeId,
                             ]);
@@ -220,6 +224,7 @@ class FacultyTargetController extends Controller
                                 'user_id' => $userId,
                                 'indicator_id' => $indicatorId,
                                 'target' => $request->target,
+                                'description' => $request->description,
                                 'form_status' => $request->form_status,
                                 'created_by' => $employeeId,
                                 'updated_by' => $employeeId,

@@ -140,8 +140,8 @@
                                     <th>Sub KPA</th>
                                     <th class="text-center">Obtained Score</th>
                                     <th class="text-center">Weight</th>
-                                    <th class="text-center">Formula</th>
-                                    <th class="text-center">Obtained %</th>
+                                    {{-- <th class="text-center">Formula</th>
+                                    <th class="text-center">Obtained %</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -164,10 +164,10 @@ $sumTotalWeight = 0;
                                         <td class="text-center">
                                             {{ $category['total_weight'] }}
                                         </td>
-                                        <td class="text-center">
+                                        {{-- <td class="text-center">
                                             ({{ $category['total_score'] }} / {{ $category['total_weight']}}) x 100 =
                                         </td>
-                                        <td class="text-center">{{ $category['score'] }}</td>
+                                        <td class="text-center">{{ $category['score'] }}</td> --}}
                                     </tr>
                                 @endforeach
 
@@ -179,10 +179,10 @@ $sumTotalWeight = 0;
                                     <th class="text-white">Total</th>
                                     <th class="text-white text-center">{{ $sumTotalScore }}</th>
                                     <th class="text-white text-center">{{ $sumTotalWeight }}</th>
-                                    <th class="text-center"> <i
+                                    {{-- <th class="text-center"> <i
                                             class="icon-base ti tabler-calculator icon-md text-white me-4"></th>
                                     <th class="text-center"> <i
-                                            class="icon-base ti tabler-scoreboard icon-md text-white me-4"></i></th>
+                                            class="icon-base ti tabler-scoreboard icon-md text-white me-4"></i></th> --}}
                                 </tr>
                             </tfoot>
                         </table>
