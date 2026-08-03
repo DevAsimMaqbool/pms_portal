@@ -256,7 +256,6 @@ class PermissionController extends Controller
         switch ($activeRole) {
             case 'teacher':
             case 'professor':
-            case 'qch':
             case 'assistant professor':
             case 'associate professor':
             case 'program leader ug':
@@ -274,6 +273,7 @@ class PermissionController extends Controller
             case 'international office':
             case 'human resources':
             case 'qec':
+            case 'qch':    
             case 'oec':
             case 'dops':
             case 'alumni office':
@@ -439,8 +439,8 @@ class PermissionController extends Controller
                     'type' => 'admin',
                     'chart_id' => 'supportTrackerAdmin',
                     'weight' => $weight,
-                    'weighted_score' => $score * $weight / 100,
-                    'percentage_score' => ($score / $weight) * 100 // weighted score
+                    'weighted_score' => $weight > 0 ? round(($score * $weight) / 100, 2) : 0,
+                    'percentage_score' => $weight > 0 ? round(($score / $weight) * 100, 2) : 0,
                 ];
 
                 $totalWeightedScore += $score * $weight / 100;

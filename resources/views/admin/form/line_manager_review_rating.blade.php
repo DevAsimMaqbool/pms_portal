@@ -70,6 +70,16 @@
                                             @endfor
                                         </select>
                                     </div>
+                                    <div class="col-md-6">
+                                                    <label class="form-label">Categorise</label>
+                                                    <select name="kpa_category" class="form-select">
+                                                        <option value="">Select Category</option>
+                                                        <option value="T&L">Teaching and Learning</option>
+                                                        <option value="RIC">Research, Innovation and Commercialization</option>
+                                                        <option value="IE">Institutional Engagement</option>
+                                                        <option value="FS">Financial Sustainability</option>
+                                                    </select>
+                                                </div>
                                     <div id="author-past-container">
                                         <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 

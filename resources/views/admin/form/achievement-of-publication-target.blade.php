@@ -88,6 +88,7 @@
                                                         <option value="">Select Target Category</option>
                                                         <option value="Scopus-Indexed">Scopus Indexed</option>
                                                         <option value="HEC">HEC</option>
+                                                        <option value="WoS">WoS</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
@@ -109,6 +110,10 @@
                                                         <option value="Y" class="hec hec-y-1">Y</option>
                                                         <option value="Medical" class="hec medical-recognized-1">Medical
                                                         </option>
+                                                        <option value="SSCI" class="WoS">SSCI</option>
+                                                        <option value="AHCI" class="WoS">AHCI</option>
+                                                        <option value="SCIE" class="WoS">SCIE</option>
+                                                        <option value="ESCI" class="WoS">ESCI</option>
                                                     </select>
 
 
@@ -362,10 +367,24 @@
                                         @foreach($facultyMembers as $member)
                                             <option value="{{ $member->id }}" data-department="{{ $member->department }}"
                                                 data-job_title="{{ $member->job_title }}">
-                                                {{ $member->name }}
+                                                {{ $member->name }} / 
+                                                @if($member->roles->isNotEmpty())
+                                                    ({{ $member->roles->first()->name }})
+                                                @endif
                                             </option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="description" class="form-label">Description</label>
+
+                                    <textarea
+                                        class="form-control"
+                                        id="description"
+                                        name="description"
+                                        rows="4"
+                                        placeholder="Enter description"></textarea>
+
                                 </div>
 
 
@@ -446,6 +465,7 @@
                                             <th>User</th>
                                             <th>Indicator</th>
                                             <th>Target</th>
+                                            <th>Description</th>
                                             <th>Q1</th>
                                             <th>Q2</th>
                                             <th>Q3</th>
@@ -720,6 +740,8 @@
                             }*/
                             $(this).show();
                         });
+                    }else if (category === "WoS") {
+                            journalSelect.find('.WoS').show();
                     }
                 });
 
@@ -1153,6 +1175,7 @@
                                 form.user ? form.user.name : 'N/A',
                                 form.indicator ? form.indicator.indicator : 'N/A',
                                 form.target || 'N/A',
+                                form.description || 'N/A',
                                 form.scopus_q1 || 'N/A',
                                 form.scopus_q2 || 'N/A',
                                 form.scopus_q3 || 'N/A',
@@ -1177,6 +1200,7 @@
                                     { title: "User" },
                                     { title: "Indicator" },
                                     { title: "Target" },
+                                    { title: "Description" },
                                     { title: "Q1" },
                                     { title: "Q2" },
                                     { title: "Q3" },

@@ -15,7 +15,11 @@
 
       <li><button type="button" class="btn rounded-pill btn-label-primary waves-effect">
           {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}, As
-          {{strtoupper(getRoleName(activeRole()))}}</button></li>
+          @php
+              $role = getRoleName(activeRole());
+          @endphp
+
+          {{ strtoupper($role == 'Teacher' ? 'Lecturer' : $role) }}</button></li>
 
       <!-- Style Switcher -->
       <li class="nav-item dropdown">

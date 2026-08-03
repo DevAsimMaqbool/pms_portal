@@ -321,7 +321,8 @@
       @php
         $totalWeight = collect($scores)->sum('weight');
         $totalscore = collect($scores)->sum('score');
-        $overallpercentage = ($combinedScore / $totalWeight) * 100;
+        //$overallpercentage = ($combinedScore / $totalWeight) * 100;
+        $overallpercentage = $totalWeight > 0? round(($combinedScore / $totalWeight) * 100, 2): 0;
         $totalweighted_score = collect($scores)->sum('percentage_score');
 
         $meta_avg_combine = getRatingMeta($overallpercentage);

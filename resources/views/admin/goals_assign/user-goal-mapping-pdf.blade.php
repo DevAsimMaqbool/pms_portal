@@ -616,7 +616,12 @@ $user = optional($assignments->first()->users->first())->user;
 </div>
 
 @php
-    $employee = optional(optional($assignments->first())->users->first())->user;
+    $employee = null;
+    //$employee = optional(optional($assignments->first())->users->first())->user;
+    if (!empty($assignments) && $assignments->isNotEmpty()) {
+        $employee = optional($assignments->first()->users->first())->user;
+    }
+
 @endphp
 
 <table>

@@ -16,10 +16,18 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <!-- Permission Table -->
         <div class="card mb-6">
-            <h5 class="card-header">Target Assign</h5>
+            <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                <div class="d-flex flex-column justify-content-center">
+                    <h4 class="mb-1">Target Assign</h4>
+                </div>
+                <div class="d-flex align-content-center flex-wrap gap-4">
+                    <div class="d-flex gap-4">
+                    <a class="btn btn-label-primary waves-effect" href="{{ route('dean.target.verify') }}">Approve</a></div>
+                </div>
+            </div>
             <form class="card-body" id="researchForm2">
                 @csrf
-                <input type="hidden" id="form_status" name="form_status" value="OTHER" required>
+                <input type="hidden" id="form_status" name="form_status" value="DEAN" required>
                 <div class="row g-6">
                     <div class="col-md-4">
                         <label class="form-label" for="indicator_id">Select Indicator</label>
@@ -109,14 +117,14 @@
     <script>
         window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
     </script>
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(auth()->user()->hasRole(['Dean']))
         <script>
             function fetchTarget() {
                 $.ajax({
                     url: "{{ route('faculty-target.index') }}",
                     method: "GET",
                     data: {
-                        status: "OTHER" // you can send more values
+                        status: "DEAN" // you can send more values
                     },
                     dataType: "json",
                     success: function (data) {

@@ -756,20 +756,20 @@
 
                     <div class="user-avatar-section">
                       <div class=" d-flex align-items-center flex-column">
-                        <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/1.png')}}"
-                          height="100" width="100" alt="User avatar">
+                        <img class="img-fluid rounded-circle mb-2" style="background-color:white !important;" src=""
+                          height="100" width="100" alt="">
                         <div class="user-info text-center">
                           <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
-                          <h5 class="m-0">Dr. Tehreem Masood</h5>
-                          <p class="m-0">Associate Professor</p>
-                          <small class="m-0">Department of Software Engineering</small>
+                          <h5 class="m-0">Yet there is no topper !</h5>
+                          <p class="m-0">Yet there is no topper !</p>
+                          <small class="m-0">Yet there is no topper !</small>
                         </div>
                         <img class="img-fluid rounded-circle mt-2 mb-2"
                           src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100"
                           alt="User avatar">
                         <div class="user-info text-center">
-                          <span class="badge bg-label-primary">{{ number_format(98, 1) }}%</span>
-                          <p class="m-0">Leding with excellence and inspiring success across the institution</p>
+                          <span class="badge bg-label-primary">0%</span>
+                          <p class="m-0">Yet there is no topper !</p>
                         </div>
                       </div>
                     </div>
@@ -779,48 +779,26 @@
 
                     <div class="user-avatar-section">
                       <div class=" d-flex align-items-center flex-column">
-                        <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/3.png')}}"
-                          height="100" width="100" alt="User avatar">
+                        <img class="img-fluid rounded-circle mb-2" style="background-color:white !important;" src=""
+                          height="100" width="100" alt="">
                         <div class="user-info text-center">
                           <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
-                          <h5 class="m-0">Abdullah Tanweer</h5>
-                          <p class="m-0">Associate Professor</p>
-                          <small class="m-0">Department of Software Engineering</small>
+                          <h5 class="m-0">Yet there is no topper !</h5>
+                          <p class="m-0">Yet there is no topper !</p>
+                          <small class="m-0">Yet there is no topper !</small>
                         </div>
                         <img class="img-fluid rounded-circle mt-2 mb-2"
                           src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100"
                           alt="User avatar">
                         <div class="user-info text-center">
-                          <span class="badge bg-label-primary">{{ number_format(98, 1) }}%</span>
-                          <p class="m-0">Leding with excellence and inspiring success across the institution</p>
+                          <span class="badge bg-label-primary">0%</span>
+                          <p class="m-0">Yet there is no topper !</p>
                         </div>
                       </div>
                     </div>
 
                   </div>
-                  <div class="carousel-item">
-
-                    <div class="user-avatar-section">
-                      <div class=" d-flex align-items-center flex-column">
-                        <img class="img-fluid rounded-circle mb-2" src="{{ asset('admin/assets/img/avatars/1.png')}}"
-                          height="100" width="100" alt="User avatar">
-                        <div class="user-info text-center">
-                          <span class="badge" style="background-color: #fdcc55 !important;">Diamond Performer</span>
-                          <h5 class="m-0">Dr. Tehreem Masood</h5>
-                          <p class="m-0">Associate Professor</p>
-                          <small class="m-0">Department of Software Engineering</small>
-                        </div>
-                        <img class="img-fluid rounded-circle mt-2 mb-2"
-                          src="{{ asset('admin/assets/img/avatars/hologram-dimond.gif')}}" height="100" width="100"
-                          alt="User avatar">
-                        <div class="user-info text-center">
-                          <span class="badge bg-label-primary">{{ number_format(98, 1) }}%</span>
-                          <p class="m-0">Leding with excellence and inspiring success across the institution</p>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
+                  
                 </div>
                 <a class="carousel-control-prev" href="#carouselExample" role="button" data-bs-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>

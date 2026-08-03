@@ -48,6 +48,7 @@ class LineManagerReviewRatingController extends Controller
                         'indicator_id' => 'required|integer',
                         'employee_id' => 'required|integer',
                         'year' => 'required|string',
+                        'kpa_category' => 'required',
                         'linemanager' => 'required|array|min:1',
                         'linemanager.*.task' => 'required|string',
                         'linemanager.*.linemanager_rating' => 'required',
@@ -73,6 +74,7 @@ class LineManagerReviewRatingController extends Controller
                         'indicator_id' => $request->indicator_id,
                         'employee_id' => $request->employee_id,
                         'year' => $request->year,
+                        'kpa_category' => $request->kpa_category,
                         'remarks' => $request->remarks,
                         'form_status' => $request->form_status,
                         'created_by' => $employeeId,
@@ -109,6 +111,7 @@ class LineManagerReviewRatingController extends Controller
         $rules = [
             'employee_id' => 'required|integer',
             'year' => 'required|string',
+            'kpa_category' => 'required',
             'linemanager' => 'required|array|min:1',
             'linemanager.*.task' => 'required|string',
             'linemanager.*.linemanager_rating' => 'required',
@@ -123,6 +126,7 @@ class LineManagerReviewRatingController extends Controller
         $review->update([
             'employee_id' => $request->employee_id,
             'year' => $request->year,
+            'kpa_category' => $request->kpa_category,
             'remarks' => $request->remarks,
             'updated_by' => Auth::user()->employee_id
         ]);

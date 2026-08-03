@@ -117,13 +117,20 @@ class FormBuilderController extends Controller
         $user = Auth::user();
         $departmentId = $user->department_id;
         $employee_id = $user->employee_id;
-        $facultyMembers = User::where('department_id', $departmentId)
+        $facultyMembers = User::with('roles')->where('department_id', $departmentId)
      ->get(['id', 'name', 'department', 'job_title']);
         return view('admin.form.hod_targets', compact('facultyMembers'));
     }
     public function DeanTargetForms()
     {
-        return view('admin.form.dean_targets');
+        $user = Auth::user();
+        $employee_id = $user->employee_id;
+        $facultyMembers = User::with('roles')->where('manager_id', $employee_id)->role(['HOD'])->get(['id', 'name', 'department', 'job_title']);
+        return view('admin.form.dean_user_targets', compact('facultyMembers'));
+    }
+     public function DeanTargetVerifyForms()
+    {
+         return view('admin.form.dean_targets');
     }
     public function OricTargetForms()
     {

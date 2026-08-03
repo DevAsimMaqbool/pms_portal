@@ -30,6 +30,7 @@ if (!function_exists('hodTopPerformers')) {
             ->whereIn('employee_id', $employeeIds)
             ->whereIn('role_id', $roleIds)
             ->groupBy('employee_id', 'role_id') 
+            ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')   // Sort by avg_score descending
             ->limit(5)                   // Take top 5
             ->get();
@@ -602,6 +603,7 @@ if (!function_exists('FacultyLevelToppers')) {
             ->whereIn('employee_id', $employeeIds)
             ->whereIn('role_id', $roleIds)
             ->groupBy('employee_id', 'role_id') 
+            ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')   // Sort by avg_score descending
             ->limit(5)                   // Take top 5
             ->get();
