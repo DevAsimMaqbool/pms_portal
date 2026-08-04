@@ -376,6 +376,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/conference-impacts/update/{id}', [ResearchConferenceImpactController::class, 'updateResearchConferenceImpact'])->name('conference-impacts.update');
         Route::resource('employee-tasks', EmployeeTaskController::class);
         Route::resource('manage-employee-tasks', ManagerTaskController::class);
+        Route::get('/tasks-dashboard', [ManagerEmployeeTaskController::class, 'taskDashboard'])
+            ->name('tasks.dashboard');
+        
     });
 
     Route::middleware('role:user')->group(function () {
@@ -420,6 +423,7 @@ Route::middleware('auth')->group(function () {
     Route::get('area-of-improvements', [TeacherController::class, 'areaOfImprovements'])->name('teacher.area_of_improvements');
     Route::get('noteable-performance', [TeacherController::class, 'noteablePerformance'])->name('teacher.noteable_performance');
     Route::resource('pip', PipController::class);
+    Route::get('pip-data/', [PipController::class, 'getDate'])->name('pips.getdata');
     Route::post('pip/{id}/update-status', [PipController::class, 'updateStatus'])->name('pip.updateStatus');
     Route::resource('/self-assessment', SelfAssessmentWorkingController::class);
     Route::resource('/feedback', RoleFeedbackController::class);

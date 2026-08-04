@@ -14,4 +14,8 @@ class Pip extends Model
         'created_by',
         'updated_by'
     ];
+    public function assignUsers()
+    {
+        return $this->hasMany(PipAssignUser::class,'pip_id');
+    }
 }
