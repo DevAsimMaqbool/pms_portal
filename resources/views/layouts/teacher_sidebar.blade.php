@@ -21,7 +21,7 @@
     <li class="menu-item {{ request()->routeIs('teacher_dashboard') ? 'active' : '' }}">
       <a href="{{ route('teacher_dashboard') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
-        <div data-i18n="Dashboard11">Dashboard</div>
+        <div data-i18n="Dashboard">Dashboard</div>
       </a>
     </li>
     <li class="menu-item {{ request()->routeIs([
