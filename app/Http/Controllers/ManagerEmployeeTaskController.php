@@ -551,6 +551,7 @@ class ManagerEmployeeTaskController extends Controller
 
         $verifiedTasks = (clone $tasks)
             ->whereNotNull('manager_completion')
+            ->where('manager_completion', '>', 0)
             ->count();
 
         $verificationCoverage = $totalActivities
@@ -627,9 +628,9 @@ class ManagerEmployeeTaskController extends Controller
 
                 DB::raw('SUM(CASE WHEN self_completion=manager_completion THEN 1 ELSE 0 END) aligned'),
 
-                DB::raw('SUM(CASE WHEN self_completion<>manager_completion THEN 1 ELSE 0 END) mismatch'),
+                DB::raw('SUM(CASE WHEN manager_completion <> 0 AND self_completion<>manager_completion THEN 1 ELSE 0 END) mismatch'),
 
-                DB::raw('SUM(CASE WHEN manager_completion IS NULL THEN 1 ELSE 0 END) awaiting')
+                DB::raw('SUM(CASE WHEN manager_completion IS NULL OR manager_completion = 0 THEN 1 ELSE 0 END) awaiting')
 
             )
 
@@ -701,9 +702,9 @@ class ManagerEmployeeTaskController extends Controller
 
                 DB::raw('SUM(CASE WHEN self_completion=manager_completion THEN 1 ELSE 0 END) aligned'),
 
-                DB::raw('SUM(CASE WHEN self_completion<>manager_completion THEN 1 ELSE 0 END) mismatch'),
+                DB::raw('SUM(CASE WHEN manager_completion <> 0 AND self_completion<>manager_completion THEN 1 ELSE 0 END) mismatch'),
 
-                DB::raw('SUM(CASE WHEN manager_completion IS NULL THEN 1 ELSE 0 END) awaiting'),
+                DB::raw('SUM(CASE WHEN manager_completion IS NULL OR manager_completion = 0 THEN 1 ELSE 0 END) awaiting'),
 
                 DB::raw('AVG(self_completion) self_avg'),
 
@@ -748,6 +749,184 @@ class ManagerEmployeeTaskController extends Controller
             'hoursPerEmployee',
 
             'priorityData',
+
+            'summary'
+
+        ));
+    }
+
+    public function taskDashboard(Request $request)
+    {
+        $employeeId = Auth::user()->employee_id;
+        $month = $request->month ?? date('Y-m');
+
+        $year = Carbon::parse($month)->year;
+        $monthNumber = Carbon::parse($month)->month;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Employees
+        |--------------------------------------------------------------------------
+        */
+
+        $employees = User::whereIn('employee_id', function ($q) use ($year, $monthNumber,$employeeId) {
+
+            $q->select('employee_id')
+                ->from('employee_tasks')
+                ->whereYear('task_date', $year)
+                ->whereMonth('task_date', $monthNumber)
+                ->whereMonth('employee_id', $employeeId);
+
+        })->orderBy('name')->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+
+        $tasks = EmployeeTask::whereYear('task_date', $year)
+            ->whereMonth('task_date', $monthNumber)
+            ->where('employee_tasks.employee_id', $employeeId);
+
+        /*
+        |--------------------------------------------------------------------------
+        | KPI CARDS
+        |--------------------------------------------------------------------------
+        */
+
+        //$departmentSelfAvg = round((clone $tasks)->avg('self_completion'), 1);
+
+        //$departmentManagerAvg = round((clone $tasks)->avg('manager_completion'), 1);
+
+        $totalHours = round((clone $tasks)->sum('hours_worked'), 2);
+
+        $totalActivities = (clone $tasks)->count();
+
+        $verifiedTasks = (clone $tasks)
+            ->whereNotNull('manager_completion')
+            ->where('manager_completion', '>', 0)
+            ->count();
+
+        $verificationCoverage = $totalActivities
+            ? round(($verifiedTasks / $totalActivities) * 100)
+            : 0;
+
+        $daysAligned = (clone $tasks)
+            ->whereColumn('self_completion', 'manager_completion')
+            ->count();
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Verification Status
+        |--------------------------------------------------------------------------
+        */
+
+        $verification = (clone $tasks)
+
+            ->join('users', 'users.employee_id', '=', 'employee_tasks.employee_id')
+
+            ->select(
+
+                'users.name',
+
+                DB::raw('SUM(CASE WHEN self_completion=manager_completion THEN 1 ELSE 0 END) aligned'),
+
+                DB::raw('SUM(CASE WHEN manager_completion <> 0 AND self_completion<>manager_completion THEN 1 ELSE 0 END) mismatch'),
+
+                DB::raw('SUM(CASE WHEN manager_completion IS NULL OR manager_completion = 0 THEN 1 ELSE 0 END) awaiting')
+
+            )
+
+            ->groupBy('users.name')
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Hours Per Employee
+        |--------------------------------------------------------------------------
+        */
+
+        $hoursPerEmployee = (clone $tasks)
+
+            ->join('users', 'users.employee_id', '=', 'employee_tasks.employee_id')
+
+            ->select(
+
+                'users.name',
+
+                DB::raw('SUM(hours_worked) total_hours')
+
+            )
+
+            ->groupBy('users.name')
+
+            ->orderByDesc('total_hours')
+
+            ->get();
+
+
+        
+
+        /*
+        |--------------------------------------------------------------------------
+        | Employee Summary Table
+        |--------------------------------------------------------------------------
+        */
+
+        $summary = (clone $tasks)
+
+            ->join('users', 'users.employee_id', '=', 'employee_tasks.employee_id')
+
+            ->select(
+
+                'users.name',
+
+                DB::raw('SUM(hours_worked) hours'),
+
+                DB::raw('COUNT(*) activities'),
+
+                DB::raw('SUM(CASE WHEN self_completion=manager_completion THEN 1 ELSE 0 END) aligned'),
+
+                DB::raw('SUM(CASE WHEN manager_completion <> 0 AND self_completion<>manager_completion THEN 1 ELSE 0 END) mismatch'),
+
+                DB::raw('SUM(CASE WHEN manager_completion IS NULL OR manager_completion = 0 THEN 1 ELSE 0 END) awaiting'),
+
+                DB::raw('AVG(self_completion) self_avg'),
+
+                DB::raw('AVG(manager_completion) manager_avg')
+
+            )
+
+            ->groupBy('users.name')
+
+            ->orderBy('users.name')
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Return
+        |--------------------------------------------------------------------------
+        */
+
+        return view('admin.manager_employee_tasks.task-dashboard', compact(
+
+            'month',
+            'totalHours',
+
+            'totalActivities',
+
+            'verificationCoverage',
+
+            'daysAligned',
+
+            'verification',
+
+            'hoursPerEmployee',
 
             'summary'
 

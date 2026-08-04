@@ -340,9 +340,36 @@ class PermissionController extends Controller
         return view('admin.my_performance', compact('employee'));
     }
 
+    // public function switchRole(Request $request)
+    // {
+    //     $request->validate(['role' => 'required|string']);
+
+    //     $user = auth()->user();
+
+    //     if (!$user->hasRole($request->role)) {
+    //         abort(403);
+    //     }
+
+    //     $teacherRoles = ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG', 'Finance', 'International Office', 'HR', 'QCE', 'OEC', 'DOPS', 'Alumni Office', 'Employability Center', 'Rector', 'QCH', 'ORIC'];
+    //     if (in_array($request->role, $teacherRoles)) {
+    //         session(['active_role' => 'teacher']);
+    //     } elseif ($request->role === 'HOD') {
+    //         session(['active_role' => 'hod']);
+    //     } else {
+    //         session(['active_role' => strtolower($request->role)]);
+    //     }
+
+    //     return match (activeRole()) {
+    //         'hod' => redirect()->route('hod.dashboard'),
+    //         'teacher' => redirect()->route('teacher_dashboard'),
+    //         default => redirect()->back(),
+    //     };
+    // }
     public function switchRole(Request $request)
     {
-        $request->validate(['role' => 'required|string']);
+        $request->validate([
+            'role' => 'required|string',
+        ]);
 
         $user = auth()->user();
 
@@ -350,19 +377,51 @@ class PermissionController extends Controller
             abort(403);
         }
 
-        $teacherRoles = ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG', 'Finance', 'International Office', 'HR', 'QCE', 'OEC', 'DOPS', 'Alumni Office', 'Employability Center', 'Rector', 'QCH', 'ORIC'];
-        if (in_array($request->role, $teacherRoles)) {
-            session(['active_role' => 'teacher']);
-        } elseif ($request->role === 'HOD') {
-            session(['active_role' => 'hod']);
-        } else {
-            session(['active_role' => strtolower($request->role)]);
-        }
+        $roleMap = [
+            'Teacher'              => 'teacher',
+            'Assistant Professor'  => 'assistant professor',
+            'Associate Professor'  => 'associate professor',
+            'Professor'            => 'professor',
+            'Program Leader UG'    => 'program leader ug',
+            'Program Leader PG'    => 'program leader pg',
+            'Finance'              => 'finance',
+            'International Office' => 'international office',
+            'HR'                   => 'hr',
+            'QCE'                  => 'qce',
+            'OEC'                  => 'oec',
+            'DOPS'                 => 'dops',
+            'Alumni Office'        => 'alumni office',
+            'Employability Center' => 'employability center',
+            'Rector'               => 'rector',
+            'QCH'                  => 'qch',
+            'ORIC'                 => 'oric',
+            'HOD'                  => 'hod',
+        ];
+
+        session([
+            'active_role' => $roleMap[$request->role] ?? strtolower($request->role),
+        ]);
 
         return match (activeRole()) {
-            'hod' => redirect()->route('hod.dashboard'),
-            'teacher' => redirect()->route('teacher_dashboard'),
-            default => redirect()->back(),
+            'teacher'              => redirect()->route('teacher_dashboard'),
+            'assistant professor'  => redirect()->route('teacher_dashboard'),
+            'associate professor'  => redirect()->route('teacher_dashboard'),
+            'professor'            => redirect()->route('teacher_dashboard'),
+            'program leader ug'    => redirect()->route('teacher_dashboard'),
+            'program leader pg'    => redirect()->route('teacher_dashboard'),
+            'finance'              => redirect()->route('teacher_dashboard'),
+            'international office' => redirect()->route('teacher_dashboard'),
+            'hr'                   => redirect()->route('teacher_dashboard'),
+            'qce'                  => redirect()->route('teacher_dashboard'),
+            'oec'                  => redirect()->route('teacher_dashboard'),
+            'dops'                 => redirect()->route('teacher_dashboard'),
+            'alumni office'        => redirect()->route('teacher_dashboard'),
+            'employability center' => redirect()->route('teacher_dashboard'),
+            'rector'               => redirect()->route('teacher_dashboard'),
+            'qch'                  => redirect()->route('teacher_dashboard'),
+            'oric'                 => redirect()->route('teacher_dashboard'),
+            'hod'                  => redirect()->route('hod.dashboard'),
+            default                => redirect()->back(),
         };
     }
     public function hodDepartmentsOverview()

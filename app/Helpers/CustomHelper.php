@@ -2293,6 +2293,37 @@ function avgKpaScore($employeeId, $kpaId)
     $memo[$key] = $result;
     return $result;
 }
+function sumKpaScore($employeeId, $kpaId)
+{
+    // Memoize per-request to avoid duplicate calculations in Blade.
+    static $memo = [];
+
+    $userRoleId = getRoleIdByName(activeRole());
+    $key = $employeeId . '|' . $kpaId . '|' . $userRoleId;
+    if (array_key_exists($key, $memo)) {
+        return $memo[$key];
+    }
+
+    // Get all scores for the employee and KPA
+    $scores = IndicatorsPercentage::where('employee_id', $employeeId)
+        ->where('key_performance_area_id', $kpaId)
+        ->where('role_id', $userRoleId)
+        ->pluck('score'); // get array of scores
+
+    if ($scores->isEmpty()) {
+        return 0;
+    }
+    // Cap each score at 100
+    $cappedScores = $scores->map(fn($score) => min($score, 100));
+
+    // Calculate average
+    $avg = $cappedScores->sum();
+    $weightage = getRoleWeightage($userRoleId, 'kpa', $kpaId)['weightage'];
+    $weightedScore = ($avg * $weightage) / 100;
+    $result = number_format($weightedScore, 1);
+    $memo[$key] = $result;
+    return $result;
+}
 
 if (!function_exists('ResearchProductivityofPGStudents')) {
     function ResearchProductivityofPGStudents($facultyId, $activeRoleId, $indicatorId)

@@ -21,7 +21,7 @@
     <li class="menu-item {{ request()->routeIs('teacher_dashboard') ? 'active' : '' }}">
       <a href="{{ route('teacher_dashboard') }}" class="menu-link">
         <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
-        <div data-i18n="Dashboard">Dashboard</div>
+        <div data-i18n="Dashboard11">Dashboard</div>
       </a>
     </li>
     <li class="menu-item {{ request()->routeIs([
@@ -47,16 +47,37 @@
         </ul>
 
     </li>
+
     <li class="menu-item {{ request()->routeIs([
               'employee-tasks.index',
               'employee-tasks.create',
               'employee-tasks.edit',
-              'employee-tasks.show'
+              'employee-tasks.show',
+              'tasks.dashboard'
           ]) ? 'active open' : '' }}">
-        <a href="{{ route('employee-tasks.index') }}"" class=" menu-link">
-          <i class="menu-icon icon-base ti tabler-calendar-check"></i>
-          <div data-i18n="Daily Productivity">Daily Productivity</div>
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon icon-base ti tabler-calendar-check"></i>
+        <div data-i18n="Daily Productivity">Daily Productivity</div>
         </a>
+
+        <ul class="menu-sub">
+        <li class="menu-item  {{ request()->routeIs([
+              'employee-tasks.index',
+              'employee-tasks.create',
+              'employee-tasks.edit',
+              'employee-tasks.show'
+          ]) ? 'active' : '' }}">
+            <a href="{{ route('employee-tasks.index') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign To Me">
+            <div data-i18n="Task Management">Task Management</div>
+            </a>
+        </li>
+         <li class="menu-item {{ request()->routeIs('tasks.dashboard') ? 'active' : '' }}">
+              <a href="{{ route('tasks.dashboard') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign To Me Report">
+              <div data-i18n="Task dashboard">Task dashboard</div>
+              </a>
+          </li>
+        </ul>
+
     </li>
 
    

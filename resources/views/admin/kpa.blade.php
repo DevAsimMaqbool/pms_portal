@@ -73,7 +73,7 @@
                         <h5 class="card-title mb-0">{{ $area['performance_area'] }} 🎉</h5>
                         <p class="mb-2">Overall KPA Performance</p>
                         <h4 class="text-primary mb-1">
-                            {{ min(number_format(avgKpaScore(Auth::user()->id, request()->segment(2)), 1), 100) }}%
+                            {{ min(number_format(sumKpaScore(Auth::user()->id, request()->segment(2)), 1), 100) }}%
                         </h4>
                         <span class="badge bg-label-primary mb-1">Out of {{ $area['kpa_weightage'] ?? 'NULL' }} %
                             weight</span>
