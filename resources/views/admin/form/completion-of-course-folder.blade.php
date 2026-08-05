@@ -61,15 +61,17 @@
                                         <div class="grant-group row g-3 m-0 p-3">
 
 
-                                            <div class="col-md-6 d-none">
+                                            <div class="col-md-12 d-none">
                                                 <label for="faculty_member" class="form-label">Name of Faculty Member</label>
 
                                                 <input type="hidden" id="faculty_member_id" name="faculty_member_id"
                                                     value="{{ auth()->id() }}">
+                                                    <input type="radio" name="completion_of_Course_folder" id="good" value="1" checked>
+                                                    
                                             </div>
 
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <label for="faculty_member" class="form-label">Class</label>
                                                 <select name="class_name[]" id="select2Success"
                                                     class="select2 form-select  faculty-class" multiple required>
@@ -78,7 +80,7 @@
                                             </div>
 
 
-                                            <div class="col-md-12">
+                                            {{-- <div class="col-md-12">
                                                 <label class="form-label d-block">1- Course folder status</label>
                                                 <div>
                                                     <input type="radio" name="completion_of_Course_folder" id="completed"
@@ -93,7 +95,64 @@
                                                         value="25">
                                                     <label for="not_Completed">Not Completed</label>
                                                 </div>
+                                            </div> --}}
+
+                                             <div class="col-md-12">
+                                                <h6 class=" d-block">Course folder status</h6>
+                                                    <div class="form-check mt-4">
+                                                        <input class="form-check-input" type="checkbox" name="completion_status[]" id="module"
+                                                            value="Module">
+                                                        <label for="module">Module</label>
+                                                    </div> 
+
+                                                    <div class="form-check mt-4">
+                                                        <input class="form-check-input" type="checkbox" name="completion_status[]"
+                                                            id="lecture_log_sheet" value="lecture log sheet" checked>
+                                                        <label for="lecture_log_sheet">Lecture log sheet</label>
+                                                    </div>
+
+                                                      <div class="form-check mt-4">
+                                                        <input class="form-check-input" type="checkbox" name="completion_status[]" id="cqi_docuement"
+                                                            value="CQI Docuement">
+                                                        <label for="cqi_docuement">CQI Docuement</label>
+                                                    </div>
+
+                                                    <div class="mt-4">
+                                                        <label class="form-check-label" for="assessment_evidence">Assessment evidence</label>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="good" value="Good">
+                                                            <label  for="good">Good</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="bad" value="Bad">
+                                                            <label  for="bad">Bad</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="any" value="Any">
+                                                            <label for="any">Any</label>
+                                                        </div>
+                                                    </div>
+
+                                                     <div class="mt-4">
+                                                        <label class="form-check-label" for="result">Result</label>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="grading_sheet" value="Grading Sheet">
+                                                            <label for="grading_sheet">Grading Sheet</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="marks_Sheet" value="Marks Sheet">
+                                                            <label for="marks_Sheet">Marks Sheet</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="clo_plo_maping_Sheet" value="CLO PLO Maping Sheet">
+                                                            <label for="clo_plo_maping_Sheet">CLO PLO Maping Sheet</label>
+                                                        </div>
+                                                    </div>
                                             </div>
+                                            <div class="col-md-12">
+                                                    <label class="form-label">Document Url</label>
+                                                    <input type="url" name="document_url" id="document_url" class="form-control">
+                                                </div>
 
 
                                             <!-- <div class="col-md-12">
@@ -387,14 +446,27 @@
 
                                 // Loop through all validation errors
                                 $.each(errors, function (field, messages) {
+
                                     let input = form.find('[name="' + field + '"]');
 
+                                    // Handle array fields like completion_status[]
+                                    if (!input.length) {
+                                        input = form.find('[name="' + field + '[]"]');
+                                    }
+
                                     if (input.length) {
+
                                         input.addClass('is-invalid');
 
-                                        // Show error message under input
-                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                        // Remove previous feedback
+                                        input.closest('.col-md-12, .mt-4').find('.invalid-feedback').remove();
+
+                                        // Show one error after the last checkbox
+                                        input.last().closest('.mt-4, .col-md-12').append(
+                                            '<div class="invalid-feedback d-block">' + messages[0] + '</div>'
+                                        );
                                     }
+
                                 });
 
                             } else if (xhr.status === 409) {

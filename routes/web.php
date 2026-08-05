@@ -94,6 +94,7 @@ use App\Http\Controllers\S2RDriverController;
 use App\Http\Controllers\GoalReportController;
 use App\Http\Controllers\ManagerTaskController;
 use App\Http\Controllers\ManagerEmployeeTaskController;
+use App\Http\Controllers\ResearchTaskAssignedHodDeanController;
 use App\Http\Controllers\ViewAsignedGoalsController;
 use Illuminate\Support\Facades\Auth;
 
@@ -329,6 +330,7 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('/alumni-satisfaction-rate', AlumniSatisfactionRateController::class);
         Route::resource('/line-manager-review-rating', LineManagerReviewRatingController::class);
+        Route::resource('/research-tasks-assigned', ResearchTaskAssignedHodDeanController::class);
         Route::resource('industrial-visit', IndustrialVisitController::class);
         Route::resource('conference-impact', ResearchConferenceImpactController::class);
 
@@ -336,6 +338,10 @@ Route::middleware('auth')->group(function () {
             '/completion-of-course-folder-verification/{id}',
             [CompletionOfCourseFolderController::class, 'updatestatusverification']
         )->name('completion.folder.verification');
+         Route::put(
+            '/compliance_and_usage_of_lms_verification/{id}',
+            [ComplianceAndUsageOfLMSController::class, 'updatestatusverification']
+        )->name('compliance.usagelms.verification');
 
         // routes/import excel file
         Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');
