@@ -8,6 +8,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\Api\ManagerEmployeeTaskController;
+use App\Http\Controllers\Api\OricApiController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/productivity-trend', [ManagerEmployeeTaskController::class, 'productivityTrend']);
         Route::get('/employee-net-promoter-score', [ManagerEmployeeTaskController::class, 'employeeNetPromoterScore']);
         Route::get('leadership-satisfaction-score', [ManagerEmployeeTaskController::class, 'leadershipSatisfactionScore']);
+
+        Route::get('research-publication-dashboard', [OricApiController::class, 'researchPublicationDashboard']);
     });
 
 });
