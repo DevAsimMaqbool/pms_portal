@@ -10,6 +10,7 @@ use App\Models\ActiveInternationalResearchPartner;
 use App\Models\NoOfGrantsSubmitAndWon;
 use App\Models\CommercialGainsCounsultancyResearchIncome;
 use App\Models\ProductsDeliveredToIndustry;
+use App\Models\IntellectualProperty;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -1037,6 +1038,383 @@ class OricApiController extends Controller
             'department_wise_summary' => $departmentSummary,
 
             'top_researcher_by_innovation' => $topResearcher,
+
+        ]);
+    }
+
+    public function patentDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+
+        $query = IntellectualProperty::query()
+            ->whereIn('intellectual_properties.status', [1, 2, 3]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Date Filters
+        |--------------------------------------------------------------------------
+        */
+
+        switch ($request->filter) {
+
+            case 'today':
+                $query->whereDate(
+                    'intellectual_properties.created_at',
+                    Carbon::today()
+                );
+                break;
+
+            case 'last_30_days':
+                $query->whereDate(
+                    'intellectual_properties.created_at',
+                    '>=',
+                    Carbon::now()->subDays(30)
+                );
+                break;
+
+            case 'quarter':
+                $query->whereDate(
+                    'intellectual_properties.created_at',
+                    '>=',
+                    Carbon::now()->subMonths(3)
+                );
+                break;
+
+            case 'last_six_months':
+                $query->whereDate(
+                    'intellectual_properties.created_at',
+                    '>=',
+                    Carbon::now()->subMonths(6)
+                );
+                break;
+
+            case 'last_one_year':
+                $query->whereDate(
+                    'intellectual_properties.created_at',
+                    '>=',
+                    Carbon::now()->subYear()
+                );
+                break;
+
+            case 'custom':
+
+                if ($request->filled('from_date') && $request->filled('to_date')) {
+
+                    $query->whereBetween(
+                        'intellectual_properties.created_at',
+                        [
+                            Carbon::parse($request->from_date)->startOfDay(),
+                            Carbon::parse($request->to_date)->endOfDay()
+                        ]
+                    );
+
+                }
+
+                break;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Summary Cards
+        |--------------------------------------------------------------------------
+        */
+
+        $patentFiled = (clone $query)->count();
+
+        $patentGranted = (clone $query)
+            ->where('intellectual_properties.status', 2)
+            ->count();
+
+        $copyright = (clone $query)
+            ->whereRaw("LOWER(intellectual_properties.patents_ip_type)='copyright'")
+            ->count();
+
+        $trademark = (clone $query)
+            ->whereRaw("LOWER(intellectual_properties.patents_ip_type)='trademark'")
+            ->count();
+
+        $softwareRegistration = 0;
+
+        $licenceAgreement = 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Trend Over Years
+        |--------------------------------------------------------------------------
+        */
+
+        $trendOverYears = (clone $query)
+            ->selectRaw("
+        YEAR(created_at) as year,
+
+        COUNT(*) as patent_filed,
+
+        SUM(CASE WHEN intellectual_properties.status=2 THEN 1 ELSE 0 END) as patent_granted,
+
+        SUM(CASE WHEN LOWER(patents_ip_type)='copyright' THEN 1 ELSE 0 END) as copyright_registration,
+
+        SUM(CASE WHEN LOWER(patents_ip_type)='trademark' THEN 1 ELSE 0 END) as trademark_registered
+    ")
+            ->groupByRaw("YEAR(created_at)")
+            ->orderBy("year")
+            ->get()
+            ->map(function ($r) {
+
+                return [
+
+                    'year' => $r->year,
+
+                    'patent_filed' => $r->patent_filed,
+
+                    'patent_granted' => $r->patent_granted,
+
+                    'copyright_registration' => $r->copyright_registration,
+
+                    'trademarks_registered' => $r->trademark_registered,
+
+                    'software_registration' => 0,
+
+                    'licence_agreement' => 0
+
+                ];
+
+            });
+
+        /*
+    |--------------------------------------------------------------------------
+    | year On Year Change
+    |--------------------------------------------------------------------------
+    */
+
+        $yearOnYear = [];
+
+        $previous = null;
+
+        foreach ($trendOverYears as $row) {
+
+            $current = [
+
+                'year' => $row['year'],
+
+                'patent_filed' => 0,
+
+                'patent_granted' => 0,
+
+                'copyright_registration' => 0,
+
+                'trademarks_registered' => 0,
+
+                'software_registration' => 0,
+
+                'licence_agreement' => 0,
+
+            ];
+
+            if ($previous) {
+
+                $current['patent_filed'] = $row['patent_filed'] - $previous['patent_filed'];
+
+                $current['patent_granted'] = $row['patent_granted'] - $previous['patent_granted'];
+
+                $current['copyright_registration'] = $row['copyright_registration'] - $previous['copyright_registration'];
+
+                $current['trademarks_registered'] = $row['trademarks_registered'] - $previous['trademarks_registered'];
+
+            }
+
+            $yearOnYear[] = $current;
+
+            $previous = $row;
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Innovation Type Distribution
+        |--------------------------------------------------------------------------
+        */
+
+        $ipDistribution = [
+
+            'Patent Filed' => $patentFiled,
+
+            'Patent Granted' => $patentGranted,
+
+            'Copyright Registration' => $copyright,
+
+            'Trademarks Registered' => $trademark,
+
+            'Software Registration' => 0,
+
+            'Licence Agreement' => 0
+
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Top Faculty
+        |--------------------------------------------------------------------------
+        */
+
+        $topFaculty = (clone $query)
+
+            ->join('users', 'users.id', '=', 'intellectual_properties.created_by')
+
+            ->leftJoin('departments', 'departments.id', '=', 'users.department_id')
+
+            ->selectRaw('
+
+        users.name,
+
+        departments.name as department,
+
+        COUNT(*) total_ip
+
+    ')
+
+            ->groupBy('users.id', 'users.name', 'departments.name')
+
+            ->orderByDesc('total_ip')
+
+            ->limit(10)
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $departmentSummary = (clone $query)
+
+            ->join('users', 'users.id', '=', 'intellectual_properties.created_by')
+
+            ->leftJoin('departments', 'departments.id', '=', 'users.department_id')
+
+            ->selectRaw('
+
+departments.name department,
+
+COUNT(*) patent_filed,
+
+SUM(CASE WHEN intellectual_properties.status=2 THEN 1 ELSE 0 END) patent_granted,
+
+SUM(CASE WHEN LOWER(patents_ip_type)="copyright" THEN 1 ELSE 0 END) copyright_registration,
+
+SUM(CASE WHEN LOWER(patents_ip_type)="trademark" THEN 1 ELSE 0 END) trademarks_registered
+
+')
+
+            ->groupBy('departments.name')
+
+            ->get()
+
+            ->map(function ($r) {
+
+                return [
+
+                    'department' => $r->department,
+
+                    'Patent Filed' => $r->patent_filed,
+
+                    'Patent Granted' => $r->patent_granted,
+
+                    'Copyright Registration' => $r->copyright_registration,
+
+                    'Trademarks Registered' => $r->trademarks_registered,
+
+                    'Software Registration' => 0,
+
+                    'Licence Agreement' => 0,
+
+                    'total' => $r->patent_filed
+
+                ];
+
+            });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Top Researcher
+        |--------------------------------------------------------------------------
+        */
+
+        $topResearcher = (clone $query)
+
+            ->join('users', 'users.id', '=', 'intellectual_properties.created_by')
+
+            ->leftJoin('departments', 'departments.id', '=', 'users.department_id')
+
+            ->selectRaw('
+
+users.name,
+
+departments.name department,
+
+COUNT(*) total_ip
+
+')
+
+            ->groupBy(
+
+                'users.id',
+
+                'users.name',
+
+                'departments.name'
+
+            )
+
+            ->orderByDesc('total_ip')
+
+            ->limit(10)
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+
+            'success' => true,
+
+            'filter' => $request->filter ?? 'all_time',
+
+            'data' => [
+
+                'patent_filed' => $patentFiled,
+
+                'patent_granted' => $patentGranted,
+
+                'copyright_registration' => $copyright,
+
+                'trademarks_registered' => $trademark,
+
+                'software_registration' => $softwareRegistration,
+
+                'licence_agreement' => $licenceAgreement,
+
+                'trend_over_years' => $trendOverYears,
+
+                'year_on_year_change' => $yearOnYear,
+
+                'ip_asset_distribution' => $ipDistribution,
+
+                'top_faculty' => $topFaculty,
+
+                'department_summary' => $departmentSummary,
+
+                'top_researcher' => $topResearcher
+
+            ]
 
         ]);
     }
