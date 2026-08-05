@@ -7,6 +7,8 @@ use App\Models\EmployeeTask;
 use App\Models\IndicatorsPercentage;
 use App\Models\User;
 use App\Models\ActiveInternationalResearchPartner;
+use App\Models\NoOfGrantsSubmitAndWon;
+use App\Models\CommercialGainsCounsultancyResearchIncome;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -486,6 +488,290 @@ class OricApiController extends Controller
             'trend_over_years' => $trend,
 
             'status_distribution' => $statusDistribution
+
+        ]);
+    }
+
+    public function researchGrantsDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Base Queries
+        |--------------------------------------------------------------------------
+        */
+
+        $grants = NoOfGrantsSubmitAndWon::query()
+            ->whereIn('no_of_grants_submit_and_wons.status', [1, 2, 3]);
+
+        $funding = CommercialGainsCounsultancyResearchIncome::query()
+            ->where('commercial_gains_counsultancy_research_incomes.status', 2);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Date Filter
+        |--------------------------------------------------------------------------
+        */
+
+        $applyFilter = function ($query, $column) use ($request) {
+
+            switch ($request->filter) {
+
+                case 'today':
+                    $query->whereDate($column, Carbon::today());
+                    break;
+
+                case 'last_30_days':
+                    $query->whereDate($column, '>=', Carbon::now()->subDays(30));
+                    break;
+
+                case 'quarter':
+                    $query->whereDate($column, '>=', Carbon::now()->subMonths(3));
+                    break;
+
+                case 'last_six_months':
+                    $query->whereDate($column, '>=', Carbon::now()->subMonths(6));
+                    break;
+
+                case 'last_one_year':
+                    $query->whereDate($column, '>=', Carbon::now()->subYear());
+                    break;
+
+                case 'custom':
+
+                    if ($request->filled('from_date') && $request->filled('to_date')) {
+
+                        $query->whereBetween($column, [
+                            Carbon::parse($request->from_date)->startOfDay(),
+                            Carbon::parse($request->to_date)->endOfDay()
+                        ]);
+
+                    }
+
+                    break;
+            }
+
+            return $query;
+
+        };
+
+        $applyFilter($grants, 'no_of_grants_submit_and_wons.created_at');
+        $applyFilter($funding, 'commercial_gains_counsultancy_research_incomes.created_at');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Summary Cards
+        |--------------------------------------------------------------------------
+        */
+
+        $grantsSecured = (clone $grants)
+            ->where('grant_status', 'Won')
+            ->count();
+
+        $submitted = (clone $grants)->count();
+
+        $international = (clone $grants)
+            ->where('grant_status', 'Won')
+            ->where('is_international', 1)
+            ->count();
+
+        $successRate = $submitted > 0
+            ? round(($grantsSecured / $submitted) * 100, 2)
+            : 0;
+
+        $totalFunding = (clone $funding)
+            ->sum(DB::raw('CAST(consultancy_fee AS DECIMAL(18,2))'));
+
+        /*
+        |--------------------------------------------------------------------------
+        | Industry Funded Research
+        |--------------------------------------------------------------------------
+        */
+
+        $fundingSource = (clone $grants)
+            ->where('grant_status', 'Won')
+            ->select(
+                'funding_agency',
+                DB::raw('COUNT(*) as total_grants')
+            )
+            ->groupBy('funding_agency')
+            ->orderByDesc('total_grants')
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Funding Trend
+        |--------------------------------------------------------------------------
+        */
+
+        $fundingTrend = (clone $funding)
+            ->selectRaw("
+            YEAR(created_at) year,
+            SUM(CAST(consultancy_fee AS DECIMAL(18,2))) total_funding
+        ")
+            ->groupBy('year')
+            ->orderBy('year')
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Top Faculty
+        |--------------------------------------------------------------------------
+        */
+
+        $topFaculty = DB::table('users')
+            ->leftJoin(
+                'commercial_gains_counsultancy_research_incomes as c',
+                function ($join) {
+
+                    $join->on('users.id', '=', 'c.created_by')
+                        ->where('c.status', 2);
+
+                }
+            )
+
+            ->leftJoin(
+                'no_of_grants_submit_and_wons as g',
+                function ($join) {
+
+                    $join->on('users.id', '=', 'g.created_by')
+                        ->whereIn('g.status', [1, 2, 3])
+                        ->where('g.grant_status', 'Won');
+
+                }
+            )
+
+            ->select(
+                'users.name',
+                'users.department'
+            )
+
+            ->selectRaw("
+            SUM(CAST(c.consultancy_fee AS DECIMAL(18,2))) total_funding,
+            COUNT(DISTINCT g.id) no_of_grants,
+            (SUM(CAST(c.consultancy_fee AS DECIMAL(18,2))) + COUNT(DISTINCT g.id)) total
+        ")
+
+            ->groupBy(
+                'users.id',
+                'users.name',
+                'users.department'
+            )
+
+            ->orderByDesc('total_funding')
+
+            ->limit(10)
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $departmentSummary = DB::table('users')
+
+            ->leftJoin(
+                'no_of_grants_submit_and_wons as g',
+                'users.id',
+                '=',
+                'g.created_by'
+            )
+
+            ->leftJoin(
+                'commercial_gains_counsultancy_research_incomes as c',
+                'users.id',
+                '=',
+                'c.created_by'
+            )
+
+            ->select('users.department')
+
+            ->selectRaw("
+
+            COUNT(DISTINCT CASE
+                WHEN g.grant_status='Won'
+                THEN g.id END) no_of_grants,
+
+            COUNT(DISTINCT CASE
+                WHEN g.grant_status='Won'
+                AND g.is_international=1
+                THEN g.id END) international_grants,
+
+            SUM(
+                CASE
+                WHEN c.status=2
+                THEN CAST(c.consultancy_fee AS DECIMAL(18,2))
+                ELSE 0 END
+            ) total_funding,
+
+            ROUND(
+
+                COUNT(DISTINCT CASE
+                WHEN g.grant_status='Won'
+                THEN g.id END)
+
+                /
+
+                NULLIF(COUNT(DISTINCT g.id),0)
+
+            *100,2) success_rate,
+
+            (
+                SUM(
+                    CASE
+                    WHEN c.status=2
+                    THEN CAST(c.consultancy_fee AS DECIMAL(18,2))
+                    ELSE 0 END
+                )
+
+                +
+
+                COUNT(DISTINCT CASE
+                WHEN g.grant_status='Won'
+                THEN g.id END)
+
+            ) total
+
+        ")
+
+            ->groupBy('users.department')
+
+            ->orderBy('users.department')
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+
+            'success' => true,
+
+            'filter' => $request->filter ?? 'all_time',
+
+            'summary' => [
+
+                'research_grants_secured' => $grantsSecured,
+
+                'total_funding_obtained' => $totalFunding,
+
+                'international_grants' => $international,
+
+                'grant_success_rate' => $successRate
+
+            ],
+
+            'industry_funded_research' => $fundingSource,
+
+            'funding_trend_over_years' => $fundingTrend,
+
+            'top_faculty' => $topFaculty,
+
+            'department_wise_summary' => $departmentSummary
 
         ]);
     }
