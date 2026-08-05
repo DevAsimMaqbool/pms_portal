@@ -11,6 +11,7 @@ use App\Models\NoOfGrantsSubmitAndWon;
 use App\Models\CommercialGainsCounsultancyResearchIncome;
 use App\Models\ProductsDeliveredToIndustry;
 use App\Models\IntellectualProperty;
+use App\Models\SpinOff;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -1407,6 +1408,384 @@ COUNT(*) total_ip
                 'year_on_year_change' => $yearOnYear,
 
                 'ip_asset_distribution' => $ipDistribution,
+
+                'top_faculty' => $topFaculty,
+
+                'department_summary' => $departmentSummary,
+
+                'top_researcher' => $topResearcher
+
+            ]
+
+        ]);
+    }
+
+    public function spinOffDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+
+        $query = SpinOff::query()
+            ->whereIn('spin_offs.status', [1, 2, 3]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Date Filters
+        |--------------------------------------------------------------------------
+        */
+
+        switch ($request->filter) {
+
+            case 'today':
+                $query->whereDate(
+                    'spin_offs.created_at',
+                    Carbon::today()
+                );
+                break;
+
+            case 'last_30_days':
+                $query->whereDate(
+                    'spin_offs.created_at',
+                    '>=',
+                    Carbon::now()->subDays(30)
+                );
+                break;
+
+            case 'quarter':
+                $query->whereDate(
+                    'spin_offs.created_at',
+                    '>=',
+                    Carbon::now()->subMonths(3)
+                );
+                break;
+
+            case 'last_six_months':
+                $query->whereDate(
+                    'spin_offs.created_at',
+                    '>=',
+                    Carbon::now()->subMonths(6)
+                );
+                break;
+
+            case 'last_one_year':
+                $query->whereDate(
+                    'spin_offs.created_at',
+                    '>=',
+                    Carbon::now()->subYear()
+                );
+                break;
+
+            case 'custom':
+
+                if ($request->filled('from_date') && $request->filled('to_date')) {
+
+                    $query->whereBetween(
+                        'spin_offs.created_at',
+                        [
+                            Carbon::parse($request->from_date)->startOfDay(),
+                            Carbon::parse($request->to_date)->endOfDay()
+                        ]
+                    );
+
+                }
+
+                break;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Summary Cards
+        |--------------------------------------------------------------------------
+        */
+
+        $spinOffCreated = (clone $query)
+            ->where('spin_offs.status', 2)
+            ->count();
+
+        $technologyCommercialized = 0;
+
+        $licensingRevenue = 0;
+
+        $industryAdoption = 0;
+
+        $startupFormation = 0;
+
+        $technologyTransfer = 0;
+
+        $commercializationSuccess = 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Trend Over Years
+        |--------------------------------------------------------------------------
+        */
+
+        $trendOverYears = (clone $query)
+
+            ->selectRaw('
+
+        YEAR(spin_offs.created_at) year,
+
+        SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) spin_off_created
+
+    ')
+
+            ->groupByRaw('YEAR(spin_offs.created_at)')
+
+            ->orderBy('year')
+
+            ->get()
+
+            ->map(function ($row) {
+
+                return [
+
+                    'year' => $row->year,
+
+                    'technology_commercialized' => 0,
+
+                    'licensing_revenue' => 0,
+
+                    'industry_adoption_of_innovation' => 0,
+
+                    'spin_off_companies_created' => $row->spin_off_created,
+
+                    'startup_formation_from_research' => 0,
+
+                    'technology_transfer_agreements' => 0
+
+                ];
+
+            });
+
+        /*
+    |--------------------------------------------------------------------------
+    | year On Year Change
+    |--------------------------------------------------------------------------
+    */
+
+        $yearOnYear = [];
+
+        $previous = null;
+
+        foreach ($trendOverYears as $row) {
+
+            $current = [
+
+                'year' => $row['year'],
+
+                'technology_commercialized' => 0,
+
+                'licensing_revenue' => 0,
+
+                'industry_adoption_of_innovation' => 0,
+
+                'spin_off_companies_created' => 0,
+
+                'startup_formation_from_research' => 0,
+
+                'technology_transfer_agreements' => 0,
+
+                'commercialization_success' => 0
+
+            ];
+
+            if ($previous) {
+
+                $current['spin_off_companies_created'] =
+                    $row['spin_off_companies_created'] -
+                    $previous['spin_off_companies_created'];
+
+            }
+
+            $yearOnYear[] = $current;
+
+            $previous = $row;
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Innovation Type Distribution
+        |--------------------------------------------------------------------------
+        */
+
+        $distribution = [
+
+            'Technology Commercialized' => 0,
+
+            'Licensing Revenue' => 0,
+
+            'Industry Adoption of Innovation' => 0,
+
+            'Spin Off Companies Created' => $spinOffCreated,
+
+            'Startup Formation From Research' => 0,
+
+            'Technology Transfer Agreements' => 0,
+
+            'Commercialization Success' => 0
+
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Top Faculty
+        |--------------------------------------------------------------------------
+        */
+
+        $topFaculty = (clone $query)
+
+            ->join('users', 'users.id', '=', 'spin_offs.created_by')
+
+            ->leftJoin('departments', 'departments.id', '=', 'users.department_id')
+
+            ->selectRaw('
+
+users.name,
+
+departments.name department,
+
+SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) spin_off_companies_created,
+
+SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
+
+')
+
+            ->groupBy(
+
+                'users.id',
+
+                'users.name',
+
+                'departments.name'
+
+            )
+
+            ->orderByDesc('commercialization_score')
+
+            ->limit(10)
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $departmentSummary = (clone $query)
+
+            ->join('users', 'users.id', '=', 'spin_offs.created_by')
+
+            ->leftJoin('departments', 'departments.id', '=', 'users.department_id')
+
+            ->selectRaw('
+
+departments.name department,
+
+SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) spin_off_created
+
+')
+
+            ->groupBy('departments.name')
+
+            ->get()
+
+            ->map(function ($row) {
+
+                return [
+
+                    'department' => $row->department,
+
+                    'Technology Commercialized' => 0,
+
+                    'Licensing Revenue' => 0,
+
+                    'Industry Adoption of Innovation' => 0,
+
+                    'Spin Off Companies Created' => $row->spin_off_created,
+
+                    'Startup Formation From Research' => 0,
+
+                    'Technology Transfer Agreements' => 0,
+
+                    'Commercialization Success' => 0
+
+                ];
+
+            });
+
+        $topResearcher = (clone $query)
+
+            ->join('users', 'users.id', '=', 'spin_offs.created_by')
+
+            ->leftJoin('departments', 'departments.id', '=', 'users.department_id')
+
+            ->selectRaw('
+
+users.name,
+
+departments.name department,
+
+0 licensing_revenue,
+
+SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
+
+')
+
+            ->groupBy(
+
+                'users.id',
+
+                'users.name',
+
+                'departments.name'
+
+            )
+
+            ->orderByDesc('commercialization_score')
+
+            ->limit(10)
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+
+            'success' => true,
+
+            'filter' => $request->filter ?? 'all_time',
+
+            'data' => [
+
+                'technology_commercialized' => $technologyCommercialized,
+
+                'licensing_revenue' => $licensingRevenue,
+
+                'industry_adoption_of_innovation' => $industryAdoption,
+
+                'spin_off_companies_created' => $spinOffCreated,
+
+                'startup_formation_from_research' => $startupFormation,
+
+                'technology_transfer_agreements' => $technologyTransfer,
+
+                'commercialization_success_rate' => $commercializationSuccess,
+
+                'trend_over_years' => $trendOverYears,
+
+                'year_on_year_change' => $yearOnYear,
+
+                'commercialization_output_distribution' => $distribution,
 
                 'top_faculty' => $topFaculty,
 
