@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\ActiveInternationalResearchPartner;
 use App\Models\NoOfGrantsSubmitAndWon;
 use App\Models\CommercialGainsCounsultancyResearchIncome;
+use App\Models\ProductsDeliveredToIndustry;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -772,6 +773,270 @@ class OricApiController extends Controller
             'top_faculty' => $topFaculty,
 
             'department_wise_summary' => $departmentSummary
+
+        ]);
+    }
+
+    public function innovationDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+
+        $query = ProductsDeliveredToIndustry::query()
+            ->whereIn('products_delivered_to_industries.status', [1, 2, 3]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Date Filters
+        |--------------------------------------------------------------------------
+        */
+
+        switch ($request->filter) {
+
+            case 'today':
+                $query->whereDate(
+                    'products_delivered_to_industries.created_at',
+                    Carbon::today()
+                );
+                break;
+
+            case 'last_30_days':
+                $query->whereDate(
+                    'products_delivered_to_industries.created_at',
+                    '>=',
+                    Carbon::now()->subDays(30)
+                );
+                break;
+
+            case 'quarter':
+                $query->whereDate(
+                    'products_delivered_to_industries.created_at',
+                    '>=',
+                    Carbon::now()->subMonths(3)
+                );
+                break;
+
+            case 'last_six_months':
+                $query->whereDate(
+                    'products_delivered_to_industries.created_at',
+                    '>=',
+                    Carbon::now()->subMonths(6)
+                );
+                break;
+
+            case 'last_one_year':
+                $query->whereDate(
+                    'products_delivered_to_industries.created_at',
+                    '>=',
+                    Carbon::now()->subYear()
+                );
+                break;
+
+            case 'custom':
+
+                if ($request->filled('from_date') && $request->filled('to_date')) {
+
+                    $query->whereBetween(
+                        'products_delivered_to_industries.created_at',
+                        [
+                            Carbon::parse($request->from_date)->startOfDay(),
+                            Carbon::parse($request->to_date)->endOfDay()
+                        ]
+                    );
+
+                }
+
+                break;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Summary Cards
+        |--------------------------------------------------------------------------
+        */
+
+        $innovationsDeveloped = (clone $query)->count();
+
+        $prototypeCreated = (clone $query)
+            ->where('product_developed', 'NO')
+            ->count();
+
+        $productDesignCompleted = (clone $query)
+            ->where('product_developed', 'YES')
+            ->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Innovation Type Distribution
+        |--------------------------------------------------------------------------
+        */
+
+        $innovationDistribution = [
+            [
+                'type' => 'Innovations Developed',
+                'total' => $innovationsDeveloped
+            ],
+            [
+                'type' => 'Prototype Created',
+                'total' => $prototypeCreated
+            ],
+            [
+                'type' => 'Product Designs Completed',
+                'total' => $productDesignCompleted
+            ]
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Top Faculty
+        |--------------------------------------------------------------------------
+        */
+
+        $topFaculty = (clone $query)
+
+            ->join(
+                'users',
+                'users.id',
+                '=',
+                'products_delivered_to_industries.created_by'
+            )
+
+            ->select(
+                'users.name',
+                'users.department'
+            )
+
+            ->selectRaw("
+            COUNT(products_delivered_to_industries.id) as total_projects
+        ")
+
+            ->groupBy(
+                'users.id',
+                'users.name',
+                'users.department'
+            )
+
+            ->orderByDesc('total_projects')
+
+            ->limit(10)
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $departmentSummary = (clone $query)
+
+            ->join(
+                'users',
+                'users.id',
+                '=',
+                'products_delivered_to_industries.created_by'
+            )
+
+            ->select('users.department')
+
+            ->selectRaw("
+
+            COUNT(products_delivered_to_industries.id) as innovations_developed,
+
+            SUM(
+                CASE
+                WHEN product_developed='NO'
+                THEN 1
+                ELSE 0
+                END
+            ) as prototype_created,
+
+            SUM(
+                CASE
+                WHEN product_developed='YES'
+                THEN 1
+                ELSE 0
+                END
+            ) as product_design_completed,
+
+            COUNT(products_delivered_to_industries.id) as total
+
+        ")
+
+            ->groupBy('users.department')
+
+            ->orderBy('users.department')
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Top Researcher
+        |--------------------------------------------------------------------------
+        */
+
+        $topResearcher = (clone $query)
+
+            ->join(
+                'users',
+                'users.id',
+                '=',
+                'products_delivered_to_industries.created_by'
+            )
+
+            ->select(
+                'users.name',
+                'users.department'
+            )
+
+            ->selectRaw("
+            COUNT(products_delivered_to_industries.id) as total_projects
+        ")
+
+            ->groupBy(
+                'users.id',
+                'users.name',
+                'users.department'
+            )
+
+            ->orderByDesc('total_projects')
+
+            ->limit(10)
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+
+            'success' => true,
+
+            'filter' => $request->filter ?? 'all_time',
+
+            'summary' => [
+
+                'innovations_developed' => $innovationsDeveloped,
+
+                'prototype_created' => $prototypeCreated,
+
+                'product_design_completed' => $productDesignCompleted,
+
+            ],
+
+            'innovation_type_distribution' => $innovationDistribution,
+
+            'top_faculty_by_total_innovation' => $topFaculty,
+
+            'department_wise_summary' => $departmentSummary,
+
+            'top_researcher_by_innovation' => $topResearcher,
 
         ]);
     }
