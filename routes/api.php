@@ -28,6 +28,8 @@ Route::prefix('v1')->group(function () {
         Route::get('leadership-satisfaction-score', [ManagerEmployeeTaskController::class, 'leadershipSatisfactionScore']);
 
         Route::get('research-publication-dashboard', [OricApiController::class, 'researchPublicationDashboard']);
+        Route::post('/publication-metrics', [OricApiController::class, 'publicationMetrics']);
+        Route::post('/international-collaborations', [OricApiController::class, 'internationalCollaborations']);
     });
 
 });

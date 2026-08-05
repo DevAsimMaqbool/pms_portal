@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\EmployeeTask;
 use App\Models\IndicatorsPercentage;
 use App\Models\User;
+use App\Models\ActiveInternationalResearchPartner;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -249,6 +250,242 @@ class OricApiController extends Controller
                 'top_researchers_by_category' => $topResearchers,
 
             ]
+
+        ]);
+    }
+
+    public function publicationMetrics(Request $request)
+    {
+        $request->validate([
+            'doi' => 'required'
+        ]);
+
+        $metrics = getPublicationMetrics($request->doi);
+
+        if (!$metrics || isset($metrics['error'])) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to fetch publication.'
+            ], 404);
+        }
+
+        return response()->json([
+
+            'success' => true,
+
+            'data' => $metrics
+
+        ]);
+    }
+
+    public function internationalCollaborations(Request $request)
+    {
+        $query = ActiveInternationalResearchPartner::query()
+            ->whereIn('active_international_research_partners.status', [1, 2, 3]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Date Filter
+        |--------------------------------------------------------------------------
+        */
+
+        switch ($request->filter) {
+
+            case 'today':
+                $query->whereDate('active_international_research_partners.created_at', Carbon::today());
+                break;
+
+            case 'last_30_days':
+                $query->whereDate(
+                    'active_international_research_partners.created_at',
+                    '>=',
+                    Carbon::now()->subDays(30)
+                );
+                break;
+
+            case 'quarter':
+                $query->whereDate(
+                    'active_international_research_partners.created_at',
+                    '>=',
+                    Carbon::now()->subMonths(3)
+                );
+                break;
+
+            case 'last_six_months':
+                $query->whereDate(
+                    'active_international_research_partners.created_at',
+                    '>=',
+                    Carbon::now()->subMonths(6)
+                );
+                break;
+
+            case 'last_one_year':
+                $query->whereDate(
+                    'active_international_research_partners.created_at',
+                    '>=',
+                    Carbon::now()->subYear()
+                );
+                break;
+
+            case 'custom':
+
+                if ($request->filled('from_date') && $request->filled('to_date')) {
+
+                    $query->whereBetween(
+                        'active_international_research_partners.created_at',
+                        [
+                            Carbon::parse($request->from_date)->startOfDay(),
+                            Carbon::parse($request->to_date)->endOfDay()
+                        ]
+                    );
+
+                }
+
+                break;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Summary Cards
+        |--------------------------------------------------------------------------
+        */
+
+        $summary = (clone $query)
+            ->selectRaw('
+            COUNT(*) as total_partnerships,
+            SUM(target) as total_target,
+            SUM(achieved_target) as total_achieved,
+            AVG(achieved_target) as average_achievement
+        ')
+            ->first();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Progress %
+        |--------------------------------------------------------------------------
+        */
+
+        $achievementPercentage = 0;
+
+        if ($summary->total_target > 0) {
+
+            $achievementPercentage = round(
+                ($summary->total_achieved / $summary->total_target) * 100,
+                2
+            );
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Wise
+        |--------------------------------------------------------------------------
+        */
+
+        $departmentWise = (clone $query)
+            ->join('users', 'users.id', '=', 'active_international_research_partners.created_by')
+            ->select(
+                'users.department'
+            )
+            ->selectRaw('
+            COUNT(*) as total_partnerships,
+            SUM(target) as total_target,
+            SUM(achieved_target) as achieved_target
+        ')
+            ->groupBy('users.department')
+            ->orderByDesc('total_partnerships')
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Top Faculty
+        |--------------------------------------------------------------------------
+        */
+
+        $topFaculty = (clone $query)
+            ->join('users', 'users.id', '=', 'active_international_research_partners.created_by')
+            ->select(
+                'users.name',
+                'users.department'
+            )
+            ->selectRaw('
+            COUNT(*) as partnerships,
+            SUM(target) as total_target,
+            SUM(achieved_target) as achieved_target
+        ')
+            ->groupBy(
+                'users.id',
+                'users.name',
+                'users.department'
+            )
+            ->orderByDesc('partnerships')
+            ->limit(10)
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Trend Over Years
+        |--------------------------------------------------------------------------
+        */
+
+        $trend = (clone $query)
+            ->selectRaw('
+            YEAR(created_at) as year,
+            COUNT(*) as partnerships,
+            SUM(achieved_target) as achieved
+        ')
+            ->groupBy('year')
+            ->orderBy('year')
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Status Distribution
+        |--------------------------------------------------------------------------
+        */
+
+        $statusDistribution = (clone $query)
+            ->select(
+                'status',
+                DB::raw('COUNT(*) as total')
+            )
+            ->groupBy('status')
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+
+            'success' => true,
+
+            'filter' => $request->filter ?? 'all_time',
+
+            'summary' => [
+
+                'total_partnerships' => (int) $summary->total_partnerships,
+
+                'total_target' => (int) $summary->total_target,
+
+                'total_achieved' => (int) $summary->total_achieved,
+
+                'average_achievement' => round($summary->average_achievement ?? 0, 2),
+
+                'achievement_percentage' => $achievementPercentage
+
+            ],
+
+            'department_wise_summary' => $departmentWise,
+
+            'top_faculty' => $topFaculty,
+
+            'trend_over_years' => $trend,
+
+            'status_distribution' => $statusDistribution
 
         ]);
     }
