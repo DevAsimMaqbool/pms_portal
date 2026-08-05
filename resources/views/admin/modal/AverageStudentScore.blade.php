@@ -11,7 +11,6 @@
         box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2);
     }
 
-
     .custom-tabs .nav-link {
         border-radius: 25px;
         margin: 0 5px;
@@ -37,19 +36,19 @@
     }
 </style>
 @php
-$activeRoleId = getRoleIdByName(activeRole());
-// Initialize totalFeedback to 0 in case nothing is set later
-$totalFeedback = 0;                                    
+    $activeRoleId = getRoleIdByName(activeRole());
+    // Initialize totalFeedback to 0 in case nothing is set later
+    $totalFeedback = 0;                                    
  @endphp
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
     @php   
-        $currentYear = now()->year;
-        $previousYear = now()->year - 1;                                    
+            $currentYear = now()->year;
+        $previousYear = now()->year - 1;
         $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
         $att = $data['classes'];
         $spring = $att->filter(function ($c) use ($currentYear) {
-                return $c->term === "Spring $currentYear";
+            return $c->term === "Spring $currentYear";
         });
         $fall = $att->filter(function ($c) use ($previousYear) {
             return $c->term === "FALL $previousYear";
@@ -96,7 +95,7 @@ $totalFeedback = 0;
                             <!-- Spring -->
                             <div class="tab-pane fade show active" id="AverageStudentScore-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
-                                     <table class="table table-hover align-middle custom-table">
+                                    <table class="table table-hover align-middle custom-table">
                                         <thead class="table-primary">
                                             <tr>
                                                 <th>Sr#</th>
@@ -135,7 +134,6 @@ $totalFeedback = 0;
                                                         }
                                                     @endphp
 
-
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $class->class_name }}</td>
@@ -162,23 +160,23 @@ $totalFeedback = 0;
                                                 @endforelse
                                             @endif
                                         </tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
-                                            <tfoot>
-                                                <tr class="table-primary">
-                                                    <th class="text-end">Total</th>
-                                                    <th colspan="4" class="text-end"></th>
-                                                    <th style="font-size: 0.960rem;">
-                                                        <b class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
-                                                            {{ number_format($avgScore, 1) }}%
-                                                        </b>
-                                                    </th>
-                                                    <th class="text-end" style="font-size: 0.960rem;"><b
-                                                            class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
-                                                            {{ getRatingMeta($avgScore)->rating }}
-                                                        </b></th>
-                                                </tr>
-                                            </tfoot>
-                                        @endif
+                                        <!-- @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                                <tfoot>
+                                                    <tr class="table-primary">
+                                                        <th class="text-end">Total</th>
+                                                        <th colspan="4" class="text-end"></th>
+                                                        <th style="font-size: 0.960rem;">
+                                                            <b class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
+                                                                {{ number_format($avgScore, 1) }}%
+                                                            </b>
+                                                        </th>
+                                                        <th class="text-end" style="font-size: 0.960rem;"><b
+                                                                class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
+                                                                {{ getRatingMeta($avgScore)->rating }}
+                                                            </b></th>
+                                                    </tr>
+                                                </tfoot>
+                                            @endif -->
                                     </table>
                                 </div>
                             </div>
@@ -225,7 +223,6 @@ $totalFeedback = 0;
                                                         }
                                                     @endphp
 
-
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $class->class_name }}</td>
@@ -258,12 +255,13 @@ $totalFeedback = 0;
                                                     <th class="text-end">Total</th>
                                                     <th colspan="4" class="text-end"></th>
                                                     <th style="font-size: 0.960rem;">
-                                                        <b class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
+                                                        <b class="badge"
+                                                            style="background-color:{{ getRatingMeta($avgScore)->color }}">
                                                             {{ number_format($avgScore, 1) }}%
                                                         </b>
                                                     </th>
-                                                    <th class="text-end" style="font-size: 0.960rem;"><b
-                                                            class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
+                                                    <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
+                                                            style="background-color:{{ getRatingMeta($avgScore)->color }}">
                                                             {{ getRatingMeta($avgScore)->rating }}
                                                         </b></th>
                                                 </tr>

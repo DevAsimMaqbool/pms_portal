@@ -11,7 +11,6 @@
         box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2);
     }
 
-
     .custom-tabs .nav-link {
         border-radius: 25px;
         margin: 0 5px;
@@ -37,9 +36,9 @@
     }
 </style>
 @php
-$activeRoleId = getRoleIdByName(activeRole());
-// Initialize totalFeedback to 0 in case nothing is set later
-$totalFeedback = 0;                                    
+    $activeRoleId = getRoleIdByName(activeRole());
+    // Initialize totalFeedback to 0 in case nothing is set later
+    $totalFeedback = 0;                                    
 @endphp
 <!--  Payment Methods modal -->
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
@@ -59,20 +58,20 @@ $totalFeedback = 0;
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0 fw-bold text-primary"></h4>
                             <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-        <input type="radio" class="btn-check" name="btnradio1" id="dailyRadio1" checked>
-        <label class="btn btn-outline-primary waves-effect" for="dailyRadio1">Weekly</label>
+            <input type="radio" class="btn-check" name="btnradio1" id="dailyRadio1" checked>
+            <label class="btn btn-outline-primary waves-effect" for="dailyRadio1">Weekly</label>
 
-        <input type="radio" class="btn-check" name="btnradio1" id="monthlyRadio1">
-        <label class="btn btn-outline-primary waves-effect" for="monthlyRadio1">Semesterly</label>
+            <input type="radio" class="btn-check" name="btnradio1" id="monthlyRadio1">
+            <label class="btn btn-outline-primary waves-effect" for="monthlyRadio1">Semesterly</label>
 
-        <input type="radio" class="btn-check" name="btnradio1" id="yearlyRadio1">
-        <label class="btn btn-outline-primary waves-effect" for="yearlyRadio1">Yearly</label>
-        </div> -->
+            <input type="radio" class="btn-check" name="btnradio1" id="yearlyRadio1">
+            <label class="btn btn-outline-primary waves-effect" for="yearlyRadio1">Yearly</label>
+            </div> -->
                         </div>
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-striped align-middle custom-table"">
-        <thead class=" table-primary">
+            <thead class=" table-primary">
                                     <tr>
                                         <th>Sr#</th>
                                         <th>Class</th>
@@ -86,26 +85,26 @@ $totalFeedback = 0;
                                     </tr>
                                     </thead>
                                     @php
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalAvgPresent = 0;
+                                        // Initialize totalFeedback to 0 in case nothing is set later
+                                        $totalAvgPresent = 0;
                                     @endphp
 
                                     <tbody class="table-border-bottom-0">
 
                                         @php
-    $att = myClassesAttendanceData(Auth::user()->faculty_id);
-    $sr = 1;
-    $totalAvgPresent = $att->isNotEmpty()
-        ? $att->avg('avg_present_percentage')
-        : 0;
+                                            $att = myClassesAttendanceData(Auth::user()->faculty_id);
+                                            $sr = 1;
+                                            $totalAvgPresent = $att->isNotEmpty()
+                                                ? $att->avg('avg_present_percentage')
+                                                : 0;
                                         @endphp
 
                                         @foreach($att as $class)
                                             @php
-        $latestAttendance = $class->attendances->first();
-        if (!$latestAttendance)
-            continue;
-        $scheduled = \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y');
+                                                $latestAttendance = $class->attendances->first();
+                                                if (!$latestAttendance)
+                                                    continue;
+                                                $scheduled = \Carbon\Carbon::parse($latestAttendance->class_date)->format('d-m-Y');
                                             @endphp
                                             <tr>
                                                 <td>{{ $sr++ }}</td>
@@ -134,11 +133,13 @@ $totalFeedback = 0;
                                             <th class="text-end">Total</th>
                                             <th colspan="6" class="text-end"></th>
                                             <th style="font-size: 0.960rem;">
-                                                <b class="badge" style="background-color: {{ getRatingMetaAsBg($totalAvgPresent)->color }}">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMetaAsBg($totalAvgPresent)->color }}">
                                                     {{ number_format($totalAvgPresent, 1) }}%
                                                 </b>
                                             </th>
-                                            <th class="text-end" style="font-size: 0.960rem;"><b class="badge" style="background-color: {{ getRatingMetaAsBg($totalAvgPresent)->color }}">
+                                            <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
+                                                    style="background-color: {{ getRatingMetaAsBg($totalAvgPresent)->color }}">
                                                     {{ getRatingMetaAsBg($totalAvgPresent)->rating }}
                                                 </b></th>
                                         </tr>
@@ -170,20 +171,20 @@ $totalFeedback = 0;
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0 fw-bold text-primary"></h4>
                             <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-        <input type="radio" class="btn-check" name="btnradio1" id="dailyRadio1" checked>
-        <label class="btn btn-outline-primary waves-effect" for="dailyRadio1">Weekly</label>
+            <input type="radio" class="btn-check" name="btnradio1" id="dailyRadio1" checked>
+            <label class="btn btn-outline-primary waves-effect" for="dailyRadio1">Weekly</label>
 
-        <input type="radio" class="btn-check" name="btnradio1" id="monthlyRadio1">
-        <label class="btn btn-outline-primary waves-effect" for="monthlyRadio1">Semesterly</label>
+            <input type="radio" class="btn-check" name="btnradio1" id="monthlyRadio1">
+            <label class="btn btn-outline-primary waves-effect" for="monthlyRadio1">Semesterly</label>
 
-        <input type="radio" class="btn-check" name="btnradio1" id="yearlyRadio1">
-        <label class="btn btn-outline-primary waves-effect" for="yearlyRadio1">Yearly</label>
-        </div> -->
+            <input type="radio" class="btn-check" name="btnradio1" id="yearlyRadio1">
+            <label class="btn btn-outline-primary waves-effect" for="yearlyRadio1">Yearly</label>
+            </div> -->
                         </div>
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-striped align-middle custom-table"">
-        <thead class=" table-primary">
+            <thead class=" table-primary">
                                     <tr>
                                         <th>Sr#</th>
                                         <th>Name</th>
@@ -197,40 +198,40 @@ $totalFeedback = 0;
 
                                     <tbody class="table-border-bottom-0">
                                         @php
-    $data = StudentAttendanceOfHOD(Auth::user()->employee_id, $activeRoleId);
-    $grouped = collect($data)->groupBy('faculty_name');
-    $sr = 1;
+                                            $data = StudentAttendanceOfHOD(Auth::user()->employee_id, $activeRoleId);
+                                            $grouped = collect($data)->groupBy('faculty_name');
+                                            $sr = 1;
                                         @endphp
 
                                         @foreach($grouped as $facultyName => $rows)
 
                                             @php
-        $totalStudents = $rows->sum('total_students');
-        $present = $rows->sum('present_count');
-        $absent = $rows->sum('absent_count');
+                                                $totalStudents = $rows->sum('total_students');
+                                                $present = $rows->sum('present_count');
+                                                $absent = $rows->sum('absent_count');
 
-        // ✅ SCORE CALCULATION
-        $score = $totalStudents > 0
-            ? ($present / $totalStudents) * 100
-            : 0;
+                                                // ✅ SCORE CALCULATION
+                                                $score = $totalStudents > 0
+                                                    ? ($present / $totalStudents) * 100
+                                                    : 0;
 
-        // ✅ RATING + COLOR LOGIC
-        if ($score >= 90) {
-            $rating = 'OS';
-            $color = 'bg-primary';
-        } elseif ($score >= 80) {
-            $rating = 'EE';
-            $color = 'bg-success';
-        } elseif ($score >= 70) {
-            $rating = 'ME';
-            $color = 'bg-warning';
-        } elseif ($score >= 60) {
-            $rating = 'NI';
-            $color = 'bg-info';
-        } else {
-            $rating = 'BE';
-            $color = 'bg-danger';
-        }
+                                                // ✅ RATING + COLOR LOGIC
+                                                if ($score >= 90) {
+                                                    $rating = 'OS';
+                                                    $color = 'bg-primary';
+                                                } elseif ($score >= 80) {
+                                                    $rating = 'EE';
+                                                    $color = 'bg-success';
+                                                } elseif ($score >= 70) {
+                                                    $rating = 'ME';
+                                                    $color = 'bg-warning';
+                                                } elseif ($score >= 60) {
+                                                    $rating = 'NI';
+                                                    $color = 'bg-info';
+                                                } else {
+                                                    $rating = 'BE';
+                                                    $color = 'bg-danger';
+                                                }
                                             @endphp
 
                                             <tr>
@@ -290,25 +291,27 @@ $totalFeedback = 0;
                                             </th>
                                             <th style="font-size: 0.960rem;">
                                                 @php
-    $totalStudents = collect($data)->sum('total_students');
-    $present = collect($data)->sum('present_count');
+                                                    $totalStudents = collect($data)->sum('total_students');
+                                                    $present = collect($data)->sum('present_count');
 
-    $grandScore = $totalStudents > 0
-        ? ($present / $totalStudents) * 100
-        : 0;
-    $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 113);
-    $weight = $indicatorWeight['weightage'] ?? 0;
-    $weightedScore = ($grandScore * $weight) / 100;
+                                                    $grandScore = $totalStudents > 0
+                                                        ? ($present / $totalStudents) * 100
+                                                        : 0;
+                                                    $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 113);
+                                                    $weight = $indicatorWeight['weightage'] ?? 0;
+                                                    $weightedScore = ($grandScore * $weight) / 100;
 
-    saveIndicatorPercentage90Plus(Auth::user()->employee_id, $activeRoleId, 1, 3, 113, $weightedScore, $grandScore);
+                                                    saveIndicatorPercentage90Plus(Auth::user()->employee_id, $activeRoleId, 1, 3, 113, $weightedScore, $grandScore);
                                                 @endphp
 
-                                                <span class="badge" style="background-color: {{ getRatingMeta($grandScore)->color }}">
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($grandScore)->color }}">
                                                     {{ number_format($grandScore, 1) }}%
                                                 </span>
                                             </th>
                                             <th style="font-size: 0.960rem;">
-                                                <span class="badge" style="background-color: {{ getRatingMeta($grandScore)->color }}">
+                                                <span class="badge"
+                                                    style="background-color: {{ getRatingMeta($grandScore)->color }}">
                                                     {{ getRatingMeta($grandScore)->rating }}
                                                 </span>
                                             </th>
