@@ -198,22 +198,22 @@
           </li>
           <li class="menu-item {{ route('view-assign-to-goal') }}">
                     <a href="{{ route('view-assign-to-goal') }}" class="menu-link">
-                    <div data-i18n="View From Assign Goal">View From Assign Goal</div>
+                    <div data-i18n="Assign To Me">Assign To Me</div>
                     </a>
                 </li>
           <li class="menu-item {{ route('view-assign-goal') }}">
             <a href="{{ route('view-assign-goal') }}" class="menu-link">
-              <div data-i18n="View To Assign Goal">View To Assign Goal</div>
+              <div data-i18n="Assign BY Mel">Assign BY Me</div>
             </a>
           </li>
           <li class="menu-item {{ route('goal.mapping.pdf') }}">
             <a href="{{ route('goal.mapping.pdf') }}" class="menu-link">
-              <div data-i18n="View Assign Report">View Assign Report</div>
+              <div data-i18n="Assign By Me Report">Assign By Me Report</div>
             </a>
           </li>
            <li class="menu-item {{ route('assign.goal.mapping.pdf') }}">
                 <a href="{{ route('assign.goal.mapping.pdf') }}" class="menu-link">
-                <div data-i18n="View From Assign Report">View From Assign Report</div>
+                <div data-i18n="Assign To Me Report">Assign To Me Report</div>
                 </a>
             </li>
         </ul>

@@ -24,6 +24,7 @@ class FacultyTarget extends Model
         'medical_recognized',
         'national',
         'international',
+        'description',
         'created_by',
         'updated_by'
     ];

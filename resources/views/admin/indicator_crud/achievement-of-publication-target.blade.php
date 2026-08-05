@@ -93,6 +93,7 @@
                                                         <option value="">Select Target Category</option>
                                                         <option value="Scopus-Indexed">Scopus Indexed</option>
                                                         <option value="HEC">HEC</option>
+                                                        <option value="WoS">WoS</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
@@ -111,6 +112,10 @@
                                                         <option value="X">X</option>
                                                         <option value="Y">Y</option>
                                                         <option value="Medical">Medical</option>
+                                                        <option value="SSCI" class="WoS">SSCI</option>
+                                                        <option value="AHCI" class="WoS">AHCI</option>
+                                                        <option value="SCIE" class="WoS">SCIE</option>
+                                                        <option value="ESCI" class="WoS">ESCI</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">

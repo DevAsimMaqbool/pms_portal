@@ -41,6 +41,7 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
     <a href="{{ route('indicators_crud.index', ['slug' => 'no_of_professional_memberships_attained_vs_targets', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
 </div> 
 <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
+<p class="" id="indicatorDescription"></p>
 <form id="researchForm" enctype="multipart/form-data">
 @csrf
 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
@@ -256,6 +257,9 @@ class="country-dropdown select2 form-select" required>
 @if(in_array(getRoleName(activeRole()), ['QEC']))
     <div class="tab-pane fade show {{ in_array(getRoleName(activeRole()), ['QEC']) ? 'active' : '' }}"
         id="form2" role="tabpanel">
+        <div class="card-title mb-0">
+                    <h5 class="mb-1">No of Professional Memberships attained vs targets</h5>
+                </div>
             <div class="d-flex">
                 <select id="bulkAction" class="form-select w-auto me-2">
                     <option value="">-- Select Action --</option>
@@ -398,12 +402,17 @@ class="country-dropdown select2 form-select" required>
                         success: function(res) {
                             if (res.target) {
                                 $('#indicatorTarget').text('Target: ' + res.target);
+                                $('#indicatorDescription').text(
+                                    'Description: ' + (res.data && res.data.description ? res.data.description : 'N/A')
+                                );
                             } else {
                                 $('#indicatorTarget').text('Target: N/A');
+                                 $('#indicatorDescription').text('Description: N/A');
                             }
                         },
                         error: function() {
                             $('#indicatorTarget').text('Target: N/A');
+                             $('#indicatorDescription').text('Description: N/A');
                         }
                     });
                 }

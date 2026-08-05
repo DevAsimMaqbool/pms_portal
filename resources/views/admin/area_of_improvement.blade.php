@@ -153,12 +153,16 @@
 
     // 🔹 Load Data into DataTable
     function loadPipData() {
-      $.get("{{ route('pip.index') }}", function (data) {
+      $.get("{{ route('pips.getdata') }}", function (data) {
         const rowData = data.map((s, i) => ([
           i + 1,
           s.description || 'N/A',
           renderDocument(s.document),
-          renderStatusDropdown(s.id, s.status),
+          //renderStatusDropdown(s.id, s.status),
+          renderStatusDropdown(
+        s.id,
+        s.assign_users.length ? s.assign_users[0].status : 'not_started'
+    ),
           formatDate(s.created_at)
         ]));
 

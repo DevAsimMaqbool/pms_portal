@@ -53,6 +53,7 @@
                                 <a href="{{ route('indicators_crud.index', ['slug' => 'intellectual-properties', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
                             </div>  
                             <h5 class="text-primary" id="indicatorTarget">Target 0</h5>  
+                             <p class="" id="indicatorDescription"></p>
                             <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
@@ -321,12 +322,17 @@
                         success: function(res) {
                             if (res.target) {
                                 $('#indicatorTarget').text('Target: ' + res.target);
+                                 $('#indicatorDescription').text(
+                                    'Description: ' + (res.data && res.data.description ? res.data.description : 'N/A')
+                                );
                             } else {
                                 $('#indicatorTarget').text('Target: N/A');
+                                 $('#indicatorDescription').text('Description: N/A');
                             }
                         },
                         error: function() {
                             $('#indicatorTarget').text('Target: N/A');
+                             $('#indicatorDescription').text('Description: N/A');
                         }
                     });
                 }

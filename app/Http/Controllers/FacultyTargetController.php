@@ -42,13 +42,21 @@ class FacultyTargetController extends Controller
 
             }
             if ($user->hasRole('Dean')) {
-                $hod_ids = User::where('manager_id', $employee_id)
-                    ->role('HOD')->pluck('employee_id');
-                $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
-                    ->whereIn('created_by', $hod_ids)
-                    ->whereIn('status', [1, 2])
-                    ->whereIn('form_status', ['OTHER', 'HOD'])
-                    ->get();
+                $status = $request->input('status');
+                if ($status == "DEAN") {
+                         $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
+                        ->where('created_by', $employee_id)
+                        ->where('form_status', 'DEAN')
+                        ->get();    }
+                if ($status == "HOD") {              
+                        
+                 $hod_ids = User::where('manager_id', $employee_id)->role('HOD')->pluck('employee_id');
+                 $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
+                     ->whereIn('created_by', $hod_ids)
+                     ->whereIn('status', [1, 2])
+                     ->whereIn('form_status', ['OTHER', 'HOD'])
+                     ->get();
+                }
             }
             if ($user->hasRole('ORIC')) {
 
@@ -99,6 +107,7 @@ class FacultyTargetController extends Controller
             if ($request->form_status == 'HOD') {
                 $rules = [
                     'indicator_id' => 'required',
+                    'description' => 'required',
                     'faculty_member_id' => 'required|array',
                     'national' => 'required|integer',
                     'international' => 'required|integer',
@@ -117,6 +126,7 @@ class FacultyTargetController extends Controller
                 $data = [
                     'indicator_id' => $request->indicator_id,
                     'target' => $request->target,
+                    'description' => $request->description,
                     'form_status' => $request->form_status,
                     'scopus_q1' => $request->scopus_q1,
                     'scopus_q2' => $request->scopus_q2,
@@ -151,12 +161,13 @@ class FacultyTargetController extends Controller
                 ]);
 
             }
-            if ($request->form_status == 'OTHER') {
+            if (in_array($request->form_status, ['OTHER', 'DEAN'])) {
                 $rules = [
                     'indicator_id' => 'required|array',
                     'indicator_id.*' => 'integer',
                     'faculty_member_id' => 'required|array',
                     'target' => 'required|integer',
+                    'description' => 'required',
                     'faculty_member_id.*' => 'integer|exists:users,id',
                     'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                 ];
@@ -211,6 +222,7 @@ class FacultyTargetController extends Controller
                             // 🔄 UPDATE EXISTING RECORD
                             $existing->update([
                                 'target' => $request->target,
+                                'description' => $request->description,
                                 'form_status' => $request->form_status,
                                 'updated_by' => $employeeId,
                             ]);
@@ -220,6 +232,7 @@ class FacultyTargetController extends Controller
                                 'user_id' => $userId,
                                 'indicator_id' => $indicatorId,
                                 'target' => $request->target,
+                                'description' => $request->description,
                                 'form_status' => $request->form_status,
                                 'created_by' => $employeeId,
                                 'updated_by' => $employeeId,

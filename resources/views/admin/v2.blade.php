@@ -722,7 +722,7 @@ saveIndicatorPercentage90Plus(
                     aria-valuenow="{{$weight_ss}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <span class="text-body-secondary">{{number_format($weight_ss, 1)}}%</span>
-                <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
+                {{-- <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span> --}}
               </div>
             </div>
           </div>
@@ -754,7 +754,7 @@ $rating_description = $getRatingByPercentage['description'];
                     aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <span class="text-body-secondary">{{number_format($avg, 1)}}%</span>
-                <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
+                {{-- <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span> --}}
               </div>
             </div>
           </div>
@@ -794,7 +794,7 @@ $ms_rating_description = $ms_getRatingByPercentage['description'];
                     aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <span class="text-body-secondary">{{number_format($avg, 1)}}%</span>
-                <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span>
+                {{-- <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span> --}}
               </div>
             </div>
           </div>
@@ -816,7 +816,7 @@ $ms_rating_description = $ms_getRatingByPercentage['description'];
                     aria-valuenow="{{$avgManager}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <span class="text-body-secondary">{{number_format($avgManager, 1)}}%</span>
-                <span class="badge bg-label-{{$colorManager}} ms-1">{{$ratingManager}}</span>
+                {{-- <span class="badge bg-label-{{$colorManager}} ms-1">{{$ratingManager}}</span> --}}
               </div>
             </div>
           </div>
@@ -848,7 +848,7 @@ $courseload_description = $courseloadgetRatingByPercentage['description'];
                     aria-valuenow="{{$courseloadavg}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <span class="text-body-secondary">{{number_format($courseloadavg, 1)}}%</span>
-                <span class="badge bg-label-{{$courseloadcolor}} ms-1">{{$courseloadrating}}</span>
+                {{-- <span class="badge bg-label-{{$courseloadcolor}} ms-1">{{$courseloadrating}}</span> --}}
               </div>
             </div>
           </div>

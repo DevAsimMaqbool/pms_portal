@@ -12,7 +12,7 @@ class LineManagerReviewRating extends Model
         'indicator_id',
         'employee_id',
         'year',
-
+        'kpa_category',
         'remarks',
         'form_status',
         'status',

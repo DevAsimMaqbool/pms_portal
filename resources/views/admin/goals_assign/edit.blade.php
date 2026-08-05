@@ -432,6 +432,23 @@ $('#goalSelector').on('change', function () {
                             </h6>
 
                         </div>
+                        <div class="col-md-12 mt-3">
+
+                            <label class="form-label">
+                                KPI Indicators
+                            </label>
+
+                            <select
+                                multiple
+                                data-selected='${JSON.stringify(selectedIndicators)}'
+                                class="form-select kpi-select"
+                                name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][kpis][]">
+
+                                ${options}
+
+                            </select>
+
+                        </div>
 
                         <div class="col-md-6">
 
@@ -461,23 +478,7 @@ $('#goalSelector').on('change', function () {
 
                         </div>
 
-                        <div class="col-md-12 mt-3">
-
-                            <label class="form-label">
-                                KPI Indicators
-                            </label>
-
-                            <select
-                                multiple
-                                data-selected='${JSON.stringify(selectedIndicators)}'
-                                class="form-select kpi-select"
-                                name="goals[${goal.id}][objectives][${obj.id}][dimensions][${dim.id}][kpis][]">
-
-                                ${options}
-
-                            </select>
-
-                        </div>
+                        
 
                     </div>
 
