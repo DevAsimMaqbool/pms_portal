@@ -10,6 +10,8 @@ class CompletionOfCourseFolder extends Model
         'faculty_member_id',
         'class_cod',
         'form_status',
+        'document_url',
+        'completion_status',
         'completion_of_Course_folder',
         'completion_of_Course_folder_indicator_id',
         'compliance_and_usage_of_lms',
@@ -20,6 +22,9 @@ class CompletionOfCourseFolder extends Model
         'update_history',
         'created_by',
         'updated_by',
+    ];
+    protected $casts = [
+        'completion_status' => 'array',
     ];
     public $timestamps = true;
     public function getCompletionScoreAttribute()
