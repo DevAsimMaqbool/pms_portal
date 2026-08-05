@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\EmployeeTask;
+use App\Models\IndicatorsPercentage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -742,6 +743,792 @@ class ManagerEmployeeTaskController extends Controller
             'summary'
 
         ));
+    }
+
+    public function facultyRetentionRate(Request $request)
+    {
+        $filter = $request->filter ?? 'all_time';
+
+        $query = DB::table('faculty_retentions_remarks');
+
+        // Apply Filter
+        switch ($filter) {
+
+            case 'today':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'last_30_days':
+                $query->whereDate('created_at', '>=', Carbon::now()->subDays(30));
+                break;
+
+            case 'quarter':
+                $query->whereDate('created_at', '>=', Carbon::now()->subMonths(3));
+                break;
+
+            case 'last_6_months':
+                $query->whereDate('created_at', '>=', Carbon::now()->subMonths(6));
+                break;
+
+            case 'last_1_year':
+                $query->whereDate('created_at', '>=', Carbon::now()->subYear());
+                break;
+
+            case 'custom':
+                if ($request->filled('from_date')) {
+                    $query->whereDate('created_at', '>=', $request->from_date);
+                }
+
+                if ($request->filled('to_date')) {
+                    $query->whereDate('created_at', '<=', $request->to_date);
+                }
+                break;
+
+            case 'all_time':
+            default:
+                // No filter
+                break;
+        }
+
+        $result = $query->selectRaw("
+            COUNT(*) as total_records,
+            ROUND(AVG(CAST(no_retention_rate AS DECIMAL(10,2))),2) as retention_rate
+        ")
+            ->first();
+
+        return response()->json([
+            'success' => true,
+            'filter' => $filter,
+            'data' => [
+                'retention_rate' => $result->retention_rate ?? 0,
+                'total_records' => $result->total_records ?? 0,
+            ]
+        ]);
+    }
+
+    public function goalAchievementRate(Request $request)
+    {
+        $filter = $request->filter ?? 'all_time';
+
+        $query = DB::table('goal_assignment_user_details as gaud')
+            ->join('goal_assignment_details as gad', 'gaud.goal_assignment_detail_id', '=', 'gad.id');
+
+        // Apply Date Filter
+        switch ($filter) {
+
+            case 'today':
+                $query->whereDate('gaud.created_at', Carbon::today());
+                break;
+
+            case 'last_30_days':
+                $query->whereDate('gaud.created_at', '>=', Carbon::now()->subDays(30));
+                break;
+
+            case 'quarter':
+                $query->whereDate('gaud.created_at', '>=', Carbon::now()->subMonths(3));
+                break;
+
+            case 'last_6_months':
+                $query->whereDate('gaud.created_at', '>=', Carbon::now()->subMonths(6));
+                break;
+
+            case 'last_1_year':
+                $query->whereDate('gaud.created_at', '>=', Carbon::now()->subYear());
+                break;
+
+            case 'custom':
+
+                if ($request->filled('from_date')) {
+                    $query->whereDate('gaud.created_at', '>=', $request->from_date);
+                }
+
+                if ($request->filled('to_date')) {
+                    $query->whereDate('gaud.created_at', '<=', $request->to_date);
+                }
+
+                break;
+
+            case 'all_time':
+            default:
+                // No filter
+                break;
+        }
+
+        $result = $query->selectRaw("
+            COUNT(gaud.id) as total_records,
+            SUM(gad.dimension_target) as total_target,
+            SUM(gaud.target_achieved) as total_achieved
+        ")
+            ->first();
+
+        $totalTarget = (float) ($result->total_target ?? 0);
+        $totalAchieved = (float) ($result->total_achieved ?? 0);
+
+        $achievementRate = $totalTarget > 0
+            ? round(($totalAchieved / $totalTarget) * 100, 2)
+            : 0;
+
+        // Optional: Cap at 100%
+        $achievementRate = min($achievementRate, 100);
+
+        return response()->json([
+            'success' => true,
+            'filter' => $filter,
+            'data' => [
+                'goal_achievement_rate' => $achievementRate,
+                'total_target' => round($totalTarget, 2),
+                'total_achieved' => round($totalAchieved, 2),
+                'total_records' => $result->total_records ?? 0,
+            ]
+        ]);
+    }
+
+    public function departmentWisePerformance(Request $request)
+    {
+        $filter = $request->filter ?? 'all_time';
+
+        $query = DB::table('goal_assignment_user_details as gaud')
+            ->join('goal_assignment_details as gad', 'gaud.goal_assignment_detail_id', '=', 'gad.id')
+            ->join('users as u', 'gaud.user_id', '=', 'u.id')
+            ->leftJoin('departments as d', 'u.department_id', '=', 'd.id');
+
+        // Apply Date Filter
+        switch ($filter) {
+
+            case 'today':
+                $query->whereDate('gaud.created_at', Carbon::today());
+                break;
+
+            case 'last_30_days':
+                $query->whereDate('gaud.created_at', '>=', Carbon::now()->subDays(30));
+                break;
+
+            case 'quarter':
+                $query->whereDate('gaud.created_at', '>=', Carbon::now()->subMonths(3));
+                break;
+
+            case 'last_6_months':
+                $query->whereDate('gaud.created_at', '>=', Carbon::now()->subMonths(6));
+                break;
+
+            case 'last_1_year':
+                $query->whereDate('gaud.created_at', '>=', Carbon::now()->subYear());
+                break;
+
+            case 'custom':
+
+                if ($request->filled('from_date')) {
+                    $query->whereDate('gaud.created_at', '>=', $request->from_date);
+                }
+
+                if ($request->filled('to_date')) {
+                    $query->whereDate('gaud.created_at', '<=', $request->to_date);
+                }
+
+                break;
+
+            case 'all_time':
+            default:
+                // No filter
+                break;
+        }
+
+        $departments = $query
+            ->select(
+                'u.department_id',
+                'd.name as department_name',
+                DB::raw('COUNT(DISTINCT gaud.user_id) as total_employees'),
+                DB::raw('SUM(gad.dimension_target) as total_target'),
+                DB::raw('SUM(gaud.target_achieved) as total_achieved')
+            )
+            ->groupBy('u.department_id', 'd.name')
+            ->orderBy('department_name')
+            ->get();
+
+        $data = $departments->map(function ($item) {
+
+            $target = (float) $item->total_target;
+            $achieved = (float) $item->total_achieved;
+
+            $performance = $target > 0
+                ? round(($achieved / $target) * 100, 2)
+                : 0;
+
+            return [
+                'department_id' => $item->department_id,
+                'department_name' => $item->department_name,
+                'total_employees' => $item->total_employees,
+                'total_target' => round($target, 2),
+                'total_achieved' => round($achieved, 2),
+                'performance' => min($performance, 100)
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'filter' => $filter,
+            'data' => $data
+        ]);
+    }
+
+    public function performanceReviewDashboard(Request $request)
+    {
+        $filter = $request->filter ?? 'all_time';
+
+        $query = DB::table('employee_tasks');
+
+        // Date Filters
+        switch ($filter) {
+
+            case 'today':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'last_30_days':
+                $query->whereDate('created_at', '>=', Carbon::now()->subDays(30));
+                break;
+
+            case 'quarter':
+                $query->whereDate('created_at', '>=', Carbon::now()->subMonths(3));
+                break;
+
+            case 'last_6_months':
+                $query->whereDate('created_at', '>=', Carbon::now()->subMonths(6));
+                break;
+
+            case 'last_1_year':
+                $query->whereDate('created_at', '>=', Carbon::now()->subYear());
+                break;
+
+            case 'custom':
+
+                if ($request->filled('from_date')) {
+                    $query->whereDate('created_at', '>=', $request->from_date);
+                }
+
+                if ($request->filled('to_date')) {
+                    $query->whereDate('created_at', '<=', $request->to_date);
+                }
+
+                break;
+
+            case 'all_time':
+            default:
+                break;
+        }
+
+        $titles = [
+            'Timely Conduct of Performance Review',
+            'PMS Goal Setting Completion Rate',
+            'Mid Year Review Completion Rate',
+            'Annual Appraisal Completion Rate',
+            '360 Feedback Coverage'
+        ];
+
+        $tasks = $query
+            ->whereIn('task_title', $titles)
+            ->select(
+                'task_title',
+                DB::raw('COUNT(*) as total_tasks'),
+                DB::raw("SUM(CASE WHEN task_status='2' THEN 1 ELSE 0 END) as completed_tasks"),
+                DB::raw('ROUND(AVG(manager_completion),2) as completion_rate')
+            )
+            ->groupBy('task_title')
+            ->get()
+            ->keyBy('task_title');
+
+        $data = [];
+
+        foreach ($titles as $title) {
+
+            $row = $tasks->get($title);
+
+            $data[] = [
+                'kpi' => $title,
+                'completion_rate' => $row ? (float) $row->completion_rate : 0,
+                'completed_tasks' => $row ? (int) $row->completed_tasks : 0,
+                'total_tasks' => $row ? (int) $row->total_tasks : 0,
+            ];
+        }
+
+        return response()->json([
+            'success' => true,
+            'filter' => $filter,
+            'data' => $data
+        ]);
+    }
+
+    public function performanceDistribution(Request $request)
+    {
+        $filter = $request->filter ?? 'all_time';
+
+        $query = DB::table('indicators_percentages')
+            ->where('status', '1')
+            ->where('is_score', 1);
+
+        // Apply Date Filter
+        switch ($filter) {
+
+            case 'today':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'last_30_days':
+                $query->whereDate('created_at', '>=', Carbon::now()->subDays(30));
+                break;
+
+            case 'quarter':
+                $query->whereDate('created_at', '>=', Carbon::now()->subMonths(3));
+                break;
+
+            case 'last_6_months':
+                $query->whereDate('created_at', '>=', Carbon::now()->subMonths(6));
+                break;
+
+            case 'last_1_year':
+                $query->whereDate('created_at', '>=', Carbon::now()->subYear());
+                break;
+
+            case 'custom':
+
+                if ($request->filled('from_date')) {
+                    $query->whereDate('created_at', '>=', $request->from_date);
+                }
+
+                if ($request->filled('to_date')) {
+                    $query->whereDate('created_at', '<=', $request->to_date);
+                }
+
+                break;
+
+            case 'all_time':
+            default:
+                break;
+        }
+
+        // Overall score of each employee
+        $employees = $query
+            ->select(
+                'employee_id',
+                DB::raw('ROUND(SUM(score),2) as overall_score')
+            )
+            ->groupBy('employee_id')
+            ->get();
+
+        $totalEmployees = $employees->count();
+
+        if ($totalEmployees == 0) {
+            return response()->json([
+                'success' => true,
+                'filter' => $filter,
+                'data' => [
+                    'total_employees' => 0,
+                    'high_performer' => [
+                        'count' => 0,
+                        'percentage' => 0
+                    ],
+                    'above_average' => [
+                        'count' => 0,
+                        'percentage' => 0
+                    ],
+                    'meet_expectations' => [
+                        'count' => 0,
+                        'percentage' => 0
+                    ],
+                    'below_expectations' => [
+                        'count' => 0,
+                        'percentage' => 0
+                    ]
+                ]
+            ]);
+        }
+
+        $high = $employees->where('overall_score', '>=', 90)->count();
+
+        $above = $employees->filter(function ($e) {
+            return $e->overall_score >= 80 && $e->overall_score < 90;
+        })->count();
+
+        $meet = $employees->filter(function ($e) {
+            return $e->overall_score >= 70 && $e->overall_score < 80;
+        })->count();
+
+        $below = $employees->filter(function ($e) {
+            return $e->overall_score > 0 && $e->overall_score < 70;
+        })->count();
+
+        $notEvaluated = $employees->filter(function ($e) {
+            return $e->overall_score <= 0;
+        })->count();
+
+        return response()->json([
+            'success' => true,
+            'filter' => $filter,
+            'data' => [
+                'total_employees' => $totalEmployees,
+
+                'high_performer' => [
+                    'count' => $high,
+                    'percentage' => round(($high / $totalEmployees) * 100, 2)
+                ],
+
+                'above_average' => [
+                    'count' => $above,
+                    'percentage' => round(($above / $totalEmployees) * 100, 2)
+                ],
+
+                'meet_expectations' => [
+                    'count' => $meet,
+                    'percentage' => round(($meet / $totalEmployees) * 100, 2)
+                ],
+
+                'below_expectations' => [
+                    'count' => $below,
+                    'percentage' => round(($below / $totalEmployees) * 100, 2)
+                ],
+                'not_evaluated' => $notEvaluated
+            ]
+        ]);
+    }
+
+    public function productivityIndexSummary(Request $request)
+    {
+        $filter = $request->filter ?? 'all_time';
+
+        $query = EmployeeTask::query();
+
+        switch ($filter) {
+
+            case 'today':
+                $query->whereDate('task_date', today());
+                break;
+
+            case 'last_30_days':
+                $query->whereDate('task_date', '>=', now()->subDays(30));
+                break;
+
+            case 'quarter':
+                $query->whereDate('task_date', '>=', now()->subMonths(3));
+                break;
+
+            case 'last_6_months':
+                $query->whereDate('task_date', '>=', now()->subMonths(6));
+                break;
+
+            case 'last_1_year':
+                $query->whereDate('task_date', '>=', now()->subYear());
+                break;
+
+            case 'custom':
+                if ($request->filled('from_date'))
+                    $query->whereDate('task_date', '>=', $request->from_date);
+
+                if ($request->filled('to_date'))
+                    $query->whereDate('task_date', '<=', $request->to_date);
+                break;
+        }
+
+        $summary = $query->selectRaw("
+        COUNT(*) total_tasks,
+        SUM(CASE WHEN task_status='2' THEN 1 ELSE 0 END) completed_tasks,
+        ROUND(AVG(manager_completion),2) avg_completion,
+        SUM(hours_worked) total_hours,
+        SUM(estimated_hours) estimated_hours
+    ")->first();
+
+        $completionRate = $summary->total_tasks
+            ? ($summary->completed_tasks / $summary->total_tasks) * 100
+            : 0;
+
+        $timeEfficiency = $summary->estimated_hours > 0
+            ? min(($summary->total_hours / $summary->estimated_hours) * 100, 100)
+            : 0;
+
+        $productivityIndex = round(
+            ($summary->avg_completion + $completionRate + $timeEfficiency) / 3,
+            2
+        );
+
+        return response()->json([
+            'success' => true,
+            'filter' => $filter,
+            'data' => [
+                'productivity_index' => $productivityIndex,
+                'average_completion' => round($summary->avg_completion, 2),
+                'task_completion_rate' => round($completionRate, 2),
+                'time_efficiency' => round($timeEfficiency, 2),
+                'completed_tasks' => $summary->completed_tasks,
+                'total_tasks' => $summary->total_tasks
+            ]
+        ]);
+    }
+
+    public function productivityTrend(Request $request)
+    {
+        $filter = $request->filter ?? 'last_30_days';
+
+        $query = EmployeeTask::query();
+
+        switch ($filter) {
+
+            case 'today':
+                $query->whereDate('task_date', today());
+                $group = "DATE(task_date)";
+                break;
+
+            case 'last_30_days':
+                $query->whereDate('task_date', '>=', now()->subDays(30));
+                $group = "DATE(task_date)";
+                break;
+
+            case 'quarter':
+            case 'last_6_months':
+            case 'last_1_year':
+                if ($filter == 'quarter')
+                    $query->whereDate('task_date', '>=', now()->subMonths(3));
+
+                if ($filter == 'last_6_months')
+                    $query->whereDate('task_date', '>=', now()->subMonths(6));
+
+                if ($filter == 'last_1_year')
+                    $query->whereDate('task_date', '>=', now()->subYear());
+
+                $group = "DATE_FORMAT(task_date,'%Y-%m')";
+                break;
+
+            case 'custom':
+                $query->whereBetween('task_date', [
+                    $request->from_date,
+                    $request->to_date
+                ]);
+
+                $group = "DATE(task_date)";
+                break;
+
+            default:
+                $group = "DATE_FORMAT(task_date,'%Y-%m')";
+        }
+
+        $trend = $query
+            ->selectRaw("
+            $group period,
+            ROUND(AVG(manager_completion),2) productivity
+        ")
+            ->groupBy('period')
+            ->orderBy('period')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'filter' => $filter,
+            'data' => $trend
+        ]);
+    }
+
+    public function employeeNetPromoterScore(Request $request)
+    {
+        $query = DB::table('faculty_net_promoter_scores')
+            ->where('status', '1');
+
+        // Apply Date Filter
+        switch ($request->filter) {
+
+            case 'today':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'last30':
+                $query->whereDate('created_at', '>=', Carbon::now()->subDays(30));
+                break;
+
+            case 'quarter':
+                $query->whereDate('created_at', '>=', Carbon::now()->subMonths(3));
+                break;
+
+            case 'last6months':
+                $query->whereDate('created_at', '>=', Carbon::now()->subMonths(6));
+                break;
+
+            case 'last1year':
+                $query->whereDate('created_at', '>=', Carbon::now()->subYear());
+                break;
+
+            case 'custom':
+                if ($request->filled('from_date') && $request->filled('to_date')) {
+                    $query->whereBetween('created_at', [
+                        $request->from_date . ' 00:00:00',
+                        $request->to_date . ' 23:59:59'
+                    ]);
+                }
+                break;
+
+            case 'all':
+            default:
+                // No filter
+                break;
+        }
+
+        $totalSurveyed = (clone $query)->sum('total_faculty_surveyed');
+
+        $totalPromoters = (clone $query)->sum('number_of_promoters');
+
+        $promoterPercentage = $totalSurveyed > 0
+            ? round(($totalPromoters / $totalSurveyed) * 100, 2)
+            : 0;
+
+        $promotersPercentage = round(
+            $query->avg('promoters_percentage'),
+            2
+        );
+
+        // Placeholder values because schema doesn't store them
+        $totalPassives = 0;
+        $totalDetractors = 0;
+        $passivePercentage = 0;
+        $detractorPercentage = 0;
+
+        // Placeholder NPS
+        $employeeNps = round($promoterPercentage - $detractorPercentage, 2);
+
+        return response()->json([
+            'success' => true,
+            'filter' => $request->filter ?? 'all',
+
+            'data' => [
+
+                'total_surveyed' => $totalSurveyed,
+
+                'employee_net_promoter_score' => $employeeNps,
+
+                'distributions' => [
+
+                    'promoters' => [
+                        'count' => $totalPromoters,
+                        'percentage' => $promoterPercentage
+                    ],
+
+                    'passives' => [
+                        'count' => $totalPassives,
+                        'percentage' => $passivePercentage
+                    ],
+
+                    'detractors' => [
+                        'count' => $totalDetractors,
+                        'percentage' => $detractorPercentage
+                    ]
+                ]
+            ]
+        ]);
+    }
+
+    public function leadershipSatisfactionScore(Request $request)
+    {
+        $query = IndicatorsPercentage::where('indicator_id', 188)
+            ->where('status', '1')
+            ->where('score', '>', 0);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Date Filters
+        |--------------------------------------------------------------------------
+        */
+
+        switch ($request->get('filter', 'all_time')) {
+
+            case 'today':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'last_30_days':
+                $query->whereBetween('created_at', [
+                    Carbon::now()->subDays(30)->startOfDay(),
+                    Carbon::now()->endOfDay()
+                ]);
+                break;
+
+            case 'quarter':
+                $query->whereBetween('created_at', [
+                    Carbon::now()->subMonths(3)->startOfDay(),
+                    Carbon::now()->endOfDay()
+                ]);
+                break;
+
+            case 'last_six_months':
+                $query->whereBetween('created_at', [
+                    Carbon::now()->subMonths(6)->startOfDay(),
+                    Carbon::now()->endOfDay()
+                ]);
+                break;
+
+            case 'last_one_year':
+                $query->whereBetween('created_at', [
+                    Carbon::now()->subYear()->startOfDay(),
+                    Carbon::now()->endOfDay()
+                ]);
+                break;
+
+            case 'custom':
+
+                if ($request->filled('from_date') && $request->filled('to_date')) {
+
+                    $query->whereBetween('created_at', [
+                        Carbon::parse($request->from_date)->startOfDay(),
+                        Carbon::parse($request->to_date)->endOfDay(),
+                    ]);
+
+                }
+
+                break;
+
+            case 'all_time':
+            default:
+                break;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Fetch records ONCE
+        |--------------------------------------------------------------------------
+        */
+
+        $records = $query->get();
+
+        $totalResponses = $records->count();
+
+        $averageScore = round((float) $records->avg('score'), 2);
+
+        // Rating out of 5
+        $ratingScale = round(($averageScore / 100) * 5, 2);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Satisfaction Level
+        |--------------------------------------------------------------------------
+        */
+
+        if ($ratingScale >= 4.50) {
+            $level = 'Excellent';
+        } elseif ($ratingScale >= 3.50) {
+            $level = 'Good';
+        } elseif ($ratingScale >= 2.50) {
+            $level = 'Average';
+        } elseif ($ratingScale >= 1.50) {
+            $level = 'Poor';
+        } else {
+            $level = 'Very Poor';
+        }
+
+        return response()->json([
+            'success' => true,
+            'filter' => $request->get('filter', 'all_time'),
+            'data' => [
+                'leadership_satisfaction_score' => $averageScore,
+                'rating_scale' => $ratingScale,
+                'maximum_rating' => 5,
+                'satisfaction_level' => $level,
+                'total_responses' => $totalResponses,
+            ]
+        ]);
     }
 
 }

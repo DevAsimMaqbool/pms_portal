@@ -11,7 +11,6 @@
         box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2);
     }
 
-
     .custom-tabs .nav-link {
         border-radius: 25px;
         margin: 0 5px;
@@ -39,13 +38,13 @@
 @php
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;   
+    $totalFeedback = 0;
     $currentYear = now()->year;
-    $previousYear = now()->year - 1; 
+    $previousYear = now()->year - 1;
     $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
     $att = $data['classes'];
     $spring = $att->filter(function ($c) use ($currentYear) {
-            return $c->term === "Spring $currentYear";
+        return $c->term === "Spring $currentYear";
     });
     $fall = $att->filter(function ($c) use ($previousYear) {
         return $c->term === "FALL $previousYear";
@@ -168,7 +167,7 @@
                                             @endforelse
                                         @endif
                                     </tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                    <!-- @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
@@ -184,7 +183,7 @@
                                                     </b></th>
                                             </tr>
                                         </tfoot>
-                                    @endif
+                                    @endif -->
 
                                 </table>
                             </div>

@@ -11,7 +11,6 @@
         box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2);
     }
 
-
     .custom-tabs .nav-link {
         border-radius: 25px;
         margin: 0 5px;
@@ -185,7 +184,7 @@ $activeRoleId = getRoleIdByName(activeRole());
 @endforelse
 
                                         </tbody>
-                                        @if($classFeedback1->isNotEmpty())
+                                        <!-- @if($classFeedback1->isNotEmpty())
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
@@ -212,7 +211,7 @@ $activeRoleId = getRoleIdByName(activeRole());
                                                     </span>
                                                 </th>
                                             </tr>
-                                        </tfoot>
+                                        </tfoot> -->
 @endif
                                     </table>
                                 </div>

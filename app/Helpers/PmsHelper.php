@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\DB;
 if (!function_exists('hodTopPerformers')) {
     function hodTopPerformers()
     {
-        $roleIds = Role::whereIn('name', ['Teacher','Professor','Associate Professor','Assistant Professor'])->pluck('id')->toArray();
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
         $departmentId = auth()->user()->department_id;
         $department = Department::find($departmentId);
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('department_id', $departmentId)
-             ->role(['Teacher','Professor','Associate Professor','Assistant Professor'])
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();
@@ -23,20 +23,20 @@ if (!function_exists('hodTopPerformers')) {
             return []; // return empty array if no employees
         }
         // 2️⃣ Get top 5 employees with avg score + eager load user
-        $topEmployees = IndicatorsPercentage::select('employee_id','role_id', DB::raw('AVG(score) as avg_score'))
+        $topEmployees = IndicatorsPercentage::select('employee_id', 'role_id', DB::raw('AVG(score) as avg_score'))
             ->with([
                 'user:employee_id,name,email,job_title,work_location'
             ])
             ->whereIn('employee_id', $employeeIds)
             ->whereIn('role_id', $roleIds)
-            ->groupBy('employee_id', 'role_id') 
+            ->groupBy('employee_id', 'role_id')
             ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')   // Sort by avg_score descending
             ->limit(5)                   // Take top 5
             ->get();
 
         // 3️⃣ Transform data into array with label and color
-        $result = $topEmployees->map(function ($item) use ($department) {    
+        $result = $topEmployees->map(function ($item) use ($department) {
             $avg_score = $item ? round($item->avg_score, 1) : 0.0;
 
             if ($avg_score >= 90) {
@@ -73,16 +73,16 @@ if (!function_exists('hodTopPerformers')) {
 
         return $result;
     }
-    
+
 }
 if (!function_exists('hodHotIndicators')) {
-    function hodHotIndicators($indicator_id,$role_id)
-    {   $employee_id = auth()->user()->employee_id;
+    function hodHotIndicators($indicator_id, $role_id)
+    {
+        $employee_id = auth()->user()->employee_id;
         $record = IndicatorsPercentage::where('employee_id', $employee_id)
             ->where('role_id', $role_id)->where('indicator_id', $indicator_id)
             ->orderBy('id')
             ->first();
-    
 
         $avg = $record ? round($record->score, 1) : 0.00;
 
@@ -112,7 +112,7 @@ if (!function_exists('hodHotIndicators')) {
             'color' => $color,
         ];
     }
-    
+
 }
 if (!function_exists('deanTopPerformers')) {
     function deanTopPerformers()
@@ -120,12 +120,12 @@ if (!function_exists('deanTopPerformers')) {
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         $employeeIds = User::where('faculty', $faculty)
-             ->role(['HOD'])
+            ->role(['HOD'])
             ->pluck('employee_id')
             ->filter()
             ->toArray();
         if (empty($employeeIds)) {
-            return []; 
+            return [];
         }
         $topEmployees = IndicatorsPercentage::select('employee_id', DB::raw('AVG(score) as avg_score'))
             ->with([
@@ -137,98 +137,96 @@ if (!function_exists('deanTopPerformers')) {
             ->groupBy('employee_id') 
             ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')
-            ->limit(5)           
+            ->limit(5)
             ->get();
-            // 3️⃣ Transform data into array with label and color
-            $result = $topEmployees->map(function ($item){    
-                $avg_score = $item ? round($item->avg_score, 1) : 0.0;
+        // 3️⃣ Transform data into array with label and color
+        $result = $topEmployees->map(function ($item) {
+            $avg_score = $item ? round($item->avg_score, 1) : 0.0;
 
-                if ($avg_score >= 90) {
-                    $color = 'primary';
-                    $label = 'OS';
-                } elseif ($avg_score >= 80) {
-                    $color = 'success';
-                    $label = 'EE';
-                } elseif ($avg_score >= 70) {
-                    $color = 'warning';
-                    $label = 'ME';
-                } elseif ($avg_score >= 60) {
-                    $color = 'orange';
-                    $label = 'NI';
-                } elseif ($avg_score >= 0) {
-                    $color = 'danger';
-                    $label = 'BE';
-                } else {
-                    $color = 'secondary';
-                    $label = 'N/A';
-                }
+            if ($avg_score >= 90) {
+                $color = 'primary';
+                $label = 'OS';
+            } elseif ($avg_score >= 80) {
+                $color = 'success';
+                $label = 'EE';
+            } elseif ($avg_score >= 70) {
+                $color = 'warning';
+                $label = 'ME';
+            } elseif ($avg_score >= 60) {
+                $color = 'orange';
+                $label = 'NI';
+            } elseif ($avg_score >= 0) {
+                $color = 'danger';
+                $label = 'BE';
+            } else {
+                $color = 'secondary';
+                $label = 'N/A';
+            }
 
-                return [
-                    'employee_id' => $item->employee_id,
-                    'name' => $item->user->name ?? null,
-                    'department' => $item->user->department->name ?? null,
-                    'location' => $item->user->work_location ?? null,
-                    'avg_score' => $avg_score,
-                    'label' => $label,
-                    'color' => $color,
-                ];
-            })->toArray();
+            return [
+                'employee_id' => $item->employee_id,
+                'name' => $item->user->name ?? null,
+                'department' => $item->user->department->name ?? null,
+                'location' => $item->user->work_location ?? null,
+                'avg_score' => $avg_score,
+                'label' => $label,
+                'color' => $color,
+            ];
+        })->toArray();
 
-            return $result;    
-       
+        return $result;
+
     }
-    
+
 }
 if (!function_exists('deanHotIndicators')) {
-    function deanHotIndicators($indicator_id,$role_id)
-    {   
+    function deanHotIndicators($indicator_id, $role_id)
+    {
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         $employeeIds = User::where('faculty', $faculty)
-             ->role(['HOD'])
+            ->role(['HOD'])
             ->pluck('employee_id')
             ->filter()
             ->toArray();
         if (empty($employeeIds)) {
-            return []; 
+            return [];
         }
-        
-         $avg = IndicatorsPercentage::whereIn('employee_id', $employeeIds)
+
+        $avg = IndicatorsPercentage::whereIn('employee_id', $employeeIds)
             ->where('indicator_id', $indicator_id)
             ->whereIn('role_id', $roleIds)
-            ->avg('score');       
-          
-           
-              
-               $avg = $avg ? round($avg, 1) : 0.00;
+            ->avg('score');
 
-                if ($avg >= 90) {
-                    $color = 'primary';
-                    $rating = 'OS';
-                } elseif ($avg >= 80) {
-                    $color = 'success';
-                    $rating = 'EE';
-                } elseif ($avg >= 70) {
-                    $color = 'warning';
-                    $rating = 'ME';
-                } elseif ($avg >= 60) {
-                    $color = 'orange';
-                    $rating = 'NI';
-                } elseif ($avg >= 0) {
-                    $color = 'danger';
-                    $rating = 'BE';
-                } else {
-                    $color = 'secondary';
-                    $rating = 'N/A';
-                }
+        $avg = $avg ? round($avg, 1) : 0.00;
 
-                return [
-                    'avg' => $avg,
-                    'rating' => $rating,
-                    'color' => $color,
-                ];   
+        if ($avg >= 90) {
+            $color = 'primary';
+            $rating = 'OS';
+        } elseif ($avg >= 80) {
+            $color = 'success';
+            $rating = 'EE';
+        } elseif ($avg >= 70) {
+            $color = 'warning';
+            $rating = 'ME';
+        } elseif ($avg >= 60) {
+            $color = 'orange';
+            $rating = 'NI';
+        } elseif ($avg >= 0) {
+            $color = 'danger';
+            $rating = 'BE';
+        } else {
+            $color = 'secondary';
+            $rating = 'N/A';
+        }
+
+        return [
+            'avg' => $avg,
+            'rating' => $rating,
+            'color' => $color,
+        ];
     }
-    
+
 }
 function Research_Innovation_Commercialization_HOD_Dean($employeeIds, $activeRoleId, $indicator_id)
 {
@@ -236,7 +234,7 @@ function Research_Innovation_Commercialization_HOD_Dean($employeeIds, $activeRol
     $CG = CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeRoleId, 137);
     $PIP = PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, 138);
     $RP = ResearchPublicationHODDean($employeeIds, $activeRoleId, 128);
-  
+
     return [
         "RP" => [
             "title" => 'Research Publications',
@@ -244,7 +242,7 @@ function Research_Innovation_Commercialization_HOD_Dean($employeeIds, $activeRol
             "target" => $RP['total_target'] ?? 0,
             "achieved" => $RP['total_achieved'] ?? 0,
             "percentage" => $RP['percentage'] ?? 0,
-            "color" => $RP['color']?? '#000'
+            "color" => $RP['color'] ?? '#000'
         ],
         "PIP" => [
             "title" => 'Patents & IP',
@@ -252,7 +250,7 @@ function Research_Innovation_Commercialization_HOD_Dean($employeeIds, $activeRol
             "target" => $PIP['total_target'] ?? 0,
             "achieved" => $PIP['total_achieved'] ?? 0,
             "percentage" => $PIP['percentage'] ?? 0,
-            "color" => $PIP['color']?? '#000'
+            "color" => $PIP['color'] ?? '#000'
         ],
         "CG" => [
             "title" => 'Commercial Gains',
@@ -260,7 +258,7 @@ function Research_Innovation_Commercialization_HOD_Dean($employeeIds, $activeRol
             "target" => $CG['total_target'] ?? 0,
             "achieved" => $CG['total_achieved'] ?? 0,
             "percentage" => $CG['percentage'] ?? 0,
-            "color" => $CG['color']?? '#000'
+            "color" => $CG['color'] ?? '#000'
         ],
         "MP" => [
             "title" => 'Multidisciplinary Projects',
@@ -268,7 +266,7 @@ function Research_Innovation_Commercialization_HOD_Dean($employeeIds, $activeRol
             "target" => $MP['total_target'] ?? 0,
             "achieved" => $MP['total_achieved'] ?? 0,
             "percentage" => $MP['percentage'] ?? 0,
-            "color" => $MP['color']?? '#000'
+            "color" => $MP['color'] ?? '#000'
         ],
     ];
 
@@ -276,38 +274,37 @@ function Research_Innovation_Commercialization_HOD_Dean($employeeIds, $activeRol
 function MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, $indicatorId)
 {
     $departmentId = auth()->user()->department_id;
-    if(in_array(getRoleName(activeRole()), ['HOD'])){
-           $roleIds = Role::whereIn('name', ['Teacher','Professor','Associate Professor','Assistant Professor'])->pluck('id')->toArray();
-            // 1️⃣ Get all employee_ids in the department
-            $employeeIds = User::where('department_id', $departmentId)
-                ->role(['Teacher','Professor','Associate Professor','Assistant Professor'])
-                ->pluck('employee_id')
-                ->filter() // remove nulls
-                ->toArray();
-            if (empty($employeeIds)) {
-                return [
-                    'total_target' => 0,
-                    'total_achieved' => 0,
-                    'percentage' => 0,
-                    'color' => '#000'
-                ];
-            }       
-               
-               
+    if (in_array(getRoleName(activeRole()), ['HOD'])) {
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
+        // 1️⃣ Get all employee_ids in the department
+        $employeeIds = User::where('department_id', $departmentId)
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->pluck('employee_id')
+            ->filter() // remove nulls
+            ->toArray();
+        if (empty($employeeIds)) {
+            return [
+                'total_target' => 0,
+                'total_achieved' => 0,
+                'percentage' => 0,
+                'color' => '#000'
+            ];
+        }
+
     }
-    if(in_array(getRoleName(activeRole()), ['Dean'])){
+    if (in_array(getRoleName(activeRole()), ['Dean'])) {
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         $employeeIds = User::where('faculty', $faculty)
-             ->role(['HOD','Teacher','Professor','Associate Professor','Assistant Professor'])
+            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
             ->pluck('employee_id')
             ->filter()
             ->toArray();
         if (empty($employeeIds)) {
-            return []; 
+            return [];
         }
 
-    } 
+    }
     $facultyTargets = FacultyTarget::withCount([
         'achievementOfMultidisciplinaryProjectsTarget as multidisciplinary_projects_count' => function ($query) use ($indicatorId) {
             $query->where('form_status', 'RESEARCHER')
@@ -315,13 +312,13 @@ function MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, $indicato
                 ->where('indicator_id', $indicatorId);
         }
     ])
-    ->whereIn('user_id', $employeeIds)
-    ->where('form_status', 'OTHER')
-    ->where('indicator_id', $indicatorId)
-    ->get();    
-    $totalTarget = $facultyTargets->sum('target'); 
+        ->whereIn('user_id', $employeeIds)
+        ->where('form_status', 'OTHER')
+        ->where('indicator_id', $indicatorId)
+        ->get();
+    $totalTarget = $facultyTargets->sum('target');
     $totalAchieved = $facultyTargets->sum('multidisciplinary_projects_count');
-     // Calculate percentage safely
+    // Calculate percentage safely
     $percentage = $totalTarget > 0 ? round(($totalAchieved / $totalTarget) * 100, 2) : 0;
     if ($percentage >= 90) {
         $color = 'primary';
@@ -336,56 +333,53 @@ function MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, $indicato
     } else {
         $color = 'secondary';
     }
-     return [
+    return [
         'total_target' => $totalTarget,
         'total_achieved' => $totalAchieved,
         'percentage' => $percentage,
         'color' => $color
     ];
-    
 
-    
 }
 function CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeRoleId, $indicatorId)
 {
     $departmentId = auth()->user()->department_id;
-    if(in_array(getRoleName(activeRole()), ['HOD'])){
-           $roleIds = Role::whereIn('name', ['Teacher','Professor','Associate Professor','Assistant Professor'])->pluck('id')->toArray();
-            // 1️⃣ Get all employee_ids in the department
-            $employeeIds = User::where('department_id', $departmentId)
-                ->role(['Teacher','Professor','Associate Professor','Assistant Professor'])
-                ->pluck('employee_id')
-                ->filter() // remove nulls
-                ->toArray();
-            if (empty($employeeIds)) {
-                return [
-                    'total_target' => 0,
-                    'total_achieved' => 0,
-                    'percentage' => 0,
-                    'color' => '#000'
-                ];
-            }       
-               
-               
+    if (in_array(getRoleName(activeRole()), ['HOD'])) {
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
+        // 1️⃣ Get all employee_ids in the department
+        $employeeIds = User::where('department_id', $departmentId)
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->pluck('employee_id')
+            ->filter() // remove nulls
+            ->toArray();
+        if (empty($employeeIds)) {
+            return [
+                'total_target' => 0,
+                'total_achieved' => 0,
+                'percentage' => 0,
+                'color' => '#000'
+            ];
+        }
+
     }
-    if(in_array(getRoleName(activeRole()), ['Dean'])){
+    if (in_array(getRoleName(activeRole()), ['Dean'])) {
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         $employeeIds = User::where('faculty', $faculty)
-             ->role(['HOD','Teacher','Professor','Associate Professor','Assistant Professor'])
+            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
             ->pluck('employee_id')
             ->filter()
             ->toArray();
         if (empty($employeeIds)) {
-                return [
-                    'total_target' => 0,
-                    'total_achieved' => 0,
-                    'percentage' => 0,
-                    'color' => '#000'
-                ];
-            } 
+            return [
+                'total_target' => 0,
+                'total_achieved' => 0,
+                'percentage' => 0,
+                'color' => '#000'
+            ];
+        }
 
-    } 
+    }
     $facultyTargets = FacultyTarget::withCount([
         'commercialGainsCounsultancyTargets as commercialGainsCounsultancy_count' => function ($query) use ($indicatorId) {
             $query->where('form_status', 'RESEARCHER')
@@ -393,13 +387,13 @@ function CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeR
                 ->where('indicator_id', $indicatorId);
         }
     ])
-    ->whereIn('user_id', $employeeIds)
-    ->where('form_status', 'OTHER')
-    ->where('indicator_id', $indicatorId)
-    ->get();    
-    $totalTarget = $facultyTargets->sum('target'); 
+        ->whereIn('user_id', $employeeIds)
+        ->where('form_status', 'OTHER')
+        ->where('indicator_id', $indicatorId)
+        ->get();
+    $totalTarget = $facultyTargets->sum('target');
     $totalAchieved = $facultyTargets->sum('commercialGainsCounsultancy_count');
-     // Calculate percentage safely
+    // Calculate percentage safely
     $percentage = $totalTarget > 0 ? round(($totalAchieved / $totalTarget) * 100, 2) : 0;
     if ($percentage >= 90) {
         $color = 'primary';
@@ -414,56 +408,53 @@ function CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeR
     } else {
         $color = 'secondary';
     }
-     return [
+    return [
         'total_target' => $totalTarget,
         'total_achieved' => $totalAchieved,
         'percentage' => $percentage,
         'color' => $color
     ];
-    
 
-    
 }
 function PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, $indicatorId)
 {
     $departmentId = auth()->user()->department_id;
-    if(in_array(getRoleName(activeRole()), ['HOD'])){
-           $roleIds = Role::whereIn('name', ['Teacher','Professor','Associate Professor','Assistant Professor'])->pluck('id')->toArray();
-            // 1️⃣ Get all employee_ids in the department
-            $employeeIds = User::where('department_id', $departmentId)
-                ->role(['Teacher','Professor','Associate Professor','Assistant Professor'])
-                ->pluck('employee_id')
-                ->filter() // remove nulls
-                ->toArray();
-            if (empty($employeeIds)) {
-                return [
-                    'total_target' => 0,
-                    'total_achieved' => 0,
-                    'percentage' => 0,
-                    'color' => '#000'
-                ];
-            }       
-               
-               
+    if (in_array(getRoleName(activeRole()), ['HOD'])) {
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
+        // 1️⃣ Get all employee_ids in the department
+        $employeeIds = User::where('department_id', $departmentId)
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->pluck('employee_id')
+            ->filter() // remove nulls
+            ->toArray();
+        if (empty($employeeIds)) {
+            return [
+                'total_target' => 0,
+                'total_achieved' => 0,
+                'percentage' => 0,
+                'color' => '#000'
+            ];
+        }
+
     }
-    if(in_array(getRoleName(activeRole()), ['Dean'])){
+    if (in_array(getRoleName(activeRole()), ['Dean'])) {
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         $employeeIds = User::where('faculty', $faculty)
-             ->role(['HOD','Teacher','Professor','Associate Professor','Assistant Professor'])
+            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
             ->pluck('employee_id')
             ->filter()
             ->toArray();
         if (empty($employeeIds)) {
-                return [
-                    'total_target' => 0,
-                    'total_achieved' => 0,
-                    'percentage' => 0,
-                    'color' => '#000'
-                ];
-            } 
+            return [
+                'total_target' => 0,
+                'total_achieved' => 0,
+                'percentage' => 0,
+                'color' => '#000'
+            ];
+        }
 
-    } 
+    }
     $facultyTargets = FacultyTarget::withCount([
         'intellectualPropertyTargets as intellectualProperty_count' => function ($query) use ($indicatorId) {
             $query->where('form_status', 'RESEARCHER')
@@ -471,13 +462,13 @@ function PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, $indica
                 ->where('indicator_id', $indicatorId);
         }
     ])
-    ->whereIn('user_id', $employeeIds)
-    ->where('form_status', 'OTHER')
-    ->where('indicator_id', $indicatorId)
-    ->get();    
-    $totalTarget = $facultyTargets->sum('target'); 
+        ->whereIn('user_id', $employeeIds)
+        ->where('form_status', 'OTHER')
+        ->where('indicator_id', $indicatorId)
+        ->get();
+    $totalTarget = $facultyTargets->sum('target');
     $totalAchieved = $facultyTargets->sum('intellectualProperty_count');
-     // Calculate percentage safely
+    // Calculate percentage safely
     $percentage = $totalTarget > 0 ? round(($totalAchieved / $totalTarget) * 100, 2) : 0;
     if ($percentage >= 90) {
         $color = 'primary';
@@ -492,56 +483,53 @@ function PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, $indica
     } else {
         $color = 'secondary';
     }
-     return [
+    return [
         'total_target' => $totalTarget,
         'total_achieved' => $totalAchieved,
         'percentage' => $percentage,
         'color' => $color
     ];
-    
 
-    
 }
 function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId)
 {
     $departmentId = auth()->user()->department_id;
-    if(in_array(getRoleName(activeRole()), ['HOD'])){
-           $roleIds = Role::whereIn('name', ['Teacher','Professor','Associate Professor','Assistant Professor'])->pluck('id')->toArray();
-            // 1️⃣ Get all employee_ids in the department
-            $employeeIds = User::where('department_id', $departmentId)
-                ->role(['Teacher','Professor','Associate Professor','Assistant Professor'])
-                ->pluck('employee_id')
-                ->filter() // remove nulls
-                ->toArray();
-            if (empty($employeeIds)) {
-                return [
-                    'total_target' => 0,
-                    'total_achieved' => 0,
-                    'percentage' => 0,
-                    'color' => '#000'
-                ];
-            }       
-               
-               
+    if (in_array(getRoleName(activeRole()), ['HOD'])) {
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
+        // 1️⃣ Get all employee_ids in the department
+        $employeeIds = User::where('department_id', $departmentId)
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->pluck('employee_id')
+            ->filter() // remove nulls
+            ->toArray();
+        if (empty($employeeIds)) {
+            return [
+                'total_target' => 0,
+                'total_achieved' => 0,
+                'percentage' => 0,
+                'color' => '#000'
+            ];
+        }
+
     }
-    if(in_array(getRoleName(activeRole()), ['Dean'])){
+    if (in_array(getRoleName(activeRole()), ['Dean'])) {
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         $employeeIds = User::where('faculty', $faculty)
-             ->role(['HOD','Teacher','Professor','Associate Professor','Assistant Professor'])
+            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
             ->pluck('employee_id')
             ->filter()
             ->toArray();
         if (empty($employeeIds)) {
-                return [
-                    'total_target' => 0,
-                    'total_achieved' => 0,
-                    'percentage' => 0,
-                    'color' => '#000'
-                ];
-            } 
+            return [
+                'total_target' => 0,
+                'total_achieved' => 0,
+                'percentage' => 0,
+                'color' => '#000'
+            ];
+        }
 
-    } 
+    }
     $facultyTargets = FacultyTarget::withCount([
         'researchPublicationTargets as researchPublication_count' => function ($query) use ($indicatorId) {
             $query->where('form_status', 'RESEARCHER')
@@ -549,13 +537,13 @@ function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId)
                 ->where('indicator_id', $indicatorId);
         }
     ])
-    ->whereIn('user_id', $employeeIds)
-    ->where('form_status', 'HOD')
-    ->where('indicator_id', $indicatorId)
-    ->get();    
-    $totalTarget = $facultyTargets->sum('target'); 
+        ->whereIn('user_id', $employeeIds)
+        ->where('form_status', 'HOD')
+        ->where('indicator_id', $indicatorId)
+        ->get();
+    $totalTarget = $facultyTargets->sum('target');
     $totalAchieved = $facultyTargets->sum('researchPublication_count');
-     // Calculate percentage safely
+    // Calculate percentage safely
     $percentage = $totalTarget > 0 ? round(($totalAchieved / $totalTarget) * 100, 2) : 0;
     if ($percentage >= 90) {
         $color = 'primary';
@@ -570,24 +558,22 @@ function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId)
     } else {
         $color = 'secondary';
     }
-     return [
+    return [
         'total_target' => $totalTarget,
         'total_achieved' => $totalAchieved,
         'percentage' => $percentage,
         'color' => $color
     ];
-    
 
-    
 }
 if (!function_exists('FacultyLevelToppers')) {
     function FacultyLevelToppers()
     {
-        $roleIds = Role::whereIn('name', ['Teacher','Professor','Associate Professor','Assistant Professor'])->pluck('id')->toArray();
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('faculty', $faculty)
-             ->role(['Teacher','Professor','Associate Professor','Assistant Professor'])
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();
@@ -596,21 +582,21 @@ if (!function_exists('FacultyLevelToppers')) {
         }
 
         // 2️⃣ Get top 5 employees with avg score + eager load user
-        $topEmployees = IndicatorsPercentage::select('employee_id','role_id', DB::raw('AVG(score) as avg_score'))
+        $topEmployees = IndicatorsPercentage::select('employee_id', 'role_id', DB::raw('AVG(score) as avg_score'))
             ->with([
                 'user:employee_id,name,email,job_title,work_location,department_id',
                 'user.department:id,name'
             ])
             ->whereIn('employee_id', $employeeIds)
             ->whereIn('role_id', $roleIds)
-            ->groupBy('employee_id', 'role_id') 
+            ->groupBy('employee_id', 'role_id')
             ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')   // Sort by avg_score descending
             ->limit(5)                   // Take top 5
             ->get();
 
         // 3️⃣ Transform data into array with label and color
-        $result = $topEmployees->map(function ($item) {    
+        $result = $topEmployees->map(function ($item) {
             $avg_score = $item ? round($item->avg_score, 1) : 0.0;
 
             if ($avg_score >= 90) {
@@ -645,34 +631,34 @@ if (!function_exists('FacultyLevelToppers')) {
             ];
         })->toArray();
 
-        return $result;  
-       
+        return $result;
+
     }
-    
+
 }
 if (!function_exists('ResearchInnovationAndCommercialization')) {
     function ResearchInnovationAndCommercialization($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
     {
         $faculty = auth()->user()->faculty;
         $hod_ids = User::where('faculty', $faculty)->role('HOD')->pluck('employee_id');
-        $count_hod_ids = $hod_ids->count();   
+        $count_hod_ids = $hod_ids->count();
         $record = IndicatorsPercentage::with([
-                'user:id,employee_id,department_id,name',
-                'user.department:id,name'
-            ])
-        ->whereIn('employee_id', $hod_ids)
+            'user:id,employee_id,department_id,name',
+            'user.department:id,name'
+        ])
+            ->whereIn('employee_id', $hod_ids)
             ->where('role_id', 22)->where('key_performance_area_id', $KpaId)
             ->where('indicator_category_id', $categoryId)->where('indicator_id', $indicatorId)
             ->orderBy('id')
             ->get();
-       // dd($record);    
-        $sumScore = $record->sum('score');    
+        // dd($record);    
+        $sumScore = $record->sum('score');
         $avgScore = ($count_hod_ids > 0) ? round(($sumScore / $count_hod_ids), 2) : 0;
 
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId);
         $weight = $indicatorWeight['weightage'] ?? 0;
         $weightedScore = ($avgScore * $weight) / 100;
-        
+
         saveIndicatorPercentage(
             $employeeId,
             $activeRoleId,
@@ -691,5 +677,92 @@ if (!function_exists('ResearchInnovationAndCommercialization')) {
     }
 }
 
+function getPublicationMetrics($doi)
+{
+    try {
 
+        if (empty($doi)) {
+            return null;
+        }
+
+        // Remove unwanted prefixes
+        $doi = trim($doi);
+
+        $doi = str_replace([
+            'https://doi.org/',
+            'http://doi.org/',
+            'http://dx.doi.org/',
+            'https://dx.doi.org/',
+        ], '', $doi);
+
+        $url = "https://api.openalex.org/works/https://doi.org/" . $doi;
+
+        $response = Http::timeout(30)
+            ->acceptJson()
+            ->get($url);
+
+        if (!$response->successful()) {
+            return null;
+        }
+
+        $paper = $response->json();
+
+        return [
+
+            'doi' => $doi,
+
+            'title' => $paper['display_name'] ?? null,
+
+            'publication_year' => $paper['publication_year'] ?? null,
+
+            'publication_date' => $paper['publication_date'] ?? null,
+
+            'citation_count' => $paper['cited_by_count'] ?? 0,
+
+            'fwci' => $paper['fwci'] ?? 0,
+
+            'is_highly_cited' =>
+                $paper['citation_normalized_percentile']['is_in_top_10_percent']
+                ?? false,
+
+            'is_top_1_percent' =>
+                $paper['citation_normalized_percentile']['is_in_top_1_percent']
+                ?? false,
+
+            'counts_by_year' =>
+                $paper['counts_by_year'] ?? [],
+
+            'open_access' =>
+                $paper['open_access']['is_oa'] ?? false,
+
+            'journal' =>
+                $paper['primary_location']['source']['display_name']
+                ?? null,
+
+            'publisher' =>
+                $paper['primary_location']['source']['host_organization_name']
+                ?? null,
+
+            'authors' => collect($paper['authorships'] ?? [])
+                ->pluck('author.display_name')
+                ->values(),
+
+            'concepts' => collect($paper['concepts'] ?? [])
+                ->pluck('display_name')
+                ->values(),
+
+            'awards' => $paper['awards'] ?? [],
+
+            'raw' => $paper
+
+        ];
+
+    } catch (\Exception $e) {
+
+        return [
+            'error' => true,
+            'message' => $e->getMessage()
+        ];
+    }
+}
 

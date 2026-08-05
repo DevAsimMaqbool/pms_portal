@@ -39,4 +39,8 @@ return [
         'base_url' => env('PMS_API_URL', 'http://103.62.235.19:8000'),
     ],
 
+    'dashboard' => [
+        'api_key' => env('DASHBOARD_API_KEY'),
+    ],
+
 ];
