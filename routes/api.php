@@ -29,7 +29,7 @@ Route::prefix('v1')->group(function () {
 
         Route::get('research-publication-dashboard', [OricApiController::class, 'researchPublicationDashboard']);
         Route::post('/publication-metrics', [OricApiController::class, 'publicationMetrics']);
-        Route::post('/international-collaborations', [OricApiController::class, 'internationalCollaborations']);
+        Route::get('/international-collaborations', [OricApiController::class, 'internationalCollaborations']);
     });
 
 });
