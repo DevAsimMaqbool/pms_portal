@@ -101,11 +101,15 @@ class CompletionOfCourseFolderController extends Controller
                 if ($request->has('completion_of_Course_folder')) {
                     $rules['completion_of_Course_folder'] = 'nullable|integer';
                     $rules['completion_of_Course_folder_indicator_id'] = 'nullable|integer';
+                    $rules['document_url'] = 'nullable|url';
+                    $rules['completion_status'] = 'nullable|array';
                 }
 
                 if ($request->has('compliance_and_usage_of_lms')) {
                     $rules['compliance_and_usage_of_lms'] = 'nullable|integer';
                     $rules['compliance_and_usage_of_lms_indicator_id'] = 'nullable|integer';
+                     $rules['document_url'] = 'nullable|url';
+                    $rules['completion_status'] = 'nullable|array';
                 }
                 $validator = Validator::make($request->all(), $rules);
 
@@ -115,26 +119,52 @@ class CompletionOfCourseFolderController extends Controller
                         'errors' => $validator->errors()
                     ], 422);
                 }
+                // Checkbox values
+                $completionStatus = $request->completion_status ?? [];
+
+                // Total available checkboxes
+                $totalCheckboxes = 9;
+
+                $checkedCount = count($completionStatus);
+
+                // Calculate Score
+                if ($checkedCount == 0) {
+                    $completionScore = 25;
+                } elseif ($checkedCount == $totalCheckboxes) {
+                    $completionScore = 100;
+                } else {
+                    $completionScore = 70;
+                }
 
                 DB::beginTransaction();
                 foreach ($request->class_name as $classCode) {
+                    
 
                     $exists = CompletionOfCourseFolder::where('faculty_member_id', $request->faculty_member_id)
                         ->where('class_cod', $classCode)
-                        ->where(function ($query) use ($request) {
-                            $query->where('completion_of_Course_folder_indicator_id', $request->completion_of_Course_folder_indicator_id)
-                                ->where('compliance_and_usage_of_lms_indicator_id', $request->compliance_and_usage_of_lms_indicator_id);
+                        ->when($request->has('completion_of_Course_folder'), function ($query) use ($request) {
+                            $query->where(
+                                'completion_of_Course_folder_indicator_id',
+                                $request->completion_of_Course_folder_indicator_id
+                            );
+                        })
+                        ->when($request->has('compliance_and_usage_of_lms'), function ($query) use ($request) {
+                            $query->where(
+                                'compliance_and_usage_of_lms_indicator_id',
+                                $request->compliance_and_usage_of_lms_indicator_id
+                            );
                         })
                         ->exists();
 
-
                     if ($exists) {
                         DB::rollBack();
+
                         return response()->json([
                             'status' => 'error',
                             'message' => "This class ($classCode) is already submitted for this faculty member."
                         ], 409);
                     }
+                    
 
                     // Base data (always inserted)
                     $data = [
@@ -147,12 +177,16 @@ class CompletionOfCourseFolderController extends Controller
 
                     // Add only if exists in request
                     if ($request->has('completion_of_Course_folder')) {
-                        $data['completion_of_Course_folder'] = $request->completion_of_Course_folder;
+                        $data['document_url'] = $request->document_url;
+                        $data['completion_status'] = $completionStatus;
+                        $data['completion_of_Course_folder'] = $completionScore;
                         $data['completion_of_Course_folder_indicator_id'] = $request->completion_of_Course_folder_indicator_id;
                     }
 
                     if ($request->has('compliance_and_usage_of_lms')) {
-                        $data['compliance_and_usage_of_lms'] = $request->compliance_and_usage_of_lms;
+                         $data['document_url'] = $request->document_url;
+                        $data['completion_status'] = $completionStatus;
+                        $data['compliance_and_usage_of_lms'] = $completionScore;
                         $data['compliance_and_usage_of_lms_indicator_id'] = $request->compliance_and_usage_of_lms_indicator_id;
                     }
 
@@ -222,6 +256,8 @@ class CompletionOfCourseFolderController extends Controller
             if ($request->has('completion_of_Course_folder')) {
                 $rules['completion_of_Course_folder'] = 'nullable|integer';
                 $rules['completion_of_Course_folder_indicator_id'] = 'nullable|integer';
+                $rules['document_url'] = 'nullable|url';
+                $rules['completion_status'] = 'nullable|array';
             }
 
             if ($request->has('compliance_and_usage_of_lms')) {
@@ -237,28 +273,51 @@ class CompletionOfCourseFolderController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
+            $completionStatus = $request->completion_status ?? [];
+
+            $totalCheckboxes = 9;
+            $checkedCount = count($completionStatus);
+
+            if ($checkedCount == 0) {
+                $completionScore = 25;
+            } elseif ($checkedCount == $totalCheckboxes) {
+                $completionScore = 100;
+            } else {
+                $completionScore = 70;
+            }
 
             DB::beginTransaction();
 
             $classCode = $request->class_name[0]; // edit case → single class
 
             // ✅ Unique check (exclude current record)
+
             $exists = CompletionOfCourseFolder::where('faculty_member_id', $request->faculty_member_id)
                 ->where('class_cod', $classCode)
                 ->where('id', '!=', $id)
-                ->where(function ($query) use ($request) {
-                    $query->where('completion_of_Course_folder_indicator_id', $request->completion_of_Course_folder_indicator_id)
-                        ->orWhere('compliance_and_usage_of_lms_indicator_id', $request->compliance_and_usage_of_lms_indicator_id);
+                ->when($request->has('completion_of_Course_folder'), function ($query) use ($request) {
+                    $query->where(
+                        'completion_of_Course_folder_indicator_id',
+                        $request->completion_of_Course_folder_indicator_id
+                    );
+                })
+                ->when($request->has('compliance_and_usage_of_lms'), function ($query) use ($request) {
+                    $query->where(
+                        'compliance_and_usage_of_lms_indicator_id',
+                        $request->compliance_and_usage_of_lms_indicator_id
+                    );
                 })
                 ->exists();
 
             if ($exists) {
                 DB::rollBack();
+
                 return response()->json([
                     'status' => 'error',
-                    'message' => "This class already exists for this faculty member."
+                    'message' => 'This class already exists for this faculty member.'
                 ], 409);
             }
+            
 
             // Base update data
             $updateData = [
@@ -268,8 +327,11 @@ class CompletionOfCourseFolderController extends Controller
             ];
 
             if ($request->has('completion_of_Course_folder')) {
-                $updateData['completion_of_Course_folder'] = $request->completion_of_Course_folder;
                 $updateData['completion_of_Course_folder_indicator_id'] = $request->completion_of_Course_folder_indicator_id;
+
+                $updateData['document_url'] = $request->document_url;
+                $updateData['completion_status'] = $completionStatus;
+                $updateData['completion_of_Course_folder'] = $completionScore;
             }
 
             if ($request->has('compliance_and_usage_of_lms')) {

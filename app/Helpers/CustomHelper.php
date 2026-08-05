@@ -39,6 +39,7 @@ use App\Models\AlumniSatisfactionRate;
 use App\Models\DropoutRate;
 use App\Models\FacultyPursuingSkill;
 use App\Models\Recovery;
+use App\Models\ResearchTaskAssignedHodDean;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -3797,8 +3798,71 @@ if (!function_exists('lineManagerReviewRatingOnTasks')) {
         $weightedScore = ($averageScore * $weights['course_load']) / 100;
         $weightedScore188 = ($averageScore * $weights['course_188']) / 100;
 
-        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore);
+        //saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore);
         saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $averageScore);
+        return $managerRatings;
+    }
+}
+if (!function_exists('ResearchTasksAssignedbyDeanHOD')) {
+    function ResearchTasksAssignedbyDeanHOD($facultyId, $activeRoleId)
+    {
+        $currentYear = Carbon::now()->year;
+        $currentAcademic = ($currentYear - 1) . '-' . $currentYear;
+        $managerRatings = collect();
+        $totalScore = 0;
+        $taskCount = 0;
+
+        $reviews = ResearchTaskAssignedHodDean::with('tasks')
+            ->where('employee_id', $facultyId)
+            ->where('year', $currentAcademic)
+            ->where('form_status', 'OTHER')
+            ->get();
+            
+
+        foreach ($reviews as $review) {
+            foreach ($review->tasks as $task) {
+
+                $score = $task->linemanager_rating * 20;
+                $totalScore += $score;
+                $taskCount++;
+
+                if ($score >= 90) {
+                    $label = 'OS';
+                    $color = 'bg-primary';
+                } elseif ($score >= 80) {
+                    $label = 'EE';
+                    $color = 'bg-success';
+                } elseif ($score >= 70) {
+                    $label = 'ME';
+                    $color = 'bg-warning';
+                } elseif ($score >= 60) {
+                    $label = 'NI';
+                    $color = 'bg-info';
+                } else {
+                    $label = 'BE';
+                    $color = 'bg-danger';
+                }
+
+                $managerRatings->push((object) [
+                    'task' => $task->task,
+                    'rating_data' => [
+                        'percentage' => $score,
+                        'label' => $label,
+                        'color' => $color
+                    ]
+                ]);
+            }
+        }
+        $averageScore = $taskCount > 0 ? round($totalScore / $taskCount, 2) : 0;
+        $weights = [
+            'course_load' => getRoleWeightage($activeRoleId, 'indicator', 175)['weightage'],
+            'course_188' => getRoleWeightage($activeRoleId, 'indicator', 188)['weightage'],
+        ];
+        $weightedScore = ($averageScore * $weights['course_load']) / 100;
+        $weightedScore188 = ($averageScore * $weights['course_188']) / 100;
+
+        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore);
+        //saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $averageScore);
         return $managerRatings;
     }
 }
@@ -5201,8 +5265,75 @@ if (!function_exists('departmentLineManagerReviewRating')) {
         $weightedScore175 = ($departmentAvgScore * $weights['course_load']) / 100;
         $weightedScore188 = ($departmentAvgScore * $weights['course_188']) / 100;
         // Save department-level KPI
-        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore175, $departmentAvgScore);
+        //saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore175, $departmentAvgScore);
         saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $departmentAvgScore);
+
+        return [
+            'total_task' => $totalTasks,
+            'total_Score' => $totalScore,
+            'department_avg_score' => $departmentAvgScore,
+            'weighted_scores' => [
+                175 => $weightedScore175,
+                188 => $weightedScore188,
+            ],
+            'all_faculty_ratings' => $allRatings
+        ];
+    }
+}
+
+if (!function_exists('departmentResearchTasksAssignedbyDeanHOD')) {
+    function departmentResearchTasksAssignedbyDeanHOD($facultyId, $activeRoleId)
+    {
+        $departmentId = auth()->user()->department_id;
+
+        // Get all faculty members in this department
+        $facultyMembers = User::where('department_id', $departmentId)
+            ->get(['id', 'employee_id', 'name']);
+
+        $totalScore = 0;
+        $totalTasks = 0;
+
+        $allRatings = [];
+
+        foreach ($facultyMembers as $faculty) {
+
+            $reviews = ResearchTaskAssignedHodDean::with('tasks')
+                ->where('employee_id', $faculty->id)
+                ->where('form_status', 'OTHER')
+                ->get();
+
+            foreach ($reviews as $review) {
+                foreach ($review->tasks as $task) {
+
+                    $score = $task->linemanager_rating * 20; // convert 0-5 scale to %
+                    $totalScore += $score;
+                    $totalTasks++;
+                    $allRatings[] = (object) [
+                        'faculty_name' => $faculty->name,
+                        'task' => $task->task,
+                        'rating_data' => [
+                            'percentage' => $score
+                        ]
+                    ];
+                }
+            }
+        }
+
+        // Department average
+        $departmentAvgScore = $totalTasks > 0 ? round($totalScore / $totalTasks, 2) : 0;
+
+        // Get indicator weights
+        $weights = [
+            'course_load' => getRoleWeightage($activeRoleId, 'indicator', 175)['weightage'] ?? 0,
+            'course_188' => getRoleWeightage($activeRoleId, 'indicator', 188)['weightage'] ?? 0,
+        ];
+
+        // Weighted department scores
+        $weightedScore175 = ($departmentAvgScore * $weights['course_load']) / 100;
+        $weightedScore188 = ($departmentAvgScore * $weights['course_188']) / 100;
+        // Save department-level KPI
+        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore175, $departmentAvgScore);
+        //saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $departmentAvgScore);
 
         return [
             'total_task' => $totalTasks,
