@@ -14,6 +14,7 @@ use App\Models\IntellectualProperty;
 use App\Models\AchievementOfResearchPublicationTargetCoAuthor;
 use App\Models\SpinOff;
 use App\Models\IndustrialProjects;
+use App\Models\StudentFeedback;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -2375,6 +2376,80 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
                 'department_summary' => $departmentSummary,
 
             ],
+
+        ]);
+    }
+
+    public function studentResearchDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Publications By MS Students
+        |--------------------------------------------------------------------------
+        */
+
+        $msStudentsQuery = AchievementOfResearchPublicationTargetCoAuthor::query()
+            ->where('your_role', 'Student')
+            ->where('career', 'MS');
+
+        $this->applyDateFilterNew(
+            $msStudentsQuery,
+            $request,
+            'achievement_of_research_publications_target_co_author.created_at'
+        );
+
+        $publicationsByMSStudents = (clone $msStudentsQuery)
+            ->whereNotNull('student_roll_no')
+            ->distinct('student_roll_no')
+            ->count('student_roll_no');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Student Satisfaction
+        |--------------------------------------------------------------------------
+        */
+
+        $feedbackQuery = StudentFeedback::query();
+
+        // Apply only if created_at exists
+        // $this->applyDateFilter($feedbackQuery,$request,'created_at');
+
+        $studentSatisfactionScore = round(
+            (clone $feedbackQuery)
+                ->selectRaw("
+                AVG(
+                    CAST(REPLACE(overall,'%','') AS DECIMAL(10,2))
+                ) as avg_score
+            ")
+                ->value('avg_score'),
+            2
+        );
+
+        return response()->json([
+
+            'success' => true,
+
+            'filters' => [
+
+                'filter' => $request->filter ?? 'all_time',
+
+                'from_date' => $request->from_date,
+
+                'to_date' => $request->to_date,
+
+            ],
+
+            'data' => [
+
+                'summary_cards' => [
+
+                    'publications_by_ms_students' => $publicationsByMSStudents,
+
+                    'student_satisfaction_score' => $studentSatisfactionScore,
+
+                ]
+
+            ]
 
         ]);
     }

@@ -36,6 +36,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/spinoff-dashboard', [OricApiController::class, 'spinOffDashboard']);
         Route::get('/industry-project-dashboard', [OricApiController::class, 'industryProjectDashboard']);
         Route::get('/industry-research-dashboard', [OricApiController::class, 'activeResearchDashboard']);
+        Route::get('/student-research-dashboard', [OricApiController::class, 'studentResearchDashboard']);
     });
 
 });
