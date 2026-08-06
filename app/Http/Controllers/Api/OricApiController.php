@@ -19,6 +19,7 @@ use App\Models\Employability;
 use App\Models\Faculty;
 use App\Models\Department;
 use App\Models\AlumniSatisfactionRate;
+use App\Models\IndustrialVisit;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -2738,6 +2739,148 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
                     'alumni_survey_response' => $surveyResponses,
 
                 ],
+
+                'faculty_summary' => $facultySummary,
+
+                'department_summary' => $departmentSummary,
+
+            ],
+
+        ]);
+    }
+
+    public function industryVisitsDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+
+        $query = IndustrialVisit::query();
+
+        $this->applyDateFilter($query, $request);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Summary Cards
+        |--------------------------------------------------------------------------
+        */
+
+        $industryVisits = (clone $query)->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Engagement Activities Distribution
+        |--------------------------------------------------------------------------
+        */
+
+        $engagementActivities = (clone $query)
+            ->select(
+                'visit_category',
+                DB::raw('COUNT(*) as total')
+            )
+            ->groupBy('visit_category')
+            ->orderBy('visit_category')
+            ->get()
+            ->map(function ($row) use ($industryVisits) {
+
+                return [
+
+                    'visit_category' => $row->visit_category,
+
+                    'count' => (int) $row->total,
+
+                    'percentage' => $industryVisits > 0
+                        ? round(($row->total / $industryVisits) * 100, 2)
+                        : 0,
+
+                ];
+            });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty Wise Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $faculties = Faculty::orderBy('name')->get();
+
+        $facultySummary = $faculties->map(function ($faculty) use ($query) {
+
+            $employeeIds = DB::table('users')
+                ->where('faculty_id', $faculty->id)
+                ->pluck('employee_id');
+
+            $visits = (clone $query)
+                ->whereIn('created_by', $employeeIds)
+                ->count();
+
+            return [
+
+                'faculty_name' => $faculty->name,
+
+                'industry_visits' => $visits,
+
+            ];
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Wise Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $departments = Department::orderBy('department_name')->get();
+
+        $departmentSummary = $departments->map(function ($department) use ($query) {
+
+            $employeeIds = DB::table('users')
+                ->where('department_id', $department->id)
+                ->pluck('employee_id');
+
+            $visits = (clone $query)
+                ->whereIn('created_by', $employeeIds)
+                ->count();
+
+            return [
+
+                'department_name' => $department->department_name,
+
+                'industry_visits' => $visits,
+
+            ];
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+
+            'success' => true,
+
+            'filters' => [
+
+                'filter' => $request->filter ?? 'all_time',
+
+                'from_date' => $request->from_date,
+
+                'to_date' => $request->to_date,
+
+            ],
+
+            'data' => [
+
+                'summary_cards' => [
+
+                    'industry_visits' => $industryVisits,
+
+                ],
+
+                'engagement_activities_distribution' => $engagementActivities,
 
                 'faculty_summary' => $facultySummary,
 
