@@ -2033,11 +2033,11 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
                 $query->whereDate($column, '>=', now()->subMonths(3));
                 break;
 
-            case 'last_six_months':
+            case 'last_6_months':
                 $query->whereDate($column, '>=', now()->subMonths(6));
                 break;
 
-            case 'last_one_year':
+            case 'last_1_year':
                 $query->whereDate($column, '>=', now()->subYear());
                 break;
 
