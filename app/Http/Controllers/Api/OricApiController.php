@@ -12,6 +12,7 @@ use App\Models\CommercialGainsCounsultancyResearchIncome;
 use App\Models\ProductsDeliveredToIndustry;
 use App\Models\IntellectualProperty;
 use App\Models\SpinOff;
+use App\Models\IndustrialProjects;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -1793,6 +1794,222 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
 
                 'top_researcher' => $topResearcher
 
+            ]
+
+        ]);
+    }
+    private function applyDateFilter($query, Request $request)
+    {
+        switch ($request->filter) {
+
+            case 'today':
+                $query->whereDate('created_at', today());
+                break;
+
+            case 'last_30_days':
+                $query->whereDate('created_at', '>=', now()->subDays(30));
+                break;
+
+            case 'quarter':
+                $query->whereDate('created_at', '>=', now()->subMonths(3));
+                break;
+
+            case 'last_six_months':
+                $query->whereDate('created_at', '>=', now()->subMonths(6));
+                break;
+
+            case 'last_one_year':
+                $query->whereDate('created_at', '>=', now()->subYear());
+                break;
+
+            case 'custom':
+                if ($request->filled('from_date') && $request->filled('to_date')) {
+                    $query->whereBetween('created_at', [
+                        Carbon::parse($request->from_date)->startOfDay(),
+                        Carbon::parse($request->to_date)->endOfDay(),
+                    ]);
+                }
+                break;
+
+            case 'all_time':
+            default:
+                break;
+        }
+
+        return $query;
+    }
+    public function industryProjectDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+        $industryQuery = IndustrialProjects::query()
+            ->where('industrial_projects.status', 2);
+
+        $consultancyQuery = CommercialGainsCounsultancyResearchIncome::query()
+            ->where('commercial_gains_counsultancy_research_incomes.status', 2);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Date Filters
+        |--------------------------------------------------------------------------
+        */
+
+        $this->applyDateFilter($industryQuery, $request);
+        $this->applyDateFilter($consultancyQuery, $request);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Summary Cards
+        |--------------------------------------------------------------------------
+        */
+
+        $industryCompleted = (clone $industryQuery)->count();
+
+        $consultancyProjects = (clone $consultancyQuery)->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Trend Over Years
+        |--------------------------------------------------------------------------
+        */
+
+        $industryTrend = (clone $industryQuery)
+            ->selectRaw('YEAR(created_at) year, COUNT(*) total')
+            ->groupBy('year')
+            ->orderBy('year')
+            ->pluck('total', 'year');
+
+        $consultancyTrend = (clone $consultancyQuery)
+            ->selectRaw('YEAR(created_at) year, COUNT(*) total')
+            ->groupBy('year')
+            ->orderBy('year')
+            ->pluck('total', 'year');
+
+        $years = collect($industryTrend->keys())
+            ->merge($consultancyTrend->keys())
+            ->unique()
+            ->sort();
+
+        $trend = [];
+
+        foreach ($years as $year) {
+
+            $trend[] = [
+                'year' => $year,
+                'industry_project_completed' => $industryTrend[$year] ?? 0,
+                'consultancy_projects' => $consultancyTrend[$year] ?? 0,
+            ];
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Top Faculty
+        |--------------------------------------------------------------------------
+        */
+
+        $topFaculty = (clone $industryQuery)
+            ->join('users', 'users.id', '=', 'industrial_projects.created_by')
+            ->selectRaw("
+        users.name,
+        users.department,
+        COUNT(*) industry_projects,
+        0 impact_score
+    ")
+            ->groupBy('users.id', 'users.name', 'users.department')
+            ->orderByDesc('industry_projects')
+            ->limit(10)
+            ->get();
+
+        $consultancyFaculty = (clone $consultancyQuery)
+            ->join('users', 'users.id', '=', 'commercial_gains_counsultancy_research_incomes.created_by')
+            ->selectRaw("
+        users.name,
+        users.department,
+        COUNT(*) consultancy_projects
+    ")
+            ->groupBy('users.id', 'users.name', 'users.department')
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $departments = User::select('department')
+            ->whereNotNull('department')
+            ->distinct()
+            ->pluck('department');
+
+        $departmentSummary = [];
+
+        foreach ($departments as $department) {
+
+            $industry = (clone $industryQuery)
+                ->join('users', 'users.id', '=', 'industrial_projects.created_by')
+                ->where('users.department', $department)
+                ->count();
+
+            $consultancy = (clone $consultancyQuery)
+                ->join('users', 'users.id', '=', 'commercial_gains_counsultancy_research_incomes.created_by')
+                ->where('users.department', $department)
+                ->count();
+
+            $departmentSummary[] = [
+
+                'department' => $department,
+
+                'industry_project_completed' => $industry,
+
+                'consultancy_projects' => $consultancy,
+
+            ];
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | Top Researcher
+    |--------------------------------------------------------------------------
+    */
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+            'success' => true,
+
+            'filter' => $request->filter ?? 'all_time',
+            'data' => [
+
+                'summary' => [
+                    'industry_project_completed' => $industryCompleted,
+                    'consultancy_projects' => $consultancyProjects,
+                ],
+
+                'trend_over_years' => $trend,
+
+                'impact_distribution' => [
+                    [
+                        'name' => 'Industry Project Completed',
+                        'value' => $industryCompleted,
+                    ],
+                    [
+                        'name' => 'Consultancy Projects',
+                        'value' => $consultancyProjects,
+                    ]
+                ],
+
+                'top_faculty' => $topFaculty,
+
+                'department_summary' => $departmentSummary,
+
+                'top_researcher' => $topFaculty
             ]
 
         ]);
