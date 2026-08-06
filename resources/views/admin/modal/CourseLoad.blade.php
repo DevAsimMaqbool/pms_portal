@@ -11,7 +11,6 @@
         box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2);
     }
 
-
     .custom-tabs .nav-link {
         border-radius: 25px;
         margin: 0 5px;
@@ -43,13 +42,13 @@
 @endphp
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
-     @php
+    @php
         $currentYear = now()->year;
-        $previousYear = now()->year - 1;  
+        $previousYear = now()->year - 1;
         $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
         $att = $data['classes'];
         $spring = $att->filter(function ($c) use ($currentYear) {
-                return $c->term === "Spring $currentYear";
+            return $c->term === "Spring $currentYear";
         });
         $fall = $att->filter(function ($c) use ($previousYear) {
             return $c->term === "FALL $previousYear";
@@ -93,7 +92,7 @@
                             <!-- Spring -->
                             <div class="tab-pane fade show active" id="CourseLoad-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
-                                     <table class="table table-hover align-middle custom-table">
+                                    <table class="table table-hover align-middle custom-table">
                                         <thead class="table-primary">
                                             <tr>
                                                 <th>Sr#</th>
@@ -105,8 +104,8 @@
                                             </tr>
                                         </thead>
                                         <tbody class="table-border-bottom-0">
-                                           
-                                            @foreach($spring as $class)
+
+                                            @forelse($spring as $class)
                                                 @php
                                                     // latest attendance or null
                                                     $latestAttendance = $class->attendances->first();
@@ -124,44 +123,50 @@
                                                     {{-- Program name (only if attendance exists) --}}
                                                     <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
                                                 </tr>
-                                            @endforeach
+                                            @empty
+                                                <tr>
+                                                    <td colspan="6" class="text-center text-muted">
+                                                        no record found
+                                                    </td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
-                                        <tfoot>
-                                            <tr class="table-primary">
-                                                <th class="text-end">Total</th>
-                                                <th colspan="3" class="text-end"></th>
-                                                <th style="font-size: 0.960rem;">
-                                                    <b class="badge"
-                                                        style="background-color: {{ getRatingMeta($data['courseLoadScore'])->color }}">
-                                                        {{ number_format($data['courseLoadScore'], 1) }}%
-                                                    </b>
-                                                </th>
-                                                <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
-                                                        style="background-color: {{ getRatingMeta($data['courseLoadScore'])->color }}">
-                                                        {{ getRatingMeta($data['courseLoadScore'])->rating }}
-                                                    </b></th>
-                                            </tr>
-                                        </tfoot>
+                                        <!-- <tfoot>
+                                                        <tr class="table-primary">
+                                                            <th class="text-end">Total</th>
+                                                            <th colspan="3" class="text-end"></th>
+                                                            <th style="font-size: 0.960rem;">
+                                                                <b class="badge"
+                                                                    style="background-color: {{ getRatingMeta($data['courseLoadScore'])->color }}">
+                                                                    {{ number_format($data['courseLoadScore'], 1) }}%
+                                                                </b>
+                                                            </th>
+                                                            <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
+                                                                    style="background-color: {{ getRatingMeta($data['courseLoadScore'])->color }}">
+                                                                    {{ getRatingMeta($data['courseLoadScore'])->rating }}
+                                                                </b></th>
+                                                        </tr>
+                                                    </tfoot> -->
                                     </table>
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table m-0 table-borderless">
-                                        <tbody>
-                                            <tr>
-                                                <td class="align-top pe-6 ps-0 py-6 text-body">Total Courses:
-                                                    {{ count($att) }}
-                                                </td>
-                                                <td class="px-0 w-px-100">
-                                                    <span class="fw-medium">
-                                                        <span class="badge bg-{{ count($att) > 3 ? 'danger' : 'success' }}">
-                                                            {{ count($att) > 3 ? 'Overload' : 'Underload' }}
+                                <!-- <div class="table-responsive">
+                                        <table class="table m-0 table-borderless">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="align-top pe-6 ps-0 py-6 text-body">Total Courses:
+                                                        {{ count($att) }}
+                                                    </td>
+                                                    <td class="px-0 w-px-100">
+                                                        <span class="fw-medium">
+                                                            <span class="badge bg-{{ count($att) > 3 ? 'danger' : 'success' }}">
+                                                                {{ count($att) > 3 ? 'Overload' : 'Underload' }}
+                                                            </span>
                                                         </span>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div> -->
                             </div>
                             <!-- Fall -->
                             <div class="tab-pane fade" id="CourseLoad-fall" role="tabpanel">
@@ -178,7 +183,7 @@
                                             </tr>
                                         </thead>
                                         <tbody class="table-border-bottom-0">
-                                           
+
                                             @foreach($fall as $class)
                                                 @php
                                                     // latest attendance or null

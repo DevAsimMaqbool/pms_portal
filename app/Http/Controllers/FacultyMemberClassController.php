@@ -142,7 +142,7 @@ class FacultyMemberClassController extends Controller
                     ->join('odoocms_class as c', 'c.id', '=', 'cf.class_id')
                     ->join('odoocms_academic_term as oat', 'oat.id', '=', 'cf.term_id')
                     ->leftJoin('odoocms_career as cr', 'cr.id', '=', 'c.career_id')
-                    ->where('oat.id', 51)
+                    ->where('oat.id', 52)
                     ->where('oat.active_for_roll', true)
                     ->select([
                         'cf.faculty_staff_id as faculty_id',
@@ -305,8 +305,8 @@ class FacultyMemberClassController extends Controller
     public function classesAttendance()
     {
         try {
-            $from_date = '2025-12-21';
-            $to_date = '2025-12-27';
+            $from_date = '2025-12-27';
+            $to_date = '2026-01-27';
             $sql = "
         SELECT 
             max(ca.class_id) as class_id,
@@ -323,7 +323,7 @@ class FacultyMemberClassController extends Controller
         left join public.odoocms_class_attendance_line cal on ca.id = cal.attendance_id
         left join public.odoocms_program p on p.id = ca.program_id
         left join public.odoocms_academic_term oat on oat.id = ca.term_id
-        where cal.term_id = 51
+        where cal.term_id = 52
         and ca.date_class BETWEEN '{$from_date}' AND '{$to_date}'
         group by ca.id
         ";
@@ -340,7 +340,7 @@ class FacultyMemberClassController extends Controller
                         // }
     
                         FacultyClassAttendance::create([
-                            'class_date' => '2025-08-18',
+                            'class_date' => '2026-01-27',
                             'class_id' => $item->class_id,
                             'faculty_id' => $item->faculty_id,
                             'program_name' => $item->program_name,

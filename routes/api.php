@@ -8,14 +8,42 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\Api\ManagerEmployeeTaskController;
+use App\Http\Controllers\Api\OricApiController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('api.key')->group(function () {
         Route::get('/get-employees-task', [ManagerEmployeeTaskController::class, 'index']);
         Route::get('/dashboard/{id}', [ManagerEmployeeTaskController::class, 'show']);
+        Route::get('/faculty-retention-rate', [ManagerEmployeeTaskController::class, 'facultyRetentionRate']);
+        Route::get('/goal-achievement-rate', [ManagerEmployeeTaskController::class, 'goalAchievementRate']);
+        Route::get('/department-wise-performance', [ManagerEmployeeTaskController::class, 'departmentWisePerformance']);
+        Route::get('/performance-review', [ManagerEmployeeTaskController::class, 'performanceReviewDashboard']);
+        Route::get('/performance-distribution', [ManagerEmployeeTaskController::class, 'performanceDistribution']);
+        Route::get('/productivity-index-summary', [ManagerEmployeeTaskController::class, 'productivityIndexSummary']);
+        Route::get('/productivity-trend', [ManagerEmployeeTaskController::class, 'productivityTrend']);
+        Route::get('/employee-net-promoter-score', [ManagerEmployeeTaskController::class, 'employeeNetPromoterScore']);
+        Route::get('leadership-satisfaction-score', [ManagerEmployeeTaskController::class, 'leadershipSatisfactionScore']);
+
+        Route::get('research-publication-dashboard', [OricApiController::class, 'researchPublicationDashboard']);
+        Route::post('/publication-metrics', [OricApiController::class, 'publicationMetrics']);
+        Route::get('/international-collaborations', [OricApiController::class, 'internationalCollaborations']);
+        Route::get('/research-grants-dashboard', [OricApiController::class, 'researchGrantsDashboard']);
+        Route::get('/innovation-dashboard', [OricApiController::class, 'innovationDashboard']);
+        Route::get('/patent-dashboard', [OricApiController::class, 'patentDashboard']);
+        Route::get('/spinoff-dashboard', [OricApiController::class, 'spinOffDashboard']);
+        Route::get('/industry-project-dashboard', [OricApiController::class, 'industryProjectDashboard']);
+        Route::get('/industry-research-dashboard', [OricApiController::class, 'activeResearchDashboard']);
+        Route::get('/student-research-dashboard', [OricApiController::class, 'studentResearchDashboard']);
+        Route::get('/employability-dashboard', [OricApiController::class, 'employabilityDashboard']);
+        Route::get('/alumni-satisfaction-dashboard', [OricApiController::class, 'alumniSatisfactionDashboard']);
+        Route::get('/industry-visits-dashboard', [OricApiController::class, 'industryVisitsDashboard']);
+        Route::get('/industry-collaboration-dashboard', [OricApiController::class, 'industryCollaborationDashboard']);
+        Route::get('/active-international-research-partnership-dashboard', [OricApiController::class, 'activeInternationalResearchPartnershipDashboard']);
+        Route::get('/international-student-dashboard', [OricApiController::class, 'internationalStudentDashboard']);
+
     });
+
 });

@@ -11,7 +11,6 @@
         box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2);
     }
 
-
     .custom-tabs .nav-link {
         border-radius: 25px;
         margin: 0 5px;
@@ -37,16 +36,16 @@
     }
 </style>
 @php
-$activeRoleId = getRoleIdByName(activeRole());
-// Initialize totalFeedback to 0 in case nothing is set later
-$totalFeedback = 0;                                    
+    $activeRoleId = getRoleIdByName(activeRole());
+    // Initialize totalFeedback to 0 in case nothing is set later
+    $totalFeedback = 0;                                    
 @endphp
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
-     @php
+    @php
         $totalCompletion = 0;
-        $currentYear = now()->year;                                          
-        $previousYear = now()->year - 1;                                      
+        $currentYear = now()->year;
+        $previousYear = now()->year - 1;
         $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, $activeRoleId, 120);
 
         $springData = $CompletionofCourseFolders->filter(function ($item) use ($currentYear) {
@@ -107,62 +106,63 @@ $totalFeedback = 0;
                                             </tr>
                                         </thead>
 
-                                                                            <tbody>
-                                                                                @forelse ($springData as $CompletionofCourser_spring)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                        <tbody>
+                                            @forelse ($springData as $CompletionofCourser_spring)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
 
-                                            <td>{{ $CompletionofCourser_spring->facultyClass->code ?? 'N/A' }}</td>
+                                                    <td>{{ $CompletionofCourser_spring->facultyClass->code ?? 'N/A' }}</td>
 
-                                            <td>{{ $CompletionofCourser_spring->facultyClass?->career_code ?? 'N/A' }}</td>
+                                                    <td>{{ $CompletionofCourser_spring->facultyClass?->career_code ?? 'N/A' }}
+                                                    </td>
 
-                                            <td>
-                                                <div class="badge"
-                                                    style="background-color: {{ $CompletionofCourser_spring->color ?? '#6c757d' }}">
-                                                    {{ $CompletionofCourser_spring->status_folder ?? 'N/A' }}
-                                                </div>
-                                            </td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $CompletionofCourser_spring->color ?? '#6c757d' }}">
+                                                            {{ $CompletionofCourser_spring->status_folder ?? 'N/A' }}
+                                                        </div>
+                                                    </td>
 
-                                            <td>
-                                                <div class="badge"
-                                                    style="background-color: {{ $CompletionofCourser_spring->color ?? '#6c757d' }}">
-                                                    {{ number_format($CompletionofCourser_spring->completion_of_Course_folder ?? 0, 1) }}%
-                                                </div>
-                                            </td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $CompletionofCourser_spring->color ?? '#6c757d' }}">
+                                                            {{ number_format($CompletionofCourser_spring->completion_of_Course_folder ?? 0, 1) }}%
+                                                        </div>
+                                                    </td>
 
-                                            <td>
-                                                <div class="badge"
-                                                    style="background-color: {{ $CompletionofCourser_spring->color ?? '#6c757d' }}">
-                                                    {{ $CompletionofCourser_spring->rating ?? 'N/A' }}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center text-muted">
-                                                no record found
-                                            </td>
-                                        </tr>
-                                    @endforelse
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $CompletionofCourser_spring->color ?? '#6c757d' }}">
+                                                            {{ $CompletionofCourser_spring->rating ?? 'N/A' }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="6" class="text-center text-muted">
+                                                        no record found
+                                                    </td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
-                                        @if($CompletionofCourseFolders->isNotEmpty())
-                                        <tfoot>
-                                            <tr class="table-primary">
-                                                <th class="text-end">Total</th>
-                                                <th colspan="3" class="text-end"></th>
-                                                <th style="font-size: 0.960rem;">
-                                                    <b class="badge"
-                                                        style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
-                                                        {{ number_format($totalCompletion, 1) }}%
-                                                    </b>
-                                                </th>
-                                                <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
-                                                        style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
-                                                        {{ getRatingMeta($totalCompletion)->rating }}
-                                                    </b></th>
-                                            </tr>
-                                        </tfoot>
-                                        @endif
+                                        <!-- @if($CompletionofCourseFolders->isNotEmpty())
+                                            <tfoot>
+                                                <tr class="table-primary">
+                                                    <th class="text-end">Total</th>
+                                                    <th colspan="3" class="text-end"></th>
+                                                    <th style="font-size: 0.960rem;">
+                                                        <b class="badge"
+                                                            style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
+                                                            {{ number_format($totalCompletion, 1) }}%
+                                                        </b>
+                                                    </th>
+                                                    <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
+                                                            style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
+                                                            {{ getRatingMeta($totalCompletion)->rating }}
+                                                        </b></th>
+                                                </tr>
+                                            </tfoot>
+                                            @endif -->
                                     </table>
                                 </div>
                             </div>
@@ -184,59 +184,60 @@ $totalFeedback = 0;
 
                                         <tbody>
                                             @forelse ($fallData as $CompletionofCourser_fall)
-    <tr>
-        <td>{{ $loop->iteration }}</td>
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
 
-        <td>{{ $CompletionofCourser_fall->facultyClass->code ?? 'N/A' }}</td>
+                                                    <td>{{ $CompletionofCourser_fall->facultyClass->code ?? 'N/A' }}</td>
 
-        <td>{{ $CompletionofCourser_fall->facultyClass?->career_code ?? 'N/A' }}</td>
+                                                    <td>{{ $CompletionofCourser_fall->facultyClass?->career_code ?? 'N/A' }}
+                                                    </td>
 
-        <td>
-            <div class="badge"
-                style="background-color: {{ $CompletionofCourser_fall->color ?? '#6c757d' }}">
-                {{ $CompletionofCourser_fall->status_folder ?? 'N/A' }}
-            </div>
-        </td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $CompletionofCourser_fall->color ?? '#6c757d' }}">
+                                                            {{ $CompletionofCourser_fall->status_folder ?? 'N/A' }}
+                                                        </div>
+                                                    </td>
 
-        <td>
-            <div class="badge"
-                style="background-color: {{ $CompletionofCourser_fall->color ?? '#6c757d' }}">
-                {{ number_format($CompletionofCourser_fall->completion_of_Course_folder ?? 0, 1) }}%
-            </div>
-        </td>
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $CompletionofCourser_fall->color ?? '#6c757d' }}">
+                                                            {{ number_format($CompletionofCourser_fall->completion_of_Course_folder ?? 0, 1) }}%
+                                                        </div>
+                                                    </td>
 
-        <td>
-            <div class="badge"
-                style="background-color: {{ $CompletionofCourser_fall->color ?? '#6c757d' }}">
-                {{ $CompletionofCourser_fall->rating ?? 'N/A' }}
-            </div>
-        </td>
-    </tr>
-@empty
-    <tr>
-        <td colspan="6" class="text-center text-muted">
-            no record found
-        </td>
-    </tr>
-@endforelse
+                                                    <td>
+                                                        <div class="badge"
+                                                            style="background-color: {{ $CompletionofCourser_fall->color ?? '#6c757d' }}">
+                                                            {{ $CompletionofCourser_fall->rating ?? 'N/A' }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="6" class="text-center text-muted">
+                                                        no record found
+                                                    </td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                         @if($CompletionofCourseFolders->isNotEmpty())
-                                        <tfoot>
-                                            <tr class="table-primary">
-                                                <th class="text-end">Total</th>
-                                                <th colspan="3" class="text-end"></th>
-                                                <th style="font-size: 0.960rem;">
-                                                    <b class="badge"
-                                                        style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
-                                                        {{ number_format($totalCompletion, 1) }}%
-                                                    </b>
-                                                </th>
-                                                <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
-                                                        style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
-                                                        {{ getRatingMeta($totalCompletion)->rating }}
-                                                    </b></th>
-                                            </tr>
-                                        </tfoot>
+                                            <tfoot>
+                                                <tr class="table-primary">
+                                                    <th class="text-end">Total</th>
+                                                    <th colspan="3" class="text-end"></th>
+                                                    <th style="font-size: 0.960rem;">
+                                                        <b class="badge"
+                                                            style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
+                                                            {{ number_format($totalCompletion, 1) }}%
+                                                        </b>
+                                                    </th>
+                                                    <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
+                                                            style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
+                                                            {{ getRatingMeta($totalCompletion)->rating }}
+                                                        </b></th>
+                                                </tr>
+                                            </tfoot>
                                         @endif
                                     </table>
                                 </div>
@@ -292,14 +293,14 @@ $totalFeedback = 0;
                             <div class="tab-pane fade show" id="completion-course-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     @php
-    $CompletionofCourseFolders = CompletionOfCourseFolderForHOD($activeRoleId, 120);
+                                        $CompletionofCourseFolders = CompletionOfCourseFolderForHOD($activeRoleId, 120);
                                     @endphp
 
                                     @foreach ($CompletionofCourseFolders as $programId => $records)
 
                                         @php
-        $avg = $records->avg('completion_of_course_folder');
-        $weightedScore = $records->avg('weighted_score');
+                                            $avg = $records->avg('completion_of_course_folder');
+                                            $weightedScore = $records->avg('weighted_score');
                                         @endphp
 
                                         <table class="table table-hover align-middle custom-table">
@@ -319,7 +320,7 @@ $totalFeedback = 0;
                                                 @forelse ($records as $row)
 
                                                     @php
-            $class = optional($row->facultyClass);
+                                                        $class = optional($row->facultyClass);
                                                     @endphp
 
                                                     <tr>
