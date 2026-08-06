@@ -18,6 +18,7 @@ use App\Models\StudentFeedback;
 use App\Models\Employability;
 use App\Models\Faculty;
 use App\Models\Department;
+use App\Models\AlumniSatisfactionRate;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -2613,6 +2614,128 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
                     'job_placements' => $jobPlacements,
 
                     'job_placement_percentage' => $jobPlacementPercentage,
+
+                ],
+
+                'faculty_summary' => $facultySummary,
+
+                'department_summary' => $departmentSummary,
+
+            ],
+
+        ]);
+    }
+
+    public function alumniSatisfactionDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+
+        $query = AlumniSatisfactionRate::query()
+            ->whereNotNull('satisfaction_rate');
+
+        $this->applyDateFilter($query, $request);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Summary Cards
+        |--------------------------------------------------------------------------
+        */
+
+        $avgPercentage = (clone $query)->avg('satisfaction_rate');
+
+        $alumniSatisfactionScore = $avgPercentage
+            ? round(($avgPercentage / 100) * 5, 2)
+            : 0;
+
+        $surveyResponses = (clone $query)->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty Wise Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $faculties = Faculty::orderBy('name')->get();
+
+        $facultySummary = $faculties->map(function ($faculty) use ($query) {
+
+            $facultyQuery = (clone $query)
+                ->where('faculty_id', $faculty->id);
+
+            $avg = $facultyQuery->avg('satisfaction_rate');
+
+            return [
+
+                'faculty_name' => $faculty->name,
+
+                'alumni_satisfaction_score' => $avg
+                    ? round(($avg / 100) * 5, 2)
+                    : 0,
+
+                'alumni_survey_response' => (clone $facultyQuery)->count(),
+
+            ];
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Wise Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $departments = Department::orderBy('department_name')->get();
+
+        $departmentSummary = $departments->map(function ($department) use ($query) {
+
+            $departmentQuery = (clone $query)
+                ->where('department_id', $department->id);
+
+            $avg = $departmentQuery->avg('satisfaction_rate');
+
+            return [
+
+                'department_name' => $department->department_name,
+
+                'alumni_satisfaction_score' => $avg
+                    ? round(($avg / 100) * 5, 2)
+                    : 0,
+
+                'alumni_survey_response' => (clone $departmentQuery)->count(),
+
+            ];
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+
+            'success' => true,
+
+            'filters' => [
+
+                'filter' => $request->filter ?? 'all_time',
+
+                'from_date' => $request->from_date,
+
+                'to_date' => $request->to_date,
+
+            ],
+
+            'data' => [
+
+                'summary_cards' => [
+
+                    'alumni_satisfaction_score' => $alumniSatisfactionScore,
+
+                    'alumni_survey_response' => $surveyResponses,
 
                 ],
 
