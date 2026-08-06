@@ -11,6 +11,7 @@ use App\Models\NoOfGrantsSubmitAndWon;
 use App\Models\CommercialGainsCounsultancyResearchIncome;
 use App\Models\ProductsDeliveredToIndustry;
 use App\Models\IntellectualProperty;
+use App\Models\AchievementOfResearchPublicationTargetCoAuthor;
 use App\Models\SpinOff;
 use App\Models\IndustrialProjects;
 use Illuminate\Http\Request;
@@ -2011,6 +2012,328 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
 
                 'top_researcher' => $topFaculty
             ]
+
+        ]);
+    }
+
+    public function activeResearchDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Base Research Query
+        |--------------------------------------------------------------------------
+        | Base Table:
+        | achievement_of_research_publications_target_co_author
+        */
+
+        $researchQuery = AchievementOfResearchPublicationTargetCoAuthor::query()
+            ->join(
+                'users',
+                'users.employee_id',
+                '=',
+                'achievement_of_research_publications_target_co_author.created_by'
+            )
+            ->whereNotNull('users.department_id');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Apply Date Filter
+        |--------------------------------------------------------------------------
+        */
+
+        $this->applyDateFilter(
+            $researchQuery,
+            $request,
+            'achievement_of_research_publications_target_co_author.created_at'
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Active Research Centers
+        |--------------------------------------------------------------------------
+        | Distinct Departments
+        */
+
+        $activeResearchCenters = (clone $researchQuery)
+            ->distinct('users.department_id')
+            ->count('users.department_id');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Active Research Faculty %
+        |--------------------------------------------------------------------------
+        */
+
+        $totalFaculty = User::whereNotNull('faculty_id')->count();
+
+        $activeFaculty = (clone $researchQuery)
+            ->distinct(
+                'achievement_of_research_publications_target_co_author.created_by'
+            )
+            ->count(
+                'achievement_of_research_publications_target_co_author.created_by'
+            );
+
+        $activeResearchFacultyPercentage = $totalFaculty > 0
+            ? round(($activeFaculty / $totalFaculty) * 100, 2)
+            : 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Postgraduate Research Completion
+        |--------------------------------------------------------------------------
+        */
+
+        $postGraduateResearch = (clone $researchQuery)
+            ->where(
+                'achievement_of_research_publications_target_co_author.career',
+                'PG'
+            )
+            ->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | International Research Collaborations
+        |--------------------------------------------------------------------------
+        */
+
+        $internationalQuery = ActiveInternationalResearchPartner::query()
+            ->where('status', 2);
+
+        $this->applyDateFilter(
+            $internationalQuery,
+            $request,
+            'created_at'
+        );
+
+        $internationalResearchCollaborations = (clone $internationalQuery)
+            ->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Total Research Records
+        |--------------------------------------------------------------------------
+        */
+
+        $totalResearchRecords = (clone $researchQuery)->count();
+
+        /*
+    |--------------------------------------------------------------------------
+    | Total Research Records
+    |--------------------------------------------------------------------------
+    */
+
+        $totalResearchRecords = (clone $researchQuery)->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Top Faculty by Research
+        |--------------------------------------------------------------------------
+        |
+        | Base Table:
+        | achievement_of_research_publications_target_co_author
+        |
+        | Join:
+        | users.employee_id = co_author.created_by
+        |
+        |--------------------------------------------------------------------------
+        */
+
+        $topFaculty = (clone $researchQuery)
+
+            ->select(
+                'users.employee_id',
+                'users.name',
+                'users.department',
+                DB::raw('COUNT(*) as total_research')
+            )
+
+            ->groupBy(
+                'users.employee_id',
+                'users.name',
+                'users.department'
+            )
+
+            ->orderByDesc('total_research')
+
+            ->get()
+
+            ->map(function ($faculty) use ($totalResearchRecords) {
+
+                return [
+
+                    'employee_id' => $faculty->employee_id,
+
+                    'faculty_name' => $faculty->name,
+
+                    'department' => $faculty->department,
+
+                    'total_research' => (int) $faculty->total_research,
+
+                    'research_percentage' => $totalResearchRecords > 0
+                        ? round(($faculty->total_research / $totalResearchRecords) * 100, 2)
+                        : 0,
+
+                ];
+
+            });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Top 10 Faculties (Optional)
+        |--------------------------------------------------------------------------
+        */
+
+        $topFaculty = $topFaculty->take(10)->values();
+        /*
+        |--------------------------------------------------------------------------
+        | Department Wise Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $departments = User::select('department_id', 'department')
+            ->whereNotNull('department_id')
+            ->distinct()
+            ->orderBy('department')
+            ->get();
+
+        $departmentSummary = $departments->map(function ($department) use ($researchQuery, $internationalQuery) {
+
+            // Employees of current department
+            $employeeIds = User::where('department_id', $department->department_id)
+                ->pluck('employee_id');
+
+            /*
+            |--------------------------------------------------------------------------
+            | Active Research Centers
+            |--------------------------------------------------------------------------
+            | Distinct faculty/researchers in this department
+            */
+
+            $activeResearchCenters = (clone $researchQuery)
+                ->whereIn(
+                    'achievement_of_research_publications_target_co_author.created_by',
+                    $employeeIds
+                )
+                ->distinct(
+                    'achievement_of_research_publications_target_co_author.created_by'
+                )
+                ->count(
+                    'achievement_of_research_publications_target_co_author.created_by'
+                );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Faculty Percentage
+            |--------------------------------------------------------------------------
+            */
+
+            $departmentFaculty = User::where('department_id', $department->department_id)
+                ->whereNotNull('faculty_id')
+                ->count();
+
+            $activeFaculty = (clone $researchQuery)
+                ->whereIn(
+                    'achievement_of_research_publications_target_co_author.created_by',
+                    $employeeIds
+                )
+                ->distinct(
+                    'achievement_of_research_publications_target_co_author.created_by'
+                )
+                ->count(
+                    'achievement_of_research_publications_target_co_author.created_by'
+                );
+
+            $facultyPercentage = $departmentFaculty > 0
+                ? round(($activeFaculty / $departmentFaculty) * 100, 2)
+                : 0;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Postgraduate Research
+            |--------------------------------------------------------------------------
+            */
+
+            $pgResearch = (clone $researchQuery)
+                ->whereIn(
+                    'achievement_of_research_publications_target_co_author.created_by',
+                    $employeeIds
+                )
+                ->where(
+                    'achievement_of_research_publications_target_co_author.career',
+                    'PG'
+                )
+                ->count();
+
+            /*
+            |--------------------------------------------------------------------------
+            | International Collaborations
+            |--------------------------------------------------------------------------
+            */
+
+            $international = (clone $internationalQuery)
+                ->whereIn(
+                    'active_international_research_partners.created_by',
+                    $employeeIds
+                )
+                ->count();
+
+            return [
+
+                'department_id' => $department->department_id,
+
+                'department_name' => $department->department,
+
+                'active_research_centers' => $activeResearchCenters,
+
+                'active_research_faculty_percentage' => $facultyPercentage,
+
+                'postgraduate_research_completion' => $pgResearch,
+
+                'international_research_collaborations' => $international,
+
+            ];
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Final Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+
+            'success' => true,
+
+            'filters' => [
+
+                'filter' => $request->filter ?? 'all_time',
+
+                'from_date' => $request->from_date,
+
+                'to_date' => $request->to_date,
+
+            ],
+
+            'data' => [
+
+                'summary_cards' => [
+
+                    'active_research_centers' => $activeResearchCenters,
+
+                    'active_research_faculty_percentage' => $activeResearchFacultyPercentage,
+
+                    'postgraduate_research_completion' => $postGraduateResearch,
+
+                    'international_research_collaborations' => $internationalResearchCollaborations,
+
+                ],
+
+                'top_faculty_by_research' => $topFaculty,
+
+                'department_summary' => $departmentSummary,
+
+            ],
 
         ]);
     }
