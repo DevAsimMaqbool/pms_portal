@@ -20,6 +20,7 @@ use App\Models\Faculty;
 use App\Models\Department;
 use App\Models\AlumniSatisfactionRate;
 use App\Models\IndustrialVisit;
+use App\Models\SatisfactionOfInternationalStudent;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -3185,6 +3186,118 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
             'data' => [
                 'summary_cards' => [
                     'active_international_research_partnerships' => (int) $activeInternationalResearchPartnerships,
+                ],
+
+                'faculty_wise_summary' => $facultySummary,
+
+                'department_wise_summary' => $departmentSummary,
+            ]
+
+        ]);
+    }
+
+    public function internationalStudentDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+
+        $baseQuery = SatisfactionOfInternationalStudent::query()
+            ->where('status', '2');
+
+        $this->applyDateFilterNew(
+            $baseQuery,
+            $request,
+            'satisfaction_of_international_students.created_at'
+        );
+
+        $internationalStudents = (clone $baseQuery)->count();
+
+        $studentRating = round(
+            (clone $baseQuery)->avg('student_rating') ?? 0,
+            2
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty Wise Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $facultySummary = SatisfactionOfInternationalStudent::query()
+            ->join('faculties', 'faculties.id', '=', 'satisfaction_of_international_students.faculty_id')
+            ->select(
+                'faculties.id as faculty_id',
+                'faculties.name as faculty_name',
+                DB::raw('COUNT(satisfaction_of_international_students.id) as international_students'),
+                DB::raw('ROUND(AVG(satisfaction_of_international_students.student_rating),2) as student_rating')
+            )
+            ->where('satisfaction_of_international_students.status', '2')
+            ->groupBy(
+                'faculties.id',
+                'faculties.name'
+            );
+
+        $this->applyDateFilterNew(
+            $facultySummary,
+            $request,
+            'satisfaction_of_international_students.created_at'
+        );
+
+        $facultySummary = $facultySummary
+            ->orderByDesc('international_students')
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Wise Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $departmentSummary = SatisfactionOfInternationalStudent::query()
+            ->join(
+                'departments',
+                'departments.id',
+                '=',
+                'satisfaction_of_international_students.department_id'
+            )
+            ->select(
+                'departments.id as department_id',
+                'departments.department_name',
+                DB::raw('COUNT(satisfaction_of_international_students.id) as international_students'),
+                DB::raw('ROUND(AVG(satisfaction_of_international_students.student_rating),2) as student_rating')
+            )
+            ->where('satisfaction_of_international_students.status', '2')
+            ->groupBy(
+                'departments.id',
+                'departments.department_name'
+            );
+
+        $this->applyDateFilterNew(
+            $departmentSummary,
+            $request,
+            'satisfaction_of_international_students.created_at'
+        );
+
+        $departmentSummary = $departmentSummary
+            ->orderByDesc('international_students')
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+            'success' => true,
+            'filter' => $request->filter ?? 'all_time',
+            'data' => [
+                'summary_cards' => [
+                    'international_students' => (int) $internationalStudents,
+                    'student_rating' => (float) $studentRating,
                 ],
 
                 'faculty_wise_summary' => $facultySummary,
