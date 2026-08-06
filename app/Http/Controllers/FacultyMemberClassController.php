@@ -305,8 +305,8 @@ class FacultyMemberClassController extends Controller
     public function classesAttendance()
     {
         try {
-            $from_date = '2025-12-21';
-            $to_date = '2025-12-27';
+            $from_date = '2025-12-27';
+            $to_date = '2026-01-27';
             $sql = "
         SELECT 
             max(ca.class_id) as class_id,
@@ -340,7 +340,7 @@ class FacultyMemberClassController extends Controller
                         // }
     
                         FacultyClassAttendance::create([
-                            'class_date' => '2025-08-18',
+                            'class_date' => '2026-01-27',
                             'class_id' => $item->class_id,
                             'faculty_id' => $item->faculty_id,
                             'program_name' => $item->program_name,
