@@ -2929,7 +2929,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
             groupColumn: 'department_id',
             joinTable: 'departments',
             joinOnColumn: 'departments.id',
-            nameColumn: 'departments.department_name',
+            nameColumn: 'departments.name',
             idKey: 'department_id',
             nameKey: 'department_name'
         );
@@ -3060,6 +3060,139 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
         $this->applyDateFilterNew($query, $request, 'commercial_gains_counsultancy_research_incomes.created_at');
 
         return $query->get()->keyBy($groupColumn);
+    }
+
+    public function activeInternationalResearchPartnershipDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+
+        $query = ActiveInternationalResearchPartner::query()
+            ->where('status', '2');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Date Filter
+        |--------------------------------------------------------------------------
+        */
+
+        $this->applyDateFilterNew(
+            $query,
+            $request,
+            'active_international_research_partners.created_at'
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Summary Card
+        |--------------------------------------------------------------------------
+        */
+
+        $activeInternationalResearchPartnerships = (clone $query)->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty Wise Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $facultySummary = ActiveInternationalResearchPartner::query()
+            ->join(
+                'users',
+                'users.employee_id',
+                '=',
+                'active_international_research_partners.created_by'
+            )
+            ->join(
+                'faculties',
+                'faculties.id',
+                '=',
+                'users.faculty_id'
+            )
+            ->select(
+                'users.faculty_id',
+                'faculties.name as faculty_name',
+                DB::raw('COUNT(active_international_research_partners.id) as active_international_research_partnerships')
+            )
+            ->where('active_international_research_partners.status', '2')
+            ->groupBy(
+                'users.faculty_id',
+                'faculties.name'
+            );
+
+        $this->applyDateFilterNew(
+            $facultySummary,
+            $request,
+            'active_international_research_partners.created_at'
+        );
+
+        $facultySummary = $facultySummary
+            ->orderByDesc('active_international_research_partnerships')
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Wise Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $departmentSummary = ActiveInternationalResearchPartner::query()
+            ->join(
+                'users',
+                'users.employee_id',
+                '=',
+                'active_international_research_partners.created_by'
+            )
+            ->join(
+                'departments',
+                'departments.id',
+                '=',
+                'users.department_id'
+            )
+            ->select(
+                'users.department_id',
+                'departments.name',
+                DB::raw('COUNT(active_international_research_partners.id) as active_international_research_partnerships')
+            )
+            ->where('active_international_research_partners.status', '2')
+            ->groupBy(
+                'users.department_id',
+                'departments.name'
+            );
+
+        $this->applyDateFilterNew(
+            $departmentSummary,
+            $request,
+            'active_international_research_partners.created_at'
+        );
+
+        $departmentSummary = $departmentSummary
+            ->orderByDesc('active_international_research_partnerships')
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+            'success' => true,
+            'filter' => $request->filter ?? 'all_time',
+            'data' => [
+                'summary_cards' => [
+                    'active_international_research_partnerships' => (int) $activeInternationalResearchPartnerships,
+                ],
+
+                'faculty_wise_summary' => $facultySummary,
+
+                'department_wise_summary' => $departmentSummary,
+            ]
+
+        ]);
     }
 
 }

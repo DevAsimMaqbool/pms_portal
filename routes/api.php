@@ -41,6 +41,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/alumni-satisfaction-dashboard', [OricApiController::class, 'alumniSatisfactionDashboard']);
         Route::get('/industry-visits-dashboard', [OricApiController::class, 'industryVisitsDashboard']);
         Route::get('/industry-collaboration-dashboard', [OricApiController::class, 'industryCollaborationDashboard']);
+        Route::get('/active-international-research-partnership-dashboard', [OricApiController::class, 'activeInternationalResearchPartnershipDashboard']);
+
     });
 
 });
