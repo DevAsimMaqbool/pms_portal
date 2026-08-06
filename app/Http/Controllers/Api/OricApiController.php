@@ -2891,4 +2891,175 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
         ]);
     }
 
+    public function industryCollaborationDashboard(Request $request)
+    {
+        $industryProjectsQuery = IndustrialProjects::query()
+            ->whereIn('status', ['1', '2', '3', '4', '5', '6']);
+
+        $consultancyProjectsQuery = CommercialGainsCounsultancyResearchIncome::query()
+            ->where('status', '2');
+
+        $this->applyDateFilterNew($industryProjectsQuery, $request, 'industrial_projects.created_at');
+        $this->applyDateFilterNew($consultancyProjectsQuery, $request, 'commercial_gains_counsultancy_research_incomes.created_at');
+
+        $industryFundedProjects = (clone $industryProjectsQuery)->count();
+        $jointResearchProjects = $industryFundedProjects; // same table currently
+        $consultancyProjects = (clone $consultancyProjectsQuery)->count();
+        $appliedResearchInitiatives = $industryFundedProjects + $jointResearchProjects + $consultancyProjects;
+
+        $distribution = [
+            ['type' => 'Industry Funded Projects', 'count' => $industryFundedProjects],
+            ['type' => 'Joint Research Projects', 'count' => $jointResearchProjects],
+            ['type' => 'Consultancy Projects', 'count' => $consultancyProjects],
+            ['type' => 'Applied Research Initiatives', 'count' => $appliedResearchInitiatives],
+        ];
+
+        $facultySummary = $this->buildGroupedCollaborationSummary(
+            $request,
+            groupColumn: 'faculty_id',
+            joinTable: 'faculties',
+            joinOnColumn: 'faculties.id',
+            nameColumn: 'faculties.name',
+            idKey: 'faculty_id',
+            nameKey: 'faculty_name'
+        );
+
+        $departmentSummary = $this->buildGroupedCollaborationSummary(
+            $request,
+            groupColumn: 'department_id',
+            joinTable: 'departments',
+            joinOnColumn: 'departments.id',
+            nameColumn: 'departments.department_name',
+            idKey: 'department_id',
+            nameKey: 'department_name'
+        );
+
+        return response()->json([
+            'success' => true,
+            'summary_cards' => [
+                'industry_funded_projects' => (int) $industryFundedProjects,
+                'joint_research_projects' => (int) $jointResearchProjects,
+                'consultancy_projects' => (int) $consultancyProjects,
+                'applied_research_initiatives' => (int) $appliedResearchInitiatives,
+            ],
+            'distribution_by_project_type' => $distribution,
+            'faculty_wise_summary' => $facultySummary,
+            'department_wise_summary' => $departmentSummary,
+        ]);
+    }
+
+    /**
+     * Build a faculty- or department-wise collaboration summary.
+     *
+     * @return \Illuminate\Support\Collection<int, array<string, mixed>>
+     */
+    private function buildGroupedCollaborationSummary(
+        Request $request,
+        string $groupColumn,
+        string $joinTable,
+        string $joinOnColumn,
+        string $nameColumn,
+        string $idKey,
+        string $nameKey
+    ): \Illuminate\Support\Collection {
+        $industryRows = $this->groupedIndustryProjects(
+            $request,
+            $groupColumn,
+            $joinTable,
+            $joinOnColumn,
+            $nameColumn
+        );
+
+        $consultancyRows = $this->groupedConsultancyProjects(
+            $request,
+            $groupColumn,
+            $joinTable,
+            $joinOnColumn,
+            $nameColumn
+        );
+
+        $ids = collect($industryRows->keys())
+            ->merge($consultancyRows->keys())
+            ->unique()
+            ->values();
+
+        $summary = $ids->map(function ($id) use ($industryRows, $consultancyRows, $idKey, $nameKey, $nameColumn) {
+            $industryRow = $industryRows->get($id);
+            $consultancyRow = $consultancyRows->get($id);
+
+            $industry = (int) (optional($industryRow)->industry_funded_projects ?? 0);
+            $joint = $industry; // currently same source
+            $consultancy = (int) (optional($consultancyRow)->consultancy_projects ?? 0);
+            $applied = $industry + $joint + $consultancy;
+
+            $nameField = last(explode('.', $nameColumn));
+
+            return [
+                $idKey => $id,
+                $nameKey => optional($industryRow)->{$nameField}
+                    ?? optional($consultancyRow)->{$nameField}
+                    ?? 'N/A',
+                'industry_funded_projects' => $industry,
+                'joint_research_projects' => $joint,
+                'consultancy_projects' => $consultancy,
+                'applied_research_initiatives' => $applied,
+                'total' => $applied,
+            ];
+        });
+
+        return $summary->sortByDesc('total')->values();
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int|string, object>
+     */
+    private function groupedIndustryProjects(
+        Request $request,
+        string $groupColumn,
+        string $joinTable,
+        string $joinOnColumn,
+        string $nameColumn
+    ): \Illuminate\Support\Collection {
+        $query = IndustrialProjects::query()
+            ->join('users', 'users.employee_id', '=', 'industrial_projects.created_by')
+            ->join($joinTable, $joinOnColumn, '=', "users.{$groupColumn}")
+            ->select(
+                "users.{$groupColumn}",
+                DB::raw("{$nameColumn} as " . last(explode('.', $nameColumn))),
+                DB::raw('COUNT(industrial_projects.id) as industry_funded_projects')
+            )
+            ->whereIn('industrial_projects.status', ['1', '2', '3', '4', '5', '6'])
+            ->groupBy("users.{$groupColumn}", $nameColumn);
+
+        $this->applyDateFilterNew($query, $request, 'industrial_projects.created_at');
+
+        return $query->get()->keyBy($groupColumn);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int|string, object>
+     */
+    private function groupedConsultancyProjects(
+        Request $request,
+        string $groupColumn,
+        string $joinTable,
+        string $joinOnColumn,
+        string $nameColumn
+    ): \Illuminate\Support\Collection {
+        $query = CommercialGainsCounsultancyResearchIncome::query()
+            ->join('users', 'users.employee_id', '=', 'commercial_gains_counsultancy_research_incomes.created_by')
+            ->join($joinTable, $joinOnColumn, '=', "users.{$groupColumn}")
+            ->select(
+                "users.{$groupColumn}",
+                DB::raw("{$nameColumn} as " . last(explode('.', $nameColumn))),
+                DB::raw('COUNT(commercial_gains_counsultancy_research_incomes.id) as consultancy_projects')
+            )
+            ->where('commercial_gains_counsultancy_research_incomes.status', '2')
+            ->groupBy("users.{$groupColumn}", $nameColumn);
+
+        $this->applyDateFilterNew($query, $request, 'commercial_gains_counsultancy_research_incomes.created_at');
+
+        return $query->get()->keyBy($groupColumn);
+    }
+
 }
