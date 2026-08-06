@@ -8175,7 +8175,8 @@ function kpaAvgScoreForReport($kpa_id, $emp_id, $member = null)
         ->pluck('score')
         ->map(fn($score) => min($score, 100))
         ->avg();
-    $avg = ($avgs / $target) * 100;
+    //$avg = ($avgs / $target) * 100;
+    $avg = $target > 0 ? ($avgs / $target) * 100 : 0;
     $avg = $avg ? round($avg, 2) : 0.00;
     // Rating logic
     if ($avg >= 90) {
