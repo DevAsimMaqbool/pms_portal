@@ -2016,6 +2016,47 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
         ]);
     }
 
+    private function applyDateFilterNew($query, Request $request, $column = 'created_at')
+    {
+        switch ($request->filter) {
+
+            case 'today':
+                $query->whereDate($column, today());
+                break;
+
+            case 'last_30_days':
+                $query->whereDate($column, '>=', now()->subDays(30));
+                break;
+
+            case 'quarter':
+                $query->whereDate($column, '>=', now()->subMonths(3));
+                break;
+
+            case 'last_six_months':
+                $query->whereDate($column, '>=', now()->subMonths(6));
+                break;
+
+            case 'last_one_year':
+                $query->whereDate($column, '>=', now()->subYear());
+                break;
+
+            case 'custom':
+                if ($request->filled('from_date') && $request->filled('to_date')) {
+                    $query->whereBetween($column, [
+                        Carbon::parse($request->from_date)->startOfDay(),
+                        Carbon::parse($request->to_date)->endOfDay(),
+                    ]);
+                }
+                break;
+
+            case 'all_time':
+            default:
+                break;
+        }
+
+        return $query;
+    }
+
     public function activeResearchDashboard(Request $request)
     {
         /*
@@ -2041,7 +2082,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
         |--------------------------------------------------------------------------
         */
 
-        $this->applyDateFilter(
+        $this->applyDateFilterNew(
             $researchQuery,
             $request,
             'achievement_of_research_publications_target_co_author.created_at'
@@ -2100,7 +2141,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
         $internationalQuery = ActiveInternationalResearchPartner::query()
             ->where('status', 2);
 
-        $this->applyDateFilter(
+        $this->applyDateFilterNew(
             $internationalQuery,
             $request,
             'created_at'
