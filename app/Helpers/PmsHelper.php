@@ -134,7 +134,8 @@ if (!function_exists('deanTopPerformers')) {
             ])
             ->whereIn('employee_id', $employeeIds)
             ->where('role_id', $roleIds)
-            ->groupBy('employee_id')
+            ->groupBy('employee_id') 
+            ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')
             ->limit(5)
             ->get();
