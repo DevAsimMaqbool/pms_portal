@@ -15,6 +15,9 @@ use App\Models\AchievementOfResearchPublicationTargetCoAuthor;
 use App\Models\SpinOff;
 use App\Models\IndustrialProjects;
 use App\Models\StudentFeedback;
+use App\Models\Employability;
+use App\Models\Faculty;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -2450,6 +2453,174 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
                 ]
 
             ]
+
+        ]);
+    }
+
+    public function employabilityDashboard(Request $request)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Base Query
+        |--------------------------------------------------------------------------
+        */
+
+        $query = Employability::query();
+
+        $this->applyDateFilterNew(
+            $query,
+            $request,
+            'employabilities.created_at'
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Employer Satisfaction Score
+        |--------------------------------------------------------------------------
+        */
+
+        $employerSatisfactionScore = round(
+            (clone $query)
+                ->whereNotNull('employer_satisfaction')
+                ->avg('employer_satisfaction'),
+            2
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Job Placements
+        |--------------------------------------------------------------------------
+        */
+
+        $totalGraduates = (clone $query)->count();
+
+        $jobPlacements = (clone $query)
+            ->whereNotNull('date_of_appointment')
+            ->count();
+
+        $jobPlacementPercentage = $totalGraduates > 0
+            ? round(($jobPlacements / $totalGraduates) * 100, 2)
+            : 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $facultySummary = Faculty::orderBy('name')
+            ->get()
+            ->map(function ($faculty) use ($query) {
+
+                $facultyQuery = (clone $query)
+                    ->where('faculty_id', $faculty->id);
+
+                $total = (clone $facultyQuery)->count();
+
+                $placements = (clone $facultyQuery)
+                    ->whereNotNull('date_of_appointment')
+                    ->count();
+
+                return [
+
+                    'faculty_id' => $faculty->id,
+
+                    'faculty_name' => $faculty->name,
+
+                    'employer_satisfaction_score' => round(
+                        (clone $facultyQuery)
+                            ->whereNotNull('employer_satisfaction')
+                            ->avg('employer_satisfaction'),
+                        2
+                    ),
+
+                    'job_placements' => $placements,
+
+                    'job_placement_percentage' => $total > 0
+                        ? round(($placements / $total) * 100, 2)
+                        : 0,
+
+                ];
+            });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $departmentSummary = Department::orderBy('name')
+            ->get()
+            ->map(function ($department) use ($query) {
+
+                $departmentQuery = (clone $query)
+                    ->where('department_id', $department->id);
+
+                $total = (clone $departmentQuery)->count();
+
+                $placements = (clone $departmentQuery)
+                    ->whereNotNull('date_of_appointment')
+                    ->count();
+
+                return [
+
+                    'department_id' => $department->id,
+
+                    'department_name' => $department->name,
+
+                    'job_placements' => $placements,
+
+                    'job_placement_percentage' => $total > 0
+                        ? round(($placements / $total) * 100, 2)
+                        : 0,
+
+                    'employer_satisfaction_score' => round(
+                        (clone $departmentQuery)
+                            ->whereNotNull('employer_satisfaction')
+                            ->avg('employer_satisfaction'),
+                        2
+                    ),
+
+                ];
+            });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+
+            'success' => true,
+
+            'filters' => [
+
+                'filter' => $request->filter ?? 'all_time',
+
+                'from_date' => $request->from_date,
+
+                'to_date' => $request->to_date,
+
+            ],
+
+            'data' => [
+
+                'summary_cards' => [
+
+                    'employer_satisfaction_score' => $employerSatisfactionScore,
+
+                    'job_placements' => $jobPlacements,
+
+                    'job_placement_percentage' => $jobPlacementPercentage,
+
+                ],
+
+                'faculty_summary' => $facultySummary,
+
+                'department_summary' => $departmentSummary,
+
+            ],
 
         ]);
     }
