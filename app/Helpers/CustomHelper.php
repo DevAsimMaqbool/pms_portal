@@ -1009,7 +1009,10 @@ if (!function_exists('calculateInternationalScore')) {
         })->count();
 
         // Fraction of international papers
-        $fraction = $totalPapers > 0 ? $internationalPapers / $totalPapers : 0;
+       // $fraction = $totalPapers > 0 ? $internationalPapers / $totalPapers : 0;
+        $fraction = $totalPapers > 0
+            ? round(($internationalPapers / $totalPapers) * 100, 2)
+            : 0;
 
         // Calculate obtained score using indicator weight
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 127);
@@ -1023,10 +1026,17 @@ if (!function_exists('calculateInternationalScore')) {
             2,
             5,
             127,
-            $obtainedScore
+            $obtainedScore,
+            $fraction
         );
 
-        return round($obtainedScore, 2); // e.g., 5.00
+        //return round($obtainedScore, 2); // e.g., 5.00
+        return [
+            'total_score' => $fraction,
+            'total_target' => $totalPapers,
+            'total_international' => $internationalPapers,
+            
+        ];
     }
 }
 
@@ -1042,6 +1052,14 @@ if (!function_exists('calculateJournalQuartile')) {
             'Q3' => 10,
             'Q4' => 5,
         ];
+           $q1Count = 0;
+            $q2Count = 0;
+            $q3Count = 0;
+            $q4Count = 0;
+             $q1_count1 = 0;
+        $q2_count1 = 0;
+        $q3_count1 = 0;
+        $q4_count1 = 0;
 
         // Get Approved Scopus Publications
         $records = AchievementOfResearchPublicationsTarget::where('indicator_id', $indicatorId)
@@ -1054,19 +1072,46 @@ if (!function_exists('calculateJournalQuartile')) {
         $obtainedScore = 0;
 
         foreach ($records as $record) {
-            if (isset($quartilePoints[$record->journal_clasification])) {
+            $quartile = strtoupper(trim($record->journal_clasification));
+            if (isset($quartilePoints[$quartile])) {
                 $obtainedScore += $quartilePoints[$record->journal_clasification];
             }
+                if ($quartile === 'Q1')
+                    $q1Count++;
+                elseif ($quartile === 'Q2')
+                    $q2Count++;
+                elseif ($quartile === 'Q3')
+                    $q3Count++;
+                elseif ($quartile === 'Q4')
+                    $q4Count++;
         }
+        $q1_count1 += $q1Count;
+        $q2_count1 += $q2Count;
+        $q3_count1 += $q3Count;
+        $q4_count1 += $q4Count;
+
+        $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 203);
+        $weight = $indicatorWeight['weightage'] ?? 0;
+        $weightedScore = ($obtainedScore * $weight) / 100;
+
+
         saveIndicatorPercentage(
             $facultyId,
             $role_id = $activeRoleId,
             2,
             5,
             203,
+            $weightedScore,
             $obtainedScore
         );
-        return $obtainedScore;
+        //return $obtainedScore;
+        return [
+            'total_score' => $obtainedScore,
+            'q1_count' => $q1_count1,
+            'q2_count' => $q2_count1,
+            'q3_count' => $q3_count1,
+            'q4_count' => $q4_count1,
+        ];
     }
 }
 

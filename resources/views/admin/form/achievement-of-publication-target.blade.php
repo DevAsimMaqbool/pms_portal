@@ -262,8 +262,9 @@
                                                         <label class="form-label">Career</label>
                                                         <select name="co_author[0][career]" class="form-select">
                                                             <option value="">Select Career</option>
-                                                            <option value="PG">PG</option>
+                                                            <option value="UG">UG</option>
                                                             <option value="MS">MS</option>
+                                                            <option value="PhD">PhD</option>
                                                         </select>
                                                     </div>
 
@@ -834,7 +835,7 @@
                     } else {
                         group.hide();
                         $(formSelector).find(inputClass).val('');
-                        $(formSelector).find(inputClass + '-1').val('').hide(); // targets .scopus-q-1
+                        //$(formSelector).find(inputClass + '-1').val('').hide(); // targets .scopus-q-1
 
                     }
                 }
@@ -939,8 +940,9 @@
                                                                                                                     <label class="form-label">Career</label>
                                                                                                                     <select name="co_author[${grantIndex}][career]" class="form-select">
                                                                                                                         <option value="">Select Career</option>
-                                                                                                                        <option value="PG">PG</option>
+                                                                                                                        <option value="UG">UG</option>
                                                                                                                         <option value="MS">MS</option>
+                                                                                                                        <option value="PhD">PhD</option> 
                                                                                                                     </select>
                                                                                                                 </div>
                                                                                                                 <div class="col-md-12 mt-2">
