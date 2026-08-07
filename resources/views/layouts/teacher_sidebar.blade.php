@@ -254,8 +254,8 @@
 
         <ul class="menu-sub">
           <li class="menu-item {{ request()->routeIs('/user_report/' . Auth::user()->id) ? 'active' : '' }}">
-            <a href="{{ url('/user_report/' . Auth::user()->id) }}" target="_blank" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Insight Report">
-              <div data-i18n="Insight Report">Insight Report</div>
+            <a href="{{ url('/user_report/' . Auth::user()->id) }}" target="_blank" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Performance Insight Report">
+              <div data-i18n="Performance Insight Report">Performance Insight Report</div>
             </a>
           </li>
           <li class="menu-item {{ request()->routeIs('/user_virtue_report/' . Auth::user()->id) ? 'active' : '' }}">

@@ -191,6 +191,9 @@
                     if ( form.faculty_class.code) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Class Cod</th><td>${ form.faculty_class.code}</td></tr>`);
                     }
+                    if ( form.document_url) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Details</th><td>${ form.document_url}</td></tr>`);
+                    }
                     if (form.completion_of_Course_folder !== undefined && form.completion_of_Course_folder !== null) {
 
                         let folderStatus = '';
