@@ -159,6 +159,12 @@ class FacultyMemberClassController extends Controller
                     'cf.faculty_staff_id as faculty_id',
                     'c.id as class_id',
                     'c.name as class_name',
+                    'c.code',
+                    'oat.id as term_id',
+                    'oat.name as term',
+                    'cr.id as career_id',
+                    'cr.name as career',
+                    'cr.code as career_code',
                 ])
                 ->first();
 
