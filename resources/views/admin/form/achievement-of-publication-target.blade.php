@@ -1377,6 +1377,10 @@
                             Swal.close();
                             Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                             form[0].reset();
+
+                             // Remove validation errors
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
                             $('#select2Success').val(null).trigger('change');
                             fetchHodTarget();
                         },

@@ -638,8 +638,9 @@
                             <label class="form-label">Career</label>
                             <select name="co_author[${i}][career]" class="form-select">
                                 <option value="">Select Career</option>
-                                <option value="PG" ${author.career === 'PG' ? 'selected' : ''}>PG</option>
+                                <option value="UG" ${author.career === 'UG' ? 'selected' : ''}>UG</option>
                                 <option value="MS" ${author.career === 'MS' ? 'selected' : ''}>MS</option>
+                                <option value="PhD" ${author.career === 'PhD' ? 'selected' : ''}>PhD</option>
                             </select>
                         </div>
                         <div class="col-md-12 mt-2">
