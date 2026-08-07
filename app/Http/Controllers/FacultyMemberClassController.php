@@ -133,43 +133,6 @@ class FacultyMemberClassController extends Controller
     public function odooClasses(Request $request)
     {
         try {
-
-            // $query = DB::connection('pgsql')
-            //     ->table('odoocms_class_faculty as cf')
-            //     ->join('odoocms_faculty_staff as fs', 'fs.id', '=', 'cf.faculty_staff_id')
-            //     ->join('odoocms_class as c', 'c.id', '=', 'cf.class_id')
-            //     ->join('odoocms_academic_term as oat', 'oat.id', '=', 'cf.term_id')
-            //     ->leftJoin('odoocms_career as cr', 'cr.id', '=', 'c.career_id')
-            //     ->where('oat.id', 52)
-            //     ->where('oat.active_for_roll', true);
-
-            // $count = (clone $query)->count();
-
-            // dd($count);
-
-            $record = DB::connection('pgsql')
-                ->table('odoocms_class_faculty as cf')
-                ->join('odoocms_faculty_staff as fs', 'fs.id', '=', 'cf.faculty_staff_id')
-                ->join('odoocms_class as c', 'c.id', '=', 'cf.class_id')
-                ->join('odoocms_academic_term as oat', 'oat.id', '=', 'cf.term_id')
-                ->leftJoin('odoocms_career as cr', 'cr.id', '=', 'c.career_id')
-                ->where('oat.id', 52)
-                ->where('oat.active_for_roll', true)
-                ->select([
-                    'cf.faculty_staff_id as faculty_id',
-                    'c.id as class_id',
-                    'c.name as class_name',
-                    'c.code',
-                    'oat.id as term_id',
-                    'oat.name as term',
-                    'cr.id as career_id',
-                    'cr.name as career',
-                    'cr.code as career_code',
-                ])
-                ->first();
-
-            dd($record);
-
             set_time_limit(300);
 
             DB::transaction(function () {
@@ -195,7 +158,7 @@ class FacultyMemberClassController extends Controller
                     // Pass the alias 'cf_id' as the 3rd parameter
                     ->chunkById(1000, function ($records) {
                         foreach ($records as $record) {
-                            FacultyMemberClass::updateOrCreate(
+                            FacultyMemberClass::firstOrCreate(
                                 [
                                     'faculty_id' => $record->faculty_id,
                                     'class_id' => $record->class_id,
