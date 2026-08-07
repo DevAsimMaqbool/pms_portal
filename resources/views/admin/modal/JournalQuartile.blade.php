@@ -41,6 +41,95 @@
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
  @endphp
+ @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+<!--  Payment Methods modal -->
+
+    <div class="modal fade" id="JournalQuartile" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Journal Quartile
+                    </h3>
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Total Q1</th>
+                                            <th>Total Q2</th>
+                                            <th>Total Q3</th>
+                                            <th>Total Q4</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            @php
+                                                $data= calculateJournalQuartile(Auth::user()->employee_id, $activeRoleId, 128);
+                                                $avg = $data['total_score'] ?? 0;
+                                                $meta = getRatingMeta($avg);
+                                            @endphp
+                                            
+                                                @if($data['total_score'] > 0)
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>{{ number_format($data['q1_count']) }}</td>
+                                                        <td>{{ number_format($data['q2_count']) }}</td>
+                                                        <td>{{ number_format($data['q3_count']) }}</td>
+                                                        <td>{{ number_format($data['q4_count']) }}</td>
+                                                        <td>
+                                                            <span class="badge" style="background-color: {{ $meta->color }}">
+                                                                {{number_format($avg) }}%
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge" style="background-color: {{ $meta->color }}">
+                                                                 {{ $meta->rating }}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                @else
+                                                    <tr>
+                                                        <td colspan="5" class="text-center">No record found</td>
+                                                    </tr>
+                                                @endif
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th colspan="4" class="text-end"></th>
+                                            <th class="fs-6">
+                                                <span class="badge" style="background-color: {{ $meta->color }}">
+                                                    {{number_format($avg, 1) }}
+                                                </span>
+                                            </th>
+                                            <th class="fs-6 text-white">
+                                                <span class="badge" style="background-color: {{ $meta->color }}">
+                                                                 {{ $meta->rating }}
+                                                            </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
+                                </table>              
+                             
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / Payment Methods modal -->
+@endif
 @if(in_array(getRoleName(activeRole()), ['HOD']))
 <!--  Payment Methods modal -->
 
