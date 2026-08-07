@@ -156,28 +156,28 @@ class FacultyMemberClassController extends Controller
                         'cr.code as career_code',
                     ])
                     // Pass the alias 'cf_id' as the 3rd parameter
-                    ->chunkById(1000, function ($records) {
+                    ->orderBy('c.id')
+                    ->chunk(1000, function ($records) {
                         foreach ($records as $record) {
-                            if (
-                                !FacultyMemberClass::where('faculty_id', $record->faculty_id)
-                                    ->where('class_id', $record->class_id)
-                                    ->where('term_id', $record->term_id)
-                                    ->exists()
-                            ) {
-                                FacultyMemberClass::create([
+
+                            FacultyMemberClass::firstOrCreate(
+                                [
                                     'faculty_id' => $record->faculty_id,
                                     'class_id' => $record->class_id,
+                                    'term_id' => $record->term_id,
+                                ],
+                                [
                                     'class_name' => $record->class_name,
                                     'code' => $record->code,
-                                    'term_id' => $record->term_id,
                                     'term' => $record->term,
                                     'career_id' => $record->career_id,
                                     'career' => $record->career,
                                     'career_code' => $record->career_code,
-                                ]);
-                            }
+                                ]
+                            );
+
                         }
-                    }, 'class_id'); // Match the alias used in select
+                    }); // Match the alias used in select
             });
 
             return apiResponse("Classes imported successfully", [], true);
