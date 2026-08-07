@@ -2689,7 +2689,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
         |--------------------------------------------------------------------------
         */
 
-        $departments = Department::orderBy('department_name')->get();
+        $departments = Department::orderBy('name')->get();
 
         $departmentSummary = $departments->map(function ($department) use ($query) {
 
@@ -2700,7 +2700,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
 
             return [
 
-                'department_name' => $department->department_name,
+                'department_name' => $department->name,
 
                 'alumni_satisfaction_score' => $avg
                     ? round(($avg / 100) * 5, 2)
