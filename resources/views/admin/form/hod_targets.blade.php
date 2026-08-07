@@ -196,6 +196,11 @@
                             });
                             form[0].reset();
 
+                                // Remove validation errors
+                                form.find('.invalid-feedback').remove();
+                                form.find('.is-invalid').removeClass('is-invalid');
+
+
                             // Reset Select2 dropdowns
                             $('#indicator_id').val(null).trigger('change');
                             $('#select2Success').val(null).trigger('change');

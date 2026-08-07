@@ -564,7 +564,7 @@
                         <h5 class="card-title">Sitara-e-Qiyadat</h5>
                         <p class="card-text">Chairman’s Leadership Excellence Award</p>
                         <a href="javascript:void(0)" class="btn btn-dark waves-effect waves-light" data-bs-toggle="modal"
-                            data-bs-target="#SitaraeQiyadat">Explore</a>
+                            data-bs-target="#SitaraeQiyadate">Explore</a>
                     </div>
                 </div>
             </div>
@@ -642,7 +642,7 @@
 
 
             <!--model -->
-            <div class="modal fade" id="SitaraeQiyadat" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="SitaraeQiyadate" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
