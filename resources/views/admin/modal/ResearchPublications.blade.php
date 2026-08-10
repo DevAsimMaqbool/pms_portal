@@ -71,24 +71,17 @@
                                         <thead class="table-primary">
                                             <tr>
                                                 <th>Sr#</th>
-                                                <th>Category</th>
-                                                <th>Clasification</th>
-                                                <th>Target</th>
-                                                <th>Achieved</th>
+                                                <th>Total Targets</th>
+                                                <th>Total Achieved</th>
                                                 <th>Score</th>
                                                 <th>Rating</th>
                                             </tr>
                                         </thead>
-                                        @php
-                                            // Initialize totalFeedback to 0 in case nothing is set later
-                                            $sumPercentage = 0;
-                                        @endphp
+                                       
                                         <tbody>
                                             @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                                 @php
-                                                    $facultyData = ScopusPublications(Auth::user()->employee_id, $activeRoleId, 128);
-                                                    $sr = 1;
-                                                    $sumPercentage = collect($facultyData)->sum('percentage');
+                                                    $scopusData = ScopusPublicationsNew(Auth::user()->employee_id, $activeRoleId, 128);
                                                     if (!function_exists('ratingFunction')) {
                                                         function ratingFunction($average)
                                                         {
@@ -103,45 +96,27 @@
                                                             return ['BE', 'danger'];
                                                         }
                                                     }
+                                                    [$rating, $color] = ratingFunction($scopusData['avgPercentage']);
                                                 @endphp
-                                                @foreach ($facultyData as $row)
-                                                    @php
-                                                        [$rating, $color] = ratingFunction($row['percentage']);
-                                                    @endphp
                                                     <tr>
-                                                        <td>{{ $sr++ }}</td>
-                                                        <td>{{ $row['target_category'] }}</td>
-                                                        <td>{{ $row['journal_clasification'] }}</td>
-                                                        <td>{{ $row['value'] }}</td>
-                                                        <td>{{ $row['count'] }}</td>
+                                                        <td>1</td>
+                                                        <td>{{ $scopusData['totalTarget'] ?? 0 }}</td>
+                                                        <td>{{ $scopusData['totalSubmitted'] ?? 0 }}</td>
                                                         <td>
                                                             <div class="badge bg-label-{{ $color }}">
-                                                                {{ number_format($row['percentage'], 1) }}%
+                                                                {{ $scopusData['avgPercentage']?? 0 }}%
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="badge bg-label-{{ $color }}">
-
                                                                 {{ $rating }}
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                @endforeach
                                             @endif
 
                                         </tbody>
-                                        <tfoot>
-                                            <tr class="table-primary">
-                                                <th class="">Total</th>
-                                                <th colspan="4" class="text-end"></th>
-                                                <th>
-                                                    <b>
-                                                        {{ number_format($sumPercentage, 1) }}
-                                                    </b>
-                                                </th>
-                                                <th class="text-end text-white"></th>
-                                            </tr>
-                                        </tfoot>
+                                        
                                     </table>
                                 </div>
                             </div>
@@ -179,7 +154,6 @@
                                             <th>Sr#</th>
                                             <th>Total Target</th>
                                             <th>Total Achieved</th>
-                                            <th>Total International</th>
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
@@ -195,7 +169,6 @@
                                                 <td>1</td>
                                                 <td>{{ number_format($data['total_target']) }}</td>
                                                 <td>{{ number_format($data['total_submit']) }}</td>
-                                                <td>{{ number_format($data['total_international']) }}</td>
                                                 <td>
                                                     <span class="badge" style="background-color: {{ $meta->color }}">
                                                         {{number_format($avg) }}%
@@ -216,7 +189,7 @@
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
-                                            <th colspan="3" class="text-end"></th>
+                                            <th colspan="2" class="text-end"></th>
                                             <th class="fs-6">
                                                 <span class="badge" style="background-color: {{ $meta->color }}">
                                                     {{number_format($avg) }}
