@@ -5,6 +5,7 @@ use App\Models\IndicatorsPercentage;
 use App\Models\Department;
 use App\Models\FacultyTarget;
 use App\Models\Role;
+use App\Models\Term;
 use Illuminate\Support\Facades\DB;
 
 if (!function_exists('hodTopPerformers')) {
@@ -764,6 +765,12 @@ function getPublicationMetrics($doi)
             'error' => true,
             'message' => $e->getMessage()
         ];
+    }
+}
+if (!function_exists('SelectCurrentTerm')) {
+    function SelectCurrentTerm()
+    {
+        return Term::where('status', '1')->get();
     }
 }
 

@@ -119,13 +119,7 @@
                                                                     <select name="batch" class="select2 form-select faculty-member"
                                                                         required>
                                                                         <option value="">-- Select Batch --</option>
-                                                                        <?php
-                        $currentYear = date('Y');
-                        for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
-                            echo "<option value='Spring $year'>Spring $year</option>";
-                            echo "<option value='Fall $year'>Fall $year</option>";
-                        }
-                                                                                                        ?>
+                                                                        @foreach(SelectCurrentTerm() as $term) <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }} </option> @endforeach
 
                                                                     </select>
                                                                 </div>
@@ -323,6 +317,9 @@
                             <small class="text-muted d-block mt-2">
                                 Allowed: xlsx, xls, csv
                             </small>
+                            <div class="text-muted d-block mt-2">
+                                @foreach(SelectCurrentTerm() as $term) <small > Batch ID:{{ $term->id }}  ->Batch Term: {{ $term->term }} ->Batch Year: {{ $term->start_year }} </small><br> @endforeach
+                            </div>
                         </div>
 
                         <div class="modal-footer">

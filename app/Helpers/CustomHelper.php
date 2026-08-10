@@ -3649,14 +3649,15 @@ function EmployabilityOfHOD()
     $currentYear = Carbon::now()->year;
     $previousYear = Carbon::now()->year - 1;
     // ✅ Campaigns for current year
-    $campaigns = [
-        "Spring $currentYear",
-        "Fall $previousYear"
-    ];
+    // $campaigns = [
+    //     "Spring $currentYear",
+    //     "Fall $previousYear"
+    // ];
+    $activeTermIds = Term::where('status', '1')->pluck('id');
 
     $records = Employability::with(['faculty', 'department', 'program'])
         ->where('department_id', $departmentId)
-        ->whereIn('batch', $campaigns)
+        ->whereIn('batch', $activeTermIds)
         ->get();
 
     if ($records->count() == 0) {
@@ -6312,9 +6313,11 @@ if (!function_exists('departmentEmployerSatisfactionOfHOD')) {
     {
         $departmentId = auth()->user()->department_id;
 
+        $activeTermIds = Term::where('status', '1')->pluck('id');
         // 1️⃣ Get ALL records
         $records = Employability::with(['faculty', 'department', 'program'])
             ->where('department_id', $departmentId)
+            ->whereIn('batch', $activeTermIds)
             ->whereNotNull('employer_satisfaction')
             ->get();
 
@@ -7207,11 +7210,12 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
         "Spring $currentYear",
         "Fall $previousYear"
     ];
+    $activeTermIds = Term::where('status', '1')->pluck('id');
     $programIds = Program::where('leader_id', $employeeId)->pluck('id');
 
     $records = Employability::with(['program'])
         ->whereIn('program_id', $programIds)
-        ->whereIn('batch', $campaigns)
+        ->whereIn('batch', $activeTermIds)
         ->where('program_level', $ProgramLevel)
         ->get();
 
@@ -7480,11 +7484,13 @@ function EmployabilityOfPLBKK($employeeId, $ProgramLevel)
         "Spring $currentYear",
         "Fall $previousYear"
     ];
+
+    $activeTermIds = Term::where('status', '1')->pluck('id');
     $programIds = Program::where('leader_id', $employeeId)->pluck('id');
 
     $records = Employability::with(['program'])
         ->whereIn('program_id', $programIds)
-        ->whereIn('batch', $campaigns)
+        ->whereIn('batch', $activeTermIds)
         ->where('program_level', $ProgramLevel)
         ->get();
 

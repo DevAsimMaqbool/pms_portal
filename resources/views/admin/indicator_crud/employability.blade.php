@@ -172,13 +172,7 @@
                                         <label for="batch" class="form-label">Batch</label>
                                         <select name="batch" id="batch" class="select2 form-select faculty-member" required>
                                             <option value="">-- Select Batch --</option>
-                                            <?php
-            $currentYear = date('Y');
-            for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
-                echo "<option value='Spring $year'>Spring $year</option>";
-                echo "<option value='Fall $year'>Fall $year</option>";
-            }
-                                                                                                        ?>
+                                            @foreach(SelectCurrentTerm() as $term) <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }} </option> @endforeach
 
                                         </select>
                                     </div>
