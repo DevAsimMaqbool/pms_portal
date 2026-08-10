@@ -204,9 +204,12 @@
                                 : 'N/A';
 
                             // Make attached evidence viewable/downloadable
+                           
                             const evidenceLink = form.attach_evidence
-                                ? `<a href="/storage/${form.attach_evidence}" target="_blank" class="text-success">View/Download</a>`
-                                : 'N/A';
+                                ? `<a href="{{ asset('') }}/${form.attach_evidence}" target="_blank" class="text-success">
+                                        View/Download
+                                </a>`
+                                : 'N/A';    
 
                           
                              let statusText = 'N/A';

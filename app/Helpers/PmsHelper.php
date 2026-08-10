@@ -654,6 +654,7 @@ if (!function_exists('ResearchInnovationAndCommercialization')) {
         // dd($record);    
         $sumScore = $record->sum('score');
         $avgScore = ($count_hod_ids > 0) ? round(($sumScore / $count_hod_ids), 2) : 0;
+        $avgScore = min($avgScore, 100); 
 
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId);
         $weight = $indicatorWeight['weightage'] ?? 0;
