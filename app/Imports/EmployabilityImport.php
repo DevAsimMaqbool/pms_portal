@@ -36,7 +36,7 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
                 'faculty_id' => 'required|integer',
                 'department_id' => 'required|integer',
                 'program_id' => 'required|integer',
-                'batch' => 'required|string',
+                'batch' => 'required',
                 'passing_year' => 'required',
                 'date_of_appointment' => 'required',
                 'proof_salary_and_appointment'=> 'required',
