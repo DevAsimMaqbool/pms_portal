@@ -292,48 +292,24 @@
                                             <div class="mb-6">
                                                 <label class="form-label" for="ecommerce-product-discount-price">Scopus</label>
                                                 <div class="input-group mb-4">
-                                                    <span class="input-group-text">Q1</span>
+                                                    <span class="input-group-text">Scopus</span>
                                                     <input type="number" class="form-control scopus-q1 form-disabled"
                                                         name="scopus_q1" readonly>
-                                                </div>
-                                                <div class="input-group mb-4">
-                                                    <span class="input-group-text">Q2</span>
-                                                    <input type="number" class="form-control scopus-q2 form-disabled"
-                                                        name="scopus_q2" readonly>
-                                                </div>
-                                                <div class="input-group mb-4">
-                                                    <span class="input-group-text">Q3</span>
-                                                    <input type="number" class="form-control scopus-q3 form-disabled"
-                                                        name="scopus_q3" readonly>
-                                                </div>
-                                                <div class="input-group">
-                                                    <span class="input-group-text">Q4</span>
-                                                    <input type="number" class="form-control scopus-q4 form-disabled"
-                                                        name="scopus_q4" readonly>
                                                 </div>
                                             </div>
                                             <div class="mb-6">
                                                 <label class="form-label" for="ecommerce-product-discount-price">HEC</label>
                                                 <div class="input-group mb-4">
-                                                    <span class="input-group-text">W</span>
+                                                    <span class="input-group-text">HEC</span>
                                                     <input type="number" class="form-control hec-w form-disabled" name="hec_w"
                                                         readonly>
                                                 </div>
-                                                <div class="input-group mb-4">
-                                                    <span class="input-group-text">X</span>
-                                                    <input type="number" class="form-control hec-x form-disabled" name="hec_x"
-                                                        readonly>
-                                                </div>
-                                                <div class="input-group">
-                                                    <span class="input-group-text">Y</span>
-                                                    <input type="number" class="form-control hec-y form-disabled" name="hec_y"
-                                                        readonly>
-                                                </div>
+                                               
                                             </div>
                                             <div class="mb-6">
                                                 <label class="form-label"> Medical</label>
                                                 <div class="input-group">
-                                                    <span class="input-group-text">Recognized</span>
+                                                    <span class="input-group-text">Medical</span>
                                                     <input type="number" class="form-control medical-recognized form-disabled"
                                                         name="medical_recognized" readonly>
                                                 </div>
@@ -396,13 +372,13 @@
 
                             </div>
                             <div class="row g-6 mt-0">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <small class="fw-medium d-block pt-4 mb-4">Scopus</small>
                                     <div class="input-group mb-4">
-                                        <span class="input-group-text">Q1</span>
-                                        <input type="number" class="form-control" name="scopus_q1" id="scopus-q1">
+                                        <span class="input-group-text">Scopus</span>
+                                        <input type="number" min="0" class="form-control" name="scopus_q1" id="scopus-q1">
                                     </div>
-                                    <div class="input-group mb-4">
+                                    {{-- <div class="input-group mb-4">
                                         <span class="input-group-text">Q2</span>
                                         <input type="number" class="form-control" name="scopus_q2" id="scopus-q2">
                                     </div>
@@ -413,44 +389,45 @@
                                     <div class="input-group">
                                         <span class="input-group-text">Q4</span>
                                         <input type="number" class="form-control" name="scopus_q4" id="scopus-q4">
-                                    </div>
+                                    </div> --}}
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <small class="fw-medium d-block pt-4 mb-4">HEC</small>
                                     <div class="input-group mb-4">
-                                        <span class="input-group-text">W</span>
-                                        <input type="number" class="form-control" name="hec_w" id="hec-w">
+                                        <span class="input-group-text">HEC</span>
+                                        <input type="number" min="0" class="form-control" name="hec_w" id="hec-w">
                                     </div>
-                                    <div class="input-group mb-4">
+                                    {{-- <div class="input-group mb-4">
                                         <span class="input-group-text">X</span>
                                         <input type="number" class="form-control" name="hec_x" id="hec-x">
                                     </div>
                                     <div class="input-group">
                                         <span class="input-group-text">Y</span>
                                         <input type="number" class="form-control" name="hec_y" id="hec-y">
-                                    </div>
+                                    </div> --}}
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <small class="fw-medium d-block pt-4 mb-4">Medical</small>
                                     <div class="input-group">
-                                        <span class="input-group-text">Recognized</span>
-                                        <input type="number" class="form-control" name="medical_recognized"
+                                        <span class="input-group-text">Medical</span>
+                                        <input type="number" min="0" class="form-control" name="medical_recognized"
                                             id="medical-recognized">
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-3">
+                                   <small class="fw-medium d-block pt-4 mb-4">Total</small>
                                     <button type="button" class="btn btn-outline-secondary waves-effect w-100 total-target">Tota
                                         0</button>
                                     <input type="text" name="target" class="" style="display:none">
                                 </div>
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-6">
                                     <label for="national" class="form-label">National</label>
                                     <input type="number" id="national" class="form-control" name="national">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="international" class="form-label">Inter National</label>
                                     <input type="number" id="international" class="form-control" name="international">
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="col-4 demo-vertical-spacing">
                                 <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
@@ -458,7 +435,7 @@
                         </form>
                         <hr>
                         <div class="">
-                            <div class="table-responsive text-nowrap">
+                            <div class="table-responsive">
                                 <table id="geTtargetTable" class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -467,16 +444,9 @@
                                             <th>Indicator</th>
                                             <th>Target</th>
                                             <th>Description</th>
-                                            <th>Q1</th>
-                                            <th>Q2</th>
-                                            <th>Q3</th>
-                                            <th>Q4</th>
-                                            <th>W</th>
-                                            <th>X</th>
-                                            <th>Y</th>
-                                            <th>Medical Recognized</th>
-                                            <th>National</th>
-                                            <th>International</th>
+                                            <th>Scopus</th>
+                                            <th>HEC</th>
+                                            <th>Medical</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -1179,23 +1149,16 @@
                                 form.target || 'N/A',
                                 form.description || 'N/A',
                                 form.scopus_q1 || 'N/A',
-                                form.scopus_q2 || 'N/A',
-                                form.scopus_q3 || 'N/A',
-                                form.scopus_q4 || 'N/A',
                                 form.hec_w || 'N/A',
-                                form.hec_x || 'N/A',
-                                form.hec_y || 'N/A',
                                 form.medical_recognized || 'N/A',
-                                form.national || 'N/A',
-                                form.international || 'N/A'
                             ];
                         });
 
                         if (!$.fn.DataTable.isDataTable('#geTtargetTable')) {
                             $('#geTtargetTable').DataTable({
                                 data: rowData,
-                                scrollX: true,
-                                scrollCollapse: true,
+                                scrollX: false,
+                                scrollCollapse: false,
                                 autoWidth: false,
                                 columns: [
                                     { title: "#" },
@@ -1203,16 +1166,9 @@
                                     { title: "Indicator" },
                                     { title: "Target" },
                                     { title: "Description" },
-                                    { title: "Q1" },
-                                    { title: "Q2" },
-                                    { title: "Q3" },
-                                    { title: "Q4" },
-                                    { title: "W" },
-                                    { title: "X" },
-                                    { title: "Y" },
-                                    { title: "Medical Recognized" },
-                                    { title: "National" },
-                                    { title: "International" }
+                                    { title: "Scopus" },
+                                    { title: "HEC" },
+                                    { title: "Medical" },
 
                                 ]
                             });
