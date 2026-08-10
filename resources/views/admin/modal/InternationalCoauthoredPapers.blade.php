@@ -65,6 +65,7 @@
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Total Target</th>
+                                            <th>Total Achieved</th>
                                             <th>Total International</th>
                                             <th>Score</th>
                                             <th>Rating</th>
@@ -80,6 +81,7 @@
                                                     <tr>
                                                         <td>1</td>
                                                         <td>{{ number_format($data['total_target']) }}</td>
+                                                        <td>{{ number_format($data['total_acheived']) }}</td>
                                                         <td>{{ number_format($data['total_international']) }}</td>
                                                         <td>
                                                             <span class="badge" style="background-color: {{ $meta->color }}">
@@ -101,7 +103,7 @@
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="">Total</th>
-                                            <th colspan="2" class="text-end"></th>
+                                            <th colspan="3" class="text-end"></th>
                                             <th class="fs-6">
                                                 <span class="badge" style="background-color: {{ $meta->color }}">
                                                     {{number_format($avg, 1) }}

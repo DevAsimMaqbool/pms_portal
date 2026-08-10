@@ -48,7 +48,7 @@
                     </div>
                     <div class="col-md-2">
                         <label class="form-label" for="target">Target</label>
-                        <input type="number" id="target" name="target" class="form-control" placeholder="1">
+                        <input type="number" id="target" min="0" name="target" class="form-control" placeholder="1">
                         <div class="invalid-feedback" id="targetError"></div>
                     </div>
                     <div class="col-md-6">
