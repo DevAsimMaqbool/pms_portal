@@ -893,7 +893,7 @@ if (!function_exists('ScopusPublications')) {
         $avgPercentage = ($totalTarget > 0)
             ? round(($totalSubmitted / $totalTarget) * 100, 2)
             : 0;
-         $avgPercentage = min($avgPercentage, 100); 
+        $avgPercentage = min($avgPercentage, 100);
         $weights = [
             'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'],
         ];
@@ -1087,7 +1087,7 @@ if (!function_exists('ScopusPublicationsBKKKK')) {
         $avgPercentage = ($totalTarget > 0)
             ? round(($totalSubmitted / $totalTarget) * 100, 2)
             : 0;
-        $avgPercentage = min($avgPercentage, 100);     
+        $avgPercentage = min($avgPercentage, 100);
 
         $weights = [
             'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'],
@@ -1226,7 +1226,7 @@ if (!function_exists('calculateJournalQuartile')) {
         $q2_count1 += $q2Count;
         $q3_count1 += $q3Count;
         $q4_count1 += $q4Count;
-        $obtainedScore = min($obtainedScore, 100); 
+        $obtainedScore = min($obtainedScore, 100);
 
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 203);
         $weight = $indicatorWeight['weightage'] ?? 0;
@@ -1488,7 +1488,7 @@ function PatentsIntellectualProperty($facultyId, $activeRoleId, $indicator_id)
 
     // ✅ Calculate overall average percentage
     $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
-    $avgPercentage = min($avgPercentage, 100); 
+    $avgPercentage = min($avgPercentage, 100);
     $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', $indicator_id);
     $weight = $indicatorWeight['weightage'] ?? 0;
     $weightedScore = ($avgPercentage * $weight) / 100;
@@ -1641,7 +1641,7 @@ function MultidisciplinaryProjects($facultyId, $activeRoleId, $indicatorId)
     } else {
         $avgPercentage = 0;
     }
-    $avgPercentage = min($avgPercentage, 100); 
+    $avgPercentage = min($avgPercentage, 100);
 
     // -------------------------
     // SAVE GLOBALLY
@@ -1729,7 +1729,7 @@ function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id)
     ];
     $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
     // ✅ Save Only One Average Score
-    saveIndicatorPercentage(  
+    saveIndicatorPercentage(
         $facultyId,
         $activeRoleId,
         2,  // KPA ID
@@ -1795,7 +1795,7 @@ function IndustrialVisits($facultyId, $activeRoleId, $indicator_id)
 
     // ✅ Calculate overall average percentage
     $avgPercentage = count($percentages) ? round(array_sum($percentages) / count($percentages), 2) : 0;
-    $avgPercentage = min($avgPercentage, 100); 
+    $avgPercentage = min($avgPercentage, 100);
     $weights = [
         'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicator_id)['weightage'],
     ];
@@ -2886,7 +2886,7 @@ function kpaAvgScore($kpaId, $employeeId)
     // Calculate average
     //$avg = $cappedScores->avg();
     $avg = $cappedScores->sum();
-     $avg = min($avg, 100);
+    $avg = min($avg, 100);
     $weightage = getRoleWeightage($userRoleId, 'kpa', $kpaId)['weightage'];
     $weightedScore = ($avg * $weightage) / 100;
 
@@ -2927,7 +2927,6 @@ function indicatorAvgScore($indicator_id, $emp_id)
         ->first();
 
     $avg = $record ? round($record->score, 2) : 0.00;
-
     //$avg = $avg ? round($avg, 2) : 0.00;
 
     if ($avg >= 90) {
@@ -2949,8 +2948,6 @@ function indicatorAvgScore($indicator_id, $emp_id)
 
     return [
         'avg' => $avg,
-        'rating' => $rating,
-        'color' => $color,
     ];
 }
 
@@ -3903,7 +3900,7 @@ function NumberOfKnowledgeProduct($facultyId, $activeRoleId)
     // 3️⃣ Calculate score (percentage)
     $score = $target > 0 ? ($totalAchieved / $target) * 100 : 0;
     $score = round($score, 2);
-     $score = min($score, 100);
+    $score = min($score, 100);
 
     // 4️⃣ Determine rating based on score
     if ($score >= 90) {
@@ -5241,7 +5238,7 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
         $departmentAvgPercentage = $totalTarget > 0
             ? round(($totalSubmitted / $totalTarget) * 100, 2)
             : 0;
-        $departmentAvgPercentage = min($departmentAvgPercentage, 100);    
+        $departmentAvgPercentage = min($departmentAvgPercentage, 100);
         $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
         $weightedScore = ($departmentAvgPercentage * $weight) / 100;
 

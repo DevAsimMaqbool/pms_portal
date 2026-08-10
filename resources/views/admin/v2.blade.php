@@ -40,7 +40,6 @@
       color: var(--bs-orange) !important;
     }
 
-
     .card-border-shadow-orange {
       --bs-card-border-bottom-color: #FFF200 !important
     }
@@ -60,7 +59,6 @@
         height: 460px;
       }
     }
-
 
     /* Wrapper provides positioning and responsive height */
     .flip-card {
@@ -142,40 +140,38 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-                                                                                                                                                                                                                                                                                                                                                          .flip-card-inner {
-                                                                                                                                                                                                                                                                                                                                                            transition: none;
-                                                                                                                                                                                                                                                                                                                                                          }
-                                                                                                                                                                                                                                                                                                                                                          .flip-card-front,
-                                                                                                                                                                                                                                                                                                                                                          .flip-card-back {
-                                                                                                                                                                                                                                                                                                                                                            position: relative;
-                                                                                                                                                                                                                                                                                                                                                            transform: none;
-                                                                                                                                                                                                                                                                                                                                                            backface-visibility: visible;
-                                                                                                                                                                                                                                                                                                                                                          }
-                                                                                                                                                                                                                                                                                                                                                          .flip-card-back { display: none; } /* or display block on click via JS if needed */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    .flip-card-inner {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      transition: none;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    .flip-card-front,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    .flip-card-back {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      position: relative;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      transform: none;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      backface-visibility: visible;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    .flip-card-back { display: none; } /* or display block on click via JS if needed */
       */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                                                                          background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                                                                          background-image:
-                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background-image:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                                                                                                                                                                                                                                                                        background-image:
-                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  background-image:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                                                                                                                                                                                                                                                                          background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                                                                                                                                                                                                                                                                          */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
         radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
-
-
 
       background-size: 200% 200%;
       /* make it larger to allow smooth movement */
@@ -282,7 +278,6 @@
       line-height: 1.2;
       font-size: 0.8667em;
     }
-
 
     /* 1. Eye Rolling Animation */
 
@@ -407,7 +402,6 @@
     <!-- Accordion1 -->
     <div class="row gy-6">
 
-
       <!-- Sales Overview -->
       <div class="col-lg-3 col-md-12 d-flex flex-column">
         <div class="row flex-fill">
@@ -464,13 +458,13 @@
 
       <!-- Website Analytics -->
       @php
-$activeRoleId = getRoleIdByName(activeRole());
-$result = getRoleAssignments(activeRole());
-$countResult = count($result);
-$icon1 = ['tabler-book', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
-$static_color = ['primary', 'success', 'warning', 'orange', 'danger'];
-$index2 = 0;
-$totalWeightSS = 0;
+        $activeRoleId = getRoleIdByName(activeRole());
+        $result = getRoleAssignments(activeRole());
+        $countResult = count($result);
+        $icon1 = ['tabler-book', 'tabler-bulb', 'tabler-network', 'tabler-shield-check', 'tabler-star'];
+        $static_color = ['primary', 'success', 'warning', 'orange', 'danger'];
+        $index2 = 0;
+        $totalWeightSS = 0;
       @endphp
       @if($countResult > 3)
         <!-- count >3 -->
@@ -481,22 +475,22 @@ $totalWeightSS = 0;
 
                 @foreach($result as $kpakey => $kpa)
                   @php
-    $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
-    $iconClass = $icon1[$index2 % count($icon1)];
-    $iconClasscolor = $static_color[$index2 % count($static_color)];
-    $index2++;
+                    $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+                    $iconClass = $icon1[$index2 % count($icon1)];
+                    $iconClasscolor = $static_color[$index2 % count($static_color)];
+                    $index2++;
 
-    // Get dynamic average, rating, and color
-    $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
-    $weight = $kpaResult['weight'];
-    $avg = $kpaResult['avg'];
-    $weight_ss = $kpaResult['weighted_score'];
-    $totalWeightSS += $weight_ss;
-    $rating = $kpaResult['rating'];
-    $color = $kpaResult['color']; // this will be used for bg and bg-label
+                    // Get dynamic average, rating, and color
+                    $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
+                    $weight = $kpaResult['weight'];
+                    $avg = $kpaResult['avg'];
+                    $weight_ss = $kpaResult['weighted_score'];
+                    $totalWeightSS += $weight_ss;
+                    $rating = $kpaResult['rating'];
+                    $color = $kpaResult['color']; // this will be used for bg and bg-label
 
-    $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
-    $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
+                    $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
+                    $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
 
                   @endphp
                   <div class="swiper-slide" id="{{ $targetId }}">
@@ -519,7 +513,6 @@ $totalWeightSS = 0;
                                 <p class="mb-0 fw-bold h5 text-white">{{ $kpa['performance_area'] }}</p>
                               </div>
 
-
                               <div class="mt-2 d-flex flex-column align-items-end small position-absolute bottom-0 end-0 p-2">
                                 <div class="mb-1">
                                   <span class="fw-semibold">Score </span> <span
@@ -539,8 +532,6 @@ $totalWeightSS = 0;
                                 </div>
                               </div>
                               <!-- /matrics-->
-
-
 
                             </div>
 
@@ -578,22 +569,22 @@ $totalWeightSS = 0;
       @else
         @foreach($result as $kpakey => $kpa)
           @php
-    $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
-    $iconClass = $icon1[$index2 % count($icon1)];
-    $iconClasscolor = $static_color[$index2 % count($static_color)];
-    $index2++;
+            $targetId = strtolower(str_replace(' ', '-', $kpa['performance_area']));
+            $iconClass = $icon1[$index2 % count($icon1)];
+            $iconClasscolor = $static_color[$index2 % count($static_color)];
+            $index2++;
 
-    // Get dynamic average, rating, and color
-    $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
-    $weight = $kpaResult['weight'];
-    $avg = $kpaResult['avg'];
-    $weight_ss = $kpaResult['weighted_score'];
-    $totalWeightSS += $weight_ss;
-    $rating = $kpaResult['rating'];
-    $color = $kpaResult['color']; // this will be used for bg and bg-label
+            // Get dynamic average, rating, and color
+            $kpaResult = kpaAvgScore($kpa['id'], Auth::user()->employee_id);
+            $weight = $kpaResult['weight'];
+            $avg = $kpaResult['avg'];
+            $weight_ss = $kpaResult['weighted_score'];
+            $totalWeightSS += $weight_ss;
+            $rating = $kpaResult['rating'];
+            $color = $kpaResult['color']; // this will be used for bg and bg-label
 
-    $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
-    $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
+            $schroll_sgetRatingByPercentage = getRatingByPercentage($avg);
+            $schroll_rating_description = $schroll_sgetRatingByPercentage['description'];
 
           @endphp
 
@@ -634,7 +625,6 @@ $totalWeightSS = 0;
                         </div>
                       </div>
 
-
                     </div>
                   </div>
 
@@ -670,40 +660,40 @@ $totalWeightSS = 0;
         <!--/ Statistics -->
         <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
           @php
-$averageFeedback = getStudentFeedbackForTeacher(Auth::user()->faculty_id);
-$average = is_numeric($averageFeedback) ? $averageFeedback : 0;
-// Get rating description
-$getRatingByPercentage = getRatingByPercentage($average);
-$rating_description = $getRatingByPercentage['description'];
+            $averageFeedback = getStudentFeedbackForTeacher(Auth::user()->faculty_id);
+            $average = is_numeric($averageFeedback) ? $averageFeedback : 0;
+            // Get rating description
+            $getRatingByPercentage = getRatingByPercentage($average);
+            $rating_description = $getRatingByPercentage['description'];
 
-// Determine rating and color
-function ratingMeta($average)
-{
-  if ($average >= 90)
-    return ['OS', 'primary'];
-  if ($average >= 80)
-    return ['EE', 'success'];
-  if ($average >= 70)
-    return ['ME', 'warning'];
-  if ($average >= 60)
-    return ['NI', 'orange'];
-  return ['BE', 'danger'];
-}
-$indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 182);
+            // Determine rating and color
+            function ratingMeta($average)
+            {
+              if ($average >= 90)
+                return ['OS', 'primary'];
+              if ($average >= 80)
+                return ['EE', 'success'];
+              if ($average >= 70)
+                return ['ME', 'warning'];
+              if ($average >= 60)
+                return ['NI', 'orange'];
+              return ['BE', 'danger'];
+            }
+            $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 182);
 
-$weight = $indicatorWeight['weightage'];
-$weight_ss = ($average * $weight) / 100;
-[$rating, $color] = ratingMeta($weight_ss);
+            $weight = $indicatorWeight['weightage'];
+            $weightage = ($average * $weight) / 100;
+            $weight_ss = ($weightage / $weight) * 100;
+            [$rating, $color] = ratingMeta($weight_ss);
 
-
-saveIndicatorPercentage90Plus(
-  Auth::user()->employee_id,
-  $activeRoleId,
-  $keyPerformanceAreaId = 1,
-  $indicatorCategoryId = 23,
-  $indicator_id = 182,
-  $weight_ss
-);
+            saveIndicatorPercentage90Plus(
+              Auth::user()->employee_id,
+              $activeRoleId,
+              $keyPerformanceAreaId = 1,
+              $indicatorCategoryId = 23,
+              $indicator_id = 182,
+              $weight_ss
+            );
           @endphp
 
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
@@ -728,14 +718,18 @@ saveIndicatorPercentage90Plus(
           </div>
 
           @php
-// Get dynamic average, rating, and color
-$kpaResult = indicatorAvgScore(117, Auth::user()->employee_id);
-//$avg = $kpaResult['avg'] ?? 0;
-$avg = min($kpaResult['avg'] ?? 0, 100);
-$rating = $kpaResult['rating'] ?? 0;
-$color = $kpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
-$getRatingByPercentage = getRatingByPercentage($avg);
-$rating_description = $getRatingByPercentage['description'];
+            // Get dynamic average, rating, and color
+            $kpaResult = indicatorAvgScore(117, Auth::user()->employee_id);
+            //$avg = $kpaResult['avg'] ?? 0;
+            $avg = min($kpaResult['avg'] ?? 0, 100);
+            $rating = $kpaResult['rating'] ?? 0;
+            $getRatingByPercentage = getRatingByPercentage($avg);
+            $rating_description = $getRatingByPercentage['description'];
+
+            $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 117);
+            $weight = $indicatorWeight['weightage'];
+            $class_held = ($avg / $weight) * 100;
+            [$rating, $color] = ratingMeta($class_held);
 
           @endphp
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
@@ -750,38 +744,48 @@ $rating_description = $getRatingByPercentage['description'];
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
                 <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$avg}}%"
-                    aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$class_held}}%"
+                    aria-valuenow="{{$class_held}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <span class="text-body-secondary">{{number_format($avg, 1)}}%</span>
+                <span class="text-body-secondary">{{number_format($class_held, 1)}}%</span>
                 {{-- <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span> --}}
               </div>
             </div>
           </div>
           @php
-// Get dynamic average, rating, and color
-$kpaResult = indicatorAvgScore(128, Auth::user()->employee_id);
-//$avg = $kpaResult['avg'] ?? 0;
-$avg = min($kpaResult['avg'] ?? 0, 100);
-$rating = $kpaResult['rating'] ?? 0;
-$color = $kpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
-$re_getRatingByPercentage = getRatingByPercentage($avg);
-$re_rating_description = $re_getRatingByPercentage['description'];
+            // Get dynamic average, rating, and color
+            $kpaResult = indicatorAvgScore(128, Auth::user()->employee_id);
+            //$avg = $kpaResult['avg'] ?? 0;
+            $avg = min($kpaResult['avg'] ?? 0, 100);
+            $rating = $kpaResult['rating'] ?? 0;
+            $color = $kpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
+            $re_getRatingByPercentage = getRatingByPercentage($avg);
+            $re_rating_description = $re_getRatingByPercentage['description'];
 
-$kpaResultManager = indicatorAvgScore(188, Auth::user()->employee_id);
-//$avgManager = $kpaResultManager['avg'] ?? 0;
-$avgManager = min($kpaResultManager['avg'] ?? 0, 100);
-$ratingManager = $kpaResultManager['rating'] ?? 0;
-$colorManager = $kpaResultManager['color'] ?? 'secondary';
-$ms_getRatingByPercentage = getRatingByPercentage($avgManager);
-$ms_rating_description = $ms_getRatingByPercentage['description'];
+            $kpaResultManager = indicatorAvgScore(188, Auth::user()->employee_id);
+            //$avgManager = $kpaResultManager['avg'] ?? 0;
+            $avgManager = min($kpaResultManager['avg'] ?? 0, 100);
+            $ratingManager = $kpaResultManager['rating'] ?? 0;
+            $colorManager = $kpaResultManager['color'] ?? 'secondary';
+            $ms_getRatingByPercentage = getRatingByPercentage($avgManager);
+            $ms_rating_description = $ms_getRatingByPercentage['description'];
+
+            $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 128);
+            $weight = $indicatorWeight['weightage'];
+            $publication = ($avg / $weight) * 100;
+            [$rating, $colorPub] = ratingMeta($publication);
+
+            $lManagerWeight = getRoleWeightage($activeRoleId, 'indicator', 188);
+            $lMweight = $lManagerWeight['weightage'];
+            $lmWeight = ($avgManager / $lMweight) * 100;
+            [$rating, $color] = ratingMeta($lmWeight);
 
           @endphp
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-{{$color}}" data-bs-original-title="{{ $re_rating_description }}">
+            data-bs-custom-class="tooltip-{{$colorPub}}" data-bs-original-title="{{ $re_rating_description }}">
             <div class="card-body d-flex">
               <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
+                <div class="badge bg-label-{{$colorPub}} rounded p-1_5 me-4"><i
                     class="icon-base ti tabler-book-2 icon-md"></i>
                 </div>
                 <div>
@@ -790,20 +794,20 @@ $ms_rating_description = $ms_getRatingByPercentage['description'];
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
                 <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$avg}}%"
-                    aria-valuenow="{{$avg}}" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar bg-{{$colorPub}}" role="progressbar" style="width: {{$publication}}%"
+                    aria-valuenow="{{$publication}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <span class="text-body-secondary">{{number_format($avg, 1)}}%</span>
+                <span class="text-body-secondary">{{number_format($publication, 1)}}%</span>
                 {{-- <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span> --}}
               </div>
             </div>
           </div>
 
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-{{$colorManager}}" data-bs-original-title="{{ $ms_rating_description }}">
+            data-bs-custom-class="tooltip-{{$color}}" data-bs-original-title="{{ $ms_rating_description }}">
             <div class="card-body d-flex">
               <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-{{$colorManager}} rounded p-1_5 me-4"><i
+                <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
                     class="icon-base ti tabler-stars icon-md"></i>
                 </div>
                 <div>
@@ -812,30 +816,35 @@ $ms_rating_description = $ms_getRatingByPercentage['description'];
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
                 <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-{{$colorManager}}" role="progressbar" style="width: {{$avgManager}}%"
-                    aria-valuenow="{{$avgManager}}" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$lmWeight}}%"
+                    aria-valuenow="{{$lmWeight}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <span class="text-body-secondary">{{number_format($avgManager, 1)}}%</span>
+                <span class="text-body-secondary">{{number_format($lmWeight, 1)}}%</span>
                 {{-- <span class="badge bg-label-{{$colorManager}} ms-1">{{$ratingManager}}</span> --}}
               </div>
             </div>
           </div>
           @php
-// Get dynamic average, rating, and color
-$courseloadkpaResult = indicatorAvgScore(122, Auth::user()->employee_id);
-//$courseloadavg = $courseloadkpaResult['avg'] ?? 0;
-$courseloadavg = min($courseloadkpaResult['avg'] ?? 0, 100);
-$courseloadrating = $courseloadkpaResult['rating'] ?? 0;
-$courseloadcolor = $courseloadkpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
-$courseloadgetRatingByPercentage = getRatingByPercentage($courseloadavg);
-$courseload_description = $courseloadgetRatingByPercentage['description'];
+            // Get dynamic average, rating, and color
+            $courseloadkpaResult = indicatorAvgScore(122, Auth::user()->employee_id);
+            //$courseloadavg = $courseloadkpaResult['avg'] ?? 0;
+            $courseloadavg = min($courseloadkpaResult['avg'] ?? 0, 100);
+            $courseloadrating = $courseloadkpaResult['rating'] ?? 0;
+            $courseloadcolor = $courseloadkpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
+            $courseloadgetRatingByPercentage = getRatingByPercentage($courseloadavg);
+            $courseload_description = $courseloadgetRatingByPercentage['description'];
+
+            $cLoadWeight = getRoleWeightage($activeRoleId, 'indicator', 122);
+            $loadweight = $cLoadWeight['weightage'];
+            $WeightLoad = ($courseloadavg / $loadweight) * 100;
+            [$rating, $color] = ratingMeta($WeightLoad);
 
           @endphp
           <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-{{$courseloadcolor}}" data-bs-original-title="{{ $courseload_description }}">
+            data-bs-custom-class="tooltip-{{$color}}" data-bs-original-title="{{ $courseload_description }}">
             <div class="card-body d-flex">
               <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-{{$courseloadcolor}} rounded p-1_5 me-4"><i
+                <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
                     class="icon-base ti tabler-stars icon-md"></i>
                 </div>
                 <div>
@@ -844,10 +853,10 @@ $courseload_description = $courseloadgetRatingByPercentage['description'];
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
                 <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-{{$courseloadcolor}}" role="progressbar" style="width: {{$courseloadavg}}%"
-                    aria-valuenow="{{$courseloadavg}}" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$WeightLoad}}%"
+                    aria-valuenow="{{$WeightLoad}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <span class="text-body-secondary">{{number_format($courseloadavg, 1)}}%</span>
+                <span class="text-body-secondary">{{number_format($WeightLoad, 1)}}%</span>
                 {{-- <span class="badge bg-label-{{$courseloadcolor}} ms-1">{{$courseloadrating}}</span> --}}
               </div>
             </div>
@@ -864,14 +873,14 @@ $courseload_description = $courseloadgetRatingByPercentage['description'];
         <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
 
           @php
-$hodTopPerformers = hodTopPerformers();
+            $hodTopPerformers = hodTopPerformers();
           @endphp
           @if(!empty($hodTopPerformers))
             @foreach($hodTopPerformers as $hodTopPerformer)
               @php
-    $hodTopPerformers_avg_score = min($hodTopPerformer['avg_score'] ?? 0, 100);
-    $hodTopPerformers_avg_scoretRatingByPercentage = getRatingByPercentage($hodTopPerformers_avg_score);
-    $hodTopPerformers_description = $hodTopPerformers_avg_scoretRatingByPercentage['description'];
+                $hodTopPerformers_avg_score = min($hodTopPerformer['avg_score'] ?? 0, 100);
+                $hodTopPerformers_avg_scoretRatingByPercentage = getRatingByPercentage($hodTopPerformers_avg_score);
+                $hodTopPerformers_description = $hodTopPerformers_avg_scoretRatingByPercentage['description'];
               @endphp
               <div class="card mb-6" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
                 data-bs-custom-class="tooltip-{{ $hodTopPerformer['color'] }}"
@@ -951,7 +960,6 @@ $hodTopPerformers = hodTopPerformers();
               </div>
             </div>
 
-
             <div class="card mb-6" data-bs-toggle="tooltip" data-bs-placement="right"
               data-bs-custom-class="tooltip-secondary" data-bs-original-title="Yet there is no top performer !">
               <div class="card-body d-flex">
@@ -969,7 +977,6 @@ $hodTopPerformers = hodTopPerformers();
                 </div>
               </div>
             </div>
-
 
             <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="tooltip-secondary"
               data-bs-original-title="Yet there is no top performer !">
@@ -989,9 +996,6 @@ $hodTopPerformers = hodTopPerformers();
               </div>
             </div>
           @endif
-
-
-
 
         </div>
 
@@ -1069,7 +1073,7 @@ $hodTopPerformers = hodTopPerformers();
           <div id="scrollableCol">
             <div class="card-body">
               @php
-$indicators = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, null, 1);
+                $indicators = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, null, 1);
               @endphp
               @if($indicators->isNotEmpty())
                 <ul class="list-unstyled mb-0">
@@ -1386,8 +1390,6 @@ $indicators = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, null, 1)
       });
     });
 
-
-
     document.addEventListener("DOMContentLoaded", function () {
       const scrollableDiv = document.getElementById("scrollableCol1");
       const windowHeight = window.innerHeight;
@@ -1408,8 +1410,8 @@ $indicators = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, null, 1)
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                                                                                                                                                                                                              #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                                                            `;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                      `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1499,10 +1501,10 @@ $indicators = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, null, 1)
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                          <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                          border-radius:50%;margin-right:5px;"></span>
-                          ${label} (${shortLabels[i]})
-                          `;
+                                                                                                                                                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                    border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                    ${label} (${shortLabels[i]})
+                                                                                                                                                    `;
         legendDiv.appendChild(li);
       });
     });
@@ -1634,10 +1636,10 @@ $indicators = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, null, 1)
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                          <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                          border-radius:50%;margin-right:5px;"></span>
-                          ${label} (${shortLabels[i]})
-                          `;
+                                                                                                                                                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                                                                                                                                                    border-radius:50%;margin-right:5px;"></span>
+                                                                                                                                                    ${label} (${shortLabels[i]})
+                                                                                                                                                    `;
         legendDiv.appendChild(li);
       });
     });
