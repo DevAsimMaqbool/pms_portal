@@ -107,7 +107,9 @@
                             <select id="user-role" class="form-select select2" name="role[]" multiple>
                                 <option value="">All</option>
                                 @foreach($roles as $role)
-                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                    <option value="{{ $role->name }}">{{ $role->name  === 'Teacher' ? 'Lecturer' : $role->name }}
+                                      </option>
+                                    
                                 @endforeach
                             </select>
                             <div class="invalid-feedback" id="roleError"></div>

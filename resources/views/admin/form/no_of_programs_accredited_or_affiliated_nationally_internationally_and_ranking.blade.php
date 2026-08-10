@@ -30,6 +30,8 @@
                                 </div>
                                 <a href="{{ route('indicators_crud.index', ['slug' => 'no_of_programs_accredited_or_affiliated_nationally_internationally_and_ranking', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
                             </div> 
+                            <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
+                            <p class="" id="indicatorDescription"></p>
                             <form id="researchForm" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
@@ -358,6 +360,40 @@
     @if(in_array(getRoleName(activeRole()), ['Dean','HOD','Program Leader UG']))
         <script>
             $(document).ready(function () {
+                function fetchTarget(indicatorId) {
+
+                    if (!indicatorId) {
+                        $('#indicatorTarget').text('Target: N/A');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{{ route('faculty-target.getTarget') }}",
+                        type: "GET",
+                        data: {
+                            indicator_id: indicatorId
+                        },
+                        success: function (res) {
+                              
+                            if (res.target) {
+                                $('#indicatorTarget').text('Target: ' + res.target);
+                                $('#indicatorDescription').text(
+                                    'Description: ' + (res.data && res.data.description ? res.data.description : 'N/A')
+                                );
+                            } else {
+                                $('#indicatorTarget').text('Target: N/A');
+                                $('#indicatorDescription').text('Description: N/A');
+                            }
+                        },
+                        error: function () {
+                            $('#indicatorTarget').text('Target: N/A');
+                            $('#indicatorDescription').text('Description: N/A');
+                        }
+                    });
+                }
+
+                // ✅ Pass PHP variable safely
+                fetchTarget({{ $indicatorId }});
             
             function toggleRecognitionFields() {
 
