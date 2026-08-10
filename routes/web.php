@@ -98,7 +98,7 @@ use App\Http\Controllers\ResearchTaskAssignedHodDeanController;
 use App\Http\Controllers\ViewAsignedGoalsController;
 use Illuminate\Support\Facades\Auth;
 
-Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
+
 
 use App\Models\Department;
 use App\Models\ProfessionalMembership;
@@ -292,6 +292,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('rating-onimpact-of-research', RatingOnImpactOfResearchConferencesOrganizedController::class);
         Route::resource('trainings-seminars-workshops', TrainingsSeminarsWorkshopConductedWithImpactController::class);
         Route::resource('spin-offs', SpinOffController::class);
+        Route::resource('number-of-knowledge-products', NumberOfKnowledgeProductController::class);
         Route::resource('intellectual-properties', IntellectualPropertyController::class);
         Route::resource('counsultancy', CommercialGainsCounsultancyResearchIncomeController::class);
         Route::resource('international-Coauthored-Paper', InternationalCoauthoredPaperController::class);
