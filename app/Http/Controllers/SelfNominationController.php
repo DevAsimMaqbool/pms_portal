@@ -25,8 +25,36 @@ class SelfNominationController extends Controller
     public function create()
     {
         $employeeId = Auth::user()->employee_id;
-        $submission = SelfNomination::where('employee_id', $employeeId)->first();
-        return view('admin.self_nomination.add', compact('submission'));
+
+        $submissions = SelfNomination::where('employee_id', $employeeId)->get();
+
+        $sitaraSubmission = $submissions->first(function ($submission) {
+            return !empty($submission->sitara_qiyadat_awards);
+        });
+
+        $fakhrSubmission = $submissions->first(function ($submission) {
+            return !empty($submission->fakhr_karkardagi_awards);
+        });
+
+        $tamghaSubmission = $submissions->first(function ($submission) {
+            return !empty($submission->tamgha_tahqeeq_awards);
+        });
+
+        $chaudhrySubmission = $submissions->first(function ($submission) {
+            return !empty($submission->chaudhry_akram_awards);
+        });
+
+        $serviceSubmission = $submissions->first(function ($submission) {
+            return !empty($submission->service_superheroes_awards);
+        });
+
+        return view('admin.self_nomination.add', compact(
+            'sitaraSubmission',
+            'fakhrSubmission',
+            'tamghaSubmission',
+            'chaudhrySubmission',
+            'serviceSubmission'
+        ));
     }
 
     /**
@@ -35,6 +63,8 @@ class SelfNominationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'employee_id' => 'required',
+
             'sitara_qiyadat_awards' => 'nullable|array',
             'sitara_qiyadat_why' => 'nullable|string',
 
@@ -52,36 +82,132 @@ class SelfNominationController extends Controller
 
             'disclaimer' => 'required|boolean',
         ]);
+
         $employeeId = $request->employee_id;
-        $existing = SelfNomination::where('created_by', $employeeId)
+
+        /*
+        |--------------------------------------------------------------------------
+        | Determine which award category is being submitted
+        |--------------------------------------------------------------------------
+        */
+
+        $categories = [
+            'sitara_qiyadat' => [
+                'awards' => $request->sitara_qiyadat_awards,
+                'why' => $request->sitara_qiyadat_why,
+                'awards_column' => 'sitara_qiyadat_awards',
+                'why_column' => 'sitara_qiyadat_why',
+            ],
+
+            'fakhr_karkardagi' => [
+                'awards' => $request->fakhr_karkardagi_awards,
+                'why' => $request->fakhr_karkardagi_why,
+                'awards_column' => 'fakhr_karkardagi_awards',
+                'why_column' => 'fakhr_karkardagi_why',
+            ],
+
+            'tamgha_tahqeeq' => [
+                'awards' => $request->tamgha_tahqeeq_awards,
+                'why' => $request->tamgha_tahqeeq_why,
+                'awards_column' => 'tamgha_tahqeeq_awards',
+                'why_column' => 'tamgha_tahqeeq_why',
+            ],
+
+            'chaudhry_akram' => [
+                'awards' => $request->chaudhry_akram_awards,
+                'why' => $request->chaudhry_akram_why,
+                'awards_column' => 'chaudhry_akram_awards',
+                'why_column' => 'chaudhry_akram_why',
+            ],
+
+            'service_superheroes' => [
+                'awards' => $request->service_superheroes_awards,
+                'why' => $request->service_superheroes_why,
+                'awards_column' => 'service_superheroes_awards',
+                'why_column' => 'service_superheroes_why',
+            ],
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Find submitted category
+        |--------------------------------------------------------------------------
+        */
+
+        $submittedCategory = null;
+
+        foreach ($categories as $category => $data) {
+
+            if (!empty($data['awards'])) {
+                $submittedCategory = $category;
+                break;
+            }
+        }
+
+        if (!$submittedCategory) {
+            return redirect()
+                ->route('nomination.create')
+                ->with('error', 'Please select at least one award.');
+        }
+
+        $categoryData = $categories[$submittedCategory];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Remove duplicate awards
+        |--------------------------------------------------------------------------
+        */
+
+        $awards = array_values(
+            array_unique($categoryData['awards'])
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Find existing nomination for this employee + category
+        |--------------------------------------------------------------------------
+        */
+
+        $existing = SelfNomination::where('employee_id', $employeeId)
+            ->whereNotNull($categoryData['awards_column'])
             ->first();
 
+        /*
+        |--------------------------------------------------------------------------
+        | Update existing category
+        |--------------------------------------------------------------------------
+        */
+
         if ($existing) {
-            return redirect()->route('nomination.index')
-                ->with('error', 'You have already submitted for this year.');
+
+            $existing->update([
+                $categoryData['awards_column'] => $awards,
+                $categoryData['why_column'] => $categoryData['why'],
+                'disclaimer' => $request->disclaimer,
+                'updated_by' => $employeeId,
+            ]);
+
+        } else {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Create new category
+            |--------------------------------------------------------------------------
+            */
+
+            SelfNomination::create([
+                'employee_id' => $employeeId,
+
+                $categoryData['awards_column'] => $awards,
+                $categoryData['why_column'] => $categoryData['why'],
+
+                'disclaimer' => $request->disclaimer,
+
+                'created_by' => $employeeId,
+                'updated_by' => $employeeId,
+            ]);
         }
-        SelfNomination::create([
-            'employee_id' => $employeeId,
 
-            'sitara_qiyadat_awards' => $request->sitara_qiyadat_awards,
-            'sitara_qiyadat_why' => $request->sitara_qiyadat_why,
-
-            'fakhr_karkardagi_awards' => $request->fakhr_karkardagi_awards,
-            'fakhr_karkardagi_why' => $request->fakhr_karkardagi_why,
-
-            'tamgha_tahqeeq_awards' => $request->tamgha_tahqeeq_awards,
-            'tamgha_tahqeeq_why' => $request->tamgha_tahqeeq_why,
-
-            'chaudhry_akram_awards' => $request->chaudhry_akram_awards,
-            'chaudhry_akram_why' => $request->chaudhry_akram_why,
-
-            'service_superheroes_awards' => $request->service_superheroes_awards,
-            'service_superheroes_why' => $request->service_superheroes_why,
-
-            'disclaimer' => $request->disclaimer,
-            'created_by' => $employeeId,
-            'updated_by' => $employeeId,
-        ]);
         return redirect()
             ->route('nomination.create')
             ->with('success', 'Self-Nomination saved successfully!');
