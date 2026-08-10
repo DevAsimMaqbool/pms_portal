@@ -244,6 +244,11 @@
                                                             class="form-control">
                                                     </div>
                                                     <div class="col-md-6">
+                                                        <label class="form-label">Organization</label>
+                                                        <input type="text" name="co_author[0][organization]"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="col-md-6">
                                                         <label class="form-label d-block">Is the student first
                                                             Co-author?</label>
                                                         <div>
@@ -340,13 +345,14 @@
                                     <label for="faculty_member" class="form-label">Name of Faculty Member</label>
                                     <select name="faculty_member_id[]" id="select2Success" class="select2 form-select" multiple
                                         required>
-                                        <option value="">-- Select Faculty Member --</option>
+                                        
                                         @foreach($facultyMembers as $member)
                                             <option value="{{ $member->id }}" data-department="{{ $member->department }}"
                                                 data-job_title="{{ $member->job_title }}">
                                                 {{ $member->name }} / 
+                                                
                                                 @if($member->roles->isNotEmpty())
-                                                    ({{ $member->roles->first()->name }})
+                                                    ({{ $member->roles->first()->name === 'Teacher' ? 'Lecturer' : $member->roles->first()->name }})
                                                 @endif
                                             </option>
                                         @endforeach
@@ -728,9 +734,11 @@
 
                         // Hide designation
                         $row.find('input[name$="[designation]"]').closest('.col-md-6').hide();
+                        $row.find('input[name$="[organization]"]').closest('.col-md-6').hide();
                     } else {
                         // Show designation
                         $row.find('input[name$="[designation]"]').closest('.col-md-6').show();
+                        $row.find('input[name$="[organization]"]').closest('.col-md-6').show();
 
                         // Hide student-specific fields
                         $row.find('input[name$="[student_roll_no]"]').closest('.col-md-6').hide();
@@ -895,6 +903,11 @@
                                                                                                                 <div class="col-md-6">
                                                                                                                     <label class="form-label">Co-Author Email</label>
                                                                                                                     <input type="email" name="co_author[${grantIndex}][co_author_email]" class="form-control" >
+                                                                                                                </div>
+                                                                                                                <div class="col-md-6">
+                                                                                                                    <label class="form-label">Organization</label>
+                                                                                                                    <input type="text" name="co_author[${grantIndex}][organization]"
+                                                                                                                        class="form-control">
                                                                                                                 </div>
                                                                                                                 <div class="col-md-6">
                                                                                                                     <label class="form-label d-block">Is the student first Co-author?</label>
@@ -1146,11 +1159,11 @@
                                 i + 1,
                                 form.user ? form.user.name : 'N/A',
                                 form.indicator ? form.indicator.indicator : 'N/A',
-                                form.target || 'N/A',
-                                form.description || 'N/A',
-                                form.scopus_q1 || 'N/A',
-                                form.hec_w || 'N/A',
-                                form.medical_recognized || 'N/A',
+                                form.target ?? 'N/A',
+                                form.description ?? 'N/A',
+                                form.scopus_q1 ?? 'N/A',
+                                form.hec_w ?? 'N/A',
+                                form.medical_recognized ?? 'N/A',
                             ];
                         });
 

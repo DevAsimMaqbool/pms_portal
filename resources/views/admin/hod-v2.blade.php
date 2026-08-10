@@ -988,7 +988,7 @@
 
 
         <!-- Website Analytics -->
-        <div class="col-xl-4 col">
+        <div class="col-xl-6 col">
 
           <div class="card h-100">
             <div class="card-header d-flex align-items-center justify-content-between">
@@ -1004,7 +1004,7 @@
         <!--/ Website Analytics -->
 
         <!-- Radial bar Chart -->
-        <div class="col-md-4 col-12">
+        <div class="col-md-6 col-12">
           <div class="card h-100">
             <div class="card-header d-flex align-items-center justify-content-between">
               <h5 class="card-title mb-0">Departments Overview</h5>
@@ -1016,7 +1016,7 @@
         </div>
         <!-- /Radial bar Chart -->
         <!-- Website Analytics -->
-        <div class="col-xl-4 col">
+        {{-- <div class="col-xl-4 col">
           <div class="card h-100">
             <div class="card-header d-flex align-items-center justify-content-between">
               <h5 class="card-title m-0 me-2">Semester-wise Overall Performance</h5>
@@ -1026,7 +1026,7 @@
               <div id="carrierPerformance1"></div>
             </div>
           </div>
-        </div>
+        </div> --}}
         <!--/ Website Analytics -->
 
 

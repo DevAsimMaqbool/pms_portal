@@ -2499,6 +2499,7 @@ function sumKpaScore($employeeId, $kpaId)
 
     // Calculate average
     $avg = $cappedScores->sum();
+    $avg = min($avg, 100);
     $weightage = getRoleWeightage($userRoleId, 'kpa', $kpaId)['weightage'];
     $weightedScore = ($avg * $weightage) / 100;
     $result = number_format($weightedScore, 1);
@@ -2877,7 +2878,9 @@ function kpaAvgScore($kpaId, $employeeId)
     $cappedScores = $scores->map(fn($score) => min($score, 100));
 
     // Calculate average
-    $avg = $cappedScores->avg();
+    //$avg = $cappedScores->avg();
+    $avg = $cappedScores->sum();
+     $avg = min($avg, 100);
     $weightage = getRoleWeightage($userRoleId, 'kpa', $kpaId)['weightage'];
     $weightedScore = ($avg * $weightage) / 100;
 

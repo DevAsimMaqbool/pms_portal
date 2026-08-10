@@ -142,6 +142,7 @@ class FacultyTargetController extends Controller
                     'updated_by' => $employeeId,
                 ];
                 DB::beginTransaction();
+                
 
                 foreach ($request->faculty_member_id as $userId) {
                     FacultyTarget::updateOrCreate(

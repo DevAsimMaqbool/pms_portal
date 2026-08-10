@@ -51,8 +51,9 @@
                                 <option value="{{ $member->id }}" data-department="{{ $member->department }}"
                                     data-job_title="{{ $member->job_title }}">
                                     {{ $member->name }} / 
+                                    
                                     @if($member->roles->isNotEmpty())
-                                        ({{ $member->roles->first()->name }})
+                                        ({{ $member->roles->first()->name === 'Teacher' ? 'Lecturer' : $member->roles->first()->name }})
                                     @endif
                                 </option>
                             @endforeach

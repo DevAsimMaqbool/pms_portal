@@ -43,6 +43,7 @@
                             <option value="194">Number of Knowledge Products (I&C)</option>
                             <option value="197">Industrial Visits (I&C)</option>
                             <option value="155">No of Professional Memberships attained vs targets</option>
+                            <option value="154">No of Programs accredited or affiliated nationally/ Internationally and ranking</option>
                         </select>
                         <div class="invalid-feedback" id="indicatorError"></div>
                     </div>
@@ -59,9 +60,9 @@
                                 <option value="{{ $member->id }}" data-department="{{ $member->department }}"
                                     data-job_title="{{ $member->job_title }}">
                                     {{ $member->name }} / 
-                                    @if($member->roles->isNotEmpty())
-                                        ({{ $member->roles->first()->name }})
-                                    @endif
+                                     @if($member->roles->isNotEmpty())
+                                                    ({{ $member->roles->first()->name === 'Teacher' ? 'Lecturer' : $member->roles->first()->name }})
+                                     @endif
                                 </option>
                             @endforeach
                         </select>

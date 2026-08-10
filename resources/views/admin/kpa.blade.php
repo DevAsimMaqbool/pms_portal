@@ -177,7 +177,7 @@ $sumTotalWeight = 0;
                             <tfoot style="background-color: #7367F0;">
                                 <tr>
                                     <th class="text-white">Total</th>
-                                    <th class="text-white text-center">{{ $sumTotalScore }}</th>
+                                    <th class="text-white text-center">{{  min($sumTotalScore, 100) }}</th>
                                     <th class="text-white text-center">{{ $sumTotalWeight }}</th>
                                     {{-- <th class="text-center"> <i
                                             class="icon-base ti tabler-calculator icon-md text-white me-4"></th>

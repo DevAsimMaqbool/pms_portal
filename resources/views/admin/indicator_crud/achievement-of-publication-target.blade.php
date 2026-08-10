@@ -171,10 +171,10 @@
                                         <div class="card-body">
                                             <div class="mb-4">
                                                 <label class="form-label">Scopus</label>
-                                                <div class="input-group mb-2"><span class="input-group-text">Q1</span><input
+                                                <div class="input-group mb-2"><span class="input-group-text">Scopus</span><input
                                                         type="number" name="scopus_q1" class="form-control form-disabled"
                                                         readonly></div>
-                                                <div class="input-group mb-2"><span class="input-group-text">Q2</span><input
+                                                {{-- <div class="input-group mb-2"><span class="input-group-text">Q2</span><input
                                                         type="number" name="scopus_q2" class="form-control form-disabled"
                                                         readonly></div>
                                                 <div class="input-group mb-2"><span class="input-group-text">Q3</span><input
@@ -182,24 +182,24 @@
                                                         readonly></div>
                                                 <div class="input-group"><span class="input-group-text">Q4</span><input
                                                         type="number" name="scopus_q4" class="form-control form-disabled"
-                                                        readonly></div>
+                                                        readonly></div> --}}
                                             </div>
                                             <div class="mb-4">
                                                 <label class="form-label">HEC</label>
-                                                <div class="input-group mb-2"><span class="input-group-text">W</span><input
+                                                <div class="input-group mb-2"><span class="input-group-text">HEC</span><input
                                                         type="number" name="hec_w" class="form-control form-disabled"
                                                         readonly></div>
-                                                <div class="input-group mb-2"><span class="input-group-text">X</span><input
+                                                {{-- <div class="input-group mb-2"><span class="input-group-text">X</span><input
                                                         type="number" name="hec_x" class="form-control form-disabled"
                                                         readonly></div>
                                                 <div class="input-group"><span class="input-group-text">Y</span><input
                                                         type="number" name="hec_y" class="form-control form-disabled"
-                                                        readonly></div>
+                                                        readonly></div> --}}
                                             </div>
                                             <div class="mb-4">
                                                 <label class="form-label">Medical</label>
                                                 <div class="input-group"><span
-                                                        class="input-group-text">Recognized</span><input type="number"
+                                                        class="input-group-text">Medical</span><input type="number"
                                                         name="medical_recognized" class="form-control form-disabled"
                                                         readonly></div>
                                             </div>
@@ -539,9 +539,11 @@
 
                         // Hide designation
                         $row.find('input[name$="[designation]"]').closest('.col-md-6').hide();
+                         $row.find('input[name$="[organization]"]').closest('.col-md-6').hide();
                     } else {
                         // Show designation
                         $row.find('input[name$="[designation]"]').closest('.col-md-6').show();
+                        $row.find('input[name$="[organization]"]').closest('.col-md-6').show();
 
                         // Hide student-specific fields
                         $row.find('input[name$="[student_roll_no]"]').closest('.col-md-6').hide();
@@ -623,6 +625,11 @@
                         <div class="col-md-6">
                             <label class="form-label">Co-Author Email</label>
                             <input type="email" name="co_author[${i}][co_author_email]" class="form-control" value="${author.co_author_email || ''}">
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label">Organization</label>
+                            <input type="text" name="co_author[${i}][organization]"
+                                class="form-control" value="${author.organization || ''}">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label d-block">Is the student first Co-author?</label>
