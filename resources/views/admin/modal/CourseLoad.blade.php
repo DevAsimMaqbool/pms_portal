@@ -37,23 +37,94 @@
 </style>
 @php
     $activeRoleId = getRoleIdByName(activeRole());
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+    $totalFeedback = 0;
+
+    $activeTerms = \App\Models\Term::where('status', '1')
+        ->get()
+        ->keyBy('term');
+
+    $springTerm = $activeTerms->get('Spring');
+    $fallTerm = $activeTerms->get('Fall');
+
+    $springData = $springTerm
+        ? myClasses(
+            Auth::user()->faculty_id,
+            $activeRoleId,
+            $springTerm->id
+        )
+        : null;
+
+    $fallData = $fallTerm
+        ? myClasses(
+            Auth::user()->faculty_id,
+            $activeRoleId,
+            $fallTerm->id
+        )
+        : null;
+    $spring = $springData['classes'] ?? collect();
+    $fall = $fallData['classes'] ?? collect();
+
+    $springWeightedCourseLoad = $springData['weightedCourseLoad'] ?? 0;
+    $fallWeightedCourseLoad = $fallData['weightedCourseLoad'] ?? 0;
+
+    $springWeightedPassScore = $springData['weightedPassScore'] ?? 0;
+    $fallWeightedPassScore = $fallData['weightedPassScore'] ?? 0;
+
+    $springWeightedMarksScore = $springData['weightedMarksScore'] ?? 0;
+    $fallWeightedMarksScore = $fallData['weightedMarksScore'] ?? 0;
+
+    $weightedCourseLoad = round(
+        ($springWeightedCourseLoad + $fallWeightedCourseLoad) / 2,
+        2
+    );
+
+    $weightedPassScore = round(
+        ($springWeightedPassScore + $fallWeightedPassScore) / 2,
+        2
+    );
+
+    $weightedMarksScore = round(
+        ($springWeightedMarksScore + $fallWeightedMarksScore) / 2,
+        2
+    );
+
+    $userId = getUserID(Auth::user()->faculty_id);
+
+    DB::transaction(function () use ($userId, $activeRoleId, $weightedCourseLoad, $weightedPassScore, $weightedMarksScore) {
+        if ($activeRoleId != 22) {
+
+            saveIndicatorPercentage(
+                $userId,
+                $activeRoleId,
+                1,
+                3,
+                122,
+                $weightedCourseLoad
+            );
+
+            saveIndicatorPercentage90Plus(
+                $userId,
+                $activeRoleId,
+                1,
+                25,
+                185,
+                $weightedPassScore
+            );
+
+            saveIndicatorPercentage(
+                $userId,
+                $activeRoleId,
+                1,
+                25,
+                186,
+                $weightedMarksScore
+            );
+        }
+    });
+
 @endphp
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
-    @php
-        $currentYear = now()->year;
-        $previousYear = now()->year - 1;
-        $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
-        $att = $data['classes'];
-        $spring = $att->filter(function ($c) use ($currentYear) {
-            return $c->term === "Spring $currentYear";
-        });
-        $fall = $att->filter(function ($c) use ($previousYear) {
-            return $c->term === "FALL $previousYear";
-        });
-    @endphp
     <div class="modal fade" id="CourseLoad" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
@@ -63,8 +134,8 @@
                 <div class="modal-body p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
-                        <div class="badge bg-label-primary rounded p-2"><i class="icon-base ti tabler-loader-3 icon-md"></i>
-                        </div> Course Load
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-rewind-backward-50 icon-md"></i></div> Course Load
                     </h3>
                     <!-- Tabs -->
                     <div class="nav-align-top nav-tabs-shadow">
@@ -72,14 +143,14 @@
                             <ul class="nav custom-tabs" role="tablist">
                                 <li class="nav-item">
                                     <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                        data-bs-target="#CourseLoad-spring" aria-controls="CourseLoad-spring"
+                                        data-bs-target="#course-load-spring" aria-controls="course-load-spring"
                                         aria-selected="true">
                                         🌸 Spring {{ date('Y') }}
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                        data-bs-target="#CourseLoad-fall" aria-controls="CourseLoad-fall"
+                                        data-bs-target="#course-load-fall" aria-controls="course-load-fall"
                                         aria-selected="false">
                                         🍂 Fall {{ date('Y') - 1 }}
                                     </button>
@@ -90,7 +161,7 @@
                         <!-- Tab Content -->
                         <div class="tab-content">
                             <!-- Spring -->
-                            <div class="tab-pane fade show active" id="CourseLoad-spring" role="tabpanel">
+                            <div class="tab-pane fade show active" id="course-load-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-hover align-middle custom-table">
                                         <thead class="table-primary">
@@ -131,45 +202,13 @@
                                                 </tr>
                                             @endforelse
                                         </tbody>
-                                        <!-- <tfoot>
-                                                        <tr class="table-primary">
-                                                            <th class="text-end">Total</th>
-                                                            <th colspan="3" class="text-end"></th>
-                                                            <th style="font-size: 0.960rem;">
-                                                                <b class="badge"
-                                                                    style="background-color: {{ getRatingMeta($data['courseLoadScore'])->color }}">
-                                                                    {{ number_format($data['courseLoadScore'], 1) }}%
-                                                                </b>
-                                                            </th>
-                                                            <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
-                                                                    style="background-color: {{ getRatingMeta($data['courseLoadScore'])->color }}">
-                                                                    {{ getRatingMeta($data['courseLoadScore'])->rating }}
-                                                                </b></th>
-                                                        </tr>
-                                                    </tfoot> -->
+
                                     </table>
                                 </div>
-                                <!-- <div class="table-responsive">
-                                        <table class="table m-0 table-borderless">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="align-top pe-6 ps-0 py-6 text-body">Total Courses:
-                                                        {{ count($att) }}
-                                                    </td>
-                                                    <td class="px-0 w-px-100">
-                                                        <span class="fw-medium">
-                                                            <span class="badge bg-{{ count($att) > 3 ? 'danger' : 'success' }}">
-                                                                {{ count($att) > 3 ? 'Overload' : 'Underload' }}
-                                                            </span>
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div> -->
                             </div>
+
                             <!-- Fall -->
-                            <div class="tab-pane fade" id="CourseLoad-fall" role="tabpanel">
+                            <div class="tab-pane fade" id="course-load-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-hover align-middle custom-table">
                                         <thead class="table-primary">
@@ -184,7 +223,7 @@
                                         </thead>
                                         <tbody class="table-border-bottom-0">
 
-                                            @foreach($fall as $class)
+                                            @forelse($fall as $class)
                                                 @php
                                                     // latest attendance or null
                                                     $latestAttendance = $class->attendances->first();
@@ -202,42 +241,15 @@
                                                     {{-- Program name (only if attendance exists) --}}
                                                     <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
                                                 </tr>
-                                            @endforeach
+                                            @empty
+                                                <tr>
+                                                    <td colspan="6" class="text-center text-muted">
+                                                        no record found
+                                                    </td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
-                                        <tfoot>
-                                            <tr class="table-primary">
-                                                <th class="text-end">Total</th>
-                                                <th colspan="3" class="text-end"></th>
-                                                <th style="font-size: 0.960rem;">
-                                                    <b class="badge"
-                                                        style="background-color: {{ getRatingMeta($data['courseLoadScore'])->color }}">
-                                                        {{ number_format($data['courseLoadScore'], 1) }}%
-                                                    </b>
-                                                </th>
-                                                <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
-                                                        style="background-color: {{ getRatingMeta($data['courseLoadScore'])->color }}">
-                                                        {{ getRatingMeta($data['courseLoadScore'])->rating }}
-                                                    </b></th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table m-0 table-borderless">
-                                        <tbody>
-                                            <tr>
-                                                <td class="align-top pe-6 ps-0 py-6 text-body">Total Courses:
-                                                    {{ count($att) }}
-                                                </td>
-                                                <td class="px-0 w-px-100">
-                                                    <span class="fw-medium">
-                                                        <span class="badge bg-{{ count($att) > 3 ? 'danger' : 'success' }}">
-                                                            {{ count($att) > 3 ? 'Overload' : 'Underload' }}
-                                                        </span>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
+
                                     </table>
                                 </div>
                             </div>
@@ -247,5 +259,4 @@
             </div>
         </div>
     </div>
-    <!-- / Payment Methods modal -->
 @endif

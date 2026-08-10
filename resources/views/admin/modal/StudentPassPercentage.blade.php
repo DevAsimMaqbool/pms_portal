@@ -39,19 +39,42 @@
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;
-    $currentYear = now()->year;
-    $previousYear = now()->year - 1;
-    $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
-    $att = $data['classes'];
-    $spring = $att->filter(function ($c) use ($currentYear) {
-        return $c->term === "Spring $currentYear";
-    });
-    $fall = $att->filter(function ($c) use ($previousYear) {
-        return $c->term === "FALL $previousYear";
-    });
-    $avgScore = $att->isNotEmpty()
-        ? $att->avg(fn($c) => (float) ($c->passing_percentage ?? 0))
-        : 0;                                
+    $activeTerms = \App\Models\Term::where('status', '1')
+        ->get()
+        ->keyBy('term');
+
+    $springTerm = $activeTerms->get('Spring');
+    $fallTerm = $activeTerms->get('Fall');
+
+    $springData = $springTerm
+        ? myClasses(
+            Auth::user()->faculty_id,
+            $activeRoleId,
+            $springTerm->id
+        )
+        : null;
+
+    $fallData = $fallTerm
+        ? myClasses(
+            Auth::user()->faculty_id,
+            $activeRoleId,
+            $fallTerm->id
+        )
+        : null;
+    $spring = $springData['classes'] ?? collect();
+    $fall = $fallData['classes'] ?? collect();
+
+    $springAvg = $spring->isNotEmpty()
+        ? $spring->avg(fn($class) => (float) ($class->passing_percentage ?? 0))
+        : 0;
+
+    $fallAvg = $fall->isNotEmpty()
+        ? $fall->avg(fn($class) => (float) ($class->passing_percentage ?? 0))
+        : 0;
+
+    $avgScore = ($spring->isNotEmpty() && $fall->isNotEmpty())
+        ? ($springAvg + $fallAvg) / 2
+        : ($spring->isNotEmpty() ? $springAvg : $fallAvg);                                
 @endphp
 <!-- / Payment Methods modal -->
 <div class="modal fade" id="StudentPassPercentage" tabindex="-1" aria-hidden="true">
@@ -167,23 +190,23 @@
                                             @endforelse
                                         @endif
                                     </tbody>
-                                    <!-- @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
                                                 <th colspan="6" class="text-end"></th>
                                                 <th style="font-size: 0.960rem;">
-                                                    <b class="badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
-                                                        {{ number_format($avgScore, 1) }}%
+                                                    <b class="badge bg-label-{{ getRatingMetaAsBg($springAvg)->color }}">
+                                                        {{ number_format($springAvg, 1) }}%
                                                     </b>
                                                 </th>
                                                 <th class="text-end" style="font-size: 0.960rem;"><b
-                                                        class="badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
-                                                        {{ getRatingMeta($avgScore)->rating }}
+                                                        class="badge bg-label-{{ getRatingMetaAsBg($springAvg)->color }}">
+                                                        {{ getRatingMeta($springAvg)->rating }}
                                                     </b></th>
                                             </tr>
                                         </tfoot>
-                                    @endif -->
+                                    @endif
 
                                 </table>
                             </div>
@@ -273,13 +296,13 @@
                                                 <th class="text-end">Total</th>
                                                 <th colspan="6" class="text-end"></th>
                                                 <th style="font-size: 0.960rem;">
-                                                    <b class="badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
-                                                        {{ number_format($avgScore, 1) }}%
+                                                    <b class="badge bg-label-{{ getRatingMetaAsBg($fallAvg)->color }}">
+                                                        {{ number_format($fallAvg, 1) }}%
                                                     </b>
                                                 </th>
                                                 <th class="text-end" style="font-size: 0.960rem;"><b
-                                                        class="badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
-                                                        {{ getRatingMeta($avgScore)->rating }}
+                                                        class="badge bg-label-{{ getRatingMetaAsBg($fallAvg)->color }}">
+                                                        {{ getRatingMeta($fallAvg)->rating }}
                                                     </b></th>
                                             </tr>
                                         </tfoot>

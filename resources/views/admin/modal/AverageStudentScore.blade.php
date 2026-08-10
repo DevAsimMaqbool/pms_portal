@@ -35,27 +35,61 @@
         vertical-align: middle;
     }
 </style>
-@php
-    $activeRoleId = getRoleIdByName(activeRole());
-    // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
- @endphp
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
     @php   
-            $currentYear = now()->year;
-        $previousYear = now()->year - 1;
-        $data = myClasses(Auth::user()->faculty_id, $activeRoleId);
-        $att = $data['classes'];
-        $spring = $att->filter(function ($c) use ($currentYear) {
-            return $c->term === "Spring $currentYear";
-        });
-        $fall = $att->filter(function ($c) use ($previousYear) {
-            return $c->term === "FALL $previousYear";
-        });
-        $avgScore = $att->isNotEmpty()
-            ? $att->avg(fn($c) => (float) ($c->average_marks ?? 0))
-            : 0;
+        $activeRoleId = getRoleIdByName(activeRole());
+            // Initialize totalFeedback to 0 in case nothing is set later
+            $totalFeedback = 0;
+            $activeTerms = \App\Models\Term::where('status', '1')
+                ->get()
+                ->keyBy('term');
+
+            $springTerm = $activeTerms->get('Spring');
+            $fallTerm = $activeTerms->get('Fall');
+
+            $springData = $springTerm
+                ? myClasses(
+                    Auth::user()->faculty_id,
+                    $activeRoleId,
+                    $springTerm->id
+                )
+                : null;
+
+            $fallData = $fallTerm
+                ? myClasses(
+                    Auth::user()->faculty_id,
+                    $activeRoleId,
+                    $fallTerm->id
+                )
+                : null;
+
+            $spring = $springData['classes'] ?? collect();
+            $fall = $fallData['classes'] ?? collect();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Average Student Marks
+            |--------------------------------------------------------------------------
+            */
+
+            $springAvg = $spring->isNotEmpty()
+                ? $spring->avg(fn($class) => (float) ($class->average_marks ?? 0))
+                : 0;
+
+            $fallAvg = $fall->isNotEmpty()
+                ? $fall->avg(fn($class) => (float) ($class->average_marks ?? 0))
+                : 0;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Overall Average - Spring + Fall
+            |--------------------------------------------------------------------------
+            */
+
+            $avgScore = ($spring->isNotEmpty() && $fall->isNotEmpty())
+                ? ($springAvg + $fallAvg) / 2
+                : ($spring->isNotEmpty() ? $springAvg : $fallAvg);
     @endphp
     <div class="modal fade" id="AverageStudentScore" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -160,23 +194,24 @@
                                                 @endforelse
                                             @endif
                                         </tbody>
-                                        <!-- @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
-                                                <tfoot>
-                                                    <tr class="table-primary">
-                                                        <th class="text-end">Total</th>
-                                                        <th colspan="4" class="text-end"></th>
-                                                        <th style="font-size: 0.960rem;">
-                                                            <b class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
-                                                                {{ number_format($avgScore, 1) }}%
-                                                            </b>
-                                                        </th>
-                                                        <th class="text-end" style="font-size: 0.960rem;"><b
-                                                                class="badge" style="background-color:{{ getRatingMeta($avgScore)->color }}">
-                                                                {{ getRatingMeta($avgScore)->rating }}
-                                                            </b></th>
-                                                    </tr>
-                                                </tfoot>
-                                            @endif -->
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                            <tfoot>
+                                                <tr class="table-primary">
+                                                    <th class="text-end">Total</th>
+                                                    <th colspan="4" class="text-end"></th>
+                                                    <th style="font-size: 0.960rem;">
+                                                        <b class="badge"
+                                                            style="background-color:{{ getRatingMeta($springAvg)->color }}">
+                                                            {{ number_format($springAvg, 1) }}%
+                                                        </b>
+                                                    </th>
+                                                    <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
+                                                            style="background-color:{{ getRatingMeta($springAvg)->color }}">
+                                                            {{ getRatingMeta($springAvg)->rating }}
+                                                        </b></th>
+                                                </tr>
+                                            </tfoot>
+                                        @endif
                                     </table>
                                 </div>
                             </div>
@@ -256,13 +291,13 @@
                                                     <th colspan="4" class="text-end"></th>
                                                     <th style="font-size: 0.960rem;">
                                                         <b class="badge"
-                                                            style="background-color:{{ getRatingMeta($avgScore)->color }}">
-                                                            {{ number_format($avgScore, 1) }}%
+                                                            style="background-color:{{ getRatingMeta($fallAvg)->color }}">
+                                                            {{ number_format($fallAvg, 1) }}%
                                                         </b>
                                                     </th>
                                                     <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
-                                                            style="background-color:{{ getRatingMeta($avgScore)->color }}">
-                                                            {{ getRatingMeta($avgScore)->rating }}
+                                                            style="background-color:{{ getRatingMeta($fallAvg)->color }}">
+                                                            {{ getRatingMeta($fallAvg)->rating }}
                                                         </b></th>
                                                 </tr>
                                             </tfoot>

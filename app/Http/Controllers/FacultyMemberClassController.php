@@ -135,7 +135,13 @@ class FacultyMemberClassController extends Controller
         try {
             set_time_limit(300);
 
-            DB::transaction(function () {
+            $total = 0;
+            $inserted = 0;
+            $skipped = 0;
+            $skippedClasses = [];
+
+            DB::transaction(function () use (&$total, &$inserted, &$skipped, &$skippedClasses) {
+
                 DB::connection('pgsql')
                     ->table('odoocms_class_faculty as cf')
                     ->join('odoocms_faculty_staff as fs', 'fs.id', '=', 'cf.faculty_staff_id')
@@ -155,30 +161,51 @@ class FacultyMemberClassController extends Controller
                         'cr.name as career',
                         'cr.code as career_code',
                     ])
-                    // Pass the alias 'cf_id' as the 3rd parameter
                     ->orderBy('c.id')
-                    ->chunk(1000, function ($records) {
+                    ->chunk(1000, function ($records) use (&$total, &$inserted, &$skipped, &$skippedClasses) {
+
                         foreach ($records as $record) {
 
-                            FacultyMemberClass::firstOrCreate(
-                                [
-                                    'faculty_id' => $record->faculty_id,
-                                    'class_id' => $record->class_id,
-                                    'term_id' => $record->term_id,
-                                ],
-                                [
-                                    'class_name' => $record->class_name,
-                                    'code' => $record->code,
-                                    'term' => $record->term,
-                                    'career_id' => $record->career_id,
-                                    'career' => $record->career,
-                                    'career_code' => $record->career_code,
-                                ]
-                            );
+                            $total++;
 
+                            $exists = FacultyMemberClass::where('faculty_id', $record->faculty_id)
+                                ->where('class_id', $record->class_id)
+                                ->where('term_id', $record->term_id)
+                                ->exists();
+
+                            if ($exists) {
+                                $skipped++;
+
+                                $skippedClasses[$record->class_id] = ($skippedClasses[$record->class_id] ?? 0) + 1;
+
+                                continue;
+                            }
+
+                            FacultyMemberClass::create([
+                                'faculty_id' => $record->faculty_id,
+                                'class_id' => $record->class_id,
+                                'class_name' => $record->class_name,
+                                'code' => $record->code,
+                                'term_id' => $record->term_id,
+                                'term' => $record->term,
+                                'career_id' => $record->career_id,
+                                'career' => $record->career,
+                                'career_code' => $record->career_code,
+                            ]);
+
+                            $inserted++;
                         }
-                    }); // Match the alias used in select
+                    });
             });
+
+            arsort($skippedClasses);
+
+            dd([
+                'Total Records' => $total,
+                'Inserted' => $inserted,
+                'Skipped' => $skipped,
+                'Skipped Class IDs' => $skippedClasses,
+            ]);
 
             return apiResponse("Classes imported successfully", [], true);
 
@@ -308,8 +335,11 @@ class FacultyMemberClassController extends Controller
     public function classesAttendance()
     {
         try {
-            $from_date = '2026-01-27';
-            $to_date = '2026-02-27';
+            // $from_date = '2025-12-21';
+            // $to_date = '2025-12-27';
+
+            $from_date = '2026-07-27';
+            $to_date = '2026-08-27';
             $sql = "
         SELECT 
             max(ca.class_id) as class_id,
@@ -343,7 +373,7 @@ class FacultyMemberClassController extends Controller
                         // }
     
                         FacultyClassAttendance::create([
-                            'class_date' => '2026-01-27',
+                            'class_date' => '2026-08-27',
                             'class_id' => $item->class_id,
                             'faculty_id' => $item->faculty_id,
                             'program_name' => $item->program_name,
@@ -376,6 +406,7 @@ class FacultyMemberClassController extends Controller
         // 1. faculty_member_classes se saari classes le lo
         DB::table('faculty_member_classes')
             ->select('id', 'class_id')
+            ->where('term_id', 52)
             ->orderBy('id')
             ->chunk(1000, function ($facultyClasses) {
 

@@ -40,6 +40,7 @@ use App\Models\DropoutRate;
 use App\Models\FacultyPursuingSkill;
 use App\Models\Recovery;
 use App\Models\ResearchTaskAssignedHodDean;
+use App\Models\Term;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -464,6 +465,68 @@ function myClassesBK27Feb($facultyId, $activeRoleId)
 
 function myClasses($facultyId, $activeRoleId, $term = null)
 {
+    // 1️⃣ Get count and averages for selected term
+    $stats = FacultyMemberClass::where('faculty_id', $facultyId)
+        ->when($term !== null, function ($query) use ($term) {
+            $query->where('term_id', $term);
+        })
+        ->selectRaw('COUNT(*) as total_courses, 
+        SUM(COALESCE(passing_percentage,0)) as total_pass,
+        SUM(COALESCE(average_marks,0)) as total_average_marks,
+        AVG(COALESCE(average_marks,0)) as avg_marks, 
+        AVG(COALESCE(passing_percentage,0)) as avg_pass')
+        ->first();
+
+    $totalCourses = $stats->total_courses ?? 0;
+    $totalPassPercentage = $stats->total_pass ?? 0;
+    $totalAverageMarks = $stats->total_average_marks ?? 0;
+    $averagePassPercentage = $stats->avg_pass ?? 0;
+    $averageStudentScore = $stats->avg_marks ?? 0;
+
+    // 2️⃣ Course Load Score
+    $courseLoadScore = $totalCourses > 3
+        ? 100
+        : ($totalCourses == 3 ? 80 : 60);
+
+    // 3️⃣ Get weightages
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', 122)['weightage'],
+        'pass' => getRoleWeightage($activeRoleId, 'indicator', 185)['weightage'],
+        'marks' => getRoleWeightage($activeRoleId, 'indicator', 186)['weightage'],
+    ];
+
+    $weightedCourseLoad = ($courseLoadScore * $weights['course_load']) / 100;
+    $weightedPassScore = ($averagePassPercentage * $weights['pass']) / 100;
+    $weightedMarksScore = ($averageStudentScore * $weights['marks']) / 100;
+
+    // 4️⃣ Get classes for selected term
+    $classes = FacultyMemberClass::with([
+        'attendances' => function ($query) {
+            $query->orderBy('class_date', 'desc');
+        }
+    ])
+        ->where('faculty_id', $facultyId)
+        ->when($term !== null, function ($query) use ($term) {
+            $query->where('term_id', $term);
+        })
+        ->get();
+
+    return [
+        'classes' => $classes,
+        'totalCourses' => $totalCourses,
+        'courseLoadScore' => $courseLoadScore,
+        'totalPassPercentage' => $totalPassPercentage,
+        'totalAverageMarks' => $totalAverageMarks,
+        'averagePassPercentage' => $averagePassPercentage,
+        'averageStudentScore' => $averageStudentScore,
+        'weightedCourseLoad' => $weightedCourseLoad,
+        'weightedPassScore' => $weightedPassScore,
+        'weightedMarksScore' => $weightedMarksScore,
+    ];
+}
+
+function myClassesBK($facultyId, $activeRoleId, $term = null)
+{
     $currentYear = Carbon::now()->year;
     $previousYear = Carbon::now()->year - 1;
     $campaigns = [
@@ -537,8 +600,9 @@ function myClasses($facultyId, $activeRoleId, $term = null)
     ];
 }
 
-function myClassesAttendanceRecord($facultyId, $activeRoleId)
+function myClassesAttendanceRecord($facultyId, $activeRoleId, $activeTermId)
 {
+    // $activeTermId = Term::where('status', '1')->value('id');
     $classes = FacultyMemberClass::withCount([
         'attendances as total_rows',
         'attendances as class_held_count' => function ($query) {
@@ -549,6 +613,7 @@ function myClassesAttendanceRecord($facultyId, $activeRoleId)
         },
     ])
         ->where('faculty_id', $facultyId)
+        ->where('term_id', $activeTermId)
         ->get()
         ->map(function ($class) {
             $class->program = $class->attendances()->latest('class_date')->value('program_name');
@@ -580,17 +645,12 @@ function myClassesAttendanceRecord($facultyId, $activeRoleId)
             return $class;
         });
     // ✅ Save overall percentage
-    saveOverallAttendancePercentage($facultyId = getUserID($facultyId), $classes, $keyPerformanceAreaId = 1, $indicatorCategoryId = 3, $indicatorId = 117, $activeRoleId);
+    //saveOverallAttendancePercentage($facultyId = getUserID($facultyId), $classes, $keyPerformanceAreaId = 1, $indicatorCategoryId = 3, $indicatorId = 117, $activeRoleId);
 
     return $classes;
 }
-function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $activeRoleId)
+function saveOverallAttendancePercentage($facultyId, $overallPercentage, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $activeRoleId)
 {
-    if ($classes->count() == 0) {
-        $overallPercentage = 0;
-    } else {
-        $overallPercentage = round($classes->avg('held_percentage'), 2);
-    }
 
     // Color & rating logic (same as above)
     if ($overallPercentage == 100) {
@@ -625,7 +685,7 @@ function saveOverallAttendancePercentage($facultyId, $classes, $keyPerformanceAr
     return $overallPercentage;
 }
 
-function myClassesAttendanceData($facultyId)
+function myClassesAttendanceData($facultyId, $activeTermId)
 {
     // Fetch classes with attendances first
     $classes = FacultyMemberClass::with([
@@ -634,6 +694,7 @@ function myClassesAttendanceData($facultyId)
         }
     ])
         ->where('faculty_id', $facultyId)
+        ->where('term_id', $activeTermId)
         ->get();
 
     // Calculate overall present percentage across all classes
@@ -711,19 +772,19 @@ function myClassesAttendanceData($facultyId)
 
         $activeRoleId = getRoleIdByName(activeRole());
         $employeeId = getUserID($facultyId);
-        $weights = [
-            'course_load' => getRoleWeightage($activeRoleId, 'indicator', 113)['weightage'],
-        ];
+        // $weights = [
+        //     'course_load' => getRoleWeightage($activeRoleId, 'indicator', 113)['weightage'],
+        // ];
 
-        $weightedScore = ($overallPresentPercentage * $weights['course_load']) / 100;
-        saveIndicatorPercentage90Plus(
-            $employeeId,
-            $activeRoleId,
-            1,
-            3,
-            113,
-            $weightedScore
-        );
+        // $weightedScore = ($overallPresentPercentage * $weights['course_load']) / 100;
+        // saveIndicatorPercentage90Plus(
+        //     $employeeId,
+        //     $activeRoleId,
+        //     1,
+        //     3,
+        //     113,
+        //     $weightedScore
+        // );
 
         return $class;
     });
@@ -1009,7 +1070,7 @@ if (!function_exists('calculateInternationalScore')) {
         })->count();
 
         // Fraction of international papers
-       // $fraction = $totalPapers > 0 ? $internationalPapers / $totalPapers : 0;
+        // $fraction = $totalPapers > 0 ? $internationalPapers / $totalPapers : 0;
         $fraction = $totalPapers > 0
             ? round(($internationalPapers / $totalPapers) * 100, 2)
             : 0;
@@ -1035,7 +1096,7 @@ if (!function_exists('calculateInternationalScore')) {
             'total_score' => $fraction,
             'total_target' => $totalPapers,
             'total_international' => $internationalPapers,
-            
+
         ];
     }
 }
@@ -1052,11 +1113,11 @@ if (!function_exists('calculateJournalQuartile')) {
             'Q3' => 10,
             'Q4' => 5,
         ];
-           $q1Count = 0;
-            $q2Count = 0;
-            $q3Count = 0;
-            $q4Count = 0;
-             $q1_count1 = 0;
+        $q1Count = 0;
+        $q2Count = 0;
+        $q3Count = 0;
+        $q4Count = 0;
+        $q1_count1 = 0;
         $q2_count1 = 0;
         $q3_count1 = 0;
         $q4_count1 = 0;
@@ -1076,14 +1137,14 @@ if (!function_exists('calculateJournalQuartile')) {
             if (isset($quartilePoints[$quartile])) {
                 $obtainedScore += $quartilePoints[$record->journal_clasification];
             }
-                if ($quartile === 'Q1')
-                    $q1Count++;
-                elseif ($quartile === 'Q2')
-                    $q2Count++;
-                elseif ($quartile === 'Q3')
-                    $q3Count++;
-                elseif ($quartile === 'Q4')
-                    $q4Count++;
+            if ($quartile === 'Q1')
+                $q1Count++;
+            elseif ($quartile === 'Q2')
+                $q2Count++;
+            elseif ($quartile === 'Q3')
+                $q3Count++;
+            elseif ($quartile === 'Q4')
+                $q4Count++;
         }
         $q1_count1 += $q1Count;
         $q2_count1 += $q2Count;
@@ -1093,7 +1154,6 @@ if (!function_exists('calculateJournalQuartile')) {
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 203);
         $weight = $indicatorWeight['weightage'] ?? 0;
         $weightedScore = ($obtainedScore * $weight) / 100;
-
 
         saveIndicatorPercentage(
             $facultyId,
@@ -3314,16 +3374,23 @@ if (!function_exists('getStudentFeedbackForTeacher')) {
 if (!function_exists('getFacultyClassWiseFeedback')) {
     function getFacultyClassWiseFeedback(?int $facultyId)
     {
-        $currentYear = Carbon::now()->year;
-        $previousYear = Carbon::now()->year - 1;
-        // ✅ Campaigns for current year
-        $campaigns = [
-            "Spring $currentYear",
-            "Fall $previousYear"
-        ];
+        // Get active Spring and Fall terms
+        $activeTerms = \App\Models\Term::where('status', '1')
+            ->get()
+            ->keyBy('term');
+
+        $springTerm = $activeTerms->get('Spring');
+        $fallTerm = $activeTerms->get('Fall');
+
+        $termIds = collect([
+            $springTerm?->id,
+            $fallTerm?->id
+        ])->filter()->values()->toArray();
+
         static $memo = [];
+
         $key = (string) $facultyId;
-        //$key = $facultyId . '_' . $term;
+
         if (array_key_exists($key, $memo)) {
             return $memo[$key];
         }
@@ -3336,27 +3403,26 @@ if (!function_exists('getFacultyClassWiseFeedback')) {
                 'student_feedback_class_wises.component_class'
             )
             ->where('faculty_member_classes.faculty_id', $facultyId)
-            ->whereIn('faculty_member_classes.term', $campaigns)
+            ->whereIn('student_feedback_class_wises.term_id', $termIds)
             ->select(
                 'student_feedback_class_wises.*',
                 'faculty_member_classes.code as class_code',
-                'faculty_member_classes.faculty_id',
-                'faculty_member_classes.term'
+                'faculty_member_classes.faculty_id'
             )
             ->get();
-        // Calculate sum of feedback (numeric)
+
+        // Calculate sum of feedback
         $totalFeedback = $result->sum(function ($item) {
             return (float) str_replace('%', '', $item->feedback);
         });
 
-        // Return both collection and sum as an array
         $data = [
             'collection' => $result,
             'totalFeedback' => $totalFeedback,
         ];
 
         $memo[$key] = $data;
-        // dd($data);
+
         return $data;
     }
 }
@@ -3862,7 +3928,6 @@ if (!function_exists('ResearchTasksAssignedbyDeanHOD')) {
             ->where('year', $currentAcademic)
             ->where('form_status', 'OTHER')
             ->get();
-            
 
         foreach ($reviews as $review) {
             foreach ($review->tasks as $task) {
