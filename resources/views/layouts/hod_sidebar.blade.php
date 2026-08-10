@@ -49,60 +49,107 @@
                 <div data-i18n="Team Performance">Team Performance</div>
             </a>
         </li>
-         <li class="menu-item {{ request()->routeIs([
-              'goals-assign.index',
-              'goals-assign.create',
-              'goals-assign.edit',
-              'goals-assign.show',
-              'view-assign-goal',
-              'view-assign-to-goal',
-              'goal.mapping.pdf',
-              'assign.goal.mapping.pdf',
-          ]) ? 'active open' : '' }}">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <li class="menu-item">
+            <a href="#" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-users"></i>
+                <div data-i18n="Goal Settings">Goal Settings</div>
+            </a>
+        </li>
+        <!-- <li class="menu-item {{ request()->routeIs([
+    'goals-assign.index',
+    'goals-assign.create',
+    'goals-assign.edit',
+    'goals-assign.show',
+    'view-assign-goal',
+    'view-assign-to-goal',
+    'goal.mapping.pdf',
+    'assign.goal.mapping.pdf',
+]) ? 'active open' : '' }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ti tabler-circle-letter-g"></i>
                 <div data-i18n="Goal Settings">Goal Settings</div>
-                </a>
+            </a>
 
-                <ul class="menu-sub">
+            <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs([
-                        'goals-assign.index',
-                        'goals-assign.create',
-                    'goals-assign.edit',
-                    'goals-assign.show',
-                        ]) ? 'active' : '' }}">
-                    <a href="{{ route('goals-assign.index') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign GOAL">
-                    <div data-i18n="Assign GOAL">Assign GOAL</div>
+    'goals-assign.index',
+    'goals-assign.create',
+    'goals-assign.edit',
+    'goals-assign.show',
+]) ? 'active' : '' }}">
+                    <a href="{{ route('goals-assign.index') }}" class="menu-link" data-bs-toggle="tooltip"
+                        data-bs-placement="right" data-bs-original-title="Assign GOAL">
+                        <div data-i18n="Assign GOAL">Assign GOAL</div>
                     </a>
                 </li>
-                 <li class="menu-item {{ request()->routeIs('view-assign-to-goal') ? 'active' : '' }}">
-                    <a href="{{ route('view-assign-to-goal') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign To Me">
-                    <div data-i18n="Assign To Me">Assign To Me</div>
+                <li class="menu-item {{ request()->routeIs('view-assign-to-goal') ? 'active' : '' }}">
+                    <a href="{{ route('view-assign-to-goal') }}" class="menu-link" data-bs-toggle="tooltip"
+                        data-bs-placement="right" data-bs-original-title="Assign To Me">
+                        <div data-i18n="Assign To Me">Assign To Me</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('view-assign-goal') ? 'active' : '' }}">
-                    <a href="{{ route('view-assign-goal') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign BY Me">
-                    <div data-i18n="Assign BY Me">Assign BY Me</div>
+                    <a href="{{ route('view-assign-goal') }}" class="menu-link" data-bs-toggle="tooltip"
+                        data-bs-placement="right" data-bs-original-title="Assign BY Me">
+                        <div data-i18n="Assign BY Me">Assign BY Me</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('goal.mapping.pdf') ? 'active' : '' }}">
-                    <a href="{{ route('goal.mapping.pdf') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign BY Me Report">
-                    <div data-i18n="Assign BY Me Report">Assign BY Me Report</div>
+                    <a href="{{ route('goal.mapping.pdf') }}" class="menu-link" data-bs-toggle="tooltip"
+                        data-bs-placement="right" data-bs-original-title="Assign BY Me Report">
+                        <div data-i18n="Assign BY Me Report">Assign BY Me Report</div>
                     </a>
                 </li>
-                 <li class="menu-item {{ request()->routeIs('assign.goal.mapping.pdf') ? 'active' : '' }}">
-                    <a href="{{ route('assign.goal.mapping.pdf') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign To Me Report">
-                    <div data-i18n="Assign To Me Report">Assign To Me Report</div>
+                <li class="menu-item {{ request()->routeIs('assign.goal.mapping.pdf') ? 'active' : '' }}">
+                    <a href="{{ route('assign.goal.mapping.pdf') }}" class="menu-link" data-bs-toggle="tooltip"
+                        data-bs-placement="right" data-bs-original-title="Assign To Me Report">
+                        <div data-i18n="Assign To Me Report">Assign To Me Report</div>
                     </a>
                 </li>
-                </ul>
+            </ul>
 
-            </li>
-        <li class="menu-item {{ request()->routeIs('manage-employee-tasks.index') ? 'active' : '' }} ">
-            <a href="{{ route('manage-employee-tasks.index') }}"" class=" menu-link">
-                <i class="menu-icon icon-base ti tabler-calendar-check"></i>
+        </li> -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon icon-base ti tabler-report"></i>
                 <div data-i18n="Daily Productivity">Daily Productivity</div>
             </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item {{ route('manage-employee-tasks.index') }}">
+                    <a href="{{ route('manage-employee-tasks.index') }}" class="menu-link">
+                        <div data-i18n="View Tasks">View Tasks</div>
+                    </a>
+                </li>
+
+                <li class="menu-item {{ route('manager-view-tasks.index') }}">
+                    <a href="{{ route('manager-view-tasks.index') }}" class="menu-link">
+                        <div data-i18n="Daily Tasks Review">Daily Tasks Review</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('manager-verification-summary') ? 'active' : '' }}">
+                    <a href="{{ route('manager-verification-summary') }}" class="menu-link">
+                        <div data-i18n="Manager Verification Summary">
+                            Manager Verification Summary
+                        </div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('productivity.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('productivity.dashboard') }}" class="menu-link">
+                        <div data-i18n="Monthly Dashboard">
+                            Monthly Dashboard
+                        </div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('main.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('main.dashboard') }}" class="menu-link">
+                        <div data-i18n="Visual Dashboard">
+                            Visual Dashboard
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
         </li>
         {{-- <li class="menu-item {{ request()->routeIs('survey.report') ? 'active' : '' }}">
             <a href="{{ route('survey.report') }}" class="menu-link">
@@ -120,11 +167,12 @@
             //$result = getRoleAssignments($displayRole, null, 1);
             $result = getSidbarRoleAssignments($displayRole, null, 1);
             $icons = icons();
-            $isPerformanceActive = request()->routeIs('indicator.form') || request()->routeIs('employee.rating.index') || request()->routeIs('employee.feedback.index') ||request()->routeIs('hod.target');
+            $isPerformanceActive = request()->routeIs('indicator.form') || request()->routeIs('employee.rating.index') || request()->routeIs('employee.feedback.index') || request()->routeIs('hod.target');
           @endphp
 
         <li class="menu-item {{ $isPerformanceActive ? 'active open' : '' }}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Performance Submissions">
+            <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip"
+                data-bs-placement="right" data-bs-original-title="Performance Submissions">
                 <i class="menu-icon icon-base ti tabler-brand-speedtest"></i>
                 <div data-i18n="Performance Submissions">Performance Submissions</div>
             </a>
@@ -132,7 +180,7 @@
             <ul class="menu-sub">
 
                 @foreach($result as $kpakey => $kpa)
-                     @php
+                    @php
                         $kpaActive = request()->routeIs('indicator.form')
                             && request()->route('area') == $kpa['id'];
                     @endphp
@@ -149,10 +197,11 @@
                         <ul class="menu-sub">
                             @foreach($kpa['category'] as $category)
                                 @php
-                                $categoryActive = request()->routeIs('indicator.form')
-                                    && request()->route('category') == $category['id'];
-                            @endphp
-                                <li class="menu-item {{ $categoryActive ? 'active open' : '' }}" title="{{ $category['indicator_category'] }}">
+                                    $categoryActive = request()->routeIs('indicator.form')
+                                        && request()->route('category') == $category['id'];
+                                @endphp
+                                <li class="menu-item {{ $categoryActive ? 'active open' : '' }}"
+                                    title="{{ $category['indicator_category'] }}">
                                     <a href="javascript:void(0);" class="menu-link menu-toggle" data-bs-toggle="tooltip"
                                         data-bs-placement="right"
                                         data-bs-original-title="{{ $category['indicator_category'] }}">
@@ -165,11 +214,12 @@
                                         <ul
                                             class="menu-sub {{ request()->routeIs('indicator.form') && request()->route('category') == $category['id'] ? 'active open' : '' }}">
                                             @foreach($category['indicator'] as $indicator)
-                                             @php
-                                                $indicatorActive = request()->routeIs('indicator.form')
-                                                    && request()->route('indicator') == $indicator['id'];
-                                            @endphp
-                                                                <li class="menu-item {{ $indicatorActive ? 'active' : '' }}" title="{{ $indicator['indicator'] }}">
+                                                                @php
+                                                                    $indicatorActive = request()->routeIs('indicator.form')
+                                                                        && request()->route('indicator') == $indicator['id'];
+                                                                @endphp
+                                                                <li class="menu-item {{ $indicatorActive ? 'active' : '' }}"
+                                                                    title="{{ $indicator['indicator'] }}">
                                                                     <a href="{{ route('indicator.form', [
                                                     'area' => $kpa['id'],
                                                     'category' => $category['id'],

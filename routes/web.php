@@ -172,7 +172,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/goal-mapping-pdf', [GoalReportController::class, 'pdf'])
         ->name('goal.mapping.pdf');
     Route::get('/reports/assign-goal-mapping-pdf', [GoalReportController::class, 'pdfuser'])
-        ->name('assign.goal.mapping.pdf');    
+        ->name('assign.goal.mapping.pdf');
 
     Route::resource('view-assign-goals', ViewAsignedGoalsController::class);
     Route::get(
@@ -189,7 +189,6 @@ Route::middleware('auth')->group(function () {
         [ViewAsignedGoalsController::class, 'managerVerify']
     )->name('manager-targets.update');
     Route::get('performance-hub', [ViewAsignedGoalsController::class, 'goalperformance'])->name('goalperformance.get');
-    
 
     // Returns the indicator modal HTML (without initial page include),
     // used for lazy-loading inside `admin/kpa.blade.php`.
@@ -338,7 +337,7 @@ Route::middleware('auth')->group(function () {
             '/completion-of-course-folder-verification/{id}',
             [CompletionOfCourseFolderController::class, 'updatestatusverification']
         )->name('completion.folder.verification');
-         Route::put(
+        Route::put(
             '/compliance_and_usage_of_lms_verification/{id}',
             [ComplianceAndUsageOfLMSController::class, 'updatestatusverification']
         )->name('compliance.usagelms.verification');
@@ -384,20 +383,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('manage-employee-tasks', ManagerTaskController::class);
         Route::get('/tasks-dashboard', [ManagerEmployeeTaskController::class, 'taskDashboard'])
             ->name('tasks.dashboard');
-        
+
     });
 
     Route::middleware('role:user')->group(function () {
-        Route::resource('manager-view-tasks', ManagerEmployeeTaskController::class);
-        Route::get(
-            '/manager-verification-summary',
-            [ManagerEmployeeTaskController::class, 'managerVerificationSummary']
-        )->name('manager-verification-summary');
-        Route::get('/productivity-dashboard', [ManagerEmployeeTaskController::class, 'MonthlyTeamProductivity'])
-            ->name('productivity.dashboard');
-        Route::get('/main-dashboard', [ManagerEmployeeTaskController::class, 'mainDashboard'])
-            ->name('main.dashboard');
-
         Route::get('/all-employee-tasks', [ManagerTaskController::class, 'allEmployeeTasks'])->name('alltask.get');
         Route::get('/employee-tasks-export', [ManagerTaskController::class, 'exportExcel'])->name('employee.tasks.export');
 
@@ -515,6 +504,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/nomination/edit/{id}', [SelfNominationController::class, 'edit'])->name('nomination.edit');
     Route::post('/nomination/update/{id}', [SelfNominationController::class, 'update'])->name('nomination.update');
     Route::delete('/nomination/delete/{id}', [SelfNominationController::class, 'destroy'])->name('nomination.destroy');
+
+    Route::resource('manager-view-tasks', ManagerEmployeeTaskController::class);
+    Route::get(
+        '/manager-verification-summary',
+        [ManagerEmployeeTaskController::class, 'managerVerificationSummary']
+    )->name('manager-verification-summary');
+    Route::get('/productivity-dashboard', [ManagerEmployeeTaskController::class, 'MonthlyTeamProductivity'])
+        ->name('productivity.dashboard');
+    Route::get('/main-dashboard', [ManagerEmployeeTaskController::class, 'mainDashboard'])
+        ->name('main.dashboard');
 
     Route::post(
         '/notifications/read/{id}',

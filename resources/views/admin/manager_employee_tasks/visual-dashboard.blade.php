@@ -5,7 +5,6 @@
 @section('content')
 
     <style>
-
         .dashboard-title {
 
             background: #1f4e78;
@@ -76,7 +75,6 @@
 
             margin-bottom: 20px;
         }
-
     </style>
 
     <div class="container-fluid">
@@ -291,7 +289,7 @@
 
             </div>
             <div class="card-body">
-              <canvas id="dailyTrendChart" height="90"></canvas>
+                <canvas id="dailyTrendChart" height="90"></canvas>
             </div>
 
         </div>
@@ -308,7 +306,7 @@
 
                     </div>
                     <div class="card-body">
-                     <canvas id="employeeChart"></canvas>
+                        <canvas id="employeeChart"></canvas>
                     </div>
 
                 </div>
@@ -326,7 +324,7 @@
 
                     </div>
                     <div class="card-body">
-                     <canvas id="verificationChart"></canvas>
+                        <canvas id="verificationChart"></canvas>
                     </div>
 
                 </div>
@@ -345,7 +343,7 @@
 
                     </div>
                     <div class="card-body">
-                      <canvas id="hoursChart" height=""></canvas>
+                        <canvas id="hoursChart" height=""></canvas>
                     </div>
 
                 </div>
@@ -362,7 +360,7 @@
 
                     </div>
                     <div class="card-body">
-                      <canvas id="priorityChart" height="300" ></canvas>
+                        <canvas id="priorityChart" height="300"></canvas>
                     </div>
 
                 </div>
@@ -489,6 +487,7 @@
     @push('script')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
         <script>
 
             const dailyTrend = @json($dailyTrend);
@@ -770,20 +769,14 @@
 
                     datasets: [{
 
-                        data: priorityData.map(x => x.total_hours),
+                        data: priorityData.map(x => Number(x.total_hours)),
 
                         backgroundColor: [
-
                             '#4F81BD',
-
                             '#C0504D',
-
                             '#9BBB59',
-
                             '#8064A2',
-
                             '#F79646'
-
                         ]
 
                     }]
@@ -797,11 +790,28 @@
 
                     plugins: {
 
-                        legend: { position: 'right' }
+                        legend: {
+                            position: 'right'
+                        },
+
+                        datalabels: {
+                            display: true,
+                            color: '#fff',
+                            font: {
+                                weight: 'bold',
+                                size: 13
+                            },
+
+                            formatter: function (value) {
+                                return Number(value).toFixed(1) + ' hrs';
+                            }
+                        }
 
                     }
 
-                }
+                },
+
+                plugins: [ChartDataLabels]
 
             });
 
