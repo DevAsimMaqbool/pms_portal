@@ -8,6 +8,7 @@ class CompletionOfCourseFolder extends Model
 {
     protected $fillable = [
         'faculty_member_id',
+        '',
         'class_cod',
         'form_status',
         'document_url',

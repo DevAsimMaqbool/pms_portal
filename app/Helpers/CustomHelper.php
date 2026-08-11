@@ -2964,7 +2964,7 @@ function indicatorCategoryAvgScore($category_id, $kpa_id, $emp_id, $member = nul
         ->where('key_performance_area_id', $kpa_id)
         ->where('indicator_category_id', $category_id)
         ->where('role_id', $roleId)
-        ->avg('score');
+        ->sum('score');
 
     $target = RoleKpaAssignment::where('role_id', $roleId)
         ->where('key_performance_area_id', $kpa_id)
@@ -8375,21 +8375,21 @@ function kpaAvgScoreForReport($kpa_id, $emp_id, $member = null)
         ->get()
         ->pluck('score')
         ->map(fn($score) => min($score, 100))
-        ->avg();
-    //$avg = ($avgs / $target) * 100;
-    $avg = $target > 0 ? ($avgs / $target) * 100 : 0;
-    $avg = $avg ? round($avg, 2) : 0.00;
+        ->sum();
+     $avgs = min($avgs, 100);    
+    
+    $weightage = $target > 0 ? ($avgs * $target) / 100 : 0;
     // Rating logic
-    if ($avg >= 90) {
+    if ($avgs >= 90) {
         $color = '#6EA8FE';
         $rating = 'OS';
-    } elseif ($avg >= 80) {
+    } elseif ($avgs >= 80) {
         $color = '#96e2b4';
         $rating = 'EE';
-    } elseif ($avg >= 70) {
+    } elseif ($avgs >= 70) {
         $color = '#ffcb9a';
         $rating = 'ME';
-    } elseif ($avg >= 60) {
+    } elseif ($avgs >= 60) {
         $color = '#fd7e13';
         $rating = 'NI';
     } else {
@@ -8399,7 +8399,7 @@ function kpaAvgScoreForReport($kpa_id, $emp_id, $member = null)
 
     return [
         'target' => $target,
-        'avg' => $avg,
+        'avg' => $avgs,
         'rating' => $rating,
         'color' => $color,
     ];
