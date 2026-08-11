@@ -201,16 +201,14 @@ class PermissionController extends Controller
             'dean' => $user->roles->firstWhere('name', 'Dean'),
             default => $user->roles->first(),
         };
-        //dd($activeRole);
-        // Fetch assignments
-        $assignments = RoleKpaAssignment::with(['kpa', 'category', 'indicator'])
-            ->where('role_id', $role->id)
-            ->get();
-
         // Group data
         if (!$role) {
             abort(403, 'No valid role found for this user.');
         }
+        // Fetch assignments
+        $assignments = RoleKpaAssignment::with(['kpa', 'category', 'indicator'])
+            ->where('role_id', $role->id)
+            ->get();
         $grouped = $assignments->filter(fn($a) => $a->kpa && $a->category && $a->indicator)
             ->groupBy(fn($a) => $a->kpa->id)
             ->map(function ($kpaGroup) {
