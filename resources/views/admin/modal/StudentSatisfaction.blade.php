@@ -78,6 +78,31 @@
             ? $classFeedback1->where('term_id', $fallTerm->id)
             : collect();
 
+        // Spring Average
+        $springAvg = $springData->isNotEmpty()
+            ? $springData->avg(
+                fn($f) => (float) str_replace('%', '', $f->feedback)
+            )
+            : 0;
+
+        // Fall Average
+        $fallAvg = $fallData->isNotEmpty()
+            ? $fallData->avg(
+                fn($f) => (float) str_replace('%', '', $f->feedback)
+            )
+            : 0;
+
+        // Overall Average = (Spring + Fall) / 2
+        if ($springData->isNotEmpty() && $fallData->isNotEmpty()) {
+            $avgScore = round(($springAvg + $fallAvg) / 2, 2);
+        } elseif ($springData->isNotEmpty()) {
+            $avgScore = $springAvg;
+        } elseif ($fallData->isNotEmpty()) {
+            $avgScore = $fallAvg;
+        } else {
+            $avgScore = 0;
+        }
+
         if (!function_exists('ratingMeta')) {
             function ratingMeta($average)
             {
@@ -96,6 +121,16 @@
 
         $color = 'secondary';
         $rating = 'N/A';
+        $weight = getRoleWeightage($activeRoleId, 'indicator', 182)['weightage'] ?? 0;
+        $weightedScore = ($avgScore * $weight) / 100;
+        saveIndicatorPercentage90Plus(
+            auth()->user()->employee_id,
+            $activeRoleId,
+            1,
+            23,
+            182,
+            $weightedScore
+        );
     @endphp
     <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
