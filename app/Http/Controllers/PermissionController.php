@@ -159,7 +159,6 @@ class PermissionController extends Controller
         $categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
         $data = [100, 40, 50, 60, 70, 80, 90, 85];
 
-
         if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'Human Resources' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center' || $role->name == 'Rector' || $role->name == 'QCH' || $role->name == 'ORIC') {
             return view('admin.teacher_dashbord_bk', compact('employee'));
         } else {
@@ -209,6 +208,9 @@ class PermissionController extends Controller
             ->get();
 
         // Group data
+        if (!$role) {
+            abort(403, 'No valid role found for this user.');
+        }
         $grouped = $assignments->filter(fn($a) => $a->kpa && $a->category && $a->indicator)
             ->groupBy(fn($a) => $a->kpa->id)
             ->map(function ($kpaGroup) {
@@ -273,7 +275,7 @@ class PermissionController extends Controller
             case 'international office':
             case 'human resources':
             case 'qec':
-            case 'qch':    
+            case 'qch':
             case 'oec':
             case 'dops':
             case 'alumni office':
@@ -295,7 +297,6 @@ class PermissionController extends Controller
         }
 
         $role = $user->roles->first();
-
 
         $assignments = RoleKpaAssignment::with(['kpa', 'category', 'indicator'])
             ->where('role_id', $role->id)
@@ -378,24 +379,24 @@ class PermissionController extends Controller
         }
 
         $roleMap = [
-            'Teacher'              => 'teacher',
-            'Assistant Professor'  => 'assistant professor',
-            'Associate Professor'  => 'associate professor',
-            'Professor'            => 'professor',
-            'Program Leader UG'    => 'program leader ug',
-            'Program Leader PG'    => 'program leader pg',
-            'Finance'              => 'finance',
+            'Teacher' => 'teacher',
+            'Assistant Professor' => 'assistant professor',
+            'Associate Professor' => 'associate professor',
+            'Professor' => 'professor',
+            'Program Leader UG' => 'program leader ug',
+            'Program Leader PG' => 'program leader pg',
+            'Finance' => 'finance',
             'International Office' => 'international office',
-            'HR'                   => 'hr',
-            'QCE'                  => 'qce',
-            'OEC'                  => 'oec',
-            'DOPS'                 => 'dops',
-            'Alumni Office'        => 'alumni office',
+            'HR' => 'hr',
+            'QCE' => 'qce',
+            'OEC' => 'oec',
+            'DOPS' => 'dops',
+            'Alumni Office' => 'alumni office',
             'Employability Center' => 'employability center',
-            'Rector'               => 'rector',
-            'QCH'                  => 'qch',
-            'ORIC'                 => 'oric',
-            'HOD'                  => 'hod',
+            'Rector' => 'rector',
+            'QCH' => 'qch',
+            'ORIC' => 'oric',
+            'HOD' => 'hod',
         ];
 
         session([
@@ -403,25 +404,25 @@ class PermissionController extends Controller
         ]);
 
         return match (activeRole()) {
-            'teacher'              => redirect()->route('teacher_dashboard'),
-            'assistant professor'  => redirect()->route('teacher_dashboard'),
-            'associate professor'  => redirect()->route('teacher_dashboard'),
-            'professor'            => redirect()->route('teacher_dashboard'),
-            'program leader ug'    => redirect()->route('teacher_dashboard'),
-            'program leader pg'    => redirect()->route('teacher_dashboard'),
-            'finance'              => redirect()->route('teacher_dashboard'),
+            'teacher' => redirect()->route('teacher_dashboard'),
+            'assistant professor' => redirect()->route('teacher_dashboard'),
+            'associate professor' => redirect()->route('teacher_dashboard'),
+            'professor' => redirect()->route('teacher_dashboard'),
+            'program leader ug' => redirect()->route('teacher_dashboard'),
+            'program leader pg' => redirect()->route('teacher_dashboard'),
+            'finance' => redirect()->route('teacher_dashboard'),
             'international office' => redirect()->route('teacher_dashboard'),
-            'hr'                   => redirect()->route('teacher_dashboard'),
-            'qce'                  => redirect()->route('teacher_dashboard'),
-            'oec'                  => redirect()->route('teacher_dashboard'),
-            'dops'                 => redirect()->route('teacher_dashboard'),
-            'alumni office'        => redirect()->route('teacher_dashboard'),
+            'hr' => redirect()->route('teacher_dashboard'),
+            'qce' => redirect()->route('teacher_dashboard'),
+            'oec' => redirect()->route('teacher_dashboard'),
+            'dops' => redirect()->route('teacher_dashboard'),
+            'alumni office' => redirect()->route('teacher_dashboard'),
             'employability center' => redirect()->route('teacher_dashboard'),
-            'rector'               => redirect()->route('teacher_dashboard'),
-            'qch'                  => redirect()->route('teacher_dashboard'),
-            'oric'                 => redirect()->route('teacher_dashboard'),
-            'hod'                  => redirect()->route('hod.dashboard'),
-            default                => redirect()->back(),
+            'rector' => redirect()->route('teacher_dashboard'),
+            'qch' => redirect()->route('teacher_dashboard'),
+            'oric' => redirect()->route('teacher_dashboard'),
+            'hod' => redirect()->route('hod.dashboard'),
+            default => redirect()->back(),
         };
     }
     public function hodDepartmentsOverview()
@@ -512,6 +513,5 @@ class PermissionController extends Controller
 
         return view('admin.multi_role_performance', compact('scores', 'combinedScore'));
     }
-
 
 }
