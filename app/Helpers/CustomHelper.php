@@ -2890,16 +2890,16 @@ function kpaAvgScore($kpaId, $employeeId)
     $weightage = getRoleWeightage($userRoleId, 'kpa', $kpaId)['weightage'];
     $weightedScore = ($avg * $weightage) / 100;
 
-    if ($weightedScore >= 90) {
+    if ($avg >= 90) {
         $color = 'primary';
         $rating = 'OS';
-    } elseif ($weightedScore >= 80) {
+    } elseif ($avg >= 80) {
         $color = 'success';
         $rating = 'EE';
-    } elseif ($weightedScore >= 70) {
+    } elseif ($avg >= 70) {
         $color = 'warning';
         $rating = 'ME';
-    } elseif ($weightedScore >= 60) {
+    } elseif ($avg >= 60) {
         $color = 'orange';
         $rating = 'NI';
     } else {
