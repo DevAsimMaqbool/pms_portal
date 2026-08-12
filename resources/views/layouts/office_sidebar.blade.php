@@ -7,7 +7,6 @@
       <img style="width: 175px;" src="{{ asset('admin/assets/img/avatars/superior.svg') }}">
     </a>
 
-
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
       <i class="icon-base ti menu-toggle-icon d-none d-xl-block"></i>
       <i class="icon-base ti tabler-x d-block d-xl-none"></i>
@@ -25,6 +24,7 @@
         <div data-i18n="Dashboard">Dashboard</div>
       </a>
     </li>
+    @if(!auth()->user()->hasRole(['ORIC', 'Alumni Office', 'Employability Center']))
      <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ti tabler-report"></i>
@@ -65,6 +65,7 @@
                 </ul>
 
             </li>
+            @endif
     @php
       // $result = getRoleAssignments(Auth::user()->getRoleNames()->first(), null, 1); 
       $result = getSidbarRoleAssignments(Auth::user()->getRoleNames()->first(), null, 1);
