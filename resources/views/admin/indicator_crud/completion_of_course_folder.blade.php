@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor']))
+        @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor', 'Demonstrator']))
         <div class="card">
             <!-- Header with Add Feedback Button -->
             <div class="d-flex justify-content-between align-items-center p-3">
@@ -50,7 +50,7 @@
                                     $color = '#000000';
                                     $status = 'NA';
                                 }
-                                
+
                             @endphp
                             <tr>
                                 <td>{{ $index + 1 }}</td>
@@ -82,7 +82,7 @@
                                         Edit
                                     </a>
                                 @endif
-                                    
+
                                 </td>
                                 <td>
                                     <button
@@ -95,11 +95,9 @@
                                 </td>
                             </tr>
                         @empty
-                            
+
                         @endforelse
                     </tbody>
-
-
 
                 </table>
             </div>
@@ -115,7 +113,7 @@
                     </div>
                     <div class="modal-body">
                         <table class="table table-bordered">
-                           
+
                             <tr>
                                 <th>Created Date</th>
                                 <td id="modalCreatedDate"></td>
@@ -147,137 +145,136 @@
 @endsection
 
 @push('script')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('admin/assets/vendor/libs/datatables/jquery.dataTables.js') }}"></script>
-<script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-<script src="{{ asset('admin/assets/vendor/libs/datatables-responsive/dataTables.responsive.js') }}"></script>
-@if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor']))
-<script>
-  const CURRENT_FACULTY_ID = @json(auth()->user()->faculty_id);
-         window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
-        window.activeUserRole = "{{ getRoleName(activeRole()) }}";
-    $(document).ready(function () {
-        let table = $('#userTable');
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/datatables/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendor/libs/datatables-responsive/dataTables.responsive.js') }}"></script>
+    @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor', 'Demonstrator']))
+    <script>
+      const CURRENT_FACULTY_ID = @json(auth()->user()->faculty_id);
+             window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+            window.activeUserRole = "{{ getRoleName(activeRole()) }}";
+        $(document).ready(function () {
+            let table = $('#userTable');
 
-        if (table.length) {
-            // Destroy existing instance if any
-            if ($.fn.DataTable.isDataTable('#userTable')) {
-                table.DataTable().destroy();
+            if (table.length) {
+                // Destroy existing instance if any
+                if ($.fn.DataTable.isDataTable('#userTable')) {
+                    table.DataTable().destroy();
+                }
+
+                // Initialize DataTable
+                table.DataTable({
+                    responsive: true,
+                    ordering: true,
+                    paging: true,
+                    searching: true,
+                    info: true,
+                    autoWidth: true
+                });
             }
 
-            // Initialize DataTable
-            table.DataTable({
-                responsive: true,
-                ordering: true,
-                paging: true,
-                searching: true,
-                info: true,
-                autoWidth: true
-            });
-        }
+            $(document).on('click', '.view-form-btn', function () {
+                        const form = $(this).data('form');
+                        $('#modalExtraFields').find('.optional-field').remove();
+                        $('#modalExtraFieldsHistory').find('.optional-field').remove();
+                        $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
+                        $('#modalStatus').text(form.status || 'Pending');
+                        $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
 
-        $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
-                    $('#modalExtraFields').find('.optional-field').remove();
-                    $('#modalExtraFieldsHistory').find('.optional-field').remove();
-                    $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
-                    $('#modalStatus').text(form.status || 'Pending');
-                    $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                      
-                    if (form.faculty_class.class_name) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Class Name</th><td>${form.faculty_class.class_name}</td></tr>`);
-                    }
-
-                    if ( form.faculty_class.code) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Class Cod</th><td>${ form.faculty_class.code}</td></tr>`);
-                    }
-                    if ( form.document_url) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Details</th><td>${ form.document_url}</td></tr>`);
-                    }
-                    if (form.completion_of_Course_folder !== undefined && form.completion_of_Course_folder !== null) {
-
-                        let folderStatus = '';
-
-                        if (form.completion_of_Course_folder == 100) {
-                            folderStatus = 'Completed';
-                        } else if (form.completion_of_Course_folder == 70) {
-                            folderStatus = 'Partially Completed';
-                        } else if (form.completion_of_Course_folder == 25) {
-                            folderStatus = 'Not Completed';
-                        } else {
-                            folderStatus = form.completion_of_Course_folder + '%';
+                        if (form.faculty_class.class_name) {
+                            $('#modalExtraFields').append(`<tr class="optional-field"><th>Class Name</th><td>${form.faculty_class.class_name}</td></tr>`);
                         }
 
-                        $('#modalExtraFields').append(`
-                            <tr class="optional-field">
-                                <th>Course Folder Status</th>
-                                <td>${folderStatus}</td>
-                            </tr>
-                        `);
-                    }
-                   
-                    
-                    if (form.update_history) {
-                            // Parse JSON string if it's a string
-                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+                        if ( form.faculty_class.code) {
+                            $('#modalExtraFields').append(`<tr class="optional-field"><th>Class Cod</th><td>${ form.faculty_class.code}</td></tr>`);
+                        }
+                        if ( form.document_url) {
+                            $('#modalExtraFields').append(`<tr class="optional-field"><th>Details</th><td>${ form.document_url}</td></tr>`);
+                        }
+                        if (form.completion_of_Course_folder !== undefined && form.completion_of_Course_folder !== null) {
 
-                            if (history.length > 0) {
-                                
-                                let historyHtml = '';
+                            let folderStatus = '';
 
-                                history.forEach(update => {
-                                    let histortText = 'N/A';
-
-                                    // Role-based status mapping
-                                    if (update.role === 'HOD') {
-                                        if (update.status == '0') histortText = 'Reject';
-                                        else if (update.status == '1') histortText = 'unapproved';
-                                            else if (update.status == '2') histortText = 'Approved';
-                                    } else if (update.role === 'ORIC') {
-                                        if (update.status == '0') histortText = 'Reject';
-                                        else if (update.status == '2') histortText = 'unapproved';
-                                        else if (update.status == '3') histortText = 'Approved';
-                                    } else {
-                                        histortText = update.status; // fallback
-                                    }
-                                    historyHtml += `
-                                        <li class="timeline-item timeline-item-transparent optional-field">
-                                            <span class="timeline-point timeline-point-primary"></span>
-                                            <div class="timeline-event">
-                                                <div class="timeline-header mb-3">
-                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
-                                                </div>
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <div class="badge bg-lighter rounded-3">
-                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
-                                                    </div>
-                                                    <div class="badge bg-lighter rounded-3 ms-2">
-                                                     <span class="h6 mb-0 text-body">${histortText}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <div class="badge bg-danger rounded-3 ms-2">
-                                                    <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    `;
-                                });
-
-                                $('#modalExtraFieldsHistory').append(historyHtml);
+                            if (form.completion_of_Course_folder == 100) {
+                                folderStatus = 'Completed';
+                            } else if (form.completion_of_Course_folder == 70) {
+                                folderStatus = 'Partially Completed';
+                            } else if (form.completion_of_Course_folder == 25) {
+                                folderStatus = 'Not Completed';
+                            } else {
+                                folderStatus = form.completion_of_Course_folder + '%';
                             }
-                        }
-                        else {
-                            $('#modalExtraFieldsHistory').append(`
-                                <li class="optional-field">
-                                    <th>No History Avalable</th>
-                                </li>
+
+                            $('#modalExtraFields').append(`
+                                <tr class="optional-field">
+                                    <th>Course Folder Status</th>
+                                    <td>${folderStatus}</td>
+                                </tr>
                             `);
                         }
-                    $('#viewFormModal').modal('show');
-                });
-    });
-</script>
- @endif
+
+                        if (form.update_history) {
+                                // Parse JSON string if it's a string
+                                let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+
+                                if (history.length > 0) {
+
+                                    let historyHtml = '';
+
+                                    history.forEach(update => {
+                                        let histortText = 'N/A';
+
+                                        // Role-based status mapping
+                                        if (update.role === 'HOD') {
+                                            if (update.status == '0') histortText = 'Reject';
+                                            else if (update.status == '1') histortText = 'unapproved';
+                                                else if (update.status == '2') histortText = 'Approved';
+                                        } else if (update.role === 'ORIC') {
+                                            if (update.status == '0') histortText = 'Reject';
+                                            else if (update.status == '2') histortText = 'unapproved';
+                                            else if (update.status == '3') histortText = 'Approved';
+                                        } else {
+                                            histortText = update.status; // fallback
+                                        }
+                                        historyHtml += `
+                                            <li class="timeline-item timeline-item-transparent optional-field">
+                                                <span class="timeline-point timeline-point-primary"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header mb-3">
+                                                        <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                    </div>
+                                                    <div class="d-flex align-items-center mb-1">
+                                                        <div class="badge bg-lighter rounded-3">
+                                                         <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                        </div>
+                                                        <div class="badge bg-lighter rounded-3 ms-2">
+                                                         <span class="h6 mb-0 text-body">${histortText}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex align-items-center mb-1">
+                                                        <div class="badge bg-danger rounded-3 ms-2">
+                                                        <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        `;
+                                    });
+
+                                    $('#modalExtraFieldsHistory').append(historyHtml);
+                                }
+                            }
+                            else {
+                                $('#modalExtraFieldsHistory').append(`
+                                    <li class="optional-field">
+                                        <th>No History Avalable</th>
+                                    </li>
+                                `);
+                            }
+                        $('#viewFormModal').modal('show');
+                    });
+        });
+    </script>
+     @endif
 @endpush

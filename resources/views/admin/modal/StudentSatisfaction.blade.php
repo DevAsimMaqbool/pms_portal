@@ -35,7 +35,7 @@
         vertical-align: middle;
     }
 </style>
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
     <!--  Payment Methods modal -->
     @php
         $activeRoleId = getRoleIdByName(activeRole());

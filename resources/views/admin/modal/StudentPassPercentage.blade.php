@@ -130,7 +130,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
 
                                             @forelse($spring as $class)
                                                 @php
@@ -190,7 +190,7 @@
                                             @endforelse
                                         @endif
                                     </tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
@@ -230,7 +230,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
 
                                             @forelse($fall as $class)
                                                 @php
@@ -290,7 +290,7 @@
                                             @endforelse
                                         @endif
                                     </tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>

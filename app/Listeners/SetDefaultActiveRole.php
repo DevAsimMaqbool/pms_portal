@@ -39,7 +39,8 @@ class SetDefaultActiveRole
             'Employability Center',
             'Rector',
             'QCH',
-            'ORIC'
+            'ORIC',
+            'Demonstrator'
         ];
 
         if (in_array($role, $teacherRoles)) {

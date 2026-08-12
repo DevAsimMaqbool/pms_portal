@@ -83,7 +83,7 @@ class PermissionController extends Controller
         if ($role->name == 'Rector') {
             return redirect()->route('rector-dashboard.index');
         }
-        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'Human Resources' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center' || $role->name == 'Rector' || $role->name == 'QCH' || $role->name == 'ORIC') {
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'Human Resources' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center' || $role->name == 'Rector' || $role->name == 'QCH' || $role->name == 'ORIC' || $role->name == 'Demonstrator') {
             return view('admin.teacher_dashbord', compact('employee', 'showPasswordPopup'));
         } elseif ($role->name == 'Survey') {
             return view('admin.survey_dashbord', compact('employee', 'showPasswordPopup'));
@@ -159,7 +159,7 @@ class PermissionController extends Controller
         $categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
         $data = [100, 40, 50, 60, 70, 80, 90, 85];
 
-        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'Human Resources' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center' || $role->name == 'Rector' || $role->name == 'QCH' || $role->name == 'ORIC') {
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'Human Resources' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center' || $role->name == 'Rector' || $role->name == 'QCH' || $role->name == 'ORIC' || $role->name == 'Demonstrator') {
             return view('admin.teacher_dashbord_bk', compact('employee'));
         } else {
             return view('admin.teacher_dashbord', compact('employee'));
@@ -196,6 +196,7 @@ class PermissionController extends Controller
             ?? $user->roles->firstWhere('name', 'Rector')
             ?? $user->roles->firstWhere('name', 'QCH')
             ?? $user->roles->firstWhere('name', 'ORIC')
+            ?? $user->roles->firstWhere('name', 'Demonstrator')
             ?? $user->roles->first(),
             'hod' => $user->roles->firstWhere('name', 'HOD'),
             'dean' => $user->roles->firstWhere('name', 'Dean'),
@@ -260,6 +261,7 @@ class PermissionController extends Controller
             case 'associate professor':
             case 'program leader ug':
             case 'program leader pg':
+            case 'demonstrator':
                 $researchData = Research_Innovation_Commercialization($employee->employee_id, $activeRoleId, 0);
                 return view('admin.v2', compact('employee', 'dataset1', 'researchData', 'showPasswordPopup'));
             case 'hod':
@@ -349,7 +351,7 @@ class PermissionController extends Controller
     //         abort(403);
     //     }
 
-    //     $teacherRoles = ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG', 'Finance', 'International Office', 'HR', 'QCE', 'OEC', 'DOPS', 'Alumni Office', 'Employability Center', 'Rector', 'QCH', 'ORIC'];
+    //     $teacherRoles = ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG', 'Finance', 'International Office', 'HR', 'QCE', 'OEC', 'DOPS', 'Alumni Office', 'Employability Center', 'Rector', 'QCH', 'ORIC', 'Demonstrator'];
     //     if (in_array($request->role, $teacherRoles)) {
     //         session(['active_role' => 'teacher']);
     //     } elseif ($request->role === 'HOD') {
@@ -394,6 +396,7 @@ class PermissionController extends Controller
             'Rector' => 'rector',
             'QCH' => 'qch',
             'ORIC' => 'oric',
+            'Demonstrator' => 'demonstrator',
             'HOD' => 'hod',
         ];
 
@@ -419,6 +422,7 @@ class PermissionController extends Controller
             'rector' => redirect()->route('teacher_dashboard'),
             'qch' => redirect()->route('teacher_dashboard'),
             'oric' => redirect()->route('teacher_dashboard'),
+            'demonstrator' => redirect()->route('teacher_dashboard'),
             'hod' => redirect()->route('hod.dashboard'),
             default => redirect()->back(),
         };

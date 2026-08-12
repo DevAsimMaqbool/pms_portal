@@ -35,61 +35,61 @@
         vertical-align: middle;
     }
 </style>
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
     <!--  Payment Methods modal -->
     @php   
-        $activeRoleId = getRoleIdByName(activeRole());
-            // Initialize totalFeedback to 0 in case nothing is set later
-            $totalFeedback = 0;
-            $activeTerms = \App\Models\Term::where('status', '1')
-                ->get()
-                ->keyBy('term');
+            $activeRoleId = getRoleIdByName(activeRole());
+        // Initialize totalFeedback to 0 in case nothing is set later
+        $totalFeedback = 0;
+        $activeTerms = \App\Models\Term::where('status', '1')
+            ->get()
+            ->keyBy('term');
 
-            $springTerm = $activeTerms->get('Spring');
-            $fallTerm = $activeTerms->get('Fall');
+        $springTerm = $activeTerms->get('Spring');
+        $fallTerm = $activeTerms->get('Fall');
 
-            $springData = $springTerm
-                ? myClasses(
-                    Auth::user()->faculty_id,
-                    $activeRoleId,
-                    $springTerm->id
-                )
-                : null;
+        $springData = $springTerm
+            ? myClasses(
+                Auth::user()->faculty_id,
+                $activeRoleId,
+                $springTerm->id
+            )
+            : null;
 
-            $fallData = $fallTerm
-                ? myClasses(
-                    Auth::user()->faculty_id,
-                    $activeRoleId,
-                    $fallTerm->id
-                )
-                : null;
+        $fallData = $fallTerm
+            ? myClasses(
+                Auth::user()->faculty_id,
+                $activeRoleId,
+                $fallTerm->id
+            )
+            : null;
 
-            $spring = $springData['classes'] ?? collect();
-            $fall = $fallData['classes'] ?? collect();
+        $spring = $springData['classes'] ?? collect();
+        $fall = $fallData['classes'] ?? collect();
 
-            /*
-            |--------------------------------------------------------------------------
-            | Average Student Marks
-            |--------------------------------------------------------------------------
-            */
+        /*
+        |--------------------------------------------------------------------------
+        | Average Student Marks
+        |--------------------------------------------------------------------------
+        */
 
-            $springAvg = $spring->isNotEmpty()
-                ? $spring->avg(fn($class) => (float) ($class->average_marks ?? 0))
-                : 0;
+        $springAvg = $spring->isNotEmpty()
+            ? $spring->avg(fn($class) => (float) ($class->average_marks ?? 0))
+            : 0;
 
-            $fallAvg = $fall->isNotEmpty()
-                ? $fall->avg(fn($class) => (float) ($class->average_marks ?? 0))
-                : 0;
+        $fallAvg = $fall->isNotEmpty()
+            ? $fall->avg(fn($class) => (float) ($class->average_marks ?? 0))
+            : 0;
 
-            /*
-            |--------------------------------------------------------------------------
-            | Overall Average - Spring + Fall
-            |--------------------------------------------------------------------------
-            */
+        /*
+        |--------------------------------------------------------------------------
+        | Overall Average - Spring + Fall
+        |--------------------------------------------------------------------------
+        */
 
-            $avgScore = ($spring->isNotEmpty() && $fall->isNotEmpty())
-                ? ($springAvg + $fallAvg) / 2
-                : ($spring->isNotEmpty() ? $springAvg : $fallAvg);
+        $avgScore = ($spring->isNotEmpty() && $fall->isNotEmpty())
+            ? ($springAvg + $fallAvg) / 2
+            : ($spring->isNotEmpty() ? $springAvg : $fallAvg);
     @endphp
     <div class="modal fade" id="AverageStudentScore" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -142,7 +142,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
 
                                                 @forelse($spring as $class)
                                                     @php
@@ -194,7 +194,7 @@
                                                 @endforelse
                                             @endif
                                         </tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
                                             <tfoot>
                                                 <tr class="table-primary">
                                                     <th class="text-end">Total</th>
@@ -232,7 +232,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
 
                                                 @forelse($fall as $class)
                                                     @php
@@ -284,7 +284,7 @@
                                                 @endforelse
                                             @endif
                                         </tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
                                             <tfoot>
                                                 <tr class="table-primary">
                                                     <th class="text-end">Total</th>
