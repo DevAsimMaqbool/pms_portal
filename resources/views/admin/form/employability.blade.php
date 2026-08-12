@@ -68,7 +68,7 @@
                             $range = $year . '-' . $nextYear;
                             echo "<option value='{$range}'>{$range}</option>";
                         }
-                                                                                                                                        ?>
+                                                                                                                                                                                                                                                                                                    ?>
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
@@ -145,7 +145,12 @@
                                                                             <option value="{{ $term->id }}"> {{ $term->term }}
                                                                                 {{ $term->start_year }}
                                                                         </option> @endforeach
-
+                                                                        <option value="35">Fall 2020</option>
+                                                                        <option value="36">Fall 2021</option>
+                                                                        <option value="45">Fall 2023</option>
+                                                                        <option value="28">Spring 2021</option>
+                                                                        <option value="40">Spring 2022</option>
+                                                                        <option value="46">Spring 2024</option>
                                                                     </select>
                                                                 </div>
 
@@ -541,8 +546,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                                                ${department.name}
-                                                </option>`
+                ${department.name}
+                </option>`
                                     );
                                 });
 
@@ -572,8 +577,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                                                ${program.program_name}
-                                                </option>`
+                ${program.program_name}
+                </option>`
                                     );
                                 });
 
