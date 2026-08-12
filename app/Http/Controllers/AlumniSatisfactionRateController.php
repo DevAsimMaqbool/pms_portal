@@ -46,7 +46,6 @@ class AlumniSatisfactionRateController extends Controller
         }
     }
 
-
     // 🔹 Store
     public function store(Request $request)
     {
@@ -54,37 +53,25 @@ class AlumniSatisfactionRateController extends Controller
         $request->validate([
             'indicator_id' => 'required|exists:indicators,id',
             'form_status' => 'required|string',
-            'name' => 'required',
-            'gender' => 'required',
             'faculty_id' => 'required',
             'department_id' => 'required',
             'program_id' => 'required',
-            'program_level'=>'required',
-            'roll_no' => 'required|unique:alumni_satisfaction_rates,roll_no',
-            'graduation_year' => 'required',
-            'current_organization' => 'required',
-            'current_designation' => 'required',
-            'current_salary' => 'required',
-            'email' => 'required',
+            'program_level' => 'required',
             'satisfaction_rate' => 'required',
+            'alumni_engagement_rate' => 'required',
+            'portal_registration' => 'required',
         ]);
 
         AlumniSatisfactionRate::create([
             'indicator_id' => $request->indicator_id,
             'form_status' => $request->form_status,
-            'name' => $request->name,
-            'gender' => $request->gender,
             'faculty_id' => $request->faculty_id,
             'department_id' => $request->department_id,
             'program_id' => $request->program_id,
             'program_level' => $request->program_level,
-            'roll_no' => $request->roll_no,
-            'graduation_year' => $request->graduation_year,
-            'current_organization' => $request->current_organization,
-            'current_designation' => $request->current_designation,
-            'current_salary' => $request->current_salary,
-            'email' => $request->email,
             'satisfaction_rate' => $request->satisfaction_rate,
+            'alumni_engagement_rate' => $request->alumni_engagement_rate,
+            'portal_registration' => $request->portal_registration,
             'created_by' => $userId,
             'updated_by' => $userId,
         ]);
@@ -114,35 +101,23 @@ class AlumniSatisfactionRateController extends Controller
         }
 
         $request->validate([
-            'name' => 'required',
-            'gender' => 'required',
             'faculty_id' => 'required',
             'department_id' => 'required',
             'program_id' => 'required',
-            'program_level'=>'required',
-            'roll_no' => 'required|unique:alumni_satisfaction_rates,roll_no,' . $id,
-            'graduation_year' => 'required',
-            'current_organization' => 'required',
-            'current_designation' => 'required',
-            'current_salary' => 'required',
-            'email' => 'required',
+            'program_level' => 'required',
             'satisfaction_rate' => 'required',
+            'alumni_engagement_rate' => 'required',
+            'portal_registration' => 'required',
         ]);
 
         $data = [
-            'name' => $request->name,
-            'gender' => $request->gender,
             'faculty_id' => $request->faculty_id,
             'department_id' => $request->department_id,
             'program_id' => $request->program_id,
             'program_level' => $request->program_level,
-            'roll_no' => $request->roll_no,
-            'graduation_year' => $request->graduation_year,
-            'current_organization' => $request->current_organization,
-            'current_designation' => $request->current_designation,
-            'current_salary' => $request->current_salary,
-            'email' => $request->email,
             'satisfaction_rate' => $request->satisfaction_rate,
+            'alumni_engagement_rate' => $request->alumni_engagement_rate,
+            'portal_registration' => $request->portal_registration,
             'updated_by' => Auth::id(),
         ];
 
