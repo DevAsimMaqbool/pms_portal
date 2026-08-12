@@ -63,18 +63,40 @@
                                                                         class="select2 form-select faculty-member" required>
                                                                         <option value="">-- Select Period --</option>
                                                                         <?php    $currentYear = date('Y');
-                        for ($year = $currentYear - 1; $year <= $currentYear + 3; $year++) {
+                        for ($year = $currentYear - 1; $year <= $currentYear; $year++) {
                             $nextYear = $year + 1;
                             $range = $year . '-' . $nextYear;
                             echo "<option value='{$range}'>{$range}</option>";
                         }
-                                                                                                        ?>
+                                                                                                                                        ?>
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="student_name" class="form-label">Student Name</label>
                                                                     <input type="text" name="student_name" id="student_name"
                                                                         class="form-control" placeholder="Student Name" required>
+                                                                </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="cnic" class="form-label">CNIC</label>
+                                                                    <input type="text" name="cnic" id="cnic" class="form-control"
+                                                                        placeholder="xxxxx-xxxxxxx-x" maxlength="15"
+                                                                        pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}" required>
+                                                                </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="domicile" class="form-label">Domicile
+                                                                    </label>
+                                                                    <input type="text" name="domicile" id="domicile" class="form-control"
+                                                                        placeholder="Domicile" required>
+                                                                </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="gender" class="form-label">Gender</label>
+                                                                    <select name="gender" id="gender"
+                                                                        class="select2 form-select faculty-member" required>
+                                                                        <option value="">-- Select --</option>
+                                                                        <option value="male">Male</option>
+                                                                        <option value="female">FeMale</option>
+                                                                        <option value="other">Other</option>
+                                                                    </select>
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="faculty" class="form-label">Faculty</label>
@@ -119,7 +141,10 @@
                                                                     <select name="batch" class="select2 form-select faculty-member"
                                                                         required>
                                                                         <option value="">-- Select Batch --</option>
-                                                                        @foreach(SelectCurrentTerm() as $term) <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }} </option> @endforeach
+                                                                        @foreach(SelectCurrentTerm() as $term)
+                                                                            <option value="{{ $term->id }}"> {{ $term->term }}
+                                                                                {{ $term->start_year }}
+                                                                        </option> @endforeach
 
                                                                     </select>
                                                                 </div>
@@ -229,7 +254,6 @@
                                                     </div>
                                                     <!-- /Product Information -->
 
-
                                                 </div>
                                                 <!-- /Second column -->
 
@@ -241,7 +265,6 @@
                                                             <h5 class="card-title mb-0">Rating</h5>
                                                         </div>
                                                         <div class="card-body">
-
 
                                                             <div class="mb-3">
                                                                 <label class="form-label">Employer Satisfaction</label>
@@ -256,7 +279,6 @@
                                                                 <input type="hidden" name="graduate_satisfaction" id="graduate_satisfaction"
                                                                     value="">
                                                             </div>
-
 
                                                         </div>
                                                     </div>
@@ -285,15 +307,12 @@
                         </div>
                     @endif
 
-
                 </div>
                 <!-- /main tab-->
 
             </div>
             <!-- tab open-->
         </div>
-
-
 
         <!-- / close new design -->
         <!-- Import Modal -->
@@ -313,12 +332,19 @@
                         <div class="modal-body">
                             <label class="form-label">Upload Excel / CSV</label>
                             <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
-
+                            {{-- Download Sample File --}}
+                            <div class="mt-2">
+                                <a href="{{ asset('sample/employability_sample.csv') }}" class="text-primary" download>
+                                    <i class="fa fa-download me-1"></i>
+                                    Download Sample File
+                                </a>
+                            </div>
                             <small class="text-muted d-block mt-2">
                                 Allowed: xlsx, xls, csv
                             </small>
                             <div class="text-muted d-block mt-2">
-                                @foreach(SelectCurrentTerm() as $term) <small > Batch ID:{{ $term->id }}  ->Batch Term: {{ $term->term }} ->Batch Year: {{ $term->start_year }} </small><br> @endforeach
+                                @foreach(SelectCurrentTerm() as $term) <small> Batch ID:{{ $term->id }} ->Batch Term:
+                                {{ $term->term }} ->Batch Year: {{ $term->start_year }} </small><br> @endforeach
                             </div>
                         </div>
 
@@ -383,15 +409,10 @@
 
         });
 
-
-
-
     </script>
     @if(in_array(getRoleName(activeRole()), ['Employability Center']))
         <script>
             $(document).ready(function () {
-
-
 
                 $('#researchForm').on('submit', function (e) {
                     e.preventDefault();
@@ -508,7 +529,6 @@
                     departmentSelect.html('<option value="">Loading...</option>');
                     programSelect.html('<option value="">-- Select Program --</option>');
 
-
                     if (facultyId) {
                         $.ajax({
                             url: "/get-departments/" + facultyId,
@@ -521,8 +541,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                                                            ${department.name}
-                                                        </option>`
+                                                ${department.name}
+                                                </option>`
                                     );
                                 });
 
@@ -552,8 +572,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                                                            ${program.program_name}
-                                                        </option>`
+                                                ${program.program_name}
+                                                </option>`
                                     );
                                 });
 
@@ -568,7 +588,22 @@
                     }
                 });
 
+            });
 
+            document.getElementById('cnic').addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, '');
+
+                if (value.length > 5) {
+                    value = value.slice(0, 5) + '-' + value.slice(5);
+                }
+
+                if (value.length > 13) {
+                    value = value.slice(0, 13) + '-' + value.slice(13);
+                }
+
+                value = value.slice(0, 15);
+
+                e.target.value = value;
             });
         </script>
     @endif

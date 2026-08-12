@@ -22,8 +22,8 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
         $this->formStatus = $formStatus;
     }
     /**
-    * @param Collection $collection
-    */
+     * @param Collection $collection
+     */
     public function collection(Collection $collection)
     {
         foreach ($collection as $index => $row) {
@@ -31,15 +31,18 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
             // ✅ Validate each row
             $validator = Validator::make($row->toArray(), [
                 'student_id' => '',
-                'period'=> 'required',
-                'student_name'=> 'required',
+                'period' => 'required',
+                'student_name' => 'required',
+                'cnic' => 'required',
+                'domicile' => 'required',
+                'gender' => 'required',
                 'faculty_id' => 'required|integer',
                 'department_id' => 'required|integer',
                 'program_id' => 'required|integer',
                 'batch' => 'required',
                 'passing_year' => 'required',
                 'date_of_appointment' => 'required',
-                'proof_salary_and_appointment'=> 'required',
+                'proof_salary_and_appointment' => 'required',
                 'employer_name' => 'required|string',
                 'sector' => 'required|string',
                 'salary' => 'required',
@@ -50,10 +53,9 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
             ]);
 
             // ❌ Skip invalid rows
-             if ($validator->fails()) {
+            if ($validator->fails()) {
                 continue;
-             }
-           
+            }
 
             // 🔁 Optional: Prevent duplicate entry
             // $exists = Employability::where('indicator_id', $this->indicatorId)
@@ -70,7 +72,10 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
                 'student_id' => null,
 
                 'period' => $row['period'],
-                'student_name'=> $row['student_name'],
+                'student_name' => $row['student_name'],
+                'cnic' => $row['cnic'],
+                'domicile' => $row['domicile'],
+                'gender' => $row['gender'],
                 'faculty_id' => $row['faculty_id'],
                 'department_id' => $row['department_id'],
                 'program_id' => $row['program_id'],
@@ -84,7 +89,7 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
                     ? Date::excelToDateTimeObject($row['date_of_appointment'])->format('Y-m-d')
                     : $row['date_of_appointment'],
 
-                'proof_salary_and_appointment'=>$row['proof_salary_and_appointment'],
+                'proof_salary_and_appointment' => $row['proof_salary_and_appointment'],
                 'employer_name' => $row['employer_name'],
                 'sector' => $row['sector'],
                 'salary' => $row['salary'],

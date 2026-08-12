@@ -81,6 +81,9 @@ class EmployabilityController extends Controller
                     'indicator_id' => 'required',
                     'period' => 'required|string',
                     'student_name' => 'required|string',
+                    'cnic' => 'required',
+                    'domicile' => 'required',
+                    'gender' => 'required',
                     'faculty_id' => 'required|integer',
                     'department_id' => 'required|integer',
                     'program_id' => 'required|integer',
@@ -99,7 +102,6 @@ class EmployabilityController extends Controller
                     'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                 ];
 
-
                 $validator = Validator::make($request->all(), $rules);
                 if ($validator->fails()) {
                     return response()->json([
@@ -108,8 +110,6 @@ class EmployabilityController extends Controller
                     ], 422);
                 }
                 $data = $validator->validated();
-
-
 
             }
             $employeeId = Auth::user()->employee_id;
