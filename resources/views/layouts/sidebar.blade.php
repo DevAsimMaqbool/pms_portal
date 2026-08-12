@@ -174,7 +174,7 @@
           <div data-i18n="Students">Students</div>
         </a>
       </li>
-      @if(!auth()->user()->hasRole(['ORIC']) || auth()->user()->hasRole(['Alumni Office']  || auth()->user()->hasRole(['Employability Center']))
+      @if(!auth()->user()->hasRole(['ORIC']) || !auth()->user()->hasRole(['Alumni Office']  || !auth()->user()->hasRole(['Employability Center']))
         <li class="menu-item">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon icon-base ti tabler-report"></i>
