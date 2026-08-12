@@ -11,11 +11,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('alumni_satisfaction_rates', function (Blueprint $table) {
-            $table->decimal('alumni_engagement_rate')
+            $table->integer('alumni_engagement_rate')
                 ->nullable()
                 ->after('satisfaction_rate');
 
-            $table->decimal('portal_registration')
+            $table->integer('portal_registration')
                 ->nullable()
                 ->after('alumni_engagement_rate');
         });
