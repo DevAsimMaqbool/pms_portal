@@ -553,6 +553,7 @@
                                     </thead>
                                     <tbody>
                                         @php
+                                            $activeRoleId = getRoleIdByName(activeRole());
                                             $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 23, 182);
                                             $avgScore = $data['records']->isNotEmpty() ? $data['records']->avg(fn($r) => (float) $r->score) : 0;
                                         @endphp
