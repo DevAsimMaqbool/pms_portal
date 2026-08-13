@@ -424,6 +424,7 @@
                                         <tbody>
 
                                             @php
+                                                $activeRoleId = getRoleIdByName(activeRole());
                                                 $feedbackData = getDepartmentFacultyFeedbackForHOD($activeRoleId);
 
                                                 $classFeedback = $feedbackData['collection'] ?? collect();
