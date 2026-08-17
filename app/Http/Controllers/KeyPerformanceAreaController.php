@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Exports\EmployeeKpaReportExport;
 use App\Exports\EmployeeCombineReportExport;
+use App\Models\Term;
 use Maatwebsite\Excel\Facades\Excel;
 class KeyPerformanceAreaController extends Controller
 {
@@ -247,6 +248,9 @@ class KeyPerformanceAreaController extends Controller
 
     public function getIndicators(Request $request)
     {
+       
+        $activeTerms = Term::where('status', '1')->first();
+        $yearId=$activeTerms->id;
         $employeeId = Auth::user()->employee_id;
         $userRoleId = getRoleIdByName(activeRole());
 
@@ -266,11 +270,19 @@ class KeyPerformanceAreaController extends Controller
         $indicators = Indicator::whereIn('id', $indicatorIds)->get();
 
         // Fetch saved scores
-        $savedScores = \App\Models\IndicatorsPercentage::where('employee_id', $employeeId)
+        $savedScoresQuery = \App\Models\IndicatorsPercentage::where('employee_id', $employeeId)
             ->whereIn('indicator_id', $indicatorIds)
             ->where('role_id', $userRoleId)
-            ->get()
-            ->keyBy('indicator_id');
+            ->where(function ($query) use ($yearId) {
+
+        $query->where('year_id', $yearId)
+                ->orWhere(function ($query) {
+                    $query->whereNull('year_id');
+                });
+        });
+        
+        $savedScores = $savedScoresQuery->get()->keyBy('indicator_id');
+            
 
         // Map response
         $indicators = $indicators->map(function ($indicator) use ($savedScores, $weightages) {

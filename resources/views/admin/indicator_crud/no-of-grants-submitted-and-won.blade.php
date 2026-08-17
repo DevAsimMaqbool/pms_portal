@@ -108,7 +108,14 @@
 
                     <div class="row g-3">
                        
-                        
+                          <div class="col-md-6">
+                                        <label for="year" class="form-label">Year</label>
+                                        <select name="year_id" id="year_id"
+                                            class="form-select" required>
+                                            <option value=""> Select year</option>
+                                                @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                            </select>
+                                </div>
                         <div class="col-md-6">
                                         <label for="name" class="form-label">Name Of Grant</label>
                                         <input type="text" id="name" name="name" class="form-control">
@@ -379,6 +386,7 @@
         $('#researchForm1 #record_id').val(form.id);
         $('#researchForm1 #name').val(form.name);
         $('#researchForm1 #funding_agency').val(form.funding_agency);
+        $('#researchForm1 #year_id').val(form.year_id).trigger('change');
         $('#researchForm1 #volume').val(form.volume);
         $('#researchForm1 #role').val(form.role);
         $('#researchForm1 #grant_status').val(form.grant_status);

@@ -43,18 +43,12 @@
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
     <!--  Payment Methods modal -->
     @php
-        $totalCompletion = 0;
-        $currentYear = now()->year;
-        $previousYear = now()->year - 1;
-        $CompletionofCourseFolders = CompletionofCourseFolder(Auth::user()->employee_id, $activeRoleId, 120);
+        
+        $data = CompletionofCourseFolderNew(Auth::user()->employee_id, $activeRoleId, 120);
+        $springData = $data['springData'];
+        $fallData = $data['fallData'];
+        $avgPercentage = $data['avgPercentage'];
 
-        $springData = $CompletionofCourseFolders->filter(function ($item) use ($currentYear) {
-            return $item->facultyClass?->term == "Spring $currentYear";
-        });
-        $fallData = $CompletionofCourseFolders->filter(function ($item) use ($previousYear) {
-            return strtoupper(optional($item->facultyClass)->term) === "FALL $previousYear";
-        });
-        $totalCompletion = $CompletionofCourseFolders->avg('completion_of_Course_folder');
     @endphp
     <div class="modal fade" id="CompletionofCourseFolder" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -76,14 +70,14 @@
                                     <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                         data-bs-target="#completion-course-spring" aria-controls="completion-course-spring"
                                         aria-selected="true">
-                                        🌸 Spring {{ date('Y') }}
+                                        🌸 Spring {{ $springData->first()?->term?->start_year ?? date('Y') }}
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                         data-bs-target="#completion-course-fall" aria-controls="completion-course-fall"
                                         aria-selected="false">
-                                        🍂 Fall {{ date('Y') - 1 }}
+                                        🍂 Fall {{ $fallData->first()?->term?->start_year ?? date('Y') - 1 }}
                                     </button>
                                 </li>
                             </ul>
@@ -145,24 +139,24 @@
                                                 </tr>
                                             @endforelse
                                         </tbody>
-                                        <!-- @if($CompletionofCourseFolders->isNotEmpty())
-                                                <tfoot>
-                                                    <tr class="table-primary">
-                                                        <th class="text-end">Total</th>
-                                                        <th colspan="3" class="text-end"></th>
-                                                        <th style="font-size: 0.960rem;">
-                                                            <b class="badge"
-                                                                style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
-                                                                {{ number_format($totalCompletion, 1) }}%
-                                                            </b>
-                                                        </th>
-                                                        <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
-                                                                style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
-                                                                {{ getRatingMeta($totalCompletion)->rating }}
-                                                            </b></th>
-                                                    </tr>
-                                                </tfoot>
-                                                @endif -->
+                                       
+                                            <tfoot>
+                                                <tr class="table-primary">
+                                                    <th class="text-end">Total</th>
+                                                    <th colspan="2" class="text-end"></th>
+                                                    <th class="text-end">(S+F)</th>
+                                                    <th style="font-size: 0.960rem;">
+                                                        <b class="badge"
+                                                            style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
+                                                            {{ number_format($avgPercentage, 1) }}%
+                                                        </b>
+                                                    </th>
+                                                    <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
+                                                            style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
+                                                            {{ getRatingMeta($avgPercentage)->rating }}
+                                                        </b></th>
+                                                </tr>
+                                            </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -221,24 +215,23 @@
                                                 </tr>
                                             @endforelse
                                         </tbody>
-                                        @if($CompletionofCourseFolders->isNotEmpty())
                                             <tfoot>
                                                 <tr class="table-primary">
                                                     <th class="text-end">Total</th>
-                                                    <th colspan="3" class="text-end"></th>
+                                                    <th colspan="2" class="text-end"></th>
+                                                    <th class="text-end">(S+F)</th>
                                                     <th style="font-size: 0.960rem;">
                                                         <b class="badge"
-                                                            style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
-                                                            {{ number_format($totalCompletion, 1) }}%
+                                                            style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
+                                                            {{ number_format($avgPercentage, 1) }}%
                                                         </b>
                                                     </th>
                                                     <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
-                                                            style="background-color: {{ getRatingMeta($totalCompletion)->color }}">
-                                                            {{ getRatingMeta($totalCompletion)->rating }}
+                                                            style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
+                                                            {{ getRatingMeta($avgPercentage)->rating }}
                                                         </b></th>
                                                 </tr>
                                             </tfoot>
-                                        @endif
                                     </table>
                                 </div>
                             </div>

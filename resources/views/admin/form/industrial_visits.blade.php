@@ -57,6 +57,7 @@
                             
                             <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
                             <p class="" id="indicatorDescription"></p>
+                             <div class="mb-2">Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYear"></div></div>
                             <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
@@ -65,7 +66,7 @@
                                     <!-- First column-->
                                     <div class="col-12 col-lg-8">
                                         <!-- Product Information -->
-                                        <div class="card mb-6">
+                                        <div class="card bg-label-secondary mb-6">
 
                                             <div class="card-body">
                                                 <div class="row">
@@ -198,9 +199,17 @@
                                     <!-- Second column -->
                                     <div class="col-12 col-lg-4">
                                         <!-- Pricing Card -->
-                                        <div class="card mb-3">
+                                        <div class="card bg-label-secondary mb-3">
 
                                             <div class="card-body">
+                                            <div class="mb-3">
+                                                    <label for="year" class="form-label">Year</label>
+                                                    <select name="year_id" id="year_id"
+                                                        class="form-select" required>
+                                                        <option value=""> Select year</option>
+                                                            @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                                        </select>
+                                                </div>
 
 
                                                 <div class="mb-3">
@@ -446,14 +455,17 @@
                                  $('#indicatorDescription').text(
                                     'Description: ' + (res.data && res.data.description ? res.data.description : 'N/A')
                                 );
+                                $('#indicatorTargetYear').text(res.year && res.year ? res.year : 'N/A');
                             } else {
                                 $('#indicatorTarget').text('Target: N/A');
                                  $('#indicatorDescription').text('Description: N/A');
+                                 $('#indicatorTargetYear').text('N/A');
                             }
                         },
                         error: function() {
                             $('#indicatorTarget').text('Target: N/A');
                              $('#indicatorDescription').text('Description: N/A');
+                             $('#indicatorTargetYear').text('N/A');
                         }
                     });
                 }

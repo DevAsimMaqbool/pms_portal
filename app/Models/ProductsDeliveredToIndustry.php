@@ -19,6 +19,7 @@ class ProductsDeliveredToIndustry extends Model
         'provide_details',
         'form_status',
         'status',
+        'year_id',
         'update_history',
         'created_by',
         'updated_by'

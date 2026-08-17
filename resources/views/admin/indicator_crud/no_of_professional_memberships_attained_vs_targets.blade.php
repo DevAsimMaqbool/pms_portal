@@ -107,7 +107,7 @@
                     <input type="hidden" name="_method" value="PUT">
 
                     <div class="row g-3">  
-
+     
                       <div class="col-md-6">
                         <label for="type_of_membership" class="form-label">Type of Membership</label>
                         <select name="type_of_membership" id="type_of_membership" class="select2 form-select faculty-member"
@@ -116,7 +116,16 @@
                         <option value="institutional">Institutional</option>
                         </select>
                         </div>
-
+                         
+                            <div class="col-md-6">
+                                <label for="year" class="form-label">Year</label>
+                                <select name="year_id" id="year_id"
+                                    class="form-select" required>
+                                    <option value=""> Select year</option>
+                                        @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                    </select>
+                        </div>
+                                                        
                         <div class="col-md-6">
                         <label for="name_of_professional_body" class="form-label">Name of Professional
                         Body</label>
@@ -473,6 +482,7 @@
         $('#researchForm1 #discipline').val(form.discipline).trigger('change');
         $('#researchForm1 #level').val(form.level).trigger('change');
         $('#researchForm1 #country').val(form.country).trigger('change');
+         $('#researchForm1 #year_id').val(form.year_id).trigger('change');
         $('#researchForm1 #membership_status').val(form.membership_status).trigger('change');
         $('#researchForm1 #membership_start_date').val(form.membership_start_date.substring(0,10));
         $('#researchForm1 #membership_valid_until').val(form.membership_valid_until.substring(0,10));

@@ -8,7 +8,7 @@ class CompletionOfCourseFolder extends Model
 {
     protected $fillable = [
         'faculty_member_id',
-        '',
+        'term_id',
         'class_cod',
         'form_status',
         'document_url',
@@ -47,5 +47,9 @@ class CompletionOfCourseFolder extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'employee_id');
+    }
+    public function term()
+    {
+        return $this->belongsTo(Term::class, 'term_id');
     }
 }

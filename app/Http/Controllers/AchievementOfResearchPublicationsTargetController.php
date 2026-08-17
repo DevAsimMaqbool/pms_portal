@@ -214,6 +214,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         try {
             $rules = [
                 'indicator_id' => 'required|exists:indicators,id',
+                'year_id' => 'required',
                 'target_category' => 'required|string|max:255',
                 'link_of_publications' => 'required|max:500',
                 'journal_clasification' => 'required',
@@ -263,6 +264,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
             $targetData = $request->only([
                 'indicator_id',
+                'year_id',
                 'target_category',
                 'link_of_publications',
                 'journal_clasification',
@@ -477,6 +479,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         $request->validate([
             'target_category' => 'required|string|max:255',
             'link_of_publications' => 'required|url|max:500',
+            'year_id' => 'required',
             'journal_clasification' => 'required',
             'nationality' => 'required|string|max:255',
             'as_author_your_rank' => 'required|integer|min:0',
@@ -512,6 +515,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
         $form->fill($request->only([
             'target_category',
+            'year_id',
             'link_of_publications',
             'journal_clasification',
             'nationality',

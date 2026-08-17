@@ -50,13 +50,14 @@
                             </div>
                             <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
                             <p class="" id="indicatorDescription"></p>
+                            <div class="">Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYear"></div></div>
                             <form id="researchForm1" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
                                 <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
 
                                 <div class="row g-6 mt-0">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <label class="form-label" for="product-dropdown">Type of Knowledge Product</label>
                                         <select name="product_type" id="product-dropdown" class="form-select" required>
                                             <option value="">Select Product</option>
@@ -70,13 +71,21 @@
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
+                                        <label for="year" class="form-label">Year</label>
+                                        <select name="year_id" id="year_id"
+                                            class="form-select" required>
+                                            <option value=""> Select year</option>
+                                                @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                            </select>
+                                    </div>
+                                    <div class="col-md-6">
                                         <label for="project_name" class="form-label">Link/URL</label>
                                         <input type="url" name="url" id="url" class="form-control"
                                             placeholder="Enter URL" required>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <label for="project_name" class="form-label">Attach Evidence</label>
                                         <input type="file" name="attach_evidence" id="attach_evidence" class="form-control"
                                             required>
@@ -262,14 +271,17 @@
                                 $('#indicatorDescription').text(
                                     'Description: ' + (res.data && res.data.description ? res.data.description : 'N/A')
                                 );
+                                 $('#indicatorTargetYear').text(res.year && res.year ? res.year : 'N/A');
                             } else {
                                 $('#indicatorTarget').text('Target: N/A');
                                 $('#indicatorDescription').text('Description: N/A');
+                                $('#indicatorTargetYear').text('N/A');
                             }
                         },
                         error: function () {
                             $('#indicatorTarget').text('Target: N/A');
                             $('#indicatorDescription').text('Description: N/A');
+                            $('#indicatorTargetYear').text('N/A');
                         }
                     });
                 }

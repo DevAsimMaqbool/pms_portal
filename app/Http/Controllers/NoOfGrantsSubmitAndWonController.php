@@ -151,6 +151,7 @@ class NoOfGrantsSubmitAndWonController extends Controller
                
                   $rules = [
                         'indicator_id' => 'required|integer',
+                        'year_id' => 'required',
                         'grants' => 'required|array|min:1',
                         'grants.*.name' => 'required|string',
                         'grants.*.funding_agency' => 'required|string',
@@ -209,6 +210,7 @@ class NoOfGrantsSubmitAndWonController extends Controller
 
                         $savedRecords[] = NoOfGrantsSubmitAndWon::create([
                             'indicator_id'   => $request->indicator_id,
+                            'year_id' => $request->year_id,
                             'name'           => $grant['name'],
                             'funding_agency' => $grant['funding_agency'],
                             'volume'         => $grant['volume'],
@@ -320,6 +322,7 @@ class NoOfGrantsSubmitAndWonController extends Controller
 
         $request->validate([
                 'record_id' => 'required',
+                'year_id' => 'required',
                 'name' => 'required|string',
                 'funding_agency' => 'required|string',
                 'volume' => 'required|numeric|min:0',
@@ -329,7 +332,7 @@ class NoOfGrantsSubmitAndWonController extends Controller
         ]);
 
         $data = $request->only([
-                        'name', 'funding_agency', 'volume', 'role', 'grant_status'
+                        'name', 'year_id', 'funding_agency', 'volume', 'role', 'grant_status'
                     ]);
                     if ($request->hasFile('proof')) {
                          

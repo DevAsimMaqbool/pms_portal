@@ -25,6 +25,7 @@ class FacultyTarget extends Model
         'national',
         'international',
         'description',
+        'year_id',
         'created_by',
         'updated_by'
     ];
@@ -92,6 +93,10 @@ class FacultyTarget extends Model
     public function professionalMembershipTarget()
     {
         return $this->hasMany(ProfessionalMembership::class, 'created_by', 'user_id');
+    }
+    public function year()
+    {
+        return $this->belongsTo(Years::class, 'year_id', 'id');
     }
 
 

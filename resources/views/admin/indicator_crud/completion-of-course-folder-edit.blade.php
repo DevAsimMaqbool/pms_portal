@@ -29,32 +29,61 @@
                                         <h5 class="mb-1">Completion of Course Folder</h5>
                                     </div>
                                 </div>
-                                <form id="editForm" enctype="multipart/form-data" class="row">
-                                    @csrf
-                                    @method('PUT')
-                                    @php
-                                        $completionStatus = $data->completion_status ?? [];
-                                    @endphp
-                                    <input type="hidden" name="form_status" value="{{ $data->form_status }}">
-                                    <input type="hidden" name="faculty_member_id" value="{{ $data->faculty_member_id }}">
-                                    <input type="hidden" name="completion_of_Course_folder_indicator_id"
-                                        value="{{ $data->completion_of_Course_folder_indicator_id }}">
-                                    <input type="hidden" name="compliance_and_usage_of_lms_indicator_id"
-                                        value="{{ $data->compliance_and_usage_of_lms_indicator_id }}">
-                                    <input type="hidden" name="record_id" value="{{ $data->id }}">
-                                     <input class="d-none" type="radio" name="completion_of_Course_folder" id="good" value="1" checked>
+                            </div>
+                            <form id="editForm" enctype="multipart/form-data" class="row">
+                                @csrf
+                                @method('PUT')
+                                @php
+                                    $completionStatus = $data->completion_status ?? [];
+                                @endphp
+                                <input type="hidden" name="form_status" value="{{ $data->form_status }}">
+                                <input type="hidden" name="faculty_member_id" value="{{ $data->faculty_member_id }}">
+                                <input type="hidden" name="completion_of_Course_folder_indicator_id"
+                                    value="{{ $data->completion_of_Course_folder_indicator_id }}">
+                                <input type="hidden" name="compliance_and_usage_of_lms_indicator_id"
+                                    value="{{ $data->compliance_and_usage_of_lms_indicator_id }}">
+                                <input type="hidden" name="record_id" value="{{ $data->id }}">
+                                 <input class="d-none" type="radio" name="completion_of_Course_folder" id="good" value="1" checked>
 
-                                    <div class="row g-6 mt-0">
+                                <div class="row g-6 mt-0">
 
-                                        <div id="grant-details-container">
-                                            <div class="grant-group row g-3 m-0 p-3">
+                                    <div id="grant-details-container">
+                                        <div class="grant-group row g-3 m-0 p-3">
 
-                                                <div class="col-md-6 d-none">
-                                                    <label for="faculty_member" class="form-label">Name of Faculty Member</label>
 
-                                                    <input type="hidden" id="faculty_member_id" name="faculty_member_id"
-                                                        value="{{ auth()->id() }}">
-                                                </div>
+                                            <div class="col-md-6 d-none">
+                                                <label for="faculty_member" class="form-label">Name of Faculty Member</label>
+
+                                                <input type="hidden" id="faculty_member_id" name="faculty_member_id"
+                                                    value="{{ auth()->id() }}">
+                                            </div>
+                                             <div class="col-md-12">
+                                                <label for="batch" class="form-label">Term</label>
+                                                <select name="term_id" class="form-select term_id"
+                                                    required>
+                                                    <option value="">-- Select Term --</option>
+                                                    @foreach(SelectCurrentTerm() as $term) <option value="{{ $term->id }}" {{ old('term_id', $data->term_id ?? '') == $term->id ? 'selected' : '' }}> {{ $term->term }} {{ $term->start_year }} </option> @endforeach
+
+                                                </select>
+                                            </div>
+
+
+                                            <div class="col-md-12">
+                                                <label for="class_name" class="form-label">Class</label>
+                                                <select name="class_name[]" id="select2Success"
+                                                    class="select2 form-select faculty-class" multiple required>
+                                                    @if($data->class_cod)
+                                                        <option value="{{ $data->class_cod }}" selected>{{ $data->class_cod }}</option>
+                                                    @endif
+                                                </select>
+                                            </div>
+
+                                           {{-- <div class="col-md-12 mt-3">
+                                        <label class="form-label d-block">1- Course Folder Status</label>
+                                        <div>
+                                            <input type="radio" name="completion_of_Course_folder" id="completed"
+                                                value="100" {{ $data->completion_of_Course_folder == 100 ? 'checked' : '' }}>
+                                            <label for="completed">Completed</label>
 
                                                 <div class="col-md-12">
                                                     <label for="class_name" class="form-label">Class</label>
@@ -134,6 +163,11 @@
                                                                 <label for="clo_plo_maping_Sheet">CLO PLO Maping Sheet</label>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                    <label class="form-label">Please Provide Drive Link</label>
+                                                    <input type="url" name="document_url" id="document_url" class="form-control" value="{{ old('document_url', $data->document_url) }}">
                                                 </div>
                                                 <div class="col-md-12">
                                                         <label class="form-label">Document Url</label>

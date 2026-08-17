@@ -119,6 +119,14 @@
 
                                                 </div>
                                                 <div class="col-md-6">
+                                                    <label for="year" class="form-label">Year</label>
+                                                    <select name="year_id" id="year_id"
+                                                        class="form-select" required>
+                                                        <option value=""> Select year</option>
+                                                            @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                                        </select>
+                                                </div>
+                                                <div class="col-md-6">
                                                     <label class="form-label">Publication Date</label>
                                                     <input type="date" name="publication_date" class="form-control">
                                                 </div>
@@ -147,7 +155,7 @@
 
                                                 <div class="col-md-6">
                                                     <label class="form-label">Your Rank (As Author)</label>
-                                                    <input type="number" name="as_author_your_rank" class="form-control">
+                                                    <input type="number" min="1" name="as_author_your_rank" class="form-control">
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label d-block">Is there at least 1 international
@@ -179,7 +187,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label">Rank</label>
-                                                        <input type="number" name="co_author[0][rank]" class="form-control">
+                                                        <input type="number" min="1" name="co_author[0][rank]" class="form-control">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label">University Name</label>
@@ -235,7 +243,7 @@
                                                     <div class="col-md-6">
                                                         <label class="form-label">No Of Papers Co-Authored with this person in
                                                             the past.</label>
-                                                        <input type="number" name="co_author[0][no_paper_past]"
+                                                        <input type="number" min="1" name="co_author[0][no_paper_past]"
                                                             class="form-control">
                                                     </div>
                                                     <div class="col-md-6">
@@ -291,7 +299,10 @@
                                 <div class="col-12 col-lg-4">
                                     <div class="card shadow-none bg-transparent border border-primary">
                                         <div class="card-header">
-                                            <h5 class="card-title mb-0">Targets</h5>
+                                        <h5 class="card-title mb-0">Targets</h5>
+                                        <small class="" id="indicatorTarget">Target 0</small>
+                                        <div class=""><small>Target year</small><div class="ms-4 badge bg-label-primary" id="indicatorTargetYear"></div></div>
+                                        <small class="" id="indicatorDescription"></small>
                                         </div>
                                         <div class="card-body">
                                             <div class="mb-6">
@@ -357,6 +368,14 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="year" class="form-label">Year</label>
+                                    <select name="year_id" id="year_id"
+                                        class="form-select" required>
+                                        <option value=""> Select year</option>
+                                            @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                        </select>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="description" class="form-label">Description</label>
@@ -453,6 +472,7 @@
                                             <th>Scopus</th>
                                             <th>HEC</th>
                                             <th>Medical</th>
+                                            <th>Year</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -795,9 +815,23 @@
 
                             // MEDICAL
                             toggleField(formSelector, '.medical-recognized', res.data.medical_recognized);
+                             if (res.target) {
+                                $('#indicatorTarget').text('Target: ' + res.target);
+                                $('#indicatorDescription').text(
+                                    'Description: ' + (res.data && res.data.description ? res.data.description : 'N/A')
+                                );
+                                 $('#indicatorTargetYear').text(res.year && res.year ? res.year : 'N/A');
+                            } else {
+                                $('#indicatorTarget').text('Target: N/A');
+                                $('#indicatorDescription').text('Description: N/A');
+                                $('#indicatorTargetYear').text('N/A');
+                            }
                         },
                         error: function () {
                             clearTargetFields(formSelector);
+                            $('#indicatorTarget').text('Target: N/A');
+                            $('#indicatorDescription').text('Description: N/A');
+                            $('#indicatorTargetYear').text('N/A');
                             alert('Failed to fetch target data.');
                         }
                     });
@@ -861,7 +895,7 @@
                                                                                                                 </div>
                                                                                                                 <div class="col-md-6">
                                                                                                                     <label class="form-label">Rank</label>
-                                                                                                                    <input type="number" name="co_author[${grantIndex}][rank]" class="form-control" >
+                                                                                                                    <input type="number" min="1" name="co_author[${grantIndex}][rank]" class="form-control" >
                                                                                                                 </div>
                                                                                                                 <div class="col-md-6">
                                                                                                                     <label class="form-label">University Name</label>
@@ -898,7 +932,7 @@
                                                                                                                 </div>
                                                                                                                 <div class="col-md-6">
                                                                                                                     <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
-                                                                                                                    <input type="number" name="co_author[${grantIndex}][no_paper_past]" class="form-control" >
+                                                                                                                    <input type="number" min="1" name="co_author[${grantIndex}][no_paper_past]" class="form-control" >
                                                                                                                 </div>
                                                                                                                 <div class="col-md-6">
                                                                                                                     <label class="form-label">Co-Author Email</label>
@@ -1164,6 +1198,7 @@
                                 form.scopus_q1 ?? 'N/A',
                                 form.hec_w ?? 'N/A',
                                 form.medical_recognized ?? 'N/A',
+                                form.year ? form.year.year : 'N/A'
                             ];
                         });
 
@@ -1182,6 +1217,7 @@
                                     { title: "Scopus" },
                                     { title: "HEC" },
                                     { title: "Medical" },
+                                    { title: "Year" }
 
                                 ]
                             });

@@ -158,6 +158,7 @@ class IntellectualPropertyController extends Controller
                  $rules = [
                         'indicator_id' => 'required',
                         'no_of_ip_disclosed' => 'required|string',
+                        'year_id' => 'required',
                         'name_of_ip_filed' => 'required|string',
                         'patents_ip_type' => 'required|string',
                         'other_detail' => 'required_if:patents_ip_type,Other|string|nullable',
@@ -182,6 +183,7 @@ class IntellectualPropertyController extends Controller
                         $data = $request->only([
                             'indicator_id',
                             'no_of_ip_disclosed',
+                            'year_id',
                             'name_of_ip_filed',
                             'patents_ip_type',
                             'other_detail',
@@ -274,6 +276,7 @@ class IntellectualPropertyController extends Controller
                 $rules = [
                     'indicator_id' => 'required',
                     'no_of_ip_disclosed' => 'required|string',
+                    'year_id' => 'required',
                     'name_of_ip_filed' => 'required|string',
                     'patents_ip_type' => 'required|string',
                     'other_detail' => 'required_if:patents_ip_type,Other|string|nullable',
@@ -283,7 +286,7 @@ class IntellectualPropertyController extends Controller
                     'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                 ];
                 $data = $request->only([
-                    'indicator_id', 'no_of_ip_disclosed', 'name_of_ip_filed', 'patents_ip_type',
+                    'indicator_id', 'year_id', 'no_of_ip_disclosed', 'name_of_ip_filed', 'patents_ip_type',
                     'other_detail', 'area_of_application', 'date_of_filing_registration', 'form_status'
                 ]);
                 if ($request->hasFile('supporting_docs_as_attachment')) {

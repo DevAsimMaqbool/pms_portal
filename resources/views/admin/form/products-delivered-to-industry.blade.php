@@ -54,6 +54,7 @@
                             <h5 class="mb-1"></h5>
                             <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
                             <p class="" id="indicatorDescription"></p>
+                             <div class="">Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYear"></div></div>
                             <form id="researchForm1" enctype="multipart/form-data" class="row">
                                 @csrf
                                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
@@ -63,6 +64,14 @@
                                     <div class="col-md-6">
                                         <label for="project_name" class="form-label">Project Name</label>
                                         <input type="text" id="project_name" name="project_name" class="form-control">
+                                    </div>
+                                     <div class="col-md-6">
+                                        <label for="year" class="form-label">Year</label>
+                                        <select name="year_id" id="year_id"
+                                            class="form-select" required>
+                                            <option value=""> Select year</option>
+                                                @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                            </select>
                                     </div>
 
                                     <div class="col-md-6">
@@ -299,14 +308,17 @@
                                  $('#indicatorDescription').text(
                                     'Description: ' + (res.data && res.data.description ? res.data.description : 'N/A')
                                 );
+                                $('#indicatorTargetYear').text(res.year && res.year ? res.year : 'N/A');
                             } else {
                                 $('#indicatorTarget').text('Target: N/A');
                                  $('#indicatorDescription').text('Description: N/A');
+                                 $('#indicatorTargetYear').text('N/A');
                             }
                         },
                         error: function() {
                             $('#indicatorTarget').text('Target: N/A');
                              $('#indicatorDescription').text('Description: N/A');
+                             $('#indicatorTargetYear').text('N/A');
                         }
                     });
                 }

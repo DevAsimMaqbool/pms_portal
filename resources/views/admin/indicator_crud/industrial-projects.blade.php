@@ -111,7 +111,14 @@
                             <label for="project_name" class="form-label">Project Name</label>
                             <input type="text" id="project_name" name="project_name" class="form-control" required>
                         </div>
-
+                        <div class="col-md-6">
+                                <label for="year" class="form-label">Year</label>
+                                <select name="year_id" id="year_id"
+                                    class="form-select" required>
+                                    <option value=""> Select year</option>
+                                        @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                    </select>
+                        </div>
                         <div class="col-md-6">
                             <label for="contracting_industry" class="form-label">Contracting Industry</label>
                             <input type="text" id="contracting_industry" name="contracting_industry" class="form-control" required>
@@ -369,6 +376,7 @@
 
         $('#researchForm1 #record_id').val(form.id);
         $('#researchForm1 #project_name').val(form.project_name);
+        $('#researchForm1 #year_id').val(form.year_id).trigger('change');
         $('#researchForm1 #contracting_industry').val(form.contracting_industry);
         $('#researchForm1 #project_duration').val(form.project_duration);
         $('#researchForm1 #estimated_project_cost').val(form.estimated_project_cost);

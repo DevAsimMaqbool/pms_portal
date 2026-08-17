@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FacultyTarget;
 use App\Models\User;
 use App\Models\RoleKpaAssignment;
+use App\Models\Years;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,18 +23,18 @@ class FacultyTargetController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-            if ($user->hasRole('HOD')) {
+            if (in_array(getRoleName(activeRole()), ['HOD'])) {    
                 $status = $request->input('status');
                 $indicator_id = $request->input('indicator');
                 if ($status == "HOD") {
-                    $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
+                    $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator','year'])
                         ->where('created_by', $employee_id)
                         ->where('form_status', 'HOD')
                         ->where('indicator_id', $indicator_id)
                         ->get();
                 }
                 if ($status == "OTHER") {
-                    $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
+                    $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator','year'])
                         ->where('created_by', $employee_id)
                         ->where('form_status', 'OTHER')
                         ->get();
@@ -41,10 +42,10 @@ class FacultyTargetController extends Controller
 
 
             }
-            if ($user->hasRole('Dean')) {
+            if (in_array(getRoleName(activeRole()), ['Dean'])) {       
                 $status = $request->input('status');
                 if ($status == "DEAN") {
-                         $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator'])
+                         $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator','year'])
                         ->where('created_by', $employee_id)
                         ->where('form_status', 'DEAN')
                         ->get();    }
@@ -58,7 +59,7 @@ class FacultyTargetController extends Controller
                      ->get();
                 }
             }
-            if ($user->hasRole('ORIC')) {
+            if (in_array(getRoleName(activeRole()), ['ORIC'])) {  
 
                 $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
                     ->whereIn('status', [2, 3])
@@ -66,7 +67,7 @@ class FacultyTargetController extends Controller
                     ->get();
 
             }
-            if ($user->hasRole('Human Resources')) {
+            if (in_array(getRoleName(activeRole()), ['Human Resources'])) {     
 
                 $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
                     ->whereIn('status', [3, 4])
@@ -108,6 +109,7 @@ class FacultyTargetController extends Controller
                 $rules = [
                     'indicator_id' => 'required',
                     'description' => 'required',
+                    'year_id' => 'required',
                     'faculty_member_id' => 'required|array',
                     // 'national' => 'required|integer',
                     // 'international' => 'required|integer',
@@ -126,6 +128,7 @@ class FacultyTargetController extends Controller
                 $data = [
                     'indicator_id' => $request->indicator_id,
                     'target' => $request->target,
+                    'year_id' => $request->year_id,
                     'description' => $request->description,
                     'form_status' => $request->form_status,
                     'scopus_q1' => $request->scopus_q1,
@@ -148,7 +151,10 @@ class FacultyTargetController extends Controller
                     FacultyTarget::updateOrCreate(
                         [
                             'user_id' => $userId,
-                            'indicator_id' => $request->indicator_id
+                            'indicator_id' => $request->indicator_id,
+                            'year_id' => $request->year_id
+                            
+                            
                         ],
                         $data
                     );
@@ -169,6 +175,7 @@ class FacultyTargetController extends Controller
                     'faculty_member_id' => 'required|array',
                     'target' => 'required|integer',
                     'description' => 'required',
+                    'year_id' => 'required',
                     'faculty_member_id.*' => 'integer|exists:users,id',
                     'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                 ];
@@ -183,6 +190,7 @@ class FacultyTargetController extends Controller
                 }
                 $data = [
                     'target' => $request->target,
+                    'year_id' => $request->year_id,
                     'form_status' => $request->form_status,
                     'created_by' => $employeeId,
                     'updated_by' => $employeeId,
@@ -217,12 +225,14 @@ class FacultyTargetController extends Controller
                         // ✅ CHECK IF ALREADY ASSIGNED
                         $existing = FacultyTarget::where('user_id', $userId)
                             ->where('indicator_id', $indicatorId)
+                            ->where('year_id', $request->year_id)
                             ->first();
 
                         if ($existing) {
                             // 🔄 UPDATE EXISTING RECORD
                             $existing->update([
                                 'target' => $request->target,
+                                'year_id' => $request->year_id,
                                 'description' => $request->description,
                                 'form_status' => $request->form_status,
                                 'updated_by' => $employeeId,
@@ -233,6 +243,7 @@ class FacultyTargetController extends Controller
                                 'user_id' => $userId,
                                 'indicator_id' => $indicatorId,
                                 'target' => $request->target,
+                                'year_id' => $request->year_id,
                                 'description' => $request->description,
                                 'form_status' => $request->form_status,
                                 'created_by' => $employeeId,
@@ -351,13 +362,16 @@ class FacultyTargetController extends Controller
     public function getTarget(Request $request)
     {
         $employeeId = Auth::user()->employee_id;
+        $activeYear = Years::where('active', 1)->first();
         $record = FacultyTarget::where('indicator_id', $request->indicator_id)
             ->where('user_id', $employeeId)
+            ->where('year_id', $activeYear->id)
             ->first();
 
         return response()->json([
             'target' => $record ? $record->target : null,
-            'data' => $record
+            'data' => $record,
+            'year' => $activeYear->year,
         ]);
     }
 

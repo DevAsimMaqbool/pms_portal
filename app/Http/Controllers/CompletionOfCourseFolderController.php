@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CompletionOfCourseFolder;
 use App\Models\FacultyMemberClass;
+use App\Models\Term;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,38 +19,55 @@ class CompletionOfCourseFolderController extends Controller
     public function index(Request $request)
     {
         $employeeId = Auth::id();
+        $activeTermIds = Term::where('status', '1')->pluck('id');
         $data = CompletionOfCourseFolder::with('facultyClass') // eager load classes
             ->where('faculty_member_id', $employeeId)
+            ->whereIn('term_id', $activeTermIds)
             ->where('completion_of_Course_folder_indicator_id', 120)
             ->get(); // make sure you call get() here, not just a query builder
         // dd($data);
 
-        if (in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator'])) {
-            $status = $request->input('status');
-            if ($status == "Teacher") {
-                $forms = CompletionOfCourseFolder::with([
-                    'creator' => function ($q) {
-                        $q->select('employee_id', 'name');
-                    },
-                    'facultyClass'
-                ])
-                    ->where('faculty_member_id', $employeeId)
-                    ->where('completion_of_Course_folder_indicator_id', 120)
-                    ->get();
+
+        if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Professor','Associate Professor'])) {
+                $status = $request->input('status');
+                if($status=="Teacher"){
+                    $forms = CompletionOfCourseFolder::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            },'facultyClass'
+                        ])
+                        ->where('faculty_member_id', $employeeId)
+                        ->whereIn('term_id', $activeTermIds)
+                        ->where('completion_of_Course_folder_indicator_id', 120)
+                        ->orderBy('id', 'desc')
+                        ->get();
+                }
+                if($status=="HOD"){
+                    $employeeIds = User::where('manager_id', $employeeId)
+                        ->role(['Teacher','Assistant Professor','Professor','Associate Professor'])->pluck('employee_id');
+                        $forms = CompletionOfCourseFolder::with([
+                                'creator' => function ($q) {
+                                    $q->select('employee_id', 'name');
+                                },'facultyClass'
+                            ])
+                            ->whereIn('created_by', $employeeIds)
+                            ->whereIn('term_id', $activeTermIds)
+                            ->where('completion_of_Course_folder_indicator_id', 120)
+                            ->orderBy('id', 'desc')
+                            ->get();
+                }        
+                
             }
-            if ($status == "HOD") {
-                $employeeIds = User::where('manager_id', $employeeId)
-                    ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator'])->pluck('employee_id');
-                $forms = CompletionOfCourseFolder::with([
-                    'creator' => function ($q) {
-                        $q->select('employee_id', 'name');
-                    },
-                    'facultyClass'
-                ])
-                    ->whereIn('created_by', $employeeIds)
-                    ->where('completion_of_Course_folder_indicator_id', 120)
-                    ->orderBy('id', 'desc')
-                    ->get();
+             if(in_array(getRoleName(activeRole()), ['QEC'])) {
+                $status = $request->input('status');
+                if($status=="RESEARCHER"){
+                    $forms = CompletionOfCourseFolder::with([
+                            'creator' => function ($q) {
+                                $q->select('employee_id', 'name');
+                            },'facultyClass'
+                        ])->whereIn('term_id', $activeTermIds)->orderBy('id', 'desc')
+                        ->get();
+                }       
             }
 
         }
@@ -94,6 +112,7 @@ class CompletionOfCourseFolderController extends Controller
                 // Validation rules
                 $rules = [
                     'faculty_member_id' => 'required|integer',
+                    'term_id' => 'required|integer',
                     'class_name' => 'required|array',
                     'class_name.*' => 'string',
                     'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
@@ -121,28 +140,42 @@ class CompletionOfCourseFolderController extends Controller
                         'errors' => $validator->errors()
                     ], 422);
                 }
-                // Checkbox values
                 $completionStatus = $request->completion_status ?? [];
 
-                // Total available checkboxes
-                $totalCheckboxes = 9;
-
-                $checkedCount = count($completionStatus);
-
-                // Calculate Score
-                if ($checkedCount == 0) {
-                    $completionScore = 25;
-                } elseif ($checkedCount == $totalCheckboxes) {
-                    $completionScore = 100;
-                } else {
-                    $completionScore = 70;
+            $checkedCount = 0;
+            // Individual checkboxes
+            $individualItems = ['Module','lecture log sheet','CQI Docuement',];
+            foreach ($individualItems as $item) {
+                if (in_array($item, $completionStatus)) {
+                    $checkedCount++;
                 }
+            }
+            // Assessment: Good / Bad / Any = count as ONE
+            $assessmentOptions = ['Good', 'Bad', 'Any'];
+            if (count(array_intersect($assessmentOptions, $completionStatus)) > 0) {
+                $checkedCount++;
+            }
+            // Result: Marks Sheet / Grading Sheet / CLO PLO Mapping Sheet = count as ONE
+            $resultOptions = ['Marks Sheet','Grading Sheet','CLO PLO Maping Sheet'];
+            if (count(array_intersect($resultOptions, $completionStatus)) > 0) {
+                $checkedCount++;
+            }
+            // Total logical items = 5
+            $totalCheckboxes = 5;
+            if ($checkedCount == 0) {
+                $completionScore = 25;
+            } elseif ($checkedCount == $totalCheckboxes) {
+                $completionScore = 100;
+            } else {
+                $completionScore = 70;
+            }   
 
                 DB::beginTransaction();
                 foreach ($request->class_name as $classCode) {
 
                     $exists = CompletionOfCourseFolder::where('faculty_member_id', $request->faculty_member_id)
                         ->where('class_cod', $classCode)
+                        ->where('term_id', $request->term_id)
                         ->when($request->has('completion_of_Course_folder'), function ($query) use ($request) {
                             $query->where(
                                 'completion_of_Course_folder_indicator_id',
@@ -169,6 +202,7 @@ class CompletionOfCourseFolderController extends Controller
                     // Base data (always inserted)
                     $data = [
                         'faculty_member_id' => $request->faculty_member_id,
+                        'term_id' => $request->term_id,
                         'class_cod' => $classCode,
                         'form_status' => $request->form_status,
                         'created_by' => $employeeId,
@@ -246,6 +280,7 @@ class CompletionOfCourseFolderController extends Controller
             // Validation
             $rules = [
                 'faculty_member_id' => 'required|integer',
+                'term_id' => 'required|integer',
                 'class_name' => 'required|array',
                 'class_name.*' => 'string',
                 'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
@@ -271,11 +306,30 @@ class CompletionOfCourseFolderController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
+
+
             $completionStatus = $request->completion_status ?? [];
 
-            $totalCheckboxes = 9;
-            $checkedCount = count($completionStatus);
-
+            $checkedCount = 0;
+            // Individual checkboxes
+            $individualItems = ['Module','lecture log sheet','CQI Docuement',];
+            foreach ($individualItems as $item) {
+                if (in_array($item, $completionStatus)) {
+                    $checkedCount++;
+                }
+            }
+            // Assessment: Good / Bad / Any = count as ONE
+            $assessmentOptions = ['Good', 'Bad', 'Any'];
+            if (count(array_intersect($assessmentOptions, $completionStatus)) > 0) {
+                $checkedCount++;
+            }
+            // Result: Marks Sheet / Grading Sheet / CLO PLO Mapping Sheet = count as ONE
+            $resultOptions = ['Marks Sheet','Grading Sheet','CLO PLO Maping Sheet'];
+            if (count(array_intersect($resultOptions, $completionStatus)) > 0) {
+                $checkedCount++;
+            }
+            // Total logical items = 5
+            $totalCheckboxes = 5;
             if ($checkedCount == 0) {
                 $completionScore = 25;
             } elseif ($checkedCount == $totalCheckboxes) {
@@ -292,6 +346,7 @@ class CompletionOfCourseFolderController extends Controller
 
             $exists = CompletionOfCourseFolder::where('faculty_member_id', $request->faculty_member_id)
                 ->where('class_cod', $classCode)
+                ->where('term_id', $request->term_id)
                 ->where('id', '!=', $id)
                 ->when($request->has('completion_of_Course_folder'), function ($query) use ($request) {
                     $query->where(
@@ -319,6 +374,7 @@ class CompletionOfCourseFolderController extends Controller
             // Base update data
             $updateData = [
                 'class_cod' => $classCode,
+                'term_id' => $request->term_id,
                 'form_status' => $request->form_status,
                 'updated_by' => $employeeId,
             ];

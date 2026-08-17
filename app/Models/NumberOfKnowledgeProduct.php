@@ -16,6 +16,7 @@ class NumberOfKnowledgeProduct extends Model
         'reject_status',
         'reject_status_remarks',
         'update_history',
+        'year_id',
         'created_by',
         'updated_by'
     ];

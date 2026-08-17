@@ -61,8 +61,20 @@
                                         <div id="grant-details-container">
                                             <div class="grant-group row g-3 m-0 p-3">
 
-                                                <div class="col-md-12 d-none">
-                                                    <label for="faculty_member" class="form-label">Name of Faculty Member</label>
+                                                <input type="hidden" id="faculty_member_id" name="faculty_member_id"
+                                                    value="{{ auth()->id() }}">
+                                                    <input type="radio" name="completion_of_Course_folder" id="good" value="1" checked>
+                                                    
+                                            </div>
+                                            <div class="col-md-12">
+                                                                    <label for="batch" class="form-label">Term</label>
+                                                                    <select name="term_id" class="form-select term_id"
+                                                                        required>
+                                                                        <option value="">-- Select Term --</option>
+                                                                        @foreach(SelectCurrentTerm() as $term) <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }} </option> @endforeach
+
+                                                                    </select>
+                                                                </div>
 
                                                     <input type="hidden" id="faculty_member_id" name="faculty_member_id"
                                                         value="{{ auth()->id() }}">
@@ -155,9 +167,9 @@
                                                             <label for="clo_plo_maping_Sheet">CLO PLO Maping Sheet</label>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <label class="form-label">Document Url</label>
+                                            </div>
+                                            <div class="col-md-12">
+                                                    <label class="form-label">Please Provide Drive Link</label>
                                                     <input type="url" name="document_url" id="document_url" class="form-control">
                                                 </div>
 

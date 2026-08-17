@@ -102,21 +102,29 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label">Journal Classification</label>
-                                                    <select name="journal_clasification" class="form-select">
+                                                    <select name="journal_clasification" class="form-select" id="journal_clasification">
                                                         <option value="">Select Journal Classification</option>
-                                                        <option value="Q1">Q1</option>
-                                                        <option value="Q2">Q2</option>
-                                                        <option value="Q3">Q3</option>
-                                                        <option value="Q4">Q4</option>
-                                                        <option value="W">W</option>
-                                                        <option value="X">X</option>
-                                                        <option value="Y">Y</option>
+                                                        <option value="Q1" class="scopus scopus-q1-1">Q1</option>
+                                                        <option value="Q2" class="scopus scopus-q2-1">Q2</option>
+                                                        <option value="Q3" class="scopus scopus-q3-1">Q3</option>
+                                                        <option value="Q4" class="scopus scopus-q4-1">Q4</option>
+                                                        <option value="W"  class="hec hec-w-1">W</option>
+                                                        <option value="X"  class="hec hec-X-1">X</option>
+                                                        <option value="Y"  class="hec hec-Y-1">Y</option>
                                                         <option value="Medical">Medical</option>
                                                         <option value="SSCI" class="WoS">SSCI</option>
                                                         <option value="AHCI" class="WoS">AHCI</option>
                                                         <option value="SCIE" class="WoS">SCIE</option>
                                                         <option value="ESCI" class="WoS">ESCI</option>
                                                     </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                        <label for="year" class="form-label">Year</label>
+                                                        <select name="year_id" id="year_id"
+                                                            class="form-select" required>
+                                                            <option value=""> Select year</option>
+                                                                @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                                            </select>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label">Publication Date</label>
@@ -143,7 +151,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label">Your Rank (As Author)</label>
-                                                    <input type="number" name="as_author_your_rank" class="form-control">
+                                                    <input type="number" min="1" name="as_author_your_rank" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -172,7 +180,7 @@
                                             <div class="mb-4">
                                                 <label class="form-label">Scopus</label>
                                                 <div class="input-group mb-2"><span class="input-group-text">Scopus</span><input
-                                                        type="number" name="scopus_q1" class="form-control form-disabled"
+                                                        type="number" min="1" name="scopus_q1" class="form-control form-disabled"
                                                         readonly></div>
                                                 {{-- <div class="input-group mb-2"><span class="input-group-text">Q2</span><input
                                                         type="number" name="scopus_q2" class="form-control form-disabled"
@@ -187,7 +195,7 @@
                                             <div class="mb-4">
                                                 <label class="form-label">HEC</label>
                                                 <div class="input-group mb-2"><span class="input-group-text">HEC</span><input
-                                                        type="number" name="hec_w" class="form-control form-disabled"
+                                                        type="number" min="1" name="hec_w" class="form-control form-disabled"
                                                         readonly></div>
                                                 {{-- <div class="input-group mb-2"><span class="input-group-text">X</span><input
                                                         type="number" name="hec_x" class="form-control form-disabled"
@@ -200,7 +208,7 @@
                                                 <label class="form-label">Medical</label>
                                                 <div class="input-group"><span
                                                         class="input-group-text">Medical</span><input type="number"
-                                                        name="medical_recognized" class="form-control form-disabled"
+                                                        name="medical_recognized" min="1" class="form-control form-disabled"
                                                         readonly></div>
                                             </div>
                                         </div>
@@ -395,10 +403,65 @@
                     }
                 });
             }
+            function filterJournalClassification() {
 
+    let category = $('select[name="target_category"]').val();
+    let journalSelect = $('#journal_clasification');
+
+    // Keep already selected value (important for edit)
+    let selectedJournal = journalSelect.val();
+
+    // Disable first
+    //journalSelect.prop('disabled', true);
+
+    // Hide all options
+    journalSelect.find('option').each(function () {
+
+        if ($(this).val() === '') {
+            $(this).hide();
+        } else {
+            $(this).hide();
+        }
+
+    });
+
+    // Stop if no category
+    if (!category) {
+        return;
+    }
+
+    // Enable select
+    journalSelect.prop('disabled', false);
+
+    // Show relevant options
+    if (category === "Scopus-Indexed") {
+
+        journalSelect.find('.scopus').show();
+
+    } else if (category === "HEC") {
+
+        journalSelect.find('.hec').show();
+
+    } else if (category === "WoS") {
+
+        journalSelect.find('.WoS').show();
+    }
+
+    // Restore selected value on edit
+    if (selectedJournal) {
+        journalSelect.val(selectedJournal);
+    }
+}
+
+// User changes category
+$(document).on('change', 'select[name="target_category"]', function () {
+    filterJournalClassification();
+});
 
             $(document).ready(function () {
                 fetchAchievementForms();
+                filterJournalClassification();
+                
                 let grantIndex = 0; // dynamic co-author counter
 
 
@@ -412,6 +475,7 @@
                     $('#researchForm1 [name="journal_clasification"]').val(form.journal_clasification);
                     $('#researchForm1 [name="nationality"][value="' + form.nationality + '"]').prop('checked', true);
                     $('#researchForm1 [name="publication_date"]').val(form.publication_date);
+                    $('#researchForm1 [name="year_id"]').val(form.year_id).trigger('change');
                     $('#researchForm1 [name="affiliated_with_superior"][value="' + form.affiliated_with_superior + '"]').prop('checked', true);
                     $('#researchForm1 [name="as_author_your_rank"]').val(form.as_author_your_rank);
                     $('#researchForm1 [name="scopus_q1"]').val(form.scopus_q1);
@@ -583,7 +647,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Rank</label>
-                            <input type="number" name="co_author[${i}][rank]" class="form-control" value="${author.rank || ''}">
+                            <input type="number" min="1" name="co_author[${i}][rank]" class="form-control" value="${author.rank || ''}">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">University Name</label>
@@ -620,7 +684,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">No Of Papers Co-Authored with this person in the past.</label>
-                            <input type="number" name="co_author[${i}][no_paper_past]" class="form-control" value="${author.no_paper_past || ''}">
+                            <input type="number" min="1" name="co_author[${i}][no_paper_past]" class="form-control" value="${author.no_paper_past || ''}">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Co-Author Email</label>

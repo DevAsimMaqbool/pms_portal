@@ -20,6 +20,7 @@ class IndicatorsPercentage extends Model
         'badge_name',
         'given_by',
         'status',
+        'year_id'
     ];
 
     public function kpa()
