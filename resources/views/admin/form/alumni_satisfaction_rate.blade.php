@@ -38,8 +38,8 @@
                                         <a class="btn btn-label-primary"
                                             href="{{ route('indicators_crud.index', ['slug' => 'alumni_satisfaction_rate', 'id' => $indicatorId]) }}">View</a>
                                     </div>
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                        <i class="bx bx-upload"></i> Import Excel / CSV</button>
+                                    <!-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                                <i class="bx bx-upload"></i> Import Excel / CSV</button> -->
                                 </div>
                             </div>
                             <form id="researchForm" enctype="multipart/form-data">
@@ -58,20 +58,20 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="mb-3 col-md-4">
-                                                        <label class="form-label" for="name">Alumni Name</label>
-                                                        <input type="text" class="form-control" id="name" name="name" required
-                                                            placeholder="Alumni Name">
-                                                    </div>
-                                                    <div class="mb-3 col-md-4">
-                                                        <label for="gender" class="form-label">Gender</label>
-                                                        <select name="gender" id="gender" class="select2 form-select" required>
-                                                            <option value="">-- Select Gender --</option>
-                                                            <option value="male">Male</option>
-                                                            <option value="female">Female</option>
-                                                            <option value="other">Other</option>
-                                                        </select>
-                                                    </div>
+                                                    <!-- <div class="mb-3 col-md-4">
+                                                                                                                            <label class="form-label" for="name">Alumni Name</label>
+                                                                                                                            <input type="text" class="form-control" id="name" name="name" required
+                                                                                                                                placeholder="Alumni Name">
+                                                                                                                        </div>
+                                                                                                                        <div class="mb-3 col-md-4">
+                                                                                                                            <label for="gender" class="form-label">Gender</label>
+                                                                                                                            <select name="gender" id="gender" class="select2 form-select" required>
+                                                                                                                                <option value="">-- Select Gender --</option>
+                                                                                                                                <option value="male">Male</option>
+                                                                                                                                <option value="female">Female</option>
+                                                                                                                                <option value="other">Other</option>
+                                                                                                                            </select>
+                                                                                                                        </div> -->
                                                     <div class="mb-3 col-md-4">
                                                         <label for="faculty" class="form-label">Faculty</label>
                                                         <select name="faculty_id" id="faculty_id" class="select2 form-select"
@@ -110,55 +110,75 @@
                                                         </select>
                                                     </div>
 
-                                                    <div class="mb-3 col-md-4">
-                                                        <label class="form-label" for="roll_no">Roll No</label>
-                                                        <input type="text" class="form-control" id="roll_no" name="roll_no"
-                                                            required placeholder="Roll No">
-                                                    </div>
+                                                    <!-- <div class="mb-3 col-md-4">
+                                                                                                                    <label class="form-label" for="roll_no">Roll No</label>
+                                                                                                                    <input type="text" class="form-control" id="roll_no" name="roll_no"
+                                                                                                                        required placeholder="Roll No">
+                                                                                                                </div>
 
-                                                    <div class="mb-3 col-md-4">
-                                                        <label class="form-label" for="name">Graduation Year</label>
-                                                        <input type="date" class="form-control" id="graduation_year"
-                                                            name="graduation_year" required placeholder="Graduation Year">
-                                                    </div>
+                                                                                                                <div class="mb-3 col-md-4">
+                                                                                                                    <label class="form-label" for="name">Graduation Year</label>
+                                                                                                                    <input type="date" class="form-control" id="graduation_year"
+                                                                                                                        name="graduation_year" required placeholder="Graduation Year">
+                                                                                                                </div>
 
-                                                    <div class="mb-3 col-md-4">
-                                                        <label class="form-label" for="name">Current Organization</label>
-                                                        <input type="text" class="form-control" id="current_organization"
-                                                            name="current_organization" required
-                                                            placeholder="Current Organization">
-                                                    </div>
+                                                                                                                <div class="mb-3 col-md-4">
+                                                                                                                    <label class="form-label" for="name">Current Organization</label>
+                                                                                                                    <input type="text" class="form-control" id="current_organization"
+                                                                                                                        name="current_organization" required
+                                                                                                                        placeholder="Current Organization">
+                                                                                                                </div>
 
-                                                    <div class="mb-3 col-md-4">
-                                                        <label class="form-label" for="current_designation">Current
-                                                            Designation</label>
-                                                        <input type="text" class="form-control" id="current_designation"
-                                                            name="current_designation" required
-                                                            placeholder="Current Designation">
-                                                    </div>
+                                                                                                                <div class="mb-3 col-md-4">
+                                                                                                                    <label class="form-label" for="current_designation">Current
+                                                                                                                        Designation</label>
+                                                                                                                    <input type="text" class="form-control" id="current_designation"
+                                                                                                                        name="current_designation" required
+                                                                                                                        placeholder="Current Designation">
+                                                                                                                </div>
 
-                                                    <div class="mb-3 col-md-4">
-                                                        <label class="form-label" for="current_salary">Current
-                                                            Salary</label>
-                                                        <input type="number" class="form-control" id="current_salary"
-                                                            name="current_salary" required placeholder="Current Salary">
-                                                    </div>
+                                                                                                                <div class="mb-3 col-md-4">
+                                                                                                                    <label class="form-label" for="current_salary">Current
+                                                                                                                        Salary</label>
+                                                                                                                    <input type="number" class="form-control" id="current_salary"
+                                                                                                                        name="current_salary" required placeholder="Current Salary">
+                                                                                                                </div>
 
-                                                    <div class="mb-3 col-md-4">
-                                                        <label class="form-label" for="email">Email</label>
-                                                        <input type="email" class="form-control" id="email" name="email" required
-                                                            placeholder="exmaple@gmail.com">
-                                                    </div>
-
+                                                                                                                <div class="mb-3 col-md-4">
+                                                                                                                    <label class="form-label" for="email">Email</label>
+                                                                                                                    <input type="email" class="form-control" id="email" name="email"
+                                                                                                                        required placeholder="exmaple@gmail.com">
+                                                                                                                </div> -->
 
                                                     <div class="mb-3 col-md-4">
                                                         <label class="form-label" for="satisfaction_rate">Satisfaction
                                                             Rate (%)</label>
-                                                        <div class="input-group">  
-                                                         <span class="input-group-text" id="basic-addon11">%</span>  
-                                                        <input type="number" class="form-control" id="satisfaction_rate"
-                                                            name="satisfaction_rate" required placeholder="Satisfaction Rate">
-                                                        </div>    
+                                                        <div class="input-group">
+                                                            <span class="input-group-text" id="basic-addon11">%</span>
+                                                            <input type="number" class="form-control" id="satisfaction_rate"
+                                                                name="satisfaction_rate" required
+                                                                placeholder="Satisfaction Rate">
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 col-md-4">
+                                                        <label class="form-label" for="alumni_engagement_rate">Alumni Engagement
+                                                            Rate (%)</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text" id="basic-addon11">%</span>
+                                                            <input type="number" class="form-control"
+                                                                id="alumni_engagement_rate" name="alumni_engagement_rate"
+                                                                required placeholder="Alumni Engagement Rate">
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 col-md-4">
+                                                        <label class="form-label" for="portal_registration">Portal Registration
+                                                            Rate (%)</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text" id="basic-addon11">%</span>
+                                                            <input type="number" class="form-control" id="portal_registration"
+                                                                name="portal_registration" required
+                                                                placeholder="Portal Registration Rate">
+                                                        </div>
                                                     </div>
                                                     <div class="text-end">
                                                         <button type="submit"
@@ -183,11 +203,11 @@
                             <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
                             <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
                             <div class="mt-12">
-                                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                                <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                                    alt="page-misc-not-authorized" width="170" class="img-fluid" />
                             </div>
                         </div>
                     @endif
-                   
 
                 </div>
                 <!-- /main tab-->
@@ -195,8 +215,6 @@
             </div>
             <!-- tab open-->
         </div>
-
-
 
         <!-- / close new design -->
         <!-- Import Modal -->
@@ -252,8 +270,6 @@
     @if(in_array(getRoleName(activeRole()), ['Alumni Office']))
         <script>
             $(document).ready(function () {
-
-
 
                 $('#researchForm').on('submit', function (e) {
                     e.preventDefault();
@@ -362,7 +378,6 @@
                     });
                 });
 
-
                 $('#faculty_id').on('change', function () {
 
                     let facultyId = $(this).val();
@@ -371,7 +386,6 @@
 
                     departmentSelect.html('<option value="">Loading...</option>');
                     programSelect.html('<option value="">-- Select Program --</option>');
-
 
                     if (facultyId) {
                         $.ajax({
@@ -385,8 +399,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ${department.name}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </option>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ${department.name}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </option>`
                                     );
                                 });
 
@@ -416,8 +430,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ${program.program_name}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </option>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ${program.program_name}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </option>`
                                     );
                                 });
 
@@ -431,8 +445,6 @@
                         programSelect.html('<option value="">-- Select Program --</option>');
                     }
                 });
-
-
 
             });
         </script>

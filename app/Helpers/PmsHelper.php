@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\DB;
 if (!function_exists('hodTopPerformers')) {
     function hodTopPerformers()
     {
-        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])->pluck('id')->toArray();
         $departmentId = auth()->user()->department_id;
         $department = Department::find($departmentId);
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('department_id', $departmentId)
-            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();
@@ -136,7 +136,7 @@ if (!function_exists('deanTopPerformers')) {
             ])
             ->whereIn('employee_id', $employeeIds)
             ->where('role_id', $roleIds)
-            ->groupBy('employee_id') 
+            ->groupBy('employee_id')
             ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')
             ->limit(5)
@@ -571,11 +571,11 @@ function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId)
 if (!function_exists('FacultyLevelToppers')) {
     function FacultyLevelToppers()
     {
-        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('faculty', $faculty)
-            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();
@@ -656,7 +656,7 @@ if (!function_exists('ResearchInnovationAndCommercialization')) {
         // dd($record);    
         $sumScore = $record->sum('score');
         $avgScore = ($count_hod_ids > 0) ? round(($sumScore / $count_hod_ids), 2) : 0;
-        $avgScore = min($avgScore, 100); 
+        $avgScore = min($avgScore, 100);
 
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId);
         $weight = $indicatorWeight['weightage'] ?? 0;

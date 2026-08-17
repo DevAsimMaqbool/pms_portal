@@ -48,15 +48,15 @@
           <a href="javascript:void(0);" class="menu-link menu-toggle">
             <span class="menu-icon"
               style="
-                                                                                                                                                                                                                                                                                                                                                                                                              display: inline-flex;
-                                                                                                                                                                                                                                                                                                                                                                                                              align-items: center;
-                                                                                                                                                                                                                                                                                                                                                                                                              justify-content: center;
-                                                                                                                                                                                                                                                                                                                                                                                                              width: 24px;
-                                                                                                                                                                                                                                                                                                                                                                                                              height: 24px;
-                                                                                                                                                                                                                                                                                                                                                                                                              border-radius: 50%;
-                                                                                                                                                                                                                                                                                                                                                                                                              background: #eee;
-                                                                                                                                                                                                                                                                                                                                                                                                              font-weight: bold;
-                                                                                                                                                                                                                                                                                                                                                                                                              font-size: 14px;">
+                                                                                                                                                                                                                                                                                                                                                                                                                          display: inline-flex;
+                                                                                                                                                                                                                                                                                                                                                                                                                          align-items: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                          justify-content: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                          width: 24px;
+                                                                                                                                                                                                                                                                                                                                                                                                                          height: 24px;
+                                                                                                                                                                                                                                                                                                                                                                                                                          border-radius: 50%;
+                                                                                                                                                                                                                                                                                                                                                                                                                          background: #eee;
+                                                                                                                                                                                                                                                                                                                                                                                                                          font-weight: bold;
+                                                                                                                                                                                                                                                                                                                                                                                                                          font-size: 14px;">
               {{ $loop->iteration }}
             </span>
             <div data-i18n="{{ $area->performance_area }}">
@@ -163,62 +163,64 @@
         </a>
       </li>
       <!-- <li class="menu-item {{ request()->routeIs('assigndepartment.index') ? 'active' : '' }}">
-                                                                                                                                                                                                              <a href="{{ route('assigndepartment.index') }}" class="menu-link">
-                                                                                                                                                                                                              <i class="menu-icon icon-base ti tabler-message-heart"></i>
-                                                                                                                                                                                                              <div data-i18n="Assign Department">Assign Department</div>
-                                                                                                                                                                                                              </a>
-                                                                                                                                                                                                            </li> -->
+                                                                                                                                                                                                                    <a href="{{ route('assigndepartment.index') }}" class="menu-link">
+                                                                                                                                                                                                                    <i class="menu-icon icon-base ti tabler-message-heart"></i>
+                                                                                                                                                                                                                    <div data-i18n="Assign Department">Assign Department</div>
+                                                                                                                                                                                                                    </a>
+                                                                                                                                                                                                                  </li> -->
       <li class="menu-item {{ request()->routeIs('students.index') ? 'active' : '' }}">
         <a href="{{ route('students.index') }}" class="menu-link">
           <i class="menu-icon icon-base ti tabler-message-heart"></i>
           <div data-i18n="Students">Students</div>
         </a>
       </li>
-      <li class="menu-item">
-        <a href="javascript:void(0);" class="menu-link menu-toggle">
-          <i class="menu-icon icon-base ti tabler-report"></i>
-          <div data-i18n="Goal Statement">Goal Statement</div>
-        </a>
+      @if(!auth()->user()->hasRole(['ORIC', 'Alumni Office', 'Employability Center']))
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <i class="menu-icon icon-base ti tabler-report"></i>
+            <div data-i18n="Goal Statement">Goal Statement</div>
+          </a>
 
-        <ul class="menu-sub">
-          <li class="menu-item {{ route('s2r-drivers.index') }}">
-            <a href="{{ route('s2r-drivers.index') }}" class="menu-link">
-              <div data-i18n="S2R">S2R</div>
-            </a>
-          </li>
-          <li class="menu-item {{ route('goals.index') }}">
-            <a href="{{ route('goals.index') }}" class="menu-link">
-              <div data-i18n="GOAL">GOAL</div>
-            </a>
-          </li>
-          <li class="menu-item {{ route('goals-assign.index') }}">
-            <a href="{{ route('goals-assign.index') }}" class="menu-link">
-              <div data-i18n="Assign GOAL">Assign GOAL</div>
-            </a>
-          </li>
-          <li class="menu-item {{ route('view-assign-to-goal') }}">
-            <a href="{{ route('view-assign-to-goal') }}" class="menu-link">
-              <div data-i18n="Assign To Me">Assign To Me</div>
-            </a>
-          </li>
-          <li class="menu-item {{ route('view-assign-goal') }}">
-            <a href="{{ route('view-assign-goal') }}" class="menu-link">
-              <div data-i18n="Assign BY Mel">Assign BY Me</div>
-            </a>
-          </li>
-          <li class="menu-item {{ route('goal.mapping.pdf') }}">
-            <a href="{{ route('goal.mapping.pdf') }}" class="menu-link">
-              <div data-i18n="Assign By Me Report">Assign By Me Report</div>
-            </a>
-          </li>
-          <li class="menu-item {{ route('assign.goal.mapping.pdf') }}">
-            <a href="{{ route('assign.goal.mapping.pdf') }}" class="menu-link">
-              <div data-i18n="Assign To Me Report">Assign To Me Report</div>
-            </a>
-          </li>
-        </ul>
+          <ul class="menu-sub">
+            <li class="menu-item {{ route('s2r-drivers.index') }}">
+              <a href="{{ route('s2r-drivers.index') }}" class="menu-link">
+                <div data-i18n="S2R">S2R</div>
+              </a>
+            </li>
+            <li class="menu-item {{ route('goals.index') }}">
+              <a href="{{ route('goals.index') }}" class="menu-link">
+                <div data-i18n="GOAL">GOAL</div>
+              </a>
+            </li>
+            <li class="menu-item {{ route('goals-assign.index') }}">
+              <a href="{{ route('goals-assign.index') }}" class="menu-link">
+                <div data-i18n="Assign GOAL">Assign GOAL</div>
+              </a>
+            </li>
+            <li class="menu-item {{ route('view-assign-to-goal') }}">
+              <a href="{{ route('view-assign-to-goal') }}" class="menu-link">
+                <div data-i18n="Assign To Me">Assign To Me</div>
+              </a>
+            </li>
+            <li class="menu-item {{ route('view-assign-goal') }}">
+              <a href="{{ route('view-assign-goal') }}" class="menu-link">
+                <div data-i18n="Assign BY Mel">Assign BY Me</div>
+              </a>
+            </li>
+            <li class="menu-item {{ route('goal.mapping.pdf') }}">
+              <a href="{{ route('goal.mapping.pdf') }}" class="menu-link">
+                <div data-i18n="Assign By Me Report">Assign By Me Report</div>
+              </a>
+            </li>
+            <li class="menu-item {{ route('assign.goal.mapping.pdf') }}">
+              <a href="{{ route('assign.goal.mapping.pdf') }}" class="menu-link">
+                <div data-i18n="Assign To Me Report">Assign To Me Report</div>
+              </a>
+            </li>
+          </ul>
 
-      </li>
+        </li>
+      @endif
       <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
           <i class="menu-icon icon-base ti tabler-report"></i>

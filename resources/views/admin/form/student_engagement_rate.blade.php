@@ -3,7 +3,6 @@
 @push('style')
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/dropzone/dropzone.css') }}" />
 
-
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
     <link rel="stylesheet"
         href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
@@ -18,7 +17,6 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
 @endpush
 
-
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <!-- new design -->
@@ -26,7 +24,6 @@
         <div class="app-ecommerce">
             <!-- tab open-->
             <div class="nav-align-top">
-
 
                 <!-- main tab-->
                 <div class="tab-content" style="padding:0;background: none;border: none;box-shadow: none;">
@@ -129,9 +126,6 @@
                                                         </div>
                                                     </div>
 
-
-
-
                                                     <div class="col-md-12 mb-3">
                                                         <label class="form-label" for="evidence_reference">Scope of the
                                                             Event</label>
@@ -155,14 +149,12 @@
                                                         </div>
                                                     </div>
 
-
                                                 </div>
                                                 <!-- Description -->
 
                                             </div>
                                         </div>
                                         <!-- /Product Information -->
-
 
                                         <!-- Product Information -->
                                         <div class="card mb-6">
@@ -200,15 +192,12 @@
                                                         </div>
                                                     </div>
 
-
-
                                                 </div>
                                                 <!-- Description -->
 
                                             </div>
                                         </div>
                                         <!-- /Product Information -->
-
 
                                     </div>
                                     <!-- /Second column -->
@@ -221,7 +210,6 @@
                                                 <h5 class="card-title mb-0">Program Information</h5>
                                             </div>
                                             <div class="card-body">
-
 
                                                 <div class="mb-3">
                                                     <label for="faculty" class="form-label">Faculty</label>
@@ -261,8 +249,6 @@
                                                     </select>
                                                 </div>
 
-
-
                                             </div>
                                         </div>
                                         <!-- /Pricing Card -->
@@ -272,7 +258,6 @@
                                                 <h5 class="card-title mb-0">Participation Data</h5>
                                             </div>
                                             <div class="card-body">
-
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="total_programs_assessed">Participation
@@ -297,7 +282,6 @@
                                                     <input type="hidden" name="employer_satisfaction" id="employer_satisfaction"
                                                         value="">
                                                 </div>
-
 
                                             </div>
                                         </div>
@@ -326,15 +310,12 @@
                         </div>
                     @endif
 
-
                 </div>
                 <!-- /main tab-->
 
             </div>
             <!-- tab open-->
         </div>
-
-
 
         <!-- / close new design -->
         <!-- Import Modal -->
@@ -347,14 +328,20 @@
 
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Import Student Engagement Rate Data</h5>
+                            <h5 class="modal-title">Import Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
                         <div class="modal-body">
                             <label class="form-label">Upload Excel / CSV</label>
                             <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
-
+                            {{-- Download Sample File --}}
+                            <div class="mt-2">
+                                <a href="{{ asset('sample/student_engagement_rate.xlsx') }}" class="text-primary" download>
+                                    <i class="fa fa-download me-1"></i>
+                                    Download Sample File
+                                </a>
+                            </div>
                             <small class="text-muted d-block mt-2">
                                 Allowed: xlsx, xls, csv
                             </small>
@@ -375,7 +362,6 @@
     <script src="{{ asset('admin/assets/js/forms-file-upload.js') }}"></script>
     <script src="{{ asset('admin/assets/js/extended-ui-star-ratings.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/raty-js/raty-js.js') }}"></script>
-
 
     <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/%40form-validation/popular.js') }}"></script>
@@ -449,7 +435,6 @@
 
                 // Run on page load (important for edit forms)
                 toggleOtherField();
-
 
                 $('#researchForm').on('submit', function (e) {
                     e.preventDefault();
@@ -530,7 +515,6 @@
                     departmentSelect.html('<option value="">Loading...</option>');
                     programSelect.html('<option value="">-- Select Program --</option>');
 
-
                     if (facultyId) {
                         $.ajax({
                             url: "/get-departments/" + facultyId,
@@ -543,8 +527,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                                                                    ${department.name}
-                                                                </option>`
+                                                                                                                    ${department.name}
+                                                                                                                </option>`
                                     );
                                 });
 
@@ -574,8 +558,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                                                                    ${program.program_name}
-                                                                </option>`
+                                                                                                                    ${program.program_name}
+                                                                                                                </option>`
                                     );
                                 });
 

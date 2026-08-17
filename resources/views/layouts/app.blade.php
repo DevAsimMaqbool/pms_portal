@@ -60,8 +60,10 @@
         @include('layouts.teacher_sidebar')
       @elseif(activeRole() === 'program leader pg')
         @include('layouts.teacher_sidebar')
+      @elseif(activeRole() === 'demonstrator')
+        @include('layouts.teacher_sidebar')
 
-      @elseif(in_array(activeRole(), ['finance', 'international office', 'human resources', 'qec','qch', 'oec', 'dops', 'alumni office', 'employability center', 'rector', 'qch', 'oric']))
+      @elseif(in_array(activeRole(), ['finance', 'international office', 'human resources', 'qec', 'qch', 'oec', 'dops', 'alumni office', 'employability center', 'qch', 'oric']))
         @include('layouts.office_sidebar')
       @elseif(activeRole() === 'hod')
         @include('layouts.hod_sidebar')

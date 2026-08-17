@@ -15,54 +15,51 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-        @if(in_array(getRoleName(activeRole()), ['QEC','HOD','Teacher','Assistant Professor','Professor','Associate Professor']))
-        <!-- Multi Column with Form Separator -->
-        <div class="card">
-            <div class="card-datatable table-responsive card-body">
-                @if(in_array(getRoleName(activeRole()), ['QEC']))
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs mb-3" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Completion of Course Folder</a>
-                    </li>
-                </ul>
-                @endif
-                @if(in_array(getRoleName(activeRole()), ['HOD']))
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs mb-3" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#form3" role="tab">Approvals</a>
-                    </li>
-                </ul>
-                @endif
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor']))
-                        <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h5 class="mb-1">Completion of Course Folder</h5>
+        @if(in_array(getRoleName(activeRole()), ['QEC', 'HOD', 'Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator']))
+            <!-- Multi Column with Form Separator -->
+            <div class="card">
+                <div class="card-datatable table-responsive card-body">
+                    @if(in_array(getRoleName(activeRole()), ['QEC']))
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs mb-3" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Completion of Course
+                                    Folder</a>
+                            </li>
+                        </ul>
+                    @endif
+                    @if(in_array(getRoleName(activeRole()), ['HOD']))
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs mb-3" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#form3" role="tab">Approvals</a>
+                            </li>
+                        </ul>
+                    @endif
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator']))
+                            <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="mb-1">Completion of Course Folder</h5>
+                                    </div>
+                                    <a href="{{ route('completion-of-course-folder.index') }}"
+                                        class="btn rounded-pill btn-outline-primary waves-effect">
+                                        View</a>
                                 </div>
-                                <a href="{{ route('completion-of-course-folder.index') }}"
-                                    class="btn rounded-pill btn-outline-primary waves-effect">
-                                    View</a>
-                            </div>
-                            <form id="researchForm" enctype="multipart/form-data">
-                                @csrf
-                                <input type="hidden" id="form_status" name="form_status" value="HOD" required>
-                                <input type="hidden" id="indicator_id" name="completion_of_Course_folder_indicator_id"
-                                    value="120">
-                                <input type="hidden" id="indicator_id" name="compliance_and_usage_of_lms_indicator_id"
-                                    value="121">
+                                <form id="researchForm" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" id="form_status" name="form_status" value="HOD" required>
+                                    <input type="hidden" id="indicator_id" name="completion_of_Course_folder_indicator_id"
+                                        value="120">
+                                    <input type="hidden" id="indicator_id" name="compliance_and_usage_of_lms_indicator_id"
+                                        value="121">
 
-                                <div class="row g-6 mt-0">
+                                    <div class="row g-6 mt-0">
 
-                                    <div id="grant-details-container">
-                                        <div class="grant-group row g-3 m-0 p-3">
-
-
-                                            <div class="col-md-12 d-none">
-                                                <label for="faculty_member" class="form-label">Name of Faculty Member</label>
+                                        <div id="grant-details-container">
+                                            <div class="grant-group row g-3 m-0 p-3">
 
                                                 <input type="hidden" id="faculty_member_id" name="faculty_member_id"
                                                     value="{{ auth()->id() }}">
@@ -79,40 +76,45 @@
                                                                     </select>
                                                                 </div>
 
+                                                    <input type="hidden" id="faculty_member_id" name="faculty_member_id"
+                                                        value="{{ auth()->id() }}">
+                                                    <input type="radio" name="completion_of_Course_folder" id="good" value="1"
+                                                        checked>
 
-                                            <div class="col-md-12">
-                                                <label for="faculty_member" class="form-label">Class</label>
-                                                <select name="class_name[]" id="select2Success"
-                                                    class="select2 form-select  faculty-class" multiple required>
-                                                    <option value="">-- Select classes --</option>
-                                                </select>
-                                            </div>
-
-
-                                            {{-- <div class="col-md-12">
-                                                <label class="form-label d-block">1- Course folder status</label>
-                                                <div>
-                                                    <input type="radio" name="completion_of_Course_folder" id="completed"
-                                                        value="100">
-                                                    <label for="completed">Completed</label>
-
-                                                    <input type="radio" name="completion_of_Course_folder"
-                                                        id="partially_completed" value="70" checked>
-                                                    <label for="partially_completed">Partially Completed</label>
-
-                                                    <input type="radio" name="completion_of_Course_folder" id="not_Completed"
-                                                        value="25">
-                                                    <label for="not_Completed">Not Completed</label>
                                                 </div>
-                                            </div> --}}
 
-                                             <div class="col-md-12">
-                                                <h6 class=" d-block">Course folder status</h6>
+                                                <div class="col-md-12">
+                                                    <label for="faculty_member" class="form-label">Class</label>
+                                                    <select name="class_name[]" id="select2Success"
+                                                        class="select2 form-select  faculty-class" multiple required>
+                                                        <option value="">-- Select classes --</option>
+                                                    </select>
+                                                </div>
+
+                                                {{-- <div class="col-md-12">
+                                                    <label class="form-label d-block">1- Course folder status</label>
+                                                    <div>
+                                                        <input type="radio" name="completion_of_Course_folder" id="completed"
+                                                            value="100">
+                                                        <label for="completed">Completed</label>
+
+                                                        <input type="radio" name="completion_of_Course_folder"
+                                                            id="partially_completed" value="70" checked>
+                                                        <label for="partially_completed">Partially Completed</label>
+
+                                                        <input type="radio" name="completion_of_Course_folder" id="not_Completed"
+                                                            value="25">
+                                                        <label for="not_Completed">Not Completed</label>
+                                                    </div>
+                                                </div> --}}
+
+                                                <div class="col-md-12">
+                                                    <h6 class=" d-block">Course folder status</h6>
                                                     <div class="form-check mt-4">
-                                                        <input class="form-check-input" type="checkbox" name="completion_status[]" id="module"
-                                                            value="Module">
+                                                        <input class="form-check-input" type="checkbox" name="completion_status[]"
+                                                            id="module" value="Module">
                                                         <label for="module">Module</label>
-                                                    </div> 
+                                                    </div>
 
                                                     <div class="form-check mt-4">
                                                         <input class="form-check-input" type="checkbox" name="completion_status[]"
@@ -120,40 +122,48 @@
                                                         <label for="lecture_log_sheet">Lecture log sheet</label>
                                                     </div>
 
-                                                      <div class="form-check mt-4">
-                                                        <input class="form-check-input" type="checkbox" name="completion_status[]" id="cqi_docuement"
-                                                            value="CQI Docuement">
+                                                    <div class="form-check mt-4">
+                                                        <input class="form-check-input" type="checkbox" name="completion_status[]"
+                                                            id="cqi_docuement" value="CQI Docuement">
                                                         <label for="cqi_docuement">CQI Docuement</label>
                                                     </div>
 
                                                     <div class="mt-4">
-                                                        <label class="form-check-label" for="assessment_evidence">Assessment evidence</label>
+                                                        <label class="form-check-label" for="assessment_evidence">Assessment
+                                                            evidence</label>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="good" value="Good">
-                                                            <label  for="good">Good</label>
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="completion_status[]" id="good" value="Good">
+                                                            <label for="good">Good</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="bad" value="Bad">
-                                                            <label  for="bad">Bad</label>
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="completion_status[]" id="bad" value="Bad">
+                                                            <label for="bad">Bad</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="any" value="Any">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="completion_status[]" id="any" value="Any">
                                                             <label for="any">Any</label>
                                                         </div>
                                                     </div>
 
-                                                     <div class="mt-4">
+                                                    <div class="mt-4">
                                                         <label class="form-check-label" for="result">Result</label>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="grading_sheet" value="Grading Sheet">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="completion_status[]" id="grading_sheet" value="Grading Sheet">
                                                             <label for="grading_sheet">Grading Sheet</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="marks_Sheet" value="Marks Sheet">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="completion_status[]" id="marks_Sheet" value="Marks Sheet">
                                                             <label for="marks_Sheet">Marks Sheet</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" name="completion_status[]" id="clo_plo_maping_Sheet" value="CLO PLO Maping Sheet">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="completion_status[]" id="clo_plo_maping_Sheet"
+                                                                value="CLO PLO Maping Sheet">
                                                             <label for="clo_plo_maping_Sheet">CLO PLO Maping Sheet</label>
                                                         </div>
                                                     </div>
@@ -163,143 +173,141 @@
                                                     <input type="url" name="document_url" id="document_url" class="form-control">
                                                 </div>
 
+                                                <!-- <div class="col-md-12">
+                                                                                                                <label class="form-label d-block">2- LMS Compliance Status</label>
+                                                                                                                <div>
+                                                                                                                    <input type="radio" name="compliance_and_usage_of_lms" id="lms_completed"
+                                                                                                                        value="100">
+                                                                                                                    <label for="lms_completed">Completed</label>
 
-                                            <!-- <div class="col-md-12">
-                                                                                        <label class="form-label d-block">2- LMS Compliance Status</label>
-                                                                                        <div>
-                                                                                            <input type="radio" name="compliance_and_usage_of_lms" id="lms_completed"
-                                                                                                value="100">
-                                                                                            <label for="lms_completed">Completed</label>
+                                                                                                                    <input type="radio" name="compliance_and_usage_of_lms"
+                                                                                                                        id="lms_partially_completed" value="70" checked>
+                                                                                                                    <label for="lms_partially_completed">Partially Completed</label>
 
-                                                                                            <input type="radio" name="compliance_and_usage_of_lms"
-                                                                                                id="lms_partially_completed" value="70" checked>
-                                                                                            <label for="lms_partially_completed">Partially Completed</label>
+                                                                                                                    <input type="radio" name="compliance_and_usage_of_lms"
+                                                                                                                        id="lms_not_Completed" value="25">
+                                                                                                                    <label for="lms_not_Completed">Not Completed</label>
+                                                                                                                </div>
+                                                                                                            </div> -->
 
-                                                                                            <input type="radio" name="compliance_and_usage_of_lms"
-                                                                                                id="lms_not_Completed" value="25">
-                                                                                            <label for="lms_not_Completed">Not Completed</label>
-                                                                                        </div>
-                                                                                    </div> -->
-
-
-
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mt-3 text-end">
-                                    <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
-                                </div>
-                            </form>
-
-                        </div>
-                    @endif
-                    @if(in_array(getRoleName(activeRole()), ['HOD']))
-                      <div class="tab-pane fade show active" id="form3" role="tabpanel">
-                           <div class="d-flex">
-                                    <select id="bulkAction" class="form-select w-auto me-2">
-                                        <option value="">-- Select Action --</option>
-                                        <option value="2">Verified</option>
-                                    </select>
-                                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                                </div>
-                            <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                            <th><input type="checkbox" id="selectAll"></th>
-                                            <th>#</th>
-                                            <th>Created By</th>
-                                            <th>Class Name</th>
-                                            <th>Class Code</th>
-                                            <th>Created Date</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                </thead>
-                            </table>
-                            </div>
-                    @endif
-                    @if(in_array(getRoleName(activeRole()), ['QEC']))
-                        <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                                        <div class="d-flex">
-                                    <select id="bulkAction" class="form-select w-auto me-2">
-                                        <option value="">-- Select Action --</option>
-                                        <option value="2">Verified</option>
-                                    </select>
-                                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                                </div>
-                            <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                            <th><input type="checkbox" id="selectAll"></th>
-                                            <th>#</th>
-                                            <th>Created By</th>
-                                            <th>Class Name</th>
-                                            <th>Class Code</th>
-                                            <th>Created Date</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    @endif
-
-                </div>
-            </div>
-        </div>
-
-
-<!-- Modal -->
-        <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="viewFormModalLabel">Form Details</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered">
-                            <tr>
-                                <th>Created By</th>
-                                <td id="modalCreatedBy"></td>
-                            </tr>
-                            {{-- <tr id="status-approval">
-                                <th>Status</th>
-                                <td>
-                                    <div class="form-check form-switch mb-2">
-                                        <input class="form-check-input" type="checkbox" id="approveCheckbox">
-                                        <label class="form-check-label" for="approveCheckbox">Approved</label>
+                                    <div class="mt-3 text-end">
+                                        <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
                                     </div>
-                                </td>
-                            </tr> --}}
-                            <tr id="status-approval">
-                                <th>Status</th>
-                                <td>
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Created Date</th>
-                                <td id="modalCreatedDate"></td>
-                            </tr>
-                            <tbody id="modalExtraFields"></tbody>
-                        </table>
-                        <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center"><i class="icon-base ti tabler-history me-3"></i>History</h5>
-                        <ul class="timeline mb-0" id="modalExtraFieldsHistory">
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </form>
+
+                            </div>
+                        @endif
+                        @if(in_array(getRoleName(activeRole()), ['HOD']))
+                            <div class="tab-pane fade show active" id="form3" role="tabpanel">
+                                <div class="d-flex">
+                                    <select id="bulkAction" class="form-select w-auto me-2">
+                                        <option value="">-- Select Action --</option>
+                                        <option value="2">Verified</option>
+                                    </select>
+                                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                                </div>
+                                <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="selectAll"></th>
+                                            <th>#</th>
+                                            <th>Created By</th>
+                                            <th>Class Name</th>
+                                            <th>Class Code</th>
+                                            <th>Created Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        @endif
+                        @if(in_array(getRoleName(activeRole()), ['QEC']))
+                            <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                                <div class="d-flex">
+                                    <select id="bulkAction" class="form-select w-auto me-2">
+                                        <option value="">-- Select Action --</option>
+                                        <option value="2">Verified</option>
+                                    </select>
+                                    <button id="bulkSubmit" class="btn btn-primary">Submit</button>
+                                </div>
+                                <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="selectAll"></th>
+                                            <th>#</th>
+                                            <th>Created By</th>
+                                            <th>Class Name</th>
+                                            <th>Class Code</th>
+                                            <th>Created Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
             </div>
-        </div>
-        <!--/ Add Permission Modal -->
+
+            <!-- Modal -->
+            <div class="modal fade" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewFormModalLabel">Form Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Created By</th>
+                                    <td id="modalCreatedBy"></td>
+                                </tr>
+                                {{-- <tr id="status-approval">
+                                    <th>Status</th>
+                                    <td>
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="approveCheckbox">
+                                            <label class="form-check-label" for="approveCheckbox">Approved</label>
+                                        </div>
+                                    </td>
+                                </tr> --}}
+                                <tr id="status-approval">
+                                    <th>Status</th>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Created Date</th>
+                                    <td id="modalCreatedDate"></td>
+                                </tr>
+                                <tbody id="modalExtraFields"></tbody>
+                            </table>
+                            <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center"><i
+                                    class="icon-base ti tabler-history me-3"></i>History</h5>
+                            <ul class="timeline mb-0" id="modalExtraFieldsHistory">
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/ Add Permission Modal -->
         @else
-             <div class="misc-wrapper">
+            <div class="misc-wrapper">
                 <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
                 <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
                 <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
                 <div class="mt-12">
-                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                        alt="page-misc-not-authorized" width="170" class="img-fluid" />
                 </div>
             </div>
         @endif
@@ -319,44 +327,43 @@
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
     <script>
         const CURRENT_FACULTY_ID = @json(auth()->user()->faculty_id);
-         window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
+        window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
         window.activeUserRole = "{{ getRoleName(activeRole()) }}";
-        function updaterejectStatus(id, status,remarks = null) {
-                $.ajax({
-                    url: `/completion-of-course-folder-verification/${id}`,
-                    type: 'POST',                            // POST with _method PUT
-                    data: {
-                        _method: 'PUT',
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        status: status,
-                        reject_status_remarks: remarks,
-                        status_reject_update: true
-                    },
-                    success: function (res) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Updated',
-                            text: res.message || 'Status updated successfully!'
-                        });
-                        
-                        fetchIndicatorForms3();
-                    },
-                    error: function (xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON?.message || 'Something went wrong!'
-                        });
-                    }
-                });
-            }
+        function updaterejectStatus(id, status, remarks = null) {
+            $.ajax({
+                url: `/completion-of-course-folder-verification/${id}`,
+                type: 'POST',                            // POST with _method PUT
+                data: {
+                    _method: 'PUT',
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    status: status,
+                    reject_status_remarks: remarks,
+                    status_reject_update: true
+                },
+                success: function (res) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Updated',
+                        text: res.message || 'Status updated successfully!'
+                    });
+
+                    fetchIndicatorForms3();
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: xhr.responseJSON?.message || 'Something went wrong!'
+                    });
+                }
+            });
+        }
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor']))
+    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator']))
         <script>
             $(document).ready(function () {
-
 
                 function loadFacultyClasses() {
                     // Use the current logged-in user's faculty_id
@@ -395,7 +402,7 @@
                             classSelect.select2();
                         },
                         error: function () {
-                            
+
                             classSelect.empty().append('<option value="">-- Error loading classes --</option>');
                         }
                     });
@@ -403,12 +410,6 @@
 
                 // Call the function directly
                 loadFacultyClasses();
-
-
-
-
-
-
 
                 $('#researchForm').on('submit', function (e) {
                     e.preventDefault();
@@ -496,8 +497,8 @@
             });
         </script>
     @endif
-     @if(in_array(getRoleName(activeRole()), ['HOD']))
-         <script>
+    @if(in_array(getRoleName(activeRole()), ['HOD']))
+        <script>
             function fetchIndicatorForms3() {
                 $.ajax({
                     url: "{{ route('completion-of-course-folder.index') }}",
@@ -513,18 +514,18 @@
                         const rowData = forms.map((form, i) => {
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
-                                : 'N/A';     
+                                : 'N/A';
 
                             let statusText = 'N/A';
-                            if (form.status == 1){
-                                if (form.reject_status == 1){
+                            if (form.status == 1) {
+                                if (form.reject_status == 1) {
                                     statusText = '<span class="badge bg-label-danger">Reject</span>';
-                                }else{
+                                } else {
                                     statusText = '<span class="badge bg-label-warning">Unverified</span>';
                                 }
-                               
-                            } 
-                            else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>';   
+
+                            }
+                            else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>';
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -580,7 +581,7 @@
                             title: 'Updated',
                             text: res.message || 'Status updated successfully!'
                         });
-                        
+
                         fetchIndicatorForms3();
                     },
                     error: function (xhr) {
@@ -592,8 +593,7 @@
                     }
                 });
             }
-            
-           
+
             $(document).ready(function () {
                 fetchIndicatorForms3();
 
@@ -604,49 +604,49 @@
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                     
+
                     if (window.activeUserRole === 'HOD') {
                         const statusCell = $('#status-approval td');
                         statusCell.empty(); // clear old checkbox if any
 
                         // Create Approve radio
                         const approveRadio = $(`
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input status-radio" type="radio" 
-                                    name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
-                                    data-id="${form.id}" value="approve">
-                                <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
-                            </div>
-                        `);
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input status-radio" type="radio" 
+                                            name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
+                                            data-id="${form.id}" value="approve">
+                                        <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
+                                    </div>
+                                `);
 
                         // Create Reject radio
                         const rejectRadio = $(`
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input status-radio" type="radio" 
-                                    name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
-                                    data-id="${form.id}" value="reject">
-                                <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
-                            </div>
-                        `);
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input status-radio" type="radio" 
+                                            name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
+                                            data-id="${form.id}" value="reject">
+                                        <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
+                                    </div>
+                                `);
                         // Create Reject radio
                         const emptyRadio = $(`
-                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by International Office.</span>
-                        `);
+                                    <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by International Office.</span>
+                                `);
 
                         // Pre-select based on existing status
-                        if(form.reject_status == 1){
-                             // Append to cell
-                              statusCell.append(emptyRadio);
-                        }else{
-                             // Append to cell
-                             statusCell.append(approveRadio, rejectRadio);
+                        if (form.reject_status == 1) {
+                            // Append to cell
+                            statusCell.append(emptyRadio);
+                        } else {
+                            // Append to cell
+                            statusCell.append(approveRadio, rejectRadio);
                             if (form.reject_status == 1) {
                                 rejectRadio.find('input').prop('checked', true);
                             } else if (form.status == 2) {
                                 approveRadio.find('input').prop('checked', true);
                             }
                         }
-                    }  else {
+                    } else {
                         $('#approveCheckbox').closest('.form-check-input').hide();
 
                         let statusLabel = "Pending"; // default
@@ -666,12 +666,12 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Class Name</th><td>${form.faculty_class.class_name}</td></tr>`);
                     }
 
-                    if ( form.faculty_class.code) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Class Cod</th><td>${ form.faculty_class.code}</td></tr>`);
+                    if (form.faculty_class.code) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Class Cod</th><td>${form.faculty_class.code}</td></tr>`);
                     }
 
-                    if ( form.document_url) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Details</th><td>${ form.document_url}</td></tr>`);
+                    if (form.document_url) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Details</th><td>${form.document_url}</td></tr>`);
                     }
                     if (form.completion_of_Course_folder !== undefined && form.completion_of_Course_folder !== null) {
 
@@ -688,74 +688,73 @@
                         }
 
                         $('#modalExtraFields').append(`
-                            <tr class="optional-field">
-                                <th>Course Folder Status</th>
-                                <td>${folderStatus}</td>
-                            </tr>
-                        `);
+                                    <tr class="optional-field">
+                                        <th>Course Folder Status</th>
+                                        <td>${folderStatus}</td>
+                                    </tr>
+                                `);
                     }
-                   
-                    
+
                     if (form.update_history) {
-                            // Parse JSON string if it's a string
-                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+                        // Parse JSON string if it's a string
+                        let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
 
-                            if (history.length > 0) {
-                                
-                                let historyHtml = '';
+                        if (history.length > 0) {
 
-                                history.forEach(update => {
-                                    let histortText = 'N/A';
+                            let historyHtml = '';
 
-                                    // Role-based status mapping
+                            history.forEach(update => {
+                                let histortText = 'N/A';
 
-                                    if (update.role === 'HOD') {
-                                        if (update.status == '0') histortText = 'Reject';
-                                        else if (update.status == '1') histortText = 'unapproved';
-                                        else if (update.status == '2') histortText = 'Approved';
-                                    } else {
-                                        histortText = update.status; // fallback
-                                    }
-                                    historyHtml += `
-                                        <li class="timeline-item timeline-item-transparent optional-field">
-                                            <span class="timeline-point timeline-point-primary"></span>
-                                            <div class="timeline-event">
-                                                <div class="timeline-header mb-3">
-                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
-                                                </div>
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <div class="badge bg-lighter rounded-3">
-                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                // Role-based status mapping
+
+                                if (update.role === 'HOD') {
+                                    if (update.status == '0') histortText = 'Reject';
+                                    else if (update.status == '1') histortText = 'unapproved';
+                                    else if (update.status == '2') histortText = 'Approved';
+                                } else {
+                                    histortText = update.status; // fallback
+                                }
+                                historyHtml += `
+                                                <li class="timeline-item timeline-item-transparent optional-field">
+                                                    <span class="timeline-point timeline-point-primary"></span>
+                                                    <div class="timeline-event">
+                                                        <div class="timeline-header mb-3">
+                                                            <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                        </div>
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <div class="badge bg-lighter rounded-3">
+                                                             <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                            </div>
+                                                            <div class="badge bg-lighter rounded-3 ms-2">
+                                                             <span class="h6 mb-0 text-body">${histortText}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <div class="badge bg-danger rounded-3 ms-2">
+                                                            <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="badge bg-lighter rounded-3 ms-2">
-                                                     <span class="h6 mb-0 text-body">${histortText}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <div class="badge bg-danger rounded-3 ms-2">
-                                                    <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                </li>
+                                            `;
+                            });
+
+                            $('#modalExtraFieldsHistory').append(historyHtml);
+                        }
+                    }
+                    else {
+                        $('#modalExtraFieldsHistory').append(`
+                                        <li class="optional-field">
+                                            <th>No History Avalable</th>
                                         </li>
-                                    `;
-                                });
-
-                                $('#modalExtraFieldsHistory').append(historyHtml);
-                            }
-                        }
-                        else {
-                            $('#modalExtraFieldsHistory').append(`
-                                <li class="optional-field">
-                                    <th>No History Avalable</th>
-                                </li>
-                            `);
-                        }
+                                    `);
+                    }
                     $('#viewFormModal').modal('show');
                 });
 
                 // ✅ Single checkbox status change
-                $(document).on('change', '.status-radio', function () { 
+                $(document).on('change', '.status-radio', function () {
                     const id = $(this).data('id');
                     const value = $(this).val(); // "approve" or "reject"
 
@@ -830,16 +829,11 @@
                 $(document).on('change', '#selectAll', function () {
                     $('.rowCheckbox').prop('checked', $(this).is(':checked'));
                 });
-                
-                
-               
-                
-                
-               
+
             });
         </script>
     @endif
-     @if(in_array(getRoleName(activeRole()), ['QEC']))
+    @if(in_array(getRoleName(activeRole()), ['QEC']))
         <script>
             function fetchIndicatorForms3() {
                 $.ajax({
@@ -856,18 +850,18 @@
                         const rowData = forms.map((form, i) => {
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
-                                : 'N/A';     
+                                : 'N/A';
 
                             let statusText = 'N/A';
-                            if (form.status == 1){
-                                if (form.reject_status == 1){
+                            if (form.status == 1) {
+                                if (form.reject_status == 1) {
                                     statusText = '<span class="badge bg-label-danger">Reject</span>';
-                                }else{
+                                } else {
                                     statusText = '<span class="badge bg-label-warning">Unverified</span>';
                                 }
-                               
-                            } 
-                            else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>';   
+
+                            }
+                            else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>';
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -923,7 +917,7 @@
                             title: 'Updated',
                             text: res.message || 'Status updated successfully!'
                         });
-                        
+
                         fetchIndicatorForms3();
                     },
                     error: function (xhr) {
@@ -935,8 +929,7 @@
                     }
                 });
             }
-            
-           
+
             $(document).ready(function () {
                 fetchIndicatorForms3();
 
@@ -947,49 +940,49 @@
                     $('#modalCreatedBy').text(form.creator ? form.creator.name : 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
-                     
+
                     if (window.activeUserRole === 'HOD') {
                         const statusCell = $('#status-approval td');
                         statusCell.empty(); // clear old checkbox if any
 
                         // Create Approve radio
                         const approveRadio = $(`
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input status-radio" type="radio" 
-                                    name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
-                                    data-id="${form.id}" value="approve">
-                                <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
-                            </div>
-                        `);
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input status-radio" type="radio" 
+                                            name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
+                                            data-id="${form.id}" value="approve">
+                                        <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
+                                    </div>
+                                `);
 
                         // Create Reject radio
                         const rejectRadio = $(`
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input status-radio" type="radio" 
-                                    name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
-                                    data-id="${form.id}" value="reject">
-                                <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
-                            </div>
-                        `);
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input status-radio" type="radio" 
+                                            name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
+                                            data-id="${form.id}" value="reject">
+                                        <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
+                                    </div>
+                                `);
                         // Create Reject radio
                         const emptyRadio = $(`
-                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by International Office.</span>
-                        `);
+                                    <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by International Office.</span>
+                                `);
 
                         // Pre-select based on existing status
-                        if(form.reject_status == 1){
-                             // Append to cell
-                              statusCell.append(emptyRadio);
-                        }else{
-                             // Append to cell
-                             statusCell.append(approveRadio, rejectRadio);
+                        if (form.reject_status == 1) {
+                            // Append to cell
+                            statusCell.append(emptyRadio);
+                        } else {
+                            // Append to cell
+                            statusCell.append(approveRadio, rejectRadio);
                             if (form.reject_status == 1) {
                                 rejectRadio.find('input').prop('checked', true);
                             } else if (form.status == 2) {
                                 approveRadio.find('input').prop('checked', true);
                             }
                         }
-                    }  else {
+                    } else {
                         $('#approveCheckbox').closest('.form-check-input').hide();
 
                         let statusLabel = "Pending"; // default
@@ -1009,11 +1002,11 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Class Name</th><td>${form.faculty_class.class_name}</td></tr>`);
                     }
 
-                    if ( form.faculty_class.code) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Class Cod</th><td>${ form.faculty_class.code}</td></tr>`);
+                    if (form.faculty_class.code) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Class Cod</th><td>${form.faculty_class.code}</td></tr>`);
                     }
-                    if ( form.document_url) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Details</th><td>${ form.document_url}</td></tr>`);
+                    if (form.document_url) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Details</th><td>${form.document_url}</td></tr>`);
                     }
                     if (form.completion_of_Course_folder !== undefined && form.completion_of_Course_folder !== null) {
 
@@ -1030,74 +1023,73 @@
                         }
 
                         $('#modalExtraFields').append(`
-                            <tr class="optional-field">
-                                <th>Course Folder Status</th>
-                                <td>${folderStatus}</td>
-                            </tr>
-                        `);
+                                    <tr class="optional-field">
+                                        <th>Course Folder Status</th>
+                                        <td>${folderStatus}</td>
+                                    </tr>
+                                `);
                     }
-                   
-                    
+
                     if (form.update_history) {
-                            // Parse JSON string if it's a string
-                            let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+                        // Parse JSON string if it's a string
+                        let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
 
-                            if (history.length > 0) {
-                                
-                                let historyHtml = '';
+                        if (history.length > 0) {
 
-                                history.forEach(update => {
-                                    let histortText = 'N/A';
+                            let historyHtml = '';
 
-                                    // Role-based status mapping
+                            history.forEach(update => {
+                                let histortText = 'N/A';
 
-                                    if (update.role === 'HOD') {
-                                        if (update.status == '0') histortText = 'Reject';
-                                        else if (update.status == '1') histortText = 'unapproved';
-                                        else if (update.status == '2') histortText = 'Approved';
-                                    } else {
-                                        histortText = update.status; // fallback
-                                    }
-                                    historyHtml += `
-                                        <li class="timeline-item timeline-item-transparent optional-field">
-                                            <span class="timeline-point timeline-point-primary"></span>
-                                            <div class="timeline-event">
-                                                <div class="timeline-header mb-3">
-                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
-                                                </div>
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <div class="badge bg-lighter rounded-3">
-                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                // Role-based status mapping
+
+                                if (update.role === 'HOD') {
+                                    if (update.status == '0') histortText = 'Reject';
+                                    else if (update.status == '1') histortText = 'unapproved';
+                                    else if (update.status == '2') histortText = 'Approved';
+                                } else {
+                                    histortText = update.status; // fallback
+                                }
+                                historyHtml += `
+                                                <li class="timeline-item timeline-item-transparent optional-field">
+                                                    <span class="timeline-point timeline-point-primary"></span>
+                                                    <div class="timeline-event">
+                                                        <div class="timeline-header mb-3">
+                                                            <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                        </div>
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <div class="badge bg-lighter rounded-3">
+                                                             <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                            </div>
+                                                            <div class="badge bg-lighter rounded-3 ms-2">
+                                                             <span class="h6 mb-0 text-body">${histortText}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <div class="badge bg-danger rounded-3 ms-2">
+                                                            <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="badge bg-lighter rounded-3 ms-2">
-                                                     <span class="h6 mb-0 text-body">${histortText}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <div class="badge bg-danger rounded-3 ms-2">
-                                                    <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                </li>
+                                            `;
+                            });
+
+                            $('#modalExtraFieldsHistory').append(historyHtml);
+                        }
+                    }
+                    else {
+                        $('#modalExtraFieldsHistory').append(`
+                                        <li class="optional-field">
+                                            <th>No History Avalable</th>
                                         </li>
-                                    `;
-                                });
-
-                                $('#modalExtraFieldsHistory').append(historyHtml);
-                            }
-                        }
-                        else {
-                            $('#modalExtraFieldsHistory').append(`
-                                <li class="optional-field">
-                                    <th>No History Avalable</th>
-                                </li>
-                            `);
-                        }
+                                    `);
+                    }
                     $('#viewFormModal').modal('show');
                 });
 
                 // ✅ Single checkbox status change
-                $(document).on('change', '.status-radio', function () { 
+                $(document).on('change', '.status-radio', function () {
                     const id = $(this).data('id');
                     const value = $(this).val(); // "approve" or "reject"
 
@@ -1172,12 +1164,7 @@
                 $(document).on('change', '#selectAll', function () {
                     $('.rowCheckbox').prop('checked', $(this).is(':checked'));
                 });
-                
-                
-               
-                
-                
-               
+
             });
         </script>
     @endif

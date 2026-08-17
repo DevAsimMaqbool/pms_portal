@@ -36,7 +36,6 @@ class AuthenticatedSessionController extends Controller
 
     //     if ($response->successful()) {
 
-
     //         $userData = $response->json();
 
     //         $responseUserData = Http::withToken($userData['access_token'])
@@ -83,6 +82,7 @@ class AuthenticatedSessionController extends Controller
                 'student' => redirect()->route('student.dashboard'),
                 'survey' => redirect()->route('survey_dashboard.report'),
                 'teacher' => redirect()->route('teacher_dashboard'),
+                'demonstrator' => redirect()->route('teacher_dashboard'),
                 default => redirect()->route('teacher_dashboard'),
             };
 

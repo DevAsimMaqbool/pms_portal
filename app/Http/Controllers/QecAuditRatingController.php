@@ -28,9 +28,6 @@ class QecAuditRatingController extends Controller
         );
     }
 
-
-
-
     public function store(Request $request)
     {
         $request->validate([
@@ -171,7 +168,6 @@ class QecAuditRatingController extends Controller
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv',
             'indicator_id' => 'required',
             'form_status' => 'required',
         ]);
@@ -188,6 +184,5 @@ class QecAuditRatingController extends Controller
             'message' => 'Imported successfully'
         ]);
     }
-
 
 }

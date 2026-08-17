@@ -97,7 +97,6 @@
                                                         </select>
                                                     </div>
 
-
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label" for="dropout_rate">Dropout Rate (%)</label>
                                                         <div class="input-group">
@@ -135,15 +134,12 @@
                         </div>
                     @endif
 
-
                 </div>
                 <!-- /main tab-->
 
             </div>
             <!-- tab open-->
         </div>
-
-
 
         <!-- / close new design -->
         <!-- Import Modal -->
@@ -156,14 +152,20 @@
 
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Import Dropout Rate Data</h5>
+                            <h5 class="modal-title">Import Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
                         <div class="modal-body">
                             <label class="form-label">Upload Excel / CSV</label>
                             <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
-
+                            {{-- Download Sample File --}}
+                            <div class="mt-2">
+                                <a href="{{ asset('sample/dropout_rates.csv') }}" class="text-primary" download>
+                                    <i class="fa fa-download me-1"></i>
+                                    Download Sample File
+                                </a>
+                            </div>
                             <small class="text-muted d-block mt-2">
                                 Allowed: xlsx, xls, csv
                             </small>
@@ -199,8 +201,6 @@
     @if(in_array(getRoleName(activeRole()), ['Finance']))
         <script>
             $(document).ready(function () {
-
-
 
                 $('#researchForm').on('submit', function (e) {
                     e.preventDefault();
@@ -309,7 +309,6 @@
                     });
                 });
 
-
                 $('#faculty_id').on('change', function () {
 
                     let facultyId = $(this).val();
@@ -318,7 +317,6 @@
 
                     departmentSelect.html('<option value="">Loading...</option>');
                     programSelect.html('<option value="">-- Select Program --</option>');
-
 
                     if (facultyId) {
                         $.ajax({
@@ -332,8 +330,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                                                                                                                                                                                                                                                                                                                            ${department.name}
-                                                                                                                                                                                                                                                                                                                        </option>`
+                                                                                                                                                                                                                                                                                                                                                    ${department.name}
+                                                                                                                                                                                                                                                                                                                                                </option>`
                                     );
                                 });
 
@@ -363,8 +361,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                                                                                                                                                                                                                                                                                                                            ${program.program_name}
-                                                                                                                                                                                                                                                                                                                        </option>`
+                                                                                                                                                                                                                                                                                                                                                    ${program.program_name}
+                                                                                                                                                                                                                                                                                                                                                </option>`
                                     );
                                 });
 
@@ -378,8 +376,6 @@
                         programSelect.html('<option value="">-- Select Program --</option>');
                     }
                 });
-
-
 
             });
         </script>

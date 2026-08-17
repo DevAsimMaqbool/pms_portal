@@ -39,9 +39,9 @@
                     <label class="form-check-label" for="remember-me">{{ __('Remember me') }}</label>
                 </div>
                 @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}">
-                        {{ __('Reset your password?') }}
-                    </a>
+                    <!-- <a href="{{ route('password.request') }}">
+                                {{ __('Reset your password?') }}
+                            </a> -->
                 @endif
             </div>
         </div>

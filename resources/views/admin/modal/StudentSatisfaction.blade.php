@@ -35,7 +35,7 @@
         vertical-align: middle;
     }
 </style>
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
     <!--  Payment Methods modal -->
     @php
         $activeRoleId = getRoleIdByName(activeRole());
@@ -424,6 +424,7 @@
                                         <tbody>
 
                                             @php
+                                                $activeRoleId = getRoleIdByName(activeRole());
                                                 $feedbackData = getDepartmentFacultyFeedbackForHOD($activeRoleId);
 
                                                 $classFeedback = $feedbackData['collection'] ?? collect();
@@ -552,6 +553,7 @@
                                     </thead>
                                     <tbody>
                                         @php
+                                            $activeRoleId = getRoleIdByName(activeRole());
                                             $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 23, 182);
                                             $avgScore = $data['records']->isNotEmpty() ? $data['records']->avg(fn($r) => (float) $r->score) : 0;
                                         @endphp

@@ -21,6 +21,8 @@ class AlumniSatisfactionRate extends Model
         'current_salary',
         'email',
         'satisfaction_rate',
+        'alumni_engagement_rate',
+        'portal_registration',
         'form_status',
         'status',
         'update_history',

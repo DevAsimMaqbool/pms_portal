@@ -106,7 +106,7 @@
         $weightedScore
     );
 @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
     <!--  Payment Methods modal -->
     <div class="modal fade" id="StudentAttendance" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -148,7 +148,7 @@
                                 <div class="table-responsive text-nowrap">
                                     <table
                                         class="table table-striped align-middle custom-table"">
-                                                                                                                                                            <thead class="
+                                                                                                                                                                <thead class="
                                         table-primary">
                                         <tr>
                                             <th>Sr#</th>
@@ -235,7 +235,7 @@
                                 <div class="table-responsive text-nowrap">
                                     <table
                                         class="table table-striped align-middle custom-table"">
-                                                                                                                                                        <thead class="
+                                                                                                                                                            <thead class="
                                         table-primary">
                                         <tr>
                                             <th>Sr#</th>
@@ -341,23 +341,23 @@
                     <!-- Tabs -->
                     <div class="nav-align-top nav-tabs-shadow">
                         <!-- <div class="d-flex justify-content-center mb-3 mt-3">
-                                                                                                                                                                    <ul class="nav custom-tabs" role="tablist">
-                                                                                                                                                                        <li class="nav-item">
-                                                                                                                                                                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                                                                                                                                                                data-bs-target="#student-attendance-spring" aria-controls="student-attendance-spring"
-                                                                                                                                                                                aria-selected="true">
-                                                                                                                                                                                🌸 Spring 2026
-                                                                                                                                                                            </button>
-                                                                                                                                                                        </li>
-                                                                                                                                                                        <li class="nav-item">
-                                                                                                                                                                            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                                                                                                                                                                data-bs-target="#student-attendance-fall" aria-controls="student-attendance-fall"
-                                                                                                                                                                                aria-selected="false">
-                                                                                                                                                                                🍂 Fall 2025
-                                                                                                                                                                            </button>
-                                                                                                                                                                        </li>
-                                                                                                                                                                    </ul>
-                                                                                                                                                                </div> -->
+                                                                                                                                                                        <ul class="nav custom-tabs" role="tablist">
+                                                                                                                                                                            <li class="nav-item">
+                                                                                                                                                                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                                                                                                                                                                    data-bs-target="#student-attendance-spring" aria-controls="student-attendance-spring"
+                                                                                                                                                                                    aria-selected="true">
+                                                                                                                                                                                    🌸 Spring 2026
+                                                                                                                                                                                </button>
+                                                                                                                                                                            </li>
+                                                                                                                                                                            <li class="nav-item">
+                                                                                                                                                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                                                                                                                                                                    data-bs-target="#student-attendance-fall" aria-controls="student-attendance-fall"
+                                                                                                                                                                                    aria-selected="false">
+                                                                                                                                                                                    🍂 Fall 2025
+                                                                                                                                                                                </button>
+                                                                                                                                                                            </li>
+                                                                                                                                                                        </ul>
+                                                                                                                                                                    </div> -->
 
                         <!-- Tab Content -->
                         <div class="tab-content">
@@ -366,7 +366,7 @@
                                 <div class="table-responsive text-nowrap">
                                     <table
                                         class="table table-striped align-middle custom-table"">
-                                                                                                                                                <thead class="
+                                                                                                                                                    <thead class="
                                         table-primary">
                                         <tr>
                                             <th>Sr#</th>

@@ -70,11 +70,25 @@ class CompletionOfCourseFolderController extends Controller
                 }       
             }
 
-            if ($request->ajax()) {
-                return response()->json([
-                    'forms' => $forms
-                ]);
+        }
+        if (in_array(getRoleName(activeRole()), ['QEC'])) {
+            $status = $request->input('status');
+            if ($status == "RESEARCHER") {
+                $forms = CompletionOfCourseFolder::with([
+                    'creator' => function ($q) {
+                        $q->select('employee_id', 'name');
+                    },
+                    'facultyClass'
+                ])->orderBy('id', 'desc')
+                    ->get();
             }
+        }
+
+        if ($request->ajax()) {
+            return response()->json([
+                'forms' => $forms
+            ]);
+        }
         return view('admin.indicator_crud.completion_of_course_folder', compact('data'));
 
     }
@@ -115,7 +129,7 @@ class CompletionOfCourseFolderController extends Controller
                 if ($request->has('compliance_and_usage_of_lms')) {
                     $rules['compliance_and_usage_of_lms'] = 'nullable|integer';
                     $rules['compliance_and_usage_of_lms_indicator_id'] = 'nullable|integer';
-                     $rules['document_url'] = 'nullable|url';
+                    $rules['document_url'] = 'nullable|url';
                     $rules['completion_status'] = 'nullable|array';
                 }
                 $validator = Validator::make($request->all(), $rules);
@@ -158,7 +172,6 @@ class CompletionOfCourseFolderController extends Controller
 
                 DB::beginTransaction();
                 foreach ($request->class_name as $classCode) {
-                    
 
                     $exists = CompletionOfCourseFolder::where('faculty_member_id', $request->faculty_member_id)
                         ->where('class_cod', $classCode)
@@ -185,7 +198,6 @@ class CompletionOfCourseFolderController extends Controller
                             'message' => "This class ($classCode) is already submitted for this faculty member."
                         ], 409);
                     }
-                    
 
                     // Base data (always inserted)
                     $data = [
@@ -206,7 +218,7 @@ class CompletionOfCourseFolderController extends Controller
                     }
 
                     if ($request->has('compliance_and_usage_of_lms')) {
-                         $data['document_url'] = $request->document_url;
+                        $data['document_url'] = $request->document_url;
                         $data['completion_status'] = $completionStatus;
                         $data['compliance_and_usage_of_lms'] = $completionScore;
                         $data['compliance_and_usage_of_lms_indicator_id'] = $request->compliance_and_usage_of_lms_indicator_id;
@@ -214,7 +226,6 @@ class CompletionOfCourseFolderController extends Controller
 
                     CompletionOfCourseFolder::create($data);
                 }
-
 
                 DB::commit();
 
@@ -238,7 +249,6 @@ class CompletionOfCourseFolderController extends Controller
             ], 500);
         }
     }
-
 
     /**
      * Display the specified resource.
@@ -360,7 +370,6 @@ class CompletionOfCourseFolderController extends Controller
                     'message' => 'This class already exists for this faculty member.'
                 ], 409);
             }
-            
 
             // Base update data
             $updateData = [
@@ -419,8 +428,8 @@ class CompletionOfCourseFolderController extends Controller
         return response()->json($classes);
     }
     public function updatestatusverification(Request $request, $id)
-    {   
-        try { 
+    {
+        try {
             if ($request->has('status_update')) {
                 $request->validate([
                     'status' => 'required|in:1,2,3,4,5,6'
@@ -440,17 +449,13 @@ class CompletionOfCourseFolderController extends Controller
                 $lastUpdate = end($history);
                 if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
                     $history[] = [
-                        'user_id'    => $currentUserId,
-                        'user_name'  => $currentUserName,
-                        'status'     => $request->status,
-                        'role'     => $userRoll,
+                        'user_id' => $currentUserId,
+                        'user_name' => $currentUserName,
+                        'status' => $request->status,
+                        'role' => $userRoll,
                         'updated_at' => now()->toDateTimeString(),
                     ];
                 }
-
-
-
-
 
                 $target->status = $request->status;
                 $target->reject_status = '0';
@@ -480,18 +485,14 @@ class CompletionOfCourseFolderController extends Controller
                 $lastUpdate = end($history);
                 if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
                     $history[] = [
-                        'user_id'    => $currentUserId,
-                        'user_name'  => $currentUserName,
-                        'status'     => 0,
-                        'role'     => $userRoll,
-                        'remarks'     => $request->reject_status_remarks,
+                        'user_id' => $currentUserId,
+                        'user_name' => $currentUserName,
+                        'status' => 0,
+                        'role' => $userRoll,
+                        'remarks' => $request->reject_status_remarks,
                         'updated_at' => now()->toDateTimeString(),
                     ];
                 }
-
-
-
-
 
                 $target->status = 1;
                 $target->reject_status = $request->status;
@@ -503,8 +504,8 @@ class CompletionOfCourseFolderController extends Controller
                 return response()->json(['success' => true]);
             }
         } catch (\Exception $e) {
-             DB::rollBack();
-             return response()->json(['message' => 'Oops! Something went wrong'], 500);
+            DB::rollBack();
+            return response()->json(['message' => 'Oops! Something went wrong'], 500);
         }
     }
 }

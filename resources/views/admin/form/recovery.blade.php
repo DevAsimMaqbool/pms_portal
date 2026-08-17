@@ -104,7 +104,6 @@
                                                 </select>
                                             </div>
 
-
                                             <div class="col-md-4">
                                                 <label class="form-label">Target Month/Year</label>
                                                 <input type="date" name="recovery[0][target_month_year]" class="form-control"
@@ -120,7 +119,6 @@
                                                 <input type="number" name="recovery[0][achieved_target]" class="form-control"
                                                     min="1" step="1" required>
                                             </div>
-
 
                                         </div>
                                     </div>
@@ -142,7 +140,6 @@
             </div>
         </div>
 
-
         <!-- Import Modal -->
         <div class="modal fade" id="importModal" tabindex="-1">
             <div class="modal-dialog">
@@ -153,14 +150,20 @@
 
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Import Employability Data</h5>
+                            <h5 class="modal-title">Import Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
                         <div class="modal-body">
                             <label class="form-label">Upload Excel / CSV</label>
                             <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
-
+                            {{-- Download Sample File --}}
+                            <div class="mt-2">
+                                <a href="{{ asset('sample/recoveries.xlsx') }}" class="text-primary" download>
+                                    <i class="fa fa-download me-1"></i>
+                                    Download Sample File
+                                </a>
+                            </div>
                             <small class="text-muted d-block mt-2">
                                 Allowed: xlsx, xls, csv
                             </small>
@@ -201,65 +204,62 @@
                 // Add new author group
                 $('#add-coauthor').click(function () {
 
-
                     let facultyOptions = '<option value="">Select Faculty</option>';
                     faculties.forEach(function (fac) {
                         facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
                     });
                     let newGroup = `
-                <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
+                                                                <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
+                                                                <div class="col-md-4">
+                                                                <label class="form-label">Faculty</label>
+                                                                <select name="recovery[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
+                                                                ${facultyOptions}
+                                                                </select>
+                                                                </div>
 
-                <div class="col-md-4">
-                <label class="form-label">Faculty</label>
-                <select name="recovery[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
-                ${facultyOptions}
-                </select>
-                </div>
+                                                                <div class="col-md-4">
+                                                                <label class="form-label">Department</label>
+                                                                <select name="recovery[${pastIndex}][department_id]" class="select2 form-select department-select">
+                                                                <option value="">Select Department</option>
+                                                                </select>
+                                                                </div>
 
-                <div class="col-md-4">
-                <label class="form-label">Department</label>
-                <select name="recovery[${pastIndex}][department_id]" class="select2 form-select department-select">
-                <option value="">Select Department</option>
-                </select>
-                </div>
+                                                                <div class="col-md-4">
+                                                                <label class="form-label">Program Name</label>
+                                                                <select name="recovery[${pastIndex}][program_id]" class="select2 form-select program-select">
+                                                                <option value="">Select Program</option>
+                                                                </select>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                <label for="program_level" class="form-label">Program Level</label>
+                                                                <select name="recovery[${pastIndex}][program_level]" id="program_level"
+                                                                class="select2 form-select faculty-member" required>
+                                                                <option value="">-- Select Level --</option>
+                                                                <option value="UG">UG</option>
+                                                                <option value="PG">PG</option>
+                                                                </select>
+                                                                </div>
 
-                <div class="col-md-4">
-                <label class="form-label">Program Name</label>
-                <select name="recovery[${pastIndex}][program_id]" class="select2 form-select program-select">
-                <option value="">Select Program</option>
-                </select>
-                </div>
-                <div class="col-md-4">
-                <label for="program_level" class="form-label">Program Level</label>
-                <select name="recovery[${pastIndex}][program_level]" id="program_level"
-                class="select2 form-select faculty-member" required>
-                <option value="">-- Select Level --</option>
-                <option value="UG">UG</option>
-                <option value="PG">PG</option>
-                </select>
-                </div>
+                                                                <div class="col-md-4">
+                                                                <label class="form-label">Target Month/Year</label>
+                                                                <input type="date" name="recovery[${pastIndex}][target_month_year]" class="form-control" required>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                <label class="form-label">Recovery Target</label>
+                                                                <input type="number" name="recovery[${pastIndex}][recovery_target]" class="form-control" min="1"
+                                                                step="1" required>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                <label class="form-label">Target Achieved</label>
+                                                                <input type="number" name="recovery[${pastIndex}][achieved_target]" class="form-control" min="1"
+                                                                step="1" required>
+                                                                </div>
 
-
-                <div class="col-md-4">
-                <label class="form-label">Target Month/Year</label>
-                <input type="date" name="recovery[${pastIndex}][target_month_year]" class="form-control" required>
-                </div>
-                <div class="col-md-4">
-                <label class="form-label">Recovery Target</label>
-                <input type="number" name="recovery[${pastIndex}][recovery_target]" class="form-control" min="1"
-                step="1" required>
-                </div>
-                <div class="col-md-4">
-                <label class="form-label">Target Achieved</label>
-                <input type="number" name="recovery[${pastIndex}][achieved_target]" class="form-control" min="1"
-                step="1" required>
-                </div>
-
-                <div class="col-md-2 d-flex align-items-end">
-                <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
-                </div>
-                </div>`;
+                                                                <div class="col-md-2 d-flex align-items-end">
+                                                                <button type="button" class="btn btn-label-danger mt-xl-6 waves-effect remove-past"><i class="icon-base ti tabler-x me-1"></i><span class="align-middle">Delete</span></button>
+                                                                </div>
+                                                                </div>`;
 
                     // Convert string → jQuery object
                     let $newBlock = $(newGroup);
@@ -442,7 +442,6 @@
                         }
                     });
                 });
-
 
             });
         </script>

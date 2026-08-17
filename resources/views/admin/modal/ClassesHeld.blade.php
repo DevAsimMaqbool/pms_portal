@@ -101,7 +101,7 @@
         $activeRoleId
     );
 @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
     <!--  Payment Methods modal -->
     <div class="modal fade" id="ClassesHeld" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -142,7 +142,7 @@
                             <div class="tab-pane fade show active" id="classes-held-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-                            <thead class=" table-primary">
+                                <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
@@ -185,7 +185,7 @@
                                                     </td>
                                                     <td>
                                                         <span class="badge me-1" style="background-color: {{ $class->color }}">{{ $class->rating
-                                                                                                }}</span>
+                                                                                                        }}</span>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -214,7 +214,7 @@
                             <div class="tab-pane fade" id="classes-held-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-                            <thead class=" table-primary">
+                                <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
@@ -257,7 +257,7 @@
                                                     </td>
                                                     <td>
                                                         <span class="badge me-1" style="background-color: {{ $class->color }}">{{ $class->rating
-                                                                                                }}</span>
+                                                                                                        }}</span>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -330,7 +330,7 @@
                             <div class="tab-pane fade show active" id="classes-held-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-                            <thead class=" table-primary">
+                                <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Total Classes</th>
@@ -407,7 +407,7 @@
                             <div class="tab-pane fade" id="classes-held-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-                            <thead class=" table-primary">
+                                <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Total Classes</th>
