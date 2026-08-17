@@ -26,8 +26,8 @@
                             <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">QEC Audit Rating</a>
                         </li>
                         <!-- <li class="nav-item">
-                                                                            <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Approvals</a>
-                                                                        </li> -->
+                                                                                                <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Approvals</a>
+                                                                                            </li> -->
                     </ul>
                 @else
                     <div class="misc-wrapper">
@@ -35,126 +35,126 @@
                         <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
                         <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
                         <div class="mt-12">
-                            <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                            <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}"
+                                alt="page-misc-not-authorized" width="170" class="img-fluid" />
                         </div>
                     </div>
                 @endif
                 <div class="tab-content">
                     @if(in_array(getRoleName(activeRole()), ['QEC']))
-                        <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                             <div
-                                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h4 class="mb-1">QEC Audit Rating</h4>
-                                </div>
-                                <div class="d-flex align-content-center flex-wrap gap-4">
-                                    <div class="d-flex gap-4">
-                                        <a href="{{ route('qec-audit-rating.index') }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
-                                    </div>
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                                        <i class="bx bx-upload"></i> Import Excel / CSV</button>
-                                </div>
-                            </div>
-                            <form id="researchForm1" enctype="multipart/form-data">
-                                @csrf
-                                <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-                                <input type="hidden" id="form_status" name="form_status" value="HOD">
-
-                                <div class="row g-3">
-                                    <div id="author-past-container">
-                                        <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Audit Term</label>
-                                                <select name="audits[0][audit_term]" class="form-select">
-                                                    <option value="">Select Audit Term</option>
-                                                    <?php
-                                                        $currentYear = date('Y');
-
-                                                        // Show range from past 2 to next 3 academic years
-                                                        for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
-                                                            $nextYear = $year + 1;
-                                                            $range = $year . '-' . $nextYear;
-                                                            echo "<option value='{$range}'>{$range}</option>";
-                                                        }
-                                                        ?>
-                                                </select>
+                                    <div class="tab-pane fade show active" id="form1" role="tabpanel">
+                                        <div
+                                            class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h4 class="mb-1">QEC Audit Rating</h4>
                                             </div>
-
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Faculty</label>
-                                                <select name="audits[0][faculty_id]" class="select2 form-select faculty-select">
-                                                    <option value="">Select Faculty</option>
-                                                    @foreach(get_faculties() as $faculty)
-                                                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                            <div class="d-flex align-content-center flex-wrap gap-4">
+                                                <div class="d-flex gap-4">
+                                                    <a href="{{ route('qec-audit-rating.index') }}"
+                                                        class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
+                                                </div>
+                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                                                    <i class="bx bx-upload"></i> Import Excel / CSV</button>
                                             </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Department</label>
-                                                <select name="audits[0][department_id]"
-                                                    class="select2 form-select department-select">
-                                                    <option value="">Select Department</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Program Name</label>
-                                                <select name="audits[0][program_id]" class="select2 form-select program-select">
-                                                    <option value="">Select Program</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Program Level</label>
-                                                <select name="audits[0][program_level]" class="form-select">
-                                                    <option value="">Select Level</option>
-                                                    <option value="UG">UG</option>
-                                                    <option value="PG">PG</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Total QEC Audit Rating Score</label>
-                                                <input type="number" name="audits[0][total_score]" class="form-control">
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Score Obtained</label>
-                                                <input type="number" name="audits[0][obtained_score]" class="form-control">
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Strenght</label>
-                                                <input type="text" name="audits[0][strenght]" class="form-control">
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="form-label">Area of Improvement</label>
-                                                <input type="text" name="audits[0][area_of_improvement]" class="form-control">
-                                            </div>
-
-
                                         </div>
+                                        <form id="researchForm1" enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
+                                            <input type="hidden" id="form_status" name="form_status" value="HOD">
+
+                                            <div class="row g-3">
+                                                <div id="author-past-container">
+                                                    <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Audit Term</label>
+                                                            <select name="audits[0][audit_term]" class="form-select">
+                                                                <option value="">Select Audit Term</option>
+                                                                <?php
+                        $currentYear = date('Y');
+
+                        // Show range from past 2 to next 3 academic years
+                        for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
+                            $nextYear = $year + 1;
+                            $range = $year . '-' . $nextYear;
+                            echo "<option value='{$range}'>{$range}</option>";
+                        }
+                                                                                                    ?>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Faculty</label>
+                                                            <select name="audits[0][faculty_id]" class="select2 form-select faculty-select">
+                                                                <option value="">Select Faculty</option>
+                                                                @foreach(get_faculties() as $faculty)
+                                                                    <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Department</label>
+                                                            <select name="audits[0][department_id]"
+                                                                class="select2 form-select department-select">
+                                                                <option value="">Select Department</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Program Name</label>
+                                                            <select name="audits[0][program_id]" class="select2 form-select program-select">
+                                                                <option value="">Select Program</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Program Level</label>
+                                                            <select name="audits[0][program_level]" class="form-select">
+                                                                <option value="">Select Level</option>
+                                                                <option value="UG">UG</option>
+                                                                <option value="PG">PG</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Total QEC Audit Rating Score</label>
+                                                            <input type="number" name="audits[0][total_score]" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Score Obtained</label>
+                                                            <input type="number" name="audits[0][obtained_score]" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Strenght</label>
+                                                            <input type="text" name="audits[0][strenght]" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Area of Improvement</label>
+                                                            <input type="text" name="audits[0][area_of_improvement]" class="form-control">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <button type="button" class="btn btn-primary waves-effect waves-light"
+                                                        id="add-coauthor"><i class="icon-base ti tabler-plus me-1"></i> <span
+                                                            class="align-middle">Add</span></button>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label">Remarks*</label>
+                                                    <textarea name="remarks" class="form-control" style="height:120px; resize:none;"
+                                                        required placeholder=""></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3 text-end">
+                                                <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="col-12 mb-3">
-                                        <button type="button" class="btn btn-primary waves-effect waves-light"
-                                            id="add-coauthor"><i class="icon-base ti tabler-plus me-1"></i> <span
-                                                class="align-middle">Add</span></button>
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <label class="form-label">Remarks*</label>
-                                        <textarea name="remarks" class="form-control" style="height:120px; resize:none;"
-                                            required placeholder=""></textarea>
-                                    </div>
-                                </div>
-                                <div class="mt-3 text-end">
-                                    <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
-                                </div>
-                            </form>
-                        </div>
                     @endif
                     @if(auth()->user()->hasRole(['Dean', 'HOD', 'ORIC']))
                         <div class="tab-pane fade show {{ auth()->user()->hasRole(['Dean', 'ORIC']) ? 'active' : '' }}"
@@ -193,14 +193,20 @@
 
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Import Dropout Rate Data</h5>
+                            <h5 class="modal-title">Import Data</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
                         <div class="modal-body">
                             <label class="form-label">Upload Excel / CSV</label>
                             <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
-
+                            {{-- Download Sample File --}}
+                            <div class="mt-2">
+                                <a href="{{ asset('sample/employability_sample.csv') }}" class="text-primary" download>
+                                    <i class="fa fa-download me-1"></i>
+                                    Download Sample File
+                                </a>
+                            </div>
                             <small class="text-muted d-block mt-2">
                                 Allowed: xlsx, xls, csv
                             </small>
@@ -230,224 +236,222 @@
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
 @endpush
 @push('script')
-@if(in_array(getRoleName(activeRole()), ['QEC']))
-    <script>
-        let pastIndex = 1;
-        let faculties = @json(get_faculties());
+    @if(in_array(getRoleName(activeRole()), ['QEC']))
+        <script>
+            let pastIndex = 1;
+            let faculties = @json(get_faculties());
 
-        $(document).ready(function () {
+            $(document).ready(function () {
 
-            initSelect2();
+                initSelect2();
 
-            fetchIndicatorForms();
+                fetchIndicatorForms();
 
-            // ===============================
-            // CREATE / UPDATE SUBMIT
-            // ===============================
-            $('#researchForm1').on('submit', function (e) {
-                e.preventDefault();
+                // ===============================
+                // CREATE / UPDATE SUBMIT
+                // ===============================
+                $('#researchForm1').on('submit', function (e) {
+                    e.preventDefault();
 
-                let form = $(this);
-                let formData = new FormData(this);
-                let formId = $('#form_id').val();
+                    let form = $(this);
+                    let formData = new FormData(this);
+                    let formId = $('#form_id').val();
 
-                let url = formId
-                    ? `/qec-audit-rating/${formId}`
-                    : "{{ route('qec-audit-rating.store') }}";
+                    let url = formId
+                        ? `/qec-audit-rating/${formId}`
+                        : "{{ route('qec-audit-rating.store') }}";
 
-                if (formId) {
-                    formData.append('_method', 'PUT');
-                }
-
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: response.message,
-                            confirmButtonText: 'OK'
-                        }).then(() => {
-
-                            // Redirect to index page
-                            window.location.href = "{{ route('qec-audit-rating.index') }}";
-
-                            // OR if you prefer direct URL:
-                            // window.location.href = "/qec-audit-rating";
-                        });
-
-                    },
-                    error: function (xhr) {
-                        if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
-                            $('.is-invalid').removeClass('is-invalid');
-                            $('.invalid-feedback').remove();
-
-                            $.each(errors, function (field, messages) {
-                                let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
-                                let input = $('[name="' + fieldName + '"]');
-                                input.addClass('is-invalid');
-                                input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                            });
-                        } else {
-                            Swal.fire('Error', 'Something went wrong', 'error');
-                        }
+                    if (formId) {
+                        formData.append('_method', 'PUT');
                     }
-                });
-            });
 
-            // ===============================
-            // ADD AUDIT GROUP
-            // ===============================
-            $('#add-coauthor').click(function () {
-                addAuditGroup();
-            });
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
 
-            // Remove group
-            $(document).on('click', '.remove-past', function () {
-                $(this).closest('.past-group').remove();
-            });
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                                confirmButtonText: 'OK'
+                            }).then(() => {
 
-            // ===============================
-            // EDIT
-            // ===============================
-            $(document).on('click', '.edit-form-btn', function () {
+                                // Redirect to index page
+                                window.location.href = "{{ route('qec-audit-rating.index') }}";
 
-                let form = $(this).data('form');
+                                // OR if you prefer direct URL:
+                                // window.location.href = "/qec-audit-rating";
+                            });
 
-                resetForm();
-                $('#form_id').val(form.id);
-                $('textarea[name="remarks"]').val(form.remarks);
+                        },
+                        error: function (xhr) {
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                $('.is-invalid').removeClass('is-invalid');
+                                $('.invalid-feedback').remove();
 
-                $('#author-past-container').html('');
-                pastIndex = 0;
-
-                if (form.details && form.details.length) {
-
-                    form.details.forEach(function (audit, index) {
-
-                        addAuditGroup(audit);
-                        pastIndex++;
+                                $.each(errors, function (field, messages) {
+                                    let fieldName = field.replace(/\.(\d+)\./g, '[$1][').replace(/\./g, '][') + ']';
+                                    let input = $('[name="' + fieldName + '"]');
+                                    input.addClass('is-invalid');
+                                    input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                });
+                            } else {
+                                Swal.fire('Error', 'Something went wrong', 'error');
+                            }
+                        }
                     });
-                }
+                });
 
-                $('.nav-tabs a[href="#form1"]').tab('show');
-            });
+                // ===============================
+                // ADD AUDIT GROUP
+                // ===============================
+                $('#add-coauthor').click(function () {
+                    addAuditGroup();
+                });
 
-            // ===============================
-            // DELETE
-            // ===============================
-            $(document).on('click', '.delete-form-btn', function () {
+                // Remove group
+                $(document).on('click', '.remove-past', function () {
+                    $(this).closest('.past-group').remove();
+                });
 
-                let id = $(this).data('id');
+                // ===============================
+                // EDIT
+                // ===============================
+                $(document).on('click', '.edit-form-btn', function () {
 
-                Swal.fire({
-                    title: "Are you sure?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    confirmButtonText: "Yes delete it"
-                }).then((result) => {
+                    let form = $(this).data('form');
 
-                    if (result.isConfirmed) {
+                    resetForm();
+                    $('#form_id').val(form.id);
+                    $('textarea[name="remarks"]').val(form.remarks);
 
+                    $('#author-past-container').html('');
+                    pastIndex = 0;
+
+                    if (form.details && form.details.length) {
+
+                        form.details.forEach(function (audit, index) {
+
+                            addAuditGroup(audit);
+                            pastIndex++;
+                        });
+                    }
+
+                    $('.nav-tabs a[href="#form1"]').tab('show');
+                });
+
+                // ===============================
+                // DELETE
+                // ===============================
+                $(document).on('click', '.delete-form-btn', function () {
+
+                    let id = $(this).data('id');
+
+                    Swal.fire({
+                        title: "Are you sure?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        confirmButtonText: "Yes delete it"
+                    }).then((result) => {
+
+                        if (result.isConfirmed) {
+
+                            $.ajax({
+                                url: `/qec-audit-rating/${id}`,
+                                type: "POST",
+                                data: {
+                                    _method: "DELETE",
+                                    _token: $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success: function (response) {
+
+                                    Swal.fire('Deleted!', response.message, 'success');
+                                    fetchIndicatorForms();
+                                }
+                            });
+                        }
+                    });
+                });
+
+                // ===============================
+                // FACULTY → DEPARTMENT
+                // ===============================
+                $(document).on('change', '.faculty-select', function () {
+
+                    let facultyId = $(this).val();
+                    let parentGroup = $(this).closest('.past-group');
+
+                    let departmentSelect = parentGroup.find('.department-select');
+                    let programSelect = parentGroup.find('.program-select');
+
+                    // Reset dependent dropdowns
+                    departmentSelect.html('<option value="">Loading...</option>').trigger('change');
+                    programSelect.html('<option value="">Select Program</option>').trigger('change');
+
+                    if (facultyId) {
                         $.ajax({
-                            url: `/qec-audit-rating/${id}`,
-                            type: "POST",
-                            data: {
-                                _method: "DELETE",
-                                _token: $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function (response) {
+                            url: "/get-departments/" + facultyId,
+                            type: "GET",
+                            success: function (departments) {
 
-                                Swal.fire('Deleted!', response.message, 'success');
-                                fetchIndicatorForms();
+                                let options = '<option value="">Select Department</option>';
+
+                                $.each(departments, function (i, dept) {
+                                    options += `<option value="${dept.id}">${dept.name}</option>`;
+                                });
+
+                                departmentSelect.html(options).trigger('change');
+                            },
+                            error: function () {
+                                departmentSelect.html('<option value="">Error loading departments</option>');
                             }
                         });
+                    } else {
+                        departmentSelect.html('<option value="">Select Department</option>').trigger('change');
                     }
                 });
-            });
 
+                // ===============================
+                // DEPARTMENT → PROGRAM
+                // ===============================
+                $(document).on('change', '.department-select', function () {
 
-            // ===============================
-            // FACULTY → DEPARTMENT
-            // ===============================
-            $(document).on('change', '.faculty-select', function () {
+                    let departmentId = $(this).val();
+                    let parentGroup = $(this).closest('.past-group');
 
-                let facultyId = $(this).val();
-                let parentGroup = $(this).closest('.past-group');
+                    let programSelect = parentGroup.find('.program-select');
 
-                let departmentSelect = parentGroup.find('.department-select');
-                let programSelect = parentGroup.find('.program-select');
+                    programSelect.html('<option value="">Loading...</option>').trigger('change');
 
-                // Reset dependent dropdowns
-                departmentSelect.html('<option value="">Loading...</option>').trigger('change');
-                programSelect.html('<option value="">Select Program</option>').trigger('change');
+                    if (departmentId) {
+                        $.ajax({
+                            url: "/get-programs/" + departmentId,
+                            type: "GET",
+                            success: function (programs) {
 
-                if (facultyId) {
-                    $.ajax({
-                        url: "/get-departments/" + facultyId,
-                        type: "GET",
-                        success: function (departments) {
+                                let options = '<option value="">Select Program</option>';
 
-                            let options = '<option value="">Select Department</option>';
+                                $.each(programs, function (i, program) {
+                                    options += `<option value="${program.id}">${program.program_name}</option>`;
+                                });
 
-                            $.each(departments, function (i, dept) {
-                                options += `<option value="${dept.id}">${dept.name}</option>`;
-                            });
-
-                            departmentSelect.html(options).trigger('change');
-                        },
-                        error: function () {
-                            departmentSelect.html('<option value="">Error loading departments</option>');
-                        }
-                    });
-                } else {
-                    departmentSelect.html('<option value="">Select Department</option>').trigger('change');
-                }
-            });
-
-
-            // ===============================
-            // DEPARTMENT → PROGRAM
-            // ===============================
-            $(document).on('change', '.department-select', function () {
-
-                let departmentId = $(this).val();
-                let parentGroup = $(this).closest('.past-group');
-
-                let programSelect = parentGroup.find('.program-select');
-
-                programSelect.html('<option value="">Loading...</option>').trigger('change');
-
-                if (departmentId) {
-                    $.ajax({
-                        url: "/get-programs/" + departmentId,
-                        type: "GET",
-                        success: function (programs) {
-
-                            let options = '<option value="">Select Program</option>';
-
-                            $.each(programs, function (i, program) {
-                                options += `<option value="${program.id}">${program.program_name}</option>`;
-                            });
-
-                            programSelect.html(options).trigger('change');
-                        },
-                        error: function () {
-                            programSelect.html('<option value="">Error loading programs</option>');
-                        }
-                    });
-                } else {
-                    programSelect.html('<option value="">Select Program</option>').trigger('change');
-                }
-            });
-            $('#importForm').on('submit', function (e) {
+                                programSelect.html(options).trigger('change');
+                            },
+                            error: function () {
+                                programSelect.html('<option value="">Error loading programs</option>');
+                            }
+                        });
+                    } else {
+                        programSelect.html('<option value="">Select Program</option>').trigger('change');
+                    }
+                });
+                $('#importForm').on('submit', function (e) {
                     e.preventDefault();
 
                     let formData = new FormData(this);
@@ -477,215 +481,213 @@
                     });
                 });
 
+            });
+        </script>
 
-        });
-    </script>
+        <script>
+            // ===============================
+            // FETCH TABLE DATA
+            // ===============================
+            function fetchIndicatorForms() {
 
-    <script>
-        // ===============================
-        // FETCH TABLE DATA
-        // ===============================
-        function fetchIndicatorForms() {
+                $.ajax({
+                    url: "{{ route('qec-audit-rating.index') }}",
+                    type: "GET",
+                    success: function (data) {
 
-            $.ajax({
-                url: "{{ route('qec-audit-rating.index') }}",
-                type: "GET",
-                success: function (data) {
+                        const forms = data.forms || [];
 
-                    const forms = data.forms || [];
+                        const rowData = forms.map((form, i) => {
 
-                    const rowData = forms.map((form, i) => {
+                            let firstDetail = form.details.length ? form.details[0] : {};
 
-                        let firstDetail = form.details.length ? form.details[0] : {};
-
-                        return [
-                            i + 1,
-                            form.creator ? form.creator.name : 'N/A',
-                            firstDetail.audit_term ?? 'N/A',
-                            firstDetail.faculty ? firstDetail.faculty.name : 'N/A',
-                            firstDetail.department ? firstDetail.department.name : 'N/A',
-                            firstDetail.program ? firstDetail.program.name : 'N/A',
-                            firstDetail.program_level ?? 'N/A',
-                            firstDetail.total_score ?? 'N/A',
-                            firstDetail.obtained_score ?? 'N/A',
-                            firstDetail.strenght ?? 'N/A',
-                            firstDetail.area_of_improvement ?? 'N/A',
-                            form.created_at ? new Date(form.created_at).toISOString().split('T')[0] : 'N/A',
-                            `<div class="d-flex gap-1"><button class="btn btn-sm btn-outline-warning edit-form-btn" data-form='${encodeURIComponent(JSON.stringify(form))}'> Edit </button>
-                                                                                                                                              <button class="btn btn-sm btn-outline-danger delete-form-btn" data-id="${form.id}"> Delete </button> </div>`
-                        ];
-                    });
-
-
-                    if (!$.fn.DataTable.isDataTable('#complaintTable2')) {
-
-                        $('#complaintTable2').DataTable({
-                            data: rowData,
-                            scrollX: true,
-                            scrollCollapse: true,
-                            autoWidth: false,
-                            columns: [
-                                { title: "#" },
-                                { title: "Audit Term" },
-                                { title: "Faculty" },
-                                { title: "Department" },
-                                { title: "Program" },
-                                { title: "Program Level" },
-                                { title: "Total Score" },
-                                { title: "Obtained Score" },
-                                { title: "Strength" },
-                                { title: "Area of Improvement" },
-                                { title: "Actions" }
-                            ]
+                            return [
+                                i + 1,
+                                form.creator ? form.creator.name : 'N/A',
+                                firstDetail.audit_term ?? 'N/A',
+                                firstDetail.faculty ? firstDetail.faculty.name : 'N/A',
+                                firstDetail.department ? firstDetail.department.name : 'N/A',
+                                firstDetail.program ? firstDetail.program.name : 'N/A',
+                                firstDetail.program_level ?? 'N/A',
+                                firstDetail.total_score ?? 'N/A',
+                                firstDetail.obtained_score ?? 'N/A',
+                                firstDetail.strenght ?? 'N/A',
+                                firstDetail.area_of_improvement ?? 'N/A',
+                                form.created_at ? new Date(form.created_at).toISOString().split('T')[0] : 'N/A',
+                                `<div class="d-flex gap-1"><button class="btn btn-sm btn-outline-warning edit-form-btn" data-form='${encodeURIComponent(JSON.stringify(form))}'> Edit </button>
+                                                                                                                                                              <button class="btn btn-sm btn-outline-danger delete-form-btn" data-id="${form.id}"> Delete </button> </div>`
+                            ];
                         });
 
-                    } else {
+                        if (!$.fn.DataTable.isDataTable('#complaintTable2')) {
 
-                        $('#complaintTable2').DataTable().clear().rows.add(rowData).draw();
+                            $('#complaintTable2').DataTable({
+                                data: rowData,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                autoWidth: false,
+                                columns: [
+                                    { title: "#" },
+                                    { title: "Audit Term" },
+                                    { title: "Faculty" },
+                                    { title: "Department" },
+                                    { title: "Program" },
+                                    { title: "Program Level" },
+                                    { title: "Total Score" },
+                                    { title: "Obtained Score" },
+                                    { title: "Strength" },
+                                    { title: "Area of Improvement" },
+                                    { title: "Actions" }
+                                ]
+                            });
+
+                        } else {
+
+                            $('#complaintTable2').DataTable().clear().rows.add(rowData).draw();
+                        }
                     }
-                }
-            });
-        }
-    </script>
-
-    <script>
-        // ===============================
-        // ADD AUDIT GROUP FUNCTION
-        // ===============================
-        function addAuditGroup(audit = null) {
-
-            let facultyOptions = '<option value="">Select Faculty</option>';
-            faculties.forEach(function (fac) {
-                facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
-            });
-            // 🔹 Dynamic Academic Year Logic (Same as PHP)
-            let currentYear = new Date().getFullYear();
-            let auditTermOptions = '<option value="">Select Audit Term</option>';
-
-            for (let year = currentYear - 2; year <= currentYear + 3; year++) {
-                let nextYear = year + 1;
-                let range = `${year}-${nextYear}`;
-                auditTermOptions += `<option value="${range}">${range}</option>`;
+                });
             }
+        </script>
 
-            let group = `
-                        <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
+        <script>
+            // ===============================
+            // ADD AUDIT GROUP FUNCTION
+            // ===============================
+            function addAuditGroup(audit = null) {
 
-                        <div class="col-md-4">
-                        <label class="form-label">Audit Term</label>
-                        <select name="audits[${pastIndex}][audit_term]" class="form-select">
-                        ${auditTermOptions}
-                        </select>
-                        </div>
+                let facultyOptions = '<option value="">Select Faculty</option>';
+                faculties.forEach(function (fac) {
+                    facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
+                });
+                // 🔹 Dynamic Academic Year Logic (Same as PHP)
+                let currentYear = new Date().getFullYear();
+                let auditTermOptions = '<option value="">Select Audit Term</option>';
+
+                for (let year = currentYear - 2; year <= currentYear + 3; year++) {
+                    let nextYear = year + 1;
+                    let range = `${year}-${nextYear}`;
+                    auditTermOptions += `<option value="${range}">${range}</option>`;
+                }
+
+                let group = `
+                                        <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
                                         <div class="col-md-4">
-                                        <label class="form-label">Faculty</label>
-                                        <select name="audits[${pastIndex}][faculty_id]" 
-                                        class="select2 form-select faculty-select">
-                                        ${facultyOptions}
+                                        <label class="form-label">Audit Term</label>
+                                        <select name="audits[${pastIndex}][audit_term]" class="form-select">
+                                        ${auditTermOptions}
                                         </select>
                                         </div>
 
-                                        <div class="col-md-4">
-                                        <label class="form-label">Department</label>
-                                        <select name="audits[${pastIndex}][department_id]" 
-                                        class="select2 form-select department-select">
-                                        <option value="">Select Department</option>
-                                        </select>
-                                        </div>
+                                                        <div class="col-md-4">
+                                                        <label class="form-label">Faculty</label>
+                                                        <select name="audits[${pastIndex}][faculty_id]" 
+                                                        class="select2 form-select faculty-select">
+                                                        ${facultyOptions}
+                                                        </select>
+                                                        </div>
 
-                                        <div class="col-md-4">
-                                        <label class="form-label">Program</label>
-                                        <select name="audits[${pastIndex}][program_id]" 
-                                        class="select2 form-select program-select">
-                                        <option value="">Select Program</option>
-                                        </select>
-                                        </div>
+                                                        <div class="col-md-4">
+                                                        <label class="form-label">Department</label>
+                                                        <select name="audits[${pastIndex}][department_id]" 
+                                                        class="select2 form-select department-select">
+                                                        <option value="">Select Department</option>
+                                                        </select>
+                                                        </div>
 
-                                        <div class="col-md-4">
-                                        <label class="form-label">Program Level</label>
-                                        <select name="audits[${pastIndex}][program_level]" class="form-select">
-                                        <option value="">Select Level</option>
-                                        <option value="UG">UG</option>
-                                        <option value="PG">PG</option>
-                                        </select>
-                                        </div>
+                                                        <div class="col-md-4">
+                                                        <label class="form-label">Program</label>
+                                                        <select name="audits[${pastIndex}][program_id]" 
+                                                        class="select2 form-select program-select">
+                                                        <option value="">Select Program</option>
+                                                        </select>
+                                                        </div>
 
-                                        <div class="col-md-4">
-                                        <label class="form-label">Total QEC Audit Rating Score</label>
-                                        <input type="number" name="audits[${pastIndex}][total_score]" 
-                                        class="form-control" value="${audit?.total_score ?? ''}">
-                                        </div>
+                                                        <div class="col-md-4">
+                                                        <label class="form-label">Program Level</label>
+                                                        <select name="audits[${pastIndex}][program_level]" class="form-select">
+                                                        <option value="">Select Level</option>
+                                                        <option value="UG">UG</option>
+                                                        <option value="PG">PG</option>
+                                                        </select>
+                                                        </div>
 
-                                        <div class="col-md-4">
-                                        <label class="form-label">Score Obtained</label>
-                                        <input type="number" name="audits[${pastIndex}][obtained_score]" 
-                                        class="form-control" value="${audit?.obtained_score ?? ''}">
-                                        </div>
+                                                        <div class="col-md-4">
+                                                        <label class="form-label">Total QEC Audit Rating Score</label>
+                                                        <input type="number" name="audits[${pastIndex}][total_score]" 
+                                                        class="form-control" value="${audit?.total_score ?? ''}">
+                                                        </div>
 
-                                        <div class="col-md-4">
-                                        <label class="form-label">Strenght</label>
-                                        <input type="text" name="audits[${pastIndex}][strenght]" value="${audit?.strenght ?? ''}" class="form-control">
-                                        </div>
+                                                        <div class="col-md-4">
+                                                        <label class="form-label">Score Obtained</label>
+                                                        <input type="number" name="audits[${pastIndex}][obtained_score]" 
+                                                        class="form-control" value="${audit?.obtained_score ?? ''}">
+                                                        </div>
 
-                                        <div class="col-md-4">
-                                        <label class="form-label">Area of Improvement</label>
-                                        <input type="text" name="audits[${pastIndex}][area_of_improvement]" value="${audit?.area_of_improvement ?? ''}" class="form-control">
-                                        </div>
+                                                        <div class="col-md-4">
+                                                        <label class="form-label">Strenght</label>
+                                                        <input type="text" name="audits[${pastIndex}][strenght]" value="${audit?.strenght ?? ''}" class="form-control">
+                                                        </div>
 
-                                        <div class="col-md-12">
-                                        <button type="button" class="btn btn-danger remove-past">Remove</button>
-                                        </div>
-                                        </div>`;
+                                                        <div class="col-md-4">
+                                                        <label class="form-label">Area of Improvement</label>
+                                                        <input type="text" name="audits[${pastIndex}][area_of_improvement]" value="${audit?.area_of_improvement ?? ''}" class="form-control">
+                                                        </div>
 
-            $('#author-past-container').append(group);
+                                                        <div class="col-md-12">
+                                                        <button type="button" class="btn btn-danger remove-past">Remove</button>
+                                                        </div>
+                                                        </div>`;
 
-            initSelect2();
+                $('#author-past-container').append(group);
 
-            if (audit) {
+                initSelect2();
 
-                $(`[name="audits[${pastIndex}][audit_term]"]`)
-                    .val(audit.audit_term);
+                if (audit) {
 
-                $(`[name="audits[${pastIndex}][faculty_id]"]`)
-                    .val(audit.faculty_id).trigger('change');
+                    $(`[name="audits[${pastIndex}][audit_term]"]`)
+                        .val(audit.audit_term);
 
-                setTimeout(function () {
-
-                    $(`[name="audits[${pastIndex}][department_id]"]`)
-                        .val(audit.department_id).trigger('change');
+                    $(`[name="audits[${pastIndex}][faculty_id]"]`)
+                        .val(audit.faculty_id).trigger('change');
 
                     setTimeout(function () {
 
-                        $(`[name="audits[${pastIndex}][program_id]"]`)
-                            .val(audit.program_id).trigger('change');
+                        $(`[name="audits[${pastIndex}][department_id]"]`)
+                            .val(audit.department_id).trigger('change');
+
+                        setTimeout(function () {
+
+                            $(`[name="audits[${pastIndex}][program_id]"]`)
+                                .val(audit.program_id).trigger('change');
+
+                        }, 500);
 
                     }, 500);
+                }
 
-                }, 500);
+                pastIndex++;
+            }
+        </script>
+
+        <script>
+            // ===============================
+            // SELECT2 INIT
+            // ===============================
+            function initSelect2() {
+                $('.select2').select2({
+                    width: '100%'
+                });
             }
 
-            pastIndex++;
-        }
-    </script>
-
-    <script>
-        // ===============================
-        // SELECT2 INIT
-        // ===============================
-        function initSelect2() {
-            $('.select2').select2({
-                width: '100%'
-            });
-        }
-
-        // RESET FORM
-        function resetForm() {
-            $('#researchForm1')[0].reset();
-            $('#form_id').val('');
-            $('#author-past-container').html('');
-            pastIndex = 0;
-        }
-    </script>
-     @endif
+            // RESET FORM
+            function resetForm() {
+                $('#researchForm1')[0].reset();
+                $('#form_id').val('');
+                $('#author-past-container').html('');
+                pastIndex = 0;
+            }
+        </script>
+    @endif
 @endpush
