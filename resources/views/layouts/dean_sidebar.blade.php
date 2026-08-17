@@ -130,10 +130,18 @@
 
                         </li>
                     @endforeach
+                    <li class="menu-item {{ request()->routeIs('employee.rating.index') ? 'active' : '' }}">
+                        <a href="{{ route('employee.rating.index') }}"" class=" menu-link" data-bs-toggle="tooltip"
+                            data-bs-placement="right" data-bs-original-title="Line Manager Feedback">
+                            <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
+                            <div data-i18n="Line Manager Feedback">Line Manager Feedback</div>
+                        </a>
+                    </li>
 
                     <li class="menu-item {{ request()->routeIs('dean.target') ? 'active' : '' }} data-bs-toggle=" tooltip"
                         data-bs-placement="right" data-bs-original-title="Target"">
-                                                                <a href=" {{ route('dean.target') }}" class="menu-link">
+                                                                    <a href=" {{ route('dean.target') }}"
+                        class="menu-link">
                         <i class="menu-icon icon-base ti tabler-target-arrow"></i>
                         <div data-i18n="Target">Target</div>
                         </a>
@@ -147,54 +155,54 @@
                 </a>
             </li>
             <!-- <li class="menu-item {{ request()->routeIs([
-                              'goals-assign.index',
-                              'goals-assign.create',
-                              'goals-assign.edit',
-                              'goals-assign.show',
-                              'view-assign-goal',
-                              'view-assign-to-goal',
-                              'goal.mapping.pdf',
-                              'assign.goal.mapping.pdf',
-                          ]) ? 'active open' : '' }}">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                <i class="menu-icon icon-base ti tabler-circle-letter-g"></i>
-                                <div data-i18n="Goal Settings">Goal Settings</div>
-                                </a>
+                                  'goals-assign.index',
+                                  'goals-assign.create',
+                                  'goals-assign.edit',
+                                  'goals-assign.show',
+                                  'view-assign-goal',
+                                  'view-assign-to-goal',
+                                  'goal.mapping.pdf',
+                                  'assign.goal.mapping.pdf',
+                              ]) ? 'active open' : '' }}">
+                                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon icon-base ti tabler-circle-letter-g"></i>
+                                    <div data-i18n="Goal Settings">Goal Settings</div>
+                                    </a>
 
-                                <ul class="menu-sub">
-                                <li class="menu-item {{ request()->routeIs([
-                                        'goals-assign.index',
-                                        'goals-assign.create',
-                                    'goals-assign.edit',
-                                    'goals-assign.show',
-                                        ]) ? 'active' : '' }}">
-                                    <a href="{{ route('goals-assign.index') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign GOAL">
-                                    <div data-i18n="Assign GOAL">Assign GOAL</div>
-                                    </a>
-                                </li>
-                                 <li class="menu-item {{ request()->routeIs('view-assign-to-goal') ? 'active' : '' }}">
-                                    <a href="{{ route('view-assign-to-goal') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign To Me">
-                                    <div data-i18n="Assign To Me">Assign To Me</div>
-                                    </a>
-                                </li>
-                                <li class="menu-item {{ request()->routeIs('view-assign-goal') ? 'active' : '' }}">
-                                    <a href="{{ route('view-assign-goal') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign BY Me">
-                                    <div data-i18n="Assign BY Me">Assign BY Me</div>
-                                    </a>
-                                </li>
-                                <li class="menu-item {{ request()->routeIs('goal.mapping.pdf') ? 'active' : '' }}">
-                                    <a href="{{ route('goal.mapping.pdf') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign BY Me Report">
-                                    <div data-i18n="Assign BY Me Report">Assign BY Me Report</div>
-                                    </a>
-                                </li>
-                                 <li class="menu-item {{ request()->routeIs('assign.goal.mapping.pdf') ? 'active' : '' }}">
-                                    <a href="{{ route('assign.goal.mapping.pdf') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign To Me Report">
-                                    <div data-i18n="Assign To Me Report">Assign To Me Report</div>
-                                    </a>
-                                </li>
-                                </ul>
+                                    <ul class="menu-sub">
+                                    <li class="menu-item {{ request()->routeIs([
+                                            'goals-assign.index',
+                                            'goals-assign.create',
+                                        'goals-assign.edit',
+                                        'goals-assign.show',
+                                            ]) ? 'active' : '' }}">
+                                        <a href="{{ route('goals-assign.index') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign GOAL">
+                                        <div data-i18n="Assign GOAL">Assign GOAL</div>
+                                        </a>
+                                    </li>
+                                     <li class="menu-item {{ request()->routeIs('view-assign-to-goal') ? 'active' : '' }}">
+                                        <a href="{{ route('view-assign-to-goal') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign To Me">
+                                        <div data-i18n="Assign To Me">Assign To Me</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {{ request()->routeIs('view-assign-goal') ? 'active' : '' }}">
+                                        <a href="{{ route('view-assign-goal') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign BY Me">
+                                        <div data-i18n="Assign BY Me">Assign BY Me</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {{ request()->routeIs('goal.mapping.pdf') ? 'active' : '' }}">
+                                        <a href="{{ route('goal.mapping.pdf') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign BY Me Report">
+                                        <div data-i18n="Assign BY Me Report">Assign BY Me Report</div>
+                                        </a>
+                                    </li>
+                                     <li class="menu-item {{ request()->routeIs('assign.goal.mapping.pdf') ? 'active' : '' }}">
+                                        <a href="{{ route('assign.goal.mapping.pdf') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"  data-bs-original-title="Assign To Me Report">
+                                        <div data-i18n="Assign To Me Report">Assign To Me Report</div>
+                                        </a>
+                                    </li>
+                                    </ul>
 
-                            </li> -->
+                                </li> -->
 
         @endif
     </ul>

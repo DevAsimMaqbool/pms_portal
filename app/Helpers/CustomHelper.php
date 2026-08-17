@@ -2231,6 +2231,113 @@ if (!function_exists('lineManagerRatingOnTasks')) {
         foreach ($feedbacks as $item) {
 
             // Calculate per-virtue average
+            $res_avg = (
+                (float) $item->responsibility_accountability_1 +
+                (float) $item->responsibility_accountability_2
+            ) / 2;
+
+            $emp_avg = (
+                (float) $item->empathy_compassion_1 +
+                (float) $item->empathy_compassion_2
+            ) / 2;
+
+            $hum_avg = (
+                (float) $item->humility_service_1 +
+                (float) $item->humility_service_2
+            ) / 2;
+
+            $hon_avg = (
+                (float) $item->honesty_integrity_1 +
+                (float) $item->honesty_integrity_2
+            ) / 2;
+
+            $ins_avg = (
+                (float) $item->inspirational_leadership_1 +
+                (float) $item->inspirational_leadership_2
+            ) / 2;
+
+            // Five virtues
+            $item->virtues = [
+                [
+                    'name' => 'Responsibility & Accountability',
+                    'avg' => $res_avg,
+                    'rating_data' => generateVirtueRating($res_avg),
+                ],
+                [
+                    'name' => 'Empathy & Compassion',
+                    'avg' => $emp_avg,
+                    'rating_data' => generateVirtueRating($emp_avg),
+                ],
+                [
+                    'name' => 'Humility & Service',
+                    'avg' => $hum_avg,
+                    'rating_data' => generateVirtueRating($hum_avg),
+                ],
+                [
+                    'name' => 'Honesty & Integrity',
+                    'avg' => $hon_avg,
+                    'rating_data' => generateVirtueRating($hon_avg),
+                ],
+                [
+                    'name' => 'Inspirational Leadership',
+                    'avg' => $ins_avg,
+                    'rating_data' => generateVirtueRating($ins_avg),
+                ],
+            ];
+
+            // Overall average of 5 virtues
+            $overallSum += (
+                $res_avg +
+                $emp_avg +
+                $hum_avg +
+                $hon_avg +
+                $ins_avg
+            ) / 5;
+
+            $totalCount++;
+        }
+
+        // Overall average
+        $overallAvg = $totalCount
+            ? $overallSum / $totalCount
+            : 0;
+
+        $weights = [
+            'course_load' => getRoleWeightage(
+                $activeRoleId,
+                'indicator',
+                188
+            )['weightage'],
+        ];
+
+        $weightedScore = ($overallAvg * $weights['course_load']) / 100;
+
+        // Save overall score
+        saveIndicatorPercentage(
+            $facultyId,
+            $activeRoleId,
+            13,   // KPA
+            27,   // Category
+            188,  // Indicator
+            $weightedScore,
+            $overallAvg
+        );
+
+        return $feedbacks;
+    }
+}
+
+if (!function_exists('lineManagerRatingOnTasksBK')) {
+    function lineManagerRatingOnTasksBK($facultyId, $activeRoleId)
+    {
+        $feedbacks = LineManagerFeedback::where('employee_id', $facultyId)->get();
+
+        $overallSum = 0;
+        $totalCount = 0;
+
+        foreach ($feedbacks as $item) {
+
+            // Calculate per-virtue average
             $res_avg = ($item->responsibility_accountability_1 + $item->responsibility_accountability_2) / 2;
             $emp_avg = ($item->empathy_compassion_1 + $item->empathy_compassion_2) / 2;
             $hum_avg = ($item->humility_service_1 + $item->humility_service_2) / 2;
@@ -3993,7 +4100,7 @@ if (!function_exists('lineManagerReviewRatingOnTasks')) {
         $weightedScore188 = ($averageScore * $weights['course_188']) / 100;
 
         //saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore);
-        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $averageScore);
+        //saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $averageScore);
         return $managerRatings;
     }
 }
@@ -5462,7 +5569,7 @@ if (!function_exists('departmentLineManagerReviewRating')) {
         $weightedScore188 = ($departmentAvgScore * $weights['course_188']) / 100;
         // Save department-level KPI
         //saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore175, $departmentAvgScore);
-        saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $departmentAvgScore);
+        //saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $departmentAvgScore);
 
         return [
             'total_task' => $totalTasks,
@@ -8376,8 +8483,8 @@ function kpaAvgScoreForReport($kpa_id, $emp_id, $member = null)
         ->pluck('score')
         ->map(fn($score) => min($score, 100))
         ->sum();
-     $avgs = min($avgs, 100);    
-    
+    $avgs = min($avgs, 100);
+
     $weightage = $target > 0 ? ($avgs * $target) / 100 : 0;
     // Rating logic
     if ($avgs >= 90) {

@@ -7,7 +7,6 @@
             <img style="width: 175px;" src="{{ asset('admin/assets/img/avatars/superior.svg') }}">
         </a>
 
-
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
             <i class="icon-base ti menu-toggle-icon d-none d-xl-block"></i>
             <i class="icon-base ti tabler-x d-block d-xl-none"></i>
@@ -26,12 +25,13 @@
             </a>
         </li>
 
-        <!-- <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            <a href="{{ route('dashboard') }}" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-smart-home"></i>
-                <div data-i18n="Home">Home</div>
+        <li class="menu-item {{ request()->routeIs('employee.rating.index') ? 'active' : '' }}">
+            <a href="{{ route('employee.rating.index') }}"" class=" menu-link" data-bs-toggle="tooltip"
+                data-bs-placement="right" data-bs-original-title="Line Manager Feedback">
+                <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
+                <div data-i18n="Line Manager Feedback">Line Manager Feedback</div>
             </a>
-        </li> -->
+        </li>
 
     </ul>
 

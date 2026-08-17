@@ -15,8 +15,55 @@ class SelfNominationController extends Controller
      */
     public function index()
     {
-        $submissions = SelfNomination::with('user')->get();
-        return view('admin.self_nomination.index', compact('submissions'));
+        $awardFields = [
+            'sitara_qiyadat_awards' => 'Sitara Qiyadat',
+            'fakhr_karkardagi_awards' => 'Fakhr-e-Karkardagi',
+            'tamgha_tahqeeq_awards' => 'Tamgha-e-Tahqeeq',
+            'chaudhry_akram_awards' => 'Chaudhry Akram',
+            'service_superheroes_awards' => 'Service Superheroes',
+        ];
+
+        $submissions = SelfNomination::with('user')
+            ->get()
+            ->flatMap(function ($submission) use ($awardFields) {
+
+                $rows = collect();
+
+                foreach ($awardFields as $field => $awardName) {
+
+                    if (!empty($submission->{$field})) {
+
+                        $awards = is_array($submission->{$field})
+                            ? $submission->{$field}
+                            : json_decode($submission->{$field}, true);
+
+                        if (!empty($awards)) {
+
+                            $row = clone $submission;
+
+                            $row->display_award = $awardName;
+
+                            $row->display_award_values = collect($awards)
+                                ->map(function ($award) {
+                                    return ucwords(
+                                        str_replace('_', ' ', $award)
+                                    );
+                                })
+                                ->values();
+
+                            $rows->push($row);
+                        }
+                    }
+                }
+
+                return $rows;
+            })
+            ->values();
+
+        return view(
+            'admin.self_nomination.index',
+            compact('submissions')
+        );
     }
 
     /**

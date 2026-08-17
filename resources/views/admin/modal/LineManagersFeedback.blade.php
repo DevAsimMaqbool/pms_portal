@@ -82,59 +82,97 @@
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Task</th>
+                                            <th>Virtue</th>
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
                                     </thead>
+
                                     @php
-                                        // Initialize totalFeedback to 0 in case nothing is set later
+                                        // Initialize totalPercentage to 0 in case nothing is set later
                                         $totalPercentage = 0;
                                     @endphp
 
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader UG', 'Program Leader PG']))
+                                        @if(
+                                                in_array(getRoleName(activeRole()), [
+                                                    'Teacher',
+                                                    'Assistant Professor',
+                                                    'Associate Professor',
+                                                    'Professor',
+                                                    'Program Leader UG',
+                                                    'Program Leader PG'
+                                                ])
+                                            )
+
                                             @php
-                                                $feedbacks = lineManagerReviewRatingOnTasks(Auth::user()->employee_id, $activeRoleId);
-                                                // ✅ Fast sum of all rating percentages
-                                                $totalPercentage = $feedbacks->avg(fn($item) => $item->rating_data['percentage']);
+                                                $feedbacks = lineManagerRatingOnTasks(
+                                                    Auth::user()->employee_id,
+                                                    $activeRoleId
+                                                );
+
+                                                // Get all virtues from feedbacks
+                                                $virtues = $feedbacks->flatMap(function ($item) {
+                                                    return $item->virtues ?? [];
+                                                });
+
+                                                // Same existing total percentage logic, but based on virtues
+                                                $totalPercentage = $virtues->avg(function ($item) {
+                                                    return $item['rating_data']['percentage'];
+                                                });
                                             @endphp
-                                            @forelse($feedbacks as $index => $item)
+
+                                            @forelse($virtues as $index => $item)
                                                 <tr>
                                                     <td>{{ $index + 1 }}</td>
-                                                    <td>{{ $item->task }}</td>
+
                                                     <td>
-                                                        <div class="badge {{ $item->rating_data['color'] }}">
-                                                            {{ number_format($item->rating_data['percentage'], 1) }}%
+                                                        {{ $item['name'] }}
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="badge {{ $item['rating_data']['color'] }}">
+                                                            {{ number_format($item['rating_data']['percentage'], 1) }}%
                                                         </div>
                                                     </td>
+
                                                     <td>
-                                                        <span class="badge {{ $item->rating_data['color'] }}">
-                                                            {{ $item->rating_data['label'] }}
-                                                        </span>
+                                                        <div class="badge {{ $item['rating_data']['color'] }}">
+                                                            {{ number_format($item['rating_data']['percentage'], 1) }}%
+                                                        </div>
                                                     </td>
                                                 </tr>
+
                                             @empty
                                                 <tr>
-                                                    <td colspan="4" class="text-center">No record found</td>
+                                                    <td colspan="4" class="text-center">
+                                                        No record found
+                                                    </td>
                                                 </tr>
                                             @endforelse
+
                                         @endif
                                     </tbody>
+
                                     <tfoot>
                                         <tr class="table-primary">
                                             <th class="text-center">Total</th>
+
                                             <th colspan="" class="text-end"></th>
+
                                             <th style="font-size: 0.960rem;">
                                                 <b class="badge"
                                                     style="background-color: {{ getRatingMeta($totalPercentage)->color }}">
                                                     {{ number_format($totalPercentage, 1) }}%
                                                 </b>
                                             </th>
-                                            <th style="font-size: 0.960rem;"><b class="badge"
+
+                                            <th style="font-size: 0.960rem;">
+                                                <b class="badge"
                                                     style="background-color: {{ getRatingMeta($totalPercentage)->color }}">
                                                     {{ getRatingMeta($totalPercentage)->rating }}
-                                                </b></th>
+                                                </b>
+                                            </th>
                                         </tr>
                                     </tfoot>
                                 </table>
