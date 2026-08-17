@@ -68,7 +68,7 @@
                             $range = $year . '-' . $nextYear;
                             echo "<option value='{$range}'>{$range}</option>";
                         }
-                                                                                                                                                                                                                                                                                                    ?>
+                                                                                                                                                                                                                                                                                                                        ?>
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
@@ -339,7 +339,7 @@
                             <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
                             {{-- Download Sample File --}}
                             <div class="mt-2">
-                                <a href="{{ asset('sample/employability_sample.csv') }}" class="text-primary" download>
+                                <a href="{{ asset('sample/employability_sample.xlsx') }}" class="text-primary" download>
                                     <i class="fa fa-download me-1"></i>
                                     Download Sample File
                                 </a>
@@ -546,8 +546,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                ${department.name}
-                </option>`
+                        ${department.name}
+                        </option>`
                                     );
                                 });
 
@@ -577,8 +577,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                ${program.program_name}
-                </option>`
+                        ${program.program_name}
+                        </option>`
                                     );
                                 });
 

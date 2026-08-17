@@ -337,7 +337,7 @@
                             <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
                             {{-- Download Sample File --}}
                             <div class="mt-2">
-                                <a href="{{ asset('sample/student_engagement_rate.csv') }}" class="text-primary" download>
+                                <a href="{{ asset('sample/student_engagement_rate.xlsx') }}" class="text-primary" download>
                                     <i class="fa fa-download me-1"></i>
                                     Download Sample File
                                 </a>
@@ -527,8 +527,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                                                                                                            ${department.name}
-                                                                                                        </option>`
+                                                                                                                    ${department.name}
+                                                                                                                </option>`
                                     );
                                 });
 
@@ -558,8 +558,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                                                                                                            ${program.program_name}
-                                                                                                        </option>`
+                                                                                                                    ${program.program_name}
+                                                                                                                </option>`
                                     );
                                 });
 
