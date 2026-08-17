@@ -90,6 +90,7 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
                 'program_id' => 'required|integer',
                 'program_level' => 'required|string',
                 'recognition_type' => 'required|in:accreditation,affiliation,ranking',
+                'year_id' => 'required',
                 
                 'scope' => 'required|string',
                 'validity_from' => 'required|date',
@@ -207,6 +208,7 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
                         'program_level' => 'required|string',
 
                         'recognition_type' => 'required|in:accreditation,affiliation,ranking',
+                        'year_id' => 'required',
 
                         'scope' => 'required|string',
                         'validity_from' => 'required|date',

@@ -56,6 +56,15 @@
                                                 <input type="hidden" id="faculty_member_id" name="faculty_member_id"
                                                     value="{{ auth()->id() }}">
                                             </div>
+                                             <div class="col-md-12">
+                                                <label for="batch" class="form-label">Term</label>
+                                                <select name="term_id" class="form-select term_id"
+                                                    required>
+                                                    <option value="">-- Select Term --</option>
+                                                    @foreach(SelectCurrentTerm() as $term) <option value="{{ $term->id }}" {{ old('term_id', $data->term_id ?? '') == $term->id ? 'selected' : '' }}> {{ $term->term }} {{ $term->start_year }} </option> @endforeach
+
+                                                </select>
+                                            </div>
 
 
                                             <div class="col-md-12">
@@ -138,7 +147,7 @@
                                                     </div>
                                             </div>
                                             <div class="col-md-12">
-                                                    <label class="form-label">Document Url</label>
+                                                    <label class="form-label">Please Provide Drive Link</label>
                                                     <input type="url" name="document_url" id="document_url" class="form-control" value="{{ old('document_url', $data->document_url) }}">
                                                 </div>
                                     </div>

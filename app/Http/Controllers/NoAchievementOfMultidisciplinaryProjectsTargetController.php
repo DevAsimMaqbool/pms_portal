@@ -132,6 +132,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                  $rules = [
                         'indicator_id' => 'required',
                         'project_name' => 'required|string',
+                        'year_id' => 'required',
                         'other_disciplines' => 'required|string',
                         'partner_industry' => 'required|string',
                         'identified_public_sector_entity' => 'required|string',
@@ -154,6 +155,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
                         $data = $request->only([
                             'indicator_id',
                             'project_name',
+                            'year_id',
                             'other_disciplines',
                             'partner_industry',
                             'identified_public_sector_entity',
@@ -329,6 +331,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
         $request->validate([
                 'record_id' => 'required',
                 'project_name' => 'required|string',
+                'year_id' => 'required',
                 'other_disciplines' => 'required|string',
                 'partner_industry' => 'required|string',
                 'identified_public_sector_entity' => 'required|string',
@@ -341,7 +344,7 @@ class NoAchievementOfMultidisciplinaryProjectsTargetController extends Controlle
         ]);
 
         $record->fill($request->only([
-                        'project_name', 'other_disciplines', 'partner_industry', 'identified_public_sector_entity','completion_time_of_project',
+                        'project_name','year_id', 'other_disciplines', 'partner_industry', 'identified_public_sector_entity','completion_time_of_project',
                         'product_developed','third_party_validation','ip_claim','provide_details'
                     ]));
                     // $data['updated_by'] = Auth::user()->employee_id;

@@ -111,6 +111,14 @@
                             <label for="title_of_consultancy" class="form-label">Title Of Consultancy</label>
                             <input type="text" id="title_of_consultancy" name="title_of_consultancy" class="form-control" required>
                         </div>
+                         <div class="col-md-6">
+                                <label for="year" class="form-label">Year</label>
+                                <select name="year_id" id="year_id"
+                                    class="form-select" required>
+                                    <option value=""> Select year</option>
+                                        @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                    </select>
+                        </div>
                         
                         
                         <div class="col-md-6">
@@ -365,6 +373,7 @@
         $('#researchForm1 #record_id').val(form.id);
         $('#researchForm1 #title_of_consultancy').val(form.title_of_consultancy);
         $('#researchForm1 #duration_of_consultancy').val(form.duration_of_consultancy);
+        $('#researchForm1 #year_id').val(form.year_id).trigger('change');
         $('#researchForm1 #name_of_client_organization').val(form.name_of_client_organization);
         $('#researchForm1 #consultancy_fee').val(form.consultancy_fee);
         if (form.consultancy_file) {

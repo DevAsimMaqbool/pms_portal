@@ -160,6 +160,7 @@ class IndustrialVisitController extends Controller
                  $rules = [
                         'indicator_id' => 'required',
                         'employee_name' => 'required',
+                        'year_id' => 'required',
                         'employee_id' => 'required',
                         'designation' => 'required',
                         'department_program' => 'required',
@@ -193,6 +194,7 @@ class IndustrialVisitController extends Controller
                         $data = $request->only([
                             'indicator_id',
                             'employee_name',
+                            'year_id',
                             'employee_id',
                             'designation',
                             'department_program',
@@ -364,6 +366,7 @@ class IndustrialVisitController extends Controller
         $request->validate([
                 'record_id' => 'required',
                 'employee_name' => 'required',
+                'year_id' => 'required',
                 'employee_id' => 'required',
                 'designation' => 'required',
                 'department_program' => 'required',
@@ -389,6 +392,7 @@ class IndustrialVisitController extends Controller
                         'employee_id',
                         'designation',
                         'department_program',
+                        'year_id',
                         'campus_unit',
                         'report_submission_date',
                         'industry_organization',

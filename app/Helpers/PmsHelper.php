@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Models\FacultyTarget;
 use App\Models\Role;
 use App\Models\Term;
+use App\Models\Years;
 use Illuminate\Support\Facades\DB;
 
 if (!function_exists('hodTopPerformers')) {
@@ -771,6 +772,19 @@ if (!function_exists('SelectCurrentTerm')) {
     function SelectCurrentTerm()
     {
         return Term::where('status', '1')->get();
+    }
+}
+
+if (!function_exists('SelectCurrentYear')) {
+    function SelectCurrentYear($active = null)
+    {
+        $query = Years::query();
+
+        if ($active !== null) {
+            $query->where('active', $active);
+        }
+
+        return $query->orderByDesc('year')->get();
     }
 }
 

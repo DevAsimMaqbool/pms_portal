@@ -131,6 +131,7 @@ class NumberOfKnowledgeProductController extends Controller
             'indicator_id' => 'required|exists:indicators,id',
             'form_status' => 'required|string',
             'product_type' => 'required|string',
+            'year_id' => 'required',
             'url' => 'required|url',
             'attach_evidence' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
@@ -144,6 +145,7 @@ class NumberOfKnowledgeProductController extends Controller
             'product_type' => $request->product_type,
             'url' => $request->url,
             'attach_evidence' => $filePath,
+            'year_id' => $request->year_id,
             'created_by' => $userId,
             'updated_by' => $userId,
         ]);
@@ -176,6 +178,7 @@ class NumberOfKnowledgeProductController extends Controller
 
                 $request->validate([
                     'product_type' => 'required|string',
+                    'year_id' => 'required',
                     'url' => 'required|url',
                     'attach_evidence' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
                 ]);
@@ -183,6 +186,7 @@ class NumberOfKnowledgeProductController extends Controller
                 $data = [
                     'product_type' => $request->product_type,
                     'url' => $request->url,
+                    'year_id' => $request->year_id,
                     'updated_by' => Auth::id(),
                 ];
 

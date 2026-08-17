@@ -15,6 +15,7 @@ class ProgramAccreditation extends Model
         'program_id',
         'program_level',
         'recognition_type',
+        'year_id',
         'accrediting',
         'accrediting_other_detail',
         'affiliated_body_name',

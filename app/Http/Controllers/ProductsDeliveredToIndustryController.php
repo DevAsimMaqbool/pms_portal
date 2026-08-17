@@ -129,6 +129,7 @@ class ProductsDeliveredToIndustryController extends Controller
                         'indicator_id' => 'required',
                         'project_name' => 'required|string',
                         'other_disciplines' => 'required|string',
+                        'year_id' => 'required',
                         'partner_industry' => 'required|string',
                         'identified_public_sector_entity' => 'required|string',
                         'completion_time_of_project' => 'required|string',
@@ -151,6 +152,7 @@ class ProductsDeliveredToIndustryController extends Controller
                             'indicator_id',
                             'project_name',
                             'other_disciplines',
+                            'year_id',
                             'partner_industry',
                             'identified_public_sector_entity',
                             'completion_time_of_project',
@@ -280,6 +282,7 @@ class ProductsDeliveredToIndustryController extends Controller
                 'record_id' => 'required',
                 'project_name' => 'required|string',
                 'other_disciplines' => 'required|string',
+                'year_id' => 'required',
                 'partner_industry' => 'required|string',
                 'identified_public_sector_entity' => 'required|string',
                 'completion_time_of_project' => 'required|string',
@@ -291,7 +294,7 @@ class ProductsDeliveredToIndustryController extends Controller
         ]);
 
         $data = $request->only([
-                        'project_name', 'other_disciplines', 'partner_industry', 'identified_public_sector_entity','completion_time_of_project',
+                        'project_name', 'other_disciplines', 'year_id', 'partner_industry', 'identified_public_sector_entity','completion_time_of_project',
                         'product_developed','third_party_validation','ip_claim','provide_details'
                     ]);
                     $data['updated_by'] = Auth::user()->employee_id;

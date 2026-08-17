@@ -84,6 +84,7 @@ class ProfessionalMembershipController extends Controller
                 'indicator_id' => 'required',
                 'type_of_membership' => 'required|string',
                 'name_of_professional_body' => 'required|string|max:255',
+                'year_id' => 'required',
                 'category_of_body' => 'required|string',
                 'discipline' => 'required|string',
                 'level' => 'required|string',
@@ -111,6 +112,7 @@ class ProfessionalMembershipController extends Controller
                     'indicator_id',
                     'type_of_membership',
                     'name_of_professional_body',
+                    'year_id',
                     'category_of_body',
                     'discipline',
                     'level',
@@ -180,6 +182,7 @@ class ProfessionalMembershipController extends Controller
                         'record_id' => 'required',
                         'type_of_membership' => 'required|string',
                         'name_of_professional_body' => 'required|string|max:255',
+                        'year_id' => 'required',
                         'category_of_body' => 'required|string',
                         'discipline' => 'required|string',
                         'level' => 'required|string',
@@ -193,7 +196,7 @@ class ProfessionalMembershipController extends Controller
                 ]);
 
                 $data = $request->only([
-                                'type_of_membership', 'name_of_professional_body', 'category_of_body', 'discipline','level','country','membership_status','membership_start_date','membership_valid_until','evidence_type'
+                                'type_of_membership', 'name_of_professional_body', 'year_id', 'category_of_body', 'discipline','level','country','membership_status','membership_start_date','membership_valid_until','evidence_type'
                                 ,'document_link','declaration'
                             ]);
                             if ($request->hasFile('document_link')) {
@@ -335,7 +338,7 @@ class ProfessionalMembershipController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-            if ($user->hasRole('Dean')) {
+            if(in_array(getRoleName(activeRole()), ['Dean'])) {
                    $status = $request->input('status');
                    $indicator_id = $request->input('indicator');
                    if($status=="OTHER"){

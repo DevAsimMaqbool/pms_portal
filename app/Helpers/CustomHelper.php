@@ -2096,6 +2096,110 @@ function CompletionofCourseFolder($facultyId, $activeRoleId, $indicator_id)
 
     return $CompletionOfCourseFolder;
 }
+function CompletionofCourseFolderNew($facultyId, $activeRoleId, $indicator_id)
+{
+    // Get active terms
+    $activeTerms = Term::where('status', '1')->first();
+    
+
+    // Get active Spring and Fall term IDs
+    $springTermIds = $activeTerms
+        ->where('term', 'Spring')
+        ->pluck('id');
+
+    $fallTermIds = $activeTerms
+        ->where('term', 'Fall')
+        ->pluck('id');
+
+    // Get all completion records
+    $completionRecords = CompletionOfCourseFolder::with([
+        'facultyMember',
+        'facultyClass',
+        'term'
+    ])
+        ->where('faculty_member_id', $facultyId)
+        ->where('form_status', 'HOD')
+        ->where('status', 2)
+        ->whereIn('term_id', $activeTerms->pluck('id'))
+        ->where('completion_of_Course_folder_indicator_id', $indicator_id)
+        ->get();
+
+    // Add rating/status
+    foreach ($completionRecords as $target) {
+
+        if ($target->completion_of_Course_folder == 100) {
+
+            $rating = 'OS';
+            $color = '#6EA8FE';
+            $status = 'Completed';
+
+        } elseif ($target->completion_of_Course_folder == 70) {
+
+            $rating = 'ME';
+            $color = '#ffcb9a';
+            $status = 'Partially Completed';
+
+        } else {
+
+            $rating = 'BE';
+            $color = '#ff4c51';
+            $status = 'Not Completed';
+        }
+
+        $target->rating = $rating;
+        $target->color = $color;
+        $target->status_folder = $status;
+    }
+
+    // Separate Spring and Fall
+    $springData = $completionRecords
+        ->whereIn('term_id', $springTermIds)
+        ->values();
+
+    $fallData = $completionRecords
+        ->whereIn('term_id', $fallTermIds)
+        ->values();
+
+    // Calculate overall average
+    $totalScore = $completionRecords->sum('completion_of_Course_folder');
+    $count = $completionRecords->count();
+
+    $avgPercentage = $count > 0
+        ? floor($totalScore / $count)
+        : 0;
+
+    // Weight
+    $weights = [
+        'course_load' => getRoleWeightage(
+            $activeRoleId,
+            'indicator',
+            $indicator_id
+        )['weightage'],
+    ];
+
+    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
+
+    // Save percentage
+    saveIndicatorPercentage100Plus(
+        $facultyId,
+        $role_id = $activeRoleId,
+        $keyPerformanceAreaId = 1,
+        $indicatorCategoryId = 3,
+        $indicator_id,
+        $weightedScore,
+        $avgPercentage,
+        $activeTerms->id
+    );
+
+    return [
+        'allData'    => $completionRecords,
+        'springData' => $springData,
+        'fallData'   => $fallData,
+        'avgPercentage' => $avgPercentage,
+        'weightedScore' => $weightedScore,
+    ];
+}
+
 
 function ComplianceandUsageofLMS($facultyId, $activeRoleId, $indicator_id)
 {
@@ -3881,11 +3985,12 @@ function makeIndicatorRow($name, $indicatorId, $percentage, $faculty = null, $de
     ];
 }
 
-function NumberOfKnowledgeProduct($facultyId, $activeRoleId)
+function NumberOfKnowledgeProduct($facultyId, $activeRoleId,$currentYear=null)
 {
     // 1️⃣ Get all knowledge products created by the faculty
     $knowledgeProducts = \App\Models\NumberOfKnowledgeProduct::where('created_by', $facultyId)
         ->where('status', 2) // optional: only approved/active products
+        ->where('year_id', $currentYear)
         ->get();
 
     $totalAchieved = $knowledgeProducts->count();
@@ -3893,6 +3998,7 @@ function NumberOfKnowledgeProduct($facultyId, $activeRoleId)
     // 2️⃣ Get the target from faculty_targets table
     $targetRecord = FacultyTarget::where('user_id', $facultyId)
         ->where('indicator_id', 194) // indicator_id for NumberOfKnowledgeProduct
+        ->where('year_id', $currentYear)
         ->first();
 
     $target = $targetRecord ? $targetRecord->target : 0;
@@ -8314,7 +8420,7 @@ if (!function_exists('retentionRateofFaculty')) {
 }
 
 if (!function_exists('saveIndicatorPercentage100Plus')) {
-    function saveIndicatorPercentage100Plus($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null)
+    function saveIndicatorPercentage100Plus($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null,$yearId = null)
     {
         if ($score == 100) {
             $color = 'primary';
@@ -8332,15 +8438,20 @@ if (!function_exists('saveIndicatorPercentage100Plus')) {
             $color = 'danger';
             $rating = 'BE';
         }
+        $conditions = [
+            'employee_id' => $employeeId,
+            'role_id' => $role_id,
+            'key_performance_area_id' => $keyPerformanceAreaId,
+            'indicator_category_id' => $indicatorCategoryId,
+            'indicator_id' => $indicatorId,
+        ];
+
+        if ($yearId !== null) {
+            $conditions['year_id'] = $yearId;
+        }
 
         IndicatorsPercentage::updateOrCreate(
-            [
-                'employee_id' => $employeeId,
-                'role_id' => $role_id,
-                'key_performance_area_id' => $keyPerformanceAreaId,
-                'indicator_category_id' => $indicatorCategoryId,
-                'indicator_id' => $indicatorId,
-            ],
+            $conditions,
             [
                 'score' => number_format($score, 2),
                 'with_out_weight_score' => number_format($withOutWeightScore, 2),

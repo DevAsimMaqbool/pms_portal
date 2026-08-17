@@ -250,7 +250,14 @@
 
                                             <div class="card-body">
 
-
+                                                <div class="mb-3">
+                                                        <label for="year" class="form-label">Year</label>
+                                                        <select name="year_id" id="year_id"
+                                                            class="form-select" required>
+                                                            <option value=""> Select year</option>
+                                                                @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                                            </select>
+                                                </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Visit Start Date</label>
                                                     <input type="date" name="visit_start_date" id="visit_start_date" class="form-control" required>
@@ -531,6 +538,7 @@
         $('#researchForm1 #employee_role').val(form.employee_role).trigger('change');
         $('#researchForm1 #visit_category').val(form.visit_category).trigger('change');
         $('#researchForm1 #visit_start_date').val(form.visit_start_date);
+        $('#researchForm1 #year_id').val(form.year_id).trigger('change');;
         $('#researchForm1 #visit_end_date').val(form.visit_end_date);
         $('#researchForm1 #location').val(form.location);
         $('#researchForm1 #report_submission_date').val(form.report_submission_date);

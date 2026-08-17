@@ -134,6 +134,14 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-4">
+                                        <label for="year" class="form-label">Year</label>
+                                        <select name="year_id" id="year_id"
+                                            class="form-select" required>
+                                            <option value=""> Select year</option>
+                                                @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                            </select>
+                                </div>
+                                <div class="col-md-4">
                                     <label for="url" class="form-label">Link/URL</label>
                                     <input type="url" name="url" id="url" class="form-control" placeholder="Enter URL"
                                         required>
@@ -375,6 +383,8 @@
 
                     // Fill text fields
                     $f.find('[name="product_type"]').val(form.product_type);
+                    $f.find('[name="year_id"]').val(form.year_id);
+                    
                     $f.find('[name="url"]').val(form.url);
 
                     // Show existing evidence file if exists

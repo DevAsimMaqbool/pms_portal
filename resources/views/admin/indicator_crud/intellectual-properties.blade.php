@@ -109,6 +109,14 @@
                             <label for="name_of_ip_filed" class="form-label">Title Of IP/Patents</label>
                             <input type="text" id="name_of_ip_filed" name="name_of_ip_filed" class="form-control" required>
                         </div>
+                         <div class="col-md-6">
+                                <label for="year" class="form-label">Year</label>
+                                <select name="year_id" id="year_id"
+                                    class="form-select" required>
+                                    <option value=""> Select year</option>
+                                        @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                    </select>
+                        </div>
                         <div class="col-md-6">
                             <label class="form-label">Type</label>
                             <select id="patents_ip_type" name="patents_ip_type" class="form-select" required>
@@ -375,6 +383,7 @@
         $('#researchForm1 #record_id').val(form.id);
         $('#researchForm1 #name_of_ip_filed').val(form.name_of_ip_filed);
         $('#researchForm1 #patents_ip_type').val(form.patents_ip_type).trigger('change');
+        $('#researchForm1 #year_id').val(form.year_id).trigger('change');
         $('#researchForm1 #other_detail').val(form.other_detail);
         $('#researchForm1 #no_of_ip_disclosed').val(form.no_of_ip_disclosed);
         $('#researchForm1 #area_of_application').val(form.area_of_application);

@@ -161,6 +161,7 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                         'indicator_id' => 'required',
                         'title_of_consultancy' => 'required|string',
                         'duration_of_consultancy' => 'required|string',
+                        'year_id' => 'required',
                         'name_of_client_organization' => 'required|string',
                         'consultancy_fee' => 'required|numeric|min:0',
                         'consultancy_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
@@ -181,6 +182,7 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                             'indicator_id',
                             'title_of_consultancy',
                             'duration_of_consultancy',
+                            'year_id',
                             'name_of_client_organization',
                             'consultancy_fee',
                             'form_status'
@@ -340,6 +342,7 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
                 'record_id' => 'required',
                 'title_of_consultancy' => 'required|string',
                 'duration_of_consultancy' => 'required|string',
+                'year_id' => 'required',
                 'name_of_client_organization' => 'required|string',
                 'consultancy_fee' => 'required|numeric|min:0',
                 'consultancy_file' => '',
@@ -347,7 +350,7 @@ class CommercialGainsCounsultancyResearchIncomeController extends Controller
         ]);
 
         $data = $request->only([
-                        'title_of_consultancy', 'duration_of_consultancy', 'name_of_client_organization', 'consultancy_fee'
+                        'title_of_consultancy', 'year_id', 'duration_of_consultancy', 'name_of_client_organization', 'consultancy_fee'
                     ]);
                     if ($request->hasFile('consultancy_file')) {
 

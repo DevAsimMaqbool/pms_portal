@@ -160,6 +160,7 @@ class IndustrialProjectsController extends Controller
                  $rules = [
                         'indicator_id' => 'required',
                         'project_name' => 'required|string|max:255',
+                        'year_id' => 'required',
                         'contracting_industry' => 'required|string|max:255',
                         'project_duration' => 'required|integer',
                         'estimated_project_cost' => 'required|integer',
@@ -181,6 +182,7 @@ class IndustrialProjectsController extends Controller
                         $data = $request->only([
                             'indicator_id',
                             'project_name',
+                            'year_id',
                             'contracting_industry',
                             'project_duration',
                             'estimated_project_cost',
@@ -342,6 +344,7 @@ class IndustrialProjectsController extends Controller
         $request->validate([
                 'record_id' => 'required',
                 'project_name' => 'required|string|max:255',
+                'year_id' => 'required',
                 'contracting_industry' => 'required|string|max:255',
                 'project_duration' => 'required|integer',
                 'estimated_project_cost' => 'required|integer',
@@ -351,7 +354,7 @@ class IndustrialProjectsController extends Controller
         ]);
 
         $data = $request->only([
-                        'project_name', 'contracting_industry', 'project_duration', 'estimated_project_cost',
+                        'project_name', 'year_id', 'contracting_industry', 'project_duration', 'estimated_project_cost',
                         'estimated_complection'
                     ]);
                      if ($request->hasFile('attachment')) {

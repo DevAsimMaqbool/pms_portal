@@ -107,7 +107,14 @@
                     <input type="hidden" name="_method" value="PUT">
 
                     <div class="row g-3">
-                       
+                        <div class="col-md-6">
+                                        <label for="year" class="form-label">Year</label>
+                                        <select name="year_id" id="year_id"
+                                            class="form-select" required>
+                                            <option value=""> Select year</option>
+                                                @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                            </select>
+                                </div>
                         
                         <div class="col-md-6">
                                         <label for="project_name" class="form-label">Project Name</label>
@@ -428,6 +435,7 @@
         $('#researchForm1 #identified_public_sector_entity').val(form.identified_public_sector_entity);
         $('#researchForm1 #completion_time_of_project').val(form.completion_time_of_project);
         $('#researchForm1 #provide_details').val(form.provide_details);
+        $('#researchForm1 #year_id').val(form.year_id);
 
         // ✅ Radio: Prototype/Product Developed
         $('input[name="product_developed"][value="' + form.product_developed + '"]')

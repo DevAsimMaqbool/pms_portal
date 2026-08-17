@@ -21,7 +21,7 @@
                 @csrf
                 <input type="hidden" id="form_status" name="form_status" value="OTHER" required>
                 <div class="row g-6">
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                         <label class="form-label" for="indicator_id">Select Indicator</label>
                         <select id="indicator_id" class="select2 form-select" data-allow-clear="true" name="indicator_id[]"
                             multiple required>
@@ -29,21 +29,17 @@
                             <option value="136">Multidisciplinary Projects (I&C)</option>
                             <option value="137">Commercial Consultancy/Research Income (I&C)</option>
                             <option value="138">Patents/Intellectual Property (IPR) (I&C)</option>
-                            <option value="139">Spin Offs (I&C)</option>
+                            {{-- <option value="139">Spin Offs (I&C)</option> --}}
                             <option value="198">Industrial Projects (I&C)</option>
                             <option value="199">Products Delivered to Industry (I&C)</option>
                             <option value="194">Number of Knowledge Products (I&C)</option>
                             <option value="197">Industrial Visits (I&C)</option>
                             <option value="155">No of Professional Memberships attained vs targets</option>
+                            <option value="154">No of Programs accredited or affiliated nationally/ Internationally and ranking</option>
                         </select>
                         <div class="invalid-feedback" id="indicatorError"></div>
                     </div>
-                    <div class="col-md-2">
-                        <label class="form-label" for="target">Target</label>
-                        <input type="number" id="target" min="0" name="target" class="form-control" placeholder="1">
-                        <div class="invalid-feedback" id="targetError"></div>
-                    </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label class="form-label" for="multicol-language">Name of Faculty Member</label>
                         <select name="faculty_member_id[]" id="select2Success" class="select2 form-select" multiple
                             required>
@@ -58,6 +54,19 @@
                                 </option>
                             @endforeach
                         </select>
+                    </div>
+                     <div class="col-md-6">
+                        <label class="form-label" for="target">Target</label>
+                        <input type="number" id="target" min="0" name="target" class="form-control" placeholder="1">
+                        <div class="invalid-feedback" id="targetError"></div>
+                    </div>
+                     <div class="col-md-6">
+                        <label for="year" class="form-label">Year</label>
+                        <select name="year_id" id="year_id"
+                            class="form-select" required>
+                            <option value=""> Select year</option>
+                                @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                            </select>
                     </div>
                     <div class="col-md-12">
                         <label for="description" class="form-label">Description</label>
@@ -88,6 +97,7 @@
                             <th>Indicator</th>
                             <th>Description</th>
                             <th>Target</th>
+                            <th>Year</th>
                         </tr>
                     </thead>
                 </table>
@@ -134,8 +144,9 @@
                                 i + 1,
                                 form.user ? form.user.name : 'N/A',
                                 form.indicator ? form.indicator.indicator : 'N/A',
-                                form.description || 'N/A',
-                                form.target || 'N/A'
+                                form.description ?? 'N/A',
+                                form.target ?? 'N/A',
+                                form.year ? form.year.year : 'N/A'
                             ];
                         });
 
@@ -148,6 +159,7 @@
                                     { title: "Indicator" },
                                     { title: "Description" },
                                     { title: "Target" },
+                                    { title: "Year" },
                                 ]
                             });
                         } else {

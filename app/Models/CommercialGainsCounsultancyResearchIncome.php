@@ -11,6 +11,7 @@ class CommercialGainsCounsultancyResearchIncome extends Model
         'indicator_id',
         'form_status',
         'title_of_consultancy',
+        'year_id',
         'duration_of_consultancy',
         'name_of_client_organization',
         'consultancy_fee',

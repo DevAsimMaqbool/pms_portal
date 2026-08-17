@@ -115,7 +115,14 @@
 
 
 
-
+                               <div class="col-md-6">
+                                        <label for="year" class="form-label">Year</label>
+                                        <select name="year_id" id="year_id"
+                                            class="form-select" required>
+                                            <option value=""> Select year</option>
+                                                @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                            </select>
+                                </div>
                                 <div class="col-md-6">
                                     <label for="faculty" class="form-label">Faculty</label>
                                     <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
@@ -623,6 +630,7 @@
                     $('#researchForm1 #evidence_available').val(form.evidence_available).trigger('change');
                     $('#researchForm1 #scope').val(form.scope).trigger('change');
                     $('#researchForm1 #recognition_type').val(form.recognition_type).trigger('change');
+                    $('#researchForm1 #year_id').val(form.year_id).trigger('change');
                     // =============================
                     // Conditional field population
                     // =============================
