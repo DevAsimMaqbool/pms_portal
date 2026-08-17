@@ -43,7 +43,7 @@
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
     <!--  Payment Methods modal -->
     @php
-        
+
         $data = CompletionofCourseFolderNew(Auth::user()->employee_id, $activeRoleId, 120);
         $springData = $data['springData'];
         $fallData = $data['fallData'];
@@ -139,24 +139,24 @@
                                                 </tr>
                                             @endforelse
                                         </tbody>
-                                       
-                                            <tfoot>
-                                                <tr class="table-primary">
-                                                    <th class="text-end">Total</th>
-                                                    <th colspan="2" class="text-end"></th>
-                                                    <th class="text-end">(S+F)</th>
-                                                    <th style="font-size: 0.960rem;">
-                                                        <b class="badge"
-                                                            style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
-                                                            {{ number_format($avgPercentage, 1) }}%
-                                                        </b>
-                                                    </th>
-                                                    <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
-                                                            style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
-                                                            {{ getRatingMeta($avgPercentage)->rating }}
-                                                        </b></th>
-                                                </tr>
-                                            </tfoot>
+
+                                        <tfoot>
+                                            <tr class="table-primary">
+                                                <th class="text-end">Total</th>
+                                                <th colspan="2" class="text-end"></th>
+                                                <th class="text-end">(S+F)</th>
+                                                <th style="font-size: 0.960rem;">
+                                                    <b class="badge"
+                                                        style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
+                                                        {{ number_format($avgPercentage, 1) }}%
+                                                    </b>
+                                                </th>
+                                                <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
+                                                        style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
+                                                        {{ getRatingMeta($avgPercentage)->rating }}
+                                                    </b></th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -215,23 +215,23 @@
                                                 </tr>
                                             @endforelse
                                         </tbody>
-                                            <tfoot>
-                                                <tr class="table-primary">
-                                                    <th class="text-end">Total</th>
-                                                    <th colspan="2" class="text-end"></th>
-                                                    <th class="text-end">(S+F)</th>
-                                                    <th style="font-size: 0.960rem;">
-                                                        <b class="badge"
-                                                            style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
-                                                            {{ number_format($avgPercentage, 1) }}%
-                                                        </b>
-                                                    </th>
-                                                    <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
-                                                            style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
-                                                            {{ getRatingMeta($avgPercentage)->rating }}
-                                                        </b></th>
-                                                </tr>
-                                            </tfoot>
+                                        <tfoot>
+                                            <tr class="table-primary">
+                                                <th class="text-end">Total</th>
+                                                <th colspan="2" class="text-end"></th>
+                                                <th class="text-end">(S+F)</th>
+                                                <th style="font-size: 0.960rem;">
+                                                    <b class="badge"
+                                                        style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
+                                                        {{ number_format($avgPercentage, 1) }}%
+                                                    </b>
+                                                </th>
+                                                <th class="text-end" style="font-size: 0.960rem;"><b class="badge"
+                                                        style="background-color: {{ getRatingMeta($avgPercentage)->color }}">
+                                                        {{ getRatingMeta($avgPercentage)->rating }}
+                                                    </b></th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>

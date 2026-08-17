@@ -27,47 +27,35 @@ class CompletionOfCourseFolderController extends Controller
             ->get(); // make sure you call get() here, not just a query builder
         // dd($data);
 
-
-        if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Professor','Associate Professor'])) {
-                $status = $request->input('status');
-                if($status=="Teacher"){
-                    $forms = CompletionOfCourseFolder::with([
-                            'creator' => function ($q) {
-                                $q->select('employee_id', 'name');
-                            },'facultyClass'
-                        ])
-                        ->where('faculty_member_id', $employeeId)
-                        ->whereIn('term_id', $activeTermIds)
-                        ->where('completion_of_Course_folder_indicator_id', 120)
-                        ->orderBy('id', 'desc')
-                        ->get();
-                }
-                if($status=="HOD"){
-                    $employeeIds = User::where('manager_id', $employeeId)
-                        ->role(['Teacher','Assistant Professor','Professor','Associate Professor'])->pluck('employee_id');
-                        $forms = CompletionOfCourseFolder::with([
-                                'creator' => function ($q) {
-                                    $q->select('employee_id', 'name');
-                                },'facultyClass'
-                            ])
-                            ->whereIn('created_by', $employeeIds)
-                            ->whereIn('term_id', $activeTermIds)
-                            ->where('completion_of_Course_folder_indicator_id', 120)
-                            ->orderBy('id', 'desc')
-                            ->get();
-                }        
-                
+        if (in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator'])) {
+            $status = $request->input('status');
+            if ($status == "Teacher") {
+                $forms = CompletionOfCourseFolder::with([
+                    'creator' => function ($q) {
+                        $q->select('employee_id', 'name');
+                    },
+                    'facultyClass'
+                ])
+                    ->where('faculty_member_id', $employeeId)
+                    ->whereIn('term_id', $activeTermIds)
+                    ->where('completion_of_Course_folder_indicator_id', 120)
+                    ->orderBy('id', 'desc')
+                    ->get();
             }
-             if(in_array(getRoleName(activeRole()), ['QEC'])) {
-                $status = $request->input('status');
-                if($status=="RESEARCHER"){
-                    $forms = CompletionOfCourseFolder::with([
-                            'creator' => function ($q) {
-                                $q->select('employee_id', 'name');
-                            },'facultyClass'
-                        ])->whereIn('term_id', $activeTermIds)->orderBy('id', 'desc')
-                        ->get();
-                }       
+            if ($status == "HOD") {
+                $employeeIds = User::where('manager_id', $employeeId)
+                    ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator'])->pluck('employee_id');
+                $forms = CompletionOfCourseFolder::with([
+                    'creator' => function ($q) {
+                        $q->select('employee_id', 'name');
+                    },
+                    'facultyClass'
+                ])
+                    ->whereIn('created_by', $employeeIds)
+                    ->whereIn('term_id', $activeTermIds)
+                    ->where('completion_of_Course_folder_indicator_id', 120)
+                    ->orderBy('id', 'desc')
+                    ->get();
             }
 
         }
@@ -79,7 +67,7 @@ class CompletionOfCourseFolderController extends Controller
                         $q->select('employee_id', 'name');
                     },
                     'facultyClass'
-                ])->orderBy('id', 'desc')
+                ])->whereIn('term_id', $activeTermIds)->orderBy('id', 'desc')
                     ->get();
             }
         }
@@ -142,33 +130,33 @@ class CompletionOfCourseFolderController extends Controller
                 }
                 $completionStatus = $request->completion_status ?? [];
 
-            $checkedCount = 0;
-            // Individual checkboxes
-            $individualItems = ['Module','lecture log sheet','CQI Docuement',];
-            foreach ($individualItems as $item) {
-                if (in_array($item, $completionStatus)) {
+                $checkedCount = 0;
+                // Individual checkboxes
+                $individualItems = ['Module', 'lecture log sheet', 'CQI Docuement',];
+                foreach ($individualItems as $item) {
+                    if (in_array($item, $completionStatus)) {
+                        $checkedCount++;
+                    }
+                }
+                // Assessment: Good / Bad / Any = count as ONE
+                $assessmentOptions = ['Good', 'Bad', 'Any'];
+                if (count(array_intersect($assessmentOptions, $completionStatus)) > 0) {
                     $checkedCount++;
                 }
-            }
-            // Assessment: Good / Bad / Any = count as ONE
-            $assessmentOptions = ['Good', 'Bad', 'Any'];
-            if (count(array_intersect($assessmentOptions, $completionStatus)) > 0) {
-                $checkedCount++;
-            }
-            // Result: Marks Sheet / Grading Sheet / CLO PLO Mapping Sheet = count as ONE
-            $resultOptions = ['Marks Sheet','Grading Sheet','CLO PLO Maping Sheet'];
-            if (count(array_intersect($resultOptions, $completionStatus)) > 0) {
-                $checkedCount++;
-            }
-            // Total logical items = 5
-            $totalCheckboxes = 5;
-            if ($checkedCount == 0) {
-                $completionScore = 25;
-            } elseif ($checkedCount == $totalCheckboxes) {
-                $completionScore = 100;
-            } else {
-                $completionScore = 70;
-            }   
+                // Result: Marks Sheet / Grading Sheet / CLO PLO Mapping Sheet = count as ONE
+                $resultOptions = ['Marks Sheet', 'Grading Sheet', 'CLO PLO Maping Sheet'];
+                if (count(array_intersect($resultOptions, $completionStatus)) > 0) {
+                    $checkedCount++;
+                }
+                // Total logical items = 5
+                $totalCheckboxes = 5;
+                if ($checkedCount == 0) {
+                    $completionScore = 25;
+                } elseif ($checkedCount == $totalCheckboxes) {
+                    $completionScore = 100;
+                } else {
+                    $completionScore = 70;
+                }
 
                 DB::beginTransaction();
                 foreach ($request->class_name as $classCode) {
@@ -307,12 +295,11 @@ class CompletionOfCourseFolderController extends Controller
                 ], 422);
             }
 
-
             $completionStatus = $request->completion_status ?? [];
 
             $checkedCount = 0;
             // Individual checkboxes
-            $individualItems = ['Module','lecture log sheet','CQI Docuement',];
+            $individualItems = ['Module', 'lecture log sheet', 'CQI Docuement',];
             foreach ($individualItems as $item) {
                 if (in_array($item, $completionStatus)) {
                     $checkedCount++;
@@ -324,7 +311,7 @@ class CompletionOfCourseFolderController extends Controller
                 $checkedCount++;
             }
             // Result: Marks Sheet / Grading Sheet / CLO PLO Mapping Sheet = count as ONE
-            $resultOptions = ['Marks Sheet','Grading Sheet','CLO PLO Maping Sheet'];
+            $resultOptions = ['Marks Sheet', 'Grading Sheet', 'CLO PLO Maping Sheet'];
             if (count(array_intersect($resultOptions, $completionStatus)) > 0) {
                 $checkedCount++;
             }

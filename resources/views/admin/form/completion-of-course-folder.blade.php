@@ -61,26 +61,24 @@
                                         <div id="grant-details-container">
                                             <div class="grant-group row g-3 m-0 p-3">
 
-                                                <input type="hidden" id="faculty_member_id" name="faculty_member_id"
-                                                    value="{{ auth()->id() }}">
-                                                    <input type="radio" name="completion_of_Course_folder" id="good" value="1" checked>
-                                                    
-                                            </div>
-                                            <div class="col-md-12">
-                                                                    <label for="batch" class="form-label">Term</label>
-                                                                    <select name="term_id" class="form-select term_id"
-                                                                        required>
-                                                                        <option value="">-- Select Term --</option>
-                                                                        @foreach(SelectCurrentTerm() as $term) <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }} </option> @endforeach
-
-                                                                    </select>
-                                                                </div>
+                                                <div class="col-md-12 d-none">
+                                                    <label for="faculty_member" class="form-label">Name of Faculty Member</label>
 
                                                     <input type="hidden" id="faculty_member_id" name="faculty_member_id"
                                                         value="{{ auth()->id() }}">
                                                     <input type="radio" name="completion_of_Course_folder" id="good" value="1"
                                                         checked>
 
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label for="batch" class="form-label">Term</label>
+                                                    <select name="term_id" class="form-select term_id" required>
+                                                        <option value="">-- Select Term --</option>
+                                                        @foreach(SelectCurrentTerm() as $term)
+                                                            <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
+                                                        </option> @endforeach
+
+                                                    </select>
                                                 </div>
 
                                                 <div class="col-md-12">
@@ -167,28 +165,28 @@
                                                             <label for="clo_plo_maping_Sheet">CLO PLO Maping Sheet</label>
                                                         </div>
                                                     </div>
-                                            </div>
-                                            <div class="col-md-12">
+                                                </div>
+                                                <div class="col-md-12">
                                                     <label class="form-label">Please Provide Drive Link</label>
                                                     <input type="url" name="document_url" id="document_url" class="form-control">
                                                 </div>
 
                                                 <!-- <div class="col-md-12">
-                                                                                                                <label class="form-label d-block">2- LMS Compliance Status</label>
-                                                                                                                <div>
-                                                                                                                    <input type="radio" name="compliance_and_usage_of_lms" id="lms_completed"
-                                                                                                                        value="100">
-                                                                                                                    <label for="lms_completed">Completed</label>
+                                                                                                                                        <label class="form-label d-block">2- LMS Compliance Status</label>
+                                                                                                                                        <div>
+                                                                                                                                            <input type="radio" name="compliance_and_usage_of_lms" id="lms_completed"
+                                                                                                                                                value="100">
+                                                                                                                                            <label for="lms_completed">Completed</label>
 
-                                                                                                                    <input type="radio" name="compliance_and_usage_of_lms"
-                                                                                                                        id="lms_partially_completed" value="70" checked>
-                                                                                                                    <label for="lms_partially_completed">Partially Completed</label>
+                                                                                                                                            <input type="radio" name="compliance_and_usage_of_lms"
+                                                                                                                                                id="lms_partially_completed" value="70" checked>
+                                                                                                                                            <label for="lms_partially_completed">Partially Completed</label>
 
-                                                                                                                    <input type="radio" name="compliance_and_usage_of_lms"
-                                                                                                                        id="lms_not_Completed" value="25">
-                                                                                                                    <label for="lms_not_Completed">Not Completed</label>
-                                                                                                                </div>
-                                                                                                            </div> -->
+                                                                                                                                            <input type="radio" name="compliance_and_usage_of_lms"
+                                                                                                                                                id="lms_not_Completed" value="25">
+                                                                                                                                            <label for="lms_not_Completed">Not Completed</label>
+                                                                                                                                        </div>
+                                                                                                                                    </div> -->
 
                                             </div>
                                         </div>
@@ -611,27 +609,27 @@
 
                         // Create Approve radio
                         const approveRadio = $(`
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input status-radio" type="radio" 
-                                            name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
-                                            data-id="${form.id}" value="approve">
-                                        <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
-                                    </div>
-                                `);
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input status-radio" type="radio" 
+                                                                    name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
+                                                                    data-id="${form.id}" value="approve">
+                                                                <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
+                                                            </div>
+                                                        `);
 
                         // Create Reject radio
                         const rejectRadio = $(`
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input status-radio" type="radio" 
-                                            name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
-                                            data-id="${form.id}" value="reject">
-                                        <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
-                                    </div>
-                                `);
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input status-radio" type="radio" 
+                                                                    name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
+                                                                    data-id="${form.id}" value="reject">
+                                                                <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
+                                                            </div>
+                                                        `);
                         // Create Reject radio
                         const emptyRadio = $(`
-                                    <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by International Office.</span>
-                                `);
+                                                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by International Office.</span>
+                                                        `);
 
                         // Pre-select based on existing status
                         if (form.reject_status == 1) {
@@ -688,11 +686,11 @@
                         }
 
                         $('#modalExtraFields').append(`
-                                    <tr class="optional-field">
-                                        <th>Course Folder Status</th>
-                                        <td>${folderStatus}</td>
-                                    </tr>
-                                `);
+                                                            <tr class="optional-field">
+                                                                <th>Course Folder Status</th>
+                                                                <td>${folderStatus}</td>
+                                                            </tr>
+                                                        `);
                     }
 
                     if (form.update_history) {
@@ -716,28 +714,28 @@
                                     histortText = update.status; // fallback
                                 }
                                 historyHtml += `
-                                                <li class="timeline-item timeline-item-transparent optional-field">
-                                                    <span class="timeline-point timeline-point-primary"></span>
-                                                    <div class="timeline-event">
-                                                        <div class="timeline-header mb-3">
-                                                            <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
-                                                        </div>
-                                                        <div class="d-flex align-items-center mb-1">
-                                                            <div class="badge bg-lighter rounded-3">
-                                                             <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
-                                                            </div>
-                                                            <div class="badge bg-lighter rounded-3 ms-2">
-                                                             <span class="h6 mb-0 text-body">${histortText}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-flex align-items-center mb-1">
-                                                            <div class="badge bg-danger rounded-3 ms-2">
-                                                            <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            `;
+                                                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                                                            <span class="timeline-point timeline-point-primary"></span>
+                                                                            <div class="timeline-event">
+                                                                                <div class="timeline-header mb-3">
+                                                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                                                </div>
+                                                                                <div class="d-flex align-items-center mb-1">
+                                                                                    <div class="badge bg-lighter rounded-3">
+                                                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                                                    </div>
+                                                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="d-flex align-items-center mb-1">
+                                                                                    <div class="badge bg-danger rounded-3 ms-2">
+                                                                                    <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    `;
                             });
 
                             $('#modalExtraFieldsHistory').append(historyHtml);
@@ -745,10 +743,10 @@
                     }
                     else {
                         $('#modalExtraFieldsHistory').append(`
-                                        <li class="optional-field">
-                                            <th>No History Avalable</th>
-                                        </li>
-                                    `);
+                                                                <li class="optional-field">
+                                                                    <th>No History Avalable</th>
+                                                                </li>
+                                                            `);
                     }
                     $('#viewFormModal').modal('show');
                 });
@@ -947,27 +945,27 @@
 
                         // Create Approve radio
                         const approveRadio = $(`
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input status-radio" type="radio" 
-                                            name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
-                                            data-id="${form.id}" value="approve">
-                                        <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
-                                    </div>
-                                `);
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input status-radio" type="radio" 
+                                                                    name="statusRadio-${form.id}" id="approveRadio-${form.id}" 
+                                                                    data-id="${form.id}" value="approve">
+                                                                <label class="form-check-label" for="approveRadio-${form.id}">Approve</label>
+                                                            </div>
+                                                        `);
 
                         // Create Reject radio
                         const rejectRadio = $(`
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input status-radio" type="radio" 
-                                            name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
-                                            data-id="${form.id}" value="reject">
-                                        <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
-                                    </div>
-                                `);
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input status-radio" type="radio" 
+                                                                    name="statusRadio-${form.id}" id="rejectRadio-${form.id}" 
+                                                                    data-id="${form.id}" value="reject">
+                                                                <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
+                                                            </div>
+                                                        `);
                         // Create Reject radio
                         const emptyRadio = $(`
-                                    <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by International Office.</span>
-                                `);
+                                                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by International Office.</span>
+                                                        `);
 
                         // Pre-select based on existing status
                         if (form.reject_status == 1) {
@@ -1023,11 +1021,11 @@
                         }
 
                         $('#modalExtraFields').append(`
-                                    <tr class="optional-field">
-                                        <th>Course Folder Status</th>
-                                        <td>${folderStatus}</td>
-                                    </tr>
-                                `);
+                                                            <tr class="optional-field">
+                                                                <th>Course Folder Status</th>
+                                                                <td>${folderStatus}</td>
+                                                            </tr>
+                                                        `);
                     }
 
                     if (form.update_history) {
@@ -1051,28 +1049,28 @@
                                     histortText = update.status; // fallback
                                 }
                                 historyHtml += `
-                                                <li class="timeline-item timeline-item-transparent optional-field">
-                                                    <span class="timeline-point timeline-point-primary"></span>
-                                                    <div class="timeline-event">
-                                                        <div class="timeline-header mb-3">
-                                                            <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
-                                                        </div>
-                                                        <div class="d-flex align-items-center mb-1">
-                                                            <div class="badge bg-lighter rounded-3">
-                                                             <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
-                                                            </div>
-                                                            <div class="badge bg-lighter rounded-3 ms-2">
-                                                             <span class="h6 mb-0 text-body">${histortText}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-flex align-items-center mb-1">
-                                                            <div class="badge bg-danger rounded-3 ms-2">
-                                                            <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            `;
+                                                                        <li class="timeline-item timeline-item-transparent optional-field">
+                                                                            <span class="timeline-point timeline-point-primary"></span>
+                                                                            <div class="timeline-event">
+                                                                                <div class="timeline-header mb-3">
+                                                                                    <h6 class="mb-0">${update.user_name}</h6><small class="text-body-secondary">${new Date(update.updated_at).toLocaleString()}</small>
+                                                                                </div>
+                                                                                <div class="d-flex align-items-center mb-1">
+                                                                                    <div class="badge bg-lighter rounded-3">
+                                                                                     <span class="h6 mb-0 text-body">${update.role || 'N/A'}</span>
+                                                                                    </div>
+                                                                                    <div class="badge bg-lighter rounded-3 ms-2">
+                                                                                     <span class="h6 mb-0 text-body">${histortText}</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="d-flex align-items-center mb-1">
+                                                                                    <div class="badge bg-danger rounded-3 ms-2">
+                                                                                    <span class="h6 mb-0 text-white">${update.remarks || ''}<span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    `;
                             });
 
                             $('#modalExtraFieldsHistory').append(historyHtml);
@@ -1080,10 +1078,10 @@
                     }
                     else {
                         $('#modalExtraFieldsHistory').append(`
-                                        <li class="optional-field">
-                                            <th>No History Avalable</th>
-                                        </li>
-                                    `);
+                                                                <li class="optional-field">
+                                                                    <th>No History Avalable</th>
+                                                                </li>
+                                                            `);
                     }
                     $('#viewFormModal').modal('show');
                 });
