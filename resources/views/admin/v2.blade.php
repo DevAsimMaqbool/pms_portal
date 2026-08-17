@@ -140,34 +140,34 @@
       /* If you want to disable 3D flip on small screens (touch devices), you can stack back below front */
       /* Uncomment these lines if you prefer a simple reveal instead of 3D on mobile */
       /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-inner {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            transition: none;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-front,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-back {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            position: relative;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            transform: none;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            backface-visibility: visible;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          .flip-card-back { display: none; } /* or display block on click via JS if needed */
-      */
+                  .flip-card-inner {
+                  transition: none;
+                  }
+                  .flip-card-front,
+                  .flip-card-back {
+                  position: relative;
+                  transform: none;
+                  backface-visibility: visible;
+                  }
+                  .flip-card-back { display: none; } 
+                  */
     }
 
     .caed-wave-bg1 {
       /* background-image: radial-gradient(at left bottom, rgb(252, 247, 234) 65%, rgba(255, 95, 2, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          background-image:
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
+                background-image: radial-gradient(at left bottom, rgba(255, 255, 255, 1) 65%, rgba(74, 2, 255, 0.52) 100%);
+                background-image:
+                radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
+                radial-gradient(at bottom right, rgba(23, 2, 255, 0.6), transparent 60%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        background-image:
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
+                background-image:
+                radial-gradient(at 20% 30%, rgba(255, 200, 150, 0.6), transparent 70%),
+                radial-gradient(at 80% 70%, rgba(100, 177, 255, 0.4), transparent 80%),
+                radial-gradient(at 50% 50%, rgb(252, 247, 234), transparent 100%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
+                background-image: radial-gradient(circle at 30% 70%, #ffebee 0%, #ff8a65 40%, #ff5722 100%);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          */
+                */
 
       background-image:
         radial-gradient(at top left, rgba(255, 204, 128, 0.8), transparent 60%),
@@ -1048,20 +1048,22 @@
         </div>
       </div>
       <!-- Website Analytics -->
-      <div class="col-xl-4 col">
+      @if(getRoleIdByName(activeRole()) != 33)
+        <div class="col-xl-4 col">
 
-        <div class="card h-100">
-          <div class="card-header d-flex align-items-center justify-content-between">
-            <h5 class="card-title m-0 me-2">Research Innovation & Commercialization</h5>
-          </div>
-          <div class="card-body">
-            <div id="carrierPerformance"></div>
-            <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <h5 class="card-title m-0 me-2">Research Innovation & Commercialization</h5>
+            </div>
+            <div class="card-body">
+              <div id="carrierPerformance"></div>
+              <div id="carrierCustomLegend" class="d-flex justify-content-center flex-wrap mt-3"></div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col-xl-4 col-sm-6">
-        <div class="card h-100">
+      @endif
+      <div class="{{ getRoleIdByName(activeRole()) == 33 ? 'col-lg-6' : 'col-lg-4 col-sm-6' }}">
+        <div class=" card h-100">
           <div class="card-header d-flex align-items-center justify-content-between">
             <div class="card-title mb-0">
               <h5 class="m-0 me-2">Virtue Mirror</h5>
@@ -1073,7 +1075,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-4 col">
+      <div class="{{ getRoleIdByName(activeRole()) == 33 ? 'col-lg-6' : 'col-lg-4 col-sm-6' }}">
         <div class="card h-100">
           <div class="card-header d-flex align-items-center justify-content-between">
             <div class="card-title mb-0">
@@ -1427,8 +1429,8 @@
       // For Chrome/Safari — hide scrollbar visually
       const style = document.createElement("style");
       style.innerHTML = `
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            `;
+                                                                                                                                                                                                                                  #scrollableCol1::-webkit-scrollbar { width: 0; background: transparent; }
+                                                                                                                                                                                                                                `;
       document.head.appendChild(style);
 
       // Auto adjust on window resize
@@ -1518,10 +1520,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                                                                                          <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                                                                                          border-radius:50%;margin-right:5px;"></span>
-                                                                                                                                                                                          ${label} (${shortLabels[i]})
-                                                                                                                                                                                          `;
+                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                    border-radius:50%;margin-right:5px;"></span>
+                    ${label} (${shortLabels[i]})
+                    `;
         legendDiv.appendChild(li);
       });
     });
@@ -1653,10 +1655,10 @@
         li.style.fontSize = "9px";
         li.style.cursor = "pointer";
         li.innerHTML = `
-                                                                                                                                                                                          <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
-                                                                                                                                                                                          border-radius:50%;margin-right:5px;"></span>
-                                                                                                                                                                                          ${label} (${shortLabels[i]})
-                                                                                                                                                                                          `;
+                    <span style="display:inline-block;width:10px;height:10px;background:${labelColors[i]};
+                    border-radius:50%;margin-right:5px;"></span>
+                    ${label} (${shortLabels[i]})
+                    `;
         legendDiv.appendChild(li);
       });
     });

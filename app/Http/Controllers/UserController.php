@@ -264,8 +264,41 @@ class UserController extends Controller
         $noteable = getIndicatorsByScore('>=', 80, $id);
         $areaOfDevelopment = getIndicatorsByScore('<', 70, $id);
 
-
         return view('admin.report', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional', 'noteable', 'areaOfDevelopment'));
+
+    }
+
+    public function demoUserReport($id)
+    {
+        $user = User::findOrFail($id);
+
+        $kpaIds = [1, 13];
+        $catIds = [3, 23, 25];
+        $institutionalIds = [27, 28];
+
+        $dataset1 = [];
+        $datasetTeaching = [];
+        $datasetInstitutional = [];
+
+        foreach ($kpaIds as $kpaId) {
+            $result = kpaAvgScoreForReport($kpaId, $id);
+            $dataset1[] = $result['avg'];    // only avg
+        }
+        foreach ($catIds as $catId) {
+            $teaching = indicatorCategoryAvgScore($catId, 1, $id);
+            $datasetTeaching[] = $teaching['avg'];    // only avg
+        }
+
+        foreach ($institutionalIds as $institutionalId) {
+            $institutional = indicatorCategoryAvgScore($institutionalId, 13, $id);
+            $datasetInstitutional[] = $institutional['avg'];    // only avg
+        }
+
+        $noteable = getIndicatorsByScore('>=', 80, $id);
+        $areaOfDevelopment = getIndicatorsByScore('<', 70, $id);
+
+        return view('admin.report_for_demo', compact('user', 'dataset1', 'datasetTeaching', 'datasetInstitutional', 'noteable', 'areaOfDevelopment'));
+
     }
 
     public function teamMemberReport($id)
@@ -303,7 +336,6 @@ class UserController extends Controller
 
         $noteable = getIndicatorsByScore('>=', 80, $id, null, null, 1);
         $areaOfDevelopment = getIndicatorsByScore('<', 70, $id, null, null, 1);
-
 
         return view('admin.team_report', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional', 'noteable', 'areaOfDevelopment'));
     }
@@ -343,7 +375,6 @@ class UserController extends Controller
 
         $noteable = getIndicatorsByScore('>=', 80, $id);
         $areaOfDevelopment = getIndicatorsByScore('<', 70, $id);
-
 
         return view('admin.virtue_report', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional', 'noteable', 'areaOfDevelopment'));
     }

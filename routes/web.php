@@ -242,6 +242,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/get-role-users', [UserController::class, 'index'])->name('userRole.index');
     Route::get('/user_report/{id}', [UserController::class, 'userReport']);
+    Route::get('/demo_user_report/{id}', [UserController::class, 'demoUserReport']);
     Route::get('/team_member_report/{id}', [UserController::class, 'teamMemberReport']);
     Route::get('/user_virtue_report/{id}', [UserController::class, 'userVirtueReport']);
     Route::resource('users', UserController::class);
