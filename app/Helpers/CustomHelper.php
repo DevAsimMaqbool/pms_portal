@@ -4261,17 +4261,16 @@ if (!function_exists('lineManagerReviewRatingOnTasks')) {
     }
 }
 if (!function_exists('ResearchTasksAssignedbyDeanHOD')) {
-    function ResearchTasksAssignedbyDeanHOD($facultyId, $activeRoleId)
+    function ResearchTasksAssignedbyDeanHOD($facultyId, $activeRoleId, $currentYear=null)
     {
-        $currentYear = Carbon::now()->year;
-        $currentAcademic = ($currentYear - 1) . '-' . $currentYear;
+
         $managerRatings = collect();
         $totalScore = 0;
         $taskCount = 0;
 
         $reviews = ResearchTaskAssignedHodDean::with('tasks')
             ->where('employee_id', $facultyId)
-            ->where('year', $currentAcademic)
+            ->where('year_id', $currentYear)
             ->where('form_status', 'OTHER')
             ->get();
 
@@ -4310,6 +4309,7 @@ if (!function_exists('ResearchTasksAssignedbyDeanHOD')) {
             }
         }
         $averageScore = $taskCount > 0 ? round($totalScore / $taskCount, 2) : 0;
+        $averageScore = min($averageScore, 100);
         $weights = [
             'course_load' => getRoleWeightage($activeRoleId, 'indicator', 175)['weightage'],
             'course_188' => getRoleWeightage($activeRoleId, 'indicator', 188)['weightage'],
@@ -4317,7 +4317,7 @@ if (!function_exists('ResearchTasksAssignedbyDeanHOD')) {
         $weightedScore = ($averageScore * $weights['course_load']) / 100;
         $weightedScore188 = ($averageScore * $weights['course_188']) / 100;
 
-        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore);
+        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore,$averageScore,$currentYear);
         //saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $averageScore);
         return $managerRatings;
     }
@@ -5747,7 +5747,7 @@ if (!function_exists('departmentLineManagerReviewRating')) {
 }
 
 if (!function_exists('departmentResearchTasksAssignedbyDeanHOD')) {
-    function departmentResearchTasksAssignedbyDeanHOD($facultyId, $activeRoleId)
+    function departmentResearchTasksAssignedbyDeanHOD($facultyId, $activeRoleId,$currentYear=null)
     {
         $departmentId = auth()->user()->department_id;
 
@@ -5765,6 +5765,7 @@ if (!function_exists('departmentResearchTasksAssignedbyDeanHOD')) {
             $reviews = ResearchTaskAssignedHodDean::with('tasks')
                 ->where('employee_id', $faculty->id)
                 ->where('form_status', 'OTHER')
+                ->where('year_id', $currentYear)
                 ->get();
 
             foreach ($reviews as $review) {
@@ -5786,6 +5787,7 @@ if (!function_exists('departmentResearchTasksAssignedbyDeanHOD')) {
 
         // Department average
         $departmentAvgScore = $totalTasks > 0 ? round($totalScore / $totalTasks, 2) : 0;
+        $departmentAvgScore = min($departmentAvgScore, 100);
 
         // Get indicator weights
         $weights = [
@@ -5797,7 +5799,7 @@ if (!function_exists('departmentResearchTasksAssignedbyDeanHOD')) {
         $weightedScore175 = ($departmentAvgScore * $weights['course_load']) / 100;
         $weightedScore188 = ($departmentAvgScore * $weights['course_188']) / 100;
         // Save department-level KPI
-        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore175, $departmentAvgScore);
+        saveIndicatorPercentage($facultyId, $activeRoleId, 2, 34, 175, $weightedScore175, $departmentAvgScore,$currentYear);
         //saveIndicatorPercentage($facultyId, $activeRoleId, 13, 27, 188, $weightedScore188, $departmentAvgScore);
 
         return [

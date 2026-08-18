@@ -120,23 +120,15 @@
                                             
                                         </select>
                                     </div>
-                                     @php
-                                        $startYear = 2020; // you can change this
-                                        $currentYear = now()->year;
-                                        $endYear = $currentYear + 5; // how many years ahead you want
-                                    @endphp
                                     <div class="col-md-6">
-                                        <label class="form-label" for="multicol-language">Year</label>
-                                        <select name="year" id="year" class="select2 form-select" required>
-                                            <option value="">-- Select Year --</option>
-                                            @for($year = $startYear; $year <= $endYear; $year++)
-                                                <option value="{{ $year }}-{{ $year + 1 }}">
-                                                    {{ $year }}-{{ $year + 1 }}
-                                                </option>
-                                            @endfor
-                                        </select>
+                                        <label for="year" class="form-label">Year</label>
+                                        <select name="year_id" id="year_id"
+                                            class="form-select" required>
+                                            <option value=""> Select year</option>
+                                                @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                            </select>
                                     </div>
-                                     <div class="col-md-6">
+                                     {{-- <div class="col-md-6">
                                                     <label class="form-label">Categorise</label>
                                                     <select name="kpa_category" id="kpa_category" class="form-select">
                                                         <option value="">Select Category</option>
@@ -145,7 +137,7 @@
                                                         <option value="IE">Institutional Engagement</option>
                                                         <option value="FS">Financial Sustainability</option>
                                                     </select>
-                                                </div>
+                                                </div> --}}
                                     <div id="author-past-container">
                                         <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
@@ -246,7 +238,7 @@
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 i + 1,
-                                form.year || 'N/A',
+                                form.year ? form.year.year : 'N/A',
                                 form.remarks|| 'N/A',
                                 editButton+ ' ' + deleteBtn
                             ];
@@ -365,7 +357,7 @@ $(document).ready(function(){
 
         $('#record_id').val(form.id);
         $('#employee_id').val(form.employee_id).trigger('change');
-        $('#year').val(form.year).trigger('change');
+        $('#year_id').val(form.year_id).trigger('change');
         $('#remarks').val(form.remarks);
         $('#kpa_category').val(form.kpa_category).trigger('change');
         
