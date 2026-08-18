@@ -43,7 +43,7 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    @if(auth()->user()->hasRole(['HOD', 'Teacher', 'Assistant Professor','Professor']))
+                    @if(auth()->user()->hasRole(['HOD', 'Teacher', 'Assistant Professor','Associate Professor','Professor']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                         <div class="d-flex justify-content-between">
                                <div>
@@ -286,7 +286,7 @@
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD', 'Teacher','Assistant Professor','Professor']))
+    @if(auth()->user()->hasRole(['HOD', 'Teacher','Assistant Professor','Associate Professor','Professor']))
         <script>
             $(document).ready(function () {
                   function fetchTarget(indicatorId) {

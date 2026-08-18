@@ -39,9 +39,10 @@
 @php
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+    $totalFeedback = 0;    
+    $currentYear = SelectCurrentYear(1)->first();                                
  @endphp
-@if(in_array(getRoleName(activeRole()), ['Associate Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Associate Professor','Assistant Professor', 'Professor']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="CommercialConsultancyResearchIncome" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -49,11 +50,12 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         Commercial Consultancy/Research Income
                     </h3>
+                     <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
@@ -70,7 +72,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $ResearchIncomes = CommercialGainsCounsultancyResearchIncome(Auth::user()->employee_id, $activeRoleId, 137);
+                                            $ResearchIncomes = CommercialGainsCounsultancyResearchIncome(Auth::user()->employee_id, $activeRoleId, 137,$currentYear->id);
 
                                         @endphp
                                         @foreach ($ResearchIncomes as $ResearchIncome)

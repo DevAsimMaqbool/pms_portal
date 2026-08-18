@@ -39,7 +39,8 @@
 @php
     $activeRoleId = getRoleIdByName(activeRole());     
     // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+    $totalFeedback = 0;     
+    $currentYear = SelectCurrentYear(1)->first();                               
  @endphp
  @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
 <!--  Payment Methods modal -->
@@ -50,12 +51,13 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
                                 class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>International - Coauthored Papers
                     </h3>
+                     <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
 
                         <div class="card-body">
@@ -73,7 +75,7 @@
                                     </thead>
                                     <tbody>
                                             @php
-                                                $data= calculateInternationalScore(Auth::user()->employee_id, $activeRoleId, 128);
+                                                $data= calculateInternationalScore(Auth::user()->employee_id, $activeRoleId, 128,$currentYear->id);
                                                 $avg = $data['total_score'] ?? 0;
                                                 $meta = getRatingMeta($avg);
                                             @endphp

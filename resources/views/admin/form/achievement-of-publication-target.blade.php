@@ -82,42 +82,52 @@
                                     <div class="card shadow-none bg-transparent border border-primary">
                                         <div class="card-body">
                                             <div class="row g-6">
-                                                <div class="col-md-6">
+                                                 <div class="col-md-4">
+                                                    <label class="form-label">Scopus-Indexed</label>
+                                                    <select name="journal_clasification" class="form-select"
+                                                        id="journal_clasification" required>
+                                                        <option value="">Select</option>
+                                                        <option value="Q1" class="scopus scopus-q1-1">Q1</option>
+                                                        <option value="Q2" class="scopus scopus-q2-1">Q2</option>
+                                                        <option value="Q3" class="scopus scopus-q3-1">Q3</option>
+                                                        <option value="Q4" class="scopus scopus-q4-1">Q4</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label">HEC</label>
+                                                    <select name="journal_hec" class="form-select"
+                                                        id="journal_hec">
+                                                        <option value="">Select</option>
+                                                        <option value="W" class="hec hec-w-1">W</option>
+                                                        <option value="X" class="hec hec-x-1">X</option>
+                                                        <option value="Y" class="hec hec-y-1">Y</option>
+                                                        <option value="Medical" class="hec medical-recognized-1">Medical
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label">WoS</label>
+                                                    <select name="journal_wos" class="form-select"
+                                                        id="journal_wos">
+                                                        <option value="">Select</option>
+                                                        <option value="SSCI" class="WoS">SSCI</option>
+                                                        <option value="AHCI" class="WoS">AHCI</option>
+                                                        <option value="SCIE" class="WoS">SCIE</option>
+                                                        <option value="ESCI" class="WoS">ESCI</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 d-none">
                                                     <label class="form-label">Journal Category</label>
                                                     <select name="target_category" class="form-select">
                                                         <option value="">Select Target Category</option>
-                                                        <option value="Scopus-Indexed">Scopus Indexed</option>
-                                                        <option value="HEC">HEC</option>
-                                                        <option value="WoS">WoS</option>
+                                                        <option value="Scopus-Indexed" selected>Scopus Indexed</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label">DOI Number</label>
                                                     <input type="url" name="link_of_publications" class="form-control">
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Journal Clasification</label>
-
-                                                    <select name="journal_clasification" class="form-select"
-                                                        id="journal_clasification" disabled>
-                                                        <option value="">Select Journal Classification</option>
-                                                        <option value="Q1" class="scopus scopus-q1-1">Q1</option>
-                                                        <option value="Q2" class="scopus scopus-q2-1">Q2</option>
-                                                        <option value="Q3" class="scopus scopus-q3-1">Q3</option>
-                                                        <option value="Q4" class="scopus scopus-q4-1">Q4</option>
-                                                        <option value="W" class="hec hec-w-1">W</option>
-                                                        <option value="X" class="hec hec-x-1">X</option>
-                                                        <option value="Y" class="hec hec-y-1">Y</option>
-                                                        <option value="Medical" class="hec medical-recognized-1">Medical
-                                                        </option>
-                                                        <option value="SSCI" class="WoS">SSCI</option>
-                                                        <option value="AHCI" class="WoS">AHCI</option>
-                                                        <option value="SCIE" class="WoS">SCIE</option>
-                                                        <option value="ESCI" class="WoS">ESCI</option>
-                                                    </select>
-
-
-                                                </div>
+                                                
                                                 <div class="col-md-6">
                                                     <label for="year" class="form-label">Year</label>
                                                     <select name="year_id" id="year_id"
@@ -693,54 +703,42 @@
                 }
             });
         }
+        // ✅ Reusable function for single update
+        function updateOnholdStatus(id, status, remarks = null) {
+            $.ajax({
+                url: `/indicator-form/${id}`,
+                type: 'POST',                            // POST with _method PUT
+                data: {
+                    _method: 'PUT',
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    status: status,
+                    reject_status_remarks: remarks,
+                    status_onhold_update: true
+                },
+                success: function (res) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Updated',
+                        text: res.message || 'Status updated successfully!'
+                    });
+
+                    fetchIndicatorForms3();
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: xhr.responseJSON?.message || 'Something went wrong!'
+                    });
+                }
+            });
+        }
     </script>
 
     @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor', 'Professor', 'Associate Professor']))
         <script>
             $(document).ready(function () {
-                $(document).on('change', 'select[name="target_category"]', function () {
-                    let category = $(this).val();
-                    let journalSelect = $('#journal_clasification');
-
-                    // Reset select first
-                    journalSelect.val('');
-                    journalSelect.prop('disabled', true);
-
-                    // Hide all options except placeholder
-                    journalSelect.find('option').each(function () {
-                        if ($(this).val() === '') {
-                            //if use that hide in like q1 hide not show then remove this cod $(this).hide(); in if condition
-                            $(this).hide();
-                        } else {
-                            $(this).hide(); // hide all others by default
-                        }
-                    });
-
-                    // Stop if no category selected
-                    if (!category) return;
-
-                    // Enable the select
-                    journalSelect.prop('disabled', false);
-
-                    // Show only relevant options that have a value (ignore empty value options)
-                    if (category === "Scopus-Indexed") {
-                        journalSelect.find('.scopus').each(function () {
-                            /*if ($(this).val() !== '') { 
-                                $(this).show();
-                            }*/
-                            $(this).show();
-                        });
-                    } else if (category === "HEC") {
-                        journalSelect.find('.hec').each(function () {
-                            /*if ($(this).val() !== '') { 
-                                $(this).show();
-                            }*/
-                            $(this).show();
-                        });
-                    }else if (category === "WoS") {
-                            journalSelect.find('.WoS').show();
-                    }
-                });
+               
 
                 // Function to toggle fields based on role within a specific row
                 function toggleCoAuthorFieldsRow($row) {
@@ -1480,37 +1478,43 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
                     }
                     if (form.nationality) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality</th><td>${form.nationality}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>CO-Author National/Inter National</th><td>${form.nationality}</td></tr>`);
                     }
                     if (form.target_category) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Target Category</th><td><span class="badge rounded-pill bg-label-primary">${form.target_category}</span></td></tr>`);
                     }
                     if (form.journal_clasification) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Selected Target</th><td><span class="badge rounded-pill bg-label-primary">${form.journal_clasification}</span></td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Scopus-Indexed</th><td><span class="badge rounded-pill bg-label-primary">${form.journal_clasification}</span></td></tr>`);
+                    }
+                    if (form.journal_hec) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>HEC</th><td><span class="badge rounded-pill bg-label-primary">${form.journal_hec}</span></td></tr>`);
+                    }
+                    if (form.journal_wos) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>WOS</th><td><span class="badge rounded-pill bg-label-primary">${form.journal_wos}</span></td></tr>`);
                     }
                     if (form.scopus_q1) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q1</th><td>${form.scopus_q1}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q1}</td></tr>`);
                     }
                     if (form.scopus_q2) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q2</th><td>${form.scopus_q2}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q2}</td></tr>`);
                     }
                     if (form.scopus_q3) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q3</th><td>${form.scopus_q3}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q3}</td></tr>`);
                     }
                     if (form.scopus_q4) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q4</th><td>${form.scopus_q4}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q4}</td></tr>`);
                     }
                     if (form.hec_w) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>W</th><td>${form.hec_w}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.hec_w}</td></tr>`);
                     }
                     if (form.hec_x) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>X</th><td>${form.hec_x}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.hec_x}</td></tr>`);
                     }
                     if (form.hec_y) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Y</th><td>${form.hec_y}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.hec_y}</td></tr>`);
                     }
                     if (form.medical_recognized) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Medical Recognized</th><td>${form.medical_recognized}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.medical_recognized}</td></tr>`);
                     }
                     if (form.as_author_your_rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Your Rank (As Author)</th><td>${form.as_author_your_rank}</td></tr>`);
@@ -1529,9 +1533,12 @@
                                                                                                                                                 <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
                                                                                                                                                 <strong>Country:</strong> ${coAuthor.country || 'N/A'}<br>
                                                                                                                                                 <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
-                                                                                                                                                ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                                                                                                                                ${coAuthor.student_roll_no ? `<strong>Student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                                                                                                                                ${coAuthor.co_author_email ? `<strong>Email:</strong> ${coAuthor.co_author_email}<br>` : ''}
+                                                                                                                                                ${coAuthor.your_role ? `<strong>Your Role:</strong> ${coAuthor.your_role}<br>` : ''}
                                                                                                                                                 ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
                                                                                                                                                 ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
+                                                                                                                                                ${coAuthor.organization ? `<strong>Organization:</strong> ${coAuthor.organization}<br>` : ''}
                                                                                                                                             </td>
                                                                                                                                         </tr>
                                                                                                                                     `);
@@ -1564,6 +1571,7 @@
                                     if (update.status == '0') histortText = 'Reject';
                                     else if (update.status == '2') histortText = 'unapproved';
                                     else if (update.status == '3') histortText = 'Approved';
+                                    else if (update.status == '4') histortText = 'OnHold';
                                 } else {
                                     histortText = update.status; // fallback
                                 }
@@ -1771,7 +1779,7 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
                     }
                     if (form.nationality) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality</th><td>${form.nationality}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>CO-Author National/Inter National</th><td>${form.nationality}</td></tr>`);
                     }
                     if (form.target_category) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Target Category</th><td><span class="badge rounded-pill bg-label-primary">${form.target_category}</span></td></tr>`);
@@ -1779,29 +1787,35 @@
                     if (form.journal_clasification) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Selected Target</th><td><span class="badge rounded-pill bg-label-primary">${form.journal_clasification}</span></td></tr>`);
                     }
+                    if (form.journal_hec) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>HEC</th><td><span class="badge rounded-pill bg-label-primary">${form.journal_hec}</span></td></tr>`);
+                    }
+                    if (form.journal_wos) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>WOS</th><td><span class="badge rounded-pill bg-label-primary">${form.journal_wos}</span></td></tr>`);
+                    }
                     if (form.scopus_q1) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q1</th><td>${form.scopus_q1}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q1}</td></tr>`);
                     }
                     if (form.scopus_q2) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q2</th><td>${form.scopus_q2}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q2}</td></tr>`);
                     }
                     if (form.scopus_q3) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q3</th><td>${form.scopus_q3}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q3}</td></tr>`);
                     }
                     if (form.scopus_q4) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q4</th><td>${form.scopus_q4}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q4}</td></tr>`);
                     }
                     if (form.hec_w) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>W</th><td>${form.hec_w}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.hec_w}</td></tr>`);
                     }
                     if (form.hec_x) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>X</th><td>${form.hec_x}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.hec_x}</td></tr>`);
                     }
                     if (form.hec_y) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Y</th><td>${form.hec_y}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.hec_y}</td></tr>`);
                     }
                     if (form.medical_recognized) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Medical Recognized</th><td>${form.medical_recognized}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.medical_recognized}</td></tr>`);
                     }
                     if (form.as_author_your_rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Your Rank (As Author)</th><td>${form.as_author_your_rank}</td></tr>`);
@@ -1820,9 +1834,12 @@
                                                                                                                                                 <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
                                                                                                                                                 <strong>Country:</strong> ${coAuthor.country || 'N/A'}<br>
                                                                                                                                                 <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
-                                                                                                                                                ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                                                                                                                                ${coAuthor.student_roll_no ? `<strong>Student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                                                                                                                                ${coAuthor.co_author_email ? `<strong>Email:</strong> ${coAuthor.co_author_email}<br>` : ''}
+                                                                                                                                                ${coAuthor.your_role ? `<strong>Your Role:</strong> ${coAuthor.your_role}<br>` : ''}
                                                                                                                                                 ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
                                                                                                                                                 ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
+                                                                                                                                                ${coAuthor.organization ? `<strong>Organization:</strong> ${coAuthor.organization}<br>` : ''}
                                                                                                                                             </td>
                                                                                                                                         </tr>
                                                                                                                                     `);
@@ -1856,6 +1873,7 @@
                                     if (update.status == '0') histortText = 'Reject';
                                     else if (update.status == '2') histortText = 'unapproved';
                                     else if (update.status == '3') histortText = 'Approved';
+                                    else if (update.status == '4') histortText = 'OnHold';
                                 } else {
                                     histortText = update.status; // fallback
                                 }
@@ -1926,9 +1944,24 @@
                                 : 'N/A';
 
                             let statusText = 'N/A';
+                             if (form.status == 1) {
+                                 if (form.reject_status == 2) {
+                                    statusText = `<span class="badge bg-label-danger" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    data-bs-custom-class="tooltip-danger" 
+                                                    data-bs-original-title="${form.reject_status_remarks}">
+                                                    Reject
+                                                </span>`;
+                                } else {
+                                    statusText = '<span class="badge bg-label-warning">Unverified</span>';
+                                }
+                            } 
                             if (form.status == 2) {
                                 if (form.reject_status == 2) {
                                     statusText = '<span class="badge bg-label-danger">Reject</span>';
+                                }else if (form.reject_status == 3) {
+                                    statusText = '<span class="badge bg-label-warning">On Hold</span>';
                                 } else {
                                     statusText = '<span class="badge bg-label-warning">Unverified</span>';
                                 }
@@ -2039,16 +2072,49 @@
                                                                                 <label class="form-check-label" for="rejectRadio-${form.id}">Reject</label>
                                                                             </div>
                                                                         `);
+                        const onholdRadio = $(`
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="form-check-input status-radio" type="radio" 
+                                                                                    name="statusRadio-${form.id}" id="onholdRadio-${form.id}" 
+                                                                                    data-id="${form.id}" value="onhold">
+                                                                                <label class="form-check-label" for="onholdRadio-${form.id}">On Hold</label>
+                                                                            </div>
+                                                                        `);                                                
+                        // Create Reject radio
+                        const emptyRadio = $(`
+                                                                            <span class="p-1 rounded-pill bg-label-warning">Waiting for HOD Approvel.</span>
+                                                                        `);    
+                         const hodrejectRadio = $(`
+                                                                            <span class="p-1 rounded-pill bg-label-danger">HOD Reject this application.</span>
+                                                                        `);                                                                                              
+                                                                        
 
-                        // Append to cell
-                        statusCell.append(approveRadio, rejectRadio);
+              
+
+
 
                         // Pre-select based on existing status
-                        if (form.reject_status == 2) {
-                            rejectRadio.find('input').prop('checked', true);
-                        } else if (form.status == 3) {
-                            approveRadio.find('input').prop('checked', true);
+                        if (form.status == 1) {
+                             if (form.reject_status == 1) {
+                               statusCell.append(hodrejectRadio);
+                            } else  {
+                                statusCell.append(emptyRadio);
+                            }
+                        } else {
+                            // Append to cell
+                            statusCell.append(approveRadio, rejectRadio,onholdRadio);
+                            if (form.reject_status == 2) {
+                                rejectRadio.find('input').prop('checked', true);
+                            } else if (form.status == 3) {
+                                approveRadio.find('input').prop('checked', true);
+                            }
+                            else if (form.reject_status == 3) {
+                                onholdRadio.find('input').prop('checked', true);
+                            }
                         }
+
+
+
                     }
 
 
@@ -2059,7 +2125,7 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
                     }
                     if (form.nationality) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Nationality</th><td>${form.nationality}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>CO-Author National/Inter National</th><td>${form.nationality}</td></tr>`);
                     }
                     if (form.target_category) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Target Category</th><td><span class="badge rounded-pill bg-label-primary">${form.target_category}</span></td></tr>`);
@@ -2067,29 +2133,35 @@
                     if (form.journal_clasification) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Selected Target</th><td><span class="badge rounded-pill bg-label-primary">${form.journal_clasification}</span></td></tr>`);
                     }
+                    if (form.journal_hec) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>HEC</th><td><span class="badge rounded-pill bg-label-primary">${form.journal_hec}</span></td></tr>`);
+                    }
+                    if (form.journal_wos) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>WOS</th><td><span class="badge rounded-pill bg-label-primary">${form.journal_wos}</span></td></tr>`);
+                    }
                     if (form.scopus_q1) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q1</th><td>${form.scopus_q1}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q1}</td></tr>`);
                     }
                     if (form.scopus_q2) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q2</th><td>${form.scopus_q2}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q2}</td></tr>`);
                     }
                     if (form.scopus_q3) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q3</th><td>${form.scopus_q3}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q3}</td></tr>`);
                     }
                     if (form.scopus_q4) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Q4</th><td>${form.scopus_q4}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.scopus_q4}</td></tr>`);
                     }
                     if (form.hec_w) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>W</th><td>${form.hec_w}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.hec_w}</td></tr>`);
                     }
                     if (form.hec_x) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>X</th><td>${form.hec_x}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.hec_x}</td></tr>`);
                     }
                     if (form.hec_y) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Y</th><td>${form.hec_y}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.hec_y}</td></tr>`);
                     }
                     if (form.medical_recognized) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Medical Recognized</th><td>${form.medical_recognized}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Target</th><td>${form.medical_recognized}</td></tr>`);
                     }
                     if (form.as_author_your_rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Your Rank (As Author)</th><td>${form.as_author_your_rank}</td></tr>`);
@@ -2108,9 +2180,12 @@
                                                                                                                                                     <strong>Univeristy Name:</strong> ${coAuthor.univeristy_name || 'N/A'}<br>
                                                                                                                                                     <strong>Country:</strong> ${coAuthor.country || 'N/A'}<br>
                                                                                                                                                     <strong>No Paper Past:</strong> ${coAuthor.no_paper_past || 'N/A'}<br>
-                                                                                                                                                    ${coAuthor.student_roll_no ? `<strong>student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                                                                                                                                    ${coAuthor.student_roll_no ? `<strong>Student:</strong> ${coAuthor.student_roll_no}<br>` : ''}
+                                                                                                                                                    ${coAuthor.co_author_email ? `<strong>Email:</strong> ${coAuthor.co_author_email}<br>` : ''}
+                                                                                                                                                    ${coAuthor.your_role ? `<strong>Your Role:</strong> ${coAuthor.your_role}<br>` : ''}
                                                                                                                                                     ${coAuthor.career ? `<strong>Career:</strong> ${coAuthor.career}<br>` : ''}
                                                                                                                                                     ${coAuthor.designation ? `<strong>Designation:</strong> ${coAuthor.designation}<br>` : ''}
+                                                                                                                                                    ${coAuthor.organization ? `<strong>Organization:</strong> ${coAuthor.organization}<br>` : ''}
                                                                                                                                                 </td>
                                                                                                                                             </tr>
                                                                                                                                         `);
@@ -2144,6 +2219,7 @@
                                     if (update.status == '0') histortText = 'Reject';
                                     else if (update.status == '2') histortText = 'unapproved';
                                     else if (update.status == '3') histortText = 'Approved';
+                                    else if (update.status == '4') histortText = 'OnHold';
                                 } else {
                                     histortText = update.status; // fallback
                                 }
@@ -2220,6 +2296,36 @@
                             if (result.isConfirmed) {
                                 const remarks = result.value;
                                 updaterejectStatus(id, 2, remarks); // 2 for reject
+                            } else {
+                                // If canceled, uncheck the radio
+                                $(`input[name="statusRadio-${id}"]`).prop('checked', false);
+                            }
+                        });
+                    }else if (value === 'onhold') {
+                        // Ask for rejection remarks first
+                        // Hide current modal temporarily
+                        const bootstrapModal = bootstrap.Modal.getInstance(document.getElementById('viewFormModal'));
+                        bootstrapModal.hide();
+                        Swal.fire({
+                            title: 'Add Remarks for On Hold',
+                            input: 'textarea',
+                            inputPlaceholder: 'Enter remarks...',
+                            showCancelButton: true,
+                            confirmButtonText: 'Submit',
+                            cancelButtonText: 'Cancel',
+                            preConfirm: (remarks) => {
+                                if (!remarks) {
+                                    Swal.showValidationMessage('Remarks are required for onhold');
+                                }
+                                return remarks;
+                            }
+                        }).then((result) => {
+                            // Show modal again
+                            bootstrapModal.show();
+
+                            if (result.isConfirmed) {
+                                const remarks = result.value;
+                                updateOnholdStatus(id, 3, remarks); // 2 for reject
                             } else {
                                 // If canceled, uncheck the radio
                                 $(`input[name="statusRadio-${id}"]`).prop('checked', false);

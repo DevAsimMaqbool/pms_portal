@@ -21,7 +21,7 @@ class ProductsDeliveredToIndustryController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-            if ($user->hasRole('Dean')) {
+            if(in_array(getRoleName(activeRole()), ['Dean'])) {    
                    $status = $request->input('status');
                    $hod_ids = User::where('manager_id', $employee_id)
                    ->role('HOD')->pluck('employee_id');
@@ -40,7 +40,8 @@ class ProductsDeliveredToIndustryController extends Controller
                             ->get();
                     }
 
-            }if ($user->hasRole('HOD') || $user->hasRole('Teacher')) {
+            }
+            if(in_array(getRoleName(activeRole()), ['Teacher','HOD','Assistant Professor','Associate Professor','Professor'])) {    
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = ProductsDeliveredToIndustry::with([
@@ -67,7 +68,7 @@ class ProductsDeliveredToIndustryController extends Controller
                         ->get();
                 }
                 
-            }if ($user->hasRole('ORIC')) {
+            }if(in_array(getRoleName(activeRole()), ['ORIC'])) { 
                 $status = $request->input('status');
                     if($status=="RESEARCHER"){
                           $forms = ProductsDeliveredToIndustry::with([
@@ -81,7 +82,7 @@ class ProductsDeliveredToIndustryController extends Controller
                             ->get();
                     }
 
-            }if ($user->hasRole('Human Resources')) {
+            }  if(in_array(getRoleName(activeRole()), ['Human Resources'])) { 
                 $status = $request->input('status');
                      if($status=="HOD"){
                            $forms = ProductsDeliveredToIndustry::with([

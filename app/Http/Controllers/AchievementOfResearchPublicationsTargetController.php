@@ -103,7 +103,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                     },
                     'coAuthors'
                 ])
-                    ->whereIn('status', [2, 3])
+                    ->whereIn('status', [1,2, 3])
                     ->where('form_status', 'RESEARCHER')
                     ->orderBy('id', 'desc')
                     ->get();
@@ -218,6 +218,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 'target_category' => 'required|string|max:255',
                 'link_of_publications' => 'required|max:500',
                 'journal_clasification' => 'required',
+                'journal_hec' => '',
+                'journal_wos' => '',
                 'nationality' => 'required|string|max:255',
                 'as_author_your_rank' => 'required|integer|min:0',
                 'publication_date' => 'required|date',
@@ -268,6 +270,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 'target_category',
                 'link_of_publications',
                 'journal_clasification',
+                'journal_hec',
+                'journal_wos',
                 'nationality',
                 'as_author_your_rank',
                 'publication_date',
@@ -430,6 +434,46 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
             return response()->json(['success' => true]);
         }
+        if ($request->has('status_onhold_update')) {
+            $request->validate([
+                'status' => 'required|in:0,1,2,3,4,5,6'
+            ]);
+
+            $target = AchievementOfResearchPublicationsTarget::findOrFail($id);
+
+            // Get current update history
+            $history = $target->update_history ? json_decode($target->update_history, true) : [];
+
+            // Get current user info
+            $currentUserId = Auth::id();
+            $currentUserName = Auth::user()->name;
+            $userRoll = getRoleName(activeRole()) ?? 'N/A';
+
+            // Avoid duplicate consecutive updates by the same user with the same status
+            $lastUpdate = end($history);
+            if (!$lastUpdate || $lastUpdate['user_id'] != $currentUserId || $lastUpdate['status'] != $request->status) {
+                $history[] = [
+                    'user_id' => $currentUserId,
+                    'user_name' => $currentUserName,
+                    'status' => 4,
+                    'role' => $userRoll,
+                    'remarks' => $request->reject_status_remarks,
+                    'updated_at' => now()->toDateTimeString(),
+                ];
+            }
+
+
+
+
+            $target->status = 2;
+            $target->reject_status = $request->status;
+            $target->reject_status_remarks = $request->reject_status_remarks;
+            $target->update_history = json_encode($history);
+            $target->updated_by = $currentUserId;
+            $target->save();
+
+            return response()->json(['success' => true]);
+        }
     }
 
     /**
@@ -481,6 +525,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'link_of_publications' => 'required|url|max:500',
             'year_id' => 'required',
             'journal_clasification' => 'required',
+            'journal_hec' => '',
+            'journal_wos' => '',
             'nationality' => 'required|string|max:255',
             'as_author_your_rank' => 'required|integer|min:0',
             'publication_date' => 'required|date',
@@ -518,6 +564,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'year_id',
             'link_of_publications',
             'journal_clasification',
+            'journal_hec',
+            'journal_wos',
             'nationality',
             'as_author_your_rank',
             'publication_date',
