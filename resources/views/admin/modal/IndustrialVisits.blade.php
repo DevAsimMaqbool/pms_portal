@@ -39,7 +39,8 @@
 @php
 $activeRoleId = getRoleIdByName(activeRole());
 // Initialize totalFeedback to 0 in case nothing is set later
-$totalFeedback = 0;                                    
+$totalFeedback = 0; 
+$currentYear = SelectCurrentYear(1)->first();                                   
  @endphp
  @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
 <!-- / Payment Methods modal -->
@@ -49,11 +50,12 @@ $totalFeedback = 0;
             <div class="modal-header">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body p-4">
+            <div class="modal-body text-center p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     Industrial Visits
                 </h3>
+                <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
@@ -74,7 +76,7 @@ $totalFeedback = 0;
                                 <tbody>
                                     
                                         @php
-    $IndustrialVisits = IndustrialVisits(Auth::user()->employee_id, $activeRoleId, 197);
+    $IndustrialVisits = IndustrialVisits(Auth::user()->employee_id, $activeRoleId, 197,$currentYear->id);
     $sumIndustrialVisits = collect($IndustrialVisits)->sum('percentage'); 
                                         @endphp
                                         @foreach ($IndustrialVisits as $visit)

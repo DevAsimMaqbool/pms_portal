@@ -917,18 +917,20 @@ if (!function_exists('ScopusPublications')) {
 }
 
 if (!function_exists('ScopusPublicationsNew')) {
-    function ScopusPublicationsNew($facultyId, $activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
+    function ScopusPublicationsNew($facultyId, $activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5,$currentYear=null)
     {
         $facultyTargets = FacultyTarget::with([
-            'researchPublicationTargets' => function ($query) use ($indicatorId) {
+            'researchPublicationTargets' => function ($query) use ($indicatorId,$currentYear) {
                 $query->where('form_status', 'RESEARCHER')
                     ->where('indicator_id', $indicatorId)
                     ->where('status', 3)
+                    ->where('year_id', $currentYear)
                     ->whereNotNull('journal_clasification');
             }
         ])
             ->where('user_id', $facultyId)
             ->where('form_status', 'HOD')
+            ->where('year_id', $currentYear)
             ->where('indicator_id', $indicatorId)
             ->get();
 
@@ -964,7 +966,9 @@ if (!function_exists('ScopusPublicationsNew')) {
             $keyPerformanceAreaId,
             $indicatorCategoryId,
             $indicatorId,
-            $weightedScore
+            $weightedScore,
+            $avgPercentage,
+            $currentYear
         );
         $data = [
             'totalTarget' => $totalTarget ?? 0,
@@ -1111,19 +1115,21 @@ if (!function_exists('ScopusPublicationsBKKKK')) {
 
 if (!function_exists('calculateInternationalScore')) {
 
-    function calculateInternationalScore($facultyId, $activeRoleId, $indicatorId)
+    function calculateInternationalScore($facultyId, $activeRoleId, $indicatorId,$currentYear=null)
     {
         // Get Approved Scopus Publications
         $facultyTargets = FacultyTarget::with([
-            'researchPublicationTargets' => function ($query) use ($indicatorId) {
+            'researchPublicationTargets' => function ($query) use ($indicatorId,$currentYear) {
                 $query->where('form_status', 'RESEARCHER')
                     ->where('indicator_id', $indicatorId)
                     ->where('status', 3)
+                    ->where('year_id', $currentYear)
                     ->whereNotNull('journal_clasification');
             }
         ])
             ->where('user_id', $facultyId)
             ->where('form_status', 'HOD')
+            ->where('year_id', $currentYear)
             ->where('indicator_id', $indicatorId)
             ->get();
 
@@ -1163,7 +1169,8 @@ if (!function_exists('calculateInternationalScore')) {
             5,
             127,
             $obtainedScore,
-            $fraction
+            $fraction,
+            $currentYear
         );
 
         //return round($obtainedScore, 2); // e.g., 5.00
@@ -1179,7 +1186,7 @@ if (!function_exists('calculateInternationalScore')) {
 
 if (!function_exists('calculateJournalQuartile')) {
 
-    function calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId)
+    function calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId,$currentYear=null)
     {
 
         // Quartile Points
@@ -1203,6 +1210,7 @@ if (!function_exists('calculateJournalQuartile')) {
             ->where('created_by', $facultyId)
             ->where('target_category', 'Scopus-Indexed')
             ->where('form_status', 'RESEARCHER')
+            ->where('year_id', $currentYear)
             ->where('status', 3) // Fully approved
             ->get();
 
@@ -1239,7 +1247,8 @@ if (!function_exists('calculateJournalQuartile')) {
             5,
             203,
             $weightedScore,
-            $obtainedScore
+            $obtainedScore,
+            $currentYear
         );
         //return $obtainedScore;
         return [
@@ -1434,18 +1443,20 @@ if (!function_exists('ScopusPublicationsbk')) {
     }
 }
 
-function PatentsIntellectualProperty($facultyId, $activeRoleId, $indicator_id)
+function PatentsIntellectualProperty($facultyId, $activeRoleId, $indicator_id,$currentYear=null)
 {
     $facultyTargets = FacultyTarget::with([
-        'intellectualPropertyTargets' => function ($query) use ($indicator_id) {
+        'intellectualPropertyTargets' => function ($query) use ($indicator_id,$currentYear) {
             $query->where('form_status', 'RESEARCHER')
                 ->where('status', 3)
+                ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicator_id);
         }
     ])
         ->where('user_id', $facultyId)
         ->where('form_status', 'OTHER')
         ->where('indicator_id', $indicator_id)
+        ->where('year_id', $currentYear)
         ->get();
 
     $percentages = []; // To calculate overall average
@@ -1499,23 +1510,27 @@ function PatentsIntellectualProperty($facultyId, $activeRoleId, $indicator_id)
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
-        $weightedScore
+        $weightedScore,
+        $avgPercentage,
+        $currentYear
     );
 
     return $facultyTargets;
 }
 
-function CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, $indicator_id)
+function CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, $indicator_id,$currentYear=null)
 {
     $commercial = FacultyTarget::with([
-        'commercialGainsCounsultancyTargets' => function ($query) use ($indicator_id) {
+        'commercialGainsCounsultancyTargets' => function ($query) use ($indicator_id,$currentYear) {
             $query->where('form_status', 'RESEARCHER')
                 ->where('status', 3)
+                ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicator_id);
         }
     ])
         ->where('user_id', $facultyId)
         ->where('form_status', 'OTHER')
+        ->where('year_id', $currentYear)
         ->where('indicator_id', $indicator_id)
         ->get();
 
@@ -1573,23 +1588,27 @@ function CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, $i
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
-        $weightedScore
+        $weightedScore,
+        $avgPercentage,
+        $currentYear
     );
 
     return $commercial;
 }
-function MultidisciplinaryProjects($facultyId, $activeRoleId, $indicatorId)
+function MultidisciplinaryProjects($facultyId, $activeRoleId, $indicatorId,$currentYear=null)
 {
     $facultyTargets = FacultyTarget::with([
-        'achievementOfMultidisciplinaryProjectsTarget' => function ($query) use ($indicatorId) {
+        'achievementOfMultidisciplinaryProjectsTarget' => function ($query) use ($indicatorId, $currentYear) {
             $query->where('form_status', 'RESEARCHER')
                 ->where('status', 3)
-                ->where('indicator_id', $indicatorId);
+                ->where('indicator_id', $indicatorId)
+                ->where('year_id', $currentYear);
         }
     ])
         ->where('user_id', $facultyId)
         ->where('form_status', 'OTHER')
         ->where('indicator_id', $indicatorId)
+        ->where('year_id', $currentYear)
         ->get();
 
     // -------------------------
@@ -1656,26 +1675,32 @@ function MultidisciplinaryProjects($facultyId, $activeRoleId, $indicatorId)
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicatorId = 136,
-        $weightedScore
+        $weightedScore,
+        $avgPercentage,
+        $currentYear
     );
 
     return $facultyTargets;
 }
 
-function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id)
+function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id,$currentYear=null)
 {
+    
     $facultyTargets = FacultyTarget::with([
-        'noofGrantsWonTarget' => function ($query) use ($indicator_id, $status) {
+        'noofGrantsWonTarget' => function ($query) use ($indicator_id, $status,$currentYear) {
             $query->where('form_status', 'RESEARCHER')
                 ->where('status', 3)
                 ->where('indicator_id', $indicator_id)
+                ->where('year_id', $currentYear)
                 ->where('grant_status', $status);
         }
     ])
         ->where('user_id', $facultyId)
         ->where('form_status', 'OTHER')
+        ->where('year_id', $currentYear)
         ->where('indicator_id', $indicator_id)
         ->get();
+      
     $totalPercentage = 0;
     $count = 0;
 
@@ -1719,15 +1744,16 @@ function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id)
         $target->rating = $rating;
         $target->color = $color;
     }
-
+     
     // ✅ Calculate Average
     $avgPercentage = $count > 0 ? round($totalPercentage / $count, 2) : 0;
     $avgPercentage = min($avgPercentage, 100);
-    $status = 'Won' ? $indicatorId = 202 : $indicatorId = $indicator_id;
+    //$status = 'Won' ? $indicatorId = 202 : $indicatorId = $indicator_id;
+    $indicatorId = $status === 'Won' ? 202 : $indicator_id;
     $weights = [
         'course_load' => getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'],
     ];
-    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
+    $weightedScore = ($avgPercentage * $weights['course_load']) / 100; 
     // ✅ Save Only One Average Score
     saveIndicatorPercentage(
         $facultyId,
@@ -1735,23 +1761,27 @@ function noofGrantsWon($facultyId, $activeRoleId, $status, $indicator_id)
         2,  // KPA ID
         8,  // Category ID
         $indicatorId,
-        $weightedScore
+        $weightedScore,
+        $avgPercentage,
+        $currentYear
     );
     return $facultyTargets;
 }
 
-function IndustrialVisits($facultyId, $activeRoleId, $indicator_id)
+function IndustrialVisits($facultyId, $activeRoleId, $indicator_id,$currentYear=null)
 {
     $commercial = FacultyTarget::with([
-        'industrialVisitsTarget' => function ($query) use ($indicator_id) {
+        'industrialVisitsTarget' => function ($query) use ($indicator_id,$currentYear) {
             $query->where('form_status', 'RESEARCHER')
                 ->where('status', 2)
+                 ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicator_id);
         }
     ])
         ->where('user_id', $facultyId)
         ->where('form_status', 'OTHER')
         ->where('indicator_id', $indicator_id)
+        ->where('year_id', $currentYear)
         ->get();
 
     $percentages = []; // For calculating overall average
@@ -1807,23 +1837,27 @@ function IndustrialVisits($facultyId, $activeRoleId, $indicator_id)
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
-        $weightedScore
+        $weightedScore,
+        $avgPercentage,
+        $currentYear
     );
 
     return $commercial;
 }
 
-function IndustrialProjects($facultyId, $activeRoleId, $indicator_id)
+function IndustrialProjects($facultyId, $activeRoleId, $indicator_id,$currentYear=null)
 {
     $commercial = FacultyTarget::with([
-        'industrialProjectsTarget' => function ($query) use ($indicator_id) {
+        'industrialProjectsTarget' => function ($query) use ($indicator_id,$currentYear) {
             $query->where('form_status', 'RESEARCHER')
                 ->where('status', 3)
+                ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicator_id);
         }
     ])
         ->where('user_id', $facultyId)
         ->where('form_status', 'OTHER')
+        ->where('year_id', $currentYear)
         ->where('indicator_id', $indicator_id)
         ->get();
 
@@ -1879,7 +1913,9 @@ function IndustrialProjects($facultyId, $activeRoleId, $indicator_id)
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
-        $weightedScore
+        $weightedScore,
+        $avgPercentage,
+        $currentYear
     );
 
     return $commercial;
@@ -1957,17 +1993,19 @@ function spinOffs($facultyId, $activeRoleId, $indicator_id)
     return $commercial;
 }
 
-function ProductsDeliveredToIndustry($facultyId, $activeRoleId, $indicator_id)
+function ProductsDeliveredToIndustry($facultyId, $activeRoleId, $indicator_id,$currentYear=null)
 {
     $commercial = FacultyTarget::with([
-        'ProductsDeliveredToIndustry' => function ($query) use ($indicator_id) {
+        'ProductsDeliveredToIndustry' => function ($query) use ($indicator_id,$currentYear) {
             $query->where('form_status', 'RESEARCHER')
                 ->where('status', 2)
+                ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicator_id);
         }
     ])
         ->where('user_id', $facultyId)
         ->where('form_status', 'OTHER')
+        ->where('year_id', $currentYear)
         ->where('indicator_id', $indicator_id)
         ->get();
 
@@ -2023,7 +2061,9 @@ function ProductsDeliveredToIndustry($facultyId, $activeRoleId, $indicator_id)
         $keyPerformanceAreaId = 2,
         $indicatorCategoryId = 8,
         $indicator_id,
-        $weightedScore
+        $weightedScore,
+        $avgPercentage,
+        $currentYear
     );
 
     return $commercial;
@@ -2099,7 +2139,7 @@ function CompletionofCourseFolder($facultyId, $activeRoleId, $indicator_id)
 function CompletionofCourseFolderNew($facultyId, $activeRoleId, $indicator_id)
 {
     // Get active terms
-    $activeTerms = Term::where('status', '1')->first();
+    $activeTerms = Term::where('status', '1')->get();
     
 
     // Get active Spring and Fall term IDs
@@ -2187,8 +2227,7 @@ function CompletionofCourseFolderNew($facultyId, $activeRoleId, $indicator_id)
         $indicatorCategoryId = 3,
         $indicator_id,
         $weightedScore,
-        $avgPercentage,
-        $activeTerms->id
+        $avgPercentage
     );
 
     return [
@@ -2484,7 +2523,7 @@ if (!function_exists('lineManagerRatingOnTasksBK')) {
 }
 
 if (!function_exists('saveIndicatorPercentage')) {
-    function saveIndicatorPercentage($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null)
+    function saveIndicatorPercentage($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null,$yearId=null)
     {
         // Determine color and rating based on score
         // if ($score >= 90 && $score <= 100) {
@@ -2533,14 +2572,20 @@ if (!function_exists('saveIndicatorPercentage')) {
             $rating = 'BE';
         }
 
+        $conditions = [
+            'employee_id' => $employeeId,
+            'role_id' => $role_id,
+            'key_performance_area_id' => $keyPerformanceAreaId,
+            'indicator_category_id' => $indicatorCategoryId,
+            'indicator_id' => $indicatorId,
+        ];
+
+        if ($yearId !== null) {
+            $conditions['year_id'] = $yearId;
+        }
+
         IndicatorsPercentage::updateOrCreate(
-            [
-                'employee_id' => $employeeId,
-                'role_id' => $role_id,
-                'key_performance_area_id' => $keyPerformanceAreaId,
-                'indicator_category_id' => $indicatorCategoryId,
-                'indicator_id' => $indicatorId,
-            ],
+            $conditions,
             [
                 'score' => number_format($score, 2),
                 'with_out_weight_score' => number_format($withOutWeightScore, 1),
@@ -2552,7 +2597,7 @@ if (!function_exists('saveIndicatorPercentage')) {
 }
 
 if (!function_exists('saveIndicatorPercentage90Plus')) {
-    function saveIndicatorPercentage90Plus($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null)
+    function saveIndicatorPercentage90Plus($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null,$yearId=null)
     {
         if ($score >= 95) {
             $color = 'primary';
@@ -2570,15 +2615,20 @@ if (!function_exists('saveIndicatorPercentage90Plus')) {
             $color = 'danger';
             $rating = 'BE';
         }
+         $conditions = [
+            'employee_id' => $employeeId,
+            'role_id' => $role_id,
+            'key_performance_area_id' => $keyPerformanceAreaId,
+            'indicator_category_id' => $indicatorCategoryId,
+            'indicator_id' => $indicatorId,
+        ];
+
+        if ($yearId !== null) {
+            $conditions['year_id'] = $yearId;
+        }
 
         IndicatorsPercentage::updateOrCreate(
-            [
-                'employee_id' => $employeeId,
-                'role_id' => $role_id,
-                'key_performance_area_id' => $keyPerformanceAreaId,
-                'indicator_category_id' => $indicatorCategoryId,
-                'indicator_id' => $indicatorId,
-            ],
+            $conditions,
             [
                 'score' => number_format($score, 2),
                 'with_out_weight_score' => number_format($withOutWeightScore, 2),
@@ -4136,7 +4186,7 @@ function NumberOfKnowledgeProduct($facultyId, $activeRoleId,$currentYear=null)
         'course_load' => getRoleWeightage($activeRoleId, 'indicator', 194)['weightage'],
     ];
     $weightedScore = ($score * $weights['course_load']) / 100;
-    saveIndicatorPercentage($facultyId, $activeRoleId, 2, 32, 194, $weightedScore);
+    saveIndicatorPercentage($facultyId, $activeRoleId, 2, 32, 194, $weightedScore,$score,$currentYear);
 
     // 6️⃣ Return structured data for table
     return [
@@ -5476,7 +5526,7 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
 
 if (!function_exists('ProgramAccreditationOfHOD')) {
 
-    function ProgramAccreditationOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
+    function ProgramAccreditationOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId,$currentYear=null)
     {
         $departmentId = auth()->user()->department_id;
 
@@ -5488,12 +5538,14 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
             ->where('indicator_id', $indicatorId)
             ->where('department_id', $departmentId)
             ->where('created_by', $employeeId)
+            ->where('year_id', $currentYear)
             ->where('status', 2)
             ->get();
 
         // 3️⃣ TOTAL TARGET (calculate once)
         $totalTarget = FacultyTarget::where('user_id', $employeeId)
             ->where('indicator_id', $indicatorId)
+            ->where('year_id', $currentYear)
             ->sum('target');
 
         // 4️⃣ ACHIEVED
@@ -5518,7 +5570,8 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
             $categoryId,
             $indicatorId,
             $weightedScore,
-            $avgRating
+            $avgRating,
+            $currentYear
         );
 
         // 7️⃣ GROUP BY PROGRAM
@@ -5569,7 +5622,7 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
 
 if (!function_exists('noOfProfessionalMembershipsOfHOD')) {
 
-    function noOfProfessionalMembershipsOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
+    function noOfProfessionalMembershipsOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId,$currentYear=null)
     {
         $departmentId = auth()->user()->department_id;
 
@@ -5579,12 +5632,14 @@ if (!function_exists('noOfProfessionalMembershipsOfHOD')) {
         // 2️⃣ Records (modal data)
         $records = $modelClass::where('indicator_id', $indicatorId)
             ->where('created_by', $employeeId)
+            ->where('year_id', $currentYear)
             ->where('status', 2)
             ->get();
 
         // 3️⃣ TOTAL TARGET (calculate once)
         $totalTarget = FacultyTarget::where('user_id', $employeeId)
             ->where('indicator_id', $indicatorId)
+            ->where('year_id', $currentYear)
             ->sum('target');
 
         // 4️⃣ ACHIEVED
@@ -5609,7 +5664,8 @@ if (!function_exists('noOfProfessionalMembershipsOfHOD')) {
             $categoryId,
             $indicatorId,
             $weightedScore,
-            $avgRating
+            $avgRating,
+            $currentYear
         );
 
         // 8️⃣ RETURN

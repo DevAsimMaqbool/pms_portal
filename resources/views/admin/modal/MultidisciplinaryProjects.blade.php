@@ -40,7 +40,9 @@
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
- @endphp
+
+    $currentYear = SelectCurrentYear(1)->first();
+@endphp
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="MultidisciplinaryProjects" tabindex="-1" aria-hidden="true">
@@ -49,11 +51,12 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         Multidisciplinary Projects
                     </h3>
+                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
@@ -74,7 +77,7 @@
 
                                     <tbody>
                                         @php
-                                            $data = MultidisciplinaryProjects(Auth::user()->employee_id, $activeRoleId, 136);
+                                            $data = MultidisciplinaryProjects(Auth::user()->employee_id, $activeRoleId, 136,$currentYear->id);
                                             $sumMultidisciplinaryProjects = collect($data)->sum('percentage');
 
                                         @endphp

@@ -87,36 +87,50 @@
                                     <div class="card shadow-none bg-transparent border border-primary mb-4">
                                         <div class="card-body">
                                             <div class="row g-6">
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Journal Category</label>
-                                                    <select name="target_category" class="form-select">
-                                                        <option value="">Select Target Category</option>
-                                                        <option value="Scopus-Indexed">Scopus Indexed</option>
-                                                        <option value="HEC">HEC</option>
-                                                        <option value="WoS">WoS</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Publications Link</label>
-                                                    <input type="url" name="link_of_publications" class="form-control">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">Journal Classification</label>
-                                                    <select name="journal_clasification" class="form-select" id="journal_clasification">
-                                                        <option value="">Select Journal Classification</option>
+                                                 <div class="col-md-4">
+                                                    <label class="form-label">Scopus-Indexed</label>
+                                                    <select name="journal_clasification" class="form-select"
+                                                        id="journal_clasification" required>
+                                                        <option value="">Select</option>
                                                         <option value="Q1" class="scopus scopus-q1-1">Q1</option>
                                                         <option value="Q2" class="scopus scopus-q2-1">Q2</option>
                                                         <option value="Q3" class="scopus scopus-q3-1">Q3</option>
                                                         <option value="Q4" class="scopus scopus-q4-1">Q4</option>
-                                                        <option value="W"  class="hec hec-w-1">W</option>
-                                                        <option value="X"  class="hec hec-X-1">X</option>
-                                                        <option value="Y"  class="hec hec-Y-1">Y</option>
-                                                        <option value="Medical">Medical</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label">HEC</label>
+                                                    <select name="journal_hec" class="form-select"
+                                                        id="journal_hec">
+                                                        <option value="">Select</option>
+                                                        <option value="W" class="hec hec-w-1">W</option>
+                                                        <option value="X" class="hec hec-x-1">X</option>
+                                                        <option value="Y" class="hec hec-y-1">Y</option>
+                                                        <option value="Medical" class="hec medical-recognized-1">Medical
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label">WoS</label>
+                                                    <select name="journal_wos" class="form-select"
+                                                        id="journal_wos">
+                                                        <option value="">Select</option>
                                                         <option value="SSCI" class="WoS">SSCI</option>
                                                         <option value="AHCI" class="WoS">AHCI</option>
                                                         <option value="SCIE" class="WoS">SCIE</option>
                                                         <option value="ESCI" class="WoS">ESCI</option>
                                                     </select>
+                                                </div>
+                                                 <div class="col-md-6 d-none">
+                                                    <label class="form-label">Journal Category</label>
+                                                    <select name="target_category" class="form-select">
+                                                        <option value="">Select Target Category</option>
+                                                        <option value="Scopus-Indexed" selected>Scopus Indexed</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">DOI Number</label>
+                                                    <input type="url" name="link_of_publications" class="form-control">
                                                 </div>
                                                 <div class="col-md-6">
                                                         <label for="year" class="form-label">Year</label>
@@ -337,7 +351,18 @@
                                 }
                             } 
                             else if (form.status == 2){
-                                 statusText = '<span class="badge bg-label-success">Verified by HOD</span>';
+                                 if (form.reject_status == 3) {
+                                    statusText = `<span class="badge bg-label-warning" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    data-bs-custom-class="tooltip-warning" 
+                                                    data-bs-original-title="${form.reject_status_remarks}">
+                                                    On Hold by ORIC
+                                                </span>`;
+                                } else {
+                                    statusText = '<span class="badge bg-label-success">Verified by HOD</span>';
+                                }
+                                 
                             } 
                             else if (form.status == 3){
                                  statusText = '<span class="badge bg-label-success">Verified by ORIC</span>';
@@ -403,64 +428,12 @@
                     }
                 });
             }
-            function filterJournalClassification() {
+           
 
-    let category = $('select[name="target_category"]').val();
-    let journalSelect = $('#journal_clasification');
 
-    // Keep already selected value (important for edit)
-    let selectedJournal = journalSelect.val();
-
-    // Disable first
-    //journalSelect.prop('disabled', true);
-
-    // Hide all options
-    journalSelect.find('option').each(function () {
-
-        if ($(this).val() === '') {
-            $(this).hide();
-        } else {
-            $(this).hide();
-        }
-
-    });
-
-    // Stop if no category
-    if (!category) {
-        return;
-    }
-
-    // Enable select
-    journalSelect.prop('disabled', false);
-
-    // Show relevant options
-    if (category === "Scopus-Indexed") {
-
-        journalSelect.find('.scopus').show();
-
-    } else if (category === "HEC") {
-
-        journalSelect.find('.hec').show();
-
-    } else if (category === "WoS") {
-
-        journalSelect.find('.WoS').show();
-    }
-
-    // Restore selected value on edit
-    if (selectedJournal) {
-        journalSelect.val(selectedJournal);
-    }
-}
-
-// User changes category
-$(document).on('change', 'select[name="target_category"]', function () {
-    filterJournalClassification();
-});
 
             $(document).ready(function () {
                 fetchAchievementForms();
-                filterJournalClassification();
                 
                 let grantIndex = 0; // dynamic co-author counter
 
@@ -473,6 +446,8 @@ $(document).on('change', 'select[name="target_category"]', function () {
                     $('#researchForm1 [name="target_category"]').val(form.target_category);
                     $('#researchForm1 [name="link_of_publications"]').val(form.link_of_publications);
                     $('#researchForm1 [name="journal_clasification"]').val(form.journal_clasification);
+                    $('#researchForm1 [name="journal_hec"]').val(form.journal_hec);
+                    $('#researchForm1 [name="journal_wos"]').val(form.journal_wos);
                     $('#researchForm1 [name="nationality"][value="' + form.nationality + '"]').prop('checked', true);
                     $('#researchForm1 [name="publication_date"]').val(form.publication_date);
                     $('#researchForm1 [name="year_id"]').val(form.year_id).trigger('change');
@@ -545,6 +520,7 @@ $(document).on('change', 'select[name="target_category"]', function () {
                                     if (update.status == '0') histortText = 'Reject';
                                     else if (update.status == '2') histortText = 'unapproved';
                                     else if (update.status == '3') histortText = 'Approved';
+                                    else if (update.status == '4') histortText = 'OnHold';
                                 }
                                 else { histortText = update.status || 'N/A'; }
 

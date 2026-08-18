@@ -248,9 +248,8 @@ class KeyPerformanceAreaController extends Controller
 
     public function getIndicators(Request $request)
     {
-       
-        $activeTerms = Term::where('status', '1')->first();
-        $yearId=$activeTerms->id;
+        $currentYear = SelectCurrentYear(1)->first();
+        $yearId=$currentYear->id;
         $employeeId = Auth::user()->employee_id;
         $userRoleId = getRoleIdByName(activeRole());
 

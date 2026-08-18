@@ -40,6 +40,7 @@
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;
+    $currentYear = SelectCurrentYear(1)->first();
 @endphp
 @if(in_array(getRoleName(activeRole()), ['HOD','Program Leader UG', 'Program Leader PG']))
 <!--  Payment Methods modal -->
@@ -51,13 +52,14 @@
             <div class="modal-header">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body p-4">
+            <div class="modal-body text-center p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     <div class="badge bg-label-primary rounded p-2"><i
                             class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> No of Programs accredited or
                     affiliated nationally / Internationally and ranking
                 </h3>
+                <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
@@ -78,7 +80,7 @@
 
                                 <tbody>
                                     @php
-                                        $data = ProgramAccreditationOfHOD(Auth::user()->employee_id, $activeRoleId, 6, 14, 154);
+                                        $data = ProgramAccreditationOfHOD(Auth::user()->employee_id, $activeRoleId, 6, 14, 154,$currentYear->id);
                                     @endphp
                                     @foreach($data->rows as $index => $row)
                                         <tr>
