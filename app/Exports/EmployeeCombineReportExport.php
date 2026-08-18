@@ -27,7 +27,8 @@ class EmployeeCombineReportExport implements FromCollection, WithHeadings, WithM
     public function headings(): array
     {
         return [
-            'Role',
+            'Teaching Role',
+            'Admin Role',
             'User Name',
             'Designation',
             'Faculty',
@@ -45,6 +46,30 @@ class EmployeeCombineReportExport implements FromCollection, WithHeadings, WithM
         $departmentName = Department::where('id', (string) $user->department_id)->value('name') ?? 'N/A';
 
         $userRoles = $user->roles;
+
+        $teachingRoleNames = [
+            'Teacher',
+            'Assistant Professor',
+            'Associate Professor',
+            'Professor',
+            'Demonstrator',
+        ];
+
+        // Get Teaching Role(s)
+        $teachingRoles = $userRoles
+            ->filter(function ($role) use ($teachingRoleNames) {
+                return in_array($role->name, $teachingRoleNames);
+            })
+            ->pluck('name')
+            ->toArray();
+
+        // Get Admin Role(s)
+        $adminRoles = $userRoles
+            ->filter(function ($role) use ($teachingRoleNames) {
+                return !in_array($role->name, $teachingRoleNames);
+            })
+            ->pluck('name')
+            ->toArray();
 
         $teacherScore = 0;
         $adminScore = 0;
@@ -79,20 +104,35 @@ class EmployeeCombineReportExport implements FromCollection, WithHeadings, WithM
             }
         }
 
-        // Combined score (same logic as blade)
         $combinedScore = $totalWeight > 0
             ? round($totalWeightedScore / ($totalWeight / 100), 2)
             : 0;
 
         return [
-            implode(' | ', $userRoles->pluck('name')->toArray()),
+            // Teaching Role
+            implode(' | ', $teachingRoles),
+
+            // Admin Role
+            implode(' | ', $adminRoles),
+
+            // User Name
             $user->name,
+
+            // Designation
             $user->job_title,
+
+            // Faculty
             $facultyName,
+
+            // Department
             $departmentName,
+
+            // Scores
             $teacherScore,
             $adminScore,
             $combinedScore,
+
+            // Rating
             $this->calculateRating($combinedScore)
         ];
     }
