@@ -307,6 +307,7 @@ class UserController extends Controller
 
         $kpaIds = [1, 2, 13];
         $catIds = [3, 23, 25];
+
         $researchIds = [5, 6, 8, 32];
         $institutionalIds = [27, 28];
 
