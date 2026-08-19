@@ -21,7 +21,7 @@ class ResearchTaskAssignedHodDeanController extends Controller
 
                 $status = $request->input('status');
                 if($status=="OTHER"){
-                        $forms = ResearchTaskAssignedHodDean::with('tasks')->where('created_by', $employee_id)
+                        $forms = ResearchTaskAssignedHodDean::with(['tasks','year'])->where('created_by', $employee_id)
                         ->where('form_status', $status)
                         ->orderBy('id', 'desc')
                         ->get();
@@ -47,8 +47,8 @@ class ResearchTaskAssignedHodDeanController extends Controller
                $rules = [
                         'indicator_id' => 'required|integer',
                         'employee_id' => 'required|integer',
-                        'year' => 'required|string',
-                        'kpa_category' => 'required',
+                        'year_id' => 'required',
+                        'kpa_category' => '',
                         'linemanager' => 'required|array|min:1',
                         'linemanager.*.task' => 'required|string',
                         'linemanager.*.linemanager_rating' => 'required',
@@ -73,7 +73,7 @@ class ResearchTaskAssignedHodDeanController extends Controller
                     $lineManagerReview = ResearchTaskAssignedHodDean::create([
                         'indicator_id' => $request->indicator_id,
                         'employee_id' => $request->employee_id,
-                        'year' => $request->year,
+                        'year_id' => $request->year_id,
                         'kpa_category' => $request->kpa_category,
                         'remarks' => $request->remarks,
                         'form_status' => $request->form_status,
@@ -110,8 +110,8 @@ class ResearchTaskAssignedHodDeanController extends Controller
 
         $rules = [
             'employee_id' => 'required|integer',
-            'year' => 'required|string',
-            'kpa_category' => 'required',
+            'year_id' => 'required',
+            'kpa_category' => '',
             'linemanager' => 'required|array|min:1',
             'linemanager.*.task' => 'required|string',
             'linemanager.*.linemanager_rating' => 'required',
@@ -125,7 +125,7 @@ class ResearchTaskAssignedHodDeanController extends Controller
         // ✅ Update parent
         $review->update([
             'employee_id' => $request->employee_id,
-            'year' => $request->year,
+            'year_id' => $request->year_id,
             'kpa_category' => $request->kpa_category,
             'remarks' => $request->remarks,
             'updated_by' => Auth::user()->employee_id
