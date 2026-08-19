@@ -17,10 +17,12 @@ class EmployeeCombineReportExport implements FromCollection, WithHeadings, WithM
     public function collection()
     {
         return User::with('roles')
-            ->whereHas('roles')
-            ->whereHas('indicatorsPercentages')
-            ->withCount('roles')
-            ->having('roles_count', '>', 1)
+            ->whereHas('roles', function ($query) {
+                $query->whereIn('roles.id', $this->teacherRoles);
+            })
+            ->whereHas('roles', function ($query) {
+                $query->whereIn('roles.id', $this->adminRoles);
+            })
             ->get();
     }
 

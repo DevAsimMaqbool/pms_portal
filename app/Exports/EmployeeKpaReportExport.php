@@ -25,7 +25,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
     public function collection()
     {
         return User::with(['roles', 'facultyyy', 'departmentttt'])
-            ->whereHas('indicatorsPercentages')
+            ->whereHas('roles')
             ->get();
     }
 
