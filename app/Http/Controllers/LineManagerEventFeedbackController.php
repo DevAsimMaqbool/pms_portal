@@ -55,6 +55,7 @@ class LineManagerEventFeedbackController extends Controller
     {
         $request->validate([
             'employee_id' => 'required|exists:users,id',
+            'year_id' => 'required',
             'event_name' => 'required|array|min:1',
             'event_name.*' => 'required|string|max:255',
             'other_event' => 'nullable|string|max:255',
@@ -89,6 +90,7 @@ class LineManagerEventFeedbackController extends Controller
                 [
                     'employee_id' => $request->employee_id,
                     'event_name' => $event,
+                    'year_id' => $request->year_id,
                 ],
                 [
                     'rating' => $convertedRating,
@@ -141,6 +143,7 @@ class LineManagerEventFeedbackController extends Controller
     {
         $request->validate([
             'employee_id' => 'required|exists:users,id',
+            'year_id' => 'required',
             'event_name' => 'required|string|max:255',
             'other_event' => 'nullable|string|max:255',
             'score' => 'required|numeric|min:0|max:5',
@@ -164,6 +167,7 @@ class LineManagerEventFeedbackController extends Controller
         // ✅ Check duplicate (exclude current record)
         $exists = LineManagerEventFeedback::where('employee_id', $request->employee_id)
             ->where('event_name', $eventName)
+            ->where('year_id', $request->year_id)
             ->where('id', '<>', $id)
             ->exists();
 
@@ -178,6 +182,7 @@ class LineManagerEventFeedbackController extends Controller
         $feedback->update([
             'employee_id' => $request->employee_id,
             'event_name' => $eventName,
+            'year_id' => $request->year_id,
             'rating' => $request->score * 20,
             'remarks' => $request->remarks,
         ]);

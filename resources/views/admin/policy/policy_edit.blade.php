@@ -10,6 +10,7 @@
     <div class="container-xxl flex-grow-1 container-p-y">
 
         <div class="card">
+             <h5 class="card-header">Edit Policies & SOPs</h5>
             <div class="card-datatable table-responsive card-body">
                 @if ($errors->any())
                     <div id="errorAlert" class="alert alert-danger">
@@ -34,10 +35,13 @@
                     <!-- For non-GET/POST, use method spoofing -->
                     @method('POST') <!-- keep POST for update route as per controller -->
 
-                    <div class="row g-3" style="padding:20px; font-family:Arial;">
+                    <div class="row g-3">
                         <!-- Type -->
-                        <div class="col-md-6">
-                            <label for="sopFile" class="form-label">PMS SOPs</label>
+                         <div class="col-md-12 d-none">
+                                    <input class="form-control" type="text" id="sop_name" name="sop_name" value="{{ $policy->sop_name }}" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="sopFile" class="form-label">PMS {{ $policy->sop_name }}</label>
                             <input class="form-control" type="file" id="sopFile" name="sop_file">
                             @if($policy->sop_file)
                                 <p class="mt-2">Current File:
@@ -45,16 +49,12 @@
                                 </p>
                             @endif
                         </div>
-
-                        <!-- File -->
-                        <div class="col-md-6">
-                            <label for="policyFile" class="form-label">PMS Policy</label>
-                            <input class="form-control" type="file" id="policyFile" name="policy_file">
-                            @if($policy->policy_file)
-                                <p class="mt-2">Current File:
-                                    <a href="{{ asset('storage/' . $policy->policy_file) }}" target="_blank">View</a>
-                                </p>
-                            @endif
+                        <div class="col-md-12">
+                            <div class="mb-6">
+                                <label for="contributions" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required>@if($policy->description){{ $policy->description }}@endif
+                                </textarea>
+                            </div>
                         </div>
                     </div>
 

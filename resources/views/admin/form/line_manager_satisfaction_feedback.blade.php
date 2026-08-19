@@ -24,14 +24,12 @@
                     <div class="row g-3 mb-3">
 
                         <div class="col-md-6">
-                            <label class="form-label" for="multicol-language">PMS Cycle</label>
-                            <select name="year" id="select2Year" class="select2 form-select" required>
-                                <option value="">-- Select --</option>$rating->
-                                <option value="2025-2026">2025-2026</option>
-                                <option value="2027-2028">2027-2028</option>
-                                <option value="2028-2029">2028-2029</option>
-
-                            </select>
+                            <label for="year_id" class="form-label">Year</label>
+                            <select name="year_id" id="year_id"
+                                class="form-select" required>
+                                <option value=""> Select year</option>
+                                    @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" for="multicol-language">Name of Faculty Member</label>

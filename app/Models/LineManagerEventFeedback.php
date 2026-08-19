@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class LineManagerEventFeedback extends Model
 {
 
-    protected $fillable = ['employee_id', 'event_name', 'rating', 'remarks'];
+    protected $fillable = ['employee_id', 'event_name', 'rating', 'remarks','year_id'];
 
     public function employee()
     {

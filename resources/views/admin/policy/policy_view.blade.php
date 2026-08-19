@@ -22,8 +22,7 @@
                     <thead class="border-top">
                         <tr>
                             <th>#</th>
-                            <th>SOPs File</th>
-                            <th>Policy File</th>
+                            <th>File</th>
                             <th>Uploaded By</th>
                             <th>Created At</th>
                             <th>Actions</th>
@@ -40,13 +39,7 @@
                                         N/A
                                     @endif
                                 </td>
-                                <td>
-                                    @if($policy->policy_file)
-                                        <a href="{{ asset('storage/' . $policy->policy_file) }}" target="_blank">View File</a>
-                                    @else
-                                        N/A
-                                    @endif
-                                </td>
+                                
                                 <td>{{ $policy->created_by ? $policy->creator->name ?? 'N/A' : 'N/A' }}</td>
                                 <td>{{ $policy->created_at->format('Y-m-d') }}</td>
                                 <td>

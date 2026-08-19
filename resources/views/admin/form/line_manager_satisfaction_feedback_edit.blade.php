@@ -28,11 +28,19 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-md-6">
+                                        {{-- <div class="col-md-6">
                                             <label class="form-label" for="multicol-language">Year</label>
                                             <select name="year" id="select2Year" class="select2 form-select" required>
                                                 <option value="2025-2026" {{ $rating->year == '2025-2026' ? 'selected' : '' }}>2025-2026</option>
                                             </select>
+                                        </div> --}}
+                                        <div class="col-md-6">
+                                            <label for="year" class="form-label">Year</label>
+                                            <select name="year_id" id="year_id"
+                                                class="form-select" required>
+                                                <option value=""> Select year</option>
+                                                    @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}" {{ isset($rating) && $rating->year_id == $year->id ? 'selected' : '' }}>{{ $year->year }}</option> @endforeach
+                                                </select>
                                         </div>
                                     </div>
                                     <div class="row" style="padding:20px; display:flex; flex-wrap:wrap; gap:15px;">

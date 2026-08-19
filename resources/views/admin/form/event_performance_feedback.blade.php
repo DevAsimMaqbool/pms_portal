@@ -31,7 +31,14 @@
                                 @endforeach
                             </select>
                         </div>
-
+                        <div class="col-md-6">
+                            <label for="year" class="form-label">Year</label>
+                            <select name="year_id" id="year_id"
+                                class="form-select" required>
+                                <option value=""> Select year</option>
+                                    @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                </select>
+                        </div>
                         <!-- Event -->
                         <div class="col-md-6">
                             <label class="fw-bold mb-2 d-block">Event</label>

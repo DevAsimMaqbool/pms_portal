@@ -10,6 +10,7 @@ class LineManagerFeedback extends Model
     protected $fillable = [
         'employee_id',
         'year',
+        'year_id',
         'responsibility_accountability_1',
         'responsibility_accountability_2',
         'empathy_compassion_1',

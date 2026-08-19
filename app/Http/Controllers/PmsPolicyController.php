@@ -33,22 +33,24 @@ class PmsPolicyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-
+            'sop_name'=>'required',
+            'description'=>'required',
             'sop_file' => 'required|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:20480', // 20MB
-            'policy_file' => 'required|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:20480', // 20MB
         ]);
 
         $filePath = $request->file('sop_file')->store('policies', 'public');
-        $policyPath = $request->file('policy_file')->store('policies', 'public');
 
         PmsPolicy::create([
+            'sop_name' => $request->sop_name,
+            'description' => $request->description,
             'sop_file' => $filePath,
-            'policy_file' => $policyPath,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
         ]);
 
-        return back()->with('success', 'Policy uploaded successfully!');
+        return redirect()
+            ->route('policy.index')
+            ->with('success', 'PMS Policy uploaded successfully!');
     }
 
     /**
@@ -70,7 +72,6 @@ class PmsPolicyController extends Controller
         // Validate files (both optional if you allow update without changing them)
         $request->validate([
             'sop_file' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:20480',
-            'policy_file' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:20480',
         ]);
 
         // Handle SOP file
@@ -81,19 +82,18 @@ class PmsPolicyController extends Controller
             $policy->sop_file = $request->file('sop_file')->store('policies', 'public');
         }
 
-        // Handle Policy file
-        if ($request->hasFile('policy_file')) {
-            if ($policy->policy_file && Storage::disk('public')->exists($policy->policy_file)) {
-                Storage::disk('public')->delete($policy->policy_file);
-            }
-            $policy->policy_file = $request->file('policy_file')->store('policies', 'public');
-        }
+       
+        $policy->sop_name = $request->sop_name;
 
+        // Update description
+        $policy->description = $request->description;
         // Update type and updated_by
         $policy->updated_by = Auth::id();
         $policy->save();
 
-        return back()->with('success', 'Policy updated successfully!');
+        return redirect()
+            ->route('policy.index')
+            ->with('success', 'PMS Policy updated successfully!');
     }
 
 
@@ -109,14 +109,11 @@ class PmsPolicyController extends Controller
             Storage::disk('public')->delete($policy->sop_file);
         }
 
-        // Delete Policy file if exists
-        if ($policy->policy_file && Storage::disk('public')->exists($policy->policy_file)) {
-            Storage::disk('public')->delete($policy->policy_file);
-        }
-
         // Delete the policy record
         $policy->delete();
 
-        return back()->with('success', 'Policy deleted successfully!');
+        return redirect()
+            ->route('policy.index')
+            ->with('success', 'PMS Policy deleted successfully!');
     }
 }

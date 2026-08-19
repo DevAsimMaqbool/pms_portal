@@ -57,7 +57,7 @@ class LineManagerFeedbackController extends Controller
     {
         $data = $request->validate([
             'employee_id' => 'nullable|integer',
-            'year' => 'nullable',
+            'year_id' => 'required',
             'responsibility_accountability_1' => 'nullable|integer',
             'responsibility_accountability_2' => 'nullable|integer',
             'empathy_compassion_1' => 'nullable|integer',
@@ -75,11 +75,11 @@ class LineManagerFeedbackController extends Controller
         ]);
 
         $employeeId = $request->employee_id;
-        $year = $request->year;
+        $year = $request->year_id;
 
         // Check if the employee has already submitted feedback for this year
         $existing = LineManagerFeedback::where('created_by', $employeeId)
-            ->where('year', $year)
+            ->where('year_id', $year)
             ->first();
 
         if ($existing) {
@@ -143,7 +143,7 @@ class LineManagerFeedbackController extends Controller
 
         $data = $request->validate([
             'employee_id' => 'nullable|integer',
-            'year' => 'nullable',
+            'year_id' => 'required',
             'responsibility_accountability_1' => 'nullable|integer',
             'responsibility_accountability_2' => 'nullable|integer',
             'empathy_compassion_1' => 'nullable|integer',
