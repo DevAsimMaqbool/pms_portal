@@ -214,6 +214,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/get-indicator', [KeyPerformanceAreaController::class, 'getIndicators'])->name('indicator.getIndicator');
     Route::get('/export-kpa-report', [KeyPerformanceAreaController::class, 'exportKpaReport'])->name('export.kpa.report');
     Route::get('/export-combine-report', [KeyPerformanceAreaController::class, 'exportCombineReport'])->name('export.combine.report');
+    Route::get('/admin-report', [KeyPerformanceAreaController::class, 'adminReport'])->name('admin.report');
+
+    Route::get('/employee-report/data', [KeyPerformanceAreaController::class, 'data'])->name('employee.report.data');
+    Route::get('/employee/report/download', [KeyPerformanceAreaController::class, 'download'])->name('employee.report.download');
 
     Route::get('/assignments', [RoleKpaAssignmentController::class, 'create'])->name('assignments.create');
     Route::post('/assignments', [RoleKpaAssignmentController::class, 'store'])->name('assignments.store');

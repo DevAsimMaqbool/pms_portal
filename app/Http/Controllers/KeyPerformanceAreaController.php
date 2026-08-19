@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Indicator;
 use App\Models\KeyPerformanceArea;
 use App\Models\User;
+use App\Models\IndicatorsPercentage;
+use App\Models\Faculty;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -249,7 +252,7 @@ class KeyPerformanceAreaController extends Controller
     public function getIndicators(Request $request)
     {
         $currentYear = SelectCurrentYear(1)->first();
-        $yearId=$currentYear->id;
+        $yearId = $currentYear->id;
         $employeeId = Auth::user()->employee_id;
         $userRoleId = getRoleIdByName(activeRole());
 
@@ -274,14 +277,13 @@ class KeyPerformanceAreaController extends Controller
             ->where('role_id', $userRoleId)
             ->where(function ($query) use ($yearId) {
 
-        $query->where('year_id', $yearId)
-                ->orWhere(function ($query) {
-                    $query->whereNull('year_id');
-                });
-        });
-        
+                $query->where('year_id', $yearId)
+                    ->orWhere(function ($query) {
+                        $query->whereNull('year_id');
+                    });
+            });
+
         $savedScores = $savedScoresQuery->get()->keyBy('indicator_id');
-            
 
         // Map response
         $indicators = $indicators->map(function ($indicator) use ($savedScores, $weightages) {
@@ -333,6 +335,417 @@ class KeyPerformanceAreaController extends Controller
     {
         return Excel::download(new EmployeeCombineReportExport, 'employee_kpa_report.xlsx');
     }
+    public function adminReport()
+    {
+        return view('admin.form.admin_report');
+    }
 
+    public function data(Request $request)
+    {
+        $selectedRole = $request->role;
+
+        $facultyId = $request->faculty_id;
+        $departmentId = $request->department_id;
+        $programId = $request->program_id;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty Roles
+        |--------------------------------------------------------------------------
+        |
+        | 21 = Teacher
+        | 26 = Assistant Professor
+        | 27 = Professor
+        | 28 = Associate Professor
+        | 33 = Demonstrator
+        |
+        */
+
+        $facultyRoles = [21, 26, 27, 28, 33];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Determine Selected Role IDs
+        |--------------------------------------------------------------------------
+        */
+
+        if ($selectedRole === 'faculty') {
+
+            // Faculty means all teaching roles
+            $roleIds = $facultyRoles;
+
+        } else {
+
+            // Dean / HOD / PL-PG / PL-UG
+            $roleIds = [(int) $selectedRole];
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get Users
+        |--------------------------------------------------------------------------
+        */
+
+        $users = User::with([
+            'roles',
+            'facultyyy',
+            'departmentttt'
+        ])
+            ->whereHas('roles', function ($query) use ($roleIds) {
+
+                $query->whereIn('roles.id', $roleIds);
+
+            })
+
+            ->when($facultyId, function ($query) use ($facultyId) {
+
+                $query->where('faculty', $facultyId);
+
+            })
+
+            ->when($departmentId, function ($query) use ($departmentId) {
+
+                $query->where('department_id', $departmentId);
+
+            })
+
+            ->when($programId, function ($query) use ($programId) {
+
+                $query->where('program_id', $programId);
+
+            })
+
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get KPA Assignments
+        |--------------------------------------------------------------------------
+        |
+        | IMPORTANT:
+        |
+        | Group by role + KPA so duplicate assignments cannot inflate
+        | the total score.
+        |
+        */
+
+        $roleKpas = DB::table('role_kpa_assignments')
+            ->whereIn('role_id', $roleIds)
+            ->select(
+                'role_id',
+                'key_performance_area_id',
+                DB::raw('MAX(kpa_weightage) as kpa_weightage')
+            )
+            ->groupBy(
+                'role_id',
+                'key_performance_area_id'
+            )
+            ->get()
+            ->groupBy('role_id');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get KPA IDs
+        |--------------------------------------------------------------------------
+        */
+
+        $kpaIds = $roleKpas
+            ->flatten()
+            ->pluck('key_performance_area_id')
+            ->unique()
+            ->values();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get KPA Names
+        |--------------------------------------------------------------------------
+        */
+
+        $kpaNames = KeyPerformanceArea::whereIn('id', $kpaIds)
+            ->pluck('performance_area', 'id');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Generate Report
+        |--------------------------------------------------------------------------
+        */
+
+        $data = $users->map(function ($user) use ($selectedRole, $facultyRoles, $roleKpas, $kpaNames) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Determine Actual Role
+            |--------------------------------------------------------------------------
+            */
+
+            if ($selectedRole === 'faculty') {
+
+                $role = $user->roles
+                    ->whereIn('id', $facultyRoles)
+                    ->first();
+
+            } else {
+
+                $role = $user->roles
+                    ->firstWhere('id', (int) $selectedRole);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Skip User If Role Not Found
+            |--------------------------------------------------------------------------
+            */
+
+            if (!$role) {
+                return null;
+            }
+
+            $actualRoleId = $role->id;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Get ONLY KPAs Assigned To This Role
+            |--------------------------------------------------------------------------
+            */
+
+            $assignedKpas = $roleKpas->get(
+                $actualRoleId,
+                collect()
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Calculate KPA Scores
+            |--------------------------------------------------------------------------
+            */
+
+            $weightedTotal = 0;
+
+            $userKpas = [];
+
+            foreach ($assignedKpas as $assignment) {
+
+                $kpaId = (int) $assignment->key_performance_area_id;
+
+                $weight = (float) $assignment->kpa_weightage;
+
+                /*
+                |--------------------------------------------------------------------------
+                | Get Indicator Scores
+                |--------------------------------------------------------------------------
+                */
+
+                $indicatorScore = IndicatorsPercentage::where(
+                    'employee_id',
+                    $user->id
+                )
+                    ->where(
+                        'role_id',
+                        $actualRoleId
+                    )
+                    ->where(
+                        'key_performance_area_id',
+                        $kpaId
+                    )
+                    ->sum('score');
+
+                /*
+                |--------------------------------------------------------------------------
+                | KPA Score
+                |--------------------------------------------------------------------------
+                |
+                | Example:
+                |
+                | Teaching & Learning = 100
+                |
+                | Research = 83.5
+                |
+                | Institutional Engagement = 70.75
+                |
+                | Never allow KPA score above 100.
+                |
+                */
+
+                $kpaScore = min(
+                    (float) $indicatorScore,
+                    100
+                );
+
+                /*
+                |--------------------------------------------------------------------------
+                | Weighted KPA Score
+                |--------------------------------------------------------------------------
+                |
+                | Example:
+                |
+                | 100 × 50 / 100 = 50
+                |
+                | 83.5 × 20 / 100 = 16.70
+                |
+                | 70.75 × 30 / 100 = 21.225
+                |
+                */
+
+                $weightedKpaScore = $kpaScore * ($weight / 100);
+
+                /*
+                |--------------------------------------------------------------------------
+                | Add Weighted Score To Total
+                |--------------------------------------------------------------------------
+                */
+
+                $weightedTotal += $weightedKpaScore;
+
+                /*
+                |--------------------------------------------------------------------------
+                | Store KPA
+                |--------------------------------------------------------------------------
+                */
+
+                $userKpas[] = [
+
+                    'id' => $kpaId,
+
+                    'name' => $kpaNames[$kpaId] ?? 'N/A',
+
+                    // Original KPA score
+                    'score' => round($kpaScore, 2),
+
+                    // KPA weightage
+                    'weight' => round($weight, 2),
+
+                    // Weighted KPA score
+                    'weighted_score' => round(
+                        $weightedKpaScore,
+                        2
+                    ),
+                ];
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Final Total Score
+            |--------------------------------------------------------------------------
+            */
+
+            $totalScore = round(
+                $weightedTotal,
+                2
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Return User
+            |--------------------------------------------------------------------------
+            */
+
+            return [
+
+                'role' => $role->name == 'Teacher' ? 'Lecturer' : $role->name,
+
+                'role_id' => $actualRoleId,
+
+                'name' => $user->name,
+
+                'job_title' => $user->job_title ?? 'N/A',
+
+                'faculty' => optional(
+                    $user->facultyyy
+                )->name ?? 'N/A',
+
+                'department' => optional(
+                    $user->departmentttt
+                )->name ?? 'N/A',
+
+                'program' => $user->program_id ?? 'N/A',
+
+                'kpas' => $userKpas,
+
+                'total_score' => $totalScore,
+
+                'rating' => $this->calculateRating(
+                    $totalScore
+                ),
+            ];
+
+        })
+            ->filter()
+            ->sortByDesc('total_score')
+            ->values();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Dynamic KPA Headers
+        |--------------------------------------------------------------------------
+        |
+        | Only KPAs assigned to the returned users.
+        |
+        */
+
+        $reportKpas = $data
+            ->flatMap(function ($user) {
+
+                return $user['kpas'];
+
+            })
+            ->unique('id')
+            ->sortBy('id')
+            ->values()
+            ->map(function ($kpa) {
+
+                return [
+
+                    'id' => $kpa['id'],
+
+                    'name' => $kpa['name'],
+
+                ];
+
+            })
+            ->values();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->json([
+
+            'status' => true,
+
+            'data' => $data,
+
+            'kpas' => $reportKpas,
+
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rating
+    |--------------------------------------------------------------------------
+    */
+
+    private function calculateRating($totalScore)
+    {
+        if ($totalScore >= 90) {
+            return 'OS';
+        }
+
+        if ($totalScore >= 80) {
+            return 'EE';
+        }
+
+        if ($totalScore >= 70) {
+            return 'ME';
+        }
+
+        if ($totalScore >= 60) {
+            return 'NI';
+        }
+
+        return 'BE';
+    }
 
 }
