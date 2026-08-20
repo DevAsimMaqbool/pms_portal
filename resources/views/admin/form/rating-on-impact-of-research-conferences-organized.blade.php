@@ -62,14 +62,14 @@
                 {{-- ================= Conference Detail ================= --}}
                 <h5 class="card-tile mb-0">Conference Detail</h5>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label class="form-label" for="conference_name">Conference Name</label>
                         <input type="text" class="form-control" id="conference_name" name="conference_name" required>
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label class="form-label" for="conference_theme">Conference Theme</label>
-                        <input type="text" class="form-control" id="conference_theme" name="conference_theme">
+                        <textarea class="form-control" id="conference_theme" name="conference_theme"></textarea>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -106,15 +106,15 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label class="form-label">National Participants</label>
-                        <input type="number" class="form-control" name="national_participants">
+                        <input type="number" class="form-control" name="national_participants" min="0" >
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">International Participants</label>
-                        <input type="number" class="form-control" name="international_participants">
+                        <input type="number" class="form-control" name="international_participants" min="0" >
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Industry Participants</label>
-                        <input type="number" class="form-control" name="industry_participants">
+                        <input type="number" class="form-control" name="industry_participants" min="0" >
                     </div>
                 </div>
 
