@@ -362,7 +362,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
         Route::resource('completion-of-course-folder', CompletionOfCourseFolderController::class);
         Route::resource('compliance-usage-of-lms', ComplianceAndUsageOfLMSController::class);
-        Route::get('/get-faculty-classes/{faculty_id}', [CompletionOfCourseFolderController::class, 'getFacultyClasses']);
+        Route::get('/get-faculty-classes/{faculty_id}/{term_id}', [CompletionOfCourseFolderController::class, 'getFacultyClasses']);
 
         //form crud
         Route::put('/indicator-form/update/{id}', [AchievementOfResearchPublicationsTargetController::class, 'updateResearchPublication'])->name('research.update');

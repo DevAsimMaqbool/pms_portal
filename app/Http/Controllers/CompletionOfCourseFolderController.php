@@ -408,9 +408,10 @@ class CompletionOfCourseFolderController extends Controller
     {
         //
     }
-    public function getFacultyClasses($faculty_id)
+    public function getFacultyClasses($faculty_id, $term_id)
     {
-        $classes = FacultyMemberClass::where('faculty_id', $faculty_id)->get();
+        $classes = FacultyMemberClass::where('faculty_id', $faculty_id)
+        ->where('term_id', $term_id)->get();
 
         return response()->json($classes);
     }
