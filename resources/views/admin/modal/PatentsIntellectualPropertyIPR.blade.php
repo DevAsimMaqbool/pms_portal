@@ -130,13 +130,14 @@ $currentYear = SelectCurrentYear(1)->first();
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
                                 class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Patents/Intellectual Property (IPR)
 
                     </h3>
+                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
 
                         <div class="card-body">
@@ -153,7 +154,7 @@ $currentYear = SelectCurrentYear(1)->first();
                                     </thead>
                                     <tbody>
                                         @php
-    $data = departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 138);
+    $data = departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 138,$currentYear->id);
     $avg = $data['department_avg_percentage'];
     if ($avg >= 90) {
         $color = 'primary';
