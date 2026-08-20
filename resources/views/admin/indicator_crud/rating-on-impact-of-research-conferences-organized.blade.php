@@ -680,7 +680,7 @@ $(document).on('click', '.view-form-btn', function () {
     if(!confirm('Are you sure you want to delete this record?')) return;
 
     $.ajax({
-        url: `/line-manager-review-rating/${id}`,
+        url: `/conference-impact/${id}`,
         type: 'DELETE',
         headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
         success: function(res) {
