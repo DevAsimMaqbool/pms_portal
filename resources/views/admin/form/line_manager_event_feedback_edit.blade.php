@@ -47,6 +47,14 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="col-md-6">
+                                <label for="year" class="form-label">Year</label>
+                                <select name="year_id" id="year_id"
+                                    class="form-select" required>
+                                    <option value=""> Select year</option>
+                                        @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}" {{ isset($feedback) && $feedback->year_id == $year->id ? 'selected' : '' }}>{{ $year->year }}</option> @endforeach
+                                    </select>
+                            </div>
 
                             <!-- Event -->
                             @php

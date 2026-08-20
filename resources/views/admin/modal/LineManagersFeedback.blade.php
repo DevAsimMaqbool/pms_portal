@@ -38,7 +38,8 @@
 @php
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+    $totalFeedback = 0;    
+    $currentYear = SelectCurrentYear(1)->first();                                 
  @endphp
 <!-- / Payment Methods modal -->
 <div class="modal fade" id="LineManagersFeedback" tabindex="-1" aria-hidden="true">
@@ -47,31 +48,14 @@
             <div class="modal-header">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body p-4">
+            <div class="modal-body text-center p-4">
                 <!-- Title -->
                 <h3 class="text-center mb-4 fw-bold text-primary">
                     Line Manager's Feedback
                 </h3>
+                <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                 <!-- Tabs -->
                 <div class="nav-align-top nav-tabs-shadow">
-                    <div class="d-flex justify-content-center mb-3 mt-3">
-                        <ul class="nav custom-tabs" role="tablist">
-                            <li class="nav-item">
-                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#LineManagersFeedback-spring"
-                                    aria-controls="LineManagersFeedback-spring" aria-selected="true">
-                                    @php
-                                        $currentYear = \Carbon\Carbon::now()->year;
-                                        $currentAcademic = ($currentYear - 1) . '-' . $currentYear;
-                                    @endphp
-
-                                    {{ $currentAcademic }}
-                                </button>
-                            </li>
-
-                        </ul>
-                    </div>
-
                     <!-- Tab Content -->
                     <div class="tab-content">
 
@@ -108,7 +92,8 @@
                                             @php
                                                 $feedbacks = lineManagerRatingOnTasks(
                                                     Auth::user()->employee_id,
-                                                    $activeRoleId
+                                                    $activeRoleId,
+                                                    $currentYear->id
                                                 );
 
                                                 // Get all virtues from feedbacks

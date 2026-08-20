@@ -2364,9 +2364,10 @@ if (!function_exists('lineManagerRatingOnTasksbk')) {
 }
 
 if (!function_exists('lineManagerRatingOnTasks')) {
-    function lineManagerRatingOnTasks($facultyId, $activeRoleId)
+    function lineManagerRatingOnTasks($facultyId, $activeRoleId,$currentYear=null)
     {
-        $feedbacks = LineManagerFeedback::where('employee_id', $facultyId)->get();
+        $feedbacks = LineManagerFeedback::where('employee_id', $facultyId)
+        ->where('year_id', $currentYear)->get();
 
         $overallSum = 0;
         $totalCount = 0;
@@ -2444,6 +2445,7 @@ if (!function_exists('lineManagerRatingOnTasks')) {
         $overallAvg = $totalCount
             ? $overallSum / $totalCount
             : 0;
+        $overallAvg = min($overallAvg, 100);    
 
         $weights = [
             'course_load' => getRoleWeightage(
@@ -2463,7 +2465,8 @@ if (!function_exists('lineManagerRatingOnTasks')) {
             27,   // Category
             188,  // Indicator
             $weightedScore,
-            $overallAvg
+            $overallAvg,
+            $currentYear
         );
 
         return $feedbacks;
@@ -2639,9 +2642,10 @@ if (!function_exists('saveIndicatorPercentage90Plus')) {
     }
 }
 
-function lineManagerRatingOnEvents($facultyId, $activeRoleId)
+function lineManagerRatingOnEvents($facultyId, $activeRoleId,$currentYear=null)
 {
-    $feedbacks = LineManagerEventFeedback::where('employee_id', $facultyId)->get();
+    $feedbacks = LineManagerEventFeedback::where('employee_id', $facultyId)
+    ->where('year_id', $currentYear)->get();
 
     if ($feedbacks->isEmpty()) {
         return [];
@@ -2682,6 +2686,7 @@ function lineManagerRatingOnEvents($facultyId, $activeRoleId)
 
     // ✅ Average calculation
     $averagePercentage = $total / $count;
+    $averagePercentage = min($averagePercentage, 100);
 
     // ✅ Apply weight
     $weight = getRoleWeightage($activeRoleId, 'indicator', 189)['weightage'];
@@ -2695,7 +2700,8 @@ function lineManagerRatingOnEvents($facultyId, $activeRoleId)
         28,
         189,
         $weightedScore,
-        $averagePercentage
+        $averagePercentage,
+        $currentYear
     );
 
     return $feedbacks;

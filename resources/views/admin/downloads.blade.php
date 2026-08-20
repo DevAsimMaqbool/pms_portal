@@ -1,166 +1,63 @@
 @extends('layouts.app')
 
 @push('style')
-  <style>
-    /* Flip Card Base */
-    .flip-card {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      perspective: 1000px;
-    }
-
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-    }
-
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg);
-    }
-
-    .flip-card-front,
-    .flip-card-back {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      border-radius: 0.75rem;
-      overflow: hidden;
-    }
-
-    .flip-card-front .card,
-    .flip-card-back .card {
-      height: 100%;
-      border: none;
-    }
-
-    .flip-card-back {
-      transform: rotateY(180deg);
-    }
-
-    .icon-base {
-      font-size: 2rem;
-    }
-
-    .flip-card-front .card-body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .flip-card-back .card-body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-  </style>
+ 
 @endpush
 
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="row gy-4">
-      <div class="col-lg-2 col-md-4">
-        <a href="#" class="text-decoration-none">
-          <div class="flip-card">
-            <div class="flip-card-inner">
+  <div class="row">
+        <div class="col-lg-12">
+              <div class="card">
+                <h5 class="card-header">Policies & SOPs (Download) </h5>
+                   <div class="card-body">
+                        
 
-              <!-- FRONT -->
-              <div class="flip-card-front">
-                <div class="card bg-primary text-white">
-                  <div class="card-body">
-                    <div class="avatar mb-3">
-                      <span class="avatar-initial rounded bg-white text-primary">
-                        <i class="ti tabler-download icon-base"></i>
-                      </span>
+                    <div class="row">
+                        <!-- Basic List group -->
+                          <div class="col-lg-6 mb-6 mb-xl-0">
+                            <small class="fw-medium">PMS SOPs</small>
+                            <div class="demo-inline-spacing mt-4">
+                              <div class="list-group">
+                                @foreach($policies->where('sop_name', 'SOP') as $policy)
+                                    <a href="{{ Storage::url($policy->sop_file) }}"
+                                      target="_blank"
+                                      class="list-group-item d-flex justify-content-between align-items-center text-primary">
+                                        {{ $policy->description }}
+                                        <i class="icon-base ti tabler-cloud-download"></i>
+
+                                    </a>
+                                @endforeach
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Basic List group -->
+                          <div class="col-lg-6 mb-6 mb-xl-0">
+                            <small class="fw-medium">PMS Policy</small>
+                            <div class="demo-inline-spacing mt-4">
+                              <div class="list-group">
+                                 @foreach($policies->where('sop_name', 'POLICY') as $policy)
+                                    <a href="{{ Storage::url($policy->sop_file) }}"
+                                      target="_blank"
+                                      class="list-group-item d-flex justify-content-between align-items-center text-primary">
+                                        {{ $policy->description }}
+                                         <i class="icon-base ti tabler-cloud-download"></i>
+
+                                    </a>
+                                @endforeach
+                              </div>
+                            </div>
+                          </div>
+                    
                     </div>
-                    <h5 class="fw-bold mb-0 text-white">PMS SOPs</h5>
-                  </div>
-                </div>
-              </div>
 
-              <!-- BACK -->
-              <div class="flip-card-back">
-                <div class="card bg-primary text-white">
-                  @if($policies && $policies->sop_file)
-                    <a href="{{ asset('storage/' . $policies->sop_file) }}" target="_blank" style="color:#ffffff">
-                      <div class="card-body">
-                        <div class="badge rounded p-2 mb-2 bg-white text-primary">
-                          <i class="ti tabler-download icon-base"></i>
-                        </div>
-                        <h6 class="text-center mb-2 text-white">Click to Download</h6>
-                        <p class="text-center fs-13 mb-0">PMS SOPs</p>
-                      </div>
-                    </a>
-                  @else
-                    <div class="card-body">
-                      <div class="badge rounded p-2 mb-2 bg-white text-primary">
-                        <i class="ti tabler-download icon-base"></i>
-                      </div>
-                      <h6 class="text-center mb-2 text-white">SOPs not uploaded</h6>
-                      <p class="text-center fs-13 mb-0">PMS SOPs</p>
-                    </div>
-                  @endif
-                </div>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
 
-      <div class="col-lg-2 col-md-4">
-        <a href="#" class="text-decoration-none">
-          <div class="flip-card">
-            <div class="flip-card-inner">
-
-              <!-- FRONT -->
-              <div class="flip-card-front">
-                <div class="card bg-primary text-white">
-                  <div class="card-body">
-                    <div class="avatar mb-3">
-                      <span class="avatar-initial rounded bg-white text-primary">
-                        <i class="ti tabler-download icon-base"></i>
-                      </span>
-                    </div>
-                    <h5 class="fw-bold mb-0 text-white">PMS Policy</h5>
-                  </div>
-                </div>
-              </div>
-
-              <!-- BACK -->
-              <div class="flip-card-back">
-                <div class="card bg-primary text-white">
-                  @if($policies && $policies->policy_file)
-                    <a href="{{ asset('storage/' . $policies->policy_file) }}" target="_blank" style="color:#ffffff">
-                      <div class="card-body">
-                        <div class="badge rounded p-2 mb-2 bg-white text-primary">
-                          <i class="ti tabler-download icon-base"></i>
-                        </div>
-                        <h6 class="text-center mb-2 text-white">Click to Download</h6>
-                        <p class="text-center fs-13 mb-0">PMS Policy</p>
-                      </div>
-                    </a>
-                  @else
-                    <div class="card-body">
-                      <div class="badge rounded p-2 mb-2 bg-white text-primary">
-                        <i class="ti tabler-download icon-base"></i>
-                      </div>
-                      <h6 class="text-center mb-2 text-white">Policy not uploaded</h6>
-                      <p class="text-center fs-13 mb-0">PMS Policy</p>
-                    </div>
-                  @endif
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </a>
-      </div>
-    </div>
+                   </div>
+              </div>  
+           
+        </div>
+  </div>      
   </div>
 @endsection
 

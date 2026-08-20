@@ -16,7 +16,7 @@ class DownloadsController extends Controller
      */
     public function index(Request $request)
     {
-        $policies = PmsPolicy::orderBy('created_at', 'desc')->first();
+        $policies = PmsPolicy::orderBy('created_at', 'desc')->get();
         return view('admin.downloads', compact('policies'));
 
     }
