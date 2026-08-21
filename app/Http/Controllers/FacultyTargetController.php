@@ -251,12 +251,18 @@ class FacultyTargetController extends Controller
                             ]);
                             if ($kpaId == 2 && $indicatorCategoryId == 8) {
                                 // ✅ Insert record in role_kpa_assignments
-                                DB::table('role_kpa_assignments')->insert([
-                                    'role_id' => $roleId,
-                                    'key_performance_area_id' => $kpaId,
-                                    'indicator_category_id' => $indicatorCategoryId,
-                                    'indicator_id' => $indicatorId,
-                                ]);
+                                DB::table('role_kpa_assignments')->updateOrInsert(
+                                    [
+                                        'role_id' => $roleId,
+                                        'key_performance_area_id' => $kpaId,
+                                        'indicator_category_id' => $indicatorCategoryId,
+                                        'indicator_id' => $indicatorId,
+                                    ],
+                                    [
+                                        'status' => 1,
+                                        'updated_at' => now(),
+                                    ]
+                                );
                                 DB::table('sidebar_kpa_assignments')->updateOrInsert(
                                     [
                                         'role_id' => $roleId,

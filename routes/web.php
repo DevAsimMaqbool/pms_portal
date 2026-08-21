@@ -292,6 +292,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/kpa/{area}/category/{category}/indicator/{indicator}', [IndicatorController::class, 'indicator_form'])->name('indicator.form');
         Route::resource('indicator-form', AchievementOfResearchPublicationsTargetController::class);
         Route::get('indicator-forms/target', [AchievementOfResearchPublicationsTargetController::class, 'getPublicationTarget'])->name('indicator-form.target');
+        Route::put('/research-publications-update/{id}/update-field',[AchievementOfResearchPublicationsTargetController::class, 'updateField'])->name('research-publications-update.update-field');
         Route::resource('indicator-form-pg', ResearchProductivityOfPGStudentsController::class);
         Route::put('/indicator-form-pg/update/{id}', [ResearchProductivityOfPGStudentsController::class, 'updateResearchPublication'])->name('research-pg.update');
 
@@ -368,7 +369,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/indicators/{slug}/{id}', [IndicatorCrudController::class, 'index'])->name('indicators_crud.index');
         Route::resource('completion-of-course-folder', CompletionOfCourseFolderController::class);
         Route::resource('compliance-usage-of-lms', ComplianceAndUsageOfLMSController::class);
-        Route::get('/get-faculty-classes/{faculty_id}', [CompletionOfCourseFolderController::class, 'getFacultyClasses']);
+        Route::get('/get-faculty-classes/{faculty_id}/{term_id}', [CompletionOfCourseFolderController::class, 'getFacultyClasses']);
 
         //form crud
         Route::put('/indicator-form/update/{id}', [AchievementOfResearchPublicationsTargetController::class, 'updateResearchPublication'])->name('research.update');

@@ -37,7 +37,6 @@
                                                         <th>#</th>
                                                         <th>Created By</th>
                                                         <th>Conference Name</th>
-                                                        <th>Conference Theme</th>
                                                         <th>Created Date</th>
                                                         <th>Status</th>
                                                         <th>History</th>
@@ -114,14 +113,14 @@
                      {{-- ================= Conference Detail ================= --}}
                 <h5 class="card-tile mb-0">Conference Detail</h5>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label class="form-label" for="conference_name">Conference Name</label>
                         <input type="text" class="form-control" id="conference_name" name="conference_name" required>
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label class="form-label" for="conference_theme">Conference Theme</label>
-                        <input type="text" class="form-control" id="conference_theme" name="conference_theme">
+                        <textarea class="form-control" id="conference_theme" name="conference_theme"></textarea>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -158,15 +157,15 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label class="form-label">National Participants</label>
-                        <input type="number" class="form-control" name="national_participants" id="national_participants">
+                        <input type="number" class="form-control" name="national_participants" id="national_participants" min="0">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">International Participants</label>
-                        <input type="number" class="form-control" name="international_participants" id="international_participants">
+                        <input type="number" class="form-control" name="international_participants" id="international_participants" min="0" >
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Industry Participants</label>
-                        <input type="number" class="form-control" name="industry_participants" id="industry_participants">
+                        <input type="number" class="form-control" name="industry_participants" id="industry_participants" min="0" >
                     </div>
                 </div>
 
@@ -373,7 +372,6 @@
                                 i + 1,
                                 form.creator ? form.creator.name : 'N/A',
                                 form.conference_name || 'N/A',
-                                form.conference_theme || 'N/A',
                                 createdAt,
                                 statusText,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
@@ -396,7 +394,6 @@
                                     { title: "#" },
                                     { title: "Created By" },
                                     { title: "Conference Name" },
-                                    { title: "Conference Theme" },
                                     { title: "Created Date" },
                                      { title: "Status" },
                                     { title: "History" },
@@ -683,7 +680,7 @@ $(document).on('click', '.view-form-btn', function () {
     if(!confirm('Are you sure you want to delete this record?')) return;
 
     $.ajax({
-        url: `/line-manager-review-rating/${id}`,
+        url: `/conference-impact/${id}`,
         type: 'DELETE',
         headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
         success: function(res) {

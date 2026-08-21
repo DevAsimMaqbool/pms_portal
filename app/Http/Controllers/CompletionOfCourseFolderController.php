@@ -404,13 +404,25 @@ class CompletionOfCourseFolderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    
+    public function destroy($id)
     {
-        //
+        $folderdelate = CompletionOfCourseFolder::findOrFail($id);
+
+        if ($folderdelate->created_by !== Auth::id()) {
+            abort(403, 'Unauthorized Action');
+        }
+
+        $folderdelate->delete();
+
+        return response()->json([
+            'message' => 'Deleted successfully'
+        ]);
     }
-    public function getFacultyClasses($faculty_id)
+    public function getFacultyClasses($faculty_id, $term_id)
     {
-        $classes = FacultyMemberClass::where('faculty_id', $faculty_id)->get();
+        $classes = FacultyMemberClass::where('faculty_id', $faculty_id)
+        ->where('term_id', $term_id)->get();
 
         return response()->json($classes);
     }

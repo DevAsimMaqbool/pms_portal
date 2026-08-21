@@ -82,6 +82,14 @@
                                     <div class="card shadow-none bg-transparent border border-primary">
                                         <div class="card-body">
                                             <div class="row g-6">
+                                             <div class="col-md-6">
+                                                    <label class="form-label">Publication Title</label>
+                                                    <input type="text" name="publication_title" id="publication_title" class="form-control" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Journal Name</label>
+                                                    <input type="text" name="journal_name" id="journal_name"  class="form-control" required>
+                                                </div>
                                                  <div class="col-md-4">
                                                     <label class="form-label">Scopus-Indexed</label>
                                                     <select name="journal_clasification" class="form-select"
@@ -548,6 +556,7 @@
                 @endif
                 @if(in_array(getRoleName(activeRole()), ['ORIC']))
                     <div>
+                    <h4 class="mb-1">Research Publication</h4>
                         <div class="d-flex">
                             <select id="bulkAction" class="form-select w-auto me-2">
                                 <option value="">-- Select Action --</option>
@@ -583,6 +592,7 @@
                     </div>
                     <div class="modal-body">
                         <table class="table table-bordered">
+                        <input type="hidden" id="modalFormId">
                             <tr>
                                 <th>Created By</th>
                                 <td id="modalCreatedBy"></td>
@@ -610,6 +620,41 @@
                                 <th>Created Date</th>
                                 <td id="modalCreatedDate"></td>
                             </tr>
+                            @if(in_array(getRoleName(activeRole()), ['ORIC']))
+                            <tr>
+                                <th>Scopus-Indexed Match</th>
+                                 <td>
+                                                    <label class="form-label">Scopus-Indexed</label>
+                                                    <select name="journal_clasification" class="form-select"
+                                                        id="journal_clasification" required>
+                                                        <option value="">Select</option>
+                                                        <option value="Q1" class="scopus scopus-q1-1">Q1</option>
+                                                        <option value="Q2" class="scopus scopus-q2-1">Q2</option>
+                                                        <option value="Q3" class="scopus scopus-q3-1">Q3</option>
+                                                        <option value="Q4" class="scopus scopus-q4-1">Q4</option>
+                                                    </select>
+                                                    <label class="form-label">HEC</label>
+                                                    <select name="journal_hec" class="form-select"
+                                                        id="journal_hec">
+                                                        <option value="">Select</option>
+                                                        <option value="W" class="hec hec-w-1">W</option>
+                                                        <option value="X" class="hec hec-x-1">X</option>
+                                                        <option value="Y" class="hec hec-y-1">Y</option>
+                                                        <option value="Medical" class="hec medical-recognized-1">Medical
+                                                        </option>
+                                                    </select>
+                                                    <label class="form-label">WoS</label>
+                                                    <select name="journal_wos" class="form-select"
+                                                        id="journal_wos">
+                                                        <option value="">Select</option>
+                                                        <option value="SSCI" class="WoS">SSCI</option>
+                                                        <option value="AHCI" class="WoS">AHCI</option>
+                                                        <option value="SCIE" class="WoS">SCIE</option>
+                                                        <option value="ESCI" class="WoS">ESCI</option>
+                                                    </select>
+                                                </td>
+                            </tr>
+                            @endif
                             <tbody id="modalExtraFields"></tbody>
                         </table>
                         <h5 class="card-title mb-2 me-2 pt-1 mb-2 d-flex align-items-center"><i
@@ -1470,7 +1515,12 @@
 
 
 
-
+                    if (form.publication_title) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Publication Title</th><td>${form.publication_title}</td></tr>`);
+                    }
+                    if (form.journal_name) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Journal Name</th><td>${form.journal_name}</td></tr>`);
+                    }
                     if (form.link_of_publications) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>DOI Number</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
                     }
@@ -1771,7 +1821,12 @@
 
                     }
 
-
+                     if (form.publication_title) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Publication Title</th><td>${form.publication_title}</td></tr>`);
+                    }
+                    if (form.journal_name) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Journal Name</th><td>${form.journal_name}</td></tr>`);
+                    }
                     if (form.link_of_publications) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>DOI Number</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
                     }
@@ -2042,6 +2097,7 @@
                 fetchIndicatorForms3();
                 $(document).on('click', '.view-form-btn', function () {
                     const form = $(this).data('form');
+                    $('#modalFormId').val(form.id);
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
@@ -2049,6 +2105,17 @@
                     $('#modalTargetCategory').text(form.target_category || 'N/A');
                     $('#modalStatus').text(form.status || 'Pending');
                     $('#modalCreatedDate').text(form.created_at ? new Date(form.created_at).toLocaleString() : 'N/A');
+                    $('#journal_clasification')
+                        .val(form.journal_clasification || '')
+                        .data('previous-value', form.journal_clasification || '');
+
+                    $('#journal_hec')
+                        .val(form.journal_hec || '')
+                        .data('previous-value', form.journal_hec || '');
+
+                    $('#journal_wos')
+                        .val(form.journal_wos || '')
+                        .data('previous-value', form.journal_wos || '');
                     if (window.activeUserRole === 'ORIC') {
                         const statusCell = $('#status-approval td');
                         statusCell.empty(); // clear old checkbox if any
@@ -2117,7 +2184,12 @@
 
                     }
 
-
+                     if (form.publication_title) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Publication Title</th><td>${form.publication_title}</td></tr>`);
+                    }
+                    if (form.journal_name) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Journal Name</th><td>${form.journal_name}</td></tr>`);
+                    }
                     if (form.link_of_publications) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>DOI Number</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
                     }
@@ -2372,6 +2444,129 @@
                 $(document).on('change', '#selectAll', function () {
                     $('.rowCheckbox').prop('checked', $(this).is(':checked'));
                 });
+
+                $(document).on(
+                        'change',
+                        '#journal_clasification, #journal_hec, #journal_wos',
+                        function () {
+
+                            const select = $(this);
+                            const formId = $('#modalFormId').val();
+                            const field = select.attr('name');
+                            const value = select.val();
+
+                            // Get selected text
+                            const selectedText = select.find('option:selected').text();
+
+                            // Store previous value in case user cancels
+                            const previousValue = select.data('previous-value') || '';
+
+                            Swal.fire({
+                                title: 'Update Status?',
+                                text: `Are you sure you want to update ${selectedText}?`,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes, Update',
+                                cancelButtonText: 'Cancel',
+                                reverseButtons: true
+                            }).then((result) => {
+
+                                if (!result.isConfirmed) {
+
+                                    // Restore previous value if cancelled
+                                    select.val(previousValue);
+
+                                    return;
+                                }
+
+                                // Show loading alert
+                                Swal.fire({
+                                    title: 'Updating...',
+                                    text: 'Please wait while the status is being updated.',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    didOpen: () => {
+                                        Swal.showLoading();
+                                    }
+                                });
+
+                                $.ajax({
+                                    url: `/research-publications-update/${formId}/update-field`,
+                                    type: 'PUT',
+                                    data: {
+                                        _token: "{{ csrf_token() }}",
+                                        field: field,
+                                        value: value
+                                    },
+
+                                    success: function (response) {
+
+                                        // Save current value as previous value
+                                        select.data('previous-value', value);
+
+                                        // Update DataTable
+                                        const table = $('#complaintTable3').DataTable();
+
+                                        table.rows().every(function () {
+
+                                            const rowData = this.data();
+
+                                            const button = $(rowData[7]);
+                                            const form = button.data('form');
+
+                                            if (form && form.id == formId) {
+
+                                                // Update form object
+                                                form[field] = value;
+
+                                                // Update Classification column
+                                                if (field === 'journal_clasification') {
+                                                    rowData[4] = value || 'N/A';
+                                                }
+
+                                                // Update View button
+                                                rowData[7] = `
+                                                    <button
+                                                        class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
+                                                        data-form='${JSON.stringify(form)}'>
+                                                        <span class="icon-xs icon-base ti tabler-eye me-2"></span>
+                                                        View
+                                                    </button>
+                                                `;
+
+                                                this.data(rowData);
+                                            }
+                                        });
+
+                                        table.draw(false);
+
+                                        // Success alert
+                                        Swal.fire({
+                                            title: 'Updated!',
+                                            text: response.message || 'Status updated successfully.',
+                                            icon: 'success',
+                                            confirmButtonText: 'OK'
+                                        });
+                                    },
+
+                                    error: function (xhr) {
+
+                                        // Restore previous value
+                                        select.val(previousValue);
+
+                                        console.error(xhr.responseText);
+
+                                        Swal.fire({
+                                            title: 'Error!',
+                                            text: xhr.responseJSON?.message || 'Failed to update status.',
+                                            icon: 'error',
+                                            confirmButtonText: 'OK'
+                                        });
+                                    }
+                                });
+                            });
+                        }
+                    );
             });
         </script>
     @endif

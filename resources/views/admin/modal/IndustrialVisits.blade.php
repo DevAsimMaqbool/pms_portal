@@ -124,7 +124,7 @@ $currentYear = SelectCurrentYear(1)->first();
 
     <div class="modal fade" id="IndustrialVisits" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content custom-modal">
+            <div class="modal-content text-center custom-modal">
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -134,6 +134,7 @@ $currentYear = SelectCurrentYear(1)->first();
                         <div class="badge bg-label-primary rounded p-2"><i
                                 class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Industrial Visits
                     </h3>
+                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
 
                         <div class="card-body">
@@ -150,7 +151,7 @@ $currentYear = SelectCurrentYear(1)->first();
                                     </thead>
                                     <tbody>
                                         @php
-    $data = departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 197);
+    $data = departmentTargetIndicatorsAnalysisOfHOD(Auth::user()->employee_id, $activeRoleId, 2, 8, 197,$currentYear->id);
     $avg = $data['department_avg_percentage'];
     if ($avg >= 90) {
         $color = 'primary';

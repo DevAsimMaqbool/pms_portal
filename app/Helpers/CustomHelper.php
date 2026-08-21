@@ -5430,7 +5430,7 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
 
 if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
 
-    function departmentTargetIndicatorsAnalysisOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
+    function departmentTargetIndicatorsAnalysisOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear=null)
     {
         $departmentId = auth()->user()->department_id;
 
@@ -5527,11 +5527,13 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
         // Faculty targets
         $totalTarget = FacultyTarget::whereIn('user_id', $userIds)
             ->where('indicator_id', $indicatorId)
+            ->where('year_id', $currentYear)
             ->sum('target');
 
         // Submissions
         $totalSubmitted = $modelClass::whereIn('created_by', $employeeIds)
             ->where('indicator_id', $indicatorId)
+            ->where('year_id', $currentYear)
             ->when(!empty($filter), function ($q) use ($filter) {
                 foreach ($filter as $key => $value) {
                     $q->where($key, $value);
@@ -5556,7 +5558,8 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
             $categoryId,
             $indicatorId,
             $weightedScore,
-            $departmentAvgPercentage
+            $departmentAvgPercentage,
+            $currentYear
         );
 
         return [

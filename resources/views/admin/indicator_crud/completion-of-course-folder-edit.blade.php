@@ -77,6 +77,7 @@
                                                             </option>
                                                         @endif
                                                     </select>
+                                                    <small class="text-primary">Select the term first</small>
                                                 </div>
 
                                                 {{-- <div class="col-md-12 mt-3">
@@ -239,23 +240,98 @@
 @push('script')
     <script>
         $(document).ready(function () {
-            let classSelect = $('.faculty-class');
+               let classSelect = $('.faculty-class');
 
-            // Load the classes for faculty
-            const facultyId = {{ auth()->user()->faculty_id }};
-            $.ajax({
-                url: `/get-faculty-classes/${facultyId}`,
-                type: 'GET',
-                success: function (data) {
+                const facultyId = {{ auth()->user()->faculty_id }};
+                const selectedClassId = "{{ $data->class_cod }}";
+                const selectedTermId = "{{ $data->term_id }}";
+
+                function loadFacultyClasses(termId) {
+
                     classSelect.empty();
-                    data.forEach(cls => {
-                        let selected = cls.class_id == {{ $data->class_cod }} ? 'selected' : '';
-                        classSelect.append(`<option value="${cls.class_id}" ${selected}>${cls.code}</option>`);
-                    });
-                    classSelect.select2();
-                }
-            });
 
+                    if (!termId) {
+                        classSelect.append(
+                            '<option value="">-- First select term --</option>'
+                        );
+
+                        classSelect.prop('disabled', true);
+                        return;
+                    }
+
+                    classSelect.prop('disabled', false);
+
+                    classSelect.append(
+                        '<option value="">Loading...</option>'
+                    );
+
+                    $.ajax({
+                        url: `/get-faculty-classes/${facultyId}/${termId}`,
+                        type: 'GET',
+
+                        success: function (data) {
+
+                            classSelect.empty();
+
+                            if (data.length > 0) {
+
+                                data.forEach(function (cls) {
+
+                                    let selected =
+                                        cls.class_id == selectedClassId
+                                            ? 'selected'
+                                            : '';
+
+                                    classSelect.append(`
+                                        <option value="${cls.class_id}" ${selected}>
+                                            ${cls.code}
+                                        </option>
+                                    `);
+                                });
+
+                            } else {
+
+                                classSelect.append(
+                                    '<option value="">-- No classes found --</option>'
+                                );
+                            }
+
+                            // Initialize / refresh Select2
+                            classSelect.select2();
+                        },
+
+                        error: function () {
+
+                            classSelect.empty().append(
+                                '<option value="">-- Error loading classes --</option>'
+                            );
+                        }
+                    });
+                }
+
+
+                // When term changes
+                $('.term_id').on('change', function () {
+
+                    let termId = $(this).val();
+
+                    // Clear old selected class when user changes term
+                    if (termId != selectedTermId) {
+                        classSelect.val(null).trigger('change');
+                    }
+
+                    loadFacultyClasses(termId);
+                });
+
+
+                // Load existing classes automatically on edit
+                if (selectedTermId) {
+                    loadFacultyClasses(selectedTermId);
+                } else {
+                    classSelect.prop('disabled', true);
+                }
+
+            
             // Handle form submission
             // SUBMIT UPDATE FORM
             $('#editForm').submit(function (e) {

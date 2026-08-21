@@ -87,6 +87,14 @@
                                     <div class="card shadow-none bg-transparent border border-primary mb-4">
                                         <div class="card-body">
                                             <div class="row g-6">
+                                            <div class="col-md-6">
+                                                    <label class="form-label">Publication Title</label>
+                                                    <input type="text" name="publication_title" id="publication_title" class="form-control" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Journal Name</label>
+                                                    <input type="text" name="journal_name" id="journal_name"  class="form-control" required>
+                                                </div>
                                                  <div class="col-md-4">
                                                     <label class="form-label">Scopus-Indexed</label>
                                                     <select name="journal_clasification" class="form-select"
@@ -446,6 +454,8 @@
                     $('#researchForm1 [name="target_category"]').val(form.target_category);
                     $('#researchForm1 [name="link_of_publications"]').val(form.link_of_publications);
                     $('#researchForm1 [name="journal_clasification"]').val(form.journal_clasification);
+                    $('#researchForm1 [name="publication_title"]').val(form.publication_title);
+                    $('#researchForm1 [name="journal_name"]').val(form.journal_name);
                     $('#researchForm1 [name="journal_hec"]').val(form.journal_hec);
                     $('#researchForm1 [name="journal_wos"]').val(form.journal_wos);
                     $('#researchForm1 [name="nationality"][value="' + form.nationality + '"]').prop('checked', true);

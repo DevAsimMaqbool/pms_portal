@@ -16,7 +16,7 @@
         <div class="card">
             <!-- Header with Add Feedback Button -->
             <div class="d-flex justify-content-between align-items-center p-3">
-                <h5 class="card-title mb-0">Completion of Course Folder</h5>
+                <h5 class="card-header mb-0">Completion of Course Folder</h5>
                 <a href="{{ url('kpa/1/category/3/indicator/120') }}" class="btn btn-success">Add</a>
             </div>
 
@@ -77,10 +77,13 @@
                                     @endif</td>
                                 <td>
                                 @if($key->status == 1)
+                                   <div class="d-flex align-items-center">
                                     <a href="{{ route('completion-of-course-folder.edit', $key->id) }}"
-                                        class="btn btn-sm btn-warning">
-                                        Edit
+                                        class="btn btn-icon delete-record">
+                                        <i class="icon-base ti tabler-edit text-warning icon-md"></i>
                                     </a>
+                                    <button class="btn btn-icon delete-record text-danger delete-btn" data-id="{{ $key->id }}"><i class="icon-base ti tabler-trash icon-md"></i></button>
+                                    </div>
                                 @endif
 
                                 </td>
@@ -274,6 +277,25 @@
                             }
                         $('#viewFormModal').modal('show');
                     });
+                    // Delete
+                $(document).on('click', '.delete-btn', function () {
+                    let id = $(this).data('id');
+                    if (!confirm('Are you sure you want to delete this record?')) return;
+
+                    $.ajax({
+                        url: `/completion-of-course-folder/${id}`,
+                        type: 'DELETE',
+                        headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" },
+                        success: function (res) {
+                            alert(res.message);
+                            window.location.href = window.location.href;
+                        },
+                        error: function (xhr) {
+                            console.error(xhr.responseText);
+                            alert('Failed to delete record.');
+                        }
+                    });
+                });
         });
     </script>
      @endif
