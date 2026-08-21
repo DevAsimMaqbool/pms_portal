@@ -72,7 +72,7 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label for="batch" class="form-label">Term</label>
-                                                    <select name="term_id" class="form-select term_id" required>
+                                                    <select name="term_id" class="form-select term_id" id="term_id" required>
                                                         <option value="">-- Select Term --</option>
                                                         @foreach(SelectCurrentTerm() as $term)
                                                             <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
@@ -87,6 +87,7 @@
                                                         class="select2 form-select  faculty-class" multiple required>
                                                         <option value="">-- Select classes --</option>
                                                     </select>
+                                                    <small class="text-primary">Select the term first</small>
                                                 </div>
 
                                                 {{-- <div class="col-md-12">
@@ -366,6 +367,7 @@
                 function loadFacultyClasses() {
                     // Use the current logged-in user's faculty_id
                     let facultyId = CURRENT_FACULTY_ID;
+                    let termId = $('#term_id').val();
 
                     // Select all class dropdowns
                     let classSelect = $('.faculty-class');
@@ -381,7 +383,7 @@
 
                     // Make AJAX request to get classes
                     $.ajax({
-                        url: `/get-faculty-classes/${facultyId}`,
+                        url: `/get-faculty-classes/${facultyId}/${termId}`,
                         type: 'GET',
                         success: function (data) {
                             // Clear and add default option
@@ -397,7 +399,9 @@
                             }
 
                             // Initialize/refresh select2
-                            classSelect.select2();
+                            //classSelect.select2();
+                             // Refresh Select2
+                            classSelect.trigger('change.select2');
                         },
                         error: function () {
 
@@ -407,7 +411,10 @@
                 }
 
                 // Call the function directly
-                loadFacultyClasses();
+                //loadFacultyClasses();
+                $(document).on('change', '#term_id', function () {
+                    loadFacultyClasses();
+                });
 
                 $('#researchForm').on('submit', function (e) {
                     e.preventDefault();
