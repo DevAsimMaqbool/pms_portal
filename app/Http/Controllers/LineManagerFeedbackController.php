@@ -16,17 +16,25 @@ class LineManagerFeedbackController extends Controller
     {
         $authUser = Auth::user();
 
-        // Upward: get manager if exists
-        $manager = $authUser->manager ? collect([$authUser->manager]) : collect();
+        // Manager
+        $manager = $authUser->manager
+            ? collect([$authUser->manager])
+            : collect();
 
-        // Downward: get subordinates if any
+        // Subordinates
         $subordinates = $authUser->subordinates ?? collect();
 
-        // Combine both into a single collection
+        // Manager + Subordinates
         $facultyMembers = $manager->merge($subordinates);
 
-        // Feedback mapped by employee_id
-        $ratings = LineManagerFeedback::whereIn('employee_id', $facultyMembers->pluck('id'))
+        /*
+         * Only get feedback submitted by the logged-in user.
+         *
+         * employee_id = person who received feedback
+         * created_by  = person who submitted feedback
+         */
+        $ratings = LineManagerFeedback::where('created_by', $authUser->id)
+            ->whereIn('employee_id', $facultyMembers->pluck('id'))
             ->where('status', 1)
             ->get()
             ->keyBy('employee_id');
@@ -38,7 +46,13 @@ class LineManagerFeedbackController extends Controller
 
         return view(
             'admin.form.line_manager_satisfaction_feedback_view',
-            compact('facultyMembers', 'ratings', 'total', 'completed', 'notCompleted')
+            compact(
+                'facultyMembers',
+                'ratings',
+                'total',
+                'completed',
+                'notCompleted'
+            )
         );
     }
 
@@ -78,7 +92,8 @@ class LineManagerFeedbackController extends Controller
         $year = $request->year_id;
 
         // Check if the employee has already submitted feedback for this year
-        $existing = LineManagerFeedback::where('created_by', $employeeId)
+        $existing = LineManagerFeedback::where('created_by', Auth::id())
+            ->where('employee_id', $employeeId)
             ->where('year_id', $year)
             ->first();
 
@@ -120,18 +135,24 @@ class LineManagerFeedbackController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $rating = LineManagerFeedback::findOrFail($id);
         $authUser = Auth::user();
 
-        // Upward: get manager if exists
-        $manager = $authUser->manager ? collect([$authUser->manager]) : collect();
+        $rating = LineManagerFeedback::where('id', $id)
+            ->where('created_by', $authUser->id)
+            ->firstOrFail();
 
-        // Downward: get subordinates if any
+        $manager = $authUser->manager
+            ? collect([$authUser->manager])
+            : collect();
+
         $subordinates = $authUser->subordinates ?? collect();
 
-        // Combine both into a single collection
         $facultyMembers = $manager->merge($subordinates);
-        return view('admin.form.line_manager_satisfaction_feedback_edit', compact('rating', 'facultyMembers'));
+
+        return view(
+            'admin.form.line_manager_satisfaction_feedback_edit',
+            compact('rating', 'facultyMembers')
+        );
     }
 
     /**
@@ -139,7 +160,11 @@ class LineManagerFeedbackController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rating = LineManagerFeedback::findOrFail($id);
+        $authUser = Auth::user();
+
+        $rating = LineManagerFeedback::where('id', $id)
+            ->where('created_by', $authUser->id)
+            ->firstOrFail();
 
         $data = $request->validate([
             'employee_id' => 'nullable|integer',
@@ -158,6 +183,7 @@ class LineManagerFeedbackController extends Controller
         ]);
 
         $rating->update($data);
+
         return redirect()->route('employee.rating.index')
             ->with('success', 'Rating updated successfully!');
     }
