@@ -146,10 +146,8 @@
                             <!-- Spring -->
                             <div class="tab-pane fade show active" id="student-attendance-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
-                                    <table
-                                        class="table table-striped align-middle custom-table"">
-                                                                                                                                                                <thead class="
-                                        table-primary">
+                                    <table class="table table-striped align-middle custom-table"">
+    <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
@@ -233,10 +231,8 @@
                             <!-- Fall -->
                             <div class="tab-pane fade" id="student-attendance-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
-                                    <table
-                                        class="table table-striped align-middle custom-table"">
-                                                                                                                                                            <thead class="
-                                        table-primary">
+                                    <table class="table table-striped align-middle custom-table"">
+    <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
@@ -341,33 +337,31 @@
                     <!-- Tabs -->
                     <div class="nav-align-top nav-tabs-shadow">
                         <!-- <div class="d-flex justify-content-center mb-3 mt-3">
-                                                                                                                                                                        <ul class="nav custom-tabs" role="tablist">
-                                                                                                                                                                            <li class="nav-item">
-                                                                                                                                                                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                                                                                                                                                                    data-bs-target="#student-attendance-spring" aria-controls="student-attendance-spring"
-                                                                                                                                                                                    aria-selected="true">
-                                                                                                                                                                                    🌸 Spring 2026
-                                                                                                                                                                                </button>
-                                                                                                                                                                            </li>
-                                                                                                                                                                            <li class="nav-item">
-                                                                                                                                                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                                                                                                                                                                    data-bs-target="#student-attendance-fall" aria-controls="student-attendance-fall"
-                                                                                                                                                                                    aria-selected="false">
-                                                                                                                                                                                    🍂 Fall 2025
-                                                                                                                                                                                </button>
-                                                                                                                                                                            </li>
-                                                                                                                                                                        </ul>
-                                                                                                                                                                    </div> -->
+    <ul class="nav custom-tabs" role="tablist">
+    <li class="nav-item">
+    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+    data-bs-target="#student-attendance-spring" aria-controls="student-attendance-spring"
+    aria-selected="true">
+    🌸 Spring 2026
+    </button>
+    </li>
+    <li class="nav-item">
+    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+    data-bs-target="#student-attendance-fall" aria-controls="student-attendance-fall"
+    aria-selected="false">
+    🍂 Fall 2025
+    </button>
+    </li>
+    </ul>
+    </div> -->
 
                         <!-- Tab Content -->
                         <div class="tab-content">
                             <!-- Spring -->
                             <div class="tab-pane fade show active" id="student-attendance-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
-                                    <table
-                                        class="table table-striped align-middle custom-table"">
-                                                                                                                                                    <thead class="
-                                        table-primary">
+                                    <table class="table table-striped align-middle custom-table"">
+    <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Name</th>

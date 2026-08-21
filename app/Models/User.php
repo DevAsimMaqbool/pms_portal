@@ -159,5 +159,13 @@ class User extends Authenticatable
             'user_id'
         );
     }
+    public function newGoals()
+    {
+        return $this->hasMany(NewGoal::class);
+    }
 
+    public function goalSelfReports()
+    {
+        return $this->hasMany(GoalSelfReport::class);
+    }
 }

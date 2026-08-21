@@ -96,6 +96,12 @@ use App\Http\Controllers\ManagerTaskController;
 use App\Http\Controllers\ManagerEmployeeTaskController;
 use App\Http\Controllers\ResearchTaskAssignedHodDeanController;
 use App\Http\Controllers\ViewAsignedGoalsController;
+
+use App\Http\Controllers\NewGoalController;
+use App\Http\Controllers\GoalSelfReportController;
+use App\Http\Controllers\GoalManagerReviewController;
+use App\Http\Controllers\GoalHrReviewController;
+use App\Http\Controllers\GoalHistoryController;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Department;
@@ -533,6 +539,96 @@ Route::middleware('auth')->group(function () {
         '/notifications',
         [NotificationController::class, 'index']
     )->name('notifications.index');
+
+    Route::resource('newgoals', NewGoalController::class);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Employee Self Reports
+    |--------------------------------------------------------------------------
+    */
+
+    Route::prefix('goal-self-reports')
+        ->name('goal-self-reports.')
+        ->group(function () {
+
+            Route::get(
+                '/',
+                [GoalSelfReportController::class, 'index']
+            )->name('index');
+
+            Route::get(
+                '/create',
+                [GoalSelfReportController::class, 'create']
+            )->name('create');
+
+            Route::post(
+                '/',
+                [GoalSelfReportController::class, 'store']
+            )->name('store');
+
+            Route::get(
+                '/{goalSelfReport}',
+                [GoalSelfReportController::class, 'show']
+            )->name('show');
+        });
+
+    /*
+|--------------------------------------------------------------------------
+| Line Manager
+|--------------------------------------------------------------------------
+*/
+
+    Route::prefix('goal-manager')
+        ->name('goal-manager.')
+        ->group(function () {
+
+            Route::get(
+                '/',
+                [GoalManagerReviewController::class, 'index']
+            )->name('index');
+
+            Route::get(
+                '/{goalSelfReport}',
+                [GoalManagerReviewController::class, 'show']
+            )->name('show');
+
+            Route::post(
+                '/{goalSelfReport}/review',
+                [GoalManagerReviewController::class, 'review']
+            )->name('review');
+        });
+
+    /*
+|--------------------------------------------------------------------------
+| HR
+|--------------------------------------------------------------------------
+*/
+
+    Route::prefix('goal-hr')
+        ->name('goal-hr.')
+        ->group(function () {
+
+            Route::get(
+                '/',
+                [GoalHrReviewController::class, 'index']
+            )->name('index');
+
+            Route::get(
+                '/{goalSelfReport}',
+                [GoalHrReviewController::class, 'show']
+            )->name('show');
+
+            Route::post(
+                '/{goalSelfReport}/review',
+                [GoalHrReviewController::class, 'review']
+            )->name('review');
+        });
+
+    Route::get(
+        '/newgoals/{newgoal}/history',
+        [GoalHistoryController::class, 'index']
+    )->name('newgoals.history');
 
 });
 require __DIR__ . '/auth.php';
