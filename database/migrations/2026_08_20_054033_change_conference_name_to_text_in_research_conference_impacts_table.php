@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('conference_theme')->change();
             $table->text('conference_venue')->change();
             $table->text('partner_institute')->change();
-            $table->unsignedBigInteger('year_id')->after('created_at');
+            $table->unsignedBigInteger('year_id')->nullable()->after('created_at');
         });
     }
 
