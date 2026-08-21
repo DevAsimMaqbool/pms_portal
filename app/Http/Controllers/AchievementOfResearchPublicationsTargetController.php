@@ -215,6 +215,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             $rules = [
                 'indicator_id' => 'required|exists:indicators,id',
                 'year_id' => 'required',
+                'publication_title' => 'required',
+                'journal_name' => 'required',
                 'target_category' => 'required|string|max:255',
                 'link_of_publications' => 'required|max:500',
                 'journal_clasification' => 'required',
@@ -267,6 +269,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             $targetData = $request->only([
                 'indicator_id',
                 'year_id',
+                'publication_title',
+                'journal_name',
                 'target_category',
                 'link_of_publications',
                 'journal_clasification',
@@ -524,6 +528,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'target_category' => 'required|string|max:255',
             'link_of_publications' => 'required|url|max:500',
             'year_id' => 'required',
+            'publication_title' => 'required',
+            'journal_name' => 'required',
             'journal_clasification' => 'required',
             'journal_hec' => '',
             'journal_wos' => '',
@@ -562,6 +568,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         $form->fill($request->only([
             'target_category',
             'year_id',
+            'publication_title',
+            'journal_name',
             'link_of_publications',
             'journal_clasification',
             'journal_hec',
@@ -626,6 +634,23 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
         return response()->json([
             'message' => 'Imported successfully'
+        ]);
+    }
+    public function updateField(Request $request, $id)
+    {
+        $request->validate([
+            'field' => 'required|in:journal_clasification,journal_hec,journal_wos',
+            'value' => 'nullable|string',
+        ]);
+
+        $form = AchievementOfResearchPublicationsTarget::findOrFail($id);
+
+        $form->{$request->field} = $request->value;
+        $form->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Field updated successfully.',
         ]);
     }
 
