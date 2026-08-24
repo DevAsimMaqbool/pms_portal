@@ -216,6 +216,7 @@
                                             <th>Created By</th>
                                             <th>Class Name</th>
                                             <th>Class Code</th>
+                                            <th>Term</th>
                                             <th>Created Date</th>
                                             <th>Actions</th>
                                         </tr>
@@ -240,6 +241,7 @@
                                             <th>Created By</th>
                                             <th>Class Name</th>
                                             <th>Class Code</th>
+                                            <th>Term</th>
                                             <th>Created Date</th>
                                             <th>Actions</th>
                                         </tr>
@@ -539,6 +541,7 @@
                                 form.creator ? form.creator.name : 'N/A',
                                 form.faculty_class ? form.faculty_class.class_name : 'N/A',
                                 form.faculty_class ? form.faculty_class.code : 'N/A',
+                                form.term? `${form.term.term} - ${form.term.start_year || 'N/A'}`: 'N/A',
                                 statusText,
                                 createdAt,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
@@ -554,6 +557,7 @@
                                     { title: "Created By" },
                                     { title: "Class Name" },
                                     { title: "Class Code" },
+                                    { title: "Term" },
                                     { title: "Status" },
                                     { title: "Created Date" },
                                     { title: "Actions" }
@@ -875,6 +879,7 @@
                                 form.creator ? form.creator.name : 'N/A',
                                 form.faculty_class ? form.faculty_class.class_name : 'N/A',
                                 form.faculty_class ? form.faculty_class.code : 'N/A',
+                                form.term? `${form.term.term} - ${form.term.start_year || 'N/A'}`: 'N/A',
                                 statusText,
                                 createdAt,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
@@ -890,6 +895,7 @@
                                     { title: "Created By" },
                                     { title: "Class Name" },
                                     { title: "Class Code" },
+                                    { title: "Term" },
                                     { title: "Status" },
                                     { title: "Created Date" },
                                     { title: "Actions" }

@@ -3348,16 +3348,19 @@ function topThreeIndicators(int $kpaId, int $employeeId = null): array
 
     return $topIndicators;
 }
-function Research_publication_count($facultyId, $indicator_id)
+function Research_publication_count($facultyId, $indicator_id,$currentYear = null)
 {
     $facultyTargets = FacultyTarget::with([
-        'researchPublicationTargets' => function ($query) use ($indicator_id) {
+        'researchPublicationTargets' => function ($query) use ($indicator_id,$currentYear) {
             $query->where('form_status', 'RESEARCHER')
+                ->where('status', 3)->whereNotNull('journal_clasification')
+                ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicator_id);
         }
     ])
         ->where('user_id', $facultyId)
         ->where('form_status', 'HOD')
+        ->where('year_id', $currentYear)
         ->where('indicator_id', $indicator_id)
         ->get();
 
@@ -3403,10 +3406,11 @@ function Research_publication_count($facultyId, $indicator_id)
 }
 function Research_Innovation_Commercialization($facultyId, $activeRoleId, $indicator_id)
 {
-    $PIP = PatentsIntellectualProperty($facultyId, $activeRoleId, 138)->first();
-    $CG = CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, 137)->first();
-    $MP = MultidisciplinaryProjects($facultyId, $activeRoleId, 136)->first();
-    $RP = Research_publication_count($facultyId, 128)->first();
+    $currentYear = SelectCurrentYear(1)->first(); 
+    $PIP = PatentsIntellectualProperty($facultyId, $activeRoleId, 138,$currentYear->id)->first();
+    $CG = CommercialGainsCounsultancyResearchIncome($facultyId, $activeRoleId, 137,$currentYear->id)->first();
+    $MP = MultidisciplinaryProjects($facultyId, $activeRoleId, 136,$currentYear->id)->first();
+    $RP = Research_publication_count($facultyId, 128,$currentYear->id)->first();
 
     return [
         "RP" => [

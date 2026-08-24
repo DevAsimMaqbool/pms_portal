@@ -232,10 +232,11 @@ if (!function_exists('deanHotIndicators')) {
 }
 function Research_Innovation_Commercialization_HOD_Dean($employeeIds, $activeRoleId, $indicator_id)
 {
-    $MP = MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, 136);
-    $CG = CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeRoleId, 137);
-    $PIP = PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, 138);
-    $RP = ResearchPublicationHODDean($employeeIds, $activeRoleId, 128);
+    $currentYear = SelectCurrentYear(1)->first(); 
+    $MP = MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, 136,$currentYear->id);
+    $CG = CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeRoleId, 137,$currentYear->id);
+    $PIP = PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, 138,$currentYear->id);
+    $RP = ResearchPublicationHODDean($employeeIds, $activeRoleId, 128,$currentYear->id);
 
     return [
         "RP" => [
@@ -273,7 +274,7 @@ function Research_Innovation_Commercialization_HOD_Dean($employeeIds, $activeRol
     ];
 
 }
-function MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, $indicatorId)
+function MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, $indicatorId,$currentYear = null)
 {
     $departmentId = auth()->user()->department_id;
     if (in_array(getRoleName(activeRole()), ['HOD'])) {
@@ -308,14 +309,16 @@ function MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, $indicato
 
     }
     $facultyTargets = FacultyTarget::withCount([
-        'achievementOfMultidisciplinaryProjectsTarget as multidisciplinary_projects_count' => function ($query) use ($indicatorId) {
+        'achievementOfMultidisciplinaryProjectsTarget as multidisciplinary_projects_count' => function ($query) use ($indicatorId,$currentYear) {
             $query->where('form_status', 'RESEARCHER')
                 ->where('status', 3)
+                ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicatorId);
         }
     ])
         ->whereIn('user_id', $employeeIds)
         ->where('form_status', 'OTHER')
+        ->where('year_id', $currentYear)
         ->where('indicator_id', $indicatorId)
         ->get();
     $totalTarget = $facultyTargets->sum('target');
@@ -343,7 +346,7 @@ function MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, $indicato
     ];
 
 }
-function CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeRoleId, $indicatorId)
+function CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeRoleId, $indicatorId,$currentYear = null)
 {
     $departmentId = auth()->user()->department_id;
     if (in_array(getRoleName(activeRole()), ['HOD'])) {
@@ -383,14 +386,16 @@ function CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeR
 
     }
     $facultyTargets = FacultyTarget::withCount([
-        'commercialGainsCounsultancyTargets as commercialGainsCounsultancy_count' => function ($query) use ($indicatorId) {
+        'commercialGainsCounsultancyTargets as commercialGainsCounsultancy_count' => function ($query) use ($indicatorId,$currentYear) {
             $query->where('form_status', 'RESEARCHER')
                 ->where('status', 3)
+                ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicatorId);
         }
     ])
         ->whereIn('user_id', $employeeIds)
         ->where('form_status', 'OTHER')
+        ->where('year_id', $currentYear)
         ->where('indicator_id', $indicatorId)
         ->get();
     $totalTarget = $facultyTargets->sum('target');
@@ -418,7 +423,7 @@ function CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeR
     ];
 
 }
-function PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, $indicatorId)
+function PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, $indicatorId,$currentYear = null)
 {
     $departmentId = auth()->user()->department_id;
     if (in_array(getRoleName(activeRole()), ['HOD'])) {
@@ -458,14 +463,16 @@ function PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, $indica
 
     }
     $facultyTargets = FacultyTarget::withCount([
-        'intellectualPropertyTargets as intellectualProperty_count' => function ($query) use ($indicatorId) {
+        'intellectualPropertyTargets as intellectualProperty_count' => function ($query) use ($indicatorId,$currentYear) {
             $query->where('form_status', 'RESEARCHER')
                 ->where('status', 3)
+                ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicatorId);
         }
     ])
         ->whereIn('user_id', $employeeIds)
         ->where('form_status', 'OTHER')
+        ->where('year_id', $currentYear)
         ->where('indicator_id', $indicatorId)
         ->get();
     $totalTarget = $facultyTargets->sum('target');
@@ -493,7 +500,7 @@ function PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, $indica
     ];
 
 }
-function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId)
+function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId,$currentYear = null)
 {
     $departmentId = auth()->user()->department_id;
     if (in_array(getRoleName(activeRole()), ['HOD'])) {
@@ -533,14 +540,16 @@ function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId)
 
     }
     $facultyTargets = FacultyTarget::withCount([
-        'researchPublicationTargets as researchPublication_count' => function ($query) use ($indicatorId) {
+        'researchPublicationTargets as researchPublication_count' => function ($query) use ($indicatorId,$currentYear) {
             $query->where('form_status', 'RESEARCHER')
                 ->where('status', 3)
+                ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicatorId);
         }
     ])
         ->whereIn('user_id', $employeeIds)
         ->where('form_status', 'HOD')
+        ->where('year_id', $currentYear)
         ->where('indicator_id', $indicatorId)
         ->get();
     $totalTarget = $facultyTargets->sum('target');

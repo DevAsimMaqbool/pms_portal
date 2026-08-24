@@ -34,7 +34,7 @@ class CompletionOfCourseFolderController extends Controller
                     'creator' => function ($q) {
                         $q->select('employee_id', 'name');
                     },
-                    'facultyClass'
+                    'facultyClass','term'
                 ])
                     ->where('faculty_member_id', $employeeId)
                     ->whereIn('term_id', $activeTermIds)
@@ -49,7 +49,7 @@ class CompletionOfCourseFolderController extends Controller
                     'creator' => function ($q) {
                         $q->select('employee_id', 'name');
                     },
-                    'facultyClass'
+                    'facultyClass','term'
                 ])
                     ->whereIn('created_by', $employeeIds)
                     ->whereIn('term_id', $activeTermIds)
@@ -66,7 +66,7 @@ class CompletionOfCourseFolderController extends Controller
                     'creator' => function ($q) {
                         $q->select('employee_id', 'name');
                     },
-                    'facultyClass'
+                    'facultyClass','term'
                 ])->whereIn('term_id', $activeTermIds)->orderBy('id', 'desc')
                     ->get();
             }
