@@ -147,6 +147,7 @@
                         <div class="badge bg-label-primary rounded p-2"><i
                                 class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Journal Quartile
                     </h3>
+                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
 
                         <div class="card-body">
@@ -165,7 +166,7 @@
                                     </thead>
                                     <tbody>
                                             @php
-                                                $data=departmentScopusAnalysisOfHOD($activeRoleId, 128);
+                                                $data=departmentScopusAnalysisOfHOD($activeRoleId, 128,2,5,$currentYear->id);
                                                 $avg = $data['department_quartile_score'] ?? 0;
                                                 $meta = getRatingMeta($avg);
                                             @endphp
@@ -228,12 +229,13 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
                                 class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Journal Quartile
                     </h3>
+                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
 
                         <div class="card-body">
@@ -249,7 +251,7 @@
                                     </thead>
                                     <tbody>
                                             @php
-                                                $data=ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 2, 5, 203);
+                                                $data=ResearchInnovationAndCommercializationYear(Auth::user()->employee_id, $activeRoleId, 2, 5, 203,$currentYear->id);
                                                 $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
                                                 $meta_avg = getRatingMeta($faculty_avg_percentage);
                                             @endphp

@@ -5167,7 +5167,7 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
 }
 
 if (!function_exists('departmentScopusPublicationsOfHOD')) {
-    function departmentScopusPublicationsOfHOD($activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
+    function departmentScopusPublicationsOfHOD($activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5,$currentYear=null)
     {
         $user = auth()->user();
         $departmentId = $user->department_id;
@@ -5191,6 +5191,7 @@ if (!function_exists('departmentScopusPublicationsOfHOD')) {
         // Get all HOD target user IDs for these faculty
         $facultyTargetUserIds = FacultyTarget::whereIn('user_id', $facultyIds)
             ->where('form_status', 'HOD')
+            ->where('year_id', $currentYear)
             ->where('indicator_id', $indicatorId)
             ->pluck('user_id');
 
@@ -5199,6 +5200,7 @@ if (!function_exists('departmentScopusPublicationsOfHOD')) {
             ->where('form_status', 'RESEARCHER')
             ->where('status', 3)
             ->whereNotNull('journal_clasification')
+            ->where('year_id', $currentYear)
             ->whereIn('created_by', $facultyTargetUserIds)
             ->distinct('created_by')
             ->count('created_by');
@@ -5218,7 +5220,8 @@ if (!function_exists('departmentScopusPublicationsOfHOD')) {
             $indicatorCategoryId,
             126,
             $weightedScore,
-            $departmentAvgPercentage
+            $departmentAvgPercentage,
+            $currentYear
         );
 
         return [
@@ -5231,7 +5234,7 @@ if (!function_exists('departmentScopusPublicationsOfHOD')) {
 }
 
 if (!function_exists('departmentScopusAnalysisOfHOD')) {
-    function departmentScopusAnalysisOfHOD($activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5)
+    function departmentScopusAnalysisOfHOD($activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5,$currentYear=null)
     {
         $departmentId = auth()->user()->department_id;
 
@@ -5275,6 +5278,7 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
             // Get HOD targets for this faculty
             $facultyTargets = FacultyTarget::where('user_id', $facultyId)
                 ->where('form_status', 'HOD')
+                ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicatorId)
                 ->get();
 
@@ -5299,6 +5303,7 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
                 $facultyRecords = AchievementOfResearchPublicationsTarget::where('created_by', $facultyId)
                     ->where('indicator_id', $indicatorId)
                     ->where('form_status', 'RESEARCHER')
+                    ->where('year_id', $currentYear)
                     ->where('status', 3)
                     ->get();
 
@@ -5381,9 +5386,9 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
         $weightedScore128 = ($overdepartmentResearchPercentage * $weights['weight128']) / 100;
         $weightedScore203 = ($totalQuartileScore * $weights['weight203']) / 100;
 
-        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 127, $weightedScore127, $departmentInternationalFraction); // International
-        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 203, $weightedScore203, $totalQuartileScore); // Quartile
-        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 128, $weightedScore128, $overdepartmentResearchPercentage); // Overall Research % (dummy indicator_id 999, change as needed)
+        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 127, $weightedScore127, $departmentInternationalFraction, $currentYear); // International
+        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 203, $weightedScore203, $totalQuartileScore, $currentYear); // Quartile
+        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 128, $weightedScore128, $overdepartmentResearchPercentage, $currentYear); // Overall Research % (dummy indicator_id 999, change as needed)
         $data = [
             'total_target' => $totalTarget,
             'total_submit' => $oversubmissionCount,
