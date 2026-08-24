@@ -29,6 +29,7 @@
                             <th>Class Code</th>
                             <th>Status</th>
                             <th>Score</th>
+                            <th>Term</th>
                             <th>Status</th>
                             <th>Actions</th>
                             <th>View</th>
@@ -58,6 +59,7 @@
                                 <td>{{ $key->facultyClass->code ?? 'N/A' }}</td>
                                 <td style="color: {{ $color }}">{{ $status }}</td>
                                 <td>{{ $key->completion_of_Course_folder ?? 'N/A' }}</td>
+                                <td> {{ $key->term->term ?? 'N/A' }} - {{ $key->term->start_year ?? 'N/A' }}</td>
                                 <td>  @if($key->status == 1)
                                         @if($key->reject_status == 1)
                                             <span class="badge bg-label-danger"
