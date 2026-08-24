@@ -7,7 +7,6 @@
             <img style="width: 175px;" src="{{ asset('admin/assets/img/avatars/superior.svg') }}">
         </a>
 
-
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
             <i class="icon-base ti menu-toggle-icon d-none d-xl-block"></i>
             <i class="icon-base ti tabler-x d-block d-xl-none"></i>
@@ -19,44 +18,73 @@
     <ul class="menu-inner py-1">
         <!-- Dashboards -->
 
-        <li class="menu-item {{ request()->routeIs('survey_dashboard.report') ? 'active' : '' }}">
+        <!-- <li class="menu-item {{ request()->routeIs('survey_dashboard.report') ? 'active' : '' }}">
             <a href="{{ route('survey_dashboard.report') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
                 <div data-i18n="Dashboard">Dashboard</div>
             </a>
-        </li>
+        </li> -->
 
-        <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+        <!-- <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-smart-home"></i>
                 <div data-i18n="Home">Home</div>
             </a>
-            <!-- <ul class="menu-sub">
+            <ul class="menu-sub">
         <li class="menu-item active">
           <a href="" class="menu-link">
             <div data-i18n="Analytics">Analytics</div>
           </a>
         </li>
-      </ul> -->
-        </li>
-        <li class="menu-item {{ request()->routeIs('survey.index') ? 'active' : '' }}">
+      </ul> 
+        </li> -->
+        <!-- <li class="menu-item {{ request()->routeIs('survey.index') ? 'active' : '' }}">
             <a href="{{ route('survey.index') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-contract"></i>
                 <div data-i18n="Survey Data">Survey Data</div>
             </a>
-        </li>
-        <li class="menu-item {{ request()->routeIs('survey.report') ? 'active' : '' }}">
+        </li> -->
+        <!-- <li class="menu-item {{ request()->routeIs('survey.report') ? 'active' : '' }}">
             <a href="{{ route('survey.report') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-contract"></i>
                 <div data-i18n="Over All Teacher Report">Over All Teacher Report</div>
             </a>
-        </li>
-        <li class="menu-item">
+        </li> -->
+        <!-- <li class="menu-item">
             <a href="#" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-chart-pie"></i>
                 <div data-i18n="Survey Report">Survey Report</div>
             </a>
+        </li> -->
+
+        <li class="menu-item {{ request()->routeIs('newgoals.index') ? 'active' : '' }}">
+            <a href="{{ route('newgoals.index') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-target"></i>
+                <div data-i18n="Goal">Goal</div>
+            </a>
         </li>
+
+        <li class="menu-item {{ request()->routeIs('goal-self-reports.index') ? 'active' : '' }}">
+            <a href="{{ route('goal-self-reports.index') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-target"></i>
+                <div data-i18n="Self Performance Reporting">Self Performance Reporting</div>
+            </a>
+        </li>
+
+        @php
+            $hasManagedUsers = \App\Models\User::where('manager_id', auth()->id())->exists();
+        @endphp
+
+        @if ($hasManagedUsers)
+            <li class="menu-item {{ request()->routeIs('goal-manager.index') ? 'active' : '' }}">
+                <a href="{{ route('goal-manager.index') }}" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-target"></i>
+                    <div data-i18n="Manager Validation & Rating">
+                        Manager Validation & Rating
+                    </div>
+                </a>
+            </li>
+        @endif
 
     </ul>
 

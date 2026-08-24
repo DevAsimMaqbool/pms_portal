@@ -13,13 +13,19 @@
 
       <!--/ Language -->
 
-      <li><button type="button" class="btn rounded-pill btn-label-primary waves-effect">
-          {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}, As
+      <li>
+        <button type="button" class="btn rounded-pill btn-label-primary waves-effect">
+          {{ trim(preg_replace('/[-\s]*\d+$/', '', Auth::user()->name)) }}
+
           @php
-              $role = getRoleName(activeRole());
+            $role = getRoleName(activeRole());
           @endphp
 
-          {{ strtoupper($role == 'Teacher' ? 'Lecturer' : $role) }}</button></li>
+          @if (strtoupper($role) !== 'SURVEY')
+            , As {{ strtoupper($role == 'Teacher' ? 'Lecturer' : $role) }}
+          @endif
+        </button>
+      </li>
 
       <!-- Style Switcher -->
       <li class="nav-item dropdown">
@@ -301,9 +307,8 @@
         <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
           <div class="avatar avatar-online">
             <img src="{{ strtolower(Auth::user()->gender) == 'male'
-              ? asset('admin/assets/img/avatars/male_avatar.png')
-              : asset('admin/assets/img/avatars/female_avatar.png') }}"
-              alt class="rounded-circle" />
+  ? asset('admin/assets/img/avatars/male_avatar.png')
+  : asset('admin/assets/img/avatars/female_avatar.png') }}" alt class="rounded-circle" />
           </div>
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
@@ -313,9 +318,8 @@
                 <div class="flex-shrink-0 me-2">
                   <div class="avatar avatar-online">
                     <img src="{{ strtolower(Auth::user()->gender) == 'male'
-                      ? asset('admin/assets/img/avatars/male_avatar.png')
-                      : asset('admin/assets/img/avatars/female_avatar.png') }}"
-                      alt class="rounded-circle" />
+  ? asset('admin/assets/img/avatars/male_avatar.png')
+  : asset('admin/assets/img/avatars/female_avatar.png') }}" alt class="rounded-circle" />
                   </div>
                 </div>
                 <div class="flex-grow-1">
