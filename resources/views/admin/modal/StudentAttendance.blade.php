@@ -63,40 +63,89 @@
         : collect();
 
     // Spring overall
-    $springTotalPresent = $springAtt->flatMap->attendances->sum('present_count');
-    $springTotalStudents = $springAtt->flatMap->attendances->sum('total_students');
+    $springTotalPresent = $springAtt
+        ->flatMap->attendances
+        ->sum('present_count');
 
-    $springScore = $springTotalStudents
-        ? round(($springTotalPresent / $springTotalStudents) * 100, 2)
+    $springTotalStudents = $springAtt
+        ->flatMap->attendances
+        ->sum('total_students');
+
+    $springScore = $springTotalStudents > 0
+        ? round(
+            ($springTotalPresent / $springTotalStudents) * 100,
+            2
+        )
         : 0;
 
     // Fall overall
-    $fallTotalPresent = $fallAtt->flatMap->attendances->sum('present_count');
-    $fallTotalStudents = $fallAtt->flatMap->attendances->sum('total_students');
+    $fallTotalPresent = $fallAtt
+        ->flatMap->attendances
+        ->sum('present_count');
 
-    $fallScore = $fallTotalStudents
-        ? round(($fallTotalPresent / $fallTotalStudents) * 100, 2)
+    $fallTotalStudents = $fallAtt
+        ->flatMap->attendances
+        ->sum('total_students');
+
+    $fallScore = $fallTotalStudents > 0
+        ? round(
+            ($fallTotalPresent / $fallTotalStudents) * 100,
+            2
+        )
         : 0;
 
-    // Average of Spring + Fall
-    if ($springTerm && $fallTerm) {
+    /*
+     * Overall score:
+     *
+     * Both available (> 0)
+     *     => Average of Spring + Fall
+     *
+     * Only Spring available
+     *     => Spring score
+     *
+     * Only Fall available
+     *     => Fall score
+     *
+     * Both unavailable / 0
+     *     => 0
+     */
+    if ($springScore > 0 && $fallScore > 0) {
+
         $overallAttendanceScore = round(
             ($springScore + $fallScore) / 2,
             2
         );
-    } elseif ($springTerm) {
+
+    } elseif ($springScore > 0) {
+
         $overallAttendanceScore = $springScore;
-    } elseif ($fallTerm) {
+
+    } elseif ($fallScore > 0) {
+
         $overallAttendanceScore = $fallScore;
+
     } else {
+
         $overallAttendanceScore = 0;
     }
+
+    // Weightage
     $weights = [
-        'course_load' => getRoleWeightage($activeRoleId, 'indicator', 113)['weightage'],
+        'course_load' => getRoleWeightage(
+            $activeRoleId,
+            'indicator',
+            113
+        )['weightage'],
     ];
 
-    $weightedScore = ($overallAttendanceScore * $weights['course_load']) / 100;
+    // Weighted score
+    $weightedScore = (
+        $overallAttendanceScore * $weights['course_load']
+    ) / 100;
+
     $employeeId = getUserID(Auth::user()->faculty_id);
+
+    // Save final weighted score
     saveIndicatorPercentage90Plus(
         $employeeId,
         $activeRoleId,
@@ -147,7 +196,7 @@
                             <div class="tab-pane fade show active" id="student-attendance-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-    <thead class=" table-primary">
+            <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
@@ -232,7 +281,7 @@
                             <div class="tab-pane fade" id="student-attendance-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-    <thead class=" table-primary">
+            <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
@@ -337,23 +386,23 @@
                     <!-- Tabs -->
                     <div class="nav-align-top nav-tabs-shadow">
                         <!-- <div class="d-flex justify-content-center mb-3 mt-3">
-    <ul class="nav custom-tabs" role="tablist">
-    <li class="nav-item">
-    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-    data-bs-target="#student-attendance-spring" aria-controls="student-attendance-spring"
-    aria-selected="true">
-    🌸 Spring 2026
-    </button>
-    </li>
-    <li class="nav-item">
-    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-    data-bs-target="#student-attendance-fall" aria-controls="student-attendance-fall"
-    aria-selected="false">
-    🍂 Fall 2025
-    </button>
-    </li>
-    </ul>
-    </div> -->
+            <ul class="nav custom-tabs" role="tablist">
+            <li class="nav-item">
+            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+            data-bs-target="#student-attendance-spring" aria-controls="student-attendance-spring"
+            aria-selected="true">
+            🌸 Spring 2026
+            </button>
+            </li>
+            <li class="nav-item">
+            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+            data-bs-target="#student-attendance-fall" aria-controls="student-attendance-fall"
+            aria-selected="false">
+            🍂 Fall 2025
+            </button>
+            </li>
+            </ul>
+            </div> -->
 
                         <!-- Tab Content -->
                         <div class="tab-content">
@@ -361,7 +410,7 @@
                             <div class="tab-pane fade show active" id="student-attendance-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-    <thead class=" table-primary">
+            <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Name</th>

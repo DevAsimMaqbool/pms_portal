@@ -61,36 +61,152 @@
             $fallTerm->id
         )
         : null;
+
     $spring = $springData['classes'] ?? collect();
     $fall = $fallData['classes'] ?? collect();
 
-    $springWeightedCourseLoad = $springData['weightedCourseLoad'] ?? 0;
-    $fallWeightedCourseLoad = $fallData['weightedCourseLoad'] ?? 0;
+    /*
+     * Spring scores
+     */
+    $springWeightedCourseLoad =
+        (float) ($springData['weightedCourseLoad'] ?? 0);
 
-    $springWeightedPassScore = $springData['weightedPassScore'] ?? 0;
-    $fallWeightedPassScore = $fallData['weightedPassScore'] ?? 0;
+    $springWeightedPassScore =
+        (float) ($springData['weightedPassScore'] ?? 0);
 
-    $springWeightedMarksScore = $springData['weightedMarksScore'] ?? 0;
-    $fallWeightedMarksScore = $fallData['weightedMarksScore'] ?? 0;
+    $springWeightedMarksScore =
+        (float) ($springData['weightedMarksScore'] ?? 0);
 
-    $weightedCourseLoad = round(
-        ($springWeightedCourseLoad + $fallWeightedCourseLoad) / 2,
-        2
-    );
+    /*
+     * Fall scores
+     */
+    $fallWeightedCourseLoad =
+        (float) ($fallData['weightedCourseLoad'] ?? 0);
 
-    $weightedPassScore = round(
-        ($springWeightedPassScore + $fallWeightedPassScore) / 2,
-        2
-    );
+    $fallWeightedPassScore =
+        (float) ($fallData['weightedPassScore'] ?? 0);
 
-    $weightedMarksScore = round(
-        ($springWeightedMarksScore + $fallWeightedMarksScore) / 2,
-        2
-    );
+    $fallWeightedMarksScore =
+        (float) ($fallData['weightedMarksScore'] ?? 0);
 
+    /*
+     * Course Load
+     *
+     * Both available (> 0)
+     *     => Average
+     *
+     * Only Spring available
+     *     => Spring
+     *
+     * Only Fall available
+     *     => Fall
+     *
+     * Both unavailable / 0
+     *     => 0
+     */
+    if (
+        $springWeightedCourseLoad > 0 &&
+        $fallWeightedCourseLoad > 0
+    ) {
+
+        $weightedCourseLoad = round(
+            ($springWeightedCourseLoad + $fallWeightedCourseLoad) / 2,
+            2
+        );
+
+    } elseif ($springWeightedCourseLoad > 0) {
+
+        $weightedCourseLoad = round(
+            $springWeightedCourseLoad,
+            2
+        );
+
+    } elseif ($fallWeightedCourseLoad > 0) {
+
+        $weightedCourseLoad = round(
+            $fallWeightedCourseLoad,
+            2
+        );
+
+    } else {
+
+        $weightedCourseLoad = 0;
+    }
+
+    /*
+     * Pass Score
+     */
+    if (
+        $springWeightedPassScore > 0 &&
+        $fallWeightedPassScore > 0
+    ) {
+
+        $weightedPassScore = round(
+            ($springWeightedPassScore + $fallWeightedPassScore) / 2,
+            2
+        );
+
+    } elseif ($springWeightedPassScore > 0) {
+
+        $weightedPassScore = round(
+            $springWeightedPassScore,
+            2
+        );
+
+    } elseif ($fallWeightedPassScore > 0) {
+
+        $weightedPassScore = round(
+            $fallWeightedPassScore,
+            2
+        );
+
+    } else {
+
+        $weightedPassScore = 0;
+    }
+
+    /*
+     * Marks Score
+     */
+    if (
+        $springWeightedMarksScore > 0 &&
+        $fallWeightedMarksScore > 0
+    ) {
+
+        $weightedMarksScore = round(
+            ($springWeightedMarksScore + $fallWeightedMarksScore) / 2,
+            2
+        );
+
+    } elseif ($springWeightedMarksScore > 0) {
+
+        $weightedMarksScore = round(
+            $springWeightedMarksScore,
+            2
+        );
+
+    } elseif ($fallWeightedMarksScore > 0) {
+
+        $weightedMarksScore = round(
+            $fallWeightedMarksScore,
+            2
+        );
+
+    } else {
+
+        $weightedMarksScore = 0;
+    }
+
+    /*
+     * User ID
+     */
     $userId = getUserID(Auth::user()->faculty_id);
 
+    /*
+     * Save scores
+     */
     DB::transaction(function () use ($userId, $activeRoleId, $weightedCourseLoad, $weightedPassScore, $weightedMarksScore) {
+
         if ($activeRoleId != 22) {
 
             saveIndicatorPercentage(
@@ -189,7 +305,7 @@
                                                     <td>{{ $class->class_name }}</td>
                                                     <td>{{ $class->code }}</td>
                                                     <td>{{ $class->career_code }}</td>
-                                                    <td>{{ round($class->attendances->sum('total_students') / $class->attendances->count(), 1) }}
+                                                    <td>{{ $class->attendances->count() > 0 ? round($class->attendances->sum('total_students') / $class->attendances->count(), 1) : 0}}
                                                     </td>
                                                     {{-- Program name (only if attendance exists) --}}
                                                     <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>

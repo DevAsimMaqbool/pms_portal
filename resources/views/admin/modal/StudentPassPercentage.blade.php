@@ -37,8 +37,9 @@
 </style>
 @php
     $activeRoleId = getRoleIdByName(activeRole());
-    // Initialize totalFeedback to 0 in case nothing is set later
+
     $totalFeedback = 0;
+
     $activeTerms = \App\Models\Term::where('status', '1')
         ->get()
         ->keyBy('term');
@@ -61,20 +62,55 @@
             $fallTerm->id
         )
         : null;
+
     $spring = $springData['classes'] ?? collect();
     $fall = $fallData['classes'] ?? collect();
 
     $springAvg = $spring->isNotEmpty()
-        ? $spring->avg(fn($class) => (float) ($class->passing_percentage ?? 0))
+        ? (float) $spring->avg(
+            fn($class) => (float) ($class->passing_percentage ?? 0)
+        )
         : 0;
 
     $fallAvg = $fall->isNotEmpty()
-        ? $fall->avg(fn($class) => (float) ($class->passing_percentage ?? 0))
+        ? (float) $fall->avg(
+            fn($class) => (float) ($class->passing_percentage ?? 0)
+        )
         : 0;
 
-    $avgScore = ($spring->isNotEmpty() && $fall->isNotEmpty())
-        ? ($springAvg + $fallAvg) / 2
-        : ($spring->isNotEmpty() ? $springAvg : $fallAvg);                                
+    /*
+     * Score calculation:
+     *
+     * Both available and > 0
+     *     => Average of Spring + Fall
+     *
+     * Only Spring available
+     *     => Spring score
+     *
+     * Only Fall available
+     *     => Fall score
+     *
+     * Both unavailable / 0
+     *     => 0
+     */
+    if ($springAvg > 0 && $fallAvg > 0) {
+
+        $avgScore = ($springAvg + $fallAvg) / 2;
+
+    } elseif ($springAvg > 0) {
+
+        $avgScore = $springAvg;
+
+    } elseif ($fallAvg > 0) {
+
+        $avgScore = $fallAvg;
+
+    } else {
+
+        $avgScore = 0;
+    }
+
+    $avgScore = round($avgScore, 2);
 @endphp
 <!-- / Payment Methods modal -->
 <div class="modal fade" id="StudentPassPercentage" tabindex="-1" aria-hidden="true">
@@ -165,7 +201,7 @@
                                                     <td>{{ $class->class_name }}</td>
                                                     <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
                                                     <td>{{ $class->career_code }}</td>
-                                                    <td>{{ round($class->attendances->sum('total_students') / $class->attendances->count(), 1) }}
+                                                    <td>{{ $class->attendances->count() > 0 ? round($class->attendances->sum('total_students') / $class->attendances->count(), 1) : 0 }}
                                                     </td>
                                                     <td>{{ number_format($pass, 1) ?? 'N/A' }}</td>
                                                     <td>{{ number_format($fail, 1) ?? 'N/A' }}</td>

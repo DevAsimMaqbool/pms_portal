@@ -2160,7 +2160,10 @@ function CompletionofCourseFolderNew($facultyId, $activeRoleId, $indicator_id)
         ->where('form_status', 'HOD')
         ->where('status', 2)
         ->whereIn('term_id', $activeTerms->pluck('id'))
-        ->where('completion_of_Course_folder_indicator_id', $indicator_id)
+        ->where(
+            'completion_of_Course_folder_indicator_id',
+            $indicator_id
+        )
         ->get();
 
     // Add rating/status
@@ -2199,15 +2202,66 @@ function CompletionofCourseFolderNew($facultyId, $activeRoleId, $indicator_id)
         ->whereIn('term_id', $fallTermIds)
         ->values();
 
-    // Calculate overall average
-    $totalScore = $completionRecords->sum('completion_of_Course_folder');
-    $count = $completionRecords->count();
-
-    $avgPercentage = $count > 0
-        ? floor($totalScore / $count)
+    /*
+     * Calculate Spring score
+     */
+    $springScore = $springData->isNotEmpty()
+        ? $springData->avg(function ($record) {
+            return (float) ($record->completion_of_Course_folder ?? 0);
+        })
         : 0;
 
-    // Weight
+    $springScore = round($springScore, 2);
+
+    /*
+     * Calculate Fall score
+     */
+    $fallScore = $fallData->isNotEmpty()
+        ? $fallData->avg(function ($record) {
+            return (float) ($record->completion_of_Course_folder ?? 0);
+        })
+        : 0;
+
+    $fallScore = round($fallScore, 2);
+
+    /*
+     * Overall score
+     *
+     * Both available (> 0)
+     *     => Average of Spring + Fall
+     *
+     * Only Spring available
+     *     => Spring score
+     *
+     * Only Fall available
+     *     => Fall score
+     *
+     * Both unavailable / 0
+     *     => 0
+     */
+    if ($springScore > 0 && $fallScore > 0) {
+
+        $avgPercentage = round(
+            ($springScore + $fallScore) / 2,
+            2
+        );
+
+    } elseif ($springScore > 0) {
+
+        $avgPercentage = $springScore;
+
+    } elseif ($fallScore > 0) {
+
+        $avgPercentage = $fallScore;
+
+    } else {
+
+        $avgPercentage = 0;
+    }
+
+    /*
+     * Weight
+     */
     $weights = [
         'course_load' => getRoleWeightage(
             $activeRoleId,
@@ -2216,14 +2270,21 @@ function CompletionofCourseFolderNew($facultyId, $activeRoleId, $indicator_id)
         )['weightage'],
     ];
 
-    $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
+    /*
+     * Weighted score
+     */
+    $weightedScore = (
+        $avgPercentage * $weights['course_load']
+    ) / 100;
 
-    // Save percentage
+    /*
+     * Save percentage
+     */
     saveIndicatorPercentage100Plus(
         $facultyId,
-        $role_id = $activeRoleId,
-        $keyPerformanceAreaId = 1,
-        $indicatorCategoryId = 3,
+        $activeRoleId,
+        1,
+        3,
         $indicator_id,
         $weightedScore,
         $avgPercentage
@@ -2231,9 +2292,17 @@ function CompletionofCourseFolderNew($facultyId, $activeRoleId, $indicator_id)
 
     return [
         'allData' => $completionRecords,
+
         'springData' => $springData,
+
         'fallData' => $fallData,
+
+        'springScore' => $springScore,
+
+        'fallScore' => $fallScore,
+
         'avgPercentage' => $avgPercentage,
+
         'weightedScore' => $weightedScore,
     ];
 }
@@ -5430,7 +5499,7 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
 
 if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
 
-    function departmentTargetIndicatorsAnalysisOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear=null)
+    function departmentTargetIndicatorsAnalysisOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear = null)
     {
         $departmentId = auth()->user()->department_id;
 

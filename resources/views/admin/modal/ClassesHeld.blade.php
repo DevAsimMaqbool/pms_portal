@@ -39,8 +39,6 @@
     $activeRoleId = getRoleIdByName(activeRole());
     $totalFeedback = 0;
 
-    $activeRoleId = getRoleIdByName(activeRole());
-
     $activeTerms = \App\Models\Term::where('status', '1')
         ->get()
         ->keyBy('term');
@@ -67,22 +65,41 @@
         : collect();
 
     // Individual scores
-    $springScore = round($springClasses->avg('held_percentage') ?? 0, 2);
-    $fallScore = round($fallClasses->avg('held_percentage') ?? 0, 2);
+    $springScore = $springClasses->isNotEmpty()
+        ? round((float) $springClasses->avg('held_percentage'), 2)
+        : 0;
 
-    // Overall score
-    if ($springTerm && $fallTerm) {
+    $fallScore = $fallClasses->isNotEmpty()
+        ? round((float) $fallClasses->avg('held_percentage'), 2)
+        : 0;
+
+    /*
+     * Overall score:
+     *
+     * Both available (> 0)
+     *     => Average of Spring + Fall
+     *
+     * Only Spring available
+     *     => Spring score
+     *
+     * Only Fall available
+     *     => Fall score
+     *
+     * Both unavailable / 0
+     *     => 0
+     */
+    if ($springScore > 0 && $fallScore > 0) {
 
         $overallAttendanceScore = round(
             ($springScore + $fallScore) / 2,
             2
         );
 
-    } elseif ($springTerm) {
+    } elseif ($springScore > 0) {
 
         $overallAttendanceScore = $springScore;
 
-    } elseif ($fallTerm) {
+    } elseif ($fallScore > 0) {
 
         $overallAttendanceScore = $fallScore;
 
@@ -142,7 +159,7 @@
                             <div class="tab-pane fade show active" id="classes-held-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-                                <thead class=" table-primary">
+                                    <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
@@ -185,7 +202,7 @@
                                                     </td>
                                                     <td>
                                                         <span class="badge me-1" style="background-color: {{ $class->color }}">{{ $class->rating
-                                                                                                        }}</span>
+                                                                                                                }}</span>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -214,7 +231,7 @@
                             <div class="tab-pane fade" id="classes-held-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-                                <thead class=" table-primary">
+                                    <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Class</th>
@@ -257,7 +274,7 @@
                                                     </td>
                                                     <td>
                                                         <span class="badge me-1" style="background-color: {{ $class->color }}">{{ $class->rating
-                                                                                                        }}</span>
+                                                                                                                }}</span>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -330,7 +347,7 @@
                             <div class="tab-pane fade show active" id="classes-held-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-                                <thead class=" table-primary">
+                                    <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Total Classes</th>
@@ -407,7 +424,7 @@
                             <div class="tab-pane fade" id="classes-held-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-                                <thead class=" table-primary">
+                                    <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Total Classes</th>
