@@ -292,7 +292,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/kpa/{area}/category/{category}/indicator/{indicator}', [IndicatorController::class, 'indicator_form'])->name('indicator.form');
         Route::resource('indicator-form', AchievementOfResearchPublicationsTargetController::class);
         Route::get('indicator-forms/target', [AchievementOfResearchPublicationsTargetController::class, 'getPublicationTarget'])->name('indicator-form.target');
-        Route::put('/research-publications-update/{id}/update-field',[AchievementOfResearchPublicationsTargetController::class, 'updateField'])->name('research-publications-update.update-field');
+        Route::put('/research-publications-update/{id}/update-field', [AchievementOfResearchPublicationsTargetController::class, 'updateField'])->name('research-publications-update.update-field');
         Route::resource('indicator-form-pg', ResearchProductivityOfPGStudentsController::class);
         Route::put('/indicator-form-pg/update/{id}', [ResearchProductivityOfPGStudentsController::class, 'updateResearchPublication'])->name('research-pg.update');
 

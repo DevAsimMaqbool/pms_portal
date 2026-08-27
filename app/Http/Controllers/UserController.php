@@ -62,9 +62,7 @@ class UserController extends Controller
                     </div>
                 </div>
                 <div class="d-flex flex-column">
-                    <a href="app-user-view-account.html" class="text-heading text-truncate">
-                        <span class="fw-medium">' . $user->name . '</span>
-                    </a>
+                    <span class="fw-medium text-heading text-truncate">' . $user->name . '</span>
                     <small>' . $user->email . '</small>
                 </div>
             </div>';

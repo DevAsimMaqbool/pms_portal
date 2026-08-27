@@ -68,7 +68,7 @@
                             $range = $year . '-' . $nextYear;
                             echo "<option value='{$range}'>{$range}</option>";
                         }
-                                                                                                                                                                                                                                                                                                                        ?>
+                                                                                                                                                                                                                                                                                                                                                                                    ?>
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
@@ -520,8 +520,86 @@
                             $('#importForm')[0].reset();
                         },
                         error: function (xhr) {
+
                             Swal.close();
-                            Swal.fire('Error', xhr.responseJSON.message ?? 'Import failed', 'error');
+
+                            if (xhr.status === 422) {
+
+                                let response = xhr.responseJSON;
+
+                                let message = response.message ?? 'Validation failed.';
+
+                                let errorHtml = '';
+
+                                if (response.errors) {
+
+                                    $.each(response.errors, function (row, messages) {
+
+                                        errorHtml += '<div class="mb-2">';
+                                        errorHtml += '<strong>' + row + '</strong>';
+
+                                        $.each(messages, function (key, value) {
+
+                                            if (Array.isArray(value)) {
+
+                                                $.each(value, function (i, error) {
+
+                                                    errorHtml +=
+                                                        '<div class="text-danger">- ' +
+                                                        error +
+                                                        '</div>';
+                                                });
+
+                                            } else {
+
+                                                errorHtml +=
+                                                    '<div class="text-danger">- ' +
+                                                    value +
+                                                    '</div>';
+                                            }
+                                        });
+
+                                        errorHtml += '</div>';
+                                    });
+                                }
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Import Failed',
+
+                                    html: `
+                                <div style="text-align:left; max-height:400px; overflow-y:auto;">
+                                    <p>${message}</p>
+                                    ${errorHtml}
+                                </div>
+                            `,
+
+                                    width: 700,
+
+                                    showCloseButton: true,
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+
+                                    allowOutsideClick: true,
+                                    allowEscapeKey: true
+                                });
+
+                            } else {
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Import Failed',
+                                    text: xhr.responseJSON?.message ??
+                                        'Something went wrong while importing the file.',
+
+                                    showCloseButton: true,
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+
+                                    allowOutsideClick: true,
+                                    allowEscapeKey: true
+                                });
+                            }
                         }
                     });
                 });
@@ -546,8 +624,8 @@
                                 $.each(response, function (key, department) {
                                     departmentSelect.append(
                                         `<option value="${department.id}">
-                        ${department.name}
-                        </option>`
+                                                ${department.name}
+                                                </option>`
                                     );
                                 });
 
@@ -577,8 +655,8 @@
                                 $.each(response, function (key, program) {
                                     programSelect.append(
                                         `<option value="${program.id}">
-                        ${program.program_name}
-                        </option>`
+                                                ${program.program_name}
+                                                </option>`
                                     );
                                 });
 

@@ -221,22 +221,47 @@ class EmployabilityController extends Controller
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required',
+            'file' => 'required|file|mimes:xlsx,xls,csv',
             'indicator_id' => 'required',
             'form_status' => 'required',
         ]);
 
-        Excel::import(
-            new EmployabilityImport(
-                $request->indicator_id,
-                $request->form_status
-            ),
-            $request->file
-        );
+        try {
 
-        return response()->json([
-            'message' => 'Employability data imported successfully'
-        ]);
+            DB::beginTransaction();
+
+            Excel::import(
+                new EmployabilityImport(
+                    $request->indicator_id,
+                    $request->form_status
+                ),
+                $request->file('file')
+            );
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Employability data imported successfully'
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Import failed. No data was saved.',
+                'errors' => $e->errors(),
+            ], 422);
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Import failed. No data was saved.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }
 
