@@ -39,7 +39,7 @@ class StudentEngagementRateController extends Controller
             ], 500);
         }
     }
-    public function store(Request $request)
+    public function store1(Request $request)
     {
         try {
             $data = [];
@@ -60,11 +60,13 @@ class StudentEngagementRateController extends Controller
                     'event_start_date' => 'required|date',
                     'event_end_date' => 'required|date|after_or_equal:event_start_date',
 
-                    // Program Info
-                    'faculty_id' => 'required|integer',
-                    'department_id' => 'required|integer',
-                    'program_id' => 'required|integer',
-                    'program_level' => 'required|string',
+                    // Program Information
+                    'programs' => 'required|array|min:1',
+
+                    'programs.*.faculty_id' => 'required|integer',
+                    'programs.*.department_id' => 'required|integer',
+                    'programs.*.program_id' => 'required|integer',
+                    'programs.*.program_level' => 'required|string|in:UG,PG',
 
                     // Participation
                     'participation_target' => 'nullable|integer',
@@ -109,6 +111,226 @@ class StudentEngagementRateController extends Controller
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+public function store(Request $request)
+{
+    try {
+
+        if ($request->form_status != 'HOD') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid form status.'
+            ], 422);
+        }
+
+        // -------------------------------------------------
+        // Validation
+        // -------------------------------------------------
+        $rules = [
+
+            'indicator_id' => 'required',
+
+            'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+
+            // Engagement
+            'nature_of_event' => 'required|string',
+            'other_event_detail' => 'nullable|string',
+            'event_location' => 'nullable|array',
+            'scope_of_the_event' => 'required|string',
+
+            // Event Details
+            'title_of_the_event' => 'nullable|string',
+            'brief_description_of_activity' => 'nullable|string',
+            'event_start_date' => 'required|date',
+            'event_end_date' => 'required|date|after_or_equal:event_start_date',
+
+            // Multiple Program Information
+            'programs' => 'required|array|min:1',
+
+            'programs.*.faculty_id' => 'required|integer',
+            'programs.*.department_id' => 'required|integer',
+            'programs.*.program_id' => 'required|integer',
+            'programs.*.program_level' => 'required|string|in:UG,PG',
+
+            // Participation
+            'participation_target' => 'nullable|integer|min:0',
+            'number_of_students_participated' => 'nullable|integer|min:0',
+            'employer_satisfaction' => 'required|numeric|min:0|max:5',
+        ];
+
+
+        $validator = Validator::make(
+            $request->all(),
+            $rules
+        );
+
+
+        if ($validator->fails()) {
+
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+
+        // -------------------------------------------------
+        // Get validated data
+        // -------------------------------------------------
+        $data = $validator->validated();
+
+
+        // -------------------------------------------------
+        // Employee
+        // -------------------------------------------------
+        $employeeId = Auth::user()->employee_id;
+
+
+        // -------------------------------------------------
+        // Programs
+        // -------------------------------------------------
+        $programs = $data['programs'];
+
+        unset($data['programs']);
+
+
+        // -------------------------------------------------
+        // Convert Event Location to JSON
+        // -------------------------------------------------
+        $data['event_location'] = isset($data['event_location'])
+            ? json_encode($data['event_location'])
+            : null;
+
+
+        // -------------------------------------------------
+        // Check duplicate programs inside submitted request
+        // -------------------------------------------------
+        $uniquePrograms = [];
+
+        foreach ($programs as $index => $program) {
+
+            $programKey =
+                $program['faculty_id'] . '-' .
+                $program['department_id'] . '-' .
+                $program['program_id'] . '-' .
+                $program['program_level'];
+
+
+            if (in_array($programKey, $uniquePrograms)) {
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' =>
+                        'Duplicate program found in the submitted data at row '
+                        . ($index + 1)
+                        . '. Please remove the duplicate program.'
+                ], 409);
+            }
+
+
+            $uniquePrograms[] = $programKey;
+        }
+
+
+        // -------------------------------------------------
+        // Start transaction
+        // -------------------------------------------------
+        DB::beginTransaction();
+
+
+        $records = [];
+
+
+        // -------------------------------------------------
+        // Check and create each program record
+        // -------------------------------------------------
+        foreach ($programs as $program) {
+
+
+            $duplicate = StudentEngagementRate::where('faculty_id', $program['faculty_id'])
+                ->where('department_id', $program['department_id'])
+                ->where('program_id', $program['program_id'])
+                ->where('program_level', $program['program_level'])
+                ->exists();
+
+
+            if ($duplicate) {
+
+                DB::rollBack();
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' =>
+                        'Duplicate record already exists for the selected '
+                        . 'Faculty, Department, Program and Program Level.'
+                ], 409);
+            }
+
+
+            // -------------------------------------------------
+            // Prepare record data
+            // -------------------------------------------------
+            $recordData = array_merge($data, [
+
+                'faculty_id' => $program['faculty_id'],
+
+                'department_id' => $program['department_id'],
+
+                'program_id' => $program['program_id'],
+
+                'program_level' => $program['program_level'],
+
+                'created_by' => $employeeId,
+
+                'updated_by' => $employeeId,
+            ]);
+
+
+            // -------------------------------------------------
+            // Create record
+            // -------------------------------------------------
+            $records[] = StudentEngagementRate::create(
+                $recordData
+            );
+        }
+
+
+        // -------------------------------------------------
+        // Commit
+        // -------------------------------------------------
+        DB::commit();
+
+
+        // -------------------------------------------------
+        // Success
+        // -------------------------------------------------
+        return response()->json([
+
+            'status' => 'success',
+
+            'message' =>
+                count($records) . ' record(s) saved successfully.',
+
+            'data' => $records
+        ]);
+
+
+    } catch (\Exception $e) {
+
+        // -------------------------------------------------
+        // Rollback
+        // -------------------------------------------------
+        DB::rollBack();
+
+
+        return response()->json([
+
+            'status' => 'error',
+
+            'message' => $e->getMessage()
+
+        ], 500);
+    }
+}
 
     public function update(Request $request, $id)
     {
@@ -152,6 +374,20 @@ class StudentEngagementRateController extends Controller
                 }
 
                 $data = $validator->validated();
+                // Check duplicate record except current record
+                $duplicate = StudentEngagementRate::where('id', '!=', $id)
+                    ->where('faculty_id', $data['faculty_id'])
+                    ->where('department_id', $data['department_id'])
+                    ->where('program_id', $data['program_id'])
+                    ->where('program_level', $data['program_level'])
+                    ->exists();
+
+                if ($duplicate) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Duplicate record already exists for the selected Faculty, Department, Program and Program Level.'
+                    ], 409);
+                }
                 // ✅ Convert checkbox array to JSON
                 $data['event_location'] = isset($data['event_location'])
                     ? json_encode($data['event_location'])
