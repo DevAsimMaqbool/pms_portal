@@ -168,4 +168,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(GoalSelfReport::class);
     }
+
+    public function goalOverallReviews()
+    {
+        return $this->hasMany(
+            GoalOverallReview::class,
+            'user_id'
+        );
+    }
 }

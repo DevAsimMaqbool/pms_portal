@@ -186,7 +186,7 @@
                                                 @elseif($reportStatus === 'manager_approved')
 
                                                     <span class="badge bg-info">
-                                                        HR Review
+                                                        HR Moderated Rating
                                                     </span>
 
                                                 @elseif($reportStatus === 'manager_rejected')

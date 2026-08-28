@@ -35,7 +35,7 @@ class NewGoalController extends Controller
      */
     public function create()
     {
-        $drivers = S2RDriver::orderBy('driver_name')->get();
+        $drivers = S2RDriver::orderBy('id', 'asc')->get();
 
         return view(
             'admin.new_goals.create',

@@ -386,7 +386,7 @@
                                     type="date"
                                     name="deadline"
                                     value="{{ old('deadline') }}"
-                                    min="{{ date('Y-m-d') }}"
+                                    
                                     class="form-control deadline-input @error('deadline') is-invalid @enderror"
                                     required>
 

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\GoalSelfReport;
+use App\Models\GoalReportReview;
+use App\Models\GoalHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GoalManagerReviewController extends Controller
 {
@@ -51,6 +54,56 @@ class GoalManagerReviewController extends Controller
         |--------------------------------------------------------------------------
         | Security Check
         |--------------------------------------------------------------------------
+        */
+
+        abort_unless(
+            optional($goalSelfReport->user)->manager_id == $managerId,
+            403
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Load Required Relationships
+        |--------------------------------------------------------------------------
+        */
+
+        $goalSelfReport->load([
+            'user',
+            'goal.s2rDriver',
+            'reviews' => function ($query) {
+                $query->where('reviewer_type', 'manager')
+                    ->latest('id');
+            },
+            'reviews.reviewer',
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Existing Manager Review
+        |--------------------------------------------------------------------------
+        */
+
+        $managerReview = $goalSelfReport->reviews
+            ->where('reviewer_id', $managerId)
+            ->where('reviewer_type', 'manager')
+            ->first();
+
+        return view(
+            'admin.goal-manager.review',
+            compact(
+                'goalSelfReport',
+                'managerReview'
+            )
+        );
+    }
+    public function showBK(GoalSelfReport $goalSelfReport)
+    {
+        $managerId = Auth::id();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Security Check
+        |--------------------------------------------------------------------------
         | Make sure this employee actually belongs to logged-in manager.
         */
         abort_unless(
@@ -79,6 +132,7 @@ class GoalManagerReviewController extends Controller
         */
         $managerReview = $goalSelfReport->reviews
             ->where('reviewer_id', $managerId)
+            ->where('reviewer_type', 'manager')
             ->sortByDesc('id')
             ->first();
 
@@ -94,7 +148,118 @@ class GoalManagerReviewController extends Controller
     /**
      * Save / Update Manager Review
      */
-    public function review(
+    public function review(Request $request, GoalSelfReport $goalSelfReport)
+    {
+        $managerId = Auth::id();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Security
+        |--------------------------------------------------------------------------
+        */
+
+        abort_unless(
+            optional($goalSelfReport->user)->manager_id == $managerId,
+            403
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Validation
+        |--------------------------------------------------------------------------
+        */
+
+        $validated = $request->validate([
+            'weightage' => [
+                'required'
+            ],
+            'decision' => [
+                'required',
+                'in:approved,rejected',
+            ],
+
+            'manager_rating' => [
+                'required',
+                'integer',
+                'min:0',
+                'max:5',
+            ],
+
+            'comments' => [
+                'nullable',
+                'string',
+            ],
+        ]);
+
+        DB::transaction(function () use ($validated, $goalSelfReport, $managerId) {
+            /*
+            |--------------------------------------------------------------------------
+            | Manager Review
+            |--------------------------------------------------------------------------
+            */
+
+            GoalReportReview::updateOrCreate(
+                [
+                    'goal_self_report_id' => $goalSelfReport->id,
+                    'reviewer_id' => $managerId,
+                    'reviewer_type' => 'manager',
+                ],
+                [
+                    'decision' => $validated['decision'],
+                    'comments' => $validated['comments'] ?? null,
+                    'reviewed_at' => now(),
+                ]
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Manager Rating
+            |--------------------------------------------------------------------------
+            */
+
+            $goalSelfReport->update([
+                'manager_rating' => $validated['manager_rating'],
+                'weightage' => $validated['weightage'],
+
+                'manager_reviewed_at' => now(),
+
+                'status' => $validated['decision'] === 'approved'
+                    ? 'manager_approved'
+                    : 'manager_rejected',
+            ]);
+
+            /*
+            |--------------------------------------------------------------------------
+            | Goal History
+            |--------------------------------------------------------------------------
+            */
+
+            GoalHistory::create([
+                'new_goal_id' => $goalSelfReport->new_goal_id,
+                'user_id' => $managerId,
+                'action' => $validated['decision'] === 'approved'
+                    ? 'Manager Goal Approved'
+                    : 'Manager Goal Rejected',
+                'from_status' => 'submitted',
+                'to_status' => $validated['decision'] === 'approved'
+                    ? 'manager_approved'
+                    : 'manager_rejected',
+                'comments' => $validated['comments'] ?? null,
+                'metadata' => [
+                    'report_id' => $goalSelfReport->id,
+                    'manager_rating' => $validated['manager_rating'],
+                ],
+            ]);
+        });
+
+        return redirect()
+            ->route('goal-manager.index')
+            ->with(
+                'success',
+                'Goal assessment has been saved successfully.'
+            );
+    }
+    public function reviewBK(
         Request $request,
         GoalSelfReport $goalSelfReport
     ) {

@@ -590,7 +590,7 @@ Route::middleware('auth')->group(function () {
             )->name('index');
 
             Route::get(
-                '/{goalSelfReport}',
+                '/{goalSelfReport}/review',
                 [GoalManagerReviewController::class, 'show']
             )->name('show');
 
@@ -616,12 +616,12 @@ Route::middleware('auth')->group(function () {
             )->name('index');
 
             Route::get(
-                '/{goalSelfReport}',
+                '/{user}/review',
                 [GoalHrReviewController::class, 'show']
             )->name('show');
 
             Route::post(
-                '/{goalSelfReport}/review',
+                '/{user}/review',
                 [GoalHrReviewController::class, 'review']
             )->name('review');
         });

@@ -9,7 +9,7 @@ class GoalHistory extends Model
     protected $table = 'goal_histories';
 
     protected $fillable = [
-        'goal_id',
+        'new_goal_id',
         'user_id',
         'action',
         'from_status',

@@ -557,7 +557,7 @@
                 <div class="row g-4">
 
                     {{-- SELF --}}
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
 
                         <div class="evaluation-card self-evaluation">
 
@@ -600,7 +600,7 @@
                     </div>
 
                     {{-- MANAGER --}}
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
 
                         <div class="evaluation-card manager-evaluation">
 
@@ -657,61 +657,61 @@
                     </div>
 
                     {{-- HR --}}
-                    <div class="col-lg-4">
+                    <!-- <div class="col-lg-4">
 
-                        <div class="evaluation-card hr-evaluation">
+                            <div class="evaluation-card hr-evaluation">
 
-                            <div class="evaluation-top">
+                                <div class="evaluation-top">
 
-                                <div class="evaluation-icon">
-                                    <i class="fas fa-user-shield"></i>
-                                </div>
-
-                                <div>
-
-                                    <div class="evaluation-role">
-                                        Human Resources
+                                    <div class="evaluation-icon">
+                                        <i class="fas fa-user-shield"></i>
                                     </div>
 
-                                    <div class="evaluation-title">
-                                        HR Final Rating
+                                    <div>
+
+                                        <div class="evaluation-role">
+                                            Human Resources
+                                        </div>
+
+                                        <div class="evaluation-title">
+                                            HR Final Rating
+                                        </div>
+
                                     </div>
+
+                                </div>
+
+                                <div class="evaluation-rating">
+
+                                    <strong>
+                                        {{ $goalSelfReport->hr_rating ?? '—' }}
+                                    </strong>
+
+                                    @if($goalSelfReport->hr_rating !== null)
+                                        <span>/ 5</span>
+                                    @endif
+
+                                </div>
+
+                                <div class="evaluation-status">
+
+                                    @if($goalSelfReport->hr_rating !== null)
+
+                                        <i class="fas fa-check-circle me-1"></i>
+                                        Finalized
+
+                                    @else
+
+                                        <i class="fas fa-clock me-1"></i>
+                                        Awaiting HR
+
+                                    @endif
 
                                 </div>
 
                             </div>
 
-                            <div class="evaluation-rating">
-
-                                <strong>
-                                    {{ $goalSelfReport->hr_rating ?? '—' }}
-                                </strong>
-
-                                @if($goalSelfReport->hr_rating !== null)
-                                    <span>/ 5</span>
-                                @endif
-
-                            </div>
-
-                            <div class="evaluation-status">
-
-                                @if($goalSelfReport->hr_rating !== null)
-
-                                    <i class="fas fa-check-circle me-1"></i>
-                                    Finalized
-
-                                @else
-
-                                    <i class="fas fa-clock me-1"></i>
-                                    Awaiting HR
-
-                                @endif
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                        </div> -->
 
                 </div>
 
@@ -919,16 +919,16 @@
     ============================================================= --}}
     <style>
         /* =========================================================
-                   BASE
-                ========================================================== */
+                       BASE
+                    ========================================================== */
 
         .goal-report-page {
             color: #243447;
         }
 
         /* =========================================================
-                   HEADER
-                ========================================================== */
+                       HEADER
+                    ========================================================== */
 
         .report-header {
             background: linear-gradient(135deg,
@@ -989,8 +989,8 @@
         }
 
         /* =========================================================
-                   STATUS BAR
-                ========================================================== */
+                       STATUS BAR
+                    ========================================================== */
 
         .report-status-bar {
             background: #fff;
@@ -1061,8 +1061,8 @@
         }
 
         /* =========================================================
-                   SECTION CARD
-                ========================================================== */
+                       SECTION CARD
+                    ========================================================== */
 
         .section-card {
             background: #fff;
@@ -1131,8 +1131,8 @@
         }
 
         /* =========================================================
-                   GOAL HIGHLIGHT
-                ========================================================== */
+                       GOAL HIGHLIGHT
+                    ========================================================== */
 
         .goal-highlight {
             display: flex;
@@ -1192,8 +1192,8 @@
         }
 
         /* =========================================================
-                   INFO BOX
-                ========================================================== */
+                       INFO BOX
+                    ========================================================== */
 
         .info-box {
             height: 100%;
@@ -1272,8 +1272,8 @@
         }
 
         /* =========================================================
-                   ASSESSMENT
-                ========================================================== */
+                       ASSESSMENT
+                    ========================================================== */
 
         .assessment-box {
             height: 100%;
@@ -1347,8 +1347,8 @@
         }
 
         /* =========================================================
-                   RATING
-                ========================================================== */
+                       RATING
+                    ========================================================== */
 
         .rating-content {
             display: flex;
@@ -1400,8 +1400,8 @@
         }
 
         /* =========================================================
-                   PROGRESS
-                ========================================================== */
+                       PROGRESS
+                    ========================================================== */
 
         .progress-box {
             border: 1px solid #e9eef3;
@@ -1442,8 +1442,8 @@
         }
 
         /* =========================================================
-                   EVALUATION CARDS
-                ========================================================== */
+                       EVALUATION CARDS
+                    ========================================================== */
 
         .evaluation-card {
             padding: 20px;
@@ -1565,8 +1565,8 @@
         }
 
         /* =========================================================
-                   REVIEW CARDS
-                ========================================================== */
+                       REVIEW CARDS
+                    ========================================================== */
 
         .review-card {
             display: flex;
@@ -1729,8 +1729,8 @@
         }
 
         /* =========================================================
-                   EMPTY REVIEWS
-                ========================================================== */
+                       EMPTY REVIEWS
+                    ========================================================== */
 
         .empty-reviews {
             text-align: center;
@@ -1772,8 +1772,8 @@
         }
 
         /* =========================================================
-                   RESPONSIVE
-                ========================================================== */
+                       RESPONSIVE
+                    ========================================================== */
 
         @media(max-width: 768px) {
 

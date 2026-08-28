@@ -15,6 +15,7 @@ class GoalSelfReport extends Model
         'achievement_status',
         'rating',
         'manager_rating',
+        'weightage',
         'hr_rating',
         'status',
         'submitted_at',

@@ -57,10 +57,17 @@
             </a>
         </li> -->
 
+        <li class="menu-item">
+            <a href="" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-home"></i>
+                <div data-i18n="Home">Home</div>
+            </a>
+        </li>
+
         <li class="menu-item {{ request()->routeIs('newgoals.index') ? 'active' : '' }}">
             <a href="{{ route('newgoals.index') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-target"></i>
-                <div data-i18n="Goal">Goal</div>
+                <div data-i18n="Goal Setting">Goal Setting</div>
             </a>
         </li>
 
@@ -68,6 +75,39 @@
             <a href="{{ route('goal-self-reports.index') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-target"></i>
                 <div data-i18n="Self Performance Reporting">Self Performance Reporting</div>
+            </a>
+        </li>
+        <li class="menu-item ">
+            <a href="#" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-star"></i>
+                <div data-i18n="Virtue Mirror">Virtue Mirror</div>
+            </a>
+        </li>
+
+        <li class="menu-item ">
+            <a href="#" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-download"></i>
+                <div data-i18n="Downloads">Downloads</div>
+            </a>
+        </li>
+
+        <li class="menu-item ">
+            <a href="#" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-clipboard"></i>
+                <div data-i18n="Task Management">Task Management</div>
+            </a>
+        </li>
+
+        <li class="menu-item ">
+            <a href="#" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-message"></i>
+                <div data-i18n="Feedback / Surveys">Feedback / Surveys</div>
+            </a>
+        </li>
+        <li class="menu-item ">
+            <a href="#" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-alert-triangle"></i>
+                <div data-i18n="PIPs">PIPs</div>
             </a>
         </li>
 
