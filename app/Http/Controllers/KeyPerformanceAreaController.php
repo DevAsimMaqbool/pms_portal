@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Exports\EmployeeKpaReportExport;
 use App\Exports\EmployeeCombineReportExport;
+use App\Models\ActiveRecord;
 use App\Models\Term;
 use Maatwebsite\Excel\Facades\Excel;
 class KeyPerformanceAreaController extends Controller
@@ -185,8 +186,7 @@ class KeyPerformanceAreaController extends Controller
         }
 
         $employeeId = Auth::user()->employee_id;
-        $currentYear = SelectCurrentYear(1)->first();
-        $yearId = $currentYear->id;
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
 
         // =====================================================
         // ✅ STEP 1: Get SUM of scores per category
@@ -198,34 +198,7 @@ class KeyPerformanceAreaController extends Controller
             ->where('employee_id', $employeeId)
             ->where('key_performance_area_id', $id)
             ->where('role_id', $userRoleId)
-            ->where(function ($query) use ($yearId, $employeeId, $id, $userRoleId) {
-
-        // If current year exists, use ONLY current year
-        $query->where('year_id', $yearId)
-
-            // Otherwise use ONLY NULL year records
-            ->orWhere(function ($query) use (
-                $yearId,
-                $employeeId,
-                $id,
-                $userRoleId
-            ) {
-                $query->whereNull('year_id')
-                    ->whereNotExists(function ($subQuery) use (
-                        $yearId,
-                        $employeeId,
-                        $id,
-                        $userRoleId
-                    ) {
-                        $subQuery->select(DB::raw(1))
-                            ->from('indicators_percentages')
-                            ->where('employee_id', $employeeId)
-                            ->where('key_performance_area_id', $id)
-                            ->where('role_id', $userRoleId)
-                            ->where('year_id', $yearId);
-                    });
-            });
-    })
+            ->where('year_id', $ActiveRecord->id)
             ->groupBy('indicator_category_id')
             ->get()
             ->keyBy('indicator_category_id');
@@ -281,8 +254,8 @@ class KeyPerformanceAreaController extends Controller
 
     public function getIndicators(Request $request)
     {
-        $currentYear = SelectCurrentYear(1)->first();
-        $yearId = $currentYear->id;
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
+
         $employeeId = Auth::user()->employee_id;
         $userRoleId = getRoleIdByName(activeRole());
 
@@ -302,39 +275,11 @@ class KeyPerformanceAreaController extends Controller
         $indicators = Indicator::whereIn('id', $indicatorIds)->get();
 
         // Fetch saved scores
-        $savedScoresQuery = \App\Models\IndicatorsPercentage::where('employee_id', $employeeId)
+        $savedScores = \App\Models\IndicatorsPercentage::where('employee_id', $employeeId)
             ->whereIn('indicator_id', $indicatorIds)
-            ->where('role_id', $userRoleId)
-             ->where(function ($query) use ($yearId, $employeeId, $indicatorIds, $userRoleId) {
+            ->where('year_id', $ActiveRecord->id)
+            ->where('role_id', $userRoleId)->get()->keyBy('indicator_id');
 
-        // Get current year records
-        $query->where('year_id', $yearId)
-
-            // Only get NULL records if current year records don't exist
-            ->orWhere(function ($query) use (
-                $yearId,
-                $employeeId,
-                $indicatorIds,
-                $userRoleId,
-            ) {
-                $query->whereNull('year_id')
-                    ->whereNotExists(function ($subQuery) use (
-                        $yearId,
-                        $employeeId,
-                        $indicatorIds,
-                        $userRoleId,
-                    ) {
-                        $subQuery->select(DB::raw(1))
-                            ->from('indicators_percentages')
-                            ->where('employee_id', $employeeId)
-                            ->whereIn('indicator_id', $indicatorIds)
-                            ->where('role_id', $userRoleId)
-                            ->where('year_id', $yearId);
-                    });
-            });
-    });
-
-        $savedScores = $savedScoresQuery->get()->keyBy('indicator_id');
 
         // Map response
         $indicators = $indicators->map(function ($indicator) use ($savedScores, $weightages) {

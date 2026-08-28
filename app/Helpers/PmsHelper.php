@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ActiveRecord;
 use App\Models\User;
 use App\Models\IndicatorsPercentage;
 use App\Models\Department;
@@ -15,6 +16,7 @@ if (!function_exists('hodTopPerformers')) {
         $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])->pluck('id')->toArray();
         $departmentId = auth()->user()->department_id;
         $department = Department::find($departmentId);
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('department_id', $departmentId)
             ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])
@@ -31,6 +33,7 @@ if (!function_exists('hodTopPerformers')) {
             ])
             ->whereIn('employee_id', $employeeIds)
             ->whereIn('role_id', $roleIds)
+            ->where('year_id', $ActiveRecord->id)
             ->groupBy('employee_id', 'role_id')
             ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')   // Sort by avg_score descending
@@ -81,8 +84,10 @@ if (!function_exists('hodHotIndicators')) {
     function hodHotIndicators($indicator_id, $role_id)
     {
         $employee_id = auth()->user()->employee_id;
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $record = IndicatorsPercentage::where('employee_id', $employee_id)
             ->where('role_id', $role_id)->where('indicator_id', $indicator_id)
+            ->where('year_id', $ActiveRecord->id)
             ->orderBy('id')
             ->first();
 
@@ -121,6 +126,7 @@ if (!function_exists('deanTopPerformers')) {
     {
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $employeeIds = User::where('faculty', $faculty)
             ->role(['HOD'])
             ->pluck('employee_id')
@@ -136,6 +142,7 @@ if (!function_exists('deanTopPerformers')) {
             ])
             ->whereIn('employee_id', $employeeIds)
             ->where('role_id', $roleIds)
+            ->where('year_id', $ActiveRecord->id)
             ->groupBy('employee_id')
             ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')
@@ -186,6 +193,7 @@ if (!function_exists('deanHotIndicators')) {
     {
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $employeeIds = User::where('faculty', $faculty)
             ->role(['HOD'])
             ->pluck('employee_id')
@@ -198,6 +206,7 @@ if (!function_exists('deanHotIndicators')) {
         $avg = IndicatorsPercentage::whereIn('employee_id', $employeeIds)
             ->where('indicator_id', $indicator_id)
             ->whereIn('role_id', $roleIds)
+            ->where('year_id', $ActiveRecord->id)
             ->avg('score');
 
         $avg = $avg ? round($avg, 1) : 0.00;
@@ -582,6 +591,7 @@ if (!function_exists('FacultyLevelToppers')) {
     {
         $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('faculty', $faculty)
             ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])
@@ -600,6 +610,7 @@ if (!function_exists('FacultyLevelToppers')) {
             ])
             ->whereIn('employee_id', $employeeIds)
             ->whereIn('role_id', $roleIds)
+            ->where('year_id', $ActiveRecord->id)
             ->groupBy('employee_id', 'role_id')
             ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')   // Sort by avg_score descending
@@ -650,6 +661,7 @@ if (!function_exists('FacultyLevelToppers')) {
 if (!function_exists('ResearchInnovationAndCommercialization')) {
     function ResearchInnovationAndCommercialization($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
     {
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $faculty = auth()->user()->faculty;
         $hod_ids = User::where('faculty', $faculty)->role('HOD')->pluck('employee_id');
         $count_hod_ids = $hod_ids->count();
@@ -659,6 +671,7 @@ if (!function_exists('ResearchInnovationAndCommercialization')) {
         ])
             ->whereIn('employee_id', $hod_ids)
             ->where('role_id', 22)->where('key_performance_area_id', $KpaId)
+            ->where('year_id', $ActiveRecord->id)
             ->where('indicator_category_id', $categoryId)->where('indicator_id', $indicatorId)
             ->orderBy('id')
             ->get();
@@ -692,6 +705,7 @@ if (!function_exists('ResearchInnovationAndCommercialization')) {
 if (!function_exists('ResearchInnovationAndCommercializationYear')) {
     function ResearchInnovationAndCommercializationYear($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear=null)
     {
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $faculty = auth()->user()->faculty;
         $hod_ids = User::where('faculty', $faculty)->role('HOD')->pluck('employee_id');
         $count_hod_ids = $hod_ids->count();
@@ -700,7 +714,7 @@ if (!function_exists('ResearchInnovationAndCommercializationYear')) {
             'user.department:id,name'
         ])
             ->whereIn('employee_id', $hod_ids)
-            ->where('year_id', $currentYear)
+            ->where('year_id', $ActiveRecord->id)
             ->where('role_id', 22)->where('key_performance_area_id', $KpaId)
             ->where('indicator_category_id', $categoryId)->where('indicator_id', $indicatorId)
             ->orderBy('id')

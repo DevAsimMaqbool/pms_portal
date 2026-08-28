@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Models\Indicator;
 use App\Models\IndicatorCategory;
 use App\Models\IndicatorsPercentage;
+use App\Models\ActiveRecord;
 use App\Models\KeyPerformanceArea;
 use App\Models\Role;
 use App\Models\RoleKpaAssignment;
@@ -157,7 +158,7 @@ class ComparitiveAnalysisController extends Controller
         $roleName = getRoleName(activeRole());
         $activeRoleId = getRoleIdByName(activeRole());
         $employeeId = $user->employee_id;
-
+        
         $currentYear = Carbon::now()->year;
         $previousYear = Carbon::now()->subYear()->year;
 
@@ -226,6 +227,7 @@ class ComparitiveAnalysisController extends Controller
 
         $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])->pluck('id')->toArray();
         $departmentId = auth()->user()->department_id;
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $department = Department::find($departmentId);
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('department_id', $departmentId)
@@ -247,6 +249,7 @@ class ComparitiveAnalysisController extends Controller
             ])
             ->whereIn('employee_id', $employeeIds)
             ->whereIn('role_id', $roleIds)
+            ->where('year_id', $ActiveRecord->id)
             ->where('key_performance_area_id', $keyPerformanceAreaId)
             ->groupBy('employee_id', 'role_id')
             ->orderBy('avg_score', 'asc')

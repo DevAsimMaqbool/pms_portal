@@ -44,6 +44,7 @@ class UserController extends Controller
             if ($request->filled('department')) {
                 $query->where('department', $request->department);
             }
+            //onclick="deleteUser(' . $user->id . ')"  use on delete at this time its disable
 
             return DataTables::of($query)
                 ->addColumn(
@@ -104,7 +105,7 @@ class UserController extends Controller
                 <a href="javascript:;" class="btn btn-text-secondary rounded-pill waves-effect btn-icon" onclick="editUser(' . $user->id . ')">
                     <i class="icon-base ti tabler-edit icon-22px"></i>
                 </a>
-                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" onclick="deleteUser(' . $user->id . ')">
+                <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect disabled d-none">
                     <i class="icon-base ti tabler-trash icon-md"></i>
                 </a>
                 <a class="btn btn-icon btn-text-secondary rounded-pill waves-effect" href="/team_member_report/' . $user->id . '" target="_blank">

@@ -34,6 +34,7 @@ use App\Models\GoGlobalStreamTarget;
 use App\Models\StudentsGlobalExperience;
 use App\Models\SatisfactionOfInternationalStudent;
 use App\Models\ActiveInternationalResearchPartner;
+use App\Models\ActiveRecord;
 use App\Models\AdmissionTargetAchieved;
 use App\Models\AlumniSatisfactionRate;
 use App\Models\DropoutRate;
@@ -666,6 +667,7 @@ function saveOverallAttendancePercentage($facultyId, $overallPercentage, $keyPer
     $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 117);
     $weight = $indicatorWeight['weightage'] ?? 0;
     $weightedScore = ($overallPercentage * $weight) / 100;
+    $ActiveRecord = ActiveRecord::where('status', 1)->first();
     // Save to database
     IndicatorsPercentage::updateOrCreate(
         [
@@ -674,6 +676,7 @@ function saveOverallAttendancePercentage($facultyId, $overallPercentage, $keyPer
             'key_performance_area_id' => $keyPerformanceAreaId,
             'indicator_category_id' => $indicatorCategoryId,
             'indicator_id' => $indicatorId,
+            'year_id' => $ActiveRecord->id
         ],
         [
             'score' => $weightedScore,
@@ -2595,26 +2598,9 @@ if (!function_exists('lineManagerRatingOnTasksBK')) {
 if (!function_exists('saveIndicatorPercentage')) {
     function saveIndicatorPercentage($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null, $yearId = null)
     {
-        // Determine color and rating based on score
-        // if ($score >= 90 && $score <= 100) {
-        //     $color = 'primary';
-        //     $rating = 'OS';
-        // } elseif ($score >= 80) {
-        //     $color = 'success';
-        //     $rating = 'EE';
-        // } elseif ($score >= 70) {
-        //     $color = 'warning';
-        //     $rating = 'ME';
-        // } elseif ($score >= 60) {
-        //     $color = 'orange';
-        //     $rating = 'NI';
-        // } elseif ($score >= 50) {
-        //     $color = 'danger';
-        //     $rating = 'BE';
-        // } else {
-        //     $color = 'secondary';
-        //     $rating = 'NA';
-        // }
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
+        
+     
         $exists = DB::table('role_kpa_assignments')
             ->where('role_id', $role_id)
             ->where('indicator_id', $indicatorId)
@@ -2648,11 +2634,8 @@ if (!function_exists('saveIndicatorPercentage')) {
             'key_performance_area_id' => $keyPerformanceAreaId,
             'indicator_category_id' => $indicatorCategoryId,
             'indicator_id' => $indicatorId,
+            'year_id' => $ActiveRecord->id
         ];
-
-        if ($yearId !== null) {
-            $conditions['year_id'] = $yearId;
-        }
 
         IndicatorsPercentage::updateOrCreate(
             $conditions,
@@ -2669,6 +2652,7 @@ if (!function_exists('saveIndicatorPercentage')) {
 if (!function_exists('saveIndicatorPercentage90Plus')) {
     function saveIndicatorPercentage90Plus($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null, $yearId = null)
     {
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         if ($score >= 95) {
             $color = 'primary';
             $rating = 'OS';
@@ -2691,11 +2675,8 @@ if (!function_exists('saveIndicatorPercentage90Plus')) {
             'key_performance_area_id' => $keyPerformanceAreaId,
             'indicator_category_id' => $indicatorCategoryId,
             'indicator_id' => $indicatorId,
+            'year_id' => $ActiveRecord->id
         ];
-
-        if ($yearId !== null) {
-            $conditions['year_id'] = $yearId;
-        }
 
         IndicatorsPercentage::updateOrCreate(
             $conditions,
@@ -2785,6 +2766,7 @@ function lineManagerRatingOnEvents($facultyId, $activeRoleId, $currentYear = nul
 
 function avgKpaScore($employeeId, $kpaId)
 {
+    $ActiveRecord = ActiveRecord::where('status', 1)->first();
     // Memoize per-request to avoid duplicate calculations in Blade.
     static $memo = [];
 
@@ -2797,6 +2779,7 @@ function avgKpaScore($employeeId, $kpaId)
     // Get all scores for the employee and KPA
     $scores = IndicatorsPercentage::where('employee_id', $employeeId)
         ->where('key_performance_area_id', $kpaId)
+        ->where('year_id', $ActiveRecord->id)
         ->where('role_id', $userRoleId)
         ->pluck('score'); // get array of scores
 
@@ -2816,6 +2799,8 @@ function avgKpaScore($employeeId, $kpaId)
 }
 function sumKpaScore($employeeId, $kpaId)
 {
+    
+    $ActiveRecord = ActiveRecord::where('status', 1)->first();
     // Memoize per-request to avoid duplicate calculations in Blade.
     static $memo = [];
 
@@ -2829,6 +2814,7 @@ function sumKpaScore($employeeId, $kpaId)
     $scores = IndicatorsPercentage::where('employee_id', $employeeId)
         ->where('key_performance_area_id', $kpaId)
         ->where('role_id', $userRoleId)
+        ->where('year_id', $ActiveRecord->id)
         ->pluck('score'); // get array of scores
 
     if ($scores->isEmpty()) {
@@ -3101,7 +3087,11 @@ if (!function_exists('ResearchProductivityofPGStudentsOfPL')) {
 
 function overallAvgScore($emp_id)
 {
+    $ActiveRecord = ActiveRecord::where('status', 1)->first();
+    $userRoleId = getRoleIdByName(activeRole());
     $avg = IndicatorsPercentage::where('employee_id', $emp_id)
+    ->where('role_id', $userRoleId)
+    ->where('year_id', $ActiveRecord->id)
         ->avg('score');
 
     $avg = $avg ? round($avg, 2) : 0.00;
@@ -3196,21 +3186,23 @@ if (!function_exists('getRoleWeightage')) {
 }
 function kpaAvgScore($kpaId, $employeeId)
 {
+    $ActiveRecord = ActiveRecord::where('status', 1)->first();
     $userRoleId = getRoleIdByName(activeRole());
 
     // Get all scores for the employee and KPA
     $scores = IndicatorsPercentage::where('employee_id', $employeeId)
         ->where('key_performance_area_id', $kpaId)
         ->where('role_id', $userRoleId)
+        ->where('year_id', $ActiveRecord->id)
         ->pluck('score'); // get array of scores
-
+    $weightage = getRoleWeightage($userRoleId, 'kpa', $kpaId)['weightage'];
     if ($scores->isEmpty()) {
         return [
             'avg' => 0,
             'weighted_score' => 0,
             'rating' => 'BE',
             'color' => 'danger',
-            'weight' => 0,
+            'weight' => $weightage,
         ];
     }
 
@@ -3221,7 +3213,7 @@ function kpaAvgScore($kpaId, $employeeId)
     //$avg = $cappedScores->avg();
     $avg = $cappedScores->sum();
     $avg = min($avg, 100);
-    $weightage = getRoleWeightage($userRoleId, 'kpa', $kpaId)['weightage'];
+    //$weightage = getRoleWeightage($userRoleId, 'kpa', $kpaId)['weightage'];
     $weightedScore = ($avg * $weightage) / 100;
 
     if ($avg >= 90) {
@@ -3250,13 +3242,16 @@ function kpaAvgScore($kpaId, $employeeId)
     ];
 }
 
-function indicatorAvgScore($indicator_id, $emp_id)
+function indicatorAvgScore($indicator_id, $emp_id,$userRoleId)
 {
     // $avg = IndicatorsPercentage::where('employee_id', $emp_id)
     //     ->where('indicator_id', $indicator_id)
     //     ->value('score');
+    $ActiveRecord = ActiveRecord::where('status', 1)->first();
     $record = IndicatorsPercentage::where('employee_id', $emp_id)
         ->where('indicator_id', $indicator_id)
+        ->where('year_id', $ActiveRecord->id)
+        ->where('role_id', $userRoleId)
         ->orderBy('id')
         ->first();
 
@@ -3287,6 +3282,7 @@ function indicatorAvgScore($indicator_id, $emp_id)
 
 function indicatorCategoryAvgScore($category_id, $kpa_id, $emp_id, $member = null)
 {
+    $ActiveRecord = ActiveRecord::where('status', 1)->first();
     if ($member) {
         $user = User::find($emp_id);
         $roleId = $user->roles->first()?->id;
@@ -3298,6 +3294,7 @@ function indicatorCategoryAvgScore($category_id, $kpa_id, $emp_id, $member = nul
         ->where('key_performance_area_id', $kpa_id)
         ->where('indicator_category_id', $category_id)
         ->where('role_id', $roleId)
+        ->where('year_id', $ActiveRecord->id)
         ->sum('score');
 
     $target = RoleKpaAssignment::where('role_id', $roleId)
@@ -3584,10 +3581,12 @@ if (!function_exists('lineManagerRemarksOnTasks')) {
 if (!function_exists('getTopIndicatorsOfEmployee')) {
     function getTopIndicatorsOfEmployee($employeeId)
     {
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $activeRoleId = getRoleIdByName(activeRole());
         $indicators = IndicatorsPercentage::with('kpa:id,performance_area,short_code,icon')
             ->where('employee_id', $employeeId)
             ->where('role_id', $activeRoleId)
+            ->where('year_id', $ActiveRecord->id)
             ->get([
                 'key_performance_area_id',
                 'score'
@@ -3859,6 +3858,7 @@ if (!function_exists('indicatorsPercentageStatus')) {
             $user->update(['indicators_percentage_status' => false]);
             return;
         }
+         $ActiveRecord = ActiveRecord::where('status', 1)->first();
 
         // Get all assignments for these roles
         $assignments = RoleKpaAssignment::whereIn('role_id', $roleIds)->get();
@@ -3870,17 +3870,16 @@ if (!function_exists('indicatorsPercentageStatus')) {
         // Fetch all existing indicators for this user and these roles in ONE query
         $existing = IndicatorsPercentage::where('employee_id', $user->id)
             ->whereIn('role_id', $roleIds)
-            ->get(['role_id', 'key_performance_area_id', 'indicator_category_id', 'indicator_id'])
+            ->get(['role_id', 'key_performance_area_id', 'indicator_category_id', 'indicator_id','year_id'])
             ->map(function ($i) {
-                return $i->role_id . '-' . $i->key_performance_area_id . '-' . $i->indicator_category_id . '-' . $i->indicator_id;
+                return $i->role_id . '-' . $i->key_performance_area_id . '-' . $i->indicator_category_id . '-' . $i->indicator_id. '-' . $i->year_id;
             })
             ->toArray();
 
         // Prepare missing rows
         $insert = [];
         foreach ($assignments as $row) {
-            $key = $row->role_id . '-' . $row->key_performance_area_id . '-' . $row->indicator_category_id . '-' . $row->indicator_id;
-
+            $key = $row->role_id . '-' . $row->key_performance_area_id . '-' . $row->indicator_category_id . '-' . $row->indicator_id. '-' . $ActiveRecord->id;
             if (!in_array($key, $existing)) {
                 $insert[] = [
                     'employee_id' => $user->id,
@@ -3894,6 +3893,7 @@ if (!function_exists('indicatorsPercentageStatus')) {
                     'badge_name' => null,
                     'given_by' => null,
                     'status' => '1',
+                    'year_id' => $ActiveRecord->id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
@@ -4646,7 +4646,7 @@ function myDepartmentClassesAttendanceRecordHOD($employeeId, $activeRoleId)
 
 function saveOverallAttendancePercentageOfHOD($employeeId, $classes, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $activeRoleId)
 {
-
+    $ActiveRecord = ActiveRecord::where('status', 1)->first();
     // ✅ CORRECT FORMULA
     $totalHeld = $classes->sum('class_held_count');
     $totalClasses = $classes->sum('total_rows');
@@ -4682,6 +4682,7 @@ function saveOverallAttendancePercentageOfHOD($employeeId, $classes, $keyPerform
             'key_performance_area_id' => $keyPerformanceAreaId,
             'indicator_category_id' => $indicatorCategoryId,
             'indicator_id' => $indicatorId,
+            'year_id' => $ActiveRecord->id
         ],
         [
             'score' => $weightedScore,
@@ -7448,11 +7449,13 @@ if (!function_exists('calculateDeanPercentagesFast')) {
 
     function calculateDeanPercentagesFast($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId)
     {
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         // Get average score of all employees under this dean
         $avgScore = IndicatorsPercentage::join('users', 'indicators_percentages.employee_id', '=', 'users.employee_id')
             ->where('users.manager_id', $employeeId)
             ->where('indicators_percentages.role_id', 22)
             ->where('indicators_percentages.indicator_id', $indicatorId)
+            ->where('indicators_percentages.year_id', $ActiveRecord->id)
             ->avg('indicators_percentages.score');
 
         // Prevent null values
@@ -7477,11 +7480,13 @@ if (!function_exists('calculateDeanPercentagesFastDiffFromHOD')) {
 
     function calculateDeanPercentagesFastDiffFromHOD($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId)
     {
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         // Get average score of all employees under this dean
         $avgScore = IndicatorsPercentage::join('users', 'indicators_percentages.employee_id', '=', 'users.employee_id')
             ->where('users.manager_id', $employeeId)
             ->where('indicators_percentages.role_id', 22)
             ->where('indicators_percentages.indicator_id', $indicatorId)
+            ->where('indicators_percentages.year_id', $ActiveRecord->id)
             ->avg('indicators_percentages.with_out_weight_score');
 
         // Prevent null values
@@ -8712,6 +8717,7 @@ if (!function_exists('retentionRateofFaculty')) {
 if (!function_exists('saveIndicatorPercentage100Plus')) {
     function saveIndicatorPercentage100Plus($employeeId, $role_id, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $score, $withOutWeightScore = null, $yearId = null)
     {
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         if ($score == 100) {
             $color = 'primary';
             $rating = 'OS';
@@ -8734,11 +8740,9 @@ if (!function_exists('saveIndicatorPercentage100Plus')) {
             'key_performance_area_id' => $keyPerformanceAreaId,
             'indicator_category_id' => $indicatorCategoryId,
             'indicator_id' => $indicatorId,
+            'year_id' => $ActiveRecord->id
         ];
 
-        if ($yearId !== null) {
-            $conditions['year_id'] = $yearId;
-        }
 
         IndicatorsPercentage::updateOrCreate(
             $conditions,
@@ -8761,6 +8765,7 @@ function kpaAvgScoreForReport($kpa_id, $emp_id, $member = null)
         // Get employee role
         $roleId = getRoleIdByName(activeRole());
     }
+    $ActiveRecord = ActiveRecord::where('status', 1)->first();
     // Get KPA target weightage
     $target = RoleKpaAssignment::where('role_id', $roleId)
         ->where('key_performance_area_id', $kpa_id)
@@ -8772,6 +8777,7 @@ function kpaAvgScoreForReport($kpa_id, $emp_id, $member = null)
     $avgs = IndicatorsPercentage::where('employee_id', $emp_id)
         ->where('role_id', $roleId)
         ->where('key_performance_area_id', $kpa_id)
+        ->where('year_id', $ActiveRecord->id)
         ->where('is_score', 1)
         ->get()
         ->pluck('score')
