@@ -704,6 +704,14 @@
                                     input.addClass('is-invalid');
                                     input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
                                 });
+                            }else if (xhr.status === 409) {
+                                // 🔥 Duplicate record message
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Duplicate Entry',
+                                    text: xhr.responseJSON.message
+                                });
+
                             } else {
                                 Swal.fire('Error', 'Something went wrong!', 'error');
                             }
