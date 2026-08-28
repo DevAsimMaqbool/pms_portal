@@ -720,7 +720,7 @@
 
           @php
             // Get dynamic average, rating, and color
-            $kpaResult = indicatorAvgScore(117, Auth::user()->employee_id);
+            $kpaResult = indicatorAvgScore(117, Auth::user()->employee_id,$activeRoleId);
             //$avg = $kpaResult['avg'] ?? 0;
             $avg = min($kpaResult['avg'] ?? 0, 100);
             $rating = $kpaResult['rating'] ?? 0;
@@ -757,7 +757,7 @@
           </div>
           @php
             // Get dynamic average, rating, and color
-            $kpaResult = indicatorAvgScore(128, Auth::user()->employee_id);
+            $kpaResult = indicatorAvgScore(128, Auth::user()->employee_id,$activeRoleId);
             //$avg = $kpaResult['avg'] ?? 0;
             $avg = min($kpaResult['avg'] ?? 0, 100);
             $rating = $kpaResult['rating'] ?? 0;
@@ -765,7 +765,7 @@
             $re_getRatingByPercentage = getRatingByPercentage($avg);
             $re_rating_description = $re_getRatingByPercentage['description'];
 
-            $kpaResultManager = indicatorAvgScore(188, Auth::user()->employee_id);
+            $kpaResultManager = indicatorAvgScore(188, Auth::user()->employee_id,$activeRoleId);
             //$avgManager = $kpaResultManager['avg'] ?? 0;
             $avgManager = min($kpaResultManager['avg'] ?? 0, 100);
             $ratingManager = $kpaResultManager['rating'] ?? 0;
@@ -839,7 +839,7 @@
           </div>
           @php
             // Get dynamic average, rating, and color
-            $courseloadkpaResult = indicatorAvgScore(122, Auth::user()->employee_id);
+            $courseloadkpaResult = indicatorAvgScore(122, Auth::user()->employee_id,$activeRoleId);
             //$courseloadavg = $courseloadkpaResult['avg'] ?? 0;
             $courseloadavg = min($courseloadkpaResult['avg'] ?? 0, 100);
             $courseloadrating = $courseloadkpaResult['rating'] ?? 0;

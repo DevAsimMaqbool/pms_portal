@@ -122,7 +122,9 @@
                             </select>
                             <div class="invalid-feedback" id="statusError"></div>
                         </div>
+                         @if(in_array(getRoleName(activeRole()), ['Human Resources','admin']))
                         <button type="submit" class="btn btn-primary me-3 data-submit">Submit</button>
+                        @endif
                         <button type="reset" class="btn btn-label-danger" data-bs-dismiss="offcanvas">Cancel</button>
                     </form>
                 </div>

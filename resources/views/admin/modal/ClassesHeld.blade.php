@@ -140,14 +140,14 @@
                                     <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                         data-bs-target="#classes-held-spring" aria-controls="classes-held-spring"
                                         aria-selected="true">
-                                        🌸 Spring {{ date('Y') }}
+                                        🌸 Spring {{ $springTerm?->start_year ?? date('Y') }}
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                         data-bs-target="#classes-held-fall" aria-controls="classes-held-fall"
                                         aria-selected="false">
-                                        🍂 Fall {{ date('Y') - 1 }}
+                                        🍂 Fall {{ $fallTerm?->start_year ?? date('Y') - 1 }}
                                     </button>
                                 </li>
                             </ul>
