@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\IndicatorsPercentage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -202,6 +203,8 @@ class UserController extends Controller
             //'level' => 'required|string|max:50',
             //'manager_id' => 'required|exists:users,id',
             'status' => 'required|in:active,inactive',
+             // Password is optional during update
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
 
         $user = User::findOrFail($id);
@@ -212,6 +215,10 @@ class UserController extends Controller
         //$user->level = $request->level;
         // $user->manager_id = $request->manager_id;
         $user->status = $request->status;
+         // Update password only if entered
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
         $user->save();
 
         // Sync role

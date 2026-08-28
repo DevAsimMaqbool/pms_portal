@@ -122,7 +122,42 @@
                             </select>
                             <div class="invalid-feedback" id="statusError"></div>
                         </div>
-                         @if(in_array(getRoleName(activeRole()), ['Human Resources','admin']))
+                        {{-- New Password --}}
+                        <div class="mb-6">
+                            <label class="form-label" for="add-user-password">
+                                New Password
+                            </label>
+
+                            <input type="password"
+                                id="add-user-password"
+                                class="form-control"
+                                placeholder="Enter new password"
+                                name="password"
+                                autocomplete="new-password" />
+
+                            <div class="form-text">
+                                Leave blank to keep the current password.
+                            </div>
+
+                            <div class="invalid-feedback" id="passwordError"></div>
+                        </div>
+
+                        {{-- Confirm Password --}}
+                        <div class="mb-6">
+                            <label class="form-label" for="add-user-password-confirmation">
+                                Confirm New Password
+                            </label>
+
+                            <input type="password"
+                                id="add-user-password-confirmation"
+                                class="form-control"
+                                placeholder="Confirm new password"
+                                name="password_confirmation"
+                                autocomplete="new-password" />
+
+                            <div class="invalid-feedback" id="password_confirmationError"></div>
+                        </div>
+                         @if(in_array(getRoleName(activeRole()), ['user']))
                         <button type="submit" class="btn btn-primary me-3 data-submit">Submit</button>
                         @endif
                         <button type="reset" class="btn btn-label-danger" data-bs-dismiss="offcanvas">Cancel</button>
@@ -201,6 +236,9 @@
                 role: $('#user-role').val(),
                 //level: $('#user-level').val(),
                 // manager_id: $('#user-manager').val(),
+                 // Password fields
+                password: $('#add-user-password').val(),
+                password_confirmation: $('#add-user-password-confirmation').val(),
                 status: $('#user-status').val()
             };
             $.ajax({
