@@ -38,100 +38,208 @@
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
     <!--  Payment Methods modal -->
     @php
-        $activeRoleId = getRoleIdByName(activeRole());
+    $activeRoleId = getRoleIdByName(activeRole());
 
-        $totalFeedback = 0;
+    $activeTerms = \App\Models\Term::where('status', '1')
+        ->get()
+        ->keyBy('term');
 
-        $activeTerms = \App\Models\Term::where('status', '1')
-            ->get()
-            ->keyBy('term');
+    $springTerm = $activeTerms->get('Spring');
+    $fallTerm = $activeTerms->get('Fall');
 
-        $springTerm = $activeTerms->get('Spring');
-        $fallTerm = $activeTerms->get('Fall');
+    /*
+    |--------------------------------------------------------------------------
+    | Get Faculty Feedback
+    |--------------------------------------------------------------------------
+    */
 
-        $feedbackDataspring = getFacultyClassWiseFeedback(
-            Auth::user()->faculty_id ?? null
-        );
+    $feedbackData = getFacultyClassWiseFeedback(
+        Auth::user()->faculty_id ?? null
+    );
 
-        $classFeedback1 = $feedbackDataspring['collection'] ?? collect();
-        $totalFeedback = $feedbackDataspring['totalFeedback'] ?? 0;
+    $classFeedback1 = $feedbackData['collection'] ?? collect();
 
-        $avgScore = $classFeedback1->isNotEmpty()
-            ? $classFeedback1->avg(fn($f) => (float) str_replace('%', '', $f->feedback))
-            : 0;
+    /*
+    |--------------------------------------------------------------------------
+    | Overall Feedback
+    |--------------------------------------------------------------------------
+    |
+    | Feedback Average =
+    | SUM(feedback × attempts) / SUM(attempts)
+    |
+    */
 
-        $totalStudents = $classFeedback1->isNotEmpty()
-            ? $classFeedback1->sum(fn($f) => (float) $f->registered_students)
-            : 0;
+    $totalMultiplication = $classFeedback1->sum(function ($f) {
+        $feedback = (float) str_replace('%', '', $f->feedback ?? 0);
+        $attempts = (float) ($f->attempts ?? 0);
 
-        $attempStudents = $classFeedback1->isNotEmpty()
-            ? $classFeedback1->sum(fn($f) => (float) $f->attempts)
-            : 0;
+        return $feedback * $attempts;
+    });
 
-        // ✅ Spring
-        $springData = $springTerm
-            ? $classFeedback1->where('term_id', $springTerm->id)
-            : collect();
+    $totalAttempts = $classFeedback1->sum(function ($f) {
+        return (float) ($f->attempts ?? 0);
+    });
 
-        // ✅ Fall
-        $fallData = $fallTerm
-            ? $classFeedback1->where('term_id', $fallTerm->id)
-            : collect();
+    $avgScore = $totalAttempts > 0
+        ? round($totalMultiplication / $totalAttempts, 2)
+        : 0;
 
-        // Spring Average
-        $springAvg = $springData->isNotEmpty()
-            ? $springData->avg(
-                fn($f) => (float) str_replace('%', '', $f->feedback)
-            )
-            : 0;
+    /*
+    |--------------------------------------------------------------------------
+    | Students
+    |--------------------------------------------------------------------------
+    */
 
-        // Fall Average
-        $fallAvg = $fallData->isNotEmpty()
-            ? $fallData->avg(
-                fn($f) => (float) str_replace('%', '', $f->feedback)
-            )
-            : 0;
+    $totalStudents = $classFeedback1->sum(function ($f) {
+        return (float) ($f->registered_students ?? 0);
+    });
 
-        // Overall Average = (Spring + Fall) / 2
-        if ($springData->isNotEmpty() && $fallData->isNotEmpty()) {
-            $avgScore = round(($springAvg + $fallAvg) / 2, 2);
-        } elseif ($springData->isNotEmpty()) {
-            $avgScore = $springAvg;
-        } elseif ($fallData->isNotEmpty()) {
-            $avgScore = $fallAvg;
-        } else {
-            $avgScore = 0;
+    $attempStudents = $classFeedback1->sum(function ($f) {
+        return (float) ($f->attempts ?? 0);
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Spring Data
+    |--------------------------------------------------------------------------
+    */
+
+    $springData = $springTerm
+        ? $classFeedback1->where('term_id', $springTerm->id)
+        : collect();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fall Data
+    |--------------------------------------------------------------------------
+    */
+
+    $fallData = $fallTerm
+        ? $classFeedback1->where('term_id', $fallTerm->id)
+        : collect();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Spring Weighted Average
+    |--------------------------------------------------------------------------
+    */
+
+    $springMultiplication = $springData->sum(function ($f) {
+        $feedback = (float) str_replace('%', '', $f->feedback ?? 0);
+        $attempts = (float) ($f->attempts ?? 0);
+
+        return $feedback * $attempts;
+    });
+
+    $springAttempts = $springData->sum(function ($f) {
+        return (float) ($f->attempts ?? 0);
+    });
+
+    $springAvg = $springAttempts > 0
+        ? round($springMultiplication / $springAttempts, 2)
+        : 0;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fall Weighted Average
+    |--------------------------------------------------------------------------
+    */
+
+    $fallMultiplication = $fallData->sum(function ($f) {
+        $feedback = (float) str_replace('%', '', $f->feedback ?? 0);
+        $attempts = (float) ($f->attempts ?? 0);
+
+        return $feedback * $attempts;
+    });
+
+    $fallAttempts = $fallData->sum(function ($f) {
+        return (float) ($f->attempts ?? 0);
+    });
+
+    $fallAvg = $fallAttempts > 0
+        ? round($fallMultiplication / $fallAttempts, 2)
+        : 0;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Overall Average
+    |--------------------------------------------------------------------------
+    |
+    | If both terms exist:
+    | Overall = (Spring Weighted Total + Fall Weighted Total)
+    |           / (Spring Attempts + Fall Attempts)
+    |
+    */
+
+    $overallMultiplication =
+        $springMultiplication + $fallMultiplication;
+
+    $overallAttempts =
+        $springAttempts + $fallAttempts;
+
+    $avgScore = $overallAttempts > 0
+        ? round(
+            $overallMultiplication / $overallAttempts,
+            2
+        )
+        : 0;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rating
+    |--------------------------------------------------------------------------
+    */
+
+    if (!function_exists('ratingMeta')) {
+        function ratingMeta($average)
+        {
+            if ($average >= 90)
+                return ['OS', 'primary'];
+
+            if ($average >= 80)
+                return ['EE', 'success'];
+
+            if ($average >= 70)
+                return ['ME', 'warning'];
+
+            if ($average >= 60)
+                return ['NI', 'orange'];
+
+            return ['BE', 'danger'];
         }
+    }
 
-        if (!function_exists('ratingMeta')) {
-            function ratingMeta($average)
-            {
-                if ($average >= 90)
-                    return ['OS', 'primary'];
-                if ($average >= 80)
-                    return ['EE', 'success'];
-                if ($average >= 70)
-                    return ['ME', 'warning'];
-                if ($average >= 60)
-                    return ['NI', 'orange'];
+    [$rating, $color] = ratingMeta($avgScore);
 
-                return ['BE', 'danger'];
-            }
-        }
+    /*
+    |--------------------------------------------------------------------------
+    | Weightage
+    |--------------------------------------------------------------------------
+    */
 
-        $color = 'secondary';
-        $rating = 'N/A';
-        $weight = getRoleWeightage($activeRoleId, 'indicator', 182)['weightage'] ?? 0;
-        $weightedScore = ($avgScore * $weight) / 100;
-        saveIndicatorPercentage90Plus(
-            auth()->user()->employee_id,
-            $activeRoleId,
-            1,
-            23,
-            182,
-            $weightedScore
-        );
-    @endphp
+    $weight = getRoleWeightage(
+        $activeRoleId,
+        'indicator',
+        182
+    )['weightage'] ?? 0;
+
+    $weightedScore = ($avgScore * $weight) / 100;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Save Indicator Percentage
+    |--------------------------------------------------------------------------
+    */
+
+    // saveIndicatorPercentage90Plus(
+    //     auth()->user()->employee_id,
+    //     $activeRoleId,
+    //     1,
+    //     23,
+    //     182,
+    //     $weightedScore
+    // );
+@endphp
     <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
@@ -170,172 +278,14 @@
                             <!-- Spring -->
                             <div class="tab-pane fade show active" id="student-satisfaction-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
-                                    <table class="table table-hover align-middle custom-table">
-                                        <thead class="table-primary">
-                                            <tr>
-                                                <th>Sr#</th>
-                                                <th>Class</th>
-                                                <th>Program</th>
-                                                <th>Career (PG/UG)</th>
-                                                <th>Strength</th>
-                                                <th>Respondent</th>
-                                                <th>Score</th>
-                                                <th>Rating</th>
-                                            </tr>
-                                        </thead>
-
-                                        @php
-                                            $springAvgScore = $springData->isNotEmpty()
-                                                ? $springData->avg(fn($item) => (float) str_replace('%', '', $item->feedback))
-                                                : 0;
-                                        @endphp
-
-                                        <tbody>
-                                            @forelse ($springData as $index => $feedback1)
-
-                                                @php
-                                                    $average = (float) ($feedback1->feedback ?? 0);
-                                                    [$rating, $color] = ratingMeta($average);
-                                                @endphp
-
-                                                <tr>
-                                                    <td>{{ $index + 1 }}</td>
-                                                    <td>{{ $feedback1->class_code ?? '—' }}</td>
-                                                    <td>{{ $feedback1->program ?? '—' }}</td>
-                                                    <td>{{ $feedback1->career_code ?? 'UG' }}</td>
-                                                    <td>{{ $feedback1->registered_students ?? 0 }}</td>
-                                                    <td>{{ $feedback1->attempts ?? 0 }}</td>
-
-                                                    <td>
-                                                        <span class="badge bg-label-{{ $color }}">
-                                                            {{ number_format($average, 1) }}%
-                                                        </span>
-                                                    </td>
-
-                                                    <td>
-                                                        <span class="badge bg-label-{{ $color }}">
-                                                            {{ $rating }}
-                                                        </span>
-                                                    </td>
-                                                </tr>
-
-                                            @empty
-                                                <tr>
-                                                    <td colspan="8" class="text-center text-muted">
-                                                        no record found
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-
-                                        <tfoot>
-                                            <tr class="table-primary">
-                                                <th class="text-end">Total</th>
-                                                <th colspan="5"></th>
-
-                                                <th>
-                                                    <span
-                                                        class="badge bg-label-{{ getRatingMetaAsBg($springAvgScore)->color }}">
-                                                        {{ number_format($springAvgScore, 1) }}%
-                                                    </span>
-                                                </th>
-
-                                                <th>
-                                                    <span
-                                                        class="badge bg-label-{{ getRatingMetaAsBg($springAvgScore)->color }}">
-                                                        {{ getRatingMetaAsBg($springAvgScore)->rating }}
-                                                    </span>
-                                                </th>
-                                            </tr>
-                                        </tfoot>
-
-                                    </table>
+                                    <table class="table table-hover align-middle custom-table"> <thead class="table-primary"> <tr> <th>Sr#</th> <th>Class</th> <th>Program</th> <th>Career (PG/UG)</th> <th>Strength</th> <th>Respondent</th> <th>Score</th> <th>Rating</th> </tr> </thead> @php /* |-------------------------------------------------------------------------- | Spring Weighted Average |-------------------------------------------------------------------------- | | Formula: | | SUM(feedback × attempts) | ----------------------- | SUM(attempts) | */ $springAttempts = $springData->sum(function ($item) { return (float) ($item->attempts ?? 0); }); $springMultiplication = $springData->sum(function ($item) { $feedback = (float) str_replace( '%', '', $item->feedback ?? 0 ); $attempts = (float) ($item->attempts ?? 0); return $feedback * $attempts; }); $springAvgScore = $springAttempts > 0 ? round( $springMultiplication / $springAttempts, 2 ) : 0; $springRatingMeta = getRatingMetaAsBg($springAvgScore); @endphp <tbody> @forelse ($springData as $index => $feedback1) @php /* |-------------------------------------------------------------------------- | Individual Class Score |-------------------------------------------------------------------------- */ $average = (float) str_replace( '%', '', $feedback1->feedback ?? 0 ); [$rating, $color] = ratingMeta($average); @endphp <tr> <td>{{ $index + 1 }}</td> <td> {{ $feedback1->class_code ?? '—' }} </td> <td> {{ $feedback1->program ?? '—' }} </td> <td> {{ $feedback1->career_code ?? 'UG' }} </td> <td> {{ $feedback1->registered_students ?? 0 }} </td> <td> {{ $feedback1->attempts ?? 0 }} </td> <td> <span class="badge bg-label-{{ $color }}"> {{ number_format($average, 1) }}% </span> </td> <td> <span class="badge bg-label-{{ $color }}"> {{ $rating }} </span> </td> </tr> @empty <tr> <td colspan="8" class="text-center text-muted"> no record found </td> </tr> @endforelse </tbody> <tfoot> <tr class="table-primary"> <th class="text-end"> Total </th> <th colspan="5"> {{-- Spring Attempts: {{ $springAttempts }} --}} </th> <th> <span class="badge bg-label-{{ $springRatingMeta->color }}"> {{ number_format($springAvgScore, 1) }}% </span> </th> <th> <span class="badge bg-label-{{ $springRatingMeta->color }}"> {{ $springRatingMeta->rating }} </span> </th> </tr> </tfoot> </table>
                                 </div>
                             </div>
 
                             <!-- Fall -->
                             <div class="tab-pane fade" id="student-satisfaction-fall" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
-                                    <table class="table table-hover align-middle custom-table">
-                                        <thead class="table-primary">
-                                            <tr>
-                                                <th>Sr#</th>
-                                                <th>Class</th>
-                                                <th>Program</th>
-                                                <th>Career (PG/UG)</th>
-                                                <th>Strength</th>
-                                                <th>Respondent</th>
-                                                <th>Score</th>
-                                                <th>Rating</th>
-                                            </tr>
-                                        </thead>
-
-                                        @php
-                                            $fallAvgScore = $fallData->isNotEmpty()
-                                                ? $fallData->avg(fn($item) => (float) str_replace('%', '', $item->feedback))
-                                                : 0;
-                                        @endphp
-
-                                        <tbody>
-                                            @forelse ($fallData as $index => $feedback1)
-
-                                                @php
-                                                    $average = (float) ($feedback1->feedback ?? 0);
-                                                    [$rating, $color] = ratingMeta($average);
-                                                @endphp
-
-                                                <tr>
-                                                    <td>{{ $index + 1 }}</td>
-                                                    <td>{{ $feedback1->class_code ?? '—' }}</td>
-                                                    <td>{{ $feedback1->program ?? '—' }}</td>
-                                                    <td>{{ $feedback1->career_code ?? 'UG' }}</td>
-                                                    <td>{{ $feedback1->registered_students ?? 0 }}</td>
-                                                    <td>{{ $feedback1->attempts ?? 0 }}</td>
-
-                                                    <td>
-                                                        <span class="badge bg-label-{{ $color }}">
-                                                            {{ number_format($average, 1) }}%
-                                                        </span>
-                                                    </td>
-
-                                                    <td>
-                                                        <span class="badge bg-label-{{ $color }}">
-                                                            {{ $rating }}
-                                                        </span>
-                                                    </td>
-                                                </tr>
-
-                                            @empty
-                                                <tr>
-                                                    <td colspan="8" class="text-center text-muted">
-                                                        no record found
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-
-                                        <tfoot>
-                                            <tr class="table-primary">
-                                                <th class="text-end">Total</th>
-                                                <th colspan="5"></th>
-
-                                                <th>
-                                                    <span
-                                                        class="badge bg-label-{{ getRatingMetaAsBg($fallAvgScore)->color }}">
-                                                        {{ number_format($fallAvgScore, 1) }}%
-                                                    </span>
-                                                </th>
-
-                                                <th>
-                                                    <span
-                                                        class="badge bg-label-{{ getRatingMetaAsBg($fallAvgScore)->color }}">
-                                                        {{ getRatingMetaAsBg($fallAvgScore)->rating }}
-                                                    </span>
-                                                </th>
-                                            </tr>
-                                        </tfoot>
-
-                                    </table>
+                                    <table class="table table-hover align-middle custom-table"> <thead class="table-primary"> <tr> <th>Sr#</th> <th>Class</th> <th>Program</th> <th>Career (PG/UG)</th> <th>Strength</th> <th>Respondent</th> <th>Score</th> <th>Rating</th> </tr> </thead> @php /* |-------------------------------------------------------------------------- | Fall Weighted Average |-------------------------------------------------------------------------- | | Formula: | | SUM(feedback × attempts) | ----------------------- | SUM(attempts) | */ $fallAttempts = $fallData->sum(function ($item) { return (float) ($item->attempts ?? 0); }); $fallMultiplication = $fallData->sum(function ($item) { $feedback = (float) str_replace( '%', '', $item->feedback ?? 0 ); $attempts = (float) ($item->attempts ?? 0); return $feedback * $attempts; }); $fallAvgScore = $fallAttempts > 0 ? round( $fallMultiplication / $fallAttempts, 2 ) : 0; $fallRatingMeta = getRatingMetaAsBg($fallAvgScore); @endphp <tbody> @forelse ($fallData as $index => $feedback1) @php /* |-------------------------------------------------------------------------- | Individual Class Score |-------------------------------------------------------------------------- */ $average = (float) str_replace( '%', '', $feedback1->feedback ?? 0 ); [$rating, $color] = ratingMeta($average); @endphp <tr> <td>{{ $index + 1 }}</td> <td> {{ $feedback1->class_code ?? '—' }} </td> <td> {{ $feedback1->program ?? '—' }} </td> <td> {{ $feedback1->career_code ?? 'UG' }} </td> <td> {{ $feedback1->registered_students ?? 0 }} </td> <td> {{ $feedback1->attempts ?? 0 }} </td> <td> <span class="badge bg-label-{{ $color }}"> {{ number_format($average, 1) }}% </span> </td> <td> <span class="badge bg-label-{{ $color }}"> {{ $rating }} </span> </td> </tr> @empty <tr> <td colspan="8" class="text-center text-muted"> no record found </td> </tr> @endforelse </tbody> <tfoot> <tr class="table-primary"> <th class="text-end"> Total </th> <th colspan="5"> {{-- Fall Attempts: {{ $fallAttempts }} --}} </th> <th> <span class="badge bg-label-{{ $fallRatingMeta->color }}"> {{ number_format($fallAvgScore, 1) }}% </span> </th> <th> <span class="badge bg-label-{{ $fallRatingMeta->color }}"> {{ $fallRatingMeta->rating }} </span> </th> </tr> </tfoot> </table>
                                 </div>
                             </div>
                         </div>

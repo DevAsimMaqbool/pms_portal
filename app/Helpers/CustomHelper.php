@@ -2600,7 +2600,6 @@ if (!function_exists('saveIndicatorPercentage')) {
     {
         $ActiveRecord = ActiveRecord::where('status', 1)->first();
         
-     
         $exists = DB::table('role_kpa_assignments')
             ->where('role_id', $role_id)
             ->where('indicator_id', $indicatorId)
@@ -3829,14 +3828,41 @@ if (!function_exists('getFacultyClassWiseFeedback')) {
             )
             ->get();
 
-        // Calculate sum of feedback
-        $totalFeedback = $result->sum(function ($item) {
-            return (float) str_replace('%', '', $item->feedback);
+        /*
+         * Calculate:
+         *
+         * Multiplication = Feedback × Attempts
+         *
+         * Feedback Average =
+         * SUM(Feedback × Attempts) / SUM(Attempts)
+         */
+
+        $totalMultiplication = $result->sum(function ($item) {
+
+            $feedback = (float) str_replace(
+                '%',
+                '',
+                $item->feedback ?? 0
+            );
+
+            $attempts = (float) ($item->attempts ?? 0);
+
+            return $feedback * $attempts;
         });
+
+        $totalAttempts = $result->sum(function ($item) {
+            return (float) ($item->attempts ?? 0);
+        });
+
+        $feedbackAvg = $totalAttempts > 0
+            ? $totalMultiplication / $totalAttempts
+            : 0;
 
         $data = [
             'collection' => $result,
-            'totalFeedback' => $totalFeedback,
+            'totalMultiplication' => $totalMultiplication,
+            'totalAttempts' => $totalAttempts,
+            'feedbackAvg' => round($feedbackAvg, 2),
         ];
 
         $memo[$key] = $data;
@@ -5155,14 +5181,14 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
         $weightedScore = ($departmentAvgScore * $weight) / 100;
 
         // ✅ SAVE KPI
-        saveIndicatorPercentage90Plus(
-            auth()->user()->employee_id,
-            $activeRoleId,
-            1,
-            23,
-            182,
-            $weightedScore
-        );
+        // saveIndicatorPercentage90Plus(
+        //     auth()->user()->employee_id,
+        //     $activeRoleId,
+        //     1,
+        //     23,
+        //     182,
+        //     $weightedScore
+        // );
 
         return [
             'collection' => $collection,
@@ -8742,7 +8768,6 @@ if (!function_exists('saveIndicatorPercentage100Plus')) {
             'indicator_id' => $indicatorId,
             'year_id' => $ActiveRecord->id
         ];
-
 
         IndicatorsPercentage::updateOrCreate(
             $conditions,

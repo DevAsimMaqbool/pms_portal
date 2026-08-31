@@ -9,6 +9,7 @@ class FacultyMemberClass extends Model
     protected $fillable = [
         'class_id',
         'faculty_id',
+        'c_class_id',
         'class_name',
         'code',
         'term_id',
@@ -22,7 +23,7 @@ class FacultyMemberClass extends Model
 
     public function attendances()
     {
-        return $this->hasMany(FacultyClassAttendance::class, 'class_id', 'class_id');
+        return $this->hasMany(FacultyClassAttendance::class, 'class_id', 'c_class_id');
     }
     public function faculty()
     {
