@@ -2,799 +2,556 @@
 
 @section('content')
 
-    <div class="container-fluid py-3">
+<div class="container-fluid py-3">
 
-        {{-- ========================================================= --}}
-        {{-- PAGE HEADER --}}
-        {{-- ========================================================= --}}
+    {{-- HEADER --}}
+    <div class="manager-header mb-3">
 
-        <div class="review-page-header mb-3">
+        <div class="d-flex align-items-center justify-content-between">
 
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div class="d-flex align-items-center gap-3">
 
-                <div class="d-flex align-items-center gap-3">
+                <div class="manager-header-icon">
+                    <i class="fas fa-users"></i>
+                </div>
 
-                    <div class="header-icon">
-                        <i class="fas fa-clipboard-check"></i>
-                    </div>
+                <div>
+                    <h4 class="mb-1 fw-bold">
+                        Goal Manager Reviews
+                    </h4>
 
-                    <div>
-
-                        <h3 class="fw-bold mb-1">
-                            Goal Manager Reviews
-                        </h3>
-
-                        <p class="mb-0 text-muted">
-                            Review and manage employee goal assessments.
-                        </p>
-
-                    </div>
-
+                    <small>
+                        Select an employee to review all goals.
+                    </small>
                 </div>
 
             </div>
-
-        </div>
-
-        {{-- ========================================================= --}}
-        {{-- SUCCESS --}}
-        {{-- ========================================================= --}}
-
-        @if(session('success'))
-
-            <div class="alert alert-success border-0 shadow-sm mb-3">
-
-                <i class="fas fa-check-circle me-2"></i>
-
-                {{ session('success') }}
-
-            </div>
-
-        @endif
-
-        {{-- ========================================================= --}}
-        {{-- ERROR --}}
-        {{-- ========================================================= --}}
-
-        @if(session('error'))
-
-            <div class="alert alert-danger border-0 shadow-sm mb-3">
-
-                <i class="fas fa-exclamation-circle me-2"></i>
-
-                {{ session('error') }}
-
-            </div>
-
-        @endif
-
-        {{-- ========================================================= --}}
-        {{-- REPORT TABLE --}}
-        {{-- ========================================================= --}}
-
-        <div class="reports-card">
-
-            <div class="reports-card-header">
-
-                <div class="d-flex align-items-center gap-2">
-
-                    <div class="section-icon">
-                        <i class="fas fa-list-check"></i>
-                    </div>
-
-                    <div>
-
-                        <h5 class="mb-0 fw-bold">
-                            Employee Goal Reports
-                        </h5>
-
-                        <small>
-                            Pending, approved and rejected reports
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="table-responsive">
-
-                <table class="table reports-table align-middle mb-0">
-
-                    <thead>
-
-                        <tr>
-
-                            <th width="60">
-                                #
-                            </th>
-
-                            <th>
-                                Employee
-                            </th>
-
-                            <th>
-                                Goal
-                            </th>
-
-                            <th>
-                                Submitted
-                            </th>
-
-                            <th>
-                                Employee Rating
-                            </th>
-
-                            <th>
-                                Manager Rating
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                            <th width="170">
-                                Action
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @forelse($reports as $report)
-
-                                            @php
-
-                                                $status = strtolower($report->status ?? 'submitted');
-
-                                                $statusLabel = match ($status) {
-                                                    'approved' => 'Approved',
-                                                    'rejected' => 'Rejected',
-                                                    'submitted' => 'Pending',
-                                                    default => ucwords(str_replace('_', ' ', $status)),
-                                                };
-
-                                            @endphp
-
-                                            <tr>
-
-                                                {{-- ID --}}
-                                                <td>
-
-                                                    <span class="report-id">
-                                                        #{{ $report->id }}
-                                                    </span>
-
-                                                </td>
-
-                                                {{-- Employee --}}
-                                                <td>
-
-                                                    <div class="employee-cell">
-
-                                                        <div class="employee-avatar">
-
-                                                            <i class="fas fa-user"></i>
-
-                                                        </div>
-
-                                                        <div>
-
-                                                            <div class="employee-name">
-                                                                {{ $report->user->name ?? 'N/A' }}
-                                                            </div>
-
-                                                            <small>
-                                                                Employee
-                                                            </small>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </td>
-
-                                                {{-- Goal --}}
-                                                <td>
-
-                                                    <div class="goal-text">
-
-                                                        {{ \Illuminate\Support\Str::limit(
-                                $report->goal->goal ?? 'N/A',
-                                70
-                            ) }}
-
-                                                    </div>
-
-                                                </td>
-
-                                                {{-- Submitted --}}
-                                                <td>
-
-                                                    <div class="date-text">
-
-                                                        {{ optional($report->submitted_at)->format('d M Y') }}
-
-                                                        <small>
-                                                            {{ optional($report->submitted_at)->format('h:i A') }}
-                                                        </small>
-
-                                                    </div>
-
-                                                </td>
-
-                                                {{-- Employee Rating --}}
-                                                <td>
-
-                                                    <span class="employee-rating">
-
-                                                        <i class="fas fa-star"></i>
-
-                                                        {{ $report->rating ?? 0 }}
-
-                                                        <small>/ 5</small>
-
-                                                    </span>
-
-                                                </td>
-
-                                                {{-- Manager Rating --}}
-                                                <td>
-
-                                                    @if($report->manager_rating !== null)
-
-                                                        <span class="manager-rating">
-
-                                                            <i class="fas fa-star"></i>
-
-                                                            {{ $report->manager_rating }}
-
-                                                            <small>/ 5</small>
-
-                                                        </span>
-
-                                                    @else
-
-                                                        <span class="not-rated">
-                                                            Not Rated
-                                                        </span>
-
-                                                    @endif
-
-                                                </td>
-
-                                                {{-- Status --}}
-                                                <td>
-
-                                                    @if($status === 'approved')
-
-                                                        <span class="status-badge status-approved">
-
-                                                            <i class="fas fa-check-circle"></i>
-
-                                                            Approved
-
-                                                        </span>
-
-                                                    @elseif($status === 'rejected')
-
-                                                        <span class="status-badge status-rejected">
-
-                                                            <i class="fas fa-times-circle"></i>
-
-                                                            Rejected
-
-                                                        </span>
-
-                                                    @else
-
-                                                        <span class="status-badge status-pending">
-
-                                                            <i class="fas fa-clock"></i>
-
-                                                            Pending
-
-                                                        </span>
-
-                                                    @endif
-
-                                                </td>
-
-                                                {{-- Action --}}
-                                                <td>
-
-                                                    @if($report->manager_rating !== null)
-
-                                                                            <a href="{{ route(
-                                                            'goal-manager.show',
-                                                            $report
-                                                        ) }}" class="btn btn-success btn-sm action-btn">
-
-                                                                                <i class="fas fa-eye me-1"></i>
-
-                                                                                View / Update
-
-                                                                            </a>
-
-                                                    @else
-
-                                                                            <a href="{{ route(
-                                                            'goal-manager.show',
-                                                            $report
-                                                        ) }}" class="btn btn-primary btn-sm action-btn">
-
-                                                                                <i class="fas fa-star me-1"></i>
-
-                                                                                Give Rating
-
-                                                                            </a>
-
-                                                    @endif
-
-                                                </td>
-
-                                            </tr>
-
-                        @empty
-
-                            <tr>
-
-                                <td colspan="8">
-
-                                    <div class="empty-state">
-
-                                        <div class="empty-icon">
-
-                                            <i class="fas fa-folder-open"></i>
-
-                                        </div>
-
-                                        <h6>
-                                            No Goal Reports Found
-                                        </h6>
-
-                                        <p>
-                                            There are currently no employee goal reports assigned to you.
-                                        </p>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-                        @endforelse
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-            {{-- Pagination --}}
-
-            @if($reports->hasPages())
-
-                <div class="pagination-wrapper">
-
-                    {{ $reports->links() }}
-
-                </div>
-
-            @endif
 
         </div>
 
     </div>
 
-    <style>
-        :root {
+    {{-- ALERTS --}}
 
-            --pms-primary: #1f4e79;
-            --pms-primary-dark: #173a5c;
-            --pms-border: #e4e9f0;
-            --pms-text: #253449;
-            --pms-muted: #718096;
+    @if(session('success'))
 
-        }
+        <div class="alert alert-success border-0 shadow-sm py-2 mb-3">
+            <i class="fas fa-check-circle me-1"></i>
+            {{ session('success') }}
+        </div>
 
-        .review-page-header {
+    @endif
 
-            background: linear-gradient(135deg,
-                    #ffffff,
-                    #f5f8fc);
+    @if(session('error'))
 
-            border: 1px solid var(--pms-border);
+        <div class="alert alert-danger border-0 shadow-sm py-2 mb-3">
+            <i class="fas fa-exclamation-circle me-1"></i>
+            {{ session('error') }}
+        </div>
 
-            border-radius: 12px;
+    @endif
 
-            padding: 15px 20px;
+    {{-- EMPLOYEE CARD --}}
 
-            box-shadow:
-                0 3px 12px rgba(31, 78, 121, .05);
+    <div class="employee-card">
 
-        }
+        <div class="employee-card-header">
 
-        .review-page-header h3 {
+            <div>
+                <h5 class="mb-1 fw-bold">
+                    My Employees
+                </h5>
 
-            font-size: 20px;
+                <small>
+                    Employees with submitted goals
+                </small>
+            </div>
 
-        }
+            <span class="employee-count">
+                {{ $employees->total() }}
+                Employees
+            </span>
 
-        .header-icon {
+        </div>
 
-            width: 42px;
-            height: 42px;
+        <div class="employee-list">
 
-            border-radius: 10px;
+            @forelse($employees as $employee)
 
-            background: var(--pms-primary);
+                @php
 
-            color: #fff;
+                    $totalGoals = $employee->total_goals ?? 0;
 
-            display: flex;
+                    $reviewedGoals = $employee->reviewed_goals ?? 0;
 
-            align-items: center;
+                    $pendingGoals = $employee->pending_goals ?? 0;
 
-            justify-content: center;
+                    $complete =
+                        $totalGoals > 0 &&
+                        $pendingGoals === 0;
 
-        }
+                @endphp
 
-        .reports-card {
+                <div class="employee-row">
 
-            background: #fff;
+                    {{-- EMPLOYEE --}}
 
-            border: 1px solid var(--pms-border);
+                    <div class="employee-main">
 
-            border-radius: 12px;
+                        <div class="employee-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
 
-            overflow: hidden;
+                        <div>
 
-            box-shadow:
-                0 4px 16px rgba(31, 78, 121, .05);
+                            <div class="employee-name">
+                                {{ $employee->name }}
+                            </div>
 
-        }
+                            <small class="employee-label">
+                                Employee
+                            </small>
 
-        .reports-card-header {
+                        </div>
 
-            padding: 14px 18px;
+                    </div>
 
-            background: linear-gradient(135deg,
-                    #f5f8fc,
-                    #ffffff);
+                    {{-- GOAL COUNT --}}
 
-            border-bottom: 1px solid var(--pms-border);
+                    <div class="employee-stat">
 
-        }
+                        <span>
+                            Goals
+                        </span>
 
-        .reports-card-header small {
+                        <strong>
+                            {{ $totalGoals }}
+                        </strong>
 
-            color: var(--pms-muted);
+                    </div>
 
-            font-size: 10px;
+                    {{-- REVIEWED --}}
 
-        }
+                    <div class="employee-stat">
 
-        .section-icon {
+                        <span>
+                            Reviewed
+                        </span>
 
-            width: 34px;
-            height: 34px;
+                        <strong class="text-success">
+                            {{ $reviewedGoals }}
+                        </strong>
 
-            border-radius: 8px;
+                    </div>
 
-            background: #e8f1fa;
+                    {{-- PENDING --}}
 
-            color: var(--pms-primary);
+                    <div class="employee-stat">
 
-            display: flex;
+                        <span>
+                            Pending
+                        </span>
 
-            align-items: center;
+                        <strong class="{{ $pendingGoals > 0 ? 'text-warning' : 'text-success' }}">
+                            {{ $pendingGoals }}
+                        </strong>
 
-            justify-content: center;
+                    </div>
 
-        }
+                    {{-- STATUS --}}
 
-        .reports-table {
+                    <div>
 
-            font-size: 12px;
+                        @if($complete)
 
-        }
+                            <span class="status-badge status-complete">
+                                <i class="fas fa-check-circle"></i>
+                                All Reviewed
+                            </span>
 
-        .reports-table thead th {
+                        @else
 
-            background: #f8fafc;
+                            <span class="status-badge status-pending">
+                                <i class="fas fa-clock"></i>
+                                Review Pending
+                            </span>
 
-            color: var(--pms-muted);
+                        @endif
 
-            font-size: 10px;
+                    </div>
 
-            font-weight: 800;
+                    {{-- ACTION --}}
 
-            text-transform: uppercase;
+                    <div>
 
-            letter-spacing: .3px;
+                        <a href="{{ route('goal-manager.show', $employee) }}"
+                           class="btn btn-primary btn-sm view-goals-btn">
 
-            padding: 11px 12px;
+                            <i class="fas fa-arrow-right me-1"></i>
 
-            border-bottom: 1px solid var(--pms-border);
+                            View Goals
 
-            white-space: nowrap;
+                        </a>
 
-        }
+                    </div>
 
-        .reports-table tbody td {
+                </div>
 
-            padding: 12px;
+            @empty
 
-            border-bottom: 1px solid #edf1f5;
+                <div class="empty-state">
 
-            color: var(--pms-text);
+                    <div class="empty-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
 
-        }
+                    <h6>
+                        No Employees Found
+                    </h6>
 
-        .reports-table tbody tr:hover {
+                    <p>
+                        No employees currently have submitted goals for review.
+                    </p>
 
-            background: #f9fbfd;
+                </div>
 
-        }
+            @endforelse
 
-        .report-id {
+        </div>
 
-            color: var(--pms-primary);
+        {{-- PAGINATION --}}
 
-            font-weight: 700;
+        @if($employees->hasPages())
 
-        }
+            <div class="pagination-wrapper">
+                {{ $employees->links() }}
+            </div>
 
-        .employee-cell {
+        @endif
 
-            display: flex;
+    </div>
 
-            align-items: center;
+</div>
 
-            gap: 9px;
+<style>
 
-        }
+:root {
+    --pms-primary: #1f4e79;
+    --pms-primary-dark: #173a5c;
+    --pms-border: #e4e9f0;
+    --pms-text: #253449;
+    --pms-muted: #718096;
+}
 
-        .employee-avatar {
+body {
+    background: #f7f9fc;
+}
 
-            width: 32px;
-            height: 32px;
+/* HEADER */
 
-            border-radius: 8px;
+.manager-header {
+    background: linear-gradient(
+        135deg,
+        #ffffff,
+        #f5f8fc
+    );
 
-            background: #e8f1fa;
+    border: 1px solid var(--pms-border);
+    border-radius: 11px;
 
-            color: var(--pms-primary);
+    padding: 13px 17px;
 
-            display: flex;
+    box-shadow:
+        0 3px 12px rgba(31, 78, 121, .05);
+}
 
-            align-items: center;
+.manager-header-icon {
+    width: 40px;
+    height: 40px;
 
-            justify-content: center;
+    border-radius: 9px;
 
-        }
+    background: var(--pms-primary);
+    color: #fff;
 
-        .employee-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-            font-weight: 700;
+.manager-header h4 {
+    font-size: 17px;
+    color: var(--pms-text);
+}
 
-            color: var(--pms-text);
+.manager-header small {
+    font-size: 10px;
+    color: var(--pms-muted);
+}
 
-        }
+/* CARD */
 
-        .employee-cell small {
+.employee-card {
+    background: #fff;
 
-            color: var(--pms-muted);
+    border: 1px solid var(--pms-border);
+    border-radius: 11px;
 
-            font-size: 9px;
+    overflow: hidden;
 
-        }
+    box-shadow:
+        0 3px 14px rgba(31, 78, 121, .045);
+}
 
-        .goal-text {
+/* CARD HEADER */
 
-            max-width: 300px;
+.employee-card-header {
+    padding: 13px 16px;
 
-            line-height: 1.5;
+    background: linear-gradient(
+        135deg,
+        #f5f8fc,
+        #ffffff
+    );
 
-        }
+    border-bottom: 1px solid var(--pms-border);
 
-        .date-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-            font-weight: 600;
+.employee-card-header h5 {
+    font-size: 14px;
+    color: var(--pms-text);
+}
 
-        }
+.employee-card-header small {
+    font-size: 9px;
+    color: var(--pms-muted);
+}
 
-        .date-text small {
+.employee-count {
+    background: #e8f1fa;
+    color: var(--pms-primary);
 
-            display: block;
+    border-radius: 15px;
 
-            color: var(--pms-muted);
+    padding: 5px 10px;
 
-            font-size: 9px;
+    font-size: 10px;
+    font-weight: 700;
+}
 
-            margin-top: 2px;
+/* EMPLOYEE ROW */
 
-        }
+.employee-row {
+    min-height: 68px;
 
-        .employee-rating,
-        .manager-rating {
+    padding: 10px 15px;
 
-            display: inline-flex;
+    display: grid;
 
-            align-items: center;
+    grid-template-columns:
+        minmax(220px, 1fr)
+        80px
+        90px
+        80px
+        130px
+        120px;
 
-            gap: 3px;
+    gap: 12px;
 
-            font-weight: 800;
+    align-items: center;
 
-        }
+    border-bottom: 1px solid #edf1f5;
 
-        .employee-rating {
+    transition: background .15s ease;
+}
 
-            color: var(--pms-primary);
+.employee-row:last-child {
+    border-bottom: 0;
+}
 
-        }
+.employee-row:hover {
+    background: #fafcfe;
+}
 
-        .manager-rating {
+/* EMPLOYEE */
 
-            color: #b77900;
+.employee-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-        }
+.employee-avatar {
+    width: 36px;
+    height: 36px;
 
-        .employee-rating i,
-        .manager-rating i {
+    flex-shrink: 0;
 
-            font-size: 10px;
+    border-radius: 9px;
 
-        }
+    background: #e8f1fa;
+    color: var(--pms-primary);
 
-        .employee-rating small,
-        .manager-rating small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-            color: var(--pms-muted);
+.employee-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--pms-text);
+}
 
-            font-size: 9px;
+.employee-label {
+    font-size: 9px;
+    color: var(--pms-muted);
+}
 
-        }
+/* STATS */
 
-        .not-rated {
+.employee-stat span {
+    display: block;
 
-            color: var(--pms-muted);
+    color: var(--pms-muted);
 
-            font-size: 10px;
+    font-size: 8px;
 
-        }
+    text-transform: uppercase;
 
-        .status-badge {
+    font-weight: 700;
 
-            display: inline-flex;
+    margin-bottom: 2px;
+}
 
-            align-items: center;
+.employee-stat strong {
+    font-size: 12px;
+    color: var(--pms-text);
+}
 
-            gap: 5px;
+/* STATUS */
 
-            padding: 5px 9px;
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 
-            border-radius: 20px;
+    border-radius: 20px;
 
-            font-size: 10px;
+    padding: 5px 9px;
 
-            font-weight: 700;
+    font-size: 9px;
 
-            white-space: nowrap;
+    font-weight: 700;
 
-        }
+    white-space: nowrap;
+}
 
-        .status-approved {
+.status-complete {
+    color: #198754;
+    background: #e7f6ed;
+}
 
-            color: #198754;
+.status-pending {
+    color: #b77900;
+    background: #fff5dc;
+}
 
-            background: #e7f6ed;
+/* BUTTON */
 
-        }
+.view-goals-btn {
+    border-radius: 6px;
 
-        .status-rejected {
+    font-size: 10px;
 
-            color: #dc3545;
+    padding: 6px 10px;
 
-            background: #fdebec;
+    background: var(--pms-primary);
+    border-color: var(--pms-primary);
+}
 
-        }
+.view-goals-btn:hover {
+    background: var(--pms-primary-dark);
+    border-color: var(--pms-primary-dark);
+}
 
-        .status-pending {
+/* EMPTY */
 
-            color: #b77900;
+.empty-state {
+    text-align: center;
+    padding: 45px 20px;
+}
 
-            background: #fff5dc;
+.empty-icon {
+    width: 50px;
+    height: 50px;
 
-        }
+    margin: 0 auto 12px;
 
-        .action-btn {
+    border-radius: 12px;
 
-            border-radius: 7px;
+    background: #e8f1fa;
+    color: var(--pms-primary);
 
-            font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            padding: 7px 10px;
+    font-size: 20px;
+}
 
-            white-space: nowrap;
+.empty-state h6 {
+    color: var(--pms-text);
+    font-size: 13px;
+    font-weight: 700;
+}
 
-        }
+.empty-state p {
+    color: var(--pms-muted);
+    font-size: 10px;
+}
 
-        .empty-state {
+/* PAGINATION */
 
-            text-align: center;
+.pagination-wrapper {
+    padding: 11px 15px;
+    border-top: 1px solid var(--pms-border);
+}
 
-            padding: 45px 20px;
+/* MOBILE */
 
-        }
+@media(max-width: 900px) {
 
-        .empty-icon {
+    .employee-row {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
 
-            width: 50px;
-            height: 50px;
+    .employee-main {
+        grid-column: 1 / -1;
+    }
 
-            border-radius: 12px;
+}
 
-            background: #e8f1fa;
+@media(max-width: 600px) {
 
-            color: var(--pms-primary);
+    .employee-row {
+        grid-template-columns: 1fr 1fr;
+    }
 
-            display: flex;
+    .employee-main {
+        grid-column: 1 / -1;
+    }
 
-            align-items: center;
+    .employee-row > div:last-child {
+        text-align: right;
+    }
 
-            justify-content: center;
+}
 
-            margin: 0 auto 12px;
-
-            font-size: 20px;
-
-        }
-
-        .empty-state h6 {
-
-            color: var(--pms-text);
-
-            font-weight: 700;
-
-        }
-
-        .empty-state p {
-
-            color: var(--pms-muted);
-
-            font-size: 11px;
-
-        }
-
-        .pagination-wrapper {
-
-            padding: 12px 18px;
-
-            border-top: 1px solid var(--pms-border);
-
-        }
-
-        @media(max-width: 768px) {
-
-            .reports-card {
-
-                overflow-x: auto;
-
-            }
-
-            .reports-table {
-
-                min-width: 950px;
-
-            }
-
-        }
-    </style>
+</style>
 
 @endsection

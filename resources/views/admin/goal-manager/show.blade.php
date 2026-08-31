@@ -2,802 +2,732 @@
 
 @section('content')
 
-    <div class="container-fluid py-3">
+<div class="container-fluid py-3">
 
-        {{-- ========================================================= --}}
-        {{-- PAGE HEADER --}}
-        {{-- ========================================================= --}}
+    {{-- ========================================================= --}}
+    {{-- HEADER --}}
+    {{-- ========================================================= --}}
 
-        <div class="review-page-header mb-3">
+    <div class="page-header mb-3">
 
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
 
-                <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3">
 
-                    <div class="header-icon">
-                        <i class="fas fa-clipboard-check"></i>
-                    </div>
+                <div class="header-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
 
-                    <div>
+                <div>
 
-                        <h3 class="fw-bold mb-1">
-                            Line Manager Review
-                        </h3>
+                    <h4 class="mb-1 fw-bold">
+                        Employee Goal Review
+                    </h4>
 
-                        <p class="mb-0 text-muted">
-                            Review the employee's progress and provide your assessment against the goal.
-                        </p>
+                    <div class="employee-heading">
+
+                        <i class="fas fa-user me-1"></i>
+
+                        {{ $user->name }}
 
                     </div>
 
                 </div>
 
-                <a href="{{ route('goal-manager.index') }}" class="btn btn-light border shadow-sm px-3">
+            </div>
 
-                    <i class="fas fa-arrow-left me-2"></i>
-                    Back to Reports
+            <a href="{{ route('goal-manager.index') }}"
+               class="btn btn-light border btn-sm">
 
-                </a>
+                <i class="fas fa-arrow-left me-1"></i>
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {{-- ========================================================= --}}
+    {{-- ALERTS --}}
+    {{-- ========================================================= --}}
+
+    @if(session('success'))
+
+        <div class="alert alert-success border-0 shadow-sm py-2 mb-3">
+
+            <i class="fas fa-check-circle me-1"></i>
+
+            {{ session('success') }}
+
+        </div>
+
+    @endif
+
+    @if(session('error'))
+
+        <div class="alert alert-danger border-0 shadow-sm py-2 mb-3">
+
+            <i class="fas fa-exclamation-circle me-1"></i>
+
+            {{ session('error') }}
+
+        </div>
+
+    @endif
+
+    @if($errors->any())
+
+        <div class="alert alert-danger border-0 shadow-sm py-2 mb-3">
+
+            <strong>
+                Please correct the following:
+            </strong>
+
+            <ul class="mb-0 mt-1">
+
+                @foreach($errors->all() as $error)
+
+                    <li>
+                        {{ $error }}
+                    </li>
+
+                @endforeach
+
+            </ul>
+
+        </div>
+
+    @endif
+
+    {{-- ========================================================= --}}
+    {{-- SUMMARY --}}
+    {{-- ========================================================= --}}
+
+    <div class="summary-card mb-3">
+
+        <div class="summary-item">
+
+            <span>
+                Total Goals
+            </span>
+
+            <strong>
+                {{ $reports->count() }}
+            </strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>
+                Reviewed
+            </span>
+
+            <strong class="text-success">
+                {{ $reviewedGoals }}
+            </strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>
+                Pending
+            </span>
+
+            <strong class="{{ $pendingGoals > 0 ? 'text-warning' : 'text-success' }}">
+                {{ $pendingGoals }}
+            </strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>
+                Total Weightage
+            </span>
+
+            <strong>
+                {{ number_format($totalWeightage, 2) }}%
+            </strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>
+                Calculated Overall
+            </span>
+
+            <strong class="overall-rating">
+
+                {{ $calculatedOverallRating !== null
+                    ? number_format($calculatedOverallRating, 2)
+                    : '-' }}
+
+                @if($calculatedOverallRating !== null)
+                    <small>/ 5</small>
+                @endif
+
+            </strong>
+
+        </div>
+
+    </div>
+
+    {{-- ========================================================= --}}
+    {{-- GOALS --}}
+    {{-- ========================================================= --}}
+
+    <div class="section-header mb-2">
+
+        <div>
+
+            <h5 class="mb-1 fw-bold">
+                Employee Goals
+            </h5>
+
+            <small>
+                Review each goal and provide your assessment.
+            </small>
+
+        </div>
+
+    </div>
+
+    @forelse($reports as $index => $report)
+
+        @php
+
+            $managerReview = $report->managerReview;
+
+            $isReviewed = $report->manager_rating !== null;
+
+            $existingWeight = old(
+                'weightage',
+                $report->weightage
+            );
+
+            $existingRating = old(
+                'manager_rating',
+                $report->manager_rating
+            );
+
+            $existingDecision = old(
+                'decision',
+                optional($managerReview)->decision
+            );
+
+            $existingComments = old(
+                'comments',
+                optional($managerReview)->comments
+            );
+
+        @endphp
+
+        <div class="goal-card mb-3">
+
+            {{-- GOAL HEADER --}}
+
+            <div class="goal-header">
+
+                <div class="goal-number">
+                    {{ $index + 1 }}
+                </div>
+
+                <div class="goal-header-content">
+
+                    <div class="goal-header-title">
+                        Goal {{ $index + 1 }}
+                    </div>
+
+                    @if($isReviewed)
+
+                        <span class="goal-status reviewed">
+                            <i class="fas fa-check-circle"></i>
+                            Reviewed
+                        </span>
+
+                    @else
+
+                        <span class="goal-status pending">
+                            <i class="fas fa-clock"></i>
+                            Pending
+                        </span>
+
+                    @endif
+
+                </div>
+
+            </div>
+
+            {{-- GOAL BODY --}}
+
+            <div class="goal-body">
+
+                {{-- GOAL TEXT --}}
+
+                <div class="goal-main">
+
+                    <div class="field-label">
+                        <i class="fas fa-bullseye"></i>
+                        Goal
+                    </div>
+
+                    <div class="goal-text">
+                        {{ $report->goal->goal ?? 'N/A' }}
+                    </div>
+
+                </div>
+
+                {{-- DETAILS --}}
+
+                <div class="goal-details">
+
+                    <div class="detail-box">
+
+                        <span>
+                            <i class="fas fa-link"></i>
+                            S2R Driver / Enabler
+                        </span>
+
+                        <strong>
+                            {{ $report->goal->s2rDriver->driver_name ?? 'N/A' }}
+                        </strong>
+
+                    </div>
+
+                    <div class="detail-box">
+
+                        <span>
+                            <i class="fas fa-calendar"></i>
+                            Deadline
+                        </span>
+
+                        <strong>
+                            {{ optional($report->goal->deadline)->format('d M Y') }}
+                        </strong>
+
+                    </div>
+
+                    <div class="detail-box">
+
+                        <span>
+                            <i class="fas fa-list-check"></i>
+                            Objective
+                        </span>
+
+                        <strong>
+                            {{ $report->goal->objectives ?: 'N/A' }}
+                        </strong>
+
+                    </div>
+
+                    <div class="detail-box">
+
+                        <span>
+                            <i class="fas fa-flag-checkered"></i>
+                            Target
+                        </span>
+
+                        <strong>
+                            {{ $report->goal->target }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                {{-- EMPLOYEE ASSESSMENT --}}
+
+                <div class="employee-assessment">
+
+                    <div class="assessment-label">
+                        Employee Assessment
+                    </div>
+
+                    <div class="assessment-grid">
+
+                        <div>
+
+                            <span>
+                                Achievement
+                            </span>
+
+                            <strong>
+                                {{ ucwords(str_replace(
+                                    '_',
+                                    ' ',
+                                    $report->achievement_status
+                                )) }}
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Employee Rating
+                            </span>
+
+                            <strong class="employee-rating">
+                                <i class="fas fa-star"></i>
+                                {{ $report->rating ?? 0 }}
+                                <small>/ 5</small>
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Progress
+                            </span>
+
+                            <strong class="progress-text">
+                                {{ $report->progress_against_goal }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- MANAGER FORM --}}
+
+                <div class="manager-review-box">
+
+                    <div class="manager-review-title">
+
+                        <div>
+
+                            <i class="fas fa-user-tie"></i>
+
+                            Manager Assessment
+
+                        </div>
+
+                        @if($isReviewed)
+
+                            <span class="reviewed-label">
+                                Already Reviewed
+                            </span>
+
+                        @endif
+
+                    </div>
+
+                    <form method="POST"
+                          action="{{ route(
+                              'goal-manager.review',
+                              $report
+                          ) }}">
+
+                        @csrf
+
+                        <div class="manager-form-grid">
+
+                            {{-- WEIGHTAGE --}}
+
+                            <div>
+
+                                <label class="form-label">
+
+                                    Goal Weightage (%)
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <div class="input-group input-group-sm">
+
+                                    <input
+                                        type="number"
+                                        name="weightage"
+                                        class="form-control"
+                                        value="{{ $existingWeight }}"
+                                        min="0"
+                                        max="100"
+                                        step="0.01"
+                                        placeholder="e.g. 20"
+                                        required
+                                    >
+
+                                    <span class="input-group-text">
+                                        %
+                                    </span>
+
+                                </div>
+
+                                <small class="form-help">
+                                    Contribution of this goal to overall performance.
+                                </small>
+
+                            </div>
+
+                            {{-- DECISION --}}
+
+                            <div>
+
+                                <label class="form-label">
+
+                                    Decision
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <select
+                                    name="decision"
+                                    class="form-select form-select-sm"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select Decision
+                                    </option>
+
+                                    <option
+                                        value="approved"
+                                        {{ $existingDecision === 'approved'
+                                            ? 'selected'
+                                            : '' }}
+                                    >
+                                        Approve
+                                    </option>
+
+                                    <option
+                                        value="rejected"
+                                        {{ $existingDecision === 'rejected'
+                                            ? 'selected'
+                                            : '' }}
+                                    >
+                                        Reject
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            {{-- RATING --}}
+
+                            <div>
+
+                                <label class="form-label">
+
+                                    Manager Rating
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <div class="rating-options">
+
+                                    @for($i = 0; $i <= 5; $i++)
+
+                                        <label class="rating-option">
+
+                                            <input
+                                                type="radio"
+                                                name="manager_rating"
+                                                value="{{ $i }}"
+                                                {{ $existingRating !== null &&
+                                                    (int) $existingRating === $i
+                                                    ? 'checked'
+                                                    : '' }}
+                                                required
+                                            >
+
+                                            <span>
+                                                {{ $i }}
+                                            </span>
+
+                                        </label>
+
+                                    @endfor
+
+                                </div>
+
+                                <small class="form-help">
+                                    Rate achievement from 0 to 5.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        {{-- COMMENTS --}}
+
+                        <div class="mt-3">
+
+                            <label class="form-label">
+                                Manager Remarks
+                            </label>
+
+                            <textarea
+                                name="comments"
+                                class="form-control form-control-sm"
+                                rows="2"
+                                placeholder="Enter remarks for this goal..."
+                            >{{ $existingComments }}</textarea>
+
+                        </div>
+
+                        {{-- ACTION --}}
+
+                        <div class="form-actions">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-sm"
+                            >
+
+                                @if($isReviewed)
+
+                                    <i class="fas fa-save me-1"></i>
+                                    Update Goal Review
+
+                                @else
+
+                                    <i class="fas fa-check me-1"></i>
+                                    Save Goal Review
+
+                                @endif
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
 
             </div>
 
         </div>
 
-        {{-- ========================================================= --}}
-        {{-- SUCCESS / ERROR ALERTS --}}
-        {{-- ========================================================= --}}
+    @empty
 
-        @if(session('success'))
+        <div class="empty-state">
 
-            <div class="alert alert-success border-0 shadow-sm d-flex align-items-center mb-3">
-
-                <i class="fas fa-check-circle fs-5 me-3"></i>
-
-                <div>
-                    {{ session('success') }}
-                </div>
-
+            <div class="empty-icon">
+                <i class="fas fa-folder-open"></i>
             </div>
 
-        @endif
+            <h6>
+                No Goals Found
+            </h6>
 
-        @if(session('error'))
+            <p>
+                This employee has no submitted goals available for review.
+            </p>
 
-            <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center mb-3">
+        </div>
 
-                <i class="fas fa-exclamation-circle fs-5 me-3"></i>
+    @endforelse
+
+    {{-- ========================================================= --}}
+    {{-- OVERALL MANAGER REVIEW --}}
+    {{-- ========================================================= --}}
+
+    @if($reports->count())
+
+        <div class="overall-card mt-4">
+
+            <div class="overall-header">
 
                 <div>
-                    {{ session('error') }}
+
+                    <h5 class="mb-1 fw-bold text-white">
+                        Overall Employee Performance
+                    </h5>
+
+                    <small>
+                        Submit your final overall assessment after reviewing all goals.
+                    </small>
+
                 </div>
 
-            </div>
+                <div class="overall-calculated">
 
-        @endif
-
-        @if($errors->any())
-
-            <div class="alert alert-danger border-0 shadow-sm mb-3">
-
-                <div class="d-flex align-items-center mb-2">
-
-                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span>
+                        Weighted Calculation
+                    </span>
 
                     <strong>
-                        Please correct the following errors:
+
+                        {{ $calculatedOverallRating !== null
+                            ? number_format($calculatedOverallRating, 2)
+                            : '-' }}
+
+                        @if($calculatedOverallRating !== null)
+                            / 5
+                        @endif
+
                     </strong>
 
                 </div>
 
-                <ul class="mb-0 ps-4">
-
-                    @foreach($errors->all() as $error)
-
-                        <li>
-                            {{ $error }}
-                        </li>
-
-                    @endforeach
-
-                </ul>
-
             </div>
 
-        @endif
+            <div class="overall-body">
 
-        {{-- ========================================================= --}}
-        {{-- EMPLOYEE / REPORT SUMMARY --}}
-        {{-- ========================================================= --}}
+                @if($pendingGoals > 0)
 
-        <div class="report-summary-card mb-3">
+                    <div class="overall-warning mb-3">
 
-            <div class="report-summary-header">
+                        <i class="fas fa-exclamation-circle"></i>
 
-                <div class="d-flex align-items-center gap-3">
-
-                    <div class="employee-icon">
-
-                        <i class="fas fa-user"></i>
+                        Please review all
+                        <strong>{{ $pendingGoals }}</strong>
+                        pending goal(s) before submitting the overall assessment.
 
                     </div>
 
-                    <div>
-
-                        <h5 class="mb-1 fw-bold">
-
-                            {{ $goalSelfReport->user->name ?? 'N/A' }}
-
-                        </h5>
-
-                        <small>
-                            Employee Goal Self Report
-                        </small>
-
-                    </div>
-
-                </div>
-
-                <div>
-
-                    <span class="report-badge">
-
-                        <i class="fas fa-file-alt me-1"></i>
-
-                        Report #{{ $goalSelfReport->id }}
-
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="report-summary-body">
-
-                <div class="row g-3">
-
-                    {{-- Submitted --}}
-                    <div class="col-md-4">
-
-                        <div class="summary-item">
-
-                            <div class="summary-label">
-
-                                <i class="fas fa-calendar-check"></i>
-
-                                Submitted
-
-                            </div>
-
-                            <div class="summary-value">
-
-                                {{ optional($goalSelfReport->submitted_at)->format('d M Y, h:i A') }}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    {{-- Achievement --}}
-                    <div class="col-md-4">
-
-                        <div class="summary-item">
-
-                            <div class="summary-label">
-
-                                <i class="fas fa-trophy"></i>
-
-                                Achievement
-
-                            </div>
-
-                            <div class="summary-value">
-
-                                {{ ucwords(str_replace('_', ' ', $goalSelfReport->achievement_status)) }}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    {{-- Employee Rating --}}
-                    <div class="col-md-4">
-
-                        <div class="summary-item">
-
-                            <div class="summary-label">
-
-                                <i class="fas fa-star"></i>
-
-                                Employee Rating
-
-                            </div>
-
-                            <div class="summary-value rating-summary">
-
-                                {{ $goalSelfReport->rating ?? 0 }}
-
-                                <span>/ 5</span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {{-- ========================================================= --}}
-        {{-- RATING SUMMARY --}}
-        {{-- ========================================================= --}}
-
-        <div class="section-heading mb-2">
-
-            <div class="section-heading-icon">
-
-                <i class="fas fa-chart-bar"></i>
-
-            </div>
-
-            <div>
-
-                <h5 class="fw-bold mb-1">
-                    Rating Summary
-                </h5>
-
-                <small class="text-muted">
-                    Current assessment status across the review process.
-                </small>
-
-            </div>
-
-        </div>
-
-        <div class="row g-3 mb-3">
-
-            {{-- Employee Self Rating --}}
-            <div class="col-lg-4">
-
-                <div class="rating-card rating-self h-100">
-
-                    <div class="rating-card-icon">
-
-                        <i class="fas fa-user-check"></i>
-
-                    </div>
-
-                    <div class="rating-card-title">
-                        Employee Self Rating
-                    </div>
-
-                    <div class="rating-value">
-
-                        {{ $goalSelfReport->rating ?? 0 }}
-
-                        <small>/ 5</small>
-
-                    </div>
-
-                    <div class="rating-status">
-
-                        <span class="status-pill status-blue">
-
-                            <i class="fas fa-circle me-1"></i>
-
-                            {{ ucwords(str_replace('_', ' ', $goalSelfReport->achievement_status)) }}
-
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            {{-- Manager Rating --}}
-            <div class="col-lg-4">
-
-                <div class="rating-card rating-manager h-100">
-
-                    <div class="rating-card-icon">
-
-                        <i class="fas fa-user-tie"></i>
-
-                    </div>
-
-                    <div class="rating-card-title">
-                        Line Manager Rating
-                    </div>
-
-                    <div class="rating-value">
-
-                        {{ $goalSelfReport->manager_rating ?? '-' }}
-
-                        @if($goalSelfReport->manager_rating !== null)
-
-                            <small>/ 5</small>
-
-                        @endif
-
-                    </div>
-
-                    <div class="rating-status">
-
-                        @if($goalSelfReport->manager_rating !== null)
-
-                            <span class="status-pill status-success">
-
-                                <i class="fas fa-check-circle me-1"></i>
-
-                                Reviewed
-
-                            </span>
-
-                        @else
-
-                            <span class="status-pill status-warning">
-
-                                <i class="fas fa-clock me-1"></i>
-
-                                Pending Review
-
-                            </span>
-
-                        @endif
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            {{-- HR Rating --}}
-            <div class="col-lg-4">
-
-                <div class="rating-card rating-hr h-100">
-
-                    <div class="rating-card-icon">
-
-                        <i class="fas fa-building"></i>
-
-                    </div>
-
-                    <div class="rating-card-title">
-                        HR Final Rating
-                    </div>
-
-                    <div class="rating-value">
-
-                        {{ $goalSelfReport->hr_rating ?? '-' }}
-
-                        @if($goalSelfReport->hr_rating !== null)
-
-                            <small>/ 5</small>
-
-                        @endif
-
-                    </div>
-
-                    <div class="rating-status">
-
-                        @if($goalSelfReport->hr_rating !== null)
-
-                            <span class="status-pill status-success">
-
-                                <i class="fas fa-check-circle me-1"></i>
-
-                                Finalized
-
-                            </span>
-
-                        @else
-
-                            <span class="status-pill status-warning">
-
-                                <i class="fas fa-clock me-1"></i>
-
-                                Pending HR Review
-
-                            </span>
-
-                        @endif
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {{-- ========================================================= --}}
-        {{-- GOAL INFORMATION --}}
-        {{-- ========================================================= --}}
-
-        <div class="section-heading mb-2">
-
-            <div class="section-heading-icon">
-
-                <i class="fas fa-bullseye"></i>
-
-            </div>
-
-            <div>
-
-                <h5 class="fw-bold mb-1">
-                    Goal Information
-                </h5>
-
-                <small class="text-muted">
-                    Review the goal details submitted by the employee.
-                </small>
-
-            </div>
-
-        </div>
-
-        <div class="goal-information-card mb-3">
-
-            <div class="goal-information-header">
-
-                <div class="d-flex align-items-center gap-2">
-
-                    <i class="fas fa-bullseye"></i>
-
-                    <h5 class="mb-0 fw-bold">
-                        Goal
-                    </h5>
-
-                </div>
-
-            </div>
-
-            <div class="goal-information-body">
-
-                {{-- Goal --}}
-                <div class="info-block full-width">
-
-                    <div class="info-label">
-
-                        <i class="fas fa-bullseye"></i>
-
-                        Goal
-
-                    </div>
-
-                    <div class="info-value large">
-
-                        {{ $goalSelfReport->goal->goal }}
-
-                    </div>
-
-                </div>
-
-                <div class="row g-3">
-
-                    {{-- S2R --}}
-                    <div class="col-lg-6">
-
-                        <div class="info-block h-100">
-
-                            <div class="info-label">
-
-                                <i class="fas fa-link"></i>
-
-                                S2R Driver / Enabler Alignment
-
-                            </div>
-
-                            <div class="info-value">
-
-                                {{ $goalSelfReport->goal->s2r_driver_enabler_alignment ?: 'N/A' }}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    {{-- Objective --}}
-                    <div class="col-lg-6">
-
-                        <div class="info-block h-100">
-
-                            <div class="info-label">
-
-                                <i class="fas fa-list-check"></i>
-
-                                Objective(s)
-
-                            </div>
-
-                            <div class="info-value">
-
-                                {{ $goalSelfReport->goal->objectives ?: 'N/A' }}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    {{-- Target --}}
-                    <div class="col-lg-6">
-
-                        <div class="info-block h-100">
-
-                            <div class="info-label">
-
-                                <i class="fas fa-flag-checkered"></i>
-
-                                Target
-
-                            </div>
-
-                            <div class="info-value">
-
-                                {{ $goalSelfReport->goal->target }}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    {{-- Achievement --}}
-                    <div class="col-lg-6">
-
-                        <div class="info-block h-100">
-
-                            <div class="info-label">
-
-                                <i class="fas fa-trophy"></i>
-
-                                Achievement Status
-
-                            </div>
-
-                            <div class="info-value">
-
-                                <span class="achievement-badge">
-
-                                    {{ ucwords(str_replace('_', ' ', $goalSelfReport->achievement_status)) }}
-
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {{-- ========================================================= --}}
-        {{-- PROGRESS --}}
-        {{-- ========================================================= --}}
-
-        <div class="section-heading mb-2">
-
-            <div class="section-heading-icon">
-
-                <i class="fas fa-chart-line"></i>
-
-            </div>
-
-            <div>
-
-                <h5 class="fw-bold mb-1">
-                    Progress Against Goal
-                </h5>
-
-                <small class="text-muted">
-                    Employee's submitted progress and achievements.
-                </small>
-
-            </div>
-
-        </div>
-
-        <div class="progress-card mb-3">
-
-            <div class="progress-card-header">
-
-                <i class="fas fa-file-alt"></i>
-
-                Employee Progress Statement
-
-            </div>
-
-            <div class="progress-card-body">
-
-                {{ $goalSelfReport->progress_against_goal }}
-
-            </div>
-
-        </div>
-
-        {{-- ========================================================= --}}
-        {{-- MANAGER DECISION --}}
-        {{-- ========================================================= --}}
-
-        <div class="section-heading mb-2">
-
-            <div class="section-heading-icon">
-
-                <i class="fas fa-gavel"></i>
-
-            </div>
-
-            <div>
-
-                <h5 class="fw-bold mb-1">
-                    Manager Decision
-                </h5>
-
-                <small class="text-muted">
-                    Provide your decision, rating and feedback.
-                </small>
-
-            </div>
-
-        </div>
-
-        <div class="decision-card">
-
-            <div class="decision-card-header">
-
-                <div class="d-flex align-items-center gap-3">
-
-                    <div class="decision-icon">
-
-                        <i class="fas fa-user-tie"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h5 class="mb-1 fw-bold">
-                            Line Manager Assessment
-                        </h5>
-
-                        <small>
-                            Evaluate the employee's achievement against the submitted goal.
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="decision-card-body">
-
-                <form method="POST" action="{{ route('goal-manager.review', $goalSelfReport) }}">
+                @endif
+
+                <form method="POST"
+                      action="{{ route(
+                          'goal-manager.overall-review',
+                          $user
+                      ) }}">
 
                     @csrf
 
-                    {{-- Decision --}}
-                    <div class="mb-3">
+                    <div class="row g-3">
+                        {{-- COMMENTS --}}
 
-                        <label class="form-label fw-semibold">
+                        <div class="col-lg-12">
 
-                            Decision
+                            <label class="form-label">
+                                Overall Remarks
+                            </label>
 
-                            <span class="text-danger">*</span>
-
-                        </label>
-
-                        <select name="decision" class="form-select form-select-lg" required>
-
-                            <option value="">
-                                -- Select Decision --
-                            </option>
-
-                            <option value="approved">
-                                Approve
-                            </option>
-
-                            <option value="rejected">
-                                Reject
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                    {{-- Manager Rating --}}
-                    <div class="mb-3">
-
-                        <label class="form-label fw-semibold mb-2">
-
-                            Manager Rating
-
-                            <span class="text-danger">*</span>
-
-                        </label>
-
-                        <div class="manager-rating-options">
-
-                            @for($i = 0; $i <= 5; $i++)
-
-                                <label class="manager-rating-option">
-
-                                    <input type="radio" name="manager_rating" value="{{ $i }}" required>
-
-                                    <div class="manager-rating-content">
-
-                                        <span class="rating-number">
-                                            {{ $i }}
-                                        </span>
-
-                                        <span class="rating-star">
-                                            <i class="fas fa-star"></i>
-                                        </span>
-
-                                    </div>
-
-                                </label>
-
-                            @endfor
-
-                        </div>
-
-                        <div class="rating-help">
-
-                            <i class="fas fa-info-circle me-1"></i>
-
-                            Rate the employee's achievement against the submitted goal from 0 to 5.
-
-                        </div>
-
-                        <div id="selectedRating" class="selected-rating-message">
-
-                            Select a rating
+                            <textarea
+                                name="manager_overll_comments"
+                                class="form-control form-control-sm"
+                                rows="2"
+                                placeholder="Overall performance remarks..."
+                            >{{ old(
+                                'manager_overll_comments',
+                                optional($overallReview)->manager_overll_comments
+                            ) }}</textarea>
 
                         </div>
 
                     </div>
 
-                    {{-- Comments --}}
-                    <div class="mb-3">
+                    <div class="overall-actions">
 
-                        <label class="form-label fw-semibold">
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-sm"
+                            {{ $pendingGoals > 0 ? 'disabled' : '' }}
+                        >
 
-                            Comments
+                            <i class="fas fa-paper-plane me-1"></i>
 
-                        </label>
-
-                        <textarea name="comments" class="form-control comments-input" rows="4"
-                            placeholder="Provide constructive feedback, observations or recommendations..."></textarea>
-
-                    </div>
-
-                    {{-- Actions --}}
-                    <div class="decision-actions">
-
-                        <a href="{{ route('goal-manager.index') }}" class="btn btn-light border px-4">
-
-                            <i class="fas fa-times me-2"></i>
-
-                            Cancel
-
-                        </a>
-
-                        <button type="submit" class="btn btn-primary px-4 shadow-sm">
-
-                            <i class="fas fa-paper-plane me-2"></i>
-
-                            Submit Decision
+                            Save Overall Assessment
 
                         </button>
 
@@ -809,1083 +739,759 @@
 
         </div>
 
-    </div>
+    @endif
 
-    {{-- ========================================================= --}}
-    {{-- STYLES --}}
-    {{-- ========================================================= --}}
+</div>
 
-    <style>
-        :root {
+<style>
 
-            --pms-primary: #1f4e79;
-            --pms-primary-dark: #173a5c;
-            --pms-light: #f4f7fb;
-            --pms-border: #e4e9f0;
-            --pms-text: #253449;
-            --pms-muted: #718096;
+:root {
+    --pms-primary: #1f4e79;
+    --pms-primary-dark: #173a5c;
+    --pms-border: #e4e9f0;
+    --pms-text: #253449;
+    --pms-muted: #718096;
+}
 
-        }
+body {
+    background: #f7f9fc;
+}
 
-        /* =========================================================
-                       PAGE HEADER
-                    ========================================================= */
+/* HEADER */
 
-        .review-page-header {
+.page-header {
+    background: #fff;
 
-            background: linear-gradient(135deg,
-                    #ffffff 0%,
-                    #f5f8fc 100%);
+    border: 1px solid var(--pms-border);
+    border-radius: 10px;
 
-            border: 1px solid var(--pms-border);
+    padding: 12px 15px;
 
-            border-radius: 12px;
+    box-shadow:
+        0 2px 9px rgba(31, 78, 121, .04);
+}
 
-            padding: 15px 20px;
+.header-icon {
+    width: 38px;
+    height: 38px;
 
-            box-shadow:
-                0 3px 12px rgba(31, 78, 121, 0.05);
+    border-radius: 9px;
 
-        }
+    background: var(--pms-primary);
+    color: #fff;
 
-        .review-page-header h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-            font-size: 20px;
+.page-header h4 {
+    font-size: 16px;
+    color: var(--pms-text);
+}
 
-        }
+.employee-heading {
+    color: var(--pms-primary);
+    font-size: 11px;
+    font-weight: 700;
+}
 
-        .header-icon {
+/* SUMMARY */
 
-            width: 42px;
-            height: 42px;
+.summary-card {
+    background: #fff;
 
-            border-radius: 10px;
+    border: 1px solid var(--pms-border);
+    border-radius: 10px;
 
-            background: var(--pms-primary);
+    display: grid;
 
-            color: #fff;
+    grid-template-columns:
+        repeat(5, 1fr);
 
-            display: flex;
+    overflow: hidden;
 
-            align-items: center;
+    box-shadow:
+        0 2px 9px rgba(31, 78, 121, .035);
+}
 
-            justify-content: center;
+.summary-item {
+    padding: 10px 13px;
 
-            font-size: 17px;
+    border-right: 1px solid var(--pms-border);
+}
 
-            box-shadow:
-                0 4px 10px rgba(31, 78, 121, 0.18);
+.summary-item:last-child {
+    border-right: 0;
+}
 
-        }
+.summary-item span {
+    display: block;
 
-        /* =========================================================
-                       REPORT SUMMARY
-                    ========================================================= */
+    color: var(--pms-muted);
 
-        .report-summary-card {
+    font-size: 8px;
 
-            background: #fff;
+    font-weight: 700;
 
-            border: 1px solid var(--pms-border);
+    text-transform: uppercase;
 
-            border-radius: 12px;
+    margin-bottom: 2px;
+}
 
-            overflow: hidden;
+.summary-item strong {
+    color: var(--pms-text);
+    font-size: 14px;
+}
 
-            box-shadow:
-                0 3px 14px rgba(31, 78, 121, .05);
+.overall-rating {
+    color: var(--pms-primary) !important;
+}
 
-        }
+.overall-rating small {
+    color: var(--pms-muted);
+    font-size: 9px;
+}
 
-        .report-summary-header {
+/* SECTION */
 
-            background: linear-gradient(135deg,
-                    var(--pms-primary),
-                    var(--pms-primary-dark));
+.section-header h5 {
+    color: var(--pms-text);
+    font-size: 14px;
+}
 
-            color: #fff;
+.section-header small {
+    color: var(--pms-muted);
+    font-size: 9px;
+}
 
-            padding: 14px 18px;
+/* GOAL CARD */
 
-            display: flex;
+.goal-card {
+    background: #fff;
 
-            align-items: center;
+    border: 1px solid var(--pms-border);
+    border-radius: 10px;
 
-            justify-content: space-between;
+    overflow: hidden;
 
-            gap: 12px;
+    box-shadow:
+        0 2px 9px rgba(31, 78, 121, .035);
+}
 
-        }
+/* GOAL HEADER */
 
-        .employee-icon {
+.goal-header {
+    padding: 10px 13px;
 
-            width: 38px;
-            height: 38px;
+    background: linear-gradient(
+        135deg,
+        #f5f8fc,
+        #ffffff
+    );
 
-            border-radius: 9px;
+    border-bottom: 1px solid var(--pms-border);
 
-            background: rgba(255, 255, 255, .14);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
 
-            border: 1px solid rgba(255, 255, 255, .20);
+.goal-number {
+    width: 29px;
+    height: 29px;
 
-            display: flex;
+    border-radius: 7px;
 
-            align-items: center;
+    background: var(--pms-primary);
+    color: #fff;
 
-            justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            font-size: 15px;
+    font-size: 11px;
+    font-weight: 800;
+}
 
-        }
+.goal-header-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        .report-summary-header h5 {
+.goal-header-title {
+    color: var(--pms-text);
+    font-size: 12px;
+    font-weight: 800;
+}
 
-            font-size: 15px;
+.goal-status {
+    padding: 3px 7px;
 
-        }
+    border-radius: 15px;
 
-        .report-summary-header small {
+    font-size: 8px;
+    font-weight: 700;
+}
 
-            opacity: .78;
+.goal-status.reviewed {
+    color: #198754;
+    background: #e7f6ed;
+}
 
-            font-size: 11px;
+.goal-status.pending {
+    color: #b77900;
+    background: #fff5dc;
+}
 
-        }
+/* BODY */
 
-        .report-badge {
+.goal-body {
+    padding: 13px;
+}
 
-            display: inline-flex;
+/* MAIN GOAL */
 
-            align-items: center;
+.field-label {
+    color: var(--pms-muted);
 
-            background: rgba(255, 255, 255, .12);
+    font-size: 8px;
 
-            border: 1px solid rgba(255, 255, 255, .20);
+    font-weight: 800;
 
-            border-radius: 20px;
+    text-transform: uppercase;
 
-            padding: 6px 11px;
+    margin-bottom: 4px;
+}
 
-            font-size: 11px;
+.field-label i {
+    color: var(--pms-primary);
+    margin-right: 3px;
+}
 
-        }
+.goal-text {
+    color: var(--pms-text);
 
-        .report-summary-body {
+    font-size: 13px;
 
-            padding: 14px 18px;
+    font-weight: 700;
 
-        }
+    line-height: 1.5;
 
-        .summary-item {
+    margin-bottom: 12px;
+}
 
-            background: #f8fafc;
+/* DETAILS */
 
-            border: 1px solid #e7edf4;
+.goal-details {
+    display: grid;
 
-            border-radius: 9px;
+    grid-template-columns:
+        repeat(4, 1fr);
 
-            padding: 11px 13px;
+    gap: 7px;
 
-            height: 100%;
+    margin-bottom: 10px;
+}
 
-        }
+.detail-box {
+    background: #f8fafc;
 
-        .summary-label {
+    border: 1px solid #edf0f4;
 
-            color: var(--pms-muted);
+    border-radius: 7px;
 
-            font-size: 10px;
+    padding: 8px 9px;
+}
 
-            font-weight: 700;
+.detail-box span {
+    display: block;
 
-            text-transform: uppercase;
+    color: var(--pms-muted);
 
-            letter-spacing: .35px;
+    font-size: 8px;
 
-            margin-bottom: 4px;
+    font-weight: 700;
 
-        }
+    text-transform: uppercase;
 
-        .summary-label i {
+    margin-bottom: 3px;
+}
 
-            color: var(--pms-primary);
+.detail-box span i {
+    color: var(--pms-primary);
+    margin-right: 2px;
+}
 
-            margin-right: 4px;
+.detail-box strong {
+    display: block;
 
-        }
+    color: var(--pms-text);
 
-        .summary-value {
+    font-size: 10px;
 
-            color: var(--pms-text);
+    line-height: 1.4;
+}
 
-            font-size: 13px;
+/* EMPLOYEE ASSESSMENT */
 
-            font-weight: 600;
+.employee-assessment {
+    border: 1px solid #e6ebf1;
 
-        }
+    border-radius: 8px;
 
-        .rating-summary {
+    overflow: hidden;
 
-            color: var(--pms-primary);
+    margin-bottom: 11px;
+}
 
-            font-size: 17px;
+.assessment-label {
+    background: #f5f8fc;
 
-            font-weight: 800;
+    color: var(--pms-primary);
 
-        }
+    padding: 7px 10px;
 
-        .rating-summary span {
+    font-size: 9px;
 
-            color: var(--pms-muted);
+    font-weight: 800;
 
-            font-size: 11px;
+    text-transform: uppercase;
 
-        }
+    border-bottom: 1px solid #e6ebf1;
+}
 
-        /* =========================================================
-                       SECTION HEADING
-                    ========================================================= */
+.assessment-grid {
+    display: grid;
 
-        .section-heading {
+    grid-template-columns:
+        160px 150px 1fr;
+}
 
-            display: flex;
+.assessment-grid > div {
+    padding: 8px 10px;
 
-            align-items: center;
+    border-right: 1px solid #edf0f4;
+}
 
-            gap: 9px;
+.assessment-grid > div:last-child {
+    border-right: 0;
+}
 
-        }
+.assessment-grid span {
+    display: block;
 
-        .section-heading-icon {
+    color: var(--pms-muted);
 
-            width: 32px;
-            height: 32px;
+    font-size: 8px;
 
-            border-radius: 8px;
+    text-transform: uppercase;
 
-            background: #e8f1fa;
+    font-weight: 700;
 
-            color: var(--pms-primary);
+    margin-bottom: 2px;
+}
 
-            display: flex;
+.assessment-grid strong {
+    color: var(--pms-text);
 
-            align-items: center;
+    font-size: 10px;
+}
 
-            justify-content: center;
+.employee-rating {
+    color: var(--pms-primary) !important;
+}
 
-            font-size: 13px;
+.employee-rating i {
+    font-size: 8px;
+}
 
-        }
+.employee-rating small {
+    color: var(--pms-muted);
+    font-size: 8px;
+}
 
-        .section-heading h5 {
+.progress-text {
+    font-weight: 500 !important;
+    line-height: 1.4;
+}
 
-            font-size: 15px;
+/* MANAGER REVIEW */
 
-        }
+.manager-review-box {
+    border: 1px solid #dfe7ef;
 
-        .section-heading small {
+    border-radius: 8px;
 
-            font-size: 11px;
+    background: #fbfcfe;
 
-        }
+    overflow: hidden;
+}
 
-        /* =========================================================
-                       RATING CARDS
-                    ========================================================= */
+.manager-review-title {
+    padding: 8px 10px;
 
-        .rating-card {
+    background: #f2f6fa;
 
-            position: relative;
+    border-bottom: 1px solid #dfe7ef;
 
-            background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-            border: 1px solid var(--pms-border);
+    color: var(--pms-primary);
 
-            border-radius: 12px;
+    font-size: 10px;
 
-            padding: 15px 16px;
+    font-weight: 800;
+}
 
-            text-align: center;
+.reviewed-label {
+    color: #198754;
 
-            transition: all .2s ease;
+    background: #e7f6ed;
 
-            overflow: hidden;
+    padding: 3px 7px;
 
-            box-shadow:
-                0 3px 12px rgba(31, 78, 121, .04);
+    border-radius: 12px;
 
-        }
+    font-size: 8px;
+}
 
-        .rating-card::before {
+.manager-review-box form {
+    padding: 11px;
+}
 
-            content: "";
+.manager-form-grid {
+    display: grid;
 
-            position: absolute;
+    grid-template-columns:
+        1fr 1fr 1.3fr;
 
-            top: 0;
-            left: 0;
-            right: 0;
+    gap: 10px;
+}
 
-            height: 3px;
+/* FORM */
 
-            background: var(--pms-primary);
+.form-label {
+    color: var(--pms-text);
 
-        }
+    font-size: 9px;
 
-        .rating-card:hover {
+    font-weight: 700;
 
-            transform: translateY(-2px);
+    margin-bottom: 4px;
+}
 
-            box-shadow:
-                0 7px 18px rgba(31, 78, 121, .08);
+.form-control,
+.form-select {
+    border-color: #dce2e9;
 
-        }
+    border-radius: 6px;
 
-        .rating-self::before {
+    font-size: 10px;
+}
 
-            background: #1f4e79;
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--pms-primary);
 
-        }
+    box-shadow:
+        0 0 0 .12rem rgba(31, 78, 121, .08);
+}
 
-        .rating-manager::before {
+.form-help {
+    display: block;
 
-            background: #b77900;
+    color: var(--pms-muted);
 
-        }
+    font-size: 8px;
 
-        .rating-hr::before {
+    margin-top: 3px;
+}
 
-            background: #198754;
+/* RATING */
 
-        }
+.rating-options {
+    display: flex;
+    gap: 4px;
+}
 
-        .rating-card-icon {
+.rating-option {
+    cursor: pointer;
+    margin: 0;
+}
 
-            width: 34px;
-            height: 34px;
+.rating-option input {
+    display: none;
+}
 
-            border-radius: 8px;
+.rating-option span {
+    width: 31px;
+    height: 31px;
 
-            background: #f2f7fc;
+    border: 1px solid #dce2e9;
 
-            color: var(--pms-primary);
+    border-radius: 6px;
 
-            display: flex;
+    background: #fff;
 
-            align-items: center;
+    color: var(--pms-text);
 
-            justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            margin: 0 auto 7px;
+    font-size: 10px;
+    font-weight: 800;
 
-            font-size: 13px;
+    transition: .15s;
+}
 
-        }
+.rating-option span:hover {
+    border-color: var(--pms-primary);
+}
 
-        .rating-manager .rating-card-icon {
+.rating-option input:checked + span {
+    background: var(--pms-primary);
 
-            background: #fff5dc;
+    border-color: var(--pms-primary);
 
-            color: #b77900;
+    color: #fff;
 
-        }
+    box-shadow:
+        0 3px 7px rgba(31, 78, 121, .16);
+}
 
-        .rating-hr .rating-card-icon {
+/* FORM ACTION */
 
-            background: #e7f6ed;
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
 
-            color: #198754;
+    margin-top: 9px;
 
-        }
+    padding-top: 9px;
 
-        .rating-card-title {
+    border-top: 1px solid #e7ebf0;
+}
 
-            color: var(--pms-muted);
+.form-actions .btn {
+    font-size: 9px;
 
-            font-size: 11px;
+    border-radius: 6px;
 
-            font-weight: 700;
+    padding: 6px 10px;
+}
 
-            margin-bottom: 5px;
+/* OVERALL */
 
-        }
+.overall-card {
+    background: #fff;
 
-        .rating-value {
+    border: 1px solid var(--pms-border);
 
-            color: var(--pms-primary);
+    border-radius: 10px;
 
-            font-size: 28px;
+    overflow: hidden;
 
-            line-height: 1;
+    box-shadow:
+        0 3px 12px rgba(31, 78, 121, .05);
+}
 
-            font-weight: 800;
+.overall-header {
+    padding: 12px 14px;
 
-        }
+    background: linear-gradient(
+        135deg,
+        var(--pms-primary),
+        var(--pms-primary-dark)
+    );
 
-        .rating-manager .rating-value {
+    color: #fff;
 
-            color: #b77900;
+    display: flex;
 
-        }
+    align-items: center;
 
-        .rating-hr .rating-value {
+    justify-content: space-between;
 
-            color: #198754;
+    gap: 15px;
+}
 
-        }
+.overall-header h5 {
+    font-size: 13px;
+}
 
-        .rating-value small {
+.overall-header small {
+    font-size: 9px;
+    opacity: .8;
+}
 
-            color: var(--pms-muted);
+.overall-calculated {
+    text-align: right;
+}
 
-            font-size: 11px;
+.overall-calculated span {
+    display: block;
 
-            font-weight: 600;
+    font-size: 8px;
 
-        }
+    opacity: .75;
 
-        .rating-status {
+    text-transform: uppercase;
+}
 
-            margin-top: 8px;
+.overall-calculated strong {
+    font-size: 20px;
+}
 
-        }
+.overall-body {
+    padding: 13px;
+}
 
-        .status-pill {
+.overall-warning {
+    padding: 8px 10px;
 
-            display: inline-flex;
+    background: #fff5dc;
 
-            align-items: center;
+    color: #9a6700;
 
-            border-radius: 20px;
+    border-radius: 6px;
 
-            padding: 4px 8px;
+    font-size: 9px;
+}
 
-            font-size: 10px;
+.overall-actions {
+    display: flex;
 
-            font-weight: 700;
+    justify-content: flex-end;
 
-        }
+    margin-top: 10px;
 
-        .status-blue {
+    padding-top: 10px;
 
-            color: var(--pms-primary);
+    border-top: 1px solid var(--pms-border);
+}
 
-            background: #e8f1fa;
+.overall-actions .btn {
+    font-size: 10px;
 
-        }
+    border-radius: 6px;
+}
 
-        .status-success {
+/* EMPTY */
 
-            color: #198754;
+.empty-state {
+    background: #fff;
 
-            background: #e7f6ed;
+    border: 1px solid var(--pms-border);
 
-        }
+    border-radius: 10px;
 
-        .status-warning {
+    text-align: center;
 
-            color: #b77900;
+    padding: 45px 20px;
+}
 
-            background: #fff5dc;
+.empty-icon {
+    width: 50px;
+    height: 50px;
 
-        }
+    border-radius: 12px;
 
-        /* =========================================================
-                       GOAL INFORMATION
-                    ========================================================= */
+    background: #e8f1fa;
 
-        .goal-information-card {
+    color: var(--pms-primary);
 
-            background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            border: 1px solid #d9e3ee;
+    margin: 0 auto 10px;
 
-            border-radius: 12px;
+    font-size: 19px;
+}
 
-            overflow: hidden;
+.empty-state h6 {
+    color: var(--pms-text);
+    font-size: 13px;
+}
 
-            box-shadow:
-                0 4px 16px rgba(31, 78, 121, .05);
+.empty-state p {
+    color: var(--pms-muted);
+    font-size: 10px;
+}
 
-        }
+/* RESPONSIVE */
 
-        .goal-information-header {
+@media(max-width: 900px) {
 
-            background: linear-gradient(135deg,
-                    var(--pms-primary),
-                    var(--pms-primary-dark));
+    .summary-card {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
 
-            color: #fff;
+    .summary-item:nth-child(3) {
+        border-right: 0;
+    }
 
-            padding: 12px 18px;
+    .goal-details {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
 
-        }
+    .assessment-grid {
+        grid-template-columns:
+            1fr 1fr;
+    }
 
-        .goal-information-header h5 {
+    .assessment-grid > div:last-child {
+        grid-column: 1 / -1;
 
-            font-size: 14px;
+        border-top: 1px solid #edf0f4;
 
-        }
+        border-right: 0;
+    }
 
-        .goal-information-body {
+    .manager-form-grid {
+        grid-template-columns:
+            1fr 1fr;
+    }
 
-            padding: 16px;
+}
 
-        }
+@media(max-width: 600px) {
 
-        .info-block {
+    .summary-card {
+        grid-template-columns:
+            1fr 1fr;
+    }
 
-            background: #f8fafc;
+    .summary-item {
+        border-bottom: 1px solid var(--pms-border);
+    }
 
-            border: 1px solid #e7edf4;
+    .goal-details {
+        grid-template-columns: 1fr;
+    }
 
-            border-radius: 9px;
+    .manager-form-grid {
+        grid-template-columns: 1fr;
+    }
 
-            padding: 12px 14px;
+    .overall-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
 
-        }
+    .overall-calculated {
+        text-align: left;
+    }
 
-        .full-width {
+}
 
-            margin-bottom: 12px;
-
-        }
-
-        .info-label {
-
-            color: var(--pms-muted);
-
-            font-size: 9px;
-
-            font-weight: 700;
-
-            text-transform: uppercase;
-
-            letter-spacing: .35px;
-
-            margin-bottom: 5px;
-
-        }
-
-        .info-label i {
-
-            color: var(--pms-primary);
-
-            width: 16px;
-
-        }
-
-        .info-value {
-
-            color: var(--pms-text);
-
-            font-size: 12px;
-
-            font-weight: 500;
-
-            line-height: 1.5;
-
-            white-space: pre-line;
-
-        }
-
-        .info-value.large {
-
-            font-size: 14px;
-
-            font-weight: 700;
-
-            line-height: 1.5;
-
-        }
-
-        .achievement-badge {
-
-            display: inline-block;
-
-            background: #e8f1fa;
-
-            color: var(--pms-primary);
-
-            border-radius: 6px;
-
-            padding: 5px 9px;
-
-            font-size: 10px;
-
-            font-weight: 700;
-
-        }
-
-        /* =========================================================
-                       PROGRESS
-                    ========================================================= */
-
-        .progress-card {
-
-            background: #fff;
-
-            border: 1px solid var(--pms-border);
-
-            border-radius: 12px;
-
-            overflow: hidden;
-
-            box-shadow:
-                0 3px 14px rgba(31, 78, 121, .04);
-
-        }
-
-        .progress-card-header {
-
-            background: #f8fafc;
-
-            border-bottom: 1px solid var(--pms-border);
-
-            padding: 10px 15px;
-
-            color: var(--pms-primary);
-
-            font-weight: 700;
-
-            font-size: 11px;
-
-        }
-
-        .progress-card-header i {
-
-            margin-right: 6px;
-
-        }
-
-        .progress-card-body {
-
-            padding: 14px 16px;
-
-            color: var(--pms-text);
-
-            font-size: 12px;
-
-            line-height: 1.6;
-
-            white-space: pre-line;
-
-        }
-
-        /* =========================================================
-                       DECISION CARD
-                    ========================================================= */
-
-        .decision-card {
-
-            background: #fff;
-
-            border: 1px solid var(--pms-border);
-
-            border-radius: 12px;
-
-            overflow: hidden;
-
-            box-shadow:
-                0 4px 16px rgba(31, 78, 121, .05);
-
-        }
-
-        .decision-card-header {
-
-            background: linear-gradient(135deg,
-                    #f5f8fc,
-                    #ffffff);
-
-            border-bottom: 1px solid var(--pms-border);
-
-            padding: 14px 18px;
-
-        }
-
-        .decision-icon {
-
-            width: 36px;
-            height: 36px;
-
-            border-radius: 9px;
-
-            background: #e8f1fa;
-
-            color: var(--pms-primary);
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 14px;
-
-        }
-
-        .decision-card-header h5 {
-
-            font-size: 14px;
-
-        }
-
-        .decision-card-header small {
-
-            color: var(--pms-muted);
-
-            font-size: 10px;
-
-        }
-
-        .decision-card-body {
-
-            padding: 18px;
-
-        }
-
-        /* =========================================================
-                       FORM
-                    ========================================================= */
-
-        .form-label {
-
-            color: var(--pms-text);
-
-            font-size: 12px;
-
-            margin-bottom: 6px;
-
-        }
-
-        .form-control,
-        .form-select {
-
-            border-color: #dbe2ea;
-
-            border-radius: 8px;
-
-            padding: 9px 12px;
-
-            color: var(--pms-text);
-
-            font-size: 13px;
-
-        }
-
-        .form-select-lg {
-
-            font-size: 13px;
-
-            padding: 10px 12px;
-
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-
-            border-color: var(--pms-primary);
-
-            box-shadow:
-                0 0 0 .15rem rgba(31, 78, 121, .10);
-
-        }
-
-        .comments-input {
-
-            resize: vertical;
-
-            min-height: 105px;
-
-        }
-
-        /* =========================================================
-                       MANAGER RATING
-                    ========================================================= */
-
-        .manager-rating-options {
-
-            display: flex;
-
-            gap: 8px;
-
-            flex-wrap: wrap;
-
-            margin-top: 6px;
-
-        }
-
-        .manager-rating-option {
-
-            cursor: pointer;
-
-            margin: 0;
-
-        }
-
-        .manager-rating-option input {
-
-            display: none;
-
-        }
-
-        .manager-rating-content {
-
-            width: 52px;
-            height: 52px;
-
-            border: 1px solid #dbe2ea;
-
-            border-radius: 9px;
-
-            background: #fff;
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-            justify-content: center;
-
-            transition: all .2s ease;
-
-        }
-
-        .manager-rating-content:hover {
-
-            border-color: var(--pms-primary);
-
-            background: #f8fafc;
-
-            transform: translateY(-1px);
-
-        }
-
-        .manager-rating-option input:checked+.manager-rating-content {
-
-            background: var(--pms-primary);
-
-            border-color: var(--pms-primary);
-
-            color: #fff;
-
-            transform: translateY(-2px);
-
-            box-shadow:
-                0 5px 14px rgba(31, 78, 121, .18);
-
-        }
-
-        .rating-number {
-
-            font-size: 16px;
-
-            font-weight: 800;
-
-            line-height: 1;
-
-        }
-
-        .rating-star {
-
-            font-size: 8px;
-
-            margin-top: 4px;
-
-            opacity: .75;
-
-        }
-
-        .rating-help {
-
-            color: var(--pms-muted);
-
-            font-size: 10px;
-
-            margin-top: 7px;
-
-        }
-
-        .selected-rating-message {
-
-            display: inline-block;
-
-            margin-top: 7px;
-
-            padding: 5px 9px;
-
-            background: #f2f7fc;
-
-            color: var(--pms-primary);
-
-            border-radius: 6px;
-
-            font-size: 10px;
-
-            font-weight: 700;
-
-        }
-
-        /* =========================================================
-                       ACTIONS
-                    ========================================================= */
-
-        .decision-actions {
-
-            display: flex;
-
-            justify-content: flex-end;
-
-            gap: 8px;
-
-            padding-top: 15px;
-
-            border-top: 1px solid var(--pms-border);
-
-        }
-
-        .decision-actions .btn {
-
-            font-size: 12px;
-
-            padding: 8px 16px;
-
-            border-radius: 7px;
-
-        }
-
-        .btn-primary {
-
-            background-color: var(--pms-primary);
-
-            border-color: var(--pms-primary);
-
-        }
-
-        .btn-primary:hover {
-
-            background-color: var(--pms-primary-dark);
-
-            border-color: var(--pms-primary-dark);
-
-        }
-
-        /* =========================================================
-                       ALERTS
-                    ========================================================= */
-
-        .alert {
-
-            font-size: 12px;
-
-        }
-
-        /* =========================================================
-                       RESPONSIVE
-                    ========================================================= */
-
-        @media (max-width: 768px) {
-
-            .container-fluid {
-
-                padding-left: 12px;
-
-                padding-right: 12px;
-
-            }
-
-            .review-page-header {
-
-                padding: 14px;
-
-            }
-
-            .review-page-header h3 {
-
-                font-size: 18px;
-
-            }
-
-            .report-summary-header {
-
-                align-items: flex-start;
-
-                flex-direction: column;
-
-            }
-
-            .report-summary-body,
-            .goal-information-body,
-            .decision-card-body {
-
-                padding: 14px;
-
-            }
-
-            .rating-card {
-
-                padding: 14px;
-
-            }
-
-            .manager-rating-content {
-
-                width: 48px;
-
-                height: 48px;
-
-            }
-
-            .decision-actions {
-
-                flex-direction: column-reverse;
-
-            }
-
-            .decision-actions .btn {
-
-                width: 100%;
-
-            }
-
-        }
-    </style>
-
-    {{-- ========================================================= --}}
-    {{-- RATING SELECTION SCRIPT --}}
-    {{-- ========================================================= --}}
-
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const ratingInputs =
-                document.querySelectorAll(
-                    'input[name="manager_rating"]'
-                );
-
-            const selectedRating =
-                document.getElementById('selectedRating');
-
-            ratingInputs.forEach(function (input) {
-
-                input.addEventListener('change', function () {
-
-                    const rating = this.value;
-
-                    selectedRating.innerHTML =
-                        '<i class="fas fa-star me-1"></i>' +
-                        'Selected Rating: ' +
-                        rating +
-                        ' / 5';
-
-                });
-
-            });
-
-        });
-
-    </script>
+</style>
 
 @endsection

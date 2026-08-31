@@ -12,6 +12,8 @@ class GoalOverallReview extends Model
         'user_id',
         'reviewer_id',
         'manager_overall_rating',
+        'manager_overll_comments',
+        'manager_reviewer_id',
         'hr_overall_rating',
         'decision',
         'comments',

@@ -581,24 +581,32 @@ Route::middleware('auth')->group(function () {
 */
 
     Route::prefix('goal-manager')
-        ->name('goal-manager.')
-        ->group(function () {
+    ->name('goal-manager.')
+    ->group(function () {
 
-            Route::get(
-                '/',
-                [GoalManagerReviewController::class, 'index']
-            )->name('index');
+        Route::get(
+            '/',
+            [GoalManagerReviewController::class, 'index']
+        )->name('index');
 
-            Route::get(
-                '/{goalSelfReport}/review',
-                [GoalManagerReviewController::class, 'show']
-            )->name('show');
+        // Employee's ALL goals
+        Route::get(
+            '/{user}',
+            [GoalManagerReviewController::class, 'show']
+        )->name('show');
 
-            Route::post(
-                '/{goalSelfReport}/review',
-                [GoalManagerReviewController::class, 'review']
-            )->name('review');
-        });
+        // Individual goal review
+        Route::post(
+            '/{goalSelfReport}/review',
+            [GoalManagerReviewController::class, 'review']
+        )->name('review');
+
+        // Overall employee rating
+        Route::post(
+            '/{user}/overall-review',
+            [GoalManagerReviewController::class, 'overallReview']
+        )->name('overall-review');
+    });
 
     /*
 |--------------------------------------------------------------------------
