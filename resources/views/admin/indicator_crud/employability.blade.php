@@ -133,6 +133,33 @@
                                             placeholder="Student Name" required>
                                     </div>
                                     <div class="col-md-6 mb-3">
+                                        <label for="student_id" class="form-label">Student ID</label>
+                                        <input type="text" name="student_id" id="student_id"
+                                            class="form-control" placeholder="BSOP-S00-00" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="cnic" class="form-label">CNIC</label>
+                                        <input type="text" name="cnic" id="cnic" class="form-control"
+                                            placeholder="xxxxx-xxxxxxx-x" maxlength="15"
+                                            pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="domicile" class="form-label">Domicile
+                                        </label>
+                                        <input type="text" name="domicile" id="domicile" class="form-control"
+                                            placeholder="Domicile" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="gender" class="form-label">Gender</label>
+                                        <select name="gender" id="gender"
+                                            class="select2 form-select faculty-member" required>
+                                            <option value="">-- Select --</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
                                         <label for="faculty" class="form-label">Faculty</label>
                                         <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
                                             <option value="">-- Select Faculty --</option>
@@ -177,9 +204,14 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
+                                   <div class="col-md-6 mb-3">
                                         <label for="passing_year" class="form-label">Passing Year</label>
-                                        <input type="date" name="passing_year" id="passing_year" class="form-control" required>
+                                        <select name="passing_year" id="passing_year" class="form-control" required>
+                                            <option value="">Select Year</option>
+                                            @for ($year = date('Y'); $year >= 2000; $year--)
+                                                <option value="{{ $year }}">{{ $year }}</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="passing_year" class="form-label">Date of Appointment</label>
@@ -361,79 +393,82 @@
     @if(in_array(getRoleName(activeRole()), ['Employability Center']))
 
         <script>
-            function fetchCommercialForms() {
-                $.ajax({
-                    url: "{{ route('employability.index') }}",
-                    method: "GET",
-                    data: {
-                        status: "HOD" // you can send more values
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        const forms = data.forms || [];
+           function fetchCommercialForms() {
 
-                        const rowData = forms.map((form, i) => {
-                            const createdAt = form.created_at
-                                ? new Date(form.created_at).toISOString().split('T')[0]
-                                : 'N/A';
-
-
-                            let editButton = '';
-                            let deleteBtn = '';
-                            if (parseInt(form.status) === 1) {
-                                editButton = `
-                                                                                            <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
-                                                                                                data-form='${JSON.stringify(form)}'>
-                                                                                                <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
-                                                                                            </button>`;
-                                deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
-                            }
-
-                            // Pass entire form as JSON in button's data attribute
-                            return [
-                                i + 1,
-                                form.faculty ? form.faculty.name : 'N/A',
-                                form.department ? form.department.name : 'N/A',
-                                form.program ? form.program.program_name : 'N/A',
-                                form.program_level || 'N/A',
-                                form.batch || 'N/A',
-                                form.passing_year || 'N/A',
-                                form.salary || 'N/A',
-                                form.employer_name || 'N/A',
-                                editButton + ' ' + deleteBtn
-                            ];
-                        });
-
-
-                        if (!$.fn.DataTable.isDataTable('#employabilityTable')) {
-                            $('#employabilityTable').DataTable({
-                                data: rowData,
-                                scrollX: true,
-                                scrollCollapse: true,
-                                autoWidth: false,
-                                columns: [
-                                    { title: "#" },
-                                    { title: "Faculty" },
-                                    { title: "Department" },
-                                    { title: "Program Name" },
-                                    { title: "Program Level" },
-                                    { title: "Batch" },
-                                    { title: "Passing Year" },
-                                    { title: "Salary" },
-                                    { title: "Employer Name" },
-                                    { title: "Actions" }
-                                ]
-                            });
-                        } else {
-                            $('#employabilityTable').DataTable().clear().rows.add(rowData).draw();
-                        }
-                    },
-                    error: function (xhr) {
-                        console.error('Error fetching data:', xhr.responseText);
-                        alert('Unable to load data.');
+                    if ($.fn.DataTable.isDataTable('#employabilityTable')) {
+                        $('#employabilityTable').DataTable().destroy();
                     }
-                });
-            }
+
+                    $('#employabilityTable').DataTable({
+
+                        processing: true,
+                        serverSide: true,
+
+                        ajax: {
+                            url: "{{ route('employability.index') }}",
+                            type: "GET",
+                            data: {
+                                status: "HOD"
+                            }
+                        },
+
+                        scrollX: true,
+                        scrollCollapse: true,
+                        autoWidth: false,
+
+                        columns: [
+                            {
+                                data: 'DT_RowIndex',
+                                name: 'id',
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                data: 'faculty_name',
+                                name: 'faculty.name'
+                            },
+                            {
+                                data: 'department_name',
+                                name: 'department.name'
+                            },
+                            {
+                                data: 'program_name',
+                                name: 'program.program_name'
+                            },
+                            {
+                                data: 'program_level',
+                                name: 'program_level'
+                            },
+                            {
+                                data: 'batch',
+                                name: 'batch'
+                            },
+                            {
+                                data: 'passing_year',
+                                name: 'passing_year'
+                            },
+                            {
+                                data: 'salary',
+                                name: 'salary'
+                            },
+                            {
+                                data: 'employer_name',
+                                name: 'employer_name'
+                            },
+                            {
+                                data: 'actions',
+                                name: 'actions',
+                                orderable: false,
+                                searchable: false
+                            }
+                        ],
+
+                        order: [
+                            [0, 'desc']
+                        ]
+                    });
+                }
+
 
 
             $(document).ready(function () {
@@ -554,13 +589,21 @@
                     });
                 }
                 $(document).on('click', '.edit-form-btn', function () {
-                    const form = $(this).data('form');
+                    //const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#researchForm1 #record_id').val(form.id);
                     $('#researchForm1 #student_name').val(form.student_name);
+                     $('#researchForm1 #student_id').val(form.student_id);
+                      $('#researchForm1 #cnic').val(form.cnic);
+                       $('#researchForm1 #domicile').val(form.domicile);
+                        $('#researchForm1 #gender').val(form.gender).trigger('change');;
                     populateFacultyDepartmentProgram(form);
                     $('#researchForm1 #batch').val(form.batch).trigger('change');
                     $('#researchForm1 #period').val(form.period).trigger('change');
-                    $('#researchForm1 #passing_year').val(form.passing_year);
+                    $('#researchForm1 #passing_year').val(form.passing_year).trigger('change');
                     $('#researchForm1 #date_of_appointment').val(form.date_of_appointment);
                     $('#researchForm1 #proof_salary_and_appointment').val(form.proof_salary_and_appointment);
                     $('#researchForm1 #employer_name').val(form.employer_name);

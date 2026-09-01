@@ -76,6 +76,11 @@
                                                                     <input type="text" name="student_name" id="student_name"
                                                                         class="form-control" placeholder="Student Name" required>
                                                                 </div>
+                                                                 <div class="col-md-6 mb-3">
+                                                                    <label for="student_id" class="form-label">Student ID</label>
+                                                                    <input type="text" name="student_id" id="student_id"
+                                                                        class="form-control" placeholder="BSOP-S00-00" required>
+                                                                </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="cnic" class="form-label">CNIC</label>
                                                                     <input type="text" name="cnic" id="cnic" class="form-control"
@@ -93,9 +98,9 @@
                                                                     <select name="gender" id="gender"
                                                                         class="select2 form-select faculty-member" required>
                                                                         <option value="">-- Select --</option>
-                                                                        <option value="male">Male</option>
-                                                                        <option value="female">FeMale</option>
-                                                                        <option value="other">Other</option>
+                                                                        <option value="Male">Male</option>
+                                                                        <option value="Female">Female</option>
+                                                                        <option value="Other">Other</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
@@ -156,7 +161,12 @@
 
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="passing_year" class="form-label">Passing Year</label>
-                                                                    <input type="date" name="passing_year" class="form-control" required>
+                                                                    <select name="passing_year" class="form-control" required>
+                                                                        <option value="">Select Year</option>
+                                                                        @for ($year = date('Y'); $year >= 2000; $year--)
+                                                                            <option value="{{ $year }}">{{ $year }}</option>
+                                                                        @endfor
+                                                                    </select>
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label for="passing_year" class="form-label">Date of Appointment</label>

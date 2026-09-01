@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Imports\EmployabilityImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\Facades\DataTables;
 
 class EmployabilityController extends Controller
 {
@@ -31,7 +32,7 @@ class EmployabilityController extends Controller
     //     }
     // }
 
-    public function index(Request $request)
+    public function index123(Request $request)
     {
         try {
             $user = Auth::user();
@@ -60,6 +61,80 @@ class EmployabilityController extends Controller
             ], 500);
         }
     }
+    public function index(Request $request)
+    {
+        try {
+
+            $user = Auth::user();
+            $employee_id = $user->employee_id;
+
+            if (!in_array(getRoleName(activeRole()), ['Employability Center'])) {
+                abort(403);
+            }
+
+            $query = Employability::with([
+                'faculty',
+                'department',
+                'program',
+            ])
+            ->where('created_by', $employee_id)
+            ->orderByDesc('id');
+
+            return DataTables::eloquent($query)
+                ->addIndexColumn()
+
+                ->addColumn('faculty_name', function ($form) {
+                    return $form->faculty?->name ?? 'N/A';
+                })
+
+                ->addColumn('department_name', function ($form) {
+                    return $form->department?->name ?? 'N/A';
+                })
+
+                ->addColumn('program_name', function ($form) {
+                    return $form->program?->program_name ?? 'N/A';
+                })
+
+                ->addColumn('actions', function ($form) {
+
+                    $buttons = '';
+
+                    if ((int) $form->status === 1) {
+                        $formData = rawurlencode(json_encode($form));
+
+                        $buttons .= '
+                            <button
+                                type="button"
+                                class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn"
+                                data-form="' . $formData . '">
+                                <span class="icon-xs icon-base ti tabler-edit me-2"></span>
+                                Edit
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn rounded-pill btn-outline-danger delete-btn"
+                                data-id="' . $form->id . '">
+                                Delete
+                            </button>
+                        ';
+                    }
+
+                    return $buttons;
+                })
+
+                ->rawColumns(['actions'])
+
+                ->toJson();
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'message' => 'Oops! Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -81,6 +156,7 @@ class EmployabilityController extends Controller
                     'indicator_id' => 'required',
                     'period' => 'required|string',
                     'student_name' => 'required|string',
+                    'student_id' => 'required|string',
                     'cnic' => 'required',
                     'domicile' => 'required',
                     'gender' => 'required',
@@ -159,6 +235,10 @@ class EmployabilityController extends Controller
             'record_id' => 'required',
             'period' => 'required|string',
             'student_name' => 'required|string',
+            'student_id' => 'required|string',
+            'cnic' => 'required',
+            'domicile' => 'required',
+            'gender' => 'required',
             'faculty_id' => 'required|integer',
             'department_id' => 'required|integer',
             'program_id' => 'required|integer',
@@ -180,6 +260,10 @@ class EmployabilityController extends Controller
         $data = $request->only([
             'period',
             'student_name',
+            'student_id',
+            'cnic',
+            'domicile',
+            'gender',
             'faculty_id',
             'program_id',
             'program_level',

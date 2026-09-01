@@ -97,7 +97,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Commercial Consultancy/Research Income 1</h5>
+                <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Multidisciplinary Projects</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -283,12 +283,15 @@
                             } 
                             else if (form.status == 3){
                                  statusText = '<span class="badge bg-label-success">Verified by ORIC</span>';
-                            }    
+                            }   
+                            const formData = encodeURIComponent(
+                                JSON.stringify(form)
+                            ); 
                             let editButton = '';
                             if (parseInt(form.status) === 1) {
                                 editButton = `
                                     <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
-                                        data-form='${JSON.stringify(form)}'>
+                                        data-form="${formData}">
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
                             }       
@@ -427,7 +430,12 @@
                 $('#viewFormModal').modal('show');
             });
             $(document).on('click', '.edit-form-btn', function () {
-        const form = $(this).data('form');
+       // const form = $(this).data('form');
+
+        const encodedForm = $(this).attr('data-form');
+        const form = JSON.parse(
+            decodeURIComponent(encodedForm)
+        );
         $('#researchForm1 #record_id').val(form.id);
         $('#researchForm1 #project_name').val(form.project_name);
         $('#researchForm1 #other_disciplines').val(form.other_disciplines);

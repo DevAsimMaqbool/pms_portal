@@ -51,9 +51,9 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
 
                 'student_name' => 'required',
 
-                'cnic' => 'required',
+                'cnic' => '',
 
-                'domicile' => 'required',
+                'domicile' => '',
 
                 'gender' => 'required',
 
@@ -63,22 +63,24 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
 
                 'program_id' => 'required|integer',
 
+                'program_level'=> '',
+
                 'batch' => 'required',
 
                 'passing_year' => 'required',
 
-                'date_of_appointment' => 'required',
+                'date_of_appointment' => '',
 
-                'proof_salary_and_appointment' => 'required',
+                'proof_salary_and_appointment' => '',
 
-                'employer_name' => 'required|string',
+                'employer_name' => '',
 
-                'sector' => 'required|string',
+                'sector' => '',
 
-                'salary' => 'required',
+                'salary' => '',
 
                 'market_competitive_salary' =>
-                    'required|in:Above,At Par,Low',
+                    'nullable|in:Above,At Par,Low',
 
                 'job_relevancy' =>
                     'nullable|in:yes,no',
@@ -173,7 +175,7 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
                     $this->formStatus,
 
                 'student_id' =>
-                    null,
+                    $row['student_id'],
 
                 'period' =>
                     $row['period'],
@@ -198,16 +200,21 @@ class EmployabilityImport implements ToCollection, WithHeadingRow
 
                 'program_id' =>
                     $row['program_id'],
+                
+                'program_level' =>
+                    $row['program_level'],
 
                 'batch' =>
                     $row['batch'],
 
                 'passing_year' =>
                     is_numeric($row['passing_year'])
-                    ? Date::excelToDateTimeObject(
-                        $row['passing_year']
-                    )->format('Y-m-d')
-                    : $row['passing_year'],
+                        ? (
+                            strlen((string) $row['passing_year']) === 4
+                                ? (string) $row['passing_year']
+                                : Date::excelToDateTimeObject($row['passing_year'])->format('Y')
+                        )
+                        : $row['passing_year'],    
 
                 'date_of_appointment' =>
                     is_numeric($row['date_of_appointment'])
