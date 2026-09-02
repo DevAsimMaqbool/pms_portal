@@ -38,7 +38,7 @@
                                             <th>Faculty</th>
                                             <th>Department</th>
                                             <th>Program Name</th>
-                                            <th>Batch</th>
+                                            <th>Program Level</th>
                                             <th>Passing Year</th>
                                             <th>Salary</th>
                                             <th>Employer Name</th>
@@ -438,10 +438,6 @@
                             {
                                 data: 'program_level',
                                 name: 'program_level'
-                            },
-                            {
-                                data: 'batch',
-                                name: 'batch'
                             },
                             {
                                 data: 'passing_year',

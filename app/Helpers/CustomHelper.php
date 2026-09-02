@@ -4004,7 +4004,7 @@ if (!function_exists('getRoleName')) {
     }
 }
 
-function EmployabilityOfHOD()
+function EmployabilityOfHOD111()
 {
     $departmentId = auth()->user()->department_id;
     $currentYear = Carbon::now()->year;
@@ -4014,11 +4014,11 @@ function EmployabilityOfHOD()
     //     "Spring $currentYear",
     //     "Fall $previousYear"
     // ];
-    $activeTermIds = Term::where('status', '1')->pluck('id');
+    $activeTermIds = Term::where('status', '1')->pluck('start_year');
 
     $records = Employability::with(['faculty', 'department', 'program'])
         ->where('department_id', $departmentId)
-        ->whereIn('batch', $activeTermIds)
+        ->whereIn('passing_year', $activeTermIds)
         ->get();
 
     if ($records->count() == 0) {
@@ -4052,7 +4052,7 @@ function EmployabilityOfHOD()
 
         // ---------------- 103 Employability ----------------
         $emp = $total
-            ? round(($group->whereNotNull('date_of_appointment')->count() / $total) * 100, 2)
+            ? round(($group->whereNotNull('employer_name')->count() / $total) * 100, 2)
             : 0;
 
         $programScores[103]->push($emp);
@@ -4140,6 +4140,239 @@ function EmployabilityOfHOD()
             'Graduate Satisfaction',
             107,
             $gradSat,
+            $first->faculty->name ?? '-',
+            $first->department->name ?? '-',
+            $first->program->program_name ?? '-'
+        ));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | 🔥 DEPARTMENT LEVEL (CLEAN + FIXED)
+    |--------------------------------------------------------------------------
+    */
+
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', 103)['weightage'],
+        'course_104' => getRoleWeightage($activeRoleId, 'indicator', 104)['weightage'],
+        'course_105' => getRoleWeightage($activeRoleId, 'indicator', 105)['weightage'],
+        'course_106' => getRoleWeightage($activeRoleId, 'indicator', 106)['weightage'],
+        'course_107' => getRoleWeightage($activeRoleId, 'indicator', 107)['weightage'],
+    ];
+
+    foreach ([103, 104, 105, 106, 107] as $indicator) {
+
+        $avg = $programScores[$indicator]->count()
+            ? round($programScores[$indicator]->avg(), 2)
+            : 0;
+
+        // ---------------- correct weight mapping ----------------
+        $weightKey = match ($indicator) {
+            103 => 'course_load',
+            104 => 'course_104',
+            105 => 'course_105',
+            106 => 'course_106',
+            107 => 'course_107',
+        };
+
+        $weightedScore = ($avg * $weights[$weightKey]) / 100;
+
+        // ---------------- correct saving logic ----------------
+        $use90Plus = in_array($indicator, [103, 105]);
+
+        if ($use90Plus) {
+            saveIndicatorPercentage90Plus(
+                $employeeId,
+                $activeRoleId,
+                1,
+                1,
+                $indicator,
+                $weightedScore
+            );
+        } else {
+            saveIndicatorPercentage(
+                $employeeId,
+                $activeRoleId,
+                1,
+                1,
+                $indicator,
+                $weightedScore
+            );
+        }
+
+        $results->push(makeIndicatorRow(
+            'Overall Department',
+            $indicator,
+            $avg,
+            '',
+            '',
+            ''
+        ));
+    }
+
+    return $results;
+}
+function EmployabilityOfHOD()
+{
+    $departmentId = auth()->user()->department_id;
+    $currentYear = Carbon::now()->year;
+    $previousYear = Carbon::now()->year - 1;
+    // ✅ Campaigns for current year
+    // $campaigns = [
+    //     "Spring $currentYear",
+    //     "Fall $previousYear"
+    // ];
+    $activeTermIds = Term::where('status', '1')->pluck('start_year');
+
+    $records = Employability::with(['faculty', 'department', 'program'])
+        ->where('department_id', $departmentId)
+        ->whereIn('passing_year', $activeTermIds)
+        ->get();
+
+    if ($records->count() == 0) {
+        return collect();
+    }
+
+    $results = collect();
+
+    $activeRoleId = getRoleIdByName(activeRole());
+    $employeeId = auth()->id();
+
+    $groupedByProgram = $records->groupBy('program_id');
+
+    $programScores = [
+        103 => collect(),
+        104 => collect(),
+        105 => collect(),
+        106 => collect(),
+        107 => collect(),
+    ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROGRAM LEVEL CALCULATION
+    |--------------------------------------------------------------------------
+    */
+    foreach ($groupedByProgram as $group) {
+
+        $first = $group->first();
+        $total = $group->count();
+
+        // ---------------- 103 Employability ----------------
+        $emp = $total
+            ? round(($group->whereNotNull('employer_name')->count() / $total) * 100, 2)
+            : 0;
+
+        $programScores[103]->push($emp);
+
+        $results->push(makeIndicatorRow(
+            'Student Employability',
+            103,
+            $emp,
+            $first->faculty->name ?? '-',
+            $first->department->name ?? '-',
+            $first->program->program_name ?? '-'
+        ));
+
+        // ---------------- 104 Employer Satisfaction ----------------
+        $employerCount = $group->whereNotNull('employer_name')->count();
+        $score = 0;
+
+        $score = $employerCount > 0
+            ? round(
+                ($group->whereNotNull('employer_name')
+                    ->whereNotNull('employer_satisfaction')
+                    ->sum('employer_satisfaction') * 20)
+                / $employerCount,
+                2
+            )
+            : 0;
+
+        $empSat = $score;
+        $programScores[104]->push($empSat);
+
+        $results->push(makeIndicatorRow(
+            'Employer Satisfaction',
+            104,
+            $empSat,
+            $first->faculty->name ?? '-',
+            $first->department->name ?? '-',
+            $first->program->program_name ?? '-'
+        ));
+
+        // ---------------- 105 Job Relevancy ----------------
+
+        $job = $employerCount
+            ? round(
+                (
+                    $group->whereNotNull('employer_name')
+                        ->where('job_relevancy', 'yes')
+                        ->count()
+                    / $employerCount
+                ) * 100,
+                2
+            )
+            : 0;    
+
+        $programScores[105]->push($job);
+
+        $results->push(makeIndicatorRow(
+            'Job Relevancy',
+            105,
+            $job,
+            $first->faculty->name ?? '-',
+            $first->department->name ?? '-',
+            $first->program->program_name ?? '-'
+        ));
+
+        // ---------------- 106 Salary ----------------
+        $salaryScore = 0;
+
+        foreach ($group->whereNotNull('employer_name') as $r) {
+            $salaryScore += match ($r->market_competitive_salary) {
+                'Low'    => 33,
+                'At Par' => 66,
+                'Above'  => 100,
+                default  => 0
+            };
+        }
+
+        $salary = $employerCount ? round($salaryScore / $employerCount, 2) : 0;
+        $programScores[106]->push($salary);
+
+        $results->push(makeIndicatorRow(
+            'Market Competitive Salary',
+            106,
+            $salary,
+            $first->faculty->name ?? '-',
+            $first->department->name ?? '-',
+            $first->program->program_name ?? '-'
+        ));
+
+        // ---------------- 107 Graduate Satisfaction ----------------
+        $score = 0;
+        foreach ($group as $r) {
+            if (!is_null($r->graduate_satisfaction)) {
+                $score += $r->graduate_satisfaction * 20;
+            }
+        }
+
+         $graduate_sat = $employerCount > 0
+            ? round(
+                ($group->whereNotNull('employer_name')
+                    ->whereNotNull('graduate_satisfaction')
+                    ->sum('graduate_satisfaction') * 20)
+                / $employerCount,
+                2
+            )
+            : 0;
+
+        $programScores[107]->push($graduate_sat);
+
+        $results->push(makeIndicatorRow(
+            'Graduate Satisfaction',
+            107,
+            $graduate_sat,
             $first->faculty->name ?? '-',
             $first->department->name ?? '-',
             $first->program->program_name ?? '-'
