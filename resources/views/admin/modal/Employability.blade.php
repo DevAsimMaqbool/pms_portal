@@ -231,7 +231,7 @@
                                             ->get();
 
                                         $total = $records->count();
-                                        $employed = $records->whereNotNull('date_of_appointment')->count();
+                                        $employed = $records->whereNotNull('employer_name')->count();
                                         $unemployed = $total - $employed;
 
                                         $score = $total > 0 ? round(($employed / $total) * 100, 1) : 0;
