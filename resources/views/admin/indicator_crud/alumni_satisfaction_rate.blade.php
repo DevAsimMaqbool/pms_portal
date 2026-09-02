@@ -32,7 +32,7 @@
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div class="card-title mb-0">
-                        <h5 class="mb-1">Alumni Satisfaction Rate</h5>
+                        <h5 class="mb-1">Alumni Satisfaction Rate1</h5>
                     </div>
                     <div class="">
                         <a href="{{ url('kpa/6/category/15/indicator/163') }}" class="btn btn-success">Add</a>
@@ -225,7 +225,7 @@
                                 form.program_level || 'N/A',
                                 form.satisfaction_rate + ' %',
                                 form.alumni_engagement_rate + ' %',
-                                form.alumni_engagement_rate + ' %',
+                                form.portal_registration + ' %',
                                 editButton + ' ' + deleteBtn
                             ];
                         });
