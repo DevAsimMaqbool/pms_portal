@@ -110,20 +110,11 @@
                     <div class="row g-3">
                       <div class="col-md-4 mb-3">
                                                 <label for="batch" class="form-label">Select Year</label>
-                                                <select name="year" id="year" class="select2 form-select faculty-member" required>
-                                                    <option value="">-- Select Year --</option>
-                                                     <?php
-                                                        $currentYear = date('Y');
-
-                                                        // Show range from past 2 to next 3 academic years
-                                                        for ($year = $currentYear - 1; $year <= $currentYear + 3; $year++) {
-                                                            $nextYear = $year + 1;
-                                                            $range = $year . '-' . $nextYear;
-                                                            echo "<option value='{$range}'>{$range}</option>";
-                                                        }
-                                                        ?>
-                                                    
-                                                </select>
+                                                <select name="year_id" id="year_id"
+                                            class="form-select" required>
+                                            <option value=""> Select year</option>
+                                                @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                            </select>
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="faculty" class="form-label">Faculty</label>
@@ -148,7 +139,7 @@
                                             <div class="col-md-4">
                                                 <label for="program" class="form-label">Program</label>
                                                 <select name="program_id" id="program_id" class="select2 form-select program_id"
-                                                    required>
+                                                    >
                                                     <option value="">-- Select Program --</option>
                                                 </select>
                                             </div>
@@ -156,7 +147,7 @@
                                             <div class="col-md-4">
                                                 <label for="program_level" class="form-label">Program Level</label>
                                                 <select name="program_level" id="program_level"
-                                                    class="select2 form-select faculty-member" required>
+                                                    class="select2 form-select faculty-member">
                                                     <option value="">-- Select Level --</option>
                                                     <option value="UG">UG</option>
                                                     <option value="PG">PG</option>
@@ -297,7 +288,7 @@
                             return [
                                 i + 1,
                                 form.faculty ? form.faculty.name : 'N/A',
-                                form.year || 'N/A',
+                                form.year ? form.year.year : 'N/A',
                                 form.total_faculty_surveyed || 'N/A',
                                 form.number_of_promoters || 'N/A',
                                 form.promoters_percentage || 'N/A',
@@ -424,7 +415,7 @@
         $('#researchForm1 #total_faculty_surveyed').val(form.total_faculty_surveyed);
         $('#researchForm1 #number_of_promoters').val(form.number_of_promoters);
          $('#researchForm1 #promoters_percentage').val(form.promoters_percentage);
-        $('#researchForm1 #year').val(form.year).trigger('change');
+        $('#researchForm1 #year_id').val(form.year_id).trigger('change');
         $('#researchForm1 #program_level').val(form.program_level).trigger('change');
 
         populateFacultyDepartmentProgram(form);
