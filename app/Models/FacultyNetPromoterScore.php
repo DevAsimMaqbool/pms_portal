@@ -9,6 +9,8 @@ class FacultyNetPromoterScore extends Model
     protected $fillable = [
         'indicator_id',
         'year',
+        'year_id',
+        'term_id',
         'faculty_id',
         'department_id',
         'program_id',
@@ -38,5 +40,9 @@ class FacultyNetPromoterScore extends Model
     public function program()
     {
         return $this->belongsTo(Program::class, 'program_id');
+    }
+    public function year()
+    {
+        return $this->belongsTo(Years::class, 'year_id', 'id');
     }
 }
