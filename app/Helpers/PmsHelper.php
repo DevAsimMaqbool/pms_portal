@@ -854,4 +854,10 @@ if (!function_exists('SelectCurrentYear')) {
         return $query->orderByDesc('year')->get();
     }
 }
+if (!function_exists('SelectAllTerm')) {
+    function SelectAllTerm()
+    {
+        return Term::all();
+    }
+}
 
