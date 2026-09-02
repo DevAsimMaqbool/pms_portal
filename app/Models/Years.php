@@ -13,6 +13,8 @@ class Years extends Model
     protected $fillable = [
         'year',
         'active',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [

@@ -17,12 +17,14 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RectorDashboardController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\YearController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\DepartmentAssignmentController;
 use App\Http\Controllers\FormBuilderController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AssignFormToUserController;
 use App\Http\Controllers\AwardController;
+use App\Http\Controllers\ActiveRecordController;
 use App\Http\Controllers\CommercialGainsCounsultancyResearchIncomeController;
 use App\Http\Controllers\EmployabilityController;
 use App\Http\Controllers\IntellectualPropertyController;
@@ -413,6 +415,10 @@ Route::middleware('auth')->group(function () {
         Route::get('terms/edit/{id}', [TermController::class, 'edit'])->name('terms.edit');
         Route::post('terms/update/{id}', [TermController::class, 'update'])->name('terms.update');
         Route::delete('terms/delete/{id}', [TermController::class, 'destroy'])->name('terms.delete');
+        Route::resource('years-data', YearController::class);
+        Route::post('/years/{id}/status', [YearController::class, 'updateStatus'])->name('years.status');
+        Route::resource('active-record', ActiveRecordController::class);
+
     });
     Route::get('/faculty-target-gets', [FacultyTargetController::class, 'getTarget'])
         ->name('faculty-target.getTarget');

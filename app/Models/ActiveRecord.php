@@ -16,4 +16,17 @@ class ActiveRecord extends Model
         'status_fall',
         'status',
     ];
+     public function year()
+    {
+        return $this->belongsTo(Years::class, 'year_id', 'id');
+    }
+    public function springTerm()
+    {
+        return $this->belongsTo(Term::class, 'term_spring_id', 'id');
+    }
+
+    public function fallTerm()
+    {
+        return $this->belongsTo(Term::class, 'term_fall_id', 'id');
+    }
 }
