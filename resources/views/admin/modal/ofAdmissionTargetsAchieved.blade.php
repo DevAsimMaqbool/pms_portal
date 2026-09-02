@@ -75,7 +75,7 @@
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#ofAdmissionTargetsAchieved-fall"
                                     aria-controls="ofAdmissionTargetsAchieved-fall" aria-selected="false">
-                                    🍂 Fall {{ date('Y') }}
+                                    🍂 Fall {{ date('Y') - 1 }}
                                 </button>
                             </li>
                         </ul>
@@ -292,7 +292,7 @@
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#ofAdmissionTargetsAchieved-fall"
                                     aria-controls="ofAdmissionTargetsAchieved-fall" aria-selected="false">
-                                    🍂 Fall {{ date('Y') }}
+                                    🍂 Fall {{ date('Y') - 1 }}
                                 </button>
                             </li>
                         </ul>
