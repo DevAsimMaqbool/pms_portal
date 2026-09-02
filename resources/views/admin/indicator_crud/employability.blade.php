@@ -115,17 +115,9 @@
 
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="faculty" class="form-label">Please select period</label>
-                                        <select name="period" id="period" class="select2 form-select faculty-member" required>
-                                            <option value="">-- Select Period --</option>
-                                            <?php    $currentYear = date('Y');
-            for ($year = $currentYear - 1; $year <= $currentYear + 3; $year++) {
-                $nextYear = $year + 1;
-                $range = $year . '-' . $nextYear;
-                echo "<option value='{$range}'>{$range}</option>";
-            }
-                                                                                                        ?>
-                                        </select>
+                                        <label for="period" class="form-label">Please select period</label>
+                                        <input type="text" name="period" id="period" class="form-control"
+                                            placeholder="2000-20001" required>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="student_name" class="form-label">Student Name</label>
@@ -141,13 +133,13 @@
                                         <label for="cnic" class="form-label">CNIC</label>
                                         <input type="text" name="cnic" id="cnic" class="form-control"
                                             placeholder="xxxxx-xxxxxxx-x" maxlength="15"
-                                            pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}" required>
+                                            pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}" >
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="domicile" class="form-label">Domicile
                                         </label>
                                         <input type="text" name="domicile" id="domicile" class="form-control"
-                                            placeholder="Domicile" required>
+                                            placeholder="Domicile">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="gender" class="form-label">Gender</label>
@@ -199,7 +191,7 @@
                                         <label for="batch" class="form-label">Batch</label>
                                         <select name="batch" id="batch" class="select2 form-select faculty-member" required>
                                             <option value="">-- Select Batch --</option>
-                                            @foreach(SelectCurrentTerm() as $term) <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }} </option> @endforeach
+                                            @foreach(SelectAllTerm() as $term) <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }} </option> @endforeach
 
                                         </select>
                                     </div>
@@ -216,13 +208,13 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="passing_year" class="form-label">Date of Appointment</label>
                                         <input type="date" name="date_of_appointment" id="date_of_appointment"
-                                            class="form-control" required>
+                                            class="form-control">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Employer Name</label>
                                         <input type="text" name="employer_name" id="employer_name" class="form-control"
-                                            required>
+                                            >
                                     </div>
 
                                     <div class="col-md-6 mb-3">
@@ -290,7 +282,7 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="passing_year" class="form-label">Proof of Salary and appointment</label>
                                         <input type="url" name="proof_salary_and_appointment" id="proof_salary_and_appointment"
-                                            class="form-control" required>
+                                            class="form-control">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="fw-bold mb-2 d-block">Employer Satisfaction</label>
@@ -598,7 +590,7 @@
                         $('#researchForm1 #gender').val(form.gender).trigger('change');;
                     populateFacultyDepartmentProgram(form);
                     $('#researchForm1 #batch').val(form.batch).trigger('change');
-                    $('#researchForm1 #period').val(form.period).trigger('change');
+                    $('#researchForm1 #period').val(form.period);
                     $('#researchForm1 #passing_year').val(form.passing_year).trigger('change');
                     $('#researchForm1 #date_of_appointment').val(form.date_of_appointment);
                     $('#researchForm1 #proof_salary_and_appointment').val(form.proof_salary_and_appointment);
