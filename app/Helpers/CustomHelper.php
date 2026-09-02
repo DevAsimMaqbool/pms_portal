@@ -4350,12 +4350,6 @@ function EmployabilityOfHOD()
         ));
 
         // ---------------- 107 Graduate Satisfaction ----------------
-        $score = 0;
-        foreach ($group as $r) {
-            if (!is_null($r->graduate_satisfaction)) {
-                $score += $r->graduate_satisfaction * 20;
-            }
-        }
 
          $graduate_sat = $employerCount > 0
             ? round(
@@ -7867,16 +7861,17 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
         "Spring $currentYear",
         "Fall $previousYear"
     ];
-    $activeTermIds = Term::where('status', '1')->pluck('id');
+    $activeTermIds = Term::where('status', '1')->pluck('start_year');
     $programIds = Program::where('leader_id', $employeeId)->pluck('id');
 
     $records = Employability::with(['program'])
         ->whereIn('program_id', $programIds)
-        ->whereIn('batch', $activeTermIds)
+        ->whereIn('passing_year', $activeTermIds)
         ->where('program_level', $ProgramLevel)
         ->get();
 
     $totalStudents = $records->count();
+    $employerCount = $records->whereNotNull('employer_name')->count();
 
     if ($totalStudents == 0) {
         return collect();
@@ -7901,7 +7896,7 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
     | 1️⃣ Student Employability (103)
     |--------------------------------------------------------------------------
     */
-    $employed = $records->whereNotNull('date_of_appointment')->count();
+    $employed = $records->whereNotNull('employer_name')->count();
     $employabilityPercentage = round(($employed / $totalStudents) * 100, 2);
 
     $weightedScore103 = ($employabilityPercentage * $weights['course_103']) / 100;
@@ -7915,7 +7910,7 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
         'weighted_score' => $weightedScore103,
         'details' => [
             'total_students' => $totalStudents,
-            'employed' => $employed,
+            'employed' => 2,
             'unemployed' => $totalStudents - $employed,
         ],
     ]);
@@ -7927,7 +7922,7 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
     */
     $salaryScore = 0;
 
-    foreach ($records as $r) {
+    foreach ($records->whereNotNull('employer_name') as $r) {
         $salaryScore += match ($r->market_competitive_salary) {
             'Low' => 33,
             'At Par' => 66,
@@ -7936,7 +7931,7 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
         };
     }
 
-    $marketSalaryPercentage = round($salaryScore / $totalStudents, 2);
+    $marketSalaryPercentage = round($salaryScore / $employerCount, 2);
     $weightedScore106 = ($marketSalaryPercentage * $weights['course_106']) / 100;
 
     saveIndicatorPercentage($employeeId, $activeRoleId, 1, 1, 106, $weightedScore106);
@@ -7950,10 +7945,11 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
     $programBreakdown = $records->groupBy('program_id')->map(function ($items) {
 
         $total = $items->count();
+        $employertotalCount = $items->whereNotNull('employer_name')->count();
 
         $salaryScore = 0;
 
-        foreach ($items as $r) {
+        foreach ($items->whereNotNull('employer_name') as $r) {
             $salaryScore += match ($r->market_competitive_salary) {
                 'Low' => 33,
                 'At Par' => 66,
@@ -7962,11 +7958,11 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
             };
         }
 
-        $score = $total > 0 ? round($salaryScore / $total, 1) : 0;
+        $score = $employertotalCount > 0 ? round($salaryScore / $employertotalCount, 1) : 0;
 
         return [
             'program_name' => optional($items->first()->program)->program_name,
-            'total_students' => $total,
+            'total_students' => $employertotalCount,
             'score' => $score,
             'low' => $items->where('market_competitive_salary', 'Low')->count(),
             'at_par' => $items->where('market_competitive_salary', 'At Par')->count(),
@@ -7987,10 +7983,19 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
     | 3️⃣ Job Relevancy (105)
     |--------------------------------------------------------------------------
     */
-    $relevant = $records->where('job_relevancy', 'yes')->count();
-    $jobRelevancyPercentage = round(($relevant / $totalStudents) * 100, 2);
+    $job = $employerCount
+            ? round(
+                (
+                    $records->whereNotNull('employer_name')
+                        ->where('job_relevancy', 'yes')
+                        ->count()
+                    / $employerCount
+                ) * 100,
+                2
+            )
+            : 0;
 
-    $weightedScore105 = ($jobRelevancyPercentage * $weights['course_105']) / 100;
+    $weightedScore105 = ($job * $weights['course_105']) / 100;
 
     saveIndicatorPercentage90Plus($employeeId, $activeRoleId, 1, 1, 105, $weightedScore105);
 
@@ -8003,26 +8008,29 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
     $programBreakdown = $records->groupBy('program_id')->map(function ($items) {
 
         $total = $items->count();
+        $employertotalCount = $items->whereNotNull('employer_name')->count();
 
-        $relevant = $items->where('job_relevancy', 'yes')->count();
+        //$relevant = $items->where('job_relevancy', 'yes')->count();
+        $relevant=$items->whereNotNull('employer_name') ->where('job_relevancy', 'yes')->count();
 
-        $score = $total > 0
-            ? round(($relevant / $total) * 100, 1)
+        $score = $employertotalCount > 0
+            ? round(($relevant / $employertotalCount) * 100, 1)
             : 0;
+            
 
         return [
             'program_name' => optional($items->first()->program)->program_name,
-            'total_students' => $total,
+            'total_students' => $employertotalCount,
             'score' => $score,
             'relevant_jobs' => $relevant,
-            'non_relevant_jobs' => $total - $relevant,
+            'non_relevant_jobs' => $employertotalCount - $relevant,
         ];
     });
 
     $results->push([
         'indicator' => 'Job Relevancy',
         'indicator_id' => 105,
-        'percentage' => $jobRelevancyPercentage,
+        'percentage' => $job,
         'weighted_score' => $weightedScore105,
         'details' => $programBreakdown->values(), // ✅ IMPORTANT
     ]);
@@ -8032,15 +8040,16 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
     | 4️⃣ Employer Satisfaction (104)
     |--------------------------------------------------------------------------
     */
-    $score104 = 0;
-
-    foreach ($records as $r) {
-        if (!is_null($r->employer_satisfaction)) {
-            $score104 += $r->employer_satisfaction * 20;
-        }
-    }
-
-    $employerSatisfactionPercentage = round($score104 / $totalStudents, 2);
+   
+    $employerSatisfactionPercentage = $employerCount > 0
+            ? round(
+                ($records->whereNotNull('employer_name')
+                    ->whereNotNull('employer_satisfaction')
+                    ->sum('employer_satisfaction') * 20)
+                / $employerCount,
+                2
+            )
+            : 0;
 
     $weightedScore104 = ($employerSatisfactionPercentage * $weights['course_104']) / 100;
     $weightedScore157 = ($employerSatisfactionPercentage * $weights['course_157']) / 100;
@@ -8051,17 +8060,21 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
     $programBreakdown = $records->groupBy('program_id')->map(function ($items) {
 
         $total = $items->count();
+        $employertotalCount = $items->whereNotNull('employer_name')->count();
 
-        $score = $total > 0
+        $score = $employertotalCount > 0
             ? round(
-                ($items->whereNotNull('employer_satisfaction')->sum('employer_satisfaction') * 20) / $total,
-                1
+                ($items->whereNotNull('employer_name')
+                    ->whereNotNull('employer_satisfaction')
+                    ->sum('employer_satisfaction') * 20)
+                / $employertotalCount,
+                2
             )
-            : 0;
+            : 0;    
 
         return [
             'program_name' => optional($items->first()->program)->program_name,
-            'total_students' => $total,
+            'total_students' => $employertotalCount,
             'score' => $score,
         ];
     });
@@ -8079,15 +8092,16 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
     | 5️⃣ Graduate Satisfaction (107)
     |--------------------------------------------------------------------------
     */
-    $score107 = 0;
 
-    foreach ($records as $r) {
-        if (!is_null($r->graduate_satisfaction)) {
-            $score107 += $r->graduate_satisfaction * 20;
-        }
-    }
-
-    $graduateSatisfactionPercentage = round($score107 / $totalStudents, 2);
+    $graduateSatisfactionPercentage = $employerCount > 0
+            ? round(
+                ($records->whereNotNull('employer_name')
+                    ->whereNotNull('graduate_satisfaction')
+                    ->sum('graduate_satisfaction') * 20)
+                / $employerCount,
+                2
+            )
+            : 0;
 
     $weightedScore107 = ($graduateSatisfactionPercentage * $weights['course_107']) / 100;
 
@@ -8102,22 +8116,20 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
     $programBreakdown = $records->groupBy('program_id')->map(function ($items) {
 
         $total = $items->count();
+         $employertotalCount = $items->whereNotNull('employer_name')->count();
 
         $sum = 0;
+        $sum=$items->whereNotNull('employer_name')
+                    ->whereNotNull('graduate_satisfaction')
+                    ->sum('graduate_satisfaction') * 20;
 
-        foreach ($items as $r) {
-            if (!is_null($r->graduate_satisfaction)) {
-                $sum += $r->graduate_satisfaction * 20;
-            }
-        }
-
-        $score = $total > 0 ? round($sum / $total, 1) : 0;
+        $score = $employertotalCount > 0 ? round($sum / $employertotalCount, 1) : 0;
 
         return [
             'program_name' => optional($items->first()->program)->program_name,
-            'total_students' => $total,
+            'total_students' => $employertotalCount,
             'score' => $score,
-            'avg_rating' => round($sum / ($total * 20), 2),
+            'avg_rating' => round($sum / ($employertotalCount * 20), 2),
         ];
     });
 

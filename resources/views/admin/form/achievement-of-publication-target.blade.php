@@ -2008,8 +2008,11 @@
                                                     data-bs-original-title="${form.reject_status_remarks}">
                                                     Reject
                                                 </span>`;
+                                }
+                                if (form.reject_status == 1) {
+                                    statusText = '<span class="badge bg-label-danger">HOD Reject this application.</span>';
                                 } else {
-                                    statusText = '<span class="badge bg-label-warning">Unverified</span>';
+                                    statusText = '<span class="badge bg-label-warning">Waiting for HOD Approvel.</span>';
                                 }
                             } 
                             if (form.status == 2) {
