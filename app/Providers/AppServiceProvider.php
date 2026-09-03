@@ -50,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Event::listen(Login::class, LoadTeacherModels::class);
+        Paginator::useBootstrapFive();
 
     }
 }
