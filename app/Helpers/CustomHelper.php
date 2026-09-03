@@ -960,8 +960,8 @@ if (!function_exists('ScopusPublicationsNew')) {
 
         $weightedScore = ($avgPercentage * $weights['course_load']) / 100;
 
-        calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId);
-        calculateInternationalScore($facultyId, $activeRoleId, $indicatorId);
+        calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId, $currentYear);
+        calculateInternationalScore($facultyId, $activeRoleId, $indicatorId, $currentYear);
 
         saveIndicatorPercentage(
             $facultyId,

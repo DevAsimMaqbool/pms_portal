@@ -7,7 +7,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Pagination\Paginator;
+use App\Listeners\LoadTeacherModels;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Support\Facades\Event;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -46,8 +48,8 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         });
-        
-                Paginator::useBootstrapFive();
-            
+
+        Event::listen(Login::class, LoadTeacherModels::class);
+
     }
 }
