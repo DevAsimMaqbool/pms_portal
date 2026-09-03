@@ -59,10 +59,10 @@
 
                                 <td>
                                     @if($feedback)
-                                        <a href="{{ route('employee.rating.edit', $feedback->id) }}"
+                                        <a href="{{ route('employee.goalfeedback.edit', $feedback->id) }}"
                                             class="btn btn-sm btn-primary">Edit</a>
                                     @else
-                                        <a href="{{ route('linemanager.form', ['employee_id' => $member->id]) }}"
+                                        <a href="{{ route('linemanager.feedback', ['employee_id' => $member->id]) }}"
                                             class="btn btn-sm btn-success">Add</a>
                                     @endif
                                 </td>

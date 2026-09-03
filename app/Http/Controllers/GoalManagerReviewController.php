@@ -19,93 +19,106 @@ class GoalManagerReviewController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index()
-    {
-        $managerId = Auth::id();
+    public function index(Request $request)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | EMPLOYEES
+    |--------------------------------------------------------------------------
+    |
+    | Keep your existing employee query here.
+    | Example:
+    |
+    */
 
-        /*
-        |--------------------------------------------------------------------------
-        | Get employees who have submitted goals
-        |--------------------------------------------------------------------------
-        */
-
-        $employeeIds = GoalSelfReport::query()
-            ->whereIn('status', [
-                'submitted',
-                'manager_approved',
-                'manager_rejected',
-            ])
-            ->whereHas('user', function ($query) use ($managerId) {
-                $query->where('manager_id', $managerId);
-            })
-            ->select('user_id')
-            ->distinct();
-
-        $employees = User::query()
-            ->where('manager_id', $managerId)
-            ->whereIn('id', $employeeIds)
-            ->orderBy('name')
-            ->paginate(15);
-
-        /*
-        |--------------------------------------------------------------------------
-        | Load Reports For Current Employees
-        |--------------------------------------------------------------------------
-        */
-
-        $userIds = $employees->getCollection()
-            ->pluck('id');
-
-        $reports = GoalSelfReport::with([
-            'goal',
-            'goal.s2rDriver',
-        ])
-            ->whereIn('user_id', $userIds)
-            ->whereIn('status', [
-                'submitted',
-                'manager_approved',
-                'manager_rejected',
-            ])
-            ->get()
-            ->groupBy('user_id');
-
-        /*
-        |--------------------------------------------------------------------------
-        | Attach Reports To Employee Collection
-        |--------------------------------------------------------------------------
-        */
-
-        $employees->getCollection()->transform(function ($employee) use ($reports) {
-
-            $employeeReports = $reports->get($employee->id, collect());
-
-            $employee->goal_reports = $employeeReports;
-
-            $employee->total_goals = $employeeReports->count();
-
-            $employee->reviewed_goals = $employeeReports
-                ->whereIn('status', [
+    $employees = User::where('manager_id', Auth::id())
+        ->withCount([
+            'goalSelfReports as total_goals' => function ($query) {
+                $query->whereIn('status', [
+                    'submitted',
                     'manager_approved',
                     'manager_rejected',
-                ])
-                ->count();
+                ]);
+            },
 
-            $employee->pending_goals = $employeeReports
-                ->where('status', 'submitted')
-                ->count();
+            'goalSelfReports as reviewed_goals' => function ($query) {
+                $query->where('status', 'manager_approved');
+            },
 
-            $employee->all_goals_reviewed =
-                $employee->total_goals > 0 &&
-                $employee->pending_goals === 0;
+            'goalSelfReports as pending_goals' => function ($query) {
+                $query->whereIn('status', [
+                    'submitted',
+                    'manager_rejected',
+                ]);
+            },
+        ])
+        ->orderBy('name')
+        ->paginate(10)
+        ->withQueryString();
 
-            return $employee;
-        });
+    /*
+    |--------------------------------------------------------------------------
+    | CALCULATE OVERALL RATINGS
+    |--------------------------------------------------------------------------
+    */
 
-        return view(
+    foreach ($employees as $employee) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | SELF OVERALL RATING
+        |--------------------------------------------------------------------------
+        */
+
+        $selfRatings = GoalSelfReport::where(
+            'user_id',
+            $employee->id
+        )
+        ->whereNotNull('rating')
+        ->pluck('rating');
+
+        $employee->self_overall_rating =
+            $selfRatings->count() > 0
+                ? round($selfRatings->avg(), 2)
+                : null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | MANAGER / HR OVERALL RATING
+        |--------------------------------------------------------------------------
+        */
+
+        $overallReview = GoalOverallReview::where(
+            'user_id',
+            $employee->id
+        )
+        ->latest('id')
+        ->first();
+
+        /*
+        |--------------------------------------------------------------------------
+        | MANAGER OVERALL
+        |--------------------------------------------------------------------------
+        */
+
+        $employee->manager_overall_rating =
+            $overallReview?->manager_overall_rating;
+
+        /*
+        |--------------------------------------------------------------------------
+        | HR OVERALL
+        |--------------------------------------------------------------------------
+        */
+
+        $employee->hr_overall_rating =
+            $overallReview?->hr_overall_rating;
+    }
+
+    return view(
             'admin.goal-manager.index',
             compact('employees')
         );
-    }
+} 
 
     /*
     |--------------------------------------------------------------------------
@@ -514,4 +527,19 @@ class GoalManagerReviewController extends Controller
             'Overall manager remarks have been saved successfully.'
         );
 }
+
+public function lineManagerForm()
+    {
+        $authUser = Auth::user();
+
+        // Upward: get manager if exists
+        $manager = $authUser->manager ? collect([$authUser->manager]) : collect();
+
+        // Downward: get subordinates if any
+        $subordinates = $authUser->subordinates ?? collect();
+
+        // Combine both into a single collection
+        $facultyMembers = $manager->merge($subordinates);
+        return view('admin.form.goal_feedback.line_manager_feedback_in_goal', compact('facultyMembers'));
+    }
 }

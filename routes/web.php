@@ -52,6 +52,7 @@ use App\Http\Controllers\CompletionOfCourseFolderController;
 use App\Http\Controllers\FacultyMemberClassController;
 use App\Http\Controllers\IndicatorCrudController;
 use App\Http\Controllers\LineManagerFeedbackController;
+use App\Http\Controllers\LineManagerGoalFeedbackController;
 use App\Http\Controllers\LineManagerEventFeedbackController;
 use App\Http\Controllers\RatingRuleController;
 use App\Http\Controllers\PmsPolicyController;
@@ -481,13 +482,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/classes-attendance', [FacultyMemberClassController::class, 'classesAttendance'])->name('classes.attendance');
     Route::get('/classes-details', [FacultyMemberClassController::class, 'updateFacultyClassDetails'])->name('classes.details');
 
-    Route::post('/employee-rating/store', [LineManagerFeedbackController::class, 'store'])->name('employee.rating.store');
     Route::get('/linemanager-form', [FormBuilderController::class, 'lineManagerForm'])->name('linemanager.form');
     Route::get('/linemanagerevent-form', [FormBuilderController::class, 'lineManagerEventForm'])->name('linemanagerevent.form');
 
+    Route::post('/employee-rating/store', [LineManagerFeedbackController::class, 'store'])->name('employee.rating.store');
     Route::get('/employee-ratings', [LineManagerFeedbackController::class, 'index'])->name('employee.rating.index');
     Route::get('/employee-rating/edit/{id}', [LineManagerFeedbackController::class, 'edit'])->name('employee.rating.edit');
     Route::post('/employee-rating/update/{id}', [LineManagerFeedbackController::class, 'update'])->name('employee.rating.update');
+
     Route::get('/assignments/by-role', function (\Illuminate\Http\Request $request) {
         $roleName = $request->role_name;
         $assignments = getRoleAssignments($roleName); // use your helper
@@ -556,29 +558,45 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::prefix('goal-self-reports')
-        ->name('goal-self-reports.')
-        ->group(function () {
+    ->name('goal-self-reports.')
+    ->group(function () {
 
-            Route::get(
-                '/',
-                [GoalSelfReportController::class, 'index']
-            )->name('index');
+        // List all self reports
+        Route::get(
+            '/',
+            [GoalSelfReportController::class, 'index']
+        )->name('index');
 
-            Route::get(
-                '/create',
-                [GoalSelfReportController::class, 'create']
-            )->name('create');
+        // Create form
+        Route::get(
+            '/create',
+            [GoalSelfReportController::class, 'create']
+        )->name('create');
 
-            Route::post(
-                '/',
-                [GoalSelfReportController::class, 'store']
-            )->name('store');
+        // Store new self report
+        Route::post(
+            '/',
+            [GoalSelfReportController::class, 'store']
+        )->name('store');
 
-            Route::get(
-                '/{goalSelfReport}',
-                [GoalSelfReportController::class, 'show']
-            )->name('show');
-        });
+        // Edit self report
+        Route::get(
+            '/{goalSelfReport}/edit',
+            [GoalSelfReportController::class, 'edit']
+        )->name('edit');
+
+        // Update self report
+        Route::put(
+            '/{goalSelfReport}',
+            [GoalSelfReportController::class, 'update']
+        )->name('update');
+
+        // View self report
+        Route::get(
+            '/{goalSelfReport}',
+            [GoalSelfReportController::class, 'show']
+        )->name('show');
+    });
 
     /*
 |--------------------------------------------------------------------------
@@ -613,7 +631,11 @@ Route::middleware('auth')->group(function () {
             [GoalManagerReviewController::class, 'overallReview']
         )->name('overall-review');
     });
-
+    Route::get('/linemanager-feedback', [GoalManagerReviewController::class, 'lineManagerForm'])->name('linemanager.feedback');
+    Route::post('/employee-goalfeedback/store', [LineManagerGoalFeedbackController::class, 'store'])->name('employee.goalfeedback.store');
+    Route::get('/employee-goalfeedback', [LineManagerGoalFeedbackController::class, 'index'])->name('employee.goalfeedback.index');
+    Route::get('/employee-goalfeedback/edit/{id}', [LineManagerGoalFeedbackController::class, 'edit'])->name('employee.goalfeedback.edit');
+    Route::post('/employee-goalfeedback/update/{id}', [LineManagerGoalFeedbackController::class, 'update'])->name('employee.goalfeedback.update');
     /*
 |--------------------------------------------------------------------------
 | HR

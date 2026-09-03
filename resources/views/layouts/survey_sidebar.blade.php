@@ -124,6 +124,13 @@
                     </div>
                 </a>
             </li>
+            <li class="menu-item {{ request()->routeIs('employee.goalfeedback.index') ? 'active' : '' }}">
+                    <a href="{{ route('employee.goalfeedback.index') }}"" class=" menu-link" data-bs-toggle="tooltip"
+                        data-bs-placement="right" data-bs-original-title="Line Manager Feedback">
+                        <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
+                        <div data-i18n="Line Manager Feedback">Line Manager Feedback</div>
+                    </a>
+                </li>
         @endif
 
     </ul>
