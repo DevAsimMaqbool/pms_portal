@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use App\Listeners\LoadTeacherModels;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Pagination\Paginator;
 class AppServiceProvider extends ServiceProvider
 {
     /**
