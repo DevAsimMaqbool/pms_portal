@@ -1994,9 +1994,10 @@
                         const forms = data.forms || [];
 
                         const rowData = forms.map((form, i) => {
+                            
                             const createdAt = form.created_at
-                                ? new Date(form.created_at).toISOString().split('T')[0]
-                                : 'N/A';
+                            ? form.created_at.split('T')[0]
+                            : 'N/A';    
 
                             let statusText = 'N/A';
                              if (form.status == 1) {
@@ -2006,22 +2007,22 @@
                                                     data-bs-placement="top" 
                                                     data-bs-custom-class="tooltip-danger" 
                                                     data-bs-original-title="${form.reject_status_remarks}">
-                                                    Reject
+                                                    ORIC Reject this application.
                                                 </span>`;
-                                }
+                                }else
                                 if (form.reject_status == 1) {
-                                    statusText = '<span class="badge bg-label-danger">HOD Reject this application.</span>';
+                                    statusText = '<span class="badge bg-label-dark text-danger">HOD Reject this application.</span>';
                                 } else {
-                                    statusText = '<span class="badge bg-label-warning">Waiting for HOD Approvel.</span>';
+                                    statusText = '<span class="badge bg-label-dark text-warning">Waiting for HOD Approvel.</span>';
                                 }
                             } 
                             if (form.status == 2) {
                                 if (form.reject_status == 2) {
                                     statusText = '<span class="badge bg-label-danger">Reject</span>';
                                 }else if (form.reject_status == 3) {
-                                    statusText = '<span class="badge bg-label-warning">On Hold</span>';
+                                    statusText = '<span class="badge bg-label-info">On Hold</span>';
                                 } else {
-                                    statusText = '<span class="badge bg-label-warning">Unverified</span>';
+                                    statusText = '<span class="badge bg-label-warning">Waiting for ORIC Approvel</span>';
                                 }
 
                             }
@@ -2043,9 +2044,17 @@
                         if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
                             $('#complaintTable3').DataTable({
                                 data: rowData,
+                                deferRender: true,
+                                processing: true,
                                 scrollX: true,
                                 scrollCollapse: true,
                                 autoWidth: false,
+                                pageLength: 10,
+                                lengthMenu: [
+                                    [10, 25, 50, 100],
+                                    [10, 25, 50, 100]
+                                ],
+
                                 columns: [
                                     { title: "<input type='checkbox' id='selectAll'>" },
                                     { title: "#" },
@@ -2054,11 +2063,23 @@
                                     { title: "Classification" },
                                     { title: "Status" },
                                     { title: "Created Date" },
-                                    { title: "Actions" }
+                                    { title: "Actions",
+                                      orderable: false,
+                                     searchable: false }
+                                ],
+                                 order: [
+                                    [6, 'desc']
                                 ]
                             });
                         } else {
-                            $('#complaintTable3').DataTable().clear().rows.add(rowData).draw();
+                            const table = $('#complaintTable3').DataTable();
+
+                            table.clear();
+
+                            table.rows.add(rowData);
+
+                            table.draw(false);
+                            
                         }
                     },
                     error: function (xhr) {
