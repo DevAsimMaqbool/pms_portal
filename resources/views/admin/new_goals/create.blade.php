@@ -198,7 +198,7 @@
                                     required>
 
                                     <option value="">
-                                        -- Select S2R Driver --
+                                        Select S2R  / Enabler
                                     </option>
 
                                     @foreach($drivers as $driver)

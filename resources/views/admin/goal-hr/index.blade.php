@@ -24,41 +24,98 @@
 
                     @php
 
-                        $reports = $employee->goalSelfReports;
+    $reports = $employee->goalSelfReports;
 
-                        $managerRatings = $reports
-                            ->pluck('manager_rating')
-                            ->filter(fn($rating) => $rating !== null);
+    /*
+    |--------------------------------------------------------------------------
+    | Self Overall Rating
+    |--------------------------------------------------------------------------
+    */
 
-                        $managerOverall = $managerRatings->count()
-                            ? round($managerRatings->avg(), 2)
-                            : null;
+    $selfRatings = $reports
+        ->pluck('rating')
+        ->filter(fn($rating) => $rating !== null);
 
-                        $overallReview = $employee->goalOverallReviews->first();
+    $selfOverall = $selfRatings->count()
+        ? round($selfRatings->avg(), 2)
+        : null;
 
-                    @endphp
+    /*
+    |--------------------------------------------------------------------------
+    | Manager Overall Rating
+    |--------------------------------------------------------------------------
+    */
+
+    $managerRatings = $reports
+        ->pluck('manager_rating')
+        ->filter(fn($rating) => $rating !== null);
+
+    $managerOverall = $managerRatings->count()
+        ? round($managerRatings->avg(), 2)
+        : null;
+
+    /*
+    |--------------------------------------------------------------------------
+    | HR Overall Rating
+    |--------------------------------------------------------------------------
+    */
+
+    $overallReview = $employee->goalOverallReviews->first();
+
+@endphp
 
                     <div class="employee-row">
 
                         <div class="employee-info">
 
-                            <div class="employee-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
+    <div class="employee-avatar">
+        <i class="fas fa-user"></i>
+    </div>
 
-                            <div>
+    <div>
 
-                                <div class="employee-name">
-                                    {{ $employee->name }}
-                                </div>
+        <div class="employee-name">
+            {{ $employee->name }}
+        </div>
 
-                                <small class="text-muted">
-                                    {{ $reports->count() }} manager-reviewed goal(s)
-                                </small>
+        <div class="employee-meta">
 
-                            </div>
+            <span>
+                <i class="fas fa-building me-1"></i>
+                {{ $employee->hr_department_name ?? 'No Department' }}
+            </span>
 
-                        </div>
+            <span>
+                <i class="fas fa-user-tie me-1"></i>
+                Manager:
+                {{ $employee->manager_name ?? 'No Manager' }}
+            </span>
+
+        </div>
+
+        <small class="text-muted">
+            {{ $reports->count() }} manager-reviewed goal(s)
+        </small>
+
+    </div>
+
+</div>
+{{-- SELF OVERALL --}}
+<div class="rating-box self">
+
+    <small>
+        Self Overall
+    </small>
+
+    <strong>
+        {{ $selfOverall ?? '-' }}
+
+        @if($selfOverall !== null)
+            / 5
+        @endif
+    </strong>
+
+</div>
 
                         <div class="rating-box">
 
@@ -199,7 +256,28 @@
         }
 
     }
+.employee-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    flex-wrap: wrap;
+}
 
+.employee-meta span {
+    color: #718096;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.employee-meta i {
+    color: #1f4e79;
+    font-size: 9px;
+}
+.rating-box.self strong {
+    color: #1f4e79;
+}
     </style>
 
 @endsection

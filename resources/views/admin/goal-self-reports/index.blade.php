@@ -86,104 +86,223 @@
         @endif
 
         {{-- ================= SUMMARY ================= --}}
-        <div class="row g-3 mb-4">
+<div class="row g-3 mb-4">
 
-            <div class="col-xl-4 col-md-6">
+    {{-- TOTAL --}}
+    <div class="col-xl-2 col-md-6">
 
-                <div class="summary-card">
+        <div class="summary-card">
 
-                    <div class="summary-icon blue">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-
-                    <div>
-                        <span class="summary-label">
-                            Total Reports
-                        </span>
-
-                        <h4 class="summary-value">
-                            {{ $reports->total() }}
-                        </h4>
-                    </div>
-
-                </div>
-
+            <div class="summary-icon blue">
+                <i class="fas fa-file-alt"></i>
             </div>
 
-            <div class="col-xl-4 col-md-6">
+            <div>
+                <span class="summary-label">
+                    Total Reports
+                </span>
 
-                <div class="summary-card">
-
-                    <div class="summary-icon orange">
-                        <i class="fas fa-clock"></i>
-                    </div>
-
-                    <div>
-                        <span class="summary-label">
-                            Pending Review
-                        </span>
-
-                        <h4 class="summary-value">
-                            {{ $reports->getCollection()->where('status', 'submitted')->count() }}
-                        </h4>
-                    </div>
-
-                </div>
-
+                <h4 class="summary-value">
+                    {{ $reports->total() }}
+                </h4>
             </div>
-
-            <div class="col-xl-4 col-md-6">
-
-                <div class="summary-card">
-
-                    <div class="summary-icon cyan">
-                        <i class="fas fa-user-check"></i>
-                    </div>
-
-                    <div>
-                        <span class="summary-label">
-                            Manager Reviewed
-                        </span>
-
-                        <h4 class="summary-value">
-                            {{ $reports->getCollection()->whereIn('status', [
-        'manager_approved',
-        'manager_rejected'
-    ])->count() }}
-                        </h4>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- <div class="col-xl-3 col-md-6">
-
-                                <div class="summary-card">
-
-                                    <div class="summary-icon green">
-                                        <i class="fas fa-check-double"></i>
-                                    </div>
-
-                                    <div>
-                                        <span class="summary-label">
-                                            HR Finalized
-                                        </span>
-
-                                        <h4 class="summary-value">
-                                            {{ $reports->getCollection()->whereIn('status', [
-                                                                'hr_approved',
-                                                                'hr_rejected'
-                                                            ])->count() }}
-                                        </h4>
-                                    </div>
-
-                                </div>
-
-                            </div> -->
 
         </div>
 
+    </div>
+
+    {{-- PENDING --}}
+    <div class="col-xl-2 col-md-6">
+
+        <div class="summary-card">
+
+            <div class="summary-icon orange">
+                <i class="fas fa-clock"></i>
+            </div>
+
+            <div>
+                <span class="summary-label">
+                    Pending Review
+                </span>
+
+                <h4 class="summary-value">
+                    {{ $reports->getCollection()->where('status', 'submitted')->count() }}
+                </h4>
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- Self OVERALL --}}
+    <div class="col-xl-2 col-md-6">
+
+        <div class="summary-card">
+
+            <div class="summary-icon cyan">
+                <i class="fas fa-user-check"></i>
+            </div>
+
+            <div>
+
+                <span class="summary-label">
+                    Self Rating
+                </span>
+
+                <h4 class="summary-value">
+
+                    @if($selfOverallRating !== null)
+
+                        {{ number_format($selfOverallRating, 2)}}
+
+                        <small class="rating-max">
+                            / 5
+                        </small>
+
+                    @else
+
+                        <span class="rating-pending-text">
+                            Pending
+                        </span>
+
+                    @endif
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+    {{-- MANAGER OVERALL --}}
+    <div class="col-xl-2 col-md-6">
+
+        <div class="summary-card">
+
+            <div class="summary-icon cyan">
+                <i class="fas fa-user-check"></i>
+            </div>
+
+            <div>
+
+                <span class="summary-label">
+                    Manager Rating
+                </span>
+
+                <h4 class="summary-value">
+
+                    @if($overallReview && $overallReview->manager_overall_rating !== null)
+
+                        {{ number_format($overallReview->manager_overall_rating, 2) }}
+
+                        <small class="rating-max">
+                            / 5
+                        </small>
+
+                    @else
+
+                        <span class="rating-pending-text">
+                            Pending
+                        </span>
+
+                    @endif
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- MANAGER Feedback --}}
+    <div class="col-xl-2 col-md-6">
+
+        <div class="summary-card">
+
+            <div class="summary-icon cyan">
+                <i class="fas fa-user-check"></i>
+            </div>
+
+            <div>
+
+                <span class="summary-label">
+                    Manager Feedback
+                </span>
+
+                <h4 class="summary-value">
+
+                    @if($managerFeedbackOverall !== null)
+
+                        {{ round(
+        ($managerFeedbackOverall / 100) * 5,
+        2
+    ) }}
+
+                        <small class="rating-max">
+                            / 5
+                        </small>
+
+                    @else
+
+                        <span class="rating-pending-text">
+                            Pending
+                        </span>
+
+                    @endif
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- HR OVERALL --}}
+    <div class="col-xl-2 col-md-6">
+
+        <div class="summary-card">
+
+            <div class="summary-icon green">
+                <i class="fas fa-user-tie"></i>
+            </div>
+
+            <div>
+
+                <span class="summary-label">
+                    HR Rating
+                </span>
+
+                <h4 class="summary-value">
+
+                    @if($overallReview && $overallReview->hr_overall_rating !== null)
+
+                        {{ number_format($overallReview->hr_overall_rating, 2) }}
+
+                        <small class="rating-max">
+                            / 5
+                        </small>
+
+                    @else
+
+                        <span class="rating-pending-text">
+                            Pending
+                        </span>
+
+                    @endif
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+        
         {{-- ================= MAIN CARD ================= --}}
         <div class="reports-card">
 
@@ -215,6 +334,88 @@
 
             </div>
 
+            {{-- ================= STATUS FILTER ================= --}}
+<div class="reports-filter">
+
+    <form method="GET"
+          action="{{ route('goal-self-reports.index') }}"
+          class="row g-3 align-items-end">
+
+        <div class="col-md-5 col-lg-4">
+
+            <label class="filter-label">
+                <i class="fas fa-filter me-1"></i>
+                Filter by Status
+            </label>
+
+            <select name="status"
+                    class="form-select filter-select">
+
+                <option value="">
+                    All Statuses
+                </option>
+
+                <option value="submitted"
+                    {{ request('status') === 'submitted' ? 'selected' : '' }}>
+                    Pending Manager Review
+                </option>
+
+                <option value="manager_approved"
+                    {{ request('status') === 'manager_approved' ? 'selected' : '' }}>
+                    Manager Approved
+                </option>
+
+                <option value="manager_rejected"
+                    {{ request('status') === 'manager_rejected' ? 'selected' : '' }}>
+                    Manager Rejected
+                </option>
+
+                <option value="hr_approved"
+                    {{ request('status') === 'hr_approved' ? 'selected' : '' }}>
+                    HR Approved
+                </option>
+
+                <option value="hr_rejected"
+                    {{ request('status') === 'hr_rejected' ? 'selected' : '' }}>
+                    HR Rejected
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-auto">
+
+            <button type="submit"
+                    class="btn btn-primary filter-btn">
+
+                <i class="fas fa-search me-1"></i>
+                Apply Filter
+
+            </button>
+
+        </div>
+
+        @if(request()->filled('status'))
+
+            <div class="col-md-auto">
+
+                <a href="{{ route('goal-self-reports.index') }}"
+                   class="btn btn-light border filter-btn">
+
+                    <i class="fas fa-times me-1"></i>
+                    Clear
+
+                </a>
+
+            </div>
+
+        @endif
+
+    </form>
+
+</div>
+
             {{-- Table --}}
             <div class="table-responsive">
 
@@ -222,39 +423,43 @@
 
                     <thead>
 
-                        <tr>
+    <tr>
 
-                            <th class="text-center" style="width: 65px;">
-                                #
-                            </th>
+        <th class="text-center" style="width: 55px;">
+            #
+        </th>
 
-                            <th style="min-width: 300px;">
-                                Goal
-                            </th>
+        <th style="min-width: 280px;">
+            Goal
+        </th>
 
-                            <th style="min-width: 170px;">
-                                Achievement
-                            </th>
+        <th style="min-width: 160px;">
+            Achievement
+        </th>
 
-                            <th class="text-center" style="width: 130px;">
-                                Self Rating
-                            </th>
+        <th class="text-center" style="width: 120px;">
+            Self Rating
+        </th>
 
-                            <th class="text-center" style="width: 180px;">
-                                Review Status
-                            </th>
+        <th class="text-center" style="width: 140px;">
+            Manager Rating
+        </th>
 
-                            <th style="min-width: 145px;">
-                                Submitted
-                            </th>
+        <th class="text-center" style="width: 175px;">
+            Review Status
+        </th>
 
-                            <th class="text-center" style="width: 110px;">
-                                Action
-                            </th>
+        <th style="min-width: 135px;">
+            Submitted
+        </th>
 
-                        </tr>
+        <th class="text-center" style="width: 110px;">
+            Action
+        </th>
 
-                    </thead>
+    </tr>
+
+</thead>
 
                     <tbody>
 
@@ -431,6 +636,38 @@
                                                     </div>
 
                                                 </td>
+                                                <td class="text-center">
+
+    @if($report->manager_rating !== null)
+
+        <div class="rating-display manager-rating">
+
+            <div class="rating-star">
+                <i class="fas fa-user-check"></i>
+            </div>
+
+            <div>
+
+                <strong>
+                    {{ number_format($report->manager_rating, 2) }}
+                </strong>
+
+                <small>/ 5</small>
+
+            </div>
+
+        </div>
+
+    @else
+
+        <span class="rating-not-given">
+            <i class="fas fa-minus-circle me-1"></i>
+            Not Rated
+        </span>
+
+    @endif
+
+</td>
 
                                                 {{-- STATUS --}}
                                                 <td class="text-center">
@@ -473,22 +710,47 @@
                                                 </td>
 
                                                 {{-- ACTION --}}
-                                                <td class="text-center">
+<td class="text-center">
 
-                                                    <a href="{{ route(
-                                'goal-self-reports.show',
-                                $report
-                            ) }}" class="view-btn">
+    <div class="d-flex justify-content-center gap-2">
 
-                                                        <i class="fas fa-eye"></i>
+        {{-- VIEW --}}
+        <a href="{{ route(
+            'goal-self-reports.show',
+            $report
+        ) }}"
+           class="view-btn">
 
-                                                        <span>
-                                                            View
-                                                        </span>
+            <i class="fas fa-eye"></i>
 
-                                                    </a>
+            <span>
+                View
+            </span>
 
-                                                </td>
+        </a>
+
+        {{-- EDIT --}}
+        @if(in_array($report->status, ['submitted', 'manager_rejected']))
+
+            <a href="{{ route(
+                'goal-self-reports.edit',
+                $report
+            ) }}"
+               class="edit-btn">
+
+                <i class="fas fa-edit"></i>
+
+                <span>
+                    Edit
+                </span>
+
+            </a>
+
+        @endif
+
+    </div>
+
+</td>
 
                                             </tr>
 
@@ -578,6 +840,41 @@
     </div>
 
     <style>
+        /* =========================================
+   EDIT BUTTON
+========================================= */
+
+.edit-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 7px 12px;
+
+    border-radius: 7px;
+
+    background: #fff4df;
+
+    color: #b36b00;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    transition: all .2s ease;
+}
+
+.edit-btn:hover {
+    background: #b36b00;
+
+    color: #fff;
+
+    transform: translateY(-1px);
+}
         /* =========================================
                            PAGE
                         ========================================= */
@@ -1231,6 +1528,132 @@
             }
 
         }
+
+        /* =========================================
+   STATUS FILTER
+========================================= */
+
+.reports-filter {
+    padding: 18px 24px;
+
+    background: #f8fafc;
+
+    border-bottom: 1px solid #edf1f5;
+}
+
+.filter-label {
+    display: block;
+
+    color: #607080;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .35px;
+
+    margin-bottom: 7px;
+}
+
+.filter-label i {
+    color: #1f4e79;
+}
+
+.filter-select {
+    min-height: 42px;
+
+    border: 1px solid #dbe3eb;
+
+    border-radius: 9px;
+
+    color: #34495e;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    background-color: #fff;
+}
+
+.filter-select:focus {
+    border-color: #1f4e79;
+
+    box-shadow:
+        0 0 0 0.2rem rgba(31, 78, 121, .10);
+}
+
+.filter-btn {
+    min-height: 42px;
+
+    border-radius: 9px;
+
+    padding-left: 17px;
+    padding-right: 17px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+@media(max-width: 768px) {
+
+    .reports-filter {
+        padding: 16px;
+    }
+
+    .filter-btn {
+        width: 100%;
+    }
+
+}
+
+/* =========================================
+   MANAGER / HR RATINGS
+========================================= */
+
+.manager-rating .rating-star {
+    background: #e8f1fb;
+    color: #1f4e79;
+}
+
+.hr-rating .rating-star {
+    background: #e6f7ee;
+    color: #16804d;
+}
+
+.manager-rating strong {
+    color: #1f4e79;
+}
+
+.hr-rating strong {
+    color: #16804d;
+}
+
+.rating-not-given {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 9px;
+    border-radius: 7px;
+    background: #f4f5f7;
+    color: #8a96a3;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.rating-max {
+    color: #8b96a3;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.rating-pending-text {
+    color: #98a2b3;
+    font-size: 14px;
+    font-weight: 600;
+}
     </style>
 
 @endsection

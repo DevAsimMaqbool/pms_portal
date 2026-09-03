@@ -7,6 +7,7 @@ use App\Models\GoalOverallReview;
 use App\Models\GoalReportReview;
 use App\Models\GoalSelfReport;
 use App\Models\User;
+use App\Models\LineManagerFeedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,93 +20,106 @@ class GoalManagerReviewController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index()
-    {
-        $managerId = Auth::id();
+    public function index(Request $request)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | EMPLOYEES
+    |--------------------------------------------------------------------------
+    |
+    | Keep your existing employee query here.
+    | Example:
+    |
+    */
 
-        /*
-        |--------------------------------------------------------------------------
-        | Get employees who have submitted goals
-        |--------------------------------------------------------------------------
-        */
-
-        $employeeIds = GoalSelfReport::query()
-            ->whereIn('status', [
-                'submitted',
-                'manager_approved',
-                'manager_rejected',
-            ])
-            ->whereHas('user', function ($query) use ($managerId) {
-                $query->where('manager_id', $managerId);
-            })
-            ->select('user_id')
-            ->distinct();
-
-        $employees = User::query()
-            ->where('manager_id', $managerId)
-            ->whereIn('id', $employeeIds)
-            ->orderBy('name')
-            ->paginate(15);
-
-        /*
-        |--------------------------------------------------------------------------
-        | Load Reports For Current Employees
-        |--------------------------------------------------------------------------
-        */
-
-        $userIds = $employees->getCollection()
-            ->pluck('id');
-
-        $reports = GoalSelfReport::with([
-            'goal',
-            'goal.s2rDriver',
-        ])
-            ->whereIn('user_id', $userIds)
-            ->whereIn('status', [
-                'submitted',
-                'manager_approved',
-                'manager_rejected',
-            ])
-            ->get()
-            ->groupBy('user_id');
-
-        /*
-        |--------------------------------------------------------------------------
-        | Attach Reports To Employee Collection
-        |--------------------------------------------------------------------------
-        */
-
-        $employees->getCollection()->transform(function ($employee) use ($reports) {
-
-            $employeeReports = $reports->get($employee->id, collect());
-
-            $employee->goal_reports = $employeeReports;
-
-            $employee->total_goals = $employeeReports->count();
-
-            $employee->reviewed_goals = $employeeReports
-                ->whereIn('status', [
+    $employees = User::where('manager_id', Auth::id())
+        ->withCount([
+            'goalSelfReports as total_goals' => function ($query) {
+                $query->whereIn('status', [
+                    'submitted',
                     'manager_approved',
                     'manager_rejected',
-                ])
-                ->count();
+                ]);
+            },
 
-            $employee->pending_goals = $employeeReports
-                ->where('status', 'submitted')
-                ->count();
+            'goalSelfReports as reviewed_goals' => function ($query) {
+                $query->where('status', 'manager_approved');
+            },
 
-            $employee->all_goals_reviewed =
-                $employee->total_goals > 0 &&
-                $employee->pending_goals === 0;
+            'goalSelfReports as pending_goals' => function ($query) {
+                $query->whereIn('status', [
+                    'submitted',
+                    'manager_rejected',
+                ]);
+            },
+        ])
+        ->orderBy('name')
+        ->paginate(10)
+        ->withQueryString();
 
-            return $employee;
-        });
+    /*
+    |--------------------------------------------------------------------------
+    | CALCULATE OVERALL RATINGS
+    |--------------------------------------------------------------------------
+    */
 
-        return view(
+    foreach ($employees as $employee) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | SELF OVERALL RATING
+        |--------------------------------------------------------------------------
+        */
+
+        $selfRatings = GoalSelfReport::where(
+            'user_id',
+            $employee->id
+        )
+        ->whereNotNull('rating')
+        ->pluck('rating');
+
+        $employee->self_overall_rating =
+            $selfRatings->count() > 0
+                ? round($selfRatings->avg(), 2)
+                : null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | MANAGER / HR OVERALL RATING
+        |--------------------------------------------------------------------------
+        */
+
+        $overallReview = GoalOverallReview::where(
+            'user_id',
+            $employee->id
+        )
+        ->latest('id')
+        ->first();
+
+        /*
+        |--------------------------------------------------------------------------
+        | MANAGER OVERALL
+        |--------------------------------------------------------------------------
+        */
+
+        $employee->manager_overall_rating =
+            $overallReview?->manager_overall_rating;
+
+        /*
+        |--------------------------------------------------------------------------
+        | HR OVERALL
+        |--------------------------------------------------------------------------
+        */
+
+        $employee->hr_overall_rating =
+            $overallReview?->hr_overall_rating;
+    }
+
+    return view(
             'admin.goal-manager.index',
             compact('employees')
         );
-    }
+} 
 
     /*
     |--------------------------------------------------------------------------
@@ -249,170 +263,189 @@ class GoalManagerReviewController extends Controller
     */
 
     public function review(
-        Request $request,
-        GoalSelfReport $goalSelfReport
+    Request $request,
+    GoalSelfReport $goalSelfReport
+) {
+    $managerId = Auth::id();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Security
+    |--------------------------------------------------------------------------
+    */
+
+    abort_unless(
+        optional($goalSelfReport->user)->manager_id == $managerId,
+        403
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Validation
+    |--------------------------------------------------------------------------
+    */
+
+    $validated = $request->validate([
+
+        'weightage' => [
+            'required',
+            'numeric',
+            'min:0',
+            'max:100',
+        ],
+
+        'decision' => [
+            'required',
+            'in:approved,rejected',
+        ],
+
+        'manager_rating' => [
+            'required',
+            'integer',
+            'min:0',
+            'max:5',
+        ],
+
+        'comments' => [
+            'nullable',
+            'string',
+        ],
+    ]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | If Manager Rejects
+    |--------------------------------------------------------------------------
+    |
+    | Rejected goal will always have:
+    |
+    | Weightage      = 0
+    | Manager Rating = 0
+    |
+    */
+
+    if ($validated['decision'] === 'rejected') {
+
+        $validated['weightage'] = 0;
+
+        $validated['manager_rating'] = 0;
+    }
+
+    DB::transaction(function () use (
+        $validated,
+        $goalSelfReport,
+        $managerId
     ) {
-        $managerId = Auth::id();
 
         /*
         |--------------------------------------------------------------------------
-        | Security
+        | Save Weightage + Manager Rating
         |--------------------------------------------------------------------------
         */
 
-        abort_unless(
-            optional($goalSelfReport->user)->manager_id == $managerId,
-            403
+        $goalSelfReport->update([
+
+            'weightage' =>
+                $validated['weightage'],
+
+            'manager_rating' =>
+                $validated['manager_rating'],
+
+            'manager_reviewed_at' =>
+                now(),
+
+            'status' =>
+                $validated['decision'] === 'approved'
+                ? 'manager_approved'
+                : 'manager_rejected',
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Save / Update Manager Review
+        |--------------------------------------------------------------------------
+        */
+
+        GoalReportReview::updateOrCreate(
+            [
+                'goal_self_report_id' =>
+                    $goalSelfReport->id,
+
+                'reviewer_id' =>
+                    $managerId,
+
+                'reviewer_type' =>
+                    'manager',
+            ],
+            [
+                'decision' =>
+                    $validated['decision'],
+
+                'comments' =>
+                    $validated['comments'] ?? null,
+
+                'reviewed_at' =>
+                    now(),
+            ]
         );
 
         /*
         |--------------------------------------------------------------------------
-        | Validation
+        | Goal History
         |--------------------------------------------------------------------------
         */
 
-        $validated = $request->validate([
+        GoalHistory::create([
 
-            'weightage' => [
-                'required',
-                'numeric',
-                'min:0',
-                'max:100',
-            ],
+            'new_goal_id' =>
+                $goalSelfReport->new_goal_id,
 
-            'decision' => [
-                'required',
-                'in:approved,rejected',
-            ],
+            'user_id' =>
+                $managerId,
 
-            'manager_rating' => [
-                'required',
-                'integer',
-                'min:0',
-                'max:5',
-            ],
+            'action' =>
+                $validated['decision'] === 'approved'
+                ? 'Manager Goal Approved'
+                : 'Manager Goal Rejected',
 
-            'comments' => [
-                'nullable',
-                'string',
-            ],
-        ]);
+            'from_status' =>
+                'submitted',
 
-        DB::transaction(function () use (
-            $validated,
-            $goalSelfReport,
-            $managerId
-        ) {
+            'to_status' =>
+                $validated['decision'] === 'approved'
+                ? 'manager_approved'
+                : 'manager_rejected',
 
-            /*
-            |--------------------------------------------------------------------------
-            | Save Weightage + Manager Rating
-            |--------------------------------------------------------------------------
-            */
+            'comments' =>
+                $validated['comments'] ?? null,
 
-            $goalSelfReport->update([
+            'metadata' => [
+
+                'report_id' =>
+                    $goalSelfReport->id,
+
+                'employee_id' =>
+                    $goalSelfReport->user_id,
 
                 'weightage' =>
                     $validated['weightage'],
 
                 'manager_rating' =>
                     $validated['manager_rating'],
+            ],
+        ]);
+    });
 
-                'manager_reviewed_at' =>
-                    now(),
-
-                'status' =>
-                    $validated['decision'] === 'approved'
-                    ? 'manager_approved'
-                    : 'manager_rejected',
-            ]);
-
-            /*
-            |--------------------------------------------------------------------------
-            | Save / Update Manager Review
-            |--------------------------------------------------------------------------
-            */
-
-            GoalReportReview::updateOrCreate(
-                [
-                    'goal_self_report_id' =>
-                        $goalSelfReport->id,
-
-                    'reviewer_id' =>
-                        $managerId,
-
-                    'reviewer_type' =>
-                        'manager',
-                ],
-                [
-                    'decision' =>
-                        $validated['decision'],
-
-                    'comments' =>
-                        $validated['comments'] ?? null,
-
-                    'reviewed_at' =>
-                        now(),
-                ]
-            );
-
-            /*
-            |--------------------------------------------------------------------------
-            | Goal History
-            |--------------------------------------------------------------------------
-            */
-
-            GoalHistory::create([
-
-                'new_goal_id' =>
-                    $goalSelfReport->new_goal_id,
-
-                'user_id' =>
-                    $managerId,
-
-                'action' =>
-                    $validated['decision'] === 'approved'
-                    ? 'Manager Goal Approved'
-                    : 'Manager Goal Rejected',
-
-                'from_status' =>
-                    'submitted',
-
-                'to_status' =>
-                    $validated['decision'] === 'approved'
-                    ? 'manager_approved'
-                    : 'manager_rejected',
-
-                'comments' =>
-                    $validated['comments'] ?? null,
-
-                'metadata' => [
-
-                    'report_id' =>
-                        $goalSelfReport->id,
-
-                    'employee_id' =>
-                        $goalSelfReport->user_id,
-
-                    'weightage' =>
-                        $validated['weightage'],
-
-                    'manager_rating' =>
-                        $validated['manager_rating'],
-                ],
-            ]);
-        });
-
-        return redirect()
-            ->route(
-                'goal-manager.show',
-                $goalSelfReport->user_id
-            )
-            ->with(
-                'success',
-                'Goal review has been saved successfully.'
-            );
-    }
+    return redirect()
+        ->route(
+            'goal-manager.show',
+            $goalSelfReport->user_id
+        )
+        ->with(
+            'success',
+            'Goal review has been saved successfully.'
+        );
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -513,5 +546,164 @@ class GoalManagerReviewController extends Controller
             'success',
             'Overall manager remarks have been saved successfully.'
         );
+}
+
+public function lineManagerForm()
+    {
+        $authUser = Auth::user();
+
+        // Upward: get manager if exists
+        $manager = $authUser->manager ? collect([$authUser->manager]) : collect();
+
+        // Downward: get subordinates if any
+        $subordinates = $authUser->subordinates ?? collect();
+
+        // Combine both into a single collection
+        $facultyMembers = $manager->merge($subordinates);
+        return view('admin.form.goal_feedback.line_manager_feedback_in_goal', compact('facultyMembers'));
+    }
+
+    public function managerEmployees()
+{
+    $managerId = auth()->id();
+
+    $employees = User::query()
+        ->where('manager_id', $managerId)
+
+        ->whereHas('goalSelfReports', function ($query) {
+            $query->whereIn('status', [
+                'submitted',
+                'manager_approved',
+                'manager_rejected',
+            ]);
+        })
+
+        ->withCount([
+            'goalSelfReports as total_goals' => function ($query) {
+                $query->whereIn('status', [
+                    'submitted',
+                    'manager_approved',
+                    'manager_rejected',
+                ]);
+            },
+
+            'goalSelfReports as reviewed_goals' => function ($query) {
+                $query->where('status', 'manager_approved');
+            },
+
+            'goalSelfReports as pending_goals' => function ($query) {
+                $query->whereIn('status', [
+                    'submitted',
+                    'manager_rejected',
+                ]);
+            },
+        ])
+
+        ->orderBy('name', 'asc')
+
+        ->paginate(10)
+
+        ->withQueryString();
+
+    /*
+    |--------------------------------------------------------------------------
+    | OVERALL RATINGS
+    |--------------------------------------------------------------------------
+    */
+
+    foreach ($employees as $employee) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | SELF SCORE
+        |--------------------------------------------------------------------------
+        */
+
+        $selfRatings = GoalSelfReport::where(
+            'user_id',
+            $employee->id
+        )
+        ->whereNotNull('rating')
+        ->pluck('rating');
+
+        $employee->self_overall_rating =
+            $selfRatings->count()
+                ? round($selfRatings->avg(), 2)
+                : null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | MANAGER / HR OVERALL
+        |--------------------------------------------------------------------------
+        */
+
+        $overallReview = GoalOverallReview::where(
+            'user_id',
+            $employee->id
+        )
+        ->latest('id')
+        ->first();
+
+        $employee->manager_overall_rating =
+            $overallReview?->manager_overall_rating;
+
+        $employee->hr_overall_rating =
+            $overallReview?->hr_overall_rating;
+
+        /*
+        |--------------------------------------------------------------------------
+        | LINE MANAGER FEEDBACK
+        |--------------------------------------------------------------------------
+        */
+
+        $feedback = LineManagerFeedback::where(
+            'employee_id',
+            $employee->id
+        )
+        ->where('status', 1)
+        ->latest('id')
+        ->first();
+
+        $employee->manager_feedback_overall = null;
+
+        if ($feedback) {
+
+            $ratings = [
+                $feedback->responsibility_accountability_1,
+                $feedback->responsibility_accountability_2,
+                $feedback->responsibility_accountability_3,
+
+                $feedback->empathy_compassion_1,
+                $feedback->empathy_compassion_2,
+
+                $feedback->humility_service_1,
+                $feedback->humility_service_2,
+                $feedback->humility_service_3,
+
+                $feedback->honesty_integrity_1,
+                $feedback->honesty_integrity_2,
+                $feedback->honesty_integrity_3,
+
+                $feedback->inspirational_leadership_1,
+                $feedback->inspirational_leadership_2,
+                $feedback->inspirational_leadership_3,
+            ];
+
+            $employee->manager_feedback_overall = round(
+                array_sum(
+                    array_map(
+                        fn ($rating) => (float) ($rating ?? 0),
+                        $ratings
+                    )
+                ) / 14,
+                2
+            );
+        }
+    }
+
+    return view(
+        'admin.goal-manager.team_performance',
+        compact('employees')
+    );
 }
 }
