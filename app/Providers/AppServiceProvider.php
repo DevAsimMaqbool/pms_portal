@@ -7,6 +7,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Listeners\LoadTeacherModels;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Support\Facades\Event;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -45,6 +48,8 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         });
+
+        Event::listen(Login::class, LoadTeacherModels::class);
 
     }
 }
