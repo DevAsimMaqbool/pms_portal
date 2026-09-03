@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Pagination\Paginator;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -45,6 +46,8 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         });
-
+        
+                Paginator::useBootstrapFive();
+            
     }
 }

@@ -631,6 +631,8 @@ Route::middleware('auth')->group(function () {
             [GoalManagerReviewController::class, 'overallReview']
         )->name('overall-review');
     });
+    Route::get('/manager-employees', [GoalManagerReviewController::class, 'managerEmployees'])
+    ->name('manager.employees');
     Route::get('/linemanager-feedback', [GoalManagerReviewController::class, 'lineManagerForm'])->name('linemanager.feedback');
     Route::post('/employee-goalfeedback/store', [LineManagerGoalFeedbackController::class, 'store'])->name('employee.goalfeedback.store');
     Route::get('/employee-goalfeedback', [LineManagerGoalFeedbackController::class, 'index'])->name('employee.goalfeedback.index');
