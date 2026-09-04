@@ -362,4 +362,87 @@
 
     </div>
 
+    <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-simple">
+      <div class="modal-content">
+        <div class="modal-body">
+
+          <div class="text-center mb-4">
+            <h3 class="modal-title">
+              Change Your Password
+            </h3>
+            <p class="text-body-secondary">
+              For security reasons, you must create a new password before continuing.
+            </p>
+          </div>
+
+          <form action="{{ route('change-password.first-login') }}" method="POST" id="changePasswordForm">
+            @csrf
+            <div class="mb-4">
+              <label class="form-label">New Password</label>
+
+              <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+                required>
+
+              @error('password')
+                <div class="invalid-feedback d-block">
+                  {{ $message }}
+                </div>
+              @enderror
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Confirm New Password</label>
+
+              <input type="password" name="password_confirmation"
+                class="form-control @error('password') is-invalid @enderror" required>
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">
+                Update Password
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
+@push('script')
+@php
+$showPasswordPopup = session('show_password_popup', false);
+@endphp
+@if($showPasswordPopup)
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        let modal = new bootstrap.Modal(
+          document.getElementById('resetPasswordModal'),
+          {
+            backdrop: 'static',
+            keyboard: false
+          }
+        );
+
+        modal.show();
+      });
+    </script>
+  @endif
+   @if ($errors->any())
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        let modal = new bootstrap.Modal(
+          document.getElementById('resetPasswordModal'),
+          {
+            backdrop: 'static',
+            keyboard: false
+          }
+        );
+
+        modal.show();
+      });
+    </script>
+  @endif
+@endpush
