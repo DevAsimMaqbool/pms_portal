@@ -11,7 +11,7 @@ class UpdateEmployeeData extends Command
 {
     protected $signature = 'app:update-employees-data';
 
-    protected $description = 'Update employee category and support staff role';
+    protected $description = 'Update employee category and support staff roles';
 
     public function handle()
     {
@@ -43,7 +43,6 @@ class UpdateEmployeeData extends Command
         $failed = 0;
 
         $supportStaffRoleAdded = 0;
-        $supportStaffRoleExisting = 0;
 
         // Store barcodes
         $notFoundBarcodes = [];
@@ -51,7 +50,12 @@ class UpdateEmployeeData extends Command
 
         foreach ($employees as $emp) {
 
-            // Barcode is required
+            /*
+            |--------------------------------------------------------------------------
+            | BARCODE VALIDATION
+            |--------------------------------------------------------------------------
+            */
+
             if (empty($emp['barcode'])) {
 
                 $skipped++;
@@ -61,9 +65,15 @@ class UpdateEmployeeData extends Command
                 continue;
             }
 
-            $barcode = $emp['barcode'];
+            $barcode = trim($emp['barcode']);
 
             try {
+
+                /*
+                |--------------------------------------------------------------------------
+                | FIND USER BY BARCODE
+                |--------------------------------------------------------------------------
+                */
 
                 $user = User::where('barcode', $barcode)->first();
 
@@ -93,40 +103,51 @@ class UpdateEmployeeData extends Command
                 | SUPPORT STAFF ROLE
                 |--------------------------------------------------------------------------
                 |
-                | If employee_category = support_staff,
-                | ensure role_id 24 exists in model_has_roles.
+                | If employee_category = support_staff:
+                |
+                | - Delete all existing roles
+                | - Assign role_id = 24
+                |
+                | EXCEPTION:
+                | Barcode 100735 is completely excluded from
+                | role deletion/assignment.
                 |
                 */
 
                 if (
                     isset($emp['employee_category']) &&
-                    strtolower(trim($emp['employee_category'])) === 'support_staff'
+                    strtolower(trim($emp['employee_category'])) === 'support_staff' &&
+                    $barcode !== '100735'
                 ) {
 
-                    $roleExists = DB::table('model_has_roles')
-                        ->where('role_id', 24)
+                    /*
+                    |--------------------------------------------------------------------------
+                    | DELETE ALL EXISTING ROLES
+                    |--------------------------------------------------------------------------
+                    */
+
+                    DB::table('model_has_roles')
                         ->where('model_type', User::class)
                         ->where('model_id', $user->id)
-                        ->exists();
+                        ->delete();
 
-                    if (!$roleExists) {
+                    /*
+                    |--------------------------------------------------------------------------
+                    | ASSIGN ROLE 24
+                    |--------------------------------------------------------------------------
+                    */
 
-                        DB::table('model_has_roles')->insert([
-                            'role_id'    => 24,
-                            'model_type' => User::class,
-                            'model_id'   => $user->id,
-                        ]);
+                    DB::table('model_has_roles')->insert([
+                        'role_id'    => 24,
+                        'model_type' => User::class,
+                        'model_id'   => $user->id,
+                    ]);
 
-                        $supportStaffRoleAdded++;
+                    $supportStaffRoleAdded++;
 
-                        $this->info(
-                            "✓ Role 24 assigned: {$user->name} ({$barcode})"
-                        );
-
-                    } else {
-
-                        $supportStaffRoleExisting++;
-                    }
+                    $this->info(
+                        "✓ Role 24 assigned: {$user->name} ({$barcode})"
+                    );
                 }
 
             } catch (\Throwable $e) {
@@ -140,19 +161,25 @@ class UpdateEmployeeData extends Command
             }
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | SUMMARY
+        |--------------------------------------------------------------------------
+        */
+
         $this->newLine();
 
         $this->info("==========================================");
         $this->info("Employee category update completed.");
         $this->info("==========================================");
-        $this->info("Total API Records          : " . count($employees));
-        $this->info("Updated                    : {$updated}");
-        $this->info("Not Found                  : {$notFound}");
-        $this->info("Skipped                    : {$skipped}");
-        $this->info("Failed                     : {$failed}");
+        $this->info("Total API Records       : " . count($employees));
+        $this->info("Updated                 : {$updated}");
+        $this->info("Not Found               : {$notFound}");
+        $this->info("Skipped                 : {$skipped}");
+        $this->info("Failed                  : {$failed}");
         $this->info("------------------------------------------");
-        $this->info("Support Staff Role Added   : {$supportStaffRoleAdded}");
-        $this->info("Support Staff Role Existing: {$supportStaffRoleExisting}");
+        $this->info("Role 24 Assigned        : {$supportStaffRoleAdded}");
+        $this->info("Excluded Barcode        : 100735");
         $this->info("==========================================");
 
         /*
@@ -164,6 +191,7 @@ class UpdateEmployeeData extends Command
         if (!empty($notFoundBarcodes)) {
 
             $this->newLine();
+
             $this->warn("NOT FOUND BARCODES ({$notFound}):");
 
             foreach ($notFoundBarcodes as $barcode) {
@@ -180,6 +208,7 @@ class UpdateEmployeeData extends Command
         if (!empty($skippedBarcodes)) {
 
             $this->newLine();
+
             $this->warn("SKIPPED BARCODES ({$skipped}):");
 
             foreach ($skippedBarcodes as $barcode) {
