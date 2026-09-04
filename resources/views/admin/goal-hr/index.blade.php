@@ -16,6 +16,60 @@
 
         </div>
 
+        {{-- DEPARTMENT FILTER --}}
+<div class="card border-0 shadow-sm mb-3">
+
+    <div class="card-body py-2">
+
+        <form method="GET"
+              action="{{ route('goal-hr.index') }}"
+              class="row align-items-end g-2">
+
+            <div class="col-md-4">
+
+                <label class="form-label mb-1">
+                    Search by Department
+                </label>
+
+                <select name="department"
+        id="department"
+        class="form-select form-select-sm">
+
+    <option value="">All Departments</option>
+
+    @foreach($departments as $department)
+        <option value="{{ $department }}"
+            {{ request('department') == $department ? 'selected' : '' }}>
+            {{ $department }}
+        </option>
+    @endforeach
+
+</select>
+
+            </div>
+
+            @if(request('department'))
+
+                <div class="col-md-auto">
+
+                    <a href="{{ route('goal-hr.index') }}"
+                       class="btn btn-light border btn-sm">
+
+                        <i class="fas fa-times me-1"></i>
+                        Clear
+
+                    </a>
+
+                </div>
+
+            @endif
+
+        </form>
+
+    </div>
+
+</div>
+
         <div class="card border-0 shadow-sm">
 
             <div class="card-body p-0">
@@ -281,3 +335,22 @@
     </style>
 
 @endsection
+@push('script')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#department').select2({
+            placeholder: 'Search Department',
+            allowClear: true,
+            width: '100%'
+        });
+
+        $('#department').on('change', function () {
+            $(this).closest('form').submit();
+        });
+
+    });
+</script>
+@endpush

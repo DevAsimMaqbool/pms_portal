@@ -18,36 +18,56 @@ class GoalHrReviewController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index()
-    {
-        $employees = User::whereHas('goalSelfReports', function ($query) {
+    public function index(Request $request)
+{
+    // Get available departments
+    $departments = User::whereNotNull('hr_department_name')
+        ->where('hr_department_name', '!=', '')
+        ->distinct()
+        ->orderBy('hr_department_name')
+        ->pluck('hr_department_name');
+
+    $employees = User::whereHas('goalSelfReports', function ($query) {
             $query->where('status', 'manager_approved');
         })
-            ->with([
-                'goalSelfReports' => function ($query) {
-                    $query->where('status', 'manager_approved')
-                        ->with([
-                            'goal.s2rDriver',
-                            'reviews' => function ($query) {
-                                $query->where(
-                                    'reviewer_type',
-                                    'manager'
-                                )->latest('id');
-                            },
-                            'reviews.reviewer',
-                        ]);
-                },
-                'goalOverallReviews' => function ($query) {
-                    $query->latest('id');
-                },
-            ])
-            ->paginate(15);
+        ->when($request->filled('department'), function ($query) use ($request) {
 
-        return view(
-            'admin.goal-hr.index',
-            compact('employees')
-        );
-    }
+            $query->where(
+                'hr_department_name',
+                $request->department
+            );
+
+        })
+        ->with([
+            'goalSelfReports' => function ($query) {
+                $query->where('status', 'manager_approved')
+                    ->with([
+                        'goal.s2rDriver',
+                        'reviews' => function ($query) {
+                            $query->where(
+                                'reviewer_type',
+                                'manager'
+                            )->latest('id');
+                        },
+                        'reviews.reviewer',
+                    ]);
+            },
+
+            'goalOverallReviews' => function ($query) {
+                $query->latest('id');
+            },
+        ])
+        ->paginate(15)
+        ->withQueryString();
+
+    return view(
+        'admin.goal-hr.index',
+        compact(
+            'employees',
+            'departments'
+        )
+    );
+}
 
     /*
     |--------------------------------------------------------------------------
