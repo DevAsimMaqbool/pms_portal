@@ -531,7 +531,7 @@
                 <div class="row g-4">
 
             <!-- Department Monthly Snapshot -->
-            <div class="col-xxl-5 col-lg-6">
+            <div class="col-xxl-12 col-lg-6">
                 <div class="card shadow h-100">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0 text-white">
@@ -618,7 +618,7 @@
             </div>
 
             <!-- Active Projects -->
-    <div class="col-xxl-7 col-md-6">
+    <!-- <div class="col-xxl-7 col-md-6">
     <div class="card shadow  h-100">
     <div class="">
     <div class="card-header bg-primary text-white">
@@ -724,7 +724,7 @@
     </ul>
     </div>
     </div>
-    </div>
+    </div> -->
     <!--/ Active Projects -->
 
         </div>
