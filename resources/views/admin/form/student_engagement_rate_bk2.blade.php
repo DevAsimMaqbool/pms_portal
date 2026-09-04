@@ -209,6 +209,10 @@
                                         <div class="card mb-6">
                                             <div class="card-header d-flex justify-content-between align-items-center">
                                                 <h5 class="card-title mb-0">Program Information</h5>
+
+                                                <button type="button" class="btn btn-sm btn-primary" id="addProgram">
+                                                    <i class="bx bx-plus"></i> Add More
+                                                </button>
                                             </div>
 
                                             <div class="card-body">
@@ -224,9 +228,11 @@
                                                             <div class="col-md-12 mb-3">
                                                                 <label class="form-label">Faculty</label>
 
-                                                                <select name="faculty_ids[]"
+                                                                <select name="programs[0][faculty_id]"
                                                                         class="form-select select2 faculty_id"
-                                                                        multiple required>
+                                                                        required>
+
+                                                                    <option value="">-- Select Faculty --</option>
 
                                                                     @foreach(get_faculties() as $faculty)
                                                                         <option value="{{ $faculty->id }}">
@@ -241,9 +247,9 @@
                                                             <div class="col-md-12 mb-3">
                                                                 <label class="form-label">Department</label>
 
-                                                                <select name="department_ids[]"
+                                                                <select name="programs[0][department_id]"
                                                                         class="form-select select2 department_id"
-                                                                        multiple required>
+                                                                        required>
 
                                                                     <option value="">-- Select Department --</option>
 
@@ -254,9 +260,9 @@
                                                             <div class="col-md-12 mb-3">
                                                                 <label class="form-label">Program Name</label>
 
-                                                                <select name="program_ids[]"
+                                                                <select name="programs[0][program_id]"
                                                                         class="form-select select2 program_id"
-                                                                        multiple required>
+                                                                        required>
 
                                                                     <option value="">-- Select Program --</option>
 
@@ -267,7 +273,7 @@
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label">Program Level</label>
 
-                                                                <select name="program_level"
+                                                                <select name="programs[0][program_level]"
                                                                         class="form-select select2 program_level"
                                                                         required>
 
@@ -593,158 +599,263 @@
                 });
 
             });
-        $(document).ready(function () {
+$(document).ready(function () {
 
-       $(document).on('change', '.faculty_id', function () {
+    let programIndex = 1;
 
-    let facultyIds = $(this).val() || [];
-
-    let departmentSelect = $('.department_id');
-    let programSelect = $('.program_id');
-
-    departmentSelect.empty();
-    programSelect.empty();
-
-    programSelect.append(
-        '<option value="">-- Select Program --</option>'
-    );
-
-    if (facultyIds.length === 0) {
-        departmentSelect.append(
-            '<option value="">-- Select Department --</option>'
-        );
-
-        departmentSelect.trigger('change');
-        programSelect.trigger('change');
-
-        return;
+    /*
+    |--------------------------------------------------------------------------
+    | Initialize Select2
+    |--------------------------------------------------------------------------
+    */
+    function initializeSelect2(element) {
+        $(element).select2({
+            width: '100%'
+        });
     }
 
-    departmentSelect.append(
-        '<option value="">Loading departments...</option>'
-    );
+    /*
+    |--------------------------------------------------------------------------
+    | Faculty Change
+    |--------------------------------------------------------------------------
+    */
+    $(document).on('change', '.faculty_id', function () {
 
-    departmentSelect.trigger('change');
+        let facultyId = $(this).val();
 
-    $.ajax({
-        url: "{{ route('get.multidepartments') }}",
-        type: "POST",
+        let row = $(this).closest('.program-row');
 
-        data: {
-            faculty_ids: facultyIds,
-            _token: "{{ csrf_token() }}"
-        },
+        let departmentSelect = row.find('.department_id');
+        let programSelect = row.find('.program_id');
 
-        success: function (response) {
+        departmentSelect.html(
+            '<option value="">Loading...</option>'
+        );
 
-            departmentSelect.empty();
-
-            departmentSelect.append(
-                '<option value="">-- Select Department --</option>'
-            );
-
-            $.each(response, function (key, department) {
-
-                departmentSelect.append(
-                    $('<option>', {
-                        value: department.id,
-                        text: department.name
-                    })
-                );
-
-            });
-
-            departmentSelect.trigger('change');
-        },
-
-        error: function (xhr) {
-
-            console.log(xhr.responseJSON);
-
-            departmentSelect.empty();
-
-            departmentSelect.append(
-                '<option value="">Error loading departments</option>'
-            );
-
-            departmentSelect.trigger('change');
-        }
-    });
-});
-$(document).on('change', '.department_id', function () {
-
-    let departmentIds = $(this).val() || [];
-
-    let programSelect = $('.program_id');
-
-    programSelect.empty();
-
-    if (departmentIds.length === 0) {
-
-        programSelect.append(
+        programSelect.html(
             '<option value="">-- Select Program --</option>'
         );
 
-        programSelect.trigger('change');
+        if (!facultyId) {
 
-        return;
-    }
+            departmentSelect.html(
+                '<option value="">-- Select Department --</option>'
+            );
 
-    programSelect.append(
-        '<option value="">Loading programs...</option>'
-    );
+            return;
+        }
 
-    programSelect.trigger('change');
+        $.ajax({
 
-    $.ajax({
+            url: "/get-departments/" + facultyId,
 
-        url: "{{ route('get.multiprograms') }}",
+            type: "GET",
 
-        type: "POST",
+            success: function (response) {
 
-        data: {
-            department_ids: departmentIds,
-            _token: "{{ csrf_token() }}"
-        },
+                departmentSelect.empty();
 
-        success: function (response) {
+                departmentSelect.append(
+                    '<option value="">-- Select Department --</option>'
+                );
 
-            programSelect.empty();
+                $.each(response, function (key, department) {
 
-            programSelect.append(
+                    departmentSelect.append(`
+                        <option value="${department.id}">
+                            ${department.name}
+                        </option>
+                    `);
+
+                });
+
+                departmentSelect.trigger('change');
+
+            },
+
+            error: function () {
+
+                departmentSelect.html(
+                    '<option value="">Error loading departments</option>'
+                );
+
+            }
+
+        });
+
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Department Change
+    |--------------------------------------------------------------------------
+    */
+    $(document).on('change', '.department_id', function () {
+
+        let departmentId = $(this).val();
+
+        let row = $(this).closest('.program-row');
+
+        let programSelect = row.find('.program_id');
+
+        programSelect.html(
+            '<option value="">Loading...</option>'
+        );
+
+        if (!departmentId) {
+
+            programSelect.html(
                 '<option value="">-- Select Program --</option>'
             );
 
-            $.each(response, function (key, program) {
+            return;
+        }
+
+        $.ajax({
+
+            url: "/get-programs/" + departmentId,
+
+            type: "GET",
+
+            success: function (response) {
+
+                programSelect.empty();
 
                 programSelect.append(
-                    $('<option>', {
-                        value: program.id,
-                        text: program.program_name
-                    })
+                    '<option value="">-- Select Program --</option>'
                 );
 
-            });
+                $.each(response, function (key, program) {
 
-            programSelect.trigger('change');
-        },
+                    programSelect.append(`
+                        <option value="${program.id}">
+                            ${program.program_name}
+                        </option>
+                    `);
 
-        error: function (xhr) {
+                });
 
-            console.log(xhr.responseJSON);
+                programSelect.trigger('change');
 
-            programSelect.empty();
+            },
 
-            programSelect.append(
-                '<option value="">Error loading programs</option>'
-            );
+            error: function () {
 
-            programSelect.trigger('change');
-        }
-    });
-});
+                programSelect.html(
+                    '<option value="">Error loading programs</option>'
+                );
+
+            }
 
         });
+
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Add More Program
+    |--------------------------------------------------------------------------
+    */
+    $('#addProgram').on('click', function () {
+
+        let newRow = $('.program-row:first').clone();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update array indexes
+        |--------------------------------------------------------------------------
+        */
+
+        newRow.find('select').each(function () {
+
+            let name = $(this).attr('name');
+
+            if (name) {
+
+                name = name.replace(
+                    /programs\[\d+\]/,
+                    'programs[' + programIndex + ']'
+                );
+
+                $(this).attr('name', name);
+
+            }
+
+        });
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Reset values
+        |--------------------------------------------------------------------------
+        */
+
+        newRow.find('select').val('');
+
+        newRow.find('.department_id').html(
+            '<option value="">-- Select Department --</option>'
+        );
+
+        newRow.find('.program_id').html(
+            '<option value="">-- Select Program --</option>'
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Show Remove button
+        |--------------------------------------------------------------------------
+        */
+
+        newRow.find('.remove-program').show();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Destroy old Select2 clone
+        |--------------------------------------------------------------------------
+        */
+
+        newRow.find('.select2-container').remove();
+
+        newRow.find('select').show();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Add row
+        |--------------------------------------------------------------------------
+        */
+
+        $('#program-container').append(newRow);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Initialize Select2 for new row
+        |--------------------------------------------------------------------------
+        */
+
+        newRow.find('.select2').select2({
+            width: '100%'
+        });
+
+        programIndex++;
+
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Remove Program
+    |--------------------------------------------------------------------------
+    */
+    $(document).on('click', '.remove-program', function () {
+
+        $(this).closest('.program-row').remove();
+
+    });
+
+});
         </script>
     @endif
 @endpush

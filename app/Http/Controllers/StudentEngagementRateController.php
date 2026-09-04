@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Imports\StudentEngagementRateImport;
+use App\Models\Department;
+use App\Models\Program;
 use App\Models\StudentEngagementRate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,79 +41,218 @@ class StudentEngagementRateController extends Controller
             ], 500);
         }
     }
-    public function store1(Request $request)
-    {
-        try {
-            $data = [];
-            if ($request->form_status == 'HOD') {
-                $rules = [
-                    'indicator_id' => 'required',
-                    'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+    public function store(Request $request)
+{
+    try {
 
-                    // Engagement
-                    'nature_of_event' => 'required|string',
-                    'other_event_detail' => 'nullable|string',
-                    'event_location' => 'nullable|array',
-                    'scope_of_the_event' => 'required|string',
+        $validator = Validator::make($request->all(), [
+            'indicator_id' => 'required|integer',
+            'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
 
-                    // Event Details
-                    'title_of_the_event' => 'nullable|string',
-                    'brief_description_of_activity' => 'nullable|string',
-                    'event_start_date' => 'required|date',
-                    'event_end_date' => 'required|date|after_or_equal:event_start_date',
+            'nature_of_event' => 'required|string',
+            'other_event_detail' => 'nullable|string',
+            'event_location' => 'nullable|array',
+            'scope_of_the_event' => 'required|string',
 
-                    // Program Information
-                    'programs' => 'required|array|min:1',
+            'title_of_the_event' => 'nullable|string',
+            'brief_description_of_activity' => 'nullable|string',
 
-                    'programs.*.faculty_id' => 'required|integer',
-                    'programs.*.department_id' => 'required|integer',
-                    'programs.*.program_id' => 'required|integer',
-                    'programs.*.program_level' => 'required|string|in:UG,PG',
+            'event_start_date' => 'required|date',
+            'event_end_date' => 'required|date|after_or_equal:event_start_date',
 
-                    // Participation
-                    'participation_target' => 'nullable|integer',
-                    'number_of_students_participated' => 'nullable|integer',
-                    'employer_satisfaction' => 'required',
-                ];
+            'faculty_ids' => 'required|array|min:1',
+            'faculty_ids.*' => 'integer|exists:faculties,id',
 
+            'department_ids' => 'required|array|min:1',
+            'department_ids.*' => 'integer|exists:departments,id',
 
-                $validator = Validator::make($request->all(), $rules);
-                if ($validator->fails()) {
-                    return response()->json([
-                        'status' => 'error',
-                        'errors' => $validator->errors()
-                    ], 422);
-                }
+            'program_ids' => 'required|array|min:1',
+            'program_ids.*' => 'integer|exists:programs,id',
 
-                $data = $validator->validated();
-                // ✅ Convert checkbox array to JSON
-                $data['event_location'] = isset($data['event_location'])
-                    ? json_encode($data['event_location'])
-                    : null;
+            'program_level' => 'required|in:UG,PG',
 
+            'participation_target' => 'nullable|integer',
+            'number_of_students_participated' => 'nullable|integer',
+            'employer_satisfaction' => 'required',
 
+        ]);
 
-            }
-            $employeeId = Auth::user()->employee_id;
-            DB::beginTransaction();
-            $data['created_by'] = $employeeId;
-            $data['updated_by'] = $employeeId;
-
-            $record = StudentEngagementRate::create($data);
-            DB::commit();
-
+        if ($validator->fails()) {
             return response()->json([
-                'status' => 'success',
-                'message' => 'Record saved successfully',
-                'data' => $record
-            ]);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['message' => $e->getMessage()], 500);
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
         }
+
+        $facultyIds = array_map('intval', $request->faculty_ids);
+        $departmentIds = array_map('intval', $request->department_ids);
+        $programIds = array_map('intval', $request->program_ids);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get valid Faculty -> Department relationships
+        |--------------------------------------------------------------------------
+        */
+
+        $departments = Department::whereIn('id', $departmentIds)
+            ->whereIn('faculty_id', $facultyIds)
+            ->get(['id', 'faculty_id']);
+
+        if ($departments->count() !== count($departmentIds)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid Faculty / Department relationship selected.'
+            ], 422);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get valid Department -> Program relationships
+        |--------------------------------------------------------------------------
+        */
+
+        $programs = Program::whereIn('id', $programIds)
+            ->whereIn('department_id', $departmentIds)
+            ->get(['id', 'department_id']);
+
+        if ($programs->count() !== count($programIds)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid Department / Program relationship selected.'
+            ], 422);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Build exact Faculty -> Department -> Program rows
+        |--------------------------------------------------------------------------
+        */
+
+        $rows = [];
+
+        foreach ($programs as $program) {
+
+            $department = $departments->firstWhere(
+                'id',
+                $program->department_id
+            );
+
+            if (!$department) {
+                continue;
+            }
+
+            $facultyId = $department->faculty_id;
+
+            $rows[] = [
+                'faculty_id' => $facultyId,
+                'department_id' => $department->id,
+                'program_id' => $program->id,
+                'program_level' => $request->program_level,
+            ];
+        }
+
+        if (empty($rows)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No valid Faculty, Department and Program combination found.'
+            ], 422);
+        }
+
+        DB::beginTransaction();
+
+        $employeeId = Auth::user()->employee_id;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Common data
+        |--------------------------------------------------------------------------
+        */
+
+        $commonData = [
+            'indicator_id' => $request->indicator_id,
+            'form_status' => $request->form_status,
+            'nature_of_event' => $request->nature_of_event,
+            'other_event_detail' => $request->other_event_detail,
+            'event_location' => $request->event_location
+                ? json_encode($request->event_location)
+                : null,
+            'scope_of_the_event' => $request->scope_of_the_event,
+            'title_of_the_event' => $request->title_of_the_event,
+            'brief_description_of_activity' => $request->brief_description_of_activity,
+            'event_start_date' => $request->event_start_date,
+            'event_end_date' => $request->event_end_date,
+            'participation_target' => $request->participation_target,
+            'number_of_students_participated' => $request->number_of_students_participated,
+            'employer_satisfaction' => $request->employer_satisfaction,
+            'created_by' => $employeeId,
+            'updated_by' => $employeeId,
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Duplicate + Insert
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($rows as $row) {
+
+            $duplicate = StudentEngagementRate::where(
+                    'indicator_id',
+                    $request->indicator_id
+                )
+                ->where('faculty_id', $row['faculty_id'])
+                ->where('department_id', $row['department_id'])
+                ->where('program_id', $row['program_id'])
+                ->where('program_level', $row['program_level'])
+                ->where(function ($query) use ($request) {
+
+                    if ($request->nature_of_event === 'Other') {
+                        $query->where('nature_of_event', 'Other')
+                            ->where('other_event_detail', $request->other_event_detail);
+                    } else {
+                        $query->where('nature_of_event', $request->nature_of_event);
+                    }
+
+                })
+                ->exists();
+
+            if ($duplicate) {
+
+                DB::rollBack();
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' =>
+                        "Duplicate record already exists for Faculty {$row['faculty_id']}, " .
+                        "Department {$row['department_id']}, " .
+                        "Program {$row['program_id']} and " .
+                        "Level {$row['program_level']}."
+                ], 409);
+            }
+
+            StudentEngagementRate::create(
+                array_merge($commonData, $row)
+            );
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => count($rows) . ' record(s) saved successfully.'
+        ]);
+
+    } catch (\Throwable $e) {
+
+        DB::rollBack();
+
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
     }
-public function store(Request $request)
+}
+public function store1(Request $request)
 {
     try {
 
@@ -439,5 +580,23 @@ public function store(Request $request)
         return response()->json([
             'message' => 'Imported successfully'
         ]);
+    }
+    public function getMultipleDepartments(Request $request)
+    {
+        $facultyIds = $request->input('faculty_ids', []);
+
+        return Department::whereIn('faculty_id', $facultyIds)
+            ->select('id', 'name', 'faculty_id')
+            ->orderBy('name')
+            ->get();
+    }
+    public function getMultiplePrograms(Request $request)
+    {
+        $departmentIds = $request->input('department_ids', []);
+
+        return Program::whereIn('department_id', $departmentIds)
+            ->select('id', 'program_name', 'department_id')
+            ->orderBy('program_name')
+            ->get();
     }
 }

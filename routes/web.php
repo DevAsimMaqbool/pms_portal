@@ -454,6 +454,8 @@ Route::middleware('auth')->group(function () {
     Route::get('awards', [AwardController::class, 'index'])->name('pms.awards');
     Route::get('/get-departments/{facultyId}', [DepartmentController::class, 'getDepartments'])->name('get.departments');
     Route::get('/get-programs/{departmentId}', [ProgramController::class, 'getPrograms'])->name('get.programs');
+     Route::post('/get-multiple-departments', [StudentEngagementRateController::class, 'getMultipleDepartments'])->name('get.multidepartments');
+    Route::post('/get-multiple-programs', [StudentEngagementRateController::class, 'getMultiplePrograms'])->name('get.multiprograms');
 
     Route::middleware('role:HOD')->group(function () {
         Route::get('/hod-target', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
