@@ -394,11 +394,6 @@ Route::middleware('auth')->group(function () {
         Route::put('/no-Of-GrantSubmit-And-Won/update/{id}', [NoOfGrantsSubmitAndWonController::class, 'updateNoOfGrantsSubmitAndWon'])->name('noofgrantssubmit.update');
         Route::put('/industrial-visits/update/{id}', [IndustrialVisitController::class, 'updateIndustrialVisit'])->name('industrial-visits.update');
         Route::put('/conference-impacts/update/{id}', [ResearchConferenceImpactController::class, 'updateResearchConferenceImpact'])->name('conference-impacts.update');
-        Route::resource('employee-tasks', EmployeeTaskController::class);
-        Route::resource('manage-employee-tasks', ManagerTaskController::class);
-        Route::get('/tasks-dashboard', [ManagerEmployeeTaskController::class, 'taskDashboard'])
-            ->name('tasks.dashboard');
-
     });
 
     Route::middleware('role:user')->group(function () {
@@ -551,6 +546,11 @@ Route::middleware('auth')->group(function () {
     )->name('notifications.index');
 
     Route::resource('newgoals', NewGoalController::class);
+
+    Route::resource('employee-tasks', EmployeeTaskController::class);
+        Route::resource('manage-employee-tasks', ManagerTaskController::class);
+        Route::get('/tasks-dashboard', [ManagerEmployeeTaskController::class, 'taskDashboard'])
+            ->name('tasks.dashboard');
 
     /*
     |--------------------------------------------------------------------------

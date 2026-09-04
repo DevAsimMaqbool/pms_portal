@@ -91,12 +91,39 @@
             </a>
         </li>
 
-        <li class="menu-item ">
-            <a href="#" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-clipboard"></i>
-                <div data-i18n="Task Management">Task Management</div>
-            </a>
+        <li class="menu-item {{ request()->routeIs([
+  'employee-tasks.index',
+  'employee-tasks.create',
+  'employee-tasks.edit',
+  'employee-tasks.show',
+  'tasks.dashboard'
+]) ? 'active open' : '' }}">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon icon-base ti tabler-calendar-check"></i>
+        <div data-i18n="Daily Productivity">Daily Productivity</div>
+      </a>
+
+      <ul class="menu-sub">
+        <li class="menu-item  {{ request()->routeIs([
+  'employee-tasks.index',
+  'employee-tasks.create',
+  'employee-tasks.edit',
+  'employee-tasks.show'
+]) ? 'active' : '' }}">
+          <a href="{{ route('employee-tasks.index') }}" class="menu-link" data-bs-toggle="tooltip"
+            data-bs-placement="right" data-bs-original-title="Assign To Me">
+            <div data-i18n="Task Management">Task Management</div>
+          </a>
         </li>
+        <li class="menu-item {{ request()->routeIs('tasks.dashboard') ? 'active' : '' }}">
+          <a href="{{ route('tasks.dashboard') }}" class="menu-link" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-original-title="Assign To Me Report">
+            <div data-i18n="Task dashboard">Task dashboard</div>
+          </a>
+        </li>
+      </ul>
+
+    </li>
 
         <li class="menu-item ">
             <a href="#" class="menu-link">
@@ -137,7 +164,49 @@
                         <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
                         <div data-i18n="Line Manager Feedback">Line Manager Feedback</div>
                     </a>
+            </li>
+            <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon icon-base ti tabler-report"></i>
+                <div data-i18n="Daily Productivity">Daily Productivity</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item {{ route('manage-employee-tasks.index') }}">
+                    <a href="{{ route('manage-employee-tasks.index') }}" class="menu-link">
+                        <div data-i18n="View Tasks">View Tasks</div>
+                    </a>
                 </li>
+
+                <li class="menu-item {{ route('manager-view-tasks.index') }}">
+                    <a href="{{ route('manager-view-tasks.index') }}" class="menu-link">
+                        <div data-i18n="Daily Tasks Review">Daily Tasks Review</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('manager-verification-summary') ? 'active' : '' }}">
+                    <a href="{{ route('manager-verification-summary') }}" class="menu-link">
+                        <div data-i18n="Manager Verification Summary">
+                            Manager Verification Summary
+                        </div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('productivity.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('productivity.dashboard') }}" class="menu-link">
+                        <div data-i18n="Monthly Dashboard">
+                            Monthly Dashboard
+                        </div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('main.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('main.dashboard') }}" class="menu-link">
+                        <div data-i18n="Visual Dashboard">
+                            Visual Dashboard
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
+        </li>
                 
         @endif
 
