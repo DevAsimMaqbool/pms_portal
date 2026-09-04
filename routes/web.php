@@ -236,6 +236,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/assignments/update', [RoleKpaAssignmentController::class, 'update'])
         ->name('assignments.update');
+        //For Edit Role KPA assignment
     Route::get('/assignments/edit', [RoleKpaAssignmentController::class, 'edit'])
         ->name('assignments.edit');
 

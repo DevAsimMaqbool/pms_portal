@@ -178,6 +178,7 @@ class PermissionController extends Controller
         // Determine role based on ACTIVE ROLE (role switching)
         $activeRole = activeRole(); // use session active role
         $activeRoleId = getRoleIdByName($activeRole);
+        
         $role = match ($activeRole) {
             'teacher' => $user->roles->firstWhere('name', 'Teacher')
             ?? $user->roles->firstWhere('name', 'Assistant Professor')
@@ -270,6 +271,8 @@ class PermissionController extends Controller
             case 'dean':
                 $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
                 return view('admin.dean-v2', compact('employee', 'researchData', 'showPasswordPopup'));
+                case 'survey':
+                return redirect()->route('newgoals.index');
             default:
             case 'finance':
             case 'international office':
