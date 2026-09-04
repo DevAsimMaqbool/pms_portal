@@ -124,11 +124,11 @@
 
                     </div>
 
-                    {{-- HR --}}
+                    {{-- FEEDBACK --}}
                     <div class="rating-group-header">
 
                         <div class="rating-group-title">
-                            HR
+                            Feedback
                         </div>
 
                         <div class="rating-sub-header">
@@ -138,11 +138,11 @@
 
                     </div>
 
-                    {{-- FEEDBACK --}}
+                    {{-- HR --}}
                     <div class="rating-group-header">
 
                         <div class="rating-group-title">
-                            Feedback
+                            HR
                         </div>
 
                         <div class="rating-sub-header">
@@ -374,46 +374,6 @@ $selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
                         </div>
 
                         {{-- =============================================
-                            HR
-                        ============================================== --}}
-
-                        <div class="rating-group">
-
-                            {{-- SCORE --}}
-                            <div class="rating-score hr-score"  style="color: {{ $hrColor }}; font-weight: 700;">
-
-                                @if($hrScore !== null)
-
-                                    {{ number_format((float) $hrScore*20, 2) }}
-
-                                @else
-
-                                    —
-
-                                @endif
-
-                            </div>
-
-                            {{-- RATING --}}
-                            <div class="rating-value" style="color: {{ $hrColor }}; font-weight: 700;">
-
-                                @if($hrScore !== null)
-
-                                    {{ $hrRating }}
-
-                                @else
-
-                                    <span class="pending-text">
-                                        Pending
-                                    </span>
-
-                                @endif
-
-                            </div>
-
-                        </div>
-
-                        {{-- =============================================
                             FEEDBACK
                         ============================================== --}}
 
@@ -440,6 +400,46 @@ $selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
                                 @if($feedbackScore !== null)
 
                                     {{ $feedbackRating }}
+
+                                @else
+
+                                    <span class="pending-text">
+                                        Pending
+                                    </span>
+
+                                @endif
+
+                            </div>
+
+                        </div>
+
+                        {{-- =============================================
+                            HR
+                        ============================================== --}}
+
+                        <div class="rating-group">
+
+                            {{-- SCORE --}}
+                            <div class="rating-score hr-score"  style="color: {{ $hrColor }}; font-weight: 700;">
+
+                                @if($hrScore !== null)
+
+                                    {{ number_format((float) $hrScore*20, 2) }}
+
+                                @else
+
+                                    —
+
+                                @endif
+
+                            </div>
+
+                            {{-- RATING --}}
+                            <div class="rating-value" style="color: {{ $hrColor }}; font-weight: 700;">
+
+                                @if($hrScore !== null)
+
+                                    {{ $hrRating }}
 
                                 @else
 
