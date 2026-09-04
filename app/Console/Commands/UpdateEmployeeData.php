@@ -8,78 +8,131 @@ use App\Models\User;
 
 class UpdateEmployeeData extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'app:update-employees-data';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Update existing employees (job title, faculty, department and manager details)';
+    protected $description = 'Update HR department details for existing employees';
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         $this->info('Fetching employee records...');
 
         $response = Http::withToken('YOUR_API_TOKEN')
-            ->get('http://103.177.240.229/pms/get-employee-list');
+            ->timeout(120)
+            ->get('http://103.48.1.218/pms/get-employee-list');
 
         if ($response->failed()) {
             $this->error('Failed to fetch employee data.');
             $this->error('Status: ' . $response->status());
             $this->error('Body: ' . $response->body());
+
             return Command::FAILURE;
         }
 
         $employees = $response->json();
 
+        if (!is_array($employees)) {
+            $this->error('Invalid API response.');
+
+            return Command::FAILURE;
+        }
+
         $updated = 0;
+        $notFound = 0;
         $skipped = 0;
+        $failed = 0;
+
+        // Store barcodes
+        $notFoundBarcodes = [];
+        $skippedBarcodes = [];
 
         foreach ($employees as $emp) {
 
+            // Barcode is required
             if (empty($emp['barcode'])) {
-                $this->warn('Skipping employee with empty barcode.');
                 $skipped++;
+
+                $skippedBarcodes[] = '[EMPTY BARCODE]';
+
                 continue;
             }
 
-            $existingUser = User::where('barcode', $emp['barcode'])->first();
+            $barcode = $emp['barcode'];
 
-            if (!$existingUser) {
-                $this->warn("Employee not found. Barcode: {$emp['barcode']}");
-                $skipped++;
-                continue;
+            try {
+
+                $user = User::where('barcode', $barcode)->first();
+
+                if (!$user) {
+                    $notFound++;
+
+                    $notFoundBarcodes[] = $barcode;
+
+                    continue;
+                }
+
+                // Update ONLY these two columns
+                $user->update([
+                    'hr_department_id'   => $emp['hr_department_id'] ?? null,
+                    'hr_department_name' => $emp['hr_department_name'] ?? null,
+                ]);
+
+                $updated++;
+
+            } catch (\Throwable $e) {
+
+                $failed++;
+
+                $this->error(
+                    "Failed to update barcode {$barcode}: "
+                    . $e->getMessage()
+                );
             }
-
-            $existingUser->update([
-                'job_title' => $emp['job_title'] ?? null,
-                'faculty_id' => $emp['faculty_id'] ?? null, // Change to 'faculty' if your column name is faculty
-                'department_id' => $emp['department_id'] ?? null,
-                'manager_id' => $emp['manager_id'] ?? null,
-                'manager_name' => $emp['manager_name'] ?? null,
-            ]);
-
-            $updated++;
-
-            $this->line("✓ Updated: {$existingUser->name} ({$existingUser->barcode})");
         }
 
         $this->newLine();
+
         $this->info("==================================");
-        $this->info("Employee update completed.");
+        $this->info("HR Department update completed.");
         $this->info("Total API Records : " . count($employees));
         $this->info("Updated           : {$updated}");
+        $this->info("Not Found         : {$notFound}");
         $this->info("Skipped           : {$skipped}");
+        $this->info("Failed            : {$failed}");
         $this->info("==================================");
+
+        /*
+        |--------------------------------------------------------------------------
+        | NOT FOUND BARCODES
+        |--------------------------------------------------------------------------
+        */
+
+        if (!empty($notFoundBarcodes)) {
+
+            $this->newLine();
+            $this->warn("NOT FOUND BARCODES ({$notFound}):");
+
+            foreach ($notFoundBarcodes as $barcode) {
+                $this->line($barcode);
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | SKIPPED BARCODES
+        |--------------------------------------------------------------------------
+        */
+
+        if (!empty($skippedBarcodes)) {
+
+            $this->newLine();
+            $this->warn("SKIPPED BARCODES ({$skipped}):");
+
+            foreach ($skippedBarcodes as $barcode) {
+                $this->line($barcode);
+            }
+        }
+
+        $this->newLine();
 
         return Command::SUCCESS;
     }
