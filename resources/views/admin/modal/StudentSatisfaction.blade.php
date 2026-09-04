@@ -231,14 +231,14 @@
     |--------------------------------------------------------------------------
     */
 
-    // saveIndicatorPercentage90Plus(
-    //     auth()->user()->employee_id,
-    //     $activeRoleId,
-    //     1,
-    //     23,
-    //     182,
-    //     $weightedScore
-    // );
+     saveIndicatorPercentage90Plus(
+         auth()->user()->employee_id,
+         $activeRoleId,
+         1,
+         23,
+        182,
+         $weightedScore
+     );
 @endphp
     <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">

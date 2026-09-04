@@ -15,7 +15,7 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-        @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
+        @if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Professor','Assistant Professor','Associate Professor']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
              <div class="card-header d-flex align-items-center justify-content-between">
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="card-datatable table-responsive card-body">
-                    @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
+                    @if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Professor','Assistant Professor','Associate Professor']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="intellectualTable" class="table table-bordered">
@@ -193,7 +193,7 @@
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
+    @if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Professor','Assistant Professor','Associate Professor']))
         <script>
             function fetchCommercialForms() {
                 $.ajax({
@@ -211,6 +211,9 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );     
                             let statusText = 'N/A';
                             if (form.status == 1) {
                                 if (form.reject_status == 1) {
@@ -244,7 +247,7 @@
                             if (parseInt(form.status) === 1) {
                                 editButton = `
                                     <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
-                                        data-form='${JSON.stringify(form)}'>
+                                        data-form="${formData}">
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
                             }       
@@ -382,7 +385,12 @@
                 $('#viewFormModal').modal('show');
             });
             $(document).on('click', '.edit-form-btn', function () {
-        const form = $(this).data('form');
+       // const form = $(this).data('form');
+
+        const encodedForm = $(this).attr('data-form');
+        const form = JSON.parse(
+            decodeURIComponent(encodedForm)
+        );
         $('#researchForm1 #record_id').val(form.id);
         $('#researchForm1 #name').val(form.name);
         $('#researchForm1 #funding_agency').val(form.funding_agency);
