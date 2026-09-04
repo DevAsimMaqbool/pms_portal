@@ -15,7 +15,7 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-    @if(in_array(getRoleName(activeRole()), ['Dean','HOD','ORIC','Professor','Assistant Professor','Associate Professor']))
+    @if(in_array(getRoleName(activeRole()), ['Dean','HOD','ORIC','Teacher','Professor','Assistant Professor','Associate Professor']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
@@ -42,7 +42,7 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                     @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
+                     @if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Professor','Assistant Professor','Associate Professor']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             <div class="d-flex justify-content-between">
                                 <div>
@@ -308,7 +308,7 @@
     </script>
 @endpush
 @push('script')
-      @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
+      @if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Professor','Assistant Professor','Associate Professor']))
         <script>
             $(document).ready(function () {
                function fetchTarget(indicatorId) {
@@ -518,7 +518,10 @@
                                 }
                                
                             } 
-                            else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>';   
+                            else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>'; 
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );    
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -529,7 +532,7 @@
                                 form.funding_agency || 'N/A',
                                 statusText,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -592,7 +595,11 @@
             $(document).ready(function () {
                 fetchIndicatorForms3();
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                   // const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
@@ -864,6 +871,9 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );  
                                 
 
                             // Pass entire form as JSON in button's data attribute
@@ -873,7 +883,7 @@
                                 form.name || 'N/A',
                                 form.funding_agency || 'N/A',
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -906,7 +916,11 @@
             $(document).ready(function () {
                 fetchIndicatorForms3();
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                    //const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
@@ -1076,7 +1090,10 @@
                                 }
                                
                             } 
-                            else if (form.status == 3) statusText = '<span class="badge bg-label-success">Verified</span>';    
+                            else if (form.status == 3) statusText = '<span class="badge bg-label-success">Verified</span>'; 
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );     
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -1087,7 +1104,7 @@
                                 form.funding_agency || 'N/A',
                                 statusText,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -1150,7 +1167,11 @@
             $(document).ready(function () {
                 fetchIndicatorForms3();
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                   // const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 

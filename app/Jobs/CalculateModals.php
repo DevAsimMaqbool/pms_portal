@@ -41,6 +41,8 @@ class CalculateModals implements ShouldQueue
             $scopusData = ScopusPublicationsNew($this->userId, $this->activeRoleId, 128, 2, 5,$this->currentYearId);
             $data2= calculateJournalQuartile($this->userId, $this->activeRoleId, 128,$this->currentYearId);
             $data1= calculateInternationalScore($this->userId, $this->activeRoleId, 128, $this->currentYearId);
+            $data3 = MultidisciplinaryProjects($this->userId, $this->activeRoleId, 136, $this->currentYearId);
+            $noofGrantsWon = noofGrantsWon($this->userId, $this->activeRoleId, 'Submitted', 135, $this->currentYearId);
         }
          if (in_array($this->activeRoleName, [
             'Teacher',
