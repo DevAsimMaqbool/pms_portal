@@ -4,13 +4,14 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
 class UpdateEmployeeData extends Command
 {
     protected $signature = 'app:update-employees-data';
 
-    protected $description = 'Update HR department details for existing employees';
+    protected $description = 'Update employee category and support staff role';
 
     public function handle()
     {
@@ -41,6 +42,9 @@ class UpdateEmployeeData extends Command
         $skipped = 0;
         $failed = 0;
 
+        $supportStaffRoleAdded = 0;
+        $supportStaffRoleExisting = 0;
+
         // Store barcodes
         $notFoundBarcodes = [];
         $skippedBarcodes = [];
@@ -49,6 +53,7 @@ class UpdateEmployeeData extends Command
 
             // Barcode is required
             if (empty($emp['barcode'])) {
+
                 $skipped++;
 
                 $skippedBarcodes[] = '[EMPTY BARCODE]';
@@ -63,6 +68,7 @@ class UpdateEmployeeData extends Command
                 $user = User::where('barcode', $barcode)->first();
 
                 if (!$user) {
+
                     $notFound++;
 
                     $notFoundBarcodes[] = $barcode;
@@ -70,13 +76,58 @@ class UpdateEmployeeData extends Command
                     continue;
                 }
 
-                // Update ONLY these two columns
+                /*
+                |--------------------------------------------------------------------------
+                | UPDATE ONLY EMPLOYEE CATEGORY
+                |--------------------------------------------------------------------------
+                */
+
                 $user->update([
-                    'hr_department_id'   => $emp['hr_department_id'] ?? null,
-                    'hr_department_name' => $emp['hr_department_name'] ?? null,
+                    'employee_category' => $emp['employee_category'] ?? null,
                 ]);
 
                 $updated++;
+
+                /*
+                |--------------------------------------------------------------------------
+                | SUPPORT STAFF ROLE
+                |--------------------------------------------------------------------------
+                |
+                | If employee_category = support_staff,
+                | ensure role_id 24 exists in model_has_roles.
+                |
+                */
+
+                if (
+                    isset($emp['employee_category']) &&
+                    strtolower(trim($emp['employee_category'])) === 'support_staff'
+                ) {
+
+                    $roleExists = DB::table('model_has_roles')
+                        ->where('role_id', 24)
+                        ->where('model_type', User::class)
+                        ->where('model_id', $user->id)
+                        ->exists();
+
+                    if (!$roleExists) {
+
+                        DB::table('model_has_roles')->insert([
+                            'role_id'    => 24,
+                            'model_type' => User::class,
+                            'model_id'   => $user->id,
+                        ]);
+
+                        $supportStaffRoleAdded++;
+
+                        $this->info(
+                            "✓ Role 24 assigned: {$user->name} ({$barcode})"
+                        );
+
+                    } else {
+
+                        $supportStaffRoleExisting++;
+                    }
+                }
 
             } catch (\Throwable $e) {
 
@@ -91,14 +142,18 @@ class UpdateEmployeeData extends Command
 
         $this->newLine();
 
-        $this->info("==================================");
-        $this->info("HR Department update completed.");
-        $this->info("Total API Records : " . count($employees));
-        $this->info("Updated           : {$updated}");
-        $this->info("Not Found         : {$notFound}");
-        $this->info("Skipped           : {$skipped}");
-        $this->info("Failed            : {$failed}");
-        $this->info("==================================");
+        $this->info("==========================================");
+        $this->info("Employee category update completed.");
+        $this->info("==========================================");
+        $this->info("Total API Records          : " . count($employees));
+        $this->info("Updated                    : {$updated}");
+        $this->info("Not Found                  : {$notFound}");
+        $this->info("Skipped                    : {$skipped}");
+        $this->info("Failed                     : {$failed}");
+        $this->info("------------------------------------------");
+        $this->info("Support Staff Role Added   : {$supportStaffRoleAdded}");
+        $this->info("Support Staff Role Existing: {$supportStaffRoleExisting}");
+        $this->info("==========================================");
 
         /*
         |--------------------------------------------------------------------------

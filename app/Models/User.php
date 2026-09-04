@@ -46,6 +46,7 @@ class User extends Authenticatable
         'manager_name',
         'hr_department_id',
         'hr_department_name',
+        'employee_category',
         'level',
         'status',
         'as_teacher_score',
