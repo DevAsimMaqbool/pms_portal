@@ -2517,7 +2517,7 @@ if ($calculation === null) {
         }
 
         $query->chunkById(
-            200,
+            2000,
             function ($employees) use (&$summary) {
 
                 foreach ($employees as $employee) {
