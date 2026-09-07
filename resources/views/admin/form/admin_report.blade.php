@@ -65,7 +65,7 @@
                                                 <div class="col-md-6 mb-3">
                                                     <label for="faculty" class="form-label">Faculty</label>
                                                     <select name="faculty_id" id="faculty_id" class="select2 form-select">
-                                                        <option value="">-- Select Faculty --</option>
+                                                        <option value="">Faculty</option>
                                                         @foreach(get_faculties() as $faculty)
                                                             <option value="{{ $faculty->id }}">
                                                                 {{ $faculty->name }}
@@ -607,10 +607,11 @@
                 |--------------------------------------------------------------------------
                 */
 
-                pdf.save(
+                /*pdf.save(
                     'Employee_Performance_Report_' + fileDate + '.pdf'
-                );
-
+                );*/
+                let facultyName = facultyText.replace(/[\s-]+/g, '_');
+                pdf.save((facultyName || 'All_Faculties') +'_' +fileDate +'.pdf');
             });
 
             /*
