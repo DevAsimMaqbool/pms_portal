@@ -99,7 +99,7 @@
                         <div class="mb-6">
                             <label class="form-label" for="add-user-department">Department</label>
                             <input type="text" id="add-user-department" class="form-control" placeholder="MIS"
-                                aria-label="jdoe1" name="department" required readonly />
+                                aria-label="jdoe1" name="department" required />
                             <div class="invalid-feedback" id="departmentError"></div>
                         </div>
                         <div class="mb-6">
