@@ -171,9 +171,7 @@ class PmsIndicatorCalculationService
     /**
      * Active term IDs.
      */
-    protected ?int $springTermId = null;
-
-    protected ?int $fallTermId = null;
+    protected array $activeTermIds = [];
 
     /**
      * Constructor.
@@ -230,20 +228,16 @@ class PmsIndicatorCalculationService
      */
     protected function loadTerms(): void
 {
-    $terms = DB::table('terms')
-        ->whereIn('term', ['Spring', 'Fall'])
-        ->get()
-        ->keyBy(function ($term) {
-            return strtolower(trim($term->term));
-        });
+    $this->activeTermIds = DB::table('terms')
+        ->where('status', '1')
+        ->pluck('id')
+        ->map(fn ($id) => (int) $id)
+        ->values()
+        ->toArray();
 
-    $this->springTermId = isset($terms['spring'])
-        ? (int) $terms['spring']->id
-        : null;
-
-    $this->fallTermId = isset($terms['fall'])
-        ? (int) $terms['fall']->id
-        : null;
+    Log::info('PMS Active Terms Loaded', [
+        'active_term_ids' => $this->activeTermIds,
+    ]);
 }
 
     /**
@@ -310,8 +304,7 @@ class PmsIndicatorCalculationService
                     ->pluck('id')
                     ->values()
                     ->toArray(),
-                'spring_term_id' => $this->springTermId,
-                'fall_term_id'   => $this->fallTermId,
+                'active_term_ids' => $this->activeTermIds,
                 'year_id'        => $this->yearId,
             ]
         );
@@ -595,10 +588,7 @@ if ($calculation === null) {
 
     $termScores = [];
 
-    foreach ([
-        $this->springTermId,
-        $this->fallTermId,
-    ] as $termId) {
+    foreach ($this->activeTermIds as $termId) {
 
         if (!$termId) {
             continue;
@@ -715,10 +705,7 @@ if ($calculation === null) {
 
     $termScores = [];
 
-    foreach ([
-        $this->springTermId,
-        $this->fallTermId,
-    ] as $termId) {
+    foreach ($this->activeTermIds as $termId) {
 
         if (!$termId) {
             continue;
@@ -844,10 +831,7 @@ if ($calculation === null) {
 
         $termScores = [];
 
-        foreach ([
-            $this->springTermId,
-            $this->fallTermId,
-        ] as $termId) {
+        foreach ($this->activeTermIds as $termId) {
 
             if (!$termId) {
                 continue;
@@ -990,10 +974,7 @@ if ($calculation === null) {
 
         $scores = [];
 
-        foreach ([
-            $this->springTermId,
-            $this->fallTermId,
-        ] as $termId) {
+        foreach ($this->activeTermIds as $termId) {
 
             if (!$termId) {
                 continue;
@@ -1600,11 +1581,7 @@ if ($calculation === null) {
             );
         }
 
-        $termIds =
-            array_filter([
-                $this->springTermId,
-                $this->fallTermId,
-            ]);
+        $termIds = $this->activeTermIds;
 
         if (!$termIds) {
             return $this->noData(
@@ -2517,7 +2494,7 @@ if ($calculation === null) {
         }
 
         $query->chunkById(
-            2000,
+            200,
             function ($employees) use (&$summary) {
 
                 foreach ($employees as $employee) {
