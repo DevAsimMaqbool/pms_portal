@@ -666,7 +666,40 @@ class KeyPerformanceAreaController extends Controller
 
         })
             ->filter()
-            ->sortByDesc('total_score')
+            /*
+            |--------------------------------------------------------------------------
+            | Sort By Job Title
+            |--------------------------------------------------------------------------
+            |
+            | P = First
+            | A = Second
+            | L = Third
+            | Everything else = After that
+            |
+            */
+
+            ->sortBy(function ($item) {
+
+               $jobTitle = strtoupper(trim($item['role'] ?? ''));
+
+                $priority = match (true) {
+
+                    str_starts_with($jobTitle, 'P')    => 1,
+
+                    str_starts_with($jobTitle, 'ASSO') => 2,
+
+                    str_starts_with($jobTitle, 'ASSI') => 3,
+
+                    str_starts_with($jobTitle, 'L')    => 4,
+
+                    default => 5,
+                };
+
+                return [
+                    $priority,
+                    strtoupper($jobTitle),
+                ];
+            })
             ->values();
 
         /*
