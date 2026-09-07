@@ -40,22 +40,15 @@
                                 <input type="hidden" id="form_status" name="form_status" value="HOD">
 
                                 <div class="row g-3">
-                                    @php
-                                        $startYear = 2025; // you can change this
-                                        $currentYear = now()->year;
-                                        $endYear = $currentYear + 5; // how many years ahead you want
-                                    @endphp
+                                   
                                     <div class="col-md-6">
-                                        <label class="form-label" for="multicol-language">Year</label>
-                                        <select name="year" id="select2Year" class="select2 form-select" required>
-                                            <option value="">-- Select Year --</option>
-                                            @for($year = $startYear; $year <= $endYear; $year++)
-                                                <option value="{{ $year }}-{{ $year + 1 }}">
-                                                    {{ $year }}-{{ $year + 1 }}
-                                                </option>
-                                            @endfor
-                                        </select>
-                                    </div>
+                                                <label for="batch" class="form-label">Select Year</label>
+                                                <select name="year_id" id="year_id"
+                                                    class="form-select" required>
+                                                    <option value=""> Select year</option>
+                                                        @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                                    </select>
+                                            </div>
                                     <div id="author-past-container">
                                         <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 

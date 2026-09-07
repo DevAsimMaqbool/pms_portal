@@ -25,7 +25,7 @@ class FacultyRetentionController extends Controller
             $status = $request->input('status');
             if ($status == "HOD") {
                 $forms = FacultyRetention::with([
-                    'remarks.faculty'
+                    'year','remarks.faculty'
                 ])->where('created_by', $employee_id)
                     ->orderBy('id', 'desc')
                     ->get();
@@ -63,7 +63,7 @@ class FacultyRetentionController extends Controller
             $employeeId = Auth::user()->employee_id;
             $rules = [
                 'indicator_id' => 'required|integer',
-                'year' => 'required',
+                'year_id' => 'required',
                 'retention_rate' => 'required|array|min:1',
                 'retention_rate.*.faculty_id' => 'required|integer',
                 'retention_rate.*.no_retention_rate' => 'required|numeric|min:0|max:100',
@@ -87,7 +87,7 @@ class FacultyRetentionController extends Controller
             // Create main record
             $FacultyRetention = FacultyRetention::create([
                 'indicator_id' => $request->indicator_id,
-                'year' => $request->year,
+                'year_id' => $request->year_id,
                 'form_status' => $request->form_status,
                 'created_by' => $employeeId,
                 'updated_by' => $employeeId,
@@ -121,7 +121,7 @@ class FacultyRetentionController extends Controller
     {
 
         $rules = [
-            'year' => 'required',
+            'year_id' => 'required',
             'retention_rate' => 'required|array|min:1',
             'retention_rate.*.faculty_id' => 'required|integer',
             'retention_rate.*.no_retention_rate' => 'required|numeric|min:0|max:100',
@@ -132,7 +132,7 @@ class FacultyRetentionController extends Controller
         $record = FacultyRetention::findOrFail($id);
         // ✅ Update parent
         $record->update([
-            'year' => $request->year,
+            'year_id' => $request->year_id,
             'updated_by' => Auth::user()->employee_id
         ]);
         // ✅ Sync child tasks
