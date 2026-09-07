@@ -18,6 +18,9 @@ class NewGoal extends Model
         'objectives',
         'target',
         'deadline',
+        'evidence_type',
+        'evidence_video_url',
+        'evidence_attachment',
         'status',
     ];
 

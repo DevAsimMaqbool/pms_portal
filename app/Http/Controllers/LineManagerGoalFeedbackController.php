@@ -17,15 +17,15 @@ class LineManagerGoalFeedbackController extends Controller
         $authUser = Auth::user();
 
         // Manager
-        $manager = $authUser->manager
-            ? collect([$authUser->manager])
-            : collect();
+        // $manager = $authUser->manager
+        //     ? collect([$authUser->manager])
+        //     : collect();
 
         // Subordinates
-        $subordinates = $authUser->subordinates ?? collect();
+        $facultyMembers = $authUser->subordinates ?? collect();
 
         // Manager + Subordinates
-        $facultyMembers = $manager->merge($subordinates);
+        //$facultyMembersbk = $manager->merge($subordinates);
 
         /*
          * Only get feedback submitted by the logged-in user.

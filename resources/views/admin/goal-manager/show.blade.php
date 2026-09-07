@@ -402,7 +402,110 @@
                     </div>
 
                 </div>
+{{-- ================================================= --}}
+{{-- GOAL EVIDENCE --}}
+{{-- ================================================= --}}
 
+<div class="goal-evidence">
+
+    <div class="evidence-header">
+
+        <div>
+            <i class="fas fa-paperclip"></i>
+            Goal Evidence
+        </div>
+
+        @if($report->goal->evidence_type)
+            <span class="evidence-type-badge">
+                {{ ucfirst($report->goal->evidence_type) }}
+            </span>
+        @endif
+
+    </div>
+
+    <div class="evidence-body">
+
+        @if($report->goal->evidence_type === 'video' &&
+            $report->goal->evidence_video_url)
+
+            <div class="evidence-content">
+
+                <div class="evidence-icon video-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+
+                <div class="evidence-info">
+
+                    <span class="evidence-label">
+                        Video Evidence
+                    </span>
+
+                    <a
+                        href="{{ $report->goal->evidence_video_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="evidence-link"
+                    >
+
+                        <i class="fas fa-external-link-alt me-1"></i>
+
+                        Watch / View Video
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        @elseif($report->goal->evidence_type === 'attachment' &&
+                $report->goal->evidence_attachment)
+
+            <div class="evidence-content">
+
+                <div class="evidence-icon attachment-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+
+                <div class="evidence-info">
+
+                    <span class="evidence-label">
+                        Attachment Evidence
+                    </span>
+
+                    <a
+                        href="{{ asset('storage/' . $report->goal->evidence_attachment) }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="evidence-link"
+                    >
+
+                        <i class="fas fa-external-link-alt me-1"></i>
+
+                        View Attachment
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        @else
+
+            <div class="no-evidence">
+
+                <i class="fas fa-minus-circle"></i>
+
+                <span>
+                    No evidence provided for this goal.
+                </span>
+
+            </div>
+
+        @endif
+
+    </div>
+
+</div>
                 {{-- ================================================= --}}
                 {{-- EMPLOYEE ASSESSMENT --}}
                 {{-- ================================================= --}}
@@ -1904,6 +2007,188 @@ body {
         text-align: left;
 
     }
+
+}
+
+/* ========================================================= */
+/* GOAL EVIDENCE */
+/* ========================================================= */
+
+.goal-evidence {
+
+    border: 1px solid #e1e8ef;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    margin-bottom: 11px;
+
+    background: #fff;
+
+}
+
+.evidence-header {
+
+    padding: 7px 10px;
+
+    background: #f5f8fc;
+
+    border-bottom: 1px solid #e1e8ef;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    color: var(--pms-primary);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+}
+
+.evidence-header i {
+
+    margin-right: 4px;
+
+}
+
+.evidence-type-badge {
+
+    padding: 3px 7px;
+
+    border-radius: 12px;
+
+    background: #e8f1fa;
+
+    color: var(--pms-primary);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    text-transform: capitalize;
+
+}
+
+.evidence-body {
+
+    padding: 9px 10px;
+
+}
+
+.evidence-content {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+}
+
+.evidence-icon {
+
+    width: 34px;
+
+    height: 34px;
+
+    min-width: 34px;
+
+    border-radius: 7px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 13px;
+
+}
+
+.video-icon {
+
+    background: #e8f1fa;
+
+    color: var(--pms-primary);
+
+}
+
+.attachment-icon {
+
+    background: #eef6ef;
+
+    color: #198754;
+
+}
+
+.evidence-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+}
+
+.evidence-label {
+
+    color: var(--pms-muted);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+}
+
+.evidence-link {
+
+    color: var(--pms-primary);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+}
+
+.evidence-link:hover {
+
+    color: var(--pms-primary-dark);
+
+    text-decoration: underline;
+
+}
+
+.no-evidence {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: var(--pms-muted);
+
+    font-size: 9px;
+
+}
+
+.no-evidence i {
+
+    color: #a0aec0;
+
+    font-size: 10px;
 
 }
 

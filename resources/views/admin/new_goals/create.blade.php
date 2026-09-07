@@ -84,7 +84,7 @@
         @endif
 
         <form method="POST"
-            action="{{ route('newgoals.store') }}">
+            action="{{ route('newgoals.store') }}" enctype="multipart/form-data">
 
             @csrf
 
@@ -323,6 +323,158 @@
                                 @enderror
 
                             </div>
+
+                            {{-- ===================================== --}}
+{{-- EVIDENCE --}}
+{{-- ===================================== --}}
+
+<div class="form-group mt-4">
+
+    <label class="form-label fw-semibold">
+
+        <i class="fas fa-paperclip form-label-icon"></i>
+
+        Evidence
+
+        <span class="text-muted fw-normal">
+            — if any
+        </span>
+
+    </label>
+
+    <select
+        name="evidence_type"
+        id="evidence_type"
+        class="form-select @error('evidence_type') is-invalid @enderror">
+
+        <option value="">
+            Select Evidence Type
+        </option>
+
+        <option value="video"
+            {{ old('evidence_type') == 'video' ? 'selected' : '' }}>
+            Video
+        </option>
+
+        <option value="attachment"
+            {{ old('evidence_type') == 'attachment' ? 'selected' : '' }}>
+            Attachment
+        </option>
+
+    </select>
+
+    @error('evidence_type')
+
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+
+    @else
+
+        <small class="form-hint">
+
+            <i class="fas fa-info-circle me-1"></i>
+
+            Add supporting evidence for this goal, if applicable.
+
+        </small>
+
+    @enderror
+
+</div>
+
+{{-- ===================================== --}}
+{{-- VIDEO URL --}}
+{{-- ===================================== --}}
+
+<div
+    class="form-group mt-4"
+    id="video_evidence_field"
+    style="display: none;">
+
+    <label class="form-label fw-semibold">
+
+        <i class="fas fa-video form-label-icon"></i>
+
+        Video URL
+
+        <span class="text-danger">*</span>
+
+    </label>
+
+    <input
+        type="url"
+        name="evidence_video_url"
+        id="evidence_video_url"
+        value="{{ old('evidence_video_url') }}"
+        class="form-control @error('evidence_video_url') is-invalid @enderror"
+        placeholder="https://example.com/video">
+
+    @error('evidence_video_url')
+
+        <div class="invalid-feedback d-block">
+            {{ $message }}
+        </div>
+
+    @else
+
+        <small class="form-hint">
+
+            <i class="fas fa-link me-1"></i>
+
+            Provide the URL of the supporting video.
+
+        </small>
+
+    @enderror
+
+</div>
+
+{{-- ===================================== --}}
+{{-- ATTACHMENT --}}
+{{-- ===================================== --}}
+
+<div
+    class="form-group mt-4"
+    id="attachment_evidence_field"
+    style="display: none;">
+
+    <label class="form-label fw-semibold">
+
+        <i class="fas fa-file-upload form-label-icon"></i>
+
+        Upload Evidence
+
+        <span class="text-danger">*</span>
+
+    </label>
+
+    <input
+        type="file"
+        name="evidence_attachment"
+        id="evidence_attachment"
+        class="form-control @error('evidence_attachment') is-invalid @enderror"
+        accept=".doc,.docx,.pdf,.png,.jpg,.jpeg">
+
+    @error('evidence_attachment')
+
+        <div class="invalid-feedback d-block">
+            {{ $message }}
+        </div>
+
+    @else
+
+        <small class="form-hint">
+
+            <i class="fas fa-info-circle me-1"></i>
+
+            Supported formats: DOC, DOCX, PDF, PNG, JPG and JPEG.
+
+        </small>
+
+    @enderror
+
+</div>
 
                         </div>
 
@@ -1238,3 +1390,52 @@
     </style>
 
 @endsection
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const evidenceType = document.getElementById('evidence_type');
+
+        const videoField = document.getElementById('video_evidence_field');
+        const attachmentField = document.getElementById('attachment_evidence_field');
+
+        const videoUrl = document.getElementById('evidence_video_url');
+        const attachment = document.getElementById('evidence_attachment');
+
+        function toggleEvidenceFields() {
+
+            const type = evidenceType.value;
+
+            // Hide both
+            videoField.style.display = 'none';
+            attachmentField.style.display = 'none';
+
+            videoUrl.required = false;
+            attachment.required = false;
+
+            // Video
+            if (type === 'video') {
+
+                videoField.style.display = 'block';
+
+                videoUrl.required = true;
+
+            }
+
+            // Attachment
+            if (type === 'attachment') {
+
+                attachmentField.style.display = 'block';
+
+                attachment.required = true;
+
+            }
+
+        }
+
+        evidenceType.addEventListener('change', toggleEvidenceFields);
+
+        // Handle old value after validation error
+        toggleEvidenceFields();
+
+    });
+</script>
