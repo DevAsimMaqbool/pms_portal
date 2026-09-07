@@ -660,13 +660,19 @@
         <!--/ Statistics -->
         <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
           @php
-            $averageFeedback = getStudentFeedbackForTeacher(Auth::user()->faculty_id);
-            $average = is_numeric($averageFeedback) ? $averageFeedback : 0;
-            // Get rating description
-            $getRatingByPercentage = getRatingByPercentage($average);
-            $rating_description = $getRatingByPercentage['description'];
-
-            // Determine rating and color
+            // Get dynamic average, rating, and color
+            $kpaSatisfaction = indicatorAvgScore(182, Auth::user()->employee_id,$activeRoleId);
+            //$avg = $kpaResult['avg'] ?? 0;
+            $avgSatisfaction = min($kpaSatisfaction['avg'] ?? 0, 100);
+            $rating = $kpaSatisfaction['rating'] ?? 0;
+            $color = $kpaSatisfaction['color'] ?? 'secondary'; // this will be used for bg and bg-label
+            $indicatorWeight182 = getRoleWeightage($activeRoleId, 'indicator', 182);
+            $weight182 = $indicatorWeight182['weightage'] ?? 0;
+            $Satisfaction = $weight182 > 0
+              ? ($avgSatisfaction / $weight182) * 100
+              : 0;
+            $st_getRatingByPercentage = getRatingByPercentage($Satisfaction);
+            $st_rating_description = $st_getRatingByPercentage['description'];  
             function ratingMeta($average)
             {
               if ($average >= 90)
@@ -678,30 +684,16 @@
               if ($average >= 60)
                 return ['NI', 'orange'];
               return ['BE', 'danger'];
-            }
-            $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 182);
-            $weight = $indicatorWeight['weightage'] ?? 0;
-            $weightage = ($average * $weight) / 100;
-            $weight_ss = $weight > 0
-              ? ($weightage / $weight) * 100
-              : 0;
-            [$rating, $color] = ratingMeta($weight_ss);
-
-            saveIndicatorPercentage90Plus(
-              Auth::user()->employee_id,
-              $activeRoleId,
-              $keyPerformanceAreaId = 1,
-              $indicatorCategoryId = 23,
-              $indicator_id = 182,
-              $weight_ss
-            );
+            }  
+            [$rating182, $colorPub182] = ratingMeta($Satisfaction);  
+            
           @endphp
 
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-{{$color}}" data-bs-original-title="{{ $rating_description }}">
+            data-bs-custom-class="tooltip-{{$colorPub182}}" data-bs-original-title="{{ $st_rating_description }}">
             <div class="card-body d-flex">
               <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-{{$color}} rounded p-1_5 me-4"><i
+                <div class="badge bg-label-{{$colorPub182}} rounded p-1_5 me-4"><i
                     class="icon-base ti tabler-chalkboard icon-md"></i></div>
                 <div>
                   <small class="text-dark text-cut-hot">Student Satisfaction</small>
@@ -709,10 +701,10 @@
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
                 <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-{{$color}}" role="progressbar" style="width: {{$weight_ss}}%"
-                    aria-valuenow="{{$weight_ss}}" aria-valuemin="0" aria-valuemax="100"></div>
+                   <div class="progress-bar bg-{{$colorPub182}}" role="progressbar" style="width: {{$Satisfaction}}%"
+                      aria-valuenow="{{$Satisfaction}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <span class="text-body-secondary">{{number_format($weight_ss, 1)}}%</span>
+                <span class="text-body-secondary">{{number_format($Satisfaction, 1)}}%</span>
                 {{-- <span class="badge bg-label-{{$color}} ms-1">{{$rating}}</span> --}}
               </div>
             </div>
@@ -770,8 +762,7 @@
             $avgManager = min($kpaResultManager['avg'] ?? 0, 100);
             $ratingManager = $kpaResultManager['rating'] ?? 0;
             $colorManager = $kpaResultManager['color'] ?? 'secondary';
-            $ms_getRatingByPercentage = getRatingByPercentage($avgManager);
-            $ms_rating_description = $ms_getRatingByPercentage['description'];
+            
 
             $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 128);
             $weight = $indicatorWeight['weightage'] ?? 0;
@@ -779,6 +770,8 @@
             $publication = $weight > 0
               ? ($avg / $weight) * 100
               : 0;
+            $ms_getRatingByPercentage = getRatingByPercentage($publication);
+            $ms_rating_description = $ms_getRatingByPercentage['description'];  
 
             [$rating, $colorPub] = ratingMeta($publication);
 
@@ -844,8 +837,7 @@
             $courseloadavg = min($courseloadkpaResult['avg'] ?? 0, 100);
             $courseloadrating = $courseloadkpaResult['rating'] ?? 0;
             $courseloadcolor = $courseloadkpaResult['color'] ?? 'secondary'; // this will be used for bg and bg-label
-            $courseloadgetRatingByPercentage = getRatingByPercentage($courseloadavg);
-            $courseload_description = $courseloadgetRatingByPercentage['description'];
+            
 
             $cLoadWeight = getRoleWeightage($activeRoleId, 'indicator', 122);
             $loadweight = $cLoadWeight['weightage'] ?? 0;
@@ -853,6 +845,8 @@
             $WeightLoad = $loadweight > 0
               ? ($courseloadavg / $loadweight) * 100
               : 0;
+            $courseloadgetRatingByPercentage = getRatingByPercentage($WeightLoad);
+            $courseload_description = $courseloadgetRatingByPercentage['description'];
 
             [$rating, $color] = ratingMeta($WeightLoad);
 

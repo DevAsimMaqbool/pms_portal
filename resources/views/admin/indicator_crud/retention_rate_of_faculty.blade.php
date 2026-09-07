@@ -107,21 +107,15 @@
                                                 <input type="hidden" name="_method" value="PUT">
 
                                                 <div class="row">
-                                                    @php
-    $startYear = 2025;
-    $currentYear = now()->year;
-    $endYear = $currentYear + 5;
-                                                    @endphp
 
+                                                    
+                                                     
                                                     <div class="col-md-6">
-                                                        <label class="form-label">Year</label>
-                                                        <select name="year" id="select2Year" class="select2 form-select" required>
-                                                            <option value="">-- Select Year --</option>
-                                                            @for($year = $startYear; $year <= $endYear; $year++)
-                                                                <option value="{{ $year }}-{{ $year + 1 }}">
-                                                                    {{ $year }}-{{ $year + 1 }}
-                                                                </option>
-                                                            @endfor
+                                                            <label for="batch" class="form-label">Select Year</label>
+                                                            <select name="year_id" id="year_id"
+                                                        class="form-select" required>
+                                                        <option value=""> Select year</option>
+                                                            @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
                                                         </select>
                                                     </div>
 
@@ -224,13 +218,16 @@
                                         : 'N/A';
                                          const facultyName = form.remarks?.[0]?.faculty?.name || 'N/A';
                                     const retentionRate = form.remarks?.[0]?.no_retention_rate || 'N/A';
+                                    const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );
 
                                     let editButton = '';
                                     let deleteBtn = '';
                                     if (parseInt(form.status) === 1) {
                                         editButton = `
                                             <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
-                                                data-form='${JSON.stringify(form)}'>
+                                                data-form="${formData}">
                                                 <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                             </button>`;
                                         deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
@@ -239,7 +236,7 @@
                                     // Pass entire form as JSON in button's data attribute
                                     return [
                                         i + 1,
-                                        form.year || 'N/A',
+                                        form.year ? form.year.year : 'N/A',
                                         facultyName,
                                         retentionRate+'%',
                                         createdAt,
@@ -401,10 +398,15 @@
         });
 
         $(document).on('click', '.edit-form-btn', function () {
-            const form = $(this).data('form');
+            //const form = $(this).data('form');
+            const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
 
             $('#record_id').val(form.id);
-            $('#select2Year').val(form.year).trigger('change');
+            //$('#select2Year').val(form.year).trigger('change');
+             $('#year_id').val(form.year_id).trigger('change');
 
             $('#author-past-container').html('');
             index = 0;

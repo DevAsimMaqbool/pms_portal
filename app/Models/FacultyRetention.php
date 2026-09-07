@@ -11,6 +11,8 @@ class FacultyRetention extends Model
         'indicator_id',
         'form_status',
         'year',
+        'year_id',
+        'term_id',
         'status',
         'update_history',
         'created_by',
@@ -19,5 +21,9 @@ class FacultyRetention extends Model
     public function remarks()
     {
         return $this->hasMany(FacultyRetentionRemark::class, 'faculty_retention_id');
+    }
+     public function year()
+    {
+        return $this->belongsTo(Years::class, 'year_id', 'id');
     }
 }
