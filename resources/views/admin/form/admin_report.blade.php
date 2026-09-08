@@ -65,7 +65,7 @@
                                                 <div class="col-md-6 mb-3">
                                                     <label for="faculty" class="form-label">Faculty</label>
                                                     <select name="faculty_id" id="faculty_id" class="select2 form-select">
-                                                        <option value="">All Faculties</option>
+                                                        <option value="">Faculty</option>
                                                         @foreach(get_faculties() as $faculty)
                                                             <option value="{{ $faculty->id }}">
                                                                 {{ $faculty->name }}
@@ -77,7 +77,7 @@
                                                     <label for="department" class="form-label">Department</label>
                                                     <select name="department_id" id="department_id"
                                                         class="select2 form-select">
-                                                        <option value="">All Departments</option>
+                                                        <option value="">-- Select Department --</option>
                                                     </select>
 
                                                 </div>
@@ -85,7 +85,7 @@
                                                     <label for="program" class="form-label">Program</label>
                                                     <select name="program_id" id="program_id"
                                                         class="select2 form-select program_id">
-                                                        <option value="">All Programs</option>
+                                                        <option value="">-- Select Program --</option>
                                                     </select>
                                                 </div>
 
@@ -101,7 +101,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="card mt-4" id="reportCard" style="display:none;">
+                    <div class="card mt-4" id="reportCard" style="display:none;position: static;">
 
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">Report</h5>
@@ -606,33 +606,12 @@
                 | Download
                 |--------------------------------------------------------------------------
                 */
-                
-                let facultyValue = $('#faculty_id').val();
-                let departmentValue = $('#department_id').val();
-                let programValue = $('#program_id').val();
 
-                let fileNameText;
-
-                if (programValue) {
-                // Faculty + Department + Program
-                fileNameText = programText;
-
-                } else if (departmentValue) {
-                // Faculty + Department
-                fileNameText = departmentText;
-
-                } else if (facultyValue) {
-                // Faculty only
-                fileNameText = facultyText;
-
-                } else {
-                // Nothing selected
-                fileNameText = 'All_Faculties';
-                }
-
-                let fileName = fileNameText.replace(/[\s-]+/g, '_');
-
-                pdf.save(fileName + '_' + fileDate + '.pdf');
+                /*pdf.save(
+                    'Employee_Performance_Report_' + fileDate + '.pdf'
+                );*/
+                let facultyName = facultyText.replace(/[\s-]+/g, '_');
+                pdf.save((facultyName || 'All_Faculties') +'_' +fileDate +'.pdf');
             });
 
             /*
