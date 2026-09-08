@@ -132,7 +132,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="form-label">DOI Number</label>
+                                                    <label class="form-label">Link</label>
                                                     <input type="url" name="link_of_publications" class="form-control">
                                                 </div>
                                                 
@@ -1499,7 +1499,7 @@
                                                                         `);
                         // Create Reject radio
                         const emptyRadio = $(`
-                                                                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by ORI.</span>
+                                                                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by ORIC.</span>
                                                                         `);
 
 
@@ -1529,7 +1529,7 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Journal Name</th><td>${form.journal_name}</td></tr>`);
                     }
                     if (form.link_of_publications) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>DOI Number</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
                     }
                     if (form.rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
@@ -1842,7 +1842,7 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Journal Name</th><td>${form.journal_name}</td></tr>`);
                     }
                     if (form.link_of_publications) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>DOI Number</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
                     }
                     if (form.rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
@@ -1995,7 +1995,7 @@
     @endif
     @if(in_array(getRoleName(activeRole()), ['ORIC']))
         <script>
-            function fetchIndicatorForms3() {
+            function fetchIndicatorForms33() {
                 $.ajax({
                     url: "{{ route('indicator-form.index') }}",
                     method: "GET",
@@ -2083,9 +2083,6 @@
                                     { title: "Actions",
                                       orderable: false,
                                      searchable: false }
-                                ],
-                                 order: [
-                                    [6, 'desc']
                                 ]
                             });
                         } else {
@@ -2105,6 +2102,366 @@
                     }
                 });
             }
+            function fetchIndicatorForms3() {
+
+    if ($.fn.DataTable.isDataTable('#complaintTable3')) {
+        $('#complaintTable3').DataTable().destroy();
+    }
+
+    $('#complaintTable3').DataTable({
+
+        processing: true,
+        serverSide: true,
+
+        ajax: {
+            url: "{{ route('indicator-form.index') }}",
+            method: "GET",
+
+            data: {
+                status: "RESEARCHER"
+            },
+
+            error: function (xhr) {
+                console.error(
+                    'Error fetching data:',
+                    xhr.responseText
+                );
+
+                alert('Unable to load data.');
+            }
+        },
+
+        scrollX: true,
+        scrollCollapse: true,
+        autoWidth: false,
+
+        pageLength: 10,
+
+        lengthMenu: [
+            [10, 25, 50, 100],
+            [10, 25, 50, 100]
+        ],
+
+        columns: [
+
+            /*
+            |--------------------------------------------------------------------------
+            | Checkbox
+            |--------------------------------------------------------------------------
+            */
+            {
+                data: 'id',
+                name: 'id',
+                orderable: false,
+                searchable: false,
+
+                render: function (data) {
+
+                    return `
+                        <input
+                            type="checkbox"
+                            class="rowCheckbox"
+                            value="${data}"
+                        >
+                    `;
+                }
+            },
+
+            /*
+            |--------------------------------------------------------------------------
+            | #
+            |--------------------------------------------------------------------------
+            */
+            {
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                title: '#',
+                orderable: false,
+                searchable: false
+            },
+
+            /*
+            |--------------------------------------------------------------------------
+            | Created By
+            |--------------------------------------------------------------------------
+            */
+            {
+                data: 'creator',
+                name: 'creator.name',
+                title: 'Created By',
+
+                render: function (data) {
+
+                    return data && data.name
+                        ? data.name
+                        : 'N/A';
+                }
+            },
+
+            /*
+            |--------------------------------------------------------------------------
+            | Indicator Category
+            |--------------------------------------------------------------------------
+            */
+            {
+                data: 'target_category',
+                name: 'target_category',
+                title: 'Indicator Category',
+
+                render: function (data) {
+
+                    return data || 'N/A';
+                }
+            },
+
+            /*
+            |--------------------------------------------------------------------------
+            | Classification
+            |--------------------------------------------------------------------------
+            */
+            {
+                data: 'journal_clasification',
+                name: 'journal_clasification',
+                title: 'Classification',
+
+                render: function (data) {
+
+                    return data || 'N/A';
+                }
+            },
+
+            /*
+            |--------------------------------------------------------------------------
+            | Status
+            |--------------------------------------------------------------------------
+            */
+            {
+                data: null,
+                name: 'status',
+                title: 'Status',
+                orderable: false,
+                searchable: false,
+
+                render: function (data, type, row) {
+
+                    let statusText = 'N/A';
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Status = 1
+                    |--------------------------------------------------------------------------
+                    */
+                    if (row.status == 1) {
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | ORIC Reject
+                        |--------------------------------------------------------------------------
+                        */
+                        if (row.reject_status == 2) {
+
+                            const remarks = row.reject_status_remarks
+                                ? $('<div>').text(
+                                    row.reject_status_remarks
+                                ).html()
+                                : '';
+
+                            statusText = `
+                                <span
+                                    class="badge bg-label-danger"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    data-bs-custom-class="tooltip-danger"
+                                    data-bs-original-title="${remarks}"
+                                >
+                                    ORIC Reject this application.
+                                </span>
+                            `;
+
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | HOD Reject
+                        |--------------------------------------------------------------------------
+                        */
+                        else if (row.reject_status == 1) {
+
+                            statusText = `
+                                <span class="badge bg-label-dark text-danger">
+                                    HOD Reject this application.
+                                </span>
+                            `;
+
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Waiting for HOD
+                        |--------------------------------------------------------------------------
+                        */
+                        else {
+
+                            statusText = `
+                                <span class="badge bg-label-dark text-warning">
+                                    Waiting for HOD Approvel.
+                                </span>
+                            `;
+                        }
+                    }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Status = 2
+                    |--------------------------------------------------------------------------
+                    */
+                    else if (row.status == 2) {
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Reject
+                        |--------------------------------------------------------------------------
+                        */
+                        if (row.reject_status == 2) {
+
+                            statusText = `
+                                <span class="badge bg-label-danger">
+                                    Reject
+                                </span>
+                            `;
+
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | On Hold
+                        |--------------------------------------------------------------------------
+                        */
+                        else if (row.reject_status == 3) {
+
+                            statusText = `
+                                <span class="badge bg-label-info">
+                                    On Hold
+                                </span>
+                            `;
+
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Waiting for ORIC
+                        |--------------------------------------------------------------------------
+                        */
+                        else {
+
+                            statusText = `
+                                <span class="badge bg-label-warning">
+                                    Waiting for ORIC Approvel
+                                </span>
+                            `;
+                        }
+                    }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Status = 3
+                    |--------------------------------------------------------------------------
+                    */
+                    else if (row.status == 3) {
+
+                        statusText = `
+                            <span class="badge bg-label-success">
+                                Verified
+                            </span>
+                        `;
+                    }
+
+                    return statusText;
+                }
+            },
+
+            /*
+            |--------------------------------------------------------------------------
+            | Created Date
+            |--------------------------------------------------------------------------
+            */
+            {
+                data: 'created_at',
+                name: 'created_at',
+                title: 'Created Date',
+
+                render: function (data) {
+
+                    if (!data) {
+                        return 'N/A';
+                    }
+
+                    return data.split('T')[0];
+                }
+            },
+
+            /*
+            |--------------------------------------------------------------------------
+            | Actions
+            |--------------------------------------------------------------------------
+            */
+            {
+                data: null,
+                title: 'Actions',
+                orderable: false,
+                searchable: false,
+
+                render: function (data, type, row) {
+
+                    const formData = encodeURIComponent(
+                        JSON.stringify(row)
+                    );
+
+                    return `
+                        <button
+                            class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
+                            data-form="${formData}"
+                        >
+                            <span class="icon-xs icon-base ti tabler-eye me-2"></span>
+                            View
+                        </button>
+                    `;
+                }
+            }
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Latest ID First
+        |--------------------------------------------------------------------------
+        */
+        order: [
+            [0, 'desc']
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Tooltip initialization
+        |--------------------------------------------------------------------------
+        */
+        drawCallback: function () {
+
+            const tooltipTriggerList =
+                [].slice.call(
+                    document.querySelectorAll(
+                        '[data-bs-toggle="tooltip"]'
+                    )
+                );
+
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+
+                return new bootstrap.Tooltip(
+                    tooltipTriggerEl
+                );
+            });
+        }
+    });
+}
             // ✅ Reusable function for single update
             function updateSingleStatus(id, status) {
                 $.ajax({
@@ -2198,7 +2555,11 @@
                                                                         `);    
                          const hodrejectRadio = $(`
                                                                             <span class="p-1 rounded-pill bg-label-danger">HOD Reject this application.</span>
-                                                                        `);                                                                                              
+                                                                        `);   
+                         // Create Reject radio
+                        const emptyrejectoricRadio = $(`
+                                                                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by ORIC.</span>
+                                                                        `);                                                                                                                                            
                                                                         
 
               
@@ -2209,6 +2570,8 @@
                         if (form.status == 1) {
                              if (form.reject_status == 1) {
                                statusCell.append(hodrejectRadio);
+                            }else if (form.reject_status == 2) {
+                               statusCell.append(emptyrejectoricRadio);
                             } else  {
                                 statusCell.append(emptyRadio);
                             }
@@ -2236,7 +2599,7 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Journal Name</th><td>${form.journal_name}</td></tr>`);
                     }
                     if (form.link_of_publications) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>DOI Number</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
                     }
                     if (form.rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
@@ -2317,10 +2680,27 @@
                     }
 
                     if (form.update_history) {
-                        // Parse JSON string if it's a string
-                        let history = typeof form.update_history === 'string' ? JSON.parse(form.update_history) : form.update_history;
+                        
+                        let history = form.update_history;
 
-                        if (history.length > 0) {
+                        if (typeof history === 'string') {
+                            try {
+                                // Decode &quot; -> "
+                                history = $('<textarea/>').html(history).text();
+
+                                // Convert JSON string -> array
+                                history = JSON.parse(history);
+
+                            } catch (error) {
+                                console.error('update_history parse error:', error);
+                                console.log('update_history value:', form.update_history);
+                                history = [];
+                            }
+                        }
+
+
+
+    if (Array.isArray(history) && history.length > 0) {
 
                             let historyHtml = '';
 

@@ -137,7 +137,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="form-label">DOI Number</label>
+                                                    <label class="form-label">Link</label>
                                                     <input type="url" name="link_of_publications" class="form-control">
                                                 </div>
                                                 <div class="col-md-6">
