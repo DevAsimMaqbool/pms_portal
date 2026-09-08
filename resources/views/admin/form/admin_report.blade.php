@@ -65,7 +65,7 @@
                                                 <div class="col-md-6 mb-3">
                                                     <label for="faculty" class="form-label">Faculty</label>
                                                     <select name="faculty_id" id="faculty_id" class="select2 form-select">
-                                                        <option value="">Faculty</option>
+                                                        <option value="">All Faculties</option>
                                                         @foreach(get_faculties() as $faculty)
                                                             <option value="{{ $faculty->id }}">
                                                                 {{ $faculty->name }}
@@ -77,7 +77,7 @@
                                                     <label for="department" class="form-label">Department</label>
                                                     <select name="department_id" id="department_id"
                                                         class="select2 form-select">
-                                                        <option value="">-- Select Department --</option>
+                                                        <option value="">All Departments</option>
                                                     </select>
 
                                                 </div>
@@ -85,7 +85,7 @@
                                                     <label for="program" class="form-label">Program</label>
                                                     <select name="program_id" id="program_id"
                                                         class="select2 form-select program_id">
-                                                        <option value="">-- Select Program --</option>
+                                                        <option value="">All Programs</option>
                                                     </select>
                                                 </div>
 
@@ -606,12 +606,33 @@
                 | Download
                 |--------------------------------------------------------------------------
                 */
+                
+                let facultyValue = $('#faculty_id').val();
+                let departmentValue = $('#department_id').val();
+                let programValue = $('#program_id').val();
 
-                /*pdf.save(
-                    'Employee_Performance_Report_' + fileDate + '.pdf'
-                );*/
-                let facultyName = facultyText.replace(/[\s-]+/g, '_');
-                pdf.save((facultyName || 'All_Faculties') +'_' +fileDate +'.pdf');
+                let fileNameText;
+
+                if (programValue) {
+                // Faculty + Department + Program
+                fileNameText = programText;
+
+                } else if (departmentValue) {
+                // Faculty + Department
+                fileNameText = departmentText;
+
+                } else if (facultyValue) {
+                // Faculty only
+                fileNameText = facultyText;
+
+                } else {
+                // Nothing selected
+                fileNameText = 'All_Faculties';
+                }
+
+                let fileName = fileNameText.replace(/[\s-]+/g, '_');
+
+                pdf.save(fileName + '_' + fileDate + '.pdf');
             });
 
             /*
