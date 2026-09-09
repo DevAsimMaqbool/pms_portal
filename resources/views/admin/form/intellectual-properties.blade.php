@@ -453,6 +453,9 @@
                                
                             } 
                             else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>';  
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -463,7 +466,7 @@
                                 form.no_of_ip_disclosed || 'N/A',
                                 statusText,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -526,7 +529,11 @@
             $(document).ready(function () {
                 fetchIndicatorForms3();
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                   // const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
@@ -798,7 +805,10 @@
                         const rowData = forms.map((form, i) => {
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
-                                : 'N/A';     
+                                : 'N/A';  
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );       
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -807,7 +817,7 @@
                                 form.name_of_ip_filed || 'N/A',
                                 form.no_of_ip_disclosed || 'N/A',
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -840,7 +850,11 @@
             $(document).ready(function () {
                 fetchIndicatorForms3();
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                    //const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
@@ -1009,7 +1023,10 @@
                                 }
                                
                             } 
-                            else if (form.status == 3) statusText = '<span class="badge bg-label-success">Verified</span>';    
+                            else if (form.status == 3) statusText = '<span class="badge bg-label-success">Verified</span>'; 
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );   
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -1020,7 +1037,7 @@
                                 form.no_of_ip_disclosed || 'N/A',
                                 statusText,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -1083,7 +1100,11 @@
             $(document).ready(function () {
                 fetchIndicatorForms3();
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                    //const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 

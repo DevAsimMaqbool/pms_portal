@@ -45,13 +45,14 @@ class CompletionOfCourseFolderController extends Controller
             if ($status == "HOD") {
                 $employeeIds = User::where('manager_id', $employeeId)
                     ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator'])->pluck('employee_id');
+                    $all_ids = $employeeIds->merge($employeeId);
                 $forms = CompletionOfCourseFolder::with([
                     'creator' => function ($q) {
                         $q->select('employee_id', 'name');
                     },
                     'facultyClass','term'
                 ])
-                    ->whereIn('created_by', $employeeIds)
+                    ->whereIn('created_by', $all_ids)
                     ->whereIn('term_id', $activeTermIds)
                     ->where('completion_of_Course_folder_indicator_id', 120)
                     ->orderBy('id', 'desc')

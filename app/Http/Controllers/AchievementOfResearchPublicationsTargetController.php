@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Services\WorkflowService;
+use Yajra\DataTables\Facades\DataTables;
 
 class AchievementOfResearchPublicationsTargetController extends Controller
 {
@@ -96,19 +97,36 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
 
             }
+            // if (in_array(getRoleName(activeRole()), ['ORIC'])) {
+            //     $forms = AchievementOfResearchPublicationsTarget::with([
+            //         'creator' => function ($q) {
+            //             $q->select('employee_id', 'name');
+            //         },
+            //         'coAuthors'
+            //     ])
+            //         ->whereIn('status', [1,2, 3])
+            //         ->where('form_status', 'RESEARCHER')
+            //         ->orderBy('id', 'desc')
+            //         ->get();
+
+            // }
             if (in_array(getRoleName(activeRole()), ['ORIC'])) {
+
                 $forms = AchievementOfResearchPublicationsTarget::with([
                     'creator' => function ($q) {
                         $q->select('employee_id', 'name');
                     },
                     'coAuthors'
                 ])
-                    ->whereIn('status', [1,2, 3])
+                    ->whereIn('status', [1, 2, 3])
                     ->where('form_status', 'RESEARCHER')
-                    ->orderBy('id', 'desc')
-                    ->get();
+                    ->orderBy('id', 'desc');
 
+                return DataTables::eloquent($forms)
+                    ->addIndexColumn()
+                    ->make(true);
             }
+
             if (in_array(getRoleName(activeRole()), ['Human Resources'])) {
                 $status = $request->input('status');
                 if ($status == "HOD") {
@@ -262,7 +280,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             if ($exists) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Duplicate record found DOI Number and user is already exist'
+                    'message' => 'Duplicate record found Link and user is already exist'
                 ], 422);
             }
 
@@ -559,7 +577,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         if ($exists) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Duplicate record found DOI Number and user is already exist'
+                'message' => 'Duplicate record found Link and user is already exist'
             ], 422);
         }
 
