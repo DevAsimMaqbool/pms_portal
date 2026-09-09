@@ -206,6 +206,9 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );     
 
                             let statusText = 'N/A';
                             if (form.status == 1) {
@@ -239,7 +242,7 @@
                             if (parseInt(form.status) === 1) {
                                 editButton = `
                                     <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
-                                        data-form='${JSON.stringify(form)}'>
+                                        data-form="${formData}">
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
                             }     
@@ -378,7 +381,11 @@
             });
     // Open modal and populate data
     $(document).on('click', '.edit-form-btn', function () {
-        const form = $(this).data('form');
+       // const form = $(this).data('form');
+        const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
 
         $('#researchForm1 #record_id').val(form.id);
         $('#researchForm1 #name_of_ip_filed').val(form.name_of_ip_filed);
