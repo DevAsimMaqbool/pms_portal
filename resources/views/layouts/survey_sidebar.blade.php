@@ -77,6 +77,13 @@
                 <div data-i18n="Self Performance Reporting">Self Performance Reporting</div>
             </a>
         </li>
+        <li class="menu-item {{ request()->routeIs('goal-initiatives.index') ? 'active' : '' }}">
+            <a href="{{ route('goal-initiatives.index') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-bulb"></i>
+                <div data-i18n="Initiative / Extra Role">Initiative / Extra Role</div>
+            </a>
+        </li>
+        
         <li class="menu-item ">
             <a href="#" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-star"></i>
@@ -151,6 +158,12 @@
                     </div>
                 </a>
             </li>
+            <li class="menu-item {{ request()->routeIs('goal-initiatives.manager.index') ? 'active' : '' }}">
+            <a href="{{ route('goal-initiatives.manager.index') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-bulb"></i>
+                <div data-i18n="Initiative Validation">Initiative Validation</div>
+            </a>
+        </li>
             <li class="menu-item {{ request()->routeIs('manager.employees') ? 'active' : '' }}">
                     <a href="{{ route('manager.employees') }}"" class=" menu-link" data-bs-toggle="tooltip"
                         data-bs-placement="right" data-bs-original-title="Team Performance">

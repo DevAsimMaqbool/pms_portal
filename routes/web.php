@@ -105,6 +105,7 @@ use App\Http\Controllers\GoalSelfReportController;
 use App\Http\Controllers\GoalManagerReviewController;
 use App\Http\Controllers\GoalHrReviewController;
 use App\Http\Controllers\GoalHistoryController;
+use App\Http\Controllers\GoalInitiativeController;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Department;
@@ -671,6 +672,44 @@ Route::middleware('auth')->group(function () {
         '/newgoals/{newgoal}/history',
         [GoalHistoryController::class, 'index']
     )->name('newgoals.history');
+
+     /*
+|--------------------------------------------------------------------------
+| Initiative
+|--------------------------------------------------------------------------
+*/
+
+    // Employee
+    Route::resource(
+        'goal-initiatives',
+        GoalInitiativeController::class
+    );
+
+    // Manager
+    Route::get(
+        '/manager/goal-initiatives',
+        [GoalInitiativeController::class, 'managerIndex']
+    )->name('goal-initiatives.manager.index');
+
+    Route::get(
+        '/manager/goal-initiatives/{goalInitiative}',
+        [GoalInitiativeController::class, 'managerShow']
+    )->name('goal-initiatives.manager.show');
+
+    Route::post(
+        '/manager/goal-initiatives/{goalInitiative}/approve',
+        [GoalInitiativeController::class, 'approve']
+    )->name('goal-initiatives.approve');
+
+    Route::post(
+        '/manager/goal-initiatives/{goalInitiative}/approve-with-amendment',
+        [GoalInitiativeController::class, 'approveWithAmendment']
+    )->name('goal-initiatives.approve-with-amendment');
+
+    Route::post(
+        '/manager/goal-initiatives/{goalInitiative}/reject',
+        [GoalInitiativeController::class, 'reject']
+    )->name('goal-initiatives.reject');
 
 });
 require __DIR__ . '/auth.php';
