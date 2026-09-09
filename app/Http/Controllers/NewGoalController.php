@@ -62,44 +62,7 @@ class NewGoalController extends Controller
 
             'deadline' =>
                 'required|date',
-
-            // Evidence
-            'evidence_type' =>
-                'nullable|in:video,attachment',
-
-            'evidence_video_url' => [
-                'nullable',
-                'required_if:evidence_type,video',
-                'url',
-                'max:2000',
-            ],
-
-            'evidence_attachment' => [
-                'nullable',
-                'required_if:evidence_type,attachment',
-                'file',
-                'mimes:doc,docx,pdf,png,jpg,jpeg',
-                'max:10240', // 10 MB
-            ],
-        ]);
-
-        $evidenceAttachment = null;
-
-        /*
-        |--------------------------------------------------------------------------
-        | Upload Attachment
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-            $request->evidence_type === 'attachment' &&
-            $request->hasFile('evidence_attachment')
-        ) {
-            $evidenceAttachment = $request
-                ->file('evidence_attachment')
-                ->store('goal-evidence', 'public');
-        }
-
+        ]); 
         /*
         |--------------------------------------------------------------------------
         | Create Goal
@@ -123,25 +86,6 @@ class NewGoalController extends Controller
 
             'deadline' =>
                 $request->deadline,
-
-            /*
-            |--------------------------------------------------------------------------
-            | Evidence
-            |--------------------------------------------------------------------------
-            */
-
-            'evidence_type' =>
-                $request->evidence_type,
-
-            'evidence_video_url' =>
-                $request->evidence_type === 'video'
-                    ? $request->evidence_video_url
-                    : null,
-
-            'evidence_attachment' =>
-                $request->evidence_type === 'attachment'
-                    ? $evidenceAttachment
-                    : null,
         ]);
 
         return redirect()
@@ -252,131 +196,9 @@ class NewGoalController extends Controller
 
         'deadline' =>
             'required|date',
-
-        /*
-        |--------------------------------------------------------------------------
-        | Evidence
-        |--------------------------------------------------------------------------
-        */
-
-        'evidence_type' =>
-            'nullable|in:video,attachment',
-
-        'evidence_video_url' => [
-            'nullable',
-            'required_if:evidence_type,video',
-            'url',
-            'max:2000',
-        ],
-
-        'evidence_attachment' => [
-            'nullable',
-            'file',
-            'mimes:doc,docx,pdf,png,jpg,jpeg',
-            'max:10240',
-        ],
     ]);
 
     DB::transaction(function () use ($newgoal, $validated, $request) {
-
-        /*
-        |--------------------------------------------------------------------------
-        | Existing Evidence
-        |--------------------------------------------------------------------------
-        */
-
-        $oldAttachment = $newgoal->evidence_attachment;
-
-        $evidenceType = $validated['evidence_type'] ?? null;
-
-        $evidenceVideoUrl = null;
-
-        $evidenceAttachment = $oldAttachment;
-
-        /*
-        |--------------------------------------------------------------------------
-        | No Evidence
-        |--------------------------------------------------------------------------
-        */
-
-        if (empty($evidenceType)) {
-
-            if ($oldAttachment) {
-                Storage::disk('public')->delete($oldAttachment);
-            }
-
-            $evidenceAttachment = null;
-            $evidenceVideoUrl = null;
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Video Evidence
-        |--------------------------------------------------------------------------
-        */
-
-        elseif ($evidenceType === 'video') {
-
-            /*
-            | Delete previous attachment if goal
-            | was previously using attachment evidence.
-            */
-
-            if ($oldAttachment) {
-                Storage::disk('public')->delete($oldAttachment);
-            }
-
-            $evidenceAttachment = null;
-
-            $evidenceVideoUrl =
-                $validated['evidence_video_url'];
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Attachment Evidence
-        |--------------------------------------------------------------------------
-        */
-
-        elseif ($evidenceType === 'attachment') {
-
-            /*
-            | Video URL should not remain when
-            | evidence type is attachment.
-            */
-
-            $evidenceVideoUrl = null;
-
-            /*
-            | Upload new attachment only if user
-            | selected a new file.
-            */
-
-            if ($request->hasFile('evidence_attachment')) {
-
-                /*
-                | Delete old attachment
-                */
-
-                if ($oldAttachment) {
-                    Storage::disk('public')->delete($oldAttachment);
-                }
-
-                /*
-                | Store new attachment
-                */
-
-                $evidenceAttachment = $request
-                    ->file('evidence_attachment')
-                    ->store('goal-evidence', 'public');
-            }
-
-            /*
-            | If no new file was uploaded,
-            | keep existing attachment.
-            */
-        }
-
         /*
         |--------------------------------------------------------------------------
         | Update Goal
@@ -398,21 +220,6 @@ class NewGoalController extends Controller
 
             'deadline' =>
                 $validated['deadline'],
-
-            /*
-            |--------------------------------------------------------------------------
-            | Evidence
-            |--------------------------------------------------------------------------
-            */
-
-            'evidence_type' =>
-                $evidenceType,
-
-            'evidence_video_url' =>
-                $evidenceVideoUrl,
-
-            'evidence_attachment' =>
-                $evidenceAttachment,
         ]);
 
         /*
