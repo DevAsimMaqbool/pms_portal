@@ -157,119 +157,246 @@ compact('goals')
 
 public function store(Request $request)
 {
-$validated = $request->validate([
-'new_goal_id' => [
-'required',
-'exists:new_goals,id',
-],
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATION
+    |--------------------------------------------------------------------------
+    */
 
-'progress_against_goal' => [
-'required',
-'string',
-'max:10000',
-],
+    $validated = $request->validate([
 
-'achievement_status' => [
-'required',
-'in:not_started,in_progress,partially_complete,completed',
-],
-]);
+        'new_goal_id' => [
+            'required',
+            'exists:new_goals,id',
+        ],
 
-/*
-|--------------------------------------------------------------------------
-| Verify that the selected goal belongs to logged-in user
-|--------------------------------------------------------------------------
-*/
+        'progress_against_goal' => [
+            'required',
+            'string',
+            'max:10000',
+        ],
 
-$goal = NewGoal::where('id', $validated['new_goal_id'])
-->where('user_id', Auth::id())
-->firstOrFail();
+        /*
+        |--------------------------------------------------------------------------
+        | Evidence
+        |--------------------------------------------------------------------------
+        */
 
-/*
-|--------------------------------------------------------------------------
-| Prevent duplicate active/submitted reports
-|--------------------------------------------------------------------------
-*/
+        'evidence_type' => [
+            'nullable',
+            'in:video,attachment',
+        ],
 
-if (
-$goal->selfReports()
-->whereIn('status', [
-'submitted',
-'manager_approved',
-'hr_approved',
-])
-->exists()
-) {
-return back()
-->withInput()
-->with(
-'error',
-'A report has already been submitted for this goal.'
-);
-}
+        'evidence_video_url' => [
+            'nullable',
+            'required_if:evidence_type,video',
+            'url',
+            'max:2000',
+        ],
 
-/*
-|--------------------------------------------------------------------------
-| Calculate Rating Automatically
-|--------------------------------------------------------------------------
-*/
+        'evidence_attachment' => [
+            'nullable',
+            'required_if:evidence_type,attachment',
+            'file',
+            'mimes:doc,docx,pdf,png,jpg,jpeg',
+            'max:10240', // 10 MB
+        ],
 
-$rating = $this->ratings[
-$validated['achievement_status']
-];
+        /*
+        |--------------------------------------------------------------------------
+        | Achievement Status
+        |--------------------------------------------------------------------------
+        */
 
-DB::transaction(function () use ($validated, $goal, $rating) {
+        'achievement_status' => [
+            'required',
+            'in:not_started,in_progress,partially_complete,completed',
+        ],
+    ]);
 
-$report = GoalSelfReport::create([
-'new_goal_id' => $goal->id,
+    /*
+    |--------------------------------------------------------------------------
+    | Verify that selected goal belongs to logged-in user
+    |--------------------------------------------------------------------------
+    */
 
-'user_id' => Auth::id(),
+    $goal = NewGoal::where('id', $validated['new_goal_id'])
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
 
-'progress_against_goal' =>
-$validated['progress_against_goal'],
+    /*
+    |--------------------------------------------------------------------------
+    | Prevent duplicate active/submitted reports
+    |--------------------------------------------------------------------------
+    */
 
-'achievement_status' =>
-$validated['achievement_status'],
+    if (
+        $goal->selfReports()
+            ->whereIn('status', [
+                'submitted',
+                'manager_approved',
+                'hr_approved',
+            ])
+            ->exists()
+    ) {
+        return back()
+            ->withInput()
+            ->with(
+                'error',
+                'A report has already been submitted for this goal.'
+            );
+    }
 
-'rating' => $rating,
+    /*
+    |--------------------------------------------------------------------------
+    | Calculate Rating Automatically
+    |--------------------------------------------------------------------------
+    */
 
-'status' => 'submitted',
+    $rating = $this->ratings[
+        $validated['achievement_status']
+    ];
 
-'submitted_at' => now(),
-]);
+    /*
+    |--------------------------------------------------------------------------
+    | Evidence Values
+    |--------------------------------------------------------------------------
+    */
 
-/*
-|--------------------------------------------------------------------------
-| Goal History
-|--------------------------------------------------------------------------
-*/
+    $evidenceType = $validated['evidence_type'] ?? null;
 
-$goal->histories()->create([
-'user_id' => Auth::id(),
+    $evidenceVideoUrl = null;
 
-'action' => 'Self Report Submitted',
+    $evidenceAttachment = null;
 
-'from_status' => $goal->status,
+    /*
+    |--------------------------------------------------------------------------
+    | Upload Attachment
+    |--------------------------------------------------------------------------
+    */
 
-'to_status' => 'submitted',
+    if (
+        $evidenceType === 'attachment' &&
+        $request->hasFile('evidence_attachment')
+    ) {
+        $evidenceAttachment = $request
+            ->file('evidence_attachment')
+            ->store('goal-evidence', 'public');
+    }
 
-'metadata' => [
-'report_id' => $report->id,
+    /*
+    |--------------------------------------------------------------------------
+    | Save Self Report + History
+    |--------------------------------------------------------------------------
+    */
 
-'achievement_status' =>
-$validated['achievement_status'],
+    DB::transaction(function () use (
+        $validated,
+        $goal,
+        $rating,
+        $evidenceType,
+        $evidenceVideoUrl,
+        $evidenceAttachment
+    ) {
 
-'rating' => $rating,
-],
-]);
-});
+        $report = GoalSelfReport::create([
 
-return redirect()
-->route('goal-self-reports.index')
-->with(
-'success',
-'Self report submitted successfully and sent to your Line Manager.'
-);
+            'new_goal_id' =>
+                $goal->id,
+
+            'user_id' =>
+                Auth::id(),
+
+            'progress_against_goal' =>
+                $validated['progress_against_goal'],
+
+            'achievement_status' =>
+                $validated['achievement_status'],
+
+            'rating' =>
+                $rating,
+
+            /*
+            |--------------------------------------------------------------------------
+            | Evidence
+            |--------------------------------------------------------------------------
+            */
+
+            'evidence_type' =>
+                $evidenceType,
+
+            'evidence_video_url' =>
+                $evidenceType === 'video'
+                    ? $validated['evidence_video_url']
+                    : null,
+
+            'evidence_attachment' =>
+                $evidenceType === 'attachment'
+                    ? $evidenceAttachment
+                    : null,
+
+            /*
+            |--------------------------------------------------------------------------
+            | Status
+            |--------------------------------------------------------------------------
+            */
+
+            'status' =>
+                'submitted',
+
+            'submitted_at' =>
+                now(),
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Goal History
+        |--------------------------------------------------------------------------
+        */
+
+        $goal->histories()->create([
+
+            'user_id' =>
+                Auth::id(),
+
+            'action' =>
+                'Self Report Submitted',
+
+            'from_status' =>
+                $goal->status,
+
+            'to_status' =>
+                'submitted',
+
+            'metadata' => [
+
+                'report_id' =>
+                    $report->id,
+
+                'achievement_status' =>
+                    $validated['achievement_status'],
+
+                'rating' =>
+                    $rating,
+
+                'evidence_type' =>
+                    $evidenceType,
+            ],
+        ]);
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Redirect
+    |--------------------------------------------------------------------------
+    */
+
+    return redirect()
+        ->route('goal-self-reports.index')
+        ->with(
+            'success',
+            'Self report submitted successfully and sent to your Line Manager.'
+        );
 }
 
 public function edit(GoalSelfReport $goalSelfReport)
@@ -303,8 +430,10 @@ compact('goalSelfReport')
 );
 }
 
-public function update(Request $request, GoalSelfReport $goalSelfReport)
-{
+public function update(
+    Request $request,
+    GoalSelfReport $goalSelfReport
+) {
     /*
     |--------------------------------------------------------------------------
     | SECURITY
@@ -357,17 +486,129 @@ public function update(Request $request, GoalSelfReport $goalSelfReport)
             'in:not_started,in_progress,partially_complete,completed',
         ],
 
+        /*
+        |--------------------------------------------------------------------------
+        | Evidence
+        |--------------------------------------------------------------------------
+        */
+
+        'evidence_type' => [
+            'nullable',
+            'in:video,attachment',
+        ],
+
+        'evidence_video_url' => [
+            'nullable',
+            'required_if:evidence_type,video',
+            'url',
+            'max:2000',
+        ],
+
+        'evidence_attachment' => [
+            'nullable',
+            'file',
+            'mimes:doc,docx,pdf,png,jpg,jpeg',
+            'max:10240', // 10 MB
+        ],
     ]);
 
     /*
     |--------------------------------------------------------------------------
-    | CALCULATE RATING AUTOMATICALLY
+    | Calculate Rating Automatically
     |--------------------------------------------------------------------------
     */
 
     $rating = $this->ratings[
         $validated['achievement_status']
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Evidence
+    |--------------------------------------------------------------------------
+    */
+
+    $oldAttachment =
+        $goalSelfReport->evidence_attachment;
+
+    $evidenceType =
+        $validated['evidence_type'] ?? null;
+
+    $evidenceVideoUrl = null;
+
+    $evidenceAttachment =
+        $oldAttachment;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Handle Evidence
+    |--------------------------------------------------------------------------
+    */
+
+    if ($evidenceType === null) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | No Evidence
+        |--------------------------------------------------------------------------
+        */
+
+        if ($oldAttachment) {
+            \Illuminate\Support\Facades\Storage::disk('public')
+                ->delete($oldAttachment);
+        }
+
+        $evidenceAttachment = null;
+        $evidenceVideoUrl = null;
+    }
+
+    elseif ($evidenceType === 'video') {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Video Evidence
+        |--------------------------------------------------------------------------
+        */
+
+        if ($oldAttachment) {
+            \Illuminate\Support\Facades\Storage::disk('public')
+                ->delete($oldAttachment);
+        }
+
+        $evidenceAttachment = null;
+
+        $evidenceVideoUrl =
+            $validated['evidence_video_url'];
+    }
+
+    elseif ($evidenceType === 'attachment') {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Attachment Evidence
+        |--------------------------------------------------------------------------
+        */
+
+        $evidenceVideoUrl = null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Replace attachment only if new file uploaded
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('evidence_attachment')) {
+
+            if ($oldAttachment) {
+                \Illuminate\Support\Facades\Storage::disk('public')
+                    ->delete($oldAttachment);
+            }
+
+            $evidenceAttachment = $request
+                ->file('evidence_attachment')
+                ->store('goal-evidence', 'public');
+        }
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -378,7 +619,10 @@ public function update(Request $request, GoalSelfReport $goalSelfReport)
     DB::transaction(function () use (
         $validated,
         $goalSelfReport,
-        $rating
+        $rating,
+        $evidenceType,
+        $evidenceVideoUrl,
+        $evidenceAttachment
     ) {
 
         /*
@@ -387,7 +631,8 @@ public function update(Request $request, GoalSelfReport $goalSelfReport)
         |--------------------------------------------------------------------------
         */
 
-        $oldStatus = $goalSelfReport->status;
+        $oldStatus =
+            $goalSelfReport->status;
 
         $oldAchievementStatus =
             $goalSelfReport->achievement_status;
@@ -414,23 +659,39 @@ public function update(Request $request, GoalSelfReport $goalSelfReport)
 
             /*
             |--------------------------------------------------------------------------
-            | If manager rejected the report, resubmit it
+            | Evidence
             |--------------------------------------------------------------------------
             */
 
-            'status' => 'submitted',
+            'evidence_type' =>
+                $evidenceType,
 
-            'submitted_at' => now(),
+            'evidence_video_url' =>
+                $evidenceVideoUrl,
+
+            'evidence_attachment' =>
+                $evidenceAttachment,
 
             /*
             |--------------------------------------------------------------------------
-            | Clear manager review timestamp because it is
-            | being sent back for manager review.
+            | Resubmit
             |--------------------------------------------------------------------------
             */
 
-            'manager_reviewed_at' => null,
+            'status' =>
+                'submitted',
 
+            'submitted_at' =>
+                now(),
+
+            /*
+            |--------------------------------------------------------------------------
+            | Clear manager review timestamp
+            |--------------------------------------------------------------------------
+            */
+
+            'manager_reviewed_at' =>
+                null,
         ]);
 
         /*
@@ -441,13 +702,17 @@ public function update(Request $request, GoalSelfReport $goalSelfReport)
 
         $goalSelfReport->goal->histories()->create([
 
-            'user_id' => Auth::id(),
+            'user_id' =>
+                Auth::id(),
 
-            'action' => 'Self Report Updated',
+            'action' =>
+                'Self Report Updated',
 
-            'from_status' => $oldStatus,
+            'from_status' =>
+                $oldStatus,
 
-            'to_status' => 'submitted',
+            'to_status' =>
+                'submitted',
 
             'metadata' => [
 
@@ -466,10 +731,10 @@ public function update(Request $request, GoalSelfReport $goalSelfReport)
                 'new_rating' =>
                     $rating,
 
+                'evidence_type' =>
+                    $evidenceType,
             ],
-
         ]);
-
     });
 
     /*

@@ -184,7 +184,7 @@
         {{-- ========================================================= --}}
 
         <form method="POST"
-            action="{{ route('goal-self-reports.update', $goalSelfReport) }}">
+            action="{{ route('goal-self-reports.update', $goalSelfReport) }}" enctype="multipart/form-data">
 
             @csrf
             @method('PUT')
@@ -730,6 +730,253 @@
                 </div>
 
             </div>
+
+            {{-- ========================================================= --}}
+{{-- STEP 3 : SUPPORTING EVIDENCE --}}
+{{-- ========================================================= --}}
+
+<div class="section-card mb-4">
+
+    <div class="section-header">
+
+        <div class="section-title">
+
+            <div class="section-number">
+                3
+            </div>
+
+            <div>
+
+                <h5 class="mb-1 fw-bold">
+                    Supporting Evidence
+                </h5>
+
+                <small>
+                    Update or replace the evidence supporting your reported progress.
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="section-body">
+
+        <div class="form-group">
+
+            <label class="form-label fw-semibold">
+
+                <i class="fas fa-paperclip form-label-icon"></i>
+
+                Evidence Type
+
+                <span class="text-muted fw-normal">
+                    — if any
+                </span>
+
+            </label>
+
+            @php
+                $selectedEvidenceType = old(
+                    'evidence_type',
+                    $goalSelfReport->evidence_type
+                );
+            @endphp
+
+            <select
+                name="evidence_type"
+                id="evidence_type"
+                class="form-select @error('evidence_type') is-invalid @enderror">
+
+                <option value="">
+                    No Evidence
+                </option>
+
+                <option value="video"
+                    {{ $selectedEvidenceType === 'video' ? 'selected' : '' }}>
+                    Video
+                </option>
+
+                <option value="attachment"
+                    {{ $selectedEvidenceType === 'attachment' ? 'selected' : '' }}>
+                    Attachment
+                </option>
+
+            </select>
+
+            @error('evidence_type')
+
+                <div class="invalid-feedback d-block">
+                    {{ $message }}
+                </div>
+
+            @else
+
+                <small class="form-hint">
+
+                    <i class="fas fa-info-circle me-1"></i>
+
+                    Select the type of evidence you want to provide.
+
+                </small>
+
+            @enderror
+
+        </div>
+
+        {{-- ===================================================== --}}
+        {{-- VIDEO EVIDENCE --}}
+        {{-- ===================================================== --}}
+
+        <div
+            class="form-group mt-4"
+            id="video_evidence_field"
+            style="display: none;">
+
+            <label class="form-label fw-semibold">
+
+                <i class="fas fa-video form-label-icon"></i>
+
+                Video URL
+
+                <span class="text-danger">*</span>
+
+            </label>
+
+            <input
+                type="url"
+                name="evidence_video_url"
+                id="evidence_video_url"
+                value="{{ old(
+                    'evidence_video_url',
+                    $goalSelfReport->evidence_video_url
+                ) }}"
+                class="form-control @error('evidence_video_url') is-invalid @enderror"
+                placeholder="https://example.com/video">
+
+            @error('evidence_video_url')
+
+                <div class="invalid-feedback d-block">
+                    {{ $message }}
+                </div>
+
+            @else
+
+                <small class="form-hint">
+
+                    <i class="fas fa-link me-1"></i>
+
+                    Provide the URL of the supporting video.
+
+                </small>
+
+            @enderror
+
+        </div>
+
+        {{-- ===================================================== --}}
+        {{-- ATTACHMENT EVIDENCE --}}
+        {{-- ===================================================== --}}
+
+        <div
+            class="form-group mt-4"
+            id="attachment_evidence_field"
+            style="display: none;">
+
+            <label class="form-label fw-semibold">
+
+                <i class="fas fa-file-upload form-label-icon"></i>
+
+                Upload Evidence
+
+                <span class="text-danger">*</span>
+
+            </label>
+
+            <input
+                type="file"
+                name="evidence_attachment"
+                id="evidence_attachment"
+                class="form-control @error('evidence_attachment') is-invalid @enderror"
+                accept=".doc,.docx,.pdf,.png,.jpg,.jpeg">
+
+            @error('evidence_attachment')
+
+                <div class="invalid-feedback d-block">
+                    {{ $message }}
+                </div>
+
+            @else
+
+                <small class="form-hint">
+
+                    <i class="fas fa-info-circle me-1"></i>
+
+                    Supported formats: DOC, DOCX, PDF, PNG, JPG and JPEG.
+                    Maximum size: 10 MB.
+
+                </small>
+
+            @enderror
+
+            {{-- EXISTING ATTACHMENT --}}
+
+            @if(
+                $goalSelfReport->evidence_type === 'attachment' &&
+                $goalSelfReport->evidence_attachment
+            )
+
+                <div class="existing-evidence mt-3">
+
+                    <div class="existing-evidence-icon">
+
+                        <i class="fas fa-file-alt"></i>
+
+                    </div>
+
+                    <div class="existing-evidence-info">
+
+                        <strong>
+                            Existing Evidence
+                        </strong>
+
+                        <small>
+                            An attachment is already uploaded.
+                        </small>
+
+                    </div>
+
+                    <a
+                        href="{{ asset('storage/' . $goalSelfReport->evidence_attachment) }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-sm btn-outline-primary">
+
+                        <i class="fas fa-external-link-alt me-1"></i>
+
+                        View
+
+                    </a>
+
+                </div>
+
+                <small class="text-muted d-block mt-2">
+
+                    <i class="fas fa-info-circle me-1"></i>
+
+                    You can leave the file empty to keep the existing attachment,
+                    or upload a new file to replace it.
+
+                </small>
+
+            @endif
+
+        </div>
+
+    </div>
+
+</div>
 
             {{-- ========================================================= --}}
             {{-- SELF RATING --}}
@@ -1596,6 +1843,64 @@
 
 }
 
+/* ========================================================= */
+/* EVIDENCE */
+/* ========================================================= */
+
+.existing-evidence {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    background: #f4f8fc;
+
+    border: 1px solid #d8e4ef;
+
+    border-radius: 12px;
+
+    padding: 12px 14px;
+}
+
+.existing-evidence-icon {
+    width: 40px;
+    height: 40px;
+
+    min-width: 40px;
+
+    border-radius: 10px;
+
+    background: #e8f1fa;
+
+    color: var(--pms-primary);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 16px;
+}
+
+.existing-evidence-info {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.existing-evidence-info strong {
+    color: var(--pms-text);
+
+    font-size: 13px;
+}
+
+.existing-evidence-info small {
+    color: var(--pms-muted);
+
+    font-size: 11px;
+}
+
     </style>
 
     {{-- ========================================================= --}}
@@ -1605,6 +1910,131 @@
     <script>
 
         document.addEventListener('DOMContentLoaded', function () {
+
+            /*
+|--------------------------------------------------------------------------
+| EVIDENCE
+|--------------------------------------------------------------------------
+*/
+
+const evidenceType =
+    document.getElementById('evidence_type');
+
+const videoField =
+    document.getElementById('video_evidence_field');
+
+const attachmentField =
+    document.getElementById('attachment_evidence_field');
+
+const videoUrl =
+    document.getElementById('evidence_video_url');
+
+const attachment =
+    document.getElementById('evidence_attachment');
+
+function toggleEvidenceFields() {
+
+    if (
+        !evidenceType ||
+        !videoField ||
+        !attachmentField
+    ) {
+        return;
+    }
+
+    const type = evidenceType.value;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Hide fields
+    |--------------------------------------------------------------------------
+    */
+
+    videoField.style.display = 'none';
+
+    attachmentField.style.display = 'none';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reset required
+    |--------------------------------------------------------------------------
+    */
+
+    if (videoUrl) {
+        videoUrl.required = false;
+    }
+
+    /*
+    IMPORTANT:
+    On edit page attachment is NOT required because
+    an existing attachment may already exist.
+    */
+
+    if (attachment) {
+        attachment.required = false;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | VIDEO
+    |--------------------------------------------------------------------------
+    */
+
+    if (type === 'video') {
+
+        videoField.style.display = 'block';
+
+        if (videoUrl) {
+            videoUrl.required = true;
+        }
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ATTACHMENT
+    |--------------------------------------------------------------------------
+    */
+
+    else if (type === 'attachment') {
+
+        attachmentField.style.display = 'block';
+
+        /*
+        Do NOT make file required here.
+        Existing attachment can be retained.
+        */
+
+        if (attachment) {
+            attachment.required = false;
+        }
+
+    }
+
+}
+
+/*
+|--------------------------------------------------------------------------
+| Evidence Change
+|--------------------------------------------------------------------------
+*/
+
+if (evidenceType) {
+
+    evidenceType.addEventListener(
+        'change',
+        toggleEvidenceFields
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Show currently selected evidence
+    |--------------------------------------------------------------------------
+    */
+
+    toggleEvidenceFields();
+
+}
 
             const ratingDisplay =
                 document.getElementById('rating_display');

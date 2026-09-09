@@ -415,9 +415,9 @@
             Goal Evidence
         </div>
 
-        @if($report->goal->evidence_type)
+        @if($report->evidence_type)
             <span class="evidence-type-badge">
-                {{ ucfirst($report->goal->evidence_type) }}
+                {{ ucfirst($report->evidence_type) }}
             </span>
         @endif
 
@@ -425,8 +425,8 @@
 
     <div class="evidence-body">
 
-        @if($report->goal->evidence_type === 'video' &&
-            $report->goal->evidence_video_url)
+        @if($report->evidence_type === 'video' &&
+            $report->evidence_video_url)
 
             <div class="evidence-content">
 
@@ -441,7 +441,7 @@
                     </span>
 
                     <a
-                        href="{{ $report->goal->evidence_video_url }}"
+                        href="{{ $report->evidence_video_url }}"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="evidence-link"
@@ -457,8 +457,8 @@
 
             </div>
 
-        @elseif($report->goal->evidence_type === 'attachment' &&
-                $report->goal->evidence_attachment)
+        @elseif($report->evidence_type === 'attachment' &&
+                $report->evidence_attachment)
 
             <div class="evidence-content">
 
@@ -473,7 +473,7 @@
                     </span>
 
                     <a
-                        href="{{ asset('storage/' . $report->goal->evidence_attachment) }}"
+                        href="{{ asset('storage/' . $report->evidence_attachment) }}"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="evidence-link"
