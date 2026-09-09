@@ -326,7 +326,10 @@
                         const rowData = forms.map((form, i) => {
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
-                                : 'N/A';       
+                                : 'N/A';   
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );        
                               
                             let statusText = 'N/A';
                             if (form.status == 1) {
@@ -361,7 +364,7 @@
                             if (parseInt(form.status) === 1) {
                                 editButton = `
                                     <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
-                                        data-form='${JSON.stringify(form)}'>
+                                        data-form="${formData}">
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
                                 deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
@@ -497,7 +500,11 @@ $(document).on('click', '.remove-past', function () {
 
 // ================= Edit Load =================
 $(document).on('click','.edit-form-btn',function(){
-    const form = $(this).data('form');
+    //const form = $(this).data('form');
+     const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
     $('#record_id').val(form.id);
     // Fill basic fields
     $('#conference_name').val(form.conference_name);

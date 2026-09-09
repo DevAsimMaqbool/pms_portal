@@ -18,7 +18,7 @@
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
-                @if(auth()->user()->hasRole(['Dean']))
+                @if(in_array(getRoleName(activeRole()), ['Dean']))
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs mb-3" role="tablist">
                         <li class="nav-item">
@@ -29,7 +29,7 @@
                         </li>
                     </ul>
                 @endif
-                @if(auth()->user()->hasRole(['HOD']))
+                @if(in_array(getRoleName(activeRole()), ['HOD']))
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs mb-3" role="tablist">
                         <li class="nav-item">
@@ -43,7 +43,7 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    @if(auth()->user()->hasRole(['HOD', 'Teacher', 'Assistant Professor','Associate Professor','Professor']))
+                    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor','Associate Professor','Professor']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                         <div class="d-flex justify-content-between">
                                <div>
@@ -153,9 +153,9 @@
                             </form>
                         </div>
                     @endif
-                    @if(auth()->user()->hasRole(['HOD']))
+                     @if(in_array(getRoleName(activeRole()), ['HOD']))
                         <div class="tab-pane fade" id="form3" role="tabpanel">
-                            @if(auth()->user()->hasRole(['HOD']))
+                             @if(in_array(getRoleName(activeRole()), ['HOD']))
                                <div class="d-flex">
                                     <select id="bulkAction" class="form-select w-auto me-2">
                                         <option value="">-- Select Action --</option>
@@ -180,7 +180,7 @@
                             </table>
                         </div>
                     @endif
-                    @if(auth()->user()->hasRole(['Dean']))
+                     @if(in_array(getRoleName(activeRole()), ['Dean']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                             
                             <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
@@ -199,7 +199,7 @@
                             
                         </div>
                     @endif
-                     @if(auth()->user()->hasRole(['ORIC']))
+                      @if(in_array(getRoleName(activeRole()), ['ORIC']))
                         <div>
                             <div class="d-flex">
                                 <select id="bulkAction" class="form-select w-auto me-2">
@@ -286,7 +286,7 @@
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD', 'Teacher','Assistant Professor','Associate Professor','Professor']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Associate Professor','Professor']))
         <script>
             $(document).ready(function () {
                   function fetchTarget(indicatorId) {
@@ -393,7 +393,7 @@
             });
         </script>
     @endif
-    @if(auth()->user()->hasRole(['HOD']))
+    @if(in_array(getRoleName(activeRole()), ['HOD']))
         <script>
             function fetchIndicatorForms3() {
                 $.ajax({
@@ -411,6 +411,9 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );      
                             let statusText = 'N/A';
                             if (form.status == 1) statusText = 'Unverified';
                             else if (form.status == 2) statusText = 'Verified';    
@@ -423,14 +426,14 @@
                                 form.project_name || 'N/A',
                                 `<span class="badge bg-label-primary">${statusText}</span>`,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
                         if (!$.fn.DataTable.isDataTable('#complaintTable3')) {
                             $('#complaintTable3').DataTable({
                                 data: rowData,
-                                scrollX: true,
+                                scrollX: false,
                                 scrollCollapse: true,
                                 autoWidth: false,
                                 columns: [
@@ -486,7 +489,11 @@
                 // Extra fields for Form 2
                
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                    //const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
@@ -646,7 +653,8 @@
             });
         </script>
     @endif
-    @if(auth()->user()->hasRole(['Dean']))
+    @if(in_array(getRoleName(activeRole()), ['Dean']))
+    
         <script>
             function fetchIndicatorForms3() {
                 $.ajax({
@@ -664,6 +672,9 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );      
                              
 
                             // Pass entire form as JSON in button's data attribute
@@ -672,7 +683,7 @@
                                 form.creator ? form.creator.name : 'N/A',
                                 form.project_name || 'N/A',
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -706,7 +717,11 @@
                 // Extra fields for Form 2
                
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                    //const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
@@ -806,7 +821,7 @@
             });
         </script>
     @endif
-    @if(auth()->user()->hasRole(['ORIC']))
+    @if(in_array(getRoleName(activeRole()), ['ORIC']))
         <script>
             function fetchIndicatorForms3() {
                 $.ajax({
@@ -824,6 +839,9 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );      
                             let statusText = 'N/A';
                             if (form.status == 2) statusText = 'Unapprove';
                             else if (form.status == 3) statusText = 'Approve';     
@@ -836,7 +854,7 @@
                                 form.project_name || 'N/A',
                                 `<span class="badge bg-label-primary">${statusText}</span>`,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -899,7 +917,11 @@
                 // Extra fields for Form 2
                
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                    //const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 

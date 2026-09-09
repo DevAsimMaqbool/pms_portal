@@ -19,7 +19,7 @@
         <div class="card">
              <h5 class="card-header">Products Delivered to Industry</h5>
             <div class="card-datatable table-responsive card-body">
-                    @if(auth()->user()->hasRole(['HOD', 'Teacher','Assistant Professor','Professor']))
+                     @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Associate Professor','Professor']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="intellectualTable" class="table table-bordered">
@@ -219,7 +219,7 @@
     </script>
 @endpush
 @push('script')
-    @if(auth()->user()->hasRole(['HOD', 'Teacher','Assistant Professor','Professor']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Associate Professor','Professor']))
         <script>
             function fetchCommercialForms() {
                 $.ajax({
@@ -237,11 +237,14 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );     
                             let editButton = '';
                             if (parseInt(form.status) === 1) {
                                 editButton = `
                                     <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
-                                        data-form='${JSON.stringify(form)}'>
+                                        data-form="${formData}">
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
                             }       
@@ -357,7 +360,11 @@
                 $('#viewFormModal').modal('show');
             });
             $(document).on('click', '.edit-form-btn', function () {
-        const form = $(this).data('form');
+        //const form = $(this).data('form');
+        const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
         $('#researchForm1 #record_id').val(form.id);
         $('#researchForm1 #project_name').val(form.project_name);
         $('#researchForm1 #other_disciplines').val(form.other_disciplines);

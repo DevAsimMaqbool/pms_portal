@@ -15,7 +15,7 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-    @if(in_array(getRoleName(activeRole()), ['Dean','HOD','ORIC','Professor','Assistant Professor','Associate Professor']))
+    @if(in_array(getRoleName(activeRole()), ['Dean','HOD','ORIC','Teacher','Professor','Assistant Professor','Associate Professor']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
@@ -45,7 +45,7 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     {{-- ================= FORM 1 ================= --}}
-                    @if(in_array(getRoleName(activeRole()), ['HOD','Associate Professor','Assistant Professor','Professor']))
+                    @if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Associate Professor','Assistant Professor','Professor']))
                     
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
                     <div class="d-flex justify-content-between">
@@ -293,7 +293,7 @@
     </script>
 @endpush
 @push('script')
- @if(in_array(getRoleName(activeRole()), ['HOD','Associate Professor','Assistant Professor','Professor']))
+ @if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Associate Professor','Assistant Professor','Professor']))
 <script>
 $(document).ready(function () {
 
@@ -423,7 +423,10 @@ $(document).ready(function () {
                                 }
                                
                             } 
-                            else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>';   
+                            else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>'; 
+                             const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );  
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -434,7 +437,7 @@ $(document).ready(function () {
                                 form.contracting_industry || 'N/A',
                                 statusText,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -497,7 +500,11 @@ $(document).ready(function () {
             $(document).ready(function () {
                 fetchIndicatorForms3();
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                    //const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
@@ -770,7 +777,9 @@ $(document).ready(function () {
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
-                                
+                             const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -779,7 +788,7 @@ $(document).ready(function () {
                                 form.project_name || 'N/A',
                                 form.contracting_industry || 'N/A',
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -812,7 +821,11 @@ $(document).ready(function () {
             $(document).ready(function () {
                 fetchIndicatorForms3();
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                    //const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
@@ -982,6 +995,9 @@ $(document).ready(function () {
                                
                             } 
                             else if (form.status == 3) statusText = '<span class="badge bg-label-success">Verified</span>';    
+                             const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -992,7 +1008,7 @@ $(document).ready(function () {
                                 form.contracting_industry || 'N/A',
                                 statusText,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -1055,7 +1071,11 @@ $(document).ready(function () {
             $(document).ready(function () {
                 fetchIndicatorForms3();
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                    //const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
