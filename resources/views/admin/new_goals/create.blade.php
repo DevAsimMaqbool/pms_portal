@@ -2,415 +2,159 @@
 
 @section('content')
 
-    <div class="container-fluid py-4">
+<div class="container-fluid py-4">
 
-        {{-- ========================================================= --}}
-        {{-- PAGE HEADER --}}
-        {{-- ========================================================= --}}
+{{-- ========================================================= --}}
+{{-- PAGE HEADER --}}
+{{-- ========================================================= --}}
 
-        <div class="goal-page-header mb-4">
+<div class="goal-page-header mb-4">
 
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
-                <div class="d-flex align-items-center gap-3">
+<div class="d-flex align-items-center gap-3">
 
-                    <div class="header-icon">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
+<div class="header-icon">
+<i class="fas fa-bullseye"></i>
+</div>
 
-                    <div>
+<div>
 
-                        <h3 class="fw-bold mb-1">
-                            Create New Goal
-                        </h3>
+<h3 class="fw-bold mb-1">
+Create New Goal
+</h3>
 
-                        <p class="mb-0 text-muted">
-                            Define your goal, alignment, objectives, target and deadline.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <a href="{{ route('newgoals.index') }}"
-                    class="btn btn-light border shadow-sm px-4">
-
-                    <i class="fas fa-arrow-left me-2"></i>
-
-                    Back to Goals
-
-                </a>
-
-            </div>
-
-        </div>
-
-        {{-- ========================================================= --}}
-        {{-- VALIDATION --}}
-        {{-- ========================================================= --}}
-
-        @if($errors->any())
-
-            <div class="alert alert-danger border-0 shadow-sm mb-4">
-
-                <div class="d-flex align-items-center mb-2">
-
-                    <div class="alert-icon">
-
-                        <i class="fas fa-exclamation-triangle"></i>
-
-                    </div>
-
-                    <strong>
-                        Please correct the following errors:
-                    </strong>
-
-                </div>
-
-                <ul class="mb-0 ps-4">
-
-                    @foreach($errors->all() as $error)
-
-                        <li>
-                            {{ $error }}
-                        </li>
-
-                    @endforeach
-
-                </ul>
-
-            </div>
-
-        @endif
-
-        <form method="POST"
-            action="{{ route('newgoals.store') }}" enctype="multipart/form-data">
-
-            @csrf
-
-            <div class="row g-4">
-
-                {{-- ================================================= --}}
-                {{-- LEFT SIDE --}}
-                {{-- ================================================= --}}
-
-                <div class="col-lg-8">
-
-                    <div class="section-card">
-
-                        {{-- Section Header --}}
-
-                        <div class="section-header">
-
-                            <div class="section-title">
-
-                                <div class="section-number">
-                                    1
-                                </div>
-
-                                <div>
-
-                                    <h5 class="mb-1 fw-bold">
-                                        Goal Details
-                                    </h5>
-
-                                    <small>
-                                        Define what you want to achieve and how it aligns with the strategic direction.
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        {{-- Section Body --}}
-
-                        <div class="section-body">
-
-                            {{-- ===================================== --}}
-                            {{-- GOAL --}}
-                            {{-- ===================================== --}}
-
-                            <div class="form-group mb-4">
-
-                                <label class="form-label fw-semibold">
-
-                                    <i class="fas fa-bullseye form-label-icon"></i>
-
-                                    Goal
-
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
-                                <textarea
-                                    name="goal"
-                                    rows="5"
-                                    maxlength="5000"
-                                    class="form-control goal-textarea @error('goal') is-invalid @enderror"
-                                    placeholder="Clearly describe what you want to achieve..."
-                                    required>{{ old('goal') }}</textarea>
-
-                                <div class="d-flex justify-content-between mt-2">
-
-                                    @error('goal')
-
-                                        <div class="invalid-feedback d-block">
-                                            {{ $message }}
-                                        </div>
-
-                                    @else
-
-                                        <small class="text-muted">
-                                            Clearly define the expected outcome of your goal.
-                                        </small>
-
-                                    @enderror
-
-                                    <small class="text-muted">
-                                        Maximum 5,000 characters
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                            {{-- ===================================== --}}
-                            {{-- S2R --}}
-                            {{-- ===================================== --}}
-
-                            <div class="form-group mb-4">
-
-                                <label class="form-label fw-semibold">
-
-                                    <i class="fas fa-link form-label-icon"></i>
-
-                                    S2R Driver / Enabler Alignment
-
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
-                                <select
-                                    name="s2r_driver_enabler_alignment"
-                                    class="form-select form-select-lg @error('s2r_driver_enabler_alignment') is-invalid @enderror"
-                                    required>
-
-                                    <option value="">
-                                        Select S2R  / Enabler
-                                    </option>
-
-                                    @foreach($drivers as $driver)
-
-                                        <option
-                                            value="{{ $driver->id }}"
-                                            {{ old('s2r_driver_enabler_alignment') == $driver->id ? 'selected' : '' }}>
-
-                                            {{ $driver->driver_name }}
-
-                                        </option>
-
-                                    @endforeach
-
-                                </select>
-
-                                @error('s2r_driver_enabler_alignment')
-
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-
-                                @else
-
-                                    <small class="form-hint">
-
-                                        <i class="fas fa-info-circle me-1"></i>
-
-                                        Select the S2R driver or enabler that this goal supports.
-
-                                    </small>
-
-                                @enderror
-
-                            </div>
-
-                            {{-- ===================================== --}}
-                            {{-- OBJECTIVES --}}
-                            {{-- ===================================== --}}
-
-                            <div class="form-group mb-4">
-
-                                <label class="form-label fw-semibold">
-
-                                    <i class="fas fa-list-check form-label-icon"></i>
-
-                                    Objective(s)
-
-                                    <span class="text-muted fw-normal">
-                                        — if any
-                                    </span>
-
-                                </label>
-
-                                <textarea
-                                    name="objectives"
-                                    rows="4"
-                                    maxlength="5000"
-                                    class="form-control @error('objectives') is-invalid @enderror"
-                                    placeholder="Describe the objective(s), if applicable...">{{ old('objectives') }}</textarea>
-
-                                @error('objectives')
-
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-
-                                @else
-
-                                    <small class="form-hint">
-
-                                        <i class="fas fa-lightbulb me-1"></i>
-
-                                        Add specific objectives that will help you achieve this goal.
-
-                                    </small>
-
-                                @enderror
-
-                            </div>
-
-                            {{-- ===================================== --}}
-                            {{-- TARGET --}}
-                            {{-- ===================================== --}}
-
-                            <div class="form-group">
-
-                                <label class="form-label fw-semibold">
-
-                                    <i class="fas fa-flag-checkered form-label-icon"></i>
-
-                                    Target
-
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
-                                <textarea
-                                    name="target"
-                                    rows="4"
-                                    maxlength="5000"
-                                    class="form-control @error('target') is-invalid @enderror"
-                                    placeholder="Define the measurable target..."
-                                    required>{{ old('target') }}</textarea>
-
-                                @error('target')
-
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-
-                                @else
-
-                                    <small class="form-hint">
-
-                                        <i class="fas fa-chart-line me-1"></i>
-
-                                        Define a clear and measurable result that you want to achieve.
-
-                                    </small>
-
-                                @enderror
-
-                            </div>
-
-                            {{-- ===================================== --}}
-{{-- EVIDENCE --}}
-{{-- ===================================== --}}
-
-<div class="form-group mt-4">
-
-    <label class="form-label fw-semibold">
-
-        <i class="fas fa-paperclip form-label-icon"></i>
-
-        Evidence
-
-        <span class="text-muted fw-normal">
-            — if any
-        </span>
-
-    </label>
-
-    <select
-        name="evidence_type"
-        id="evidence_type"
-        class="form-select @error('evidence_type') is-invalid @enderror">
-
-        <option value="">
-            Select Evidence Type
-        </option>
-
-        <option value="video"
-            {{ old('evidence_type') == 'video' ? 'selected' : '' }}>
-            Video
-        </option>
-
-        <option value="attachment"
-            {{ old('evidence_type') == 'attachment' ? 'selected' : '' }}>
-            Attachment
-        </option>
-
-    </select>
-
-    @error('evidence_type')
-
-        <div class="invalid-feedback">
-            {{ $message }}
-        </div>
-
-    @else
-
-        <small class="form-hint">
-
-            <i class="fas fa-info-circle me-1"></i>
-
-            Add supporting evidence for this goal, if applicable.
-
-        </small>
-
-    @enderror
+<p class="mb-0 text-muted">
+Define your goal, alignment, objectives, target and deadline.
+</p>
 
 </div>
 
+</div>
+
+<a href="{{ route('newgoals.index') }}"
+class="btn btn-light border shadow-sm px-4">
+
+<i class="fas fa-arrow-left me-2"></i>
+
+Back to Goals
+
+</a>
+
+</div>
+
+</div>
+
+{{-- ========================================================= --}}
+{{-- VALIDATION --}}
+{{-- ========================================================= --}}
+
+@if($errors->any())
+
+<div class="alert alert-danger border-0 shadow-sm mb-4">
+
+<div class="d-flex align-items-center mb-2">
+
+<div class="alert-icon">
+
+<i class="fas fa-exclamation-triangle"></i>
+
+</div>
+
+<strong>
+Please correct the following errors:
+</strong>
+
+</div>
+
+<ul class="mb-0 ps-4">
+
+@foreach($errors->all() as $error)
+
+<li>
+{{ $error }}
+</li>
+
+@endforeach
+
+</ul>
+
+</div>
+
+@endif
+
+<form method="POST"
+action="{{ route('newgoals.store') }}" enctype="multipart/form-data">
+
+@csrf
+
+<div class="row g-4">
+
+{{-- ================================================= --}}
+{{-- LEFT SIDE --}}
+{{-- ================================================= --}}
+
+<div class="col-lg-8">
+
+<div class="section-card">
+
+{{-- Section Header --}}
+
+<div class="section-header">
+
+<div class="section-title">
+
+<div class="section-number">
+    1
+</div>
+
+<div>
+
+    <h5 class="mb-1 fw-bold">
+        Goal Details
+    </h5>
+
+    <small>
+        Define what you want to achieve and how it aligns with the strategic direction.
+    </small>
+
+</div>
+
+</div>
+
+</div>
+
+{{-- Section Body --}}
+
+<div class="section-body">
+
 {{-- ===================================== --}}
-{{-- VIDEO URL --}}
+{{-- GOAL --}}
 {{-- ===================================== --}}
 
-<div
-    class="form-group mt-4"
-    id="video_evidence_field"
-    style="display: none;">
+<div class="form-group mb-4">
 
-    <label class="form-label fw-semibold">
+<label class="form-label fw-semibold">
 
-        <i class="fas fa-video form-label-icon"></i>
+    <i class="fas fa-bullseye form-label-icon"></i>
 
-        Video URL
+    Goal
 
-        <span class="text-danger">*</span>
+    <span class="text-danger">*</span>
 
-    </label>
+</label>
 
-    <input
-        type="url"
-        name="evidence_video_url"
-        id="evidence_video_url"
-        value="{{ old('evidence_video_url') }}"
-        class="form-control @error('evidence_video_url') is-invalid @enderror"
-        placeholder="https://example.com/video">
+<textarea
+    name="goal"
+    rows="5"
+    maxlength="5000"
+    class="form-control goal-textarea @error('goal') is-invalid @enderror"
+    placeholder="Clearly describe what you want to achieve..."
+    required>{{ old('goal') }}</textarea>
 
-    @error('evidence_video_url')
+<div class="d-flex justify-content-between mt-2">
+
+    @error('goal')
 
         <div class="invalid-feedback d-block">
             {{ $message }}
@@ -418,1024 +162,1079 @@
 
     @else
 
-        <small class="form-hint">
-
-            <i class="fas fa-link me-1"></i>
-
-            Provide the URL of the supporting video.
-
+        <small class="text-muted">
+            Clearly define the expected outcome of your goal.
         </small>
 
     @enderror
 
-</div>
-
-{{-- ===================================== --}}
-{{-- ATTACHMENT --}}
-{{-- ===================================== --}}
-
-<div
-    class="form-group mt-4"
-    id="attachment_evidence_field"
-    style="display: none;">
-
-    <label class="form-label fw-semibold">
-
-        <i class="fas fa-file-upload form-label-icon"></i>
-
-        Upload Evidence
-
-        <span class="text-danger">*</span>
-
-    </label>
-
-    <input
-        type="file"
-        name="evidence_attachment"
-        id="evidence_attachment"
-        class="form-control @error('evidence_attachment') is-invalid @enderror"
-        accept=".doc,.docx,.pdf,.png,.jpg,.jpeg">
-
-    @error('evidence_attachment')
-
-        <div class="invalid-feedback d-block">
-            {{ $message }}
-        </div>
-
-    @else
-
-        <small class="form-hint">
-
-            <i class="fas fa-info-circle me-1"></i>
-
-            Supported formats: DOC, DOCX, PDF, PNG, JPG and JPEG.
-
-        </small>
-
-    @enderror
+    <small class="text-muted">
+        Maximum 5,000 characters
+    </small>
 
 </div>
 
-                        </div>
+</div>
 
-                    </div>
+{{-- ===================================== --}}
+{{-- S2R --}}
+{{-- ===================================== --}}
 
-                </div>
+<div class="form-group mb-4">
 
-                {{-- ================================================= --}}
-                {{-- RIGHT SIDE --}}
-                {{-- ================================================= --}}
+<label class="form-label fw-semibold">
 
-                <div class="col-lg-4">
+    <i class="fas fa-link form-label-icon"></i>
 
-                    {{-- ============================================= --}}
-                    {{-- TIMELINE --}}
-                    {{-- ============================================= --}}
+    S2R Driver / Enabler Alignment
 
-                    <div class="section-card mb-4">
+    <span class="text-danger">*</span>
 
-                        <div class="section-header">
+</label>
 
-                            <div class="section-title">
+<select
+    name="s2r_driver_enabler_alignment"
+    class="form-select form-select-lg @error('s2r_driver_enabler_alignment') is-invalid @enderror"
+    required>
 
-                                <div class="section-number">
-                                    2
-                                </div>
+    <option value="">
+        Select S2R  / Enabler
+    </option>
 
-                                <div>
+    @foreach($drivers as $driver)
 
-                                    <h5 class="mb-1 fw-bold">
-                                        Goal Timeline
-                                    </h5>
+        <option
+            value="{{ $driver->id }}"
+            {{ old('s2r_driver_enabler_alignment') == $driver->id ? 'selected' : '' }}>
 
-                                    <small>
-                                        Set the expected completion date.
-                                    </small>
+            {{ $driver->driver_name }}
 
-                                </div>
+        </option>
 
-                            </div>
+    @endforeach
 
-                        </div>
+</select>
 
-                        <div class="section-body">
+@error('s2r_driver_enabler_alignment')
 
-                            <label class="form-label fw-semibold">
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
 
-                                <i class="far fa-calendar-alt form-label-icon"></i>
+@else
 
-                                Deadline
+    <small class="form-hint">
 
-                                <span class="text-danger">*</span>
+        <i class="fas fa-info-circle me-1"></i>
 
-                            </label>
+        Select the S2R driver or enabler that this goal supports.
 
-                            <div class="deadline-input-wrapper">
+    </small>
 
-                                <i class="far fa-calendar-alt"></i>
+@enderror
 
-                                <input
-                                    type="date"
-                                    name="deadline"
-                                    value="{{ old('deadline') }}"
-                                    
-                                    class="form-control deadline-input @error('deadline') is-invalid @enderror"
-                                    required>
+</div>
 
-                            </div>
+{{-- ===================================== --}}
+{{-- OBJECTIVES --}}
+{{-- ===================================== --}}
 
-                            @error('deadline')
+<div class="form-group mb-4">
 
-                                <div class="invalid-feedback d-block">
-                                    {{ $message }}
-                                </div>
+<label class="form-label fw-semibold">
 
-                            @else
+    <i class="fas fa-list-check form-label-icon"></i>
 
-                                <div class="form-hint mt-2">
+    Objective(s)
 
-                                    <i class="fas fa-info-circle me-1"></i>
+    <span class="text-muted fw-normal">
+        — if any
+    </span>
 
-                                    Select the date by which the target should be achieved.
+</label>
 
-                                </div>
+<textarea
+    name="objectives"
+    rows="4"
+    maxlength="5000"
+    class="form-control @error('objectives') is-invalid @enderror"
+    placeholder="Describe the objective(s), if applicable...">{{ old('objectives') }}</textarea>
 
-                            @enderror
+@error('objectives')
 
-                            {{-- Deadline Visual --}}
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
 
-                            <div class="timeline-info mt-4">
+@else
 
-                                <div class="timeline-icon">
+    <small class="form-hint">
 
-                                    <i class="fas fa-calendar-check"></i>
+        <i class="fas fa-lightbulb me-1"></i>
 
-                                </div>
+        Add specific objectives that will help you achieve this goal.
 
-                                <div>
+    </small>
 
-                                    <strong>
-                                        Target Completion
-                                    </strong>
+@enderror
 
-                                    <small>
-                                        Make sure your deadline is realistic and achievable.
-                                    </small>
+</div>
 
-                                </div>
+{{-- ===================================== --}}
+{{-- TARGET --}}
+{{-- ===================================== --}}
 
-                            </div>
+<div class="form-group">
 
-                        </div>
+<label class="form-label fw-semibold">
 
-                    </div>
+    <i class="fas fa-flag-checkered form-label-icon"></i>
 
-                    {{-- ============================================= --}}
-                    {{-- REVIEW PROCESS --}}
-                    {{-- ============================================= --}}
+    Target
 
-                    <div class="process-card">
+    <span class="text-danger">*</span>
 
-                        <div class="process-header">
+</label>
 
-                            <div class="process-icon">
+<textarea
+    name="target"
+    rows="4"
+    maxlength="5000"
+    class="form-control @error('target') is-invalid @enderror"
+    placeholder="Define the measurable target..."
+    required>{{ old('target') }}</textarea>
 
-                                <i class="fas fa-route"></i>
+@error('target')
 
-                            </div>
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
 
-                            <div>
+@else
 
-                                <h5 class="mb-1 fw-bold">
-                                    Goal Review Process
-                                </h5>
+    <small class="form-hint">
 
-                                <small>
-                                    What happens after creating your goal?
-                                </small>
+        <i class="fas fa-chart-line me-1"></i>
 
-                            </div>
+        Define a clear and measurable result that you want to achieve.
 
-                        </div>
+    </small>
 
-                        <div class="process-body">
+@enderror
 
-                            {{-- Step 1 --}}
-
-                            <div class="process-step">
-
-                                <div class="process-step-icon completed">
-                                    <i class="fas fa-check"></i>
-                                </div>
-
-                                <div>
-
-                                    <strong>
-                                        Create your goal
-                                    </strong>
-
-                                    <small>
-                                        Define your goal and expected target.
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                            {{-- Connector --}}
-
-                            <div class="process-line"></div>
-
-                            {{-- Step 2 --}}
-
-                            <div class="process-step">
-
-                                <div class="process-step-icon">
-                                    <i class="fas fa-file-pen"></i>
-                                </div>
-
-                                <div>
-
-                                    <strong>
-                                        Submit self report
-                                    </strong>
-
-                                    <small>
-                                        Record your progress against the goal.
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                            <div class="process-line"></div>
-
-                            {{-- Step 3 --}}
-
-                            <div class="process-step">
-
-                                <div class="process-step-icon">
-                                    <i class="fas fa-user-check"></i>
-                                </div>
-
-                                <div>
-
-                                    <strong>
-                                        Line Manager review
-                                    </strong>
-
-                                    <small>
-                                        Your manager reviews the submission.
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                            <div class="process-line"></div>
-
-                            {{-- Step 4 --}}
-
-                            <div class="process-step">
-
-                                <div class="process-step-icon">
-                                    <i class="fas fa-user-tie"></i>
-                                </div>
-
-                                <div>
-
-                                    <strong>
-                                        HR final review
-                                    </strong>
-
-                                    <small>
-                                        Final review and approval by HR.
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            {{-- ========================================================= --}}
-            {{-- ACTIONS --}}
-            {{-- ========================================================= --}}
-
-            <div class="form-actions mt-4">
-
-                <a href="{{ route('newgoals.index') }}"
-                    class="btn btn-light border px-4">
-
-                    <i class="fas fa-times me-2"></i>
-
-                    Cancel
-
-                </a>
-
-                <button
-                    type="submit"
-                    class="btn btn-primary px-4 shadow-sm">
-
-                    <i class="fas fa-save me-2"></i>
-
-                    Save Goal
-
-                </button>
-
-            </div>
-
-        </form>
+</div>
 
     </div>
 
-    {{-- ============================================================= --}}
-    {{-- STYLES --}}
-    {{-- ============================================================= --}}
+</div>
 
-    <style>
+</div>
 
-        :root {
+{{-- ================================================= --}}
+{{-- RIGHT SIDE --}}
+{{-- ================================================= --}}
 
-            --pms-primary: #1f4e79;
-            --pms-primary-dark: #173a5c;
-            --pms-light: #f4f7fb;
-            --pms-border: #e4e9f0;
-            --pms-text: #253449;
-            --pms-muted: #718096;
+<div class="col-lg-4">
 
-        }
+{{-- ============================================= --}}
+{{-- TIMELINE --}}
+{{-- ============================================= --}}
 
-        /* =========================================================
-           PAGE HEADER
-        ========================================================= */
+<div class="section-card mb-4">
 
-        .goal-page-header {
+<div class="section-header">
 
-            background: linear-gradient(
-                135deg,
-                #ffffff 0%,
-                #f5f8fc 100%
-            );
+<div class="section-title">
 
-            border: 1px solid var(--pms-border);
+<div class="section-number">
+    2
+</div>
 
-            border-radius: 16px;
+<div>
 
-            padding: 22px 26px;
+    <h5 class="mb-1 fw-bold">
+        Goal Timeline
+    </h5>
 
-            box-shadow:
-                0 4px 18px rgba(31, 78, 121, 0.06);
+    <small>
+        Set the expected completion date.
+    </small>
 
-        }
+</div>
 
-        .header-icon {
+</div>
 
-            width: 48px;
-            height: 48px;
+</div>
 
-            border-radius: 12px;
+<div class="section-body">
 
-            background: var(--pms-primary);
+<label class="form-label fw-semibold">
 
-            color: #fff;
+<i class="far fa-calendar-alt form-label-icon"></i>
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+Deadline
 
-            font-size: 20px;
+<span class="text-danger">*</span>
 
-            box-shadow:
-                0 6px 14px rgba(31, 78, 121, 0.22);
+</label>
 
-        }
+<div class="deadline-input-wrapper">
 
-        /* =========================================================
-           SECTION CARD
-        ========================================================= */
+<i class="far fa-calendar-alt"></i>
 
-        .section-card {
+<input
+    type="date"
+    name="deadline"
+    value="{{ old('deadline') }}"
+    
+    class="form-control deadline-input @error('deadline') is-invalid @enderror"
+    required>
 
-            background: #fff;
+</div>
 
-            border: 1px solid var(--pms-border);
+@error('deadline')
 
-            border-radius: 16px;
+<div class="invalid-feedback d-block">
+    {{ $message }}
+</div>
 
-            overflow: hidden;
+@else
 
-            box-shadow:
-                0 4px 18px rgba(31, 78, 121, 0.06);
+<div class="form-hint mt-2">
 
-            transition:
-                box-shadow .2s ease,
-                transform .2s ease;
+    <i class="fas fa-info-circle me-1"></i>
 
-        }
+    Select the date by which the target should be achieved.
 
-        .section-card:hover {
+</div>
 
-            box-shadow:
-                0 7px 24px rgba(31, 78, 121, 0.09);
+@enderror
 
-        }
+{{-- Deadline Visual --}}
 
-        /* =========================================================
-           SECTION HEADER
-        ========================================================= */
+<div class="timeline-info mt-4">
 
-        .section-header {
+<div class="timeline-icon">
 
-            background: #f8fafc;
+    <i class="fas fa-calendar-check"></i>
 
-            border-bottom: 1px solid var(--pms-border);
+</div>
 
-            padding: 18px 22px;
+<div>
 
-        }
+    <strong>
+        Target Completion
+    </strong>
 
-        .section-title {
+    <small>
+        Make sure your deadline is realistic and achievable.
+    </small>
 
-            display: flex;
+</div>
 
-            align-items: center;
+</div>
 
-            gap: 14px;
+</div>
 
-        }
+</div>
 
-        .section-title small {
+{{-- ============================================= --}}
+{{-- REVIEW PROCESS --}}
+{{-- ============================================= --}}
 
-            color: var(--pms-muted);
+<div class="process-card">
 
-        }
+<div class="process-header">
 
-        .section-number {
+<div class="process-icon">
 
-            width: 38px;
-            height: 38px;
+<i class="fas fa-route"></i>
 
-            min-width: 38px;
+</div>
 
-            border-radius: 10px;
+<div>
 
-            background: var(--pms-primary);
+<h5 class="mb-1 fw-bold">
+    Goal Review Process
+</h5>
 
-            color: #fff;
+<small>
+    What happens after creating your goal?
+</small>
 
-            display: flex;
+</div>
 
-            align-items: center;
+</div>
 
-            justify-content: center;
+<div class="process-body">
 
-            font-weight: 700;
+{{-- Step 1 --}}
 
-            box-shadow:
-                0 5px 12px rgba(31, 78, 121, .16);
+<div class="process-step">
 
-        }
+<div class="process-step-icon completed">
+    <i class="fas fa-check"></i>
+</div>
 
-        /* =========================================================
-           SECTION BODY
-        ========================================================= */
+<div>
 
-        .section-body {
+    <strong>
+        Create your goal
+    </strong>
 
-            padding: 25px;
+    <small>
+        Define your goal and expected target.
+    </small>
 
-        }
+</div>
 
-        /* =========================================================
-           FORM
-        ========================================================= */
+</div>
 
-        .form-label {
+{{-- Connector --}}
 
-            color: var(--pms-text);
+<div class="process-line"></div>
 
-            margin-bottom: 9px;
+{{-- Step 2 --}}
 
-        }
+<div class="process-step">
 
-        .form-label-icon {
+<div class="process-step-icon">
+    <i class="fas fa-file-pen"></i>
+</div>
 
-            color: var(--pms-primary);
+<div>
 
-            width: 20px;
+    <strong>
+        Submit self report
+    </strong>
 
-            margin-right: 5px;
+    <small>
+        Record your progress against the goal.
+    </small>
 
-        }
+</div>
 
-        .form-control,
-        .form-select {
+</div>
 
-            border-color: #dbe2ea;
+<div class="process-line"></div>
 
-            border-radius: 10px;
+{{-- Step 3 --}}
 
-            padding: 11px 14px;
+<div class="process-step">
 
-            color: var(--pms-text);
+<div class="process-step-icon">
+    <i class="fas fa-user-check"></i>
+</div>
 
-            transition:
-                border-color .2s ease,
-                box-shadow .2s ease;
+<div>
 
-        }
+    <strong>
+        Line Manager review
+    </strong>
 
-        .form-select-lg {
+    <small>
+        Your manager reviews the submission.
+    </small>
 
-            padding-top: 12px;
+</div>
 
-            padding-bottom: 12px;
+</div>
 
-        }
+<div class="process-line"></div>
 
-        .form-control:focus,
-        .form-select:focus {
+{{-- Step 4 --}}
 
-            border-color: var(--pms-primary);
+<div class="process-step">
 
-            box-shadow:
-                0 0 0 0.2rem rgba(31, 78, 121, 0.10);
+<div class="process-step-icon">
+    <i class="fas fa-user-tie"></i>
+</div>
 
-        }
+<div>
 
-        textarea.form-control {
+    <strong>
+        HR final review
+    </strong>
 
-            resize: vertical;
+    <small>
+        Final review and approval by HR.
+    </small>
 
-            line-height: 1.6;
+</div>
 
-        }
+</div>
 
-        .goal-textarea {
+</div>
 
-            min-height: 145px;
+</div>
 
-        }
+</div>
 
-        .form-hint {
+</div>
 
-            display: block;
+{{-- ========================================================= --}}
+{{-- ACTIONS --}}
+{{-- ========================================================= --}}
 
-            color: var(--pms-muted);
+<div class="form-actions mt-4">
 
-            font-size: 12px;
+<a href="{{ route('newgoals.index') }}"
+class="btn btn-light border px-4">
 
-            margin-top: 7px;
+<i class="fas fa-times me-2"></i>
 
-        }
+Cancel
 
-        .form-hint i {
+</a>
 
-            color: var(--pms-primary);
+<button
+type="submit"
+class="btn btn-primary px-4 shadow-sm">
 
-        }
+<i class="fas fa-save me-2"></i>
 
-        .invalid-feedback {
+Save Goal
 
-            font-size: 12px;
+</button>
 
-        }
+</div>
 
-        /* =========================================================
-           DEADLINE
-        ========================================================= */
+</form>
 
-        .deadline-input-wrapper {
+</div>
 
-            position: relative;
+{{-- ============================================================= --}}
+{{-- STYLES --}}
+{{-- ============================================================= --}}
 
-        }
+<style>
 
-        .deadline-input-wrapper > i {
+:root {
 
-            position: absolute;
+--pms-primary: #1f4e79;
+--pms-primary-dark: #173a5c;
+--pms-light: #f4f7fb;
+--pms-border: #e4e9f0;
+--pms-text: #253449;
+--pms-muted: #718096;
 
-            left: 14px;
+}
 
-            top: 50%;
+/* =========================================================
+PAGE HEADER
+========================================================= */
 
-            transform: translateY(-50%);
+.goal-page-header {
 
-            color: var(--pms-primary);
+background: linear-gradient(
+135deg,
+#ffffff 0%,
+#f5f8fc 100%
+);
 
-            z-index: 2;
+border: 1px solid var(--pms-border);
 
-            pointer-events: none;
+border-radius: 16px;
 
-        }
+padding: 22px 26px;
 
-        .deadline-input {
+box-shadow:
+0 4px 18px rgba(31, 78, 121, 0.06);
 
-            padding-left: 40px;
+}
 
-        }
+.header-icon {
 
-        .timeline-info {
+width: 48px;
+height: 48px;
 
-            display: flex;
+border-radius: 12px;
 
-            align-items: center;
+background: var(--pms-primary);
 
-            gap: 12px;
+color: #fff;
 
-            background: #f4f7fb;
+display: flex;
+align-items: center;
+justify-content: center;
 
-            border: 1px solid #e0e8f1;
+font-size: 20px;
 
-            border-radius: 12px;
+box-shadow:
+0 6px 14px rgba(31, 78, 121, 0.22);
 
-            padding: 14px;
+}
 
-        }
+/* =========================================================
+SECTION CARD
+========================================================= */
 
-        .timeline-icon {
+.section-card {
 
-            width: 40px;
-            height: 40px;
+background: #fff;
 
-            min-width: 40px;
+border: 1px solid var(--pms-border);
 
-            border-radius: 10px;
+border-radius: 16px;
 
-            background: #e8f1fa;
+overflow: hidden;
 
-            color: var(--pms-primary);
+box-shadow:
+0 4px 18px rgba(31, 78, 121, 0.06);
 
-            display: flex;
+transition:
+box-shadow .2s ease,
+transform .2s ease;
 
-            align-items: center;
+}
 
-            justify-content: center;
+.section-card:hover {
 
-        }
+box-shadow:
+0 7px 24px rgba(31, 78, 121, 0.09);
 
-        .timeline-info strong {
+}
 
-            display: block;
+/* =========================================================
+SECTION HEADER
+========================================================= */
 
-            color: var(--pms-text);
+.section-header {
 
-            font-size: 13px;
+background: #f8fafc;
 
-        }
+border-bottom: 1px solid var(--pms-border);
 
-        .timeline-info small {
+padding: 18px 22px;
 
-            display: block;
+}
 
-            color: var(--pms-muted);
+.section-title {
 
-            margin-top: 3px;
+display: flex;
 
-            line-height: 1.4;
+align-items: center;
 
-        }
+gap: 14px;
 
-        /* =========================================================
-           PROCESS CARD
-        ========================================================= */
+}
 
-        .process-card {
+.section-title small {
 
-            background: #fff;
+color: var(--pms-muted);
 
-            border: 1px solid var(--pms-border);
+}
 
-            border-radius: 16px;
+.section-number {
 
-            overflow: hidden;
+width: 38px;
+height: 38px;
 
-            box-shadow:
-                0 4px 18px rgba(31, 78, 121, 0.06);
+min-width: 38px;
 
-        }
+border-radius: 10px;
 
-        .process-header {
+background: var(--pms-primary);
 
-            padding: 20px;
+color: #fff;
 
-            background: linear-gradient(
-                135deg,
-                var(--pms-primary),
-                var(--pms-primary-dark)
-            );
+display: flex;
 
-            color: #fff;
+align-items: center;
 
-            display: flex;
+justify-content: center;
 
-            align-items: center;
+font-weight: 700;
 
-            gap: 13px;
+box-shadow:
+0 5px 12px rgba(31, 78, 121, .16);
 
-        }
+}
 
-        .process-header small {
+/* =========================================================
+SECTION BODY
+========================================================= */
 
-            display: block;
+.section-body {
 
-            opacity: .8;
+padding: 25px;
 
-            margin-top: 3px;
+}
 
-        }
+/* =========================================================
+FORM
+========================================================= */
 
-        .process-icon {
+.form-label {
 
-            width: 44px;
-            height: 44px;
+color: var(--pms-text);
 
-            min-width: 44px;
+margin-bottom: 9px;
 
-            border-radius: 11px;
+}
 
-            background: rgba(255,255,255,.12);
+.form-label-icon {
 
-            border: 1px solid rgba(255,255,255,.18);
+color: var(--pms-primary);
 
-            display: flex;
+width: 20px;
 
-            align-items: center;
+margin-right: 5px;
 
-            justify-content: center;
+}
 
-            font-size: 18px;
+.form-control,
+.form-select {
 
-        }
+border-color: #dbe2ea;
 
-        .process-body {
+border-radius: 10px;
 
-            padding: 20px;
+padding: 11px 14px;
 
-        }
+color: var(--pms-text);
 
-        .process-step {
+transition:
+border-color .2s ease,
+box-shadow .2s ease;
 
-            display: flex;
+}
 
-            align-items: flex-start;
+.form-select-lg {
 
-            gap: 12px;
+padding-top: 12px;
 
-        }
+padding-bottom: 12px;
 
-        .process-step-icon {
+}
 
-            width: 34px;
-            height: 34px;
+.form-control:focus,
+.form-select:focus {
 
-            min-width: 34px;
+border-color: var(--pms-primary);
 
-            border-radius: 9px;
+box-shadow:
+0 0 0 0.2rem rgba(31, 78, 121, 0.10);
 
-            background: #edf3f8;
+}
 
-            color: var(--pms-primary);
+textarea.form-control {
 
-            display: flex;
+resize: vertical;
 
-            align-items: center;
+line-height: 1.6;
 
-            justify-content: center;
+}
 
-            font-size: 13px;
+.goal-textarea {
 
-        }
+min-height: 145px;
 
-        .process-step-icon.completed {
+}
 
-            background: #e7f6ed;
+.form-hint {
 
-            color: #198754;
+display: block;
 
-        }
+color: var(--pms-muted);
 
-        .process-step strong {
+font-size: 12px;
 
-            display: block;
+margin-top: 7px;
 
-            color: var(--pms-text);
+}
 
-            font-size: 13px;
+.form-hint i {
 
-            line-height: 1.4;
+color: var(--pms-primary);
 
-        }
+}
 
-        .process-step small {
+.invalid-feedback {
 
-            display: block;
+font-size: 12px;
 
-            color: var(--pms-muted);
+}
 
-            font-size: 11px;
+/* =========================================================
+DEADLINE
+========================================================= */
 
-            line-height: 1.5;
+.deadline-input-wrapper {
 
-            margin-top: 3px;
+position: relative;
 
-        }
+}
 
-        .process-line {
+.deadline-input-wrapper > i {
 
-            height: 20px;
+position: absolute;
 
-            width: 1px;
+left: 14px;
 
-            background: #dce4ec;
+top: 50%;
 
-            margin-left: 16px;
+transform: translateY(-50%);
 
-            margin-top: 3px;
+color: var(--pms-primary);
 
-            margin-bottom: 3px;
+z-index: 2;
 
-        }
+pointer-events: none;
 
-        /* =========================================================
-           ALERT
-        ========================================================= */
+}
 
-        .alert-icon {
+.deadline-input {
 
-            width: 32px;
-            height: 32px;
+padding-left: 40px;
 
-            min-width: 32px;
+}
 
-            border-radius: 8px;
+.timeline-info {
 
-            background: rgba(220, 53, 69, .10);
+display: flex;
 
-            color: #dc3545;
+align-items: center;
 
-            display: flex;
+gap: 12px;
 
-            align-items: center;
+background: #f4f7fb;
 
-            justify-content: center;
+border: 1px solid #e0e8f1;
 
-            margin-right: 10px;
+border-radius: 12px;
 
-        }
+padding: 14px;
 
-        /* =========================================================
-           ACTIONS
-        ========================================================= */
+}
 
-        .form-actions {
+.timeline-icon {
 
-            display: flex;
+width: 40px;
+height: 40px;
 
-            justify-content: flex-end;
+min-width: 40px;
 
-            gap: 10px;
+border-radius: 10px;
 
-            padding: 18px 0;
+background: #e8f1fa;
 
-            border-top: 1px solid var(--pms-border);
+color: var(--pms-primary);
 
-        }
+display: flex;
 
-        .btn-primary {
+align-items: center;
 
-            background-color: var(--pms-primary);
+justify-content: center;
 
-            border-color: var(--pms-primary);
+}
 
-        }
+.timeline-info strong {
 
-        .btn-primary:hover {
+display: block;
 
-            background-color: var(--pms-primary-dark);
+color: var(--pms-text);
 
-            border-color: var(--pms-primary-dark);
+font-size: 13px;
 
-        }
+}
 
-        /* =========================================================
-           RESPONSIVE
-        ========================================================= */
+.timeline-info small {
 
-        @media (max-width: 991px) {
+display: block;
 
-            .process-card {
+color: var(--pms-muted);
 
-                margin-top: 0;
+margin-top: 3px;
 
-            }
+line-height: 1.4;
 
-        }
+}
 
-        @media (max-width: 768px) {
+/* =========================================================
+PROCESS CARD
+========================================================= */
 
-            .container-fluid {
+.process-card {
 
-                padding-left: 15px;
+background: #fff;
 
-                padding-right: 15px;
+border: 1px solid var(--pms-border);
 
-            }
+border-radius: 16px;
 
-            .goal-page-header {
+overflow: hidden;
 
-                padding: 18px;
+box-shadow:
+0 4px 18px rgba(31, 78, 121, 0.06);
 
-            }
+}
 
-            .goal-page-header .btn {
+.process-header {
 
-                width: 100%;
+padding: 20px;
 
-            }
+background: linear-gradient(
+135deg,
+var(--pms-primary),
+var(--pms-primary-dark)
+);
 
-            .section-body {
+color: #fff;
 
-                padding: 18px;
+display: flex;
 
-            }
+align-items: center;
 
-            .section-header {
+gap: 13px;
 
-                padding: 16px 18px;
+}
 
-            }
+.process-header small {
 
-            .form-actions {
+display: block;
 
-                flex-direction: column-reverse;
+opacity: .8;
 
-            }
+margin-top: 3px;
 
-            .form-actions .btn {
+}
 
-                width: 100%;
+.process-icon {
 
-            }
+width: 44px;
+height: 44px;
 
-        }
+min-width: 44px;
 
-    </style>
+border-radius: 11px;
+
+background: rgba(255,255,255,.12);
+
+border: 1px solid rgba(255,255,255,.18);
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+font-size: 18px;
+
+}
+
+.process-body {
+
+padding: 20px;
+
+}
+
+.process-step {
+
+display: flex;
+
+align-items: flex-start;
+
+gap: 12px;
+
+}
+
+.process-step-icon {
+
+width: 34px;
+height: 34px;
+
+min-width: 34px;
+
+border-radius: 9px;
+
+background: #edf3f8;
+
+color: var(--pms-primary);
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+font-size: 13px;
+
+}
+
+.process-step-icon.completed {
+
+background: #e7f6ed;
+
+color: #198754;
+
+}
+
+.process-step strong {
+
+display: block;
+
+color: var(--pms-text);
+
+font-size: 13px;
+
+line-height: 1.4;
+
+}
+
+.process-step small {
+
+display: block;
+
+color: var(--pms-muted);
+
+font-size: 11px;
+
+line-height: 1.5;
+
+margin-top: 3px;
+
+}
+
+.process-line {
+
+height: 20px;
+
+width: 1px;
+
+background: #dce4ec;
+
+margin-left: 16px;
+
+margin-top: 3px;
+
+margin-bottom: 3px;
+
+}
+
+/* =========================================================
+ALERT
+========================================================= */
+
+.alert-icon {
+
+width: 32px;
+height: 32px;
+
+min-width: 32px;
+
+border-radius: 8px;
+
+background: rgba(220, 53, 69, .10);
+
+color: #dc3545;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+margin-right: 10px;
+
+}
+
+/* =========================================================
+ACTIONS
+========================================================= */
+
+.form-actions {
+
+display: flex;
+
+justify-content: flex-end;
+
+gap: 10px;
+
+padding: 18px 0;
+
+border-top: 1px solid var(--pms-border);
+
+}
+
+.btn-primary {
+
+background-color: var(--pms-primary);
+
+border-color: var(--pms-primary);
+
+}
+
+.btn-primary:hover {
+
+background-color: var(--pms-primary-dark);
+
+border-color: var(--pms-primary-dark);
+
+}
+
+/* =========================================================
+RESPONSIVE
+========================================================= */
+
+@media (max-width: 991px) {
+
+.process-card {
+
+margin-top: 0;
+
+}
+
+}
+
+@media (max-width: 768px) {
+
+.container-fluid {
+
+padding-left: 15px;
+
+padding-right: 15px;
+
+}
+
+.goal-page-header {
+
+padding: 18px;
+
+}
+
+.goal-page-header .btn {
+
+width: 100%;
+
+}
+
+.section-body {
+
+padding: 18px;
+
+}
+
+.section-header {
+
+padding: 16px 18px;
+
+}
+
+.form-actions {
+
+flex-direction: column-reverse;
+
+}
+
+.form-actions .btn {
+
+width: 100%;
+
+}
+
+}
+
+</style>
 
 @endsection
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-
-        const evidenceType = document.getElementById('evidence_type');
-
-        const videoField = document.getElementById('video_evidence_field');
-        const attachmentField = document.getElementById('attachment_evidence_field');
-
-        const videoUrl = document.getElementById('evidence_video_url');
-        const attachment = document.getElementById('evidence_attachment');
-
-        function toggleEvidenceFields() {
-
-            const type = evidenceType.value;
-
-            // Hide both
-            videoField.style.display = 'none';
-            attachmentField.style.display = 'none';
-
-            videoUrl.required = false;
-            attachment.required = false;
-
-            // Video
-            if (type === 'video') {
-
-                videoField.style.display = 'block';
-
-                videoUrl.required = true;
-
-            }
-
-            // Attachment
-            if (type === 'attachment') {
-
-                attachmentField.style.display = 'block';
-
-                attachment.required = true;
-
-            }
-
-        }
-
-        evidenceType.addEventListener('change', toggleEvidenceFields);
-
-        // Handle old value after validation error
-        toggleEvidenceFields();
-
-    });
-</script>
