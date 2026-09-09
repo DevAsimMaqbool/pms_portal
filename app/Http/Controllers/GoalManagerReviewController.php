@@ -549,19 +549,17 @@ class GoalManagerReviewController extends Controller
 }
 
 public function lineManagerForm()
-    {
-        $authUser = Auth::user();
+{
+    $authUser = Auth::user();
 
-        // Upward: get manager if exists
-        $manager = $authUser->manager ? collect([$authUser->manager]) : collect();
+    // Only subordinates
+    $facultyMembers = $authUser->subordinates ?? collect();
 
-        // Downward: get subordinates if any
-        $subordinates = $authUser->subordinates ?? collect();
-
-        // Combine both into a single collection
-        $facultyMembers = $manager->merge($subordinates);
-        return view('admin.form.goal_feedback.line_manager_feedback_in_goal', compact('facultyMembers'));
-    }
+    return view(
+        'admin.form.goal_feedback.line_manager_feedback_in_goal',
+        compact('facultyMembers')
+    );
+}
 
     public function managerEmployees()
 {
