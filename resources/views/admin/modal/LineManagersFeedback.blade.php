@@ -81,6 +81,7 @@
                                         @if(
                                                 in_array(getRoleName(activeRole()), [
                                                     'Teacher',
+                                                    'Demonstrator',
                                                     'Assistant Professor',
                                                     'Associate Professor',
                                                     'Professor',
