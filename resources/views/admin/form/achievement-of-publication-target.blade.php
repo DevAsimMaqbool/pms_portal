@@ -736,8 +736,12 @@
                         title: 'Updated',
                         text: res.message || 'Status updated successfully!'
                     });
+                      const table = $('#complaintTable3').DataTable();
 
-                    fetchIndicatorForms3();
+                    // Save current page
+                    const currentPage = table.page();
+
+                    fetchIndicatorForms3(currentPage);
                 },
                 error: function (xhr) {
                     Swal.fire({
@@ -1294,7 +1298,9 @@
                             let statusText = 'N/A';
                             if (form.status == 1) {
                                 if (form.reject_status == 1) {
-                                    statusText = '<span class="badge bg-label-danger">Reject</span>';
+                                    statusText = '<span class="badge bg-label-danger">Hod Reject</span>';
+                                }else if (form.reject_status == 2) {
+                                    statusText = '<span class="badge bg-label-danger">ORIC Reject this application.</span>';
                                 } else {
                                     statusText = '<span class="badge bg-label-warning">Unverified</span>';
                                 }
@@ -1529,7 +1535,7 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Journal Name</th><td>${form.journal_name}</td></tr>`);
                     }
                     if (form.link_of_publications) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Link</th><td><div><a style="word-break: break-word;overflow-wrap: anywhere;"  href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></div></td></tr>`);
                     }
                     if (form.rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
@@ -1842,7 +1848,7 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Journal Name</th><td>${form.journal_name}</td></tr>`);
                     }
                     if (form.link_of_publications) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Link</th><td><div><a style="word-break: break-word;overflow-wrap: anywhere;"  href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></div></td></tr>`);
                     }
                     if (form.rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);
@@ -2102,7 +2108,7 @@
                     }
                 });
             }
-            function fetchIndicatorForms3() {
+            function fetchIndicatorForms3(page = 0) {
 
     if ($.fn.DataTable.isDataTable('#complaintTable3')) {
         $('#complaintTable3').DataTable().destroy();
@@ -2445,6 +2451,13 @@
         |--------------------------------------------------------------------------
         */
         drawCallback: function () {
+            const api = this.api();
+
+            // Restore page only once
+            if (page !== 0) {
+                api.page(page).draw('page');
+                page = 0;
+            }
 
             const tooltipTriggerList =
                 [].slice.call(
@@ -2599,7 +2612,7 @@
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Journal Name</th><td>${form.journal_name}</td></tr>`);
                     }
                     if (form.link_of_publications) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Link</th><td><a href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Link</th><td><div><a style="word-break: break-word;overflow-wrap: anywhere;" href="${form.link_of_publications}" target="_blank">${form.link_of_publications}</a></div></td></tr>`);
                     }
                     if (form.rank) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Rank</th><td>${form.rank}</td></tr>`);

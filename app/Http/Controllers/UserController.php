@@ -197,7 +197,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $id,
             'employee_code' => 'required|string|max:50',
-            'department' => 'required|string|max:100',
+            'department' => '',
             'role' => 'required|array',
             'role.*' => 'exists:roles,name',
             //'level' => 'required|string|max:50',
