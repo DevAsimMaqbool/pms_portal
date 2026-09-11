@@ -39,6 +39,7 @@ use App\Models\AdmissionTargetAchieved;
 use App\Models\AlumniSatisfactionRate;
 use App\Models\DropoutRate;
 use App\Models\FacultyPursuingSkill;
+use App\Models\FacultyRetention;
 use App\Models\Recovery;
 use App\Models\ResearchTaskAssignedHodDean;
 use App\Models\Term;
@@ -7378,12 +7379,13 @@ if (!function_exists('departmentDropoutRateOfHOD')) {
 
 if (!function_exists('departmentPromotersPercentageOfHOD')) {
 
-    function departmentPromotersPercentageOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
+    function departmentPromotersPercentageOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId,$currentYear = null)
     {
         $departmentId = auth()->user()->department_id;
 
         // 1️⃣ Get FULL records (for grouping)
         $records = \App\Models\FacultyNetPromoterScore::with(['faculty', 'department', 'program'])
+            ->where('year_id', $currentYear)
             ->where('department_id', $departmentId)
             ->where('indicator_id', $indicatorId)
             ->whereNotNull('promoters_percentage')
@@ -7526,7 +7528,7 @@ if (!function_exists('departmentAlumniSatisfactionRateOfHOD')) {
 
 if (!function_exists('departmentEventFeedbackAverage')) {
 
-    function departmentEventFeedbackAverage($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
+    function departmentEventFeedbackAverage($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId,$currentYear = null)
     {
         $departmentId = auth()->user()->department_id;
 
@@ -7551,6 +7553,7 @@ if (!function_exists('departmentEventFeedbackAverage')) {
         // 2️⃣ Get all feedbacks
         $records = LineManagerEventFeedback::whereIn('employee_id', $employeeIds)
             ->whereNotNull('rating')
+            ->where('year_id', $currentYear)
             ->get();
 
         // 3️⃣ Department average (SAVE THIS)
@@ -7615,7 +7618,7 @@ if (!function_exists('calculateLineManagerFeedbackAverage')) {
      * @param int $indicatorId
      * @return array
      */
-    function calculateLineManagerFeedbackAverage($authUser, $activeRoleId, $indicatorId)
+    function calculateLineManagerFeedbackAverage($authUser, $activeRoleId, $indicatorId,$currentYear = null)
     {
         // Determine which employees to include
         if ($indicatorId == 177) {
@@ -7643,6 +7646,7 @@ if (!function_exists('calculateLineManagerFeedbackAverage')) {
 
         // Fetch all relevant feedback records
         $feedbacks = LineManagerFeedback::whereIn('employee_id', $employeeIds)
+        ->where('year_id', $currentYear)
             ->get([
                 'responsibility_accountability_1',
                 'responsibility_accountability_2',
@@ -9220,16 +9224,34 @@ if (!function_exists('lineManagerRatingOnEventsForPL')) {
 
 if (!function_exists('retentionRateofFaculty')) {
 
-    function retentionRateofFaculty($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId)
+    function retentionRateofFaculty($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId,$currentYear = null)
     {
         $facultyId = auth()->user()->faculty;
 
-        $stats = DB::table('faculty_retentions_remarks')
-            ->where('faculty_id', $facultyId)
-            ->selectRaw('AVG(no_retention_rate) as satisfaction')
-            ->first();
+        // $stats = DB::table('faculty_retentions_remarks')
+        //     ->where('faculty_id', $facultyId)
+        //     ->selectRaw('AVG(no_retention_rate) as satisfaction')
+        //     ->first();
 
-        $avg = $stats->satisfaction ?? 0;
+
+        $retention = FacultyRetention::where(
+                'indicator_id',
+                $indicatorId
+            )
+            ->where('year_id', $currentYear)
+            ->whereHas('remarks', function ($query) use ($facultyId) {
+                $query->where('faculty_id', $facultyId);
+            })
+            ->with(['remarks' => function ($query) use ($facultyId) {
+                $query->where('faculty_id', $facultyId);
+            }])
+            ->latest('id')
+            ->first();    
+
+        // Calculate average from faculty's remarks
+        $avg = $retention
+            ? ($retention->remarks->avg('no_retention_rate') ?? 0)
+            : 0;
 
         $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
 
