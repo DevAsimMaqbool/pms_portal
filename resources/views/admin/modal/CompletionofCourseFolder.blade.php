@@ -246,7 +246,63 @@
 @endif
 
 @if(in_array(getRoleName(activeRole()), ['HOD']))
-    <!--  Payment Methods modal -->
+   <!--  Payment Methods modal -->
+   @php
+   $courseFolderData = CompletionOfCourseFolderForHOD($activeRoleId, 120);
+
+    $springProgramData =
+        $courseFolderData['springProgramData']
+        ?? collect();
+
+    $fallProgramData =
+        $courseFolderData['fallProgramData']
+        ?? collect();
+
+    $springScore =
+        $courseFolderData['springScore']
+        ?? 0;
+
+    $fallScore =
+        $courseFolderData['fallScore']
+        ?? 0;
+
+    $avgPercentage =
+        $courseFolderData['avgPercentage']
+        ?? 0;
+
+    $weightedScore =
+        $courseFolderData['weightedScore']
+        ?? 0;
+
+    $weightage =
+        $courseFolderData['weightage']
+        ?? 0;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Years
+    |--------------------------------------------------------------------------
+    */
+
+    $springYear =
+        $springProgramData
+            ->flatMap(function ($program) {
+                return $program['records'];
+            })
+            ->first()?->term?->start_year
+            ?? date('Y');
+
+
+    $fallYear =
+        $fallProgramData
+            ->flatMap(function ($program) {
+                return $program['records'];
+            })
+            ->first()?->term?->start_year
+            ?? date('Y');
+
+@endphp
     <div class="modal fade" id="CompletionofCourseFolder" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
@@ -260,123 +316,734 @@
                         </div> Completion of Course Folder
                     </h3>
                     <!-- Tabs -->
-                    <div class="nav-align-top nav-tabs-shadow">
-                        <div class="d-flex justify-content-center mb-3 mt-3">
-                            <ul class="nav custom-tabs" role="tablist">
-                                <li class="nav-item">
-                                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                        data-bs-target="#completion-course-spring" aria-controls="completion-course-spring"
-                                        aria-selected="true">
-                                        🌸 Spring 2026
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                        data-bs-target="#completion-course-fall" aria-controls="completion-course-fall"
-                                        aria-selected="false">
-                                        🍂 Fall 2025
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
+                        @php
 
-                        <!-- Tab Content -->
-                        <div class="tab-content">
-                            <!-- Spring -->
-                            <div class="tab-pane fade show" id="completion-course-fall" role="tabpanel">
-                                <div class="table-responsive text-nowrap">
-                                    @php
-                                        $CompletionofCourseFolders = CompletionOfCourseFolderForHOD($activeRoleId, 120);
-                                    @endphp
+    $springData = $courseFolderData['springData'] ?? collect();
 
-                                    @foreach ($CompletionofCourseFolders as $programId => $records)
+    $fallData = $courseFolderData['fallData'] ?? collect();
 
-                                        @php
-                                            $avg = $records->avg('completion_of_course_folder');
-                                            $weightedScore = $records->avg('weighted_score');
-                                        @endphp
+    $springScore = $courseFolderData['springScore'] ?? 0;
 
-                                        <table class="table table-hover align-middle custom-table">
+    $fallScore = $courseFolderData['fallScore'] ?? 0;
 
-                                            <thead class="table-primary">
-                                                <tr>
-                                                    <th>Sr#</th>
-                                                    <th>Class</th>
-                                                    <th>Career</th>
-                                                    <th>Status</th>
-                                                    <th>Score</th>
-                                                    <th>Rating</th>
-                                                </tr>
-                                            </thead>
+    $avgPercentage = $courseFolderData['avgPercentage'] ?? 0;
 
-                                            <tbody>
-                                                @forelse ($records as $row)
+    $weightedScore = $courseFolderData['weightedScore'] ?? 0;
 
-                                                    @php
-                                                        $class = optional($row->facultyClass);
-                                                    @endphp
+    $weightage = $courseFolderData['weightage'] ?? 0;
 
-                                                    <tr>
-                                                        <td>{{ $loop->iteration }}</td>
 
-                                                        <td>{{ $class->code ?? 'N/A' }}</td>
+    /*
+    |--------------------------------------------------------------------------
+    | Spring Year
+    |--------------------------------------------------------------------------
+    */
 
-                                                        <td>{{ $class->career_code ?? 'N/A' }}</td>
+    $springYear = $springData->first()?->term?->start_year
+        ?? date('Y');
 
-                                                        <td>
-                                                            <span class="badge"
-                                                                style="background-color: {{ getRatingMeta($row->completion_score)->color }}">
-                                                                {{ $row->status_folder ?? 'N/A' }}
-                                                            </span>
-                                                        </td>
 
-                                                        <td>
-                                                            <span class="badge"
-                                                                style="background-color: {{ getRatingMeta($row->completion_score)->color }}">
-                                                                {{ $row->completion_score ?? 0 }}%
-                                                            </span>
-                                                        </td>
+    /*
+    |--------------------------------------------------------------------------
+    | Fall Year
+    |--------------------------------------------------------------------------
+    */
 
-                                                        <td>
-                                                            <span class="badge"
-                                                                style="background-color: {{ getRatingMeta($row->completion_score)->color }}">
-                                                                {{ getRatingMeta($row->completion_score)->rating }}
-                                                            </span>
-                                                        </td>
-                                                    </tr>
+    $fallYear = $fallData->first()?->term?->start_year
+        ?? date('Y');
 
-                                                @empty
-                                                    <tr>
-                                                        <td colspan="6" class="text-center text-danger">
-                                                            No Data Found
-                                                        </td>
-                                                    </tr>
-                                                @endforelse
-                                            </tbody>
+@endphp
 
-                                            <tfoot>
-                                                <tr class="table-primary">
-                                                    <th colspan="4" class="text-end">Program Avg</th>
-                                                    <th style="font-size: 0.960rem;">
-                                                        <b class="badge"
-                                                            style="background-color: {{ getRatingMeta($weightedScore)->color }}">
-                                                            {{ number_format($weightedScore, 1) }}%
-                                                        </b>
-                                                    </th>
-                                                    <th style="font-size: 0.960rem;"><b class="badge"
-                                                            style="background-color: {{ getRatingMeta($weightedScore)->color }}">
-                                                            {{ getRatingMeta($weightedScore)->rating }}
-                                                        </b></th>
-                                                </tr>
-                                            </tfoot>
 
-                                        </table>
+<!-- =========================================================
+     TABS
+========================================================== -->
 
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<div class="nav-align-top nav-tabs-shadow">
+
+    <!-- =====================================================
+         TAB HEADERS
+    ====================================================== -->
+
+    <div class="d-flex justify-content-center mb-3 mt-3">
+
+        <ul class="nav custom-tabs" role="tablist">
+
+            <!-- Spring -->
+
+            <li class="nav-item">
+
+                <button type="button"
+                    class="nav-link active"
+                    role="tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#completion-course-spring"
+                    aria-controls="completion-course-spring"
+                    aria-selected="true">
+
+                    🌸 Spring {{ $springYear }}
+
+                </button>
+
+            </li>
+
+
+            <!-- Fall -->
+
+            <li class="nav-item">
+
+                <button type="button"
+                    class="nav-link"
+                    role="tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#completion-course-fall"
+                    aria-controls="completion-course-fall"
+                    aria-selected="false">
+
+                    🍂 Fall {{ $fallYear }}
+
+                </button>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- =====================================================
+         TAB CONTENT
+    ====================================================== -->
+
+    <div class="tab-content">
+
+
+        <!-- =================================================
+             SPRING
+        ================================================== -->
+
+        <div class="tab-pane fade show active"
+            id="completion-course-spring"
+            role="tabpanel">
+
+            <div class="table-responsive text-nowrap">
+
+                <table class="table table-hover align-middle custom-table">
+
+                    <thead class="table-primary">
+
+                        <tr>
+
+                            <th>Sr#</th>
+
+                            <th>Class</th>
+
+                            <th>Career (PG/UG)</th>
+
+                            <th>Status</th>
+
+                            <th>Score</th>
+
+                            <th>Rating</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @forelse ($springData as $CompletionofCourser_spring)
+
+                            <tr>
+
+                                <!-- Sr -->
+
+                                <td>
+                                    {{ $loop->iteration }}
+                                </td>
+
+
+                                <!-- Class -->
+
+                                <td>
+
+                                    {{ $CompletionofCourser_spring
+                                        ->facultyClass
+                                        ?->code
+                                        ?? 'N/A' }}
+
+                                </td>
+
+
+                                <!-- Career -->
+
+                                <td>
+
+                                    {{ $CompletionofCourser_spring
+                                        ->facultyClass
+                                        ?->career_code
+                                        ?? 'N/A' }}
+
+                                </td>
+
+
+                                <!-- Status -->
+
+                                <td>
+
+                                    <div class="badge"
+                                        style="
+                                            background-color:
+                                            {{ $CompletionofCourser_spring
+                                                ->color
+                                                ?? '#6c757d' }};
+                                        ">
+
+                                        {{ $CompletionofCourser_spring
+                                            ->status_folder
+                                            ?? 'N/A' }}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- Score -->
+
+                                <td>
+
+                                    <div class="badge"
+                                        style="
+                                            background-color:
+                                            {{ $CompletionofCourser_spring
+                                                ->color
+                                                ?? '#6c757d' }};
+                                        ">
+
+                                        {{ number_format(
+                                            $CompletionofCourser_spring
+                                                ->completion_of_Course_folder
+                                                ?? 0,
+                                            1
+                                        ) }}%
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- Rating -->
+
+                                <td>
+
+                                    <div class="badge"
+                                        style="
+                                            background-color:
+                                            {{ $CompletionofCourser_spring
+                                                ->color
+                                                ?? '#6c757d' }};
+                                        ">
+
+                                        {{ $CompletionofCourser_spring
+                                            ->rating
+                                            ?? 'N/A' }}
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+
+                                <td colspan="6"
+                                    class="text-center text-muted">
+
+                                    No record found
+
+                                </td>
+
+                            </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+
+                    <!-- Spring Average -->
+
+                    <tfoot>
+
+                        <tr class="table-primary">
+
+                            <th class="text-end">
+                                Spring Average
+                            </th>
+
+                            <th colspan="2"></th>
+
+                            <th></th>
+
+
+                            <th>
+
+                                <b class="badge"
+                                    style="
+                                        background-color:
+                                        {{ getRatingMeta(
+                                            $springScore
+                                        )->color }};
+                                    ">
+
+                                    {{ number_format(
+                                        $springScore,
+                                        1
+                                    ) }}%
+
+                                </b>
+
+                            </th>
+
+
+                            <th>
+
+                                <b class="badge"
+                                    style="
+                                        background-color:
+                                        {{ getRatingMeta(
+                                            $springScore
+                                        )->color }};
+                                    ">
+
+                                    {{ getRatingMeta(
+                                        $springScore
+                                    )->rating }}
+
+                                </b>
+
+                            </th>
+
+                        </tr>
+
+                    </tfoot>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FALL
+        ================================================== -->
+
+        <div class="tab-pane fade"
+            id="completion-course-fall"
+            role="tabpanel">
+
+            <div class="table-responsive text-nowrap">
+
+                <table class="table table-hover align-middle custom-table">
+
+                    <thead class="table-primary">
+
+                        <tr>
+
+                            <th>Sr#</th>
+
+                            <th>Class</th>
+
+                            <th>Career (PG/UG)</th>
+
+                            <th>Status</th>
+
+                            <th>Score</th>
+
+                            <th>Rating</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @forelse ($fallData as $CompletionofCourser_fall)
+
+                            <tr>
+
+                                <!-- Sr -->
+
+                                <td>
+                                    {{ $loop->iteration }}
+                                </td>
+
+
+                                <!-- Class -->
+
+                                <td>
+
+                                    {{ $CompletionofCourser_fall
+                                        ->facultyClass
+                                        ?->code
+                                        ?? 'N/A' }}
+
+                                </td>
+
+
+                                <!-- Career -->
+
+                                <td>
+
+                                    {{ $CompletionofCourser_fall
+                                        ->facultyClass
+                                        ?->career_code
+                                        ?? 'N/A' }}
+
+                                </td>
+
+
+                                <!-- Status -->
+
+                                <td>
+
+                                    <div class="badge"
+                                        style="
+                                            background-color:
+                                            {{ $CompletionofCourser_fall
+                                                ->color
+                                                ?? '#6c757d' }};
+                                        ">
+
+                                        {{ $CompletionofCourser_fall
+                                            ->status_folder
+                                            ?? 'N/A' }}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- Score -->
+
+                                <td>
+
+                                    <div class="badge"
+                                        style="
+                                            background-color:
+                                            {{ $CompletionofCourser_fall
+                                                ->color
+                                                ?? '#6c757d' }};
+                                        ">
+
+                                        {{ number_format(
+                                            $CompletionofCourser_fall
+                                                ->completion_of_Course_folder
+                                                ?? 0,
+                                            1
+                                        ) }}%
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- Rating -->
+
+                                <td>
+
+                                    <div class="badge"
+                                        style="
+                                            background-color:
+                                            {{ $CompletionofCourser_fall
+                                                ->color
+                                                ?? '#6c757d' }};
+                                        ">
+
+                                        {{ $CompletionofCourser_fall
+                                            ->rating
+                                            ?? 'N/A' }}
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+
+                                <td colspan="6"
+                                    class="text-center text-muted">
+
+                                    No record found
+
+                                </td>
+
+                            </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+
+                    <!-- Fall Average -->
+
+                    <tfoot>
+
+                        <tr class="table-primary">
+
+                            <th class="text-end">
+                                Fall Average
+                            </th>
+
+                            <th colspan="2"></th>
+
+                            <th></th>
+
+
+                            <th>
+
+                                <b class="badge"
+                                    style="
+                                        background-color:
+                                        {{ getRatingMeta(
+                                            $fallScore
+                                        )->color }};
+                                    ">
+
+                                    {{ number_format(
+                                        $fallScore,
+                                        1
+                                    ) }}%
+
+                                </b>
+
+                            </th>
+
+
+                            <th>
+
+                                <b class="badge"
+                                    style="
+                                        background-color:
+                                        {{ getRatingMeta(
+                                            $fallScore
+                                        )->color }};
+                                    ">
+
+                                    {{ getRatingMeta(
+                                        $fallScore
+                                    )->rating }}
+
+                                </b>
+
+                            </th>
+
+                        </tr>
+
+                    </tfoot>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     OVERALL SPRING + FALL
+========================================================== -->
+
+<div class="card mt-4">
+
+    <div class="card-header table-primary">
+
+        <h5 class="mb-0">
+            Overall Course Folder Score
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered mb-0">
+
+                <thead class="table-primary">
+
+                    <tr>
+
+                        <th>
+                            Spring
+                        </th>
+
+                        <th>
+                            Fall
+                        </th>
+
+                        <th>
+                            Overall (S + F)
+                        </th>
+
+                        <th>
+                            Weightage
+                        </th>
+
+                        <th>
+                            Weighted Score
+                        </th>
+
+                        <th>
+                            Rating
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <!-- Spring -->
+
+                        <td>
+
+                            <b class="badge"
+                                style="
+                                    background-color:
+                                    {{ getRatingMeta(
+                                        $springScore
+                                    )->color }};
+                                ">
+
+                                {{ number_format(
+                                    $springScore,
+                                    1
+                                ) }}%
+
+                            </b>
+
+                        </td>
+
+
+                        <!-- Fall -->
+
+                        <td>
+
+                            <b class="badge"
+                                style="
+                                    background-color:
+                                    {{ getRatingMeta(
+                                        $fallScore
+                                    )->color }};
+                                ">
+
+                                {{ number_format(
+                                    $fallScore,
+                                    1
+                                ) }}%
+
+                            </b>
+
+                        </td>
+
+
+                        <!-- Overall -->
+
+                        <td>
+
+                            <b class="badge"
+                                style="
+                                    background-color:
+                                    {{ getRatingMeta(
+                                        $avgPercentage
+                                    )->color }};
+                                ">
+
+                                {{ number_format(
+                                    $avgPercentage,
+                                    1
+                                ) }}%
+
+                            </b>
+
+                        </td>
+
+
+                        <!-- Weightage -->
+
+                        <td>
+
+                            {{ number_format(
+                                $weightage,
+                                2
+                            ) }}%
+
+                        </td>
+
+
+                        <!-- Weighted -->
+
+                        <td>
+
+                            <strong>
+
+                                {{ number_format(
+                                    $weightedScore,
+                                    2
+                                ) }}
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- Rating -->
+
+                        <td>
+
+                            <b class="badge"
+                                style="
+                                    background-color:
+                                    {{ getRatingMeta(
+                                        $avgPercentage
+                                    )->color }};
+                                ">
+
+                                {{ getRatingMeta(
+                                    $avgPercentage
+                                )->rating }}
+
+                            </b>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+                    <!--/Tabs -->
                 </div>
             </div>
         </div>

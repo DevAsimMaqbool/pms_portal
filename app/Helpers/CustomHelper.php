@@ -4947,7 +4947,7 @@ function saveOverallAttendancePercentageOfHOD($employeeId, $classes, $keyPerform
     return $overallPercentage;
 }
 
-function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
+function CompletionOfCourseFolderForHODbk($activeRoleId, $indicator_id)
 {
     $departmentId = auth()->user()->department_id;
 
@@ -5020,6 +5020,277 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
     );
 
     return $records->groupBy('program_id');
+}
+function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | Active Terms
+    |--------------------------------------------------------------------------
+    */
+
+    $activeTerms = Term::where('status', '1')->get();
+
+    $activeTermIds = $activeTerms->pluck('id');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Spring / Fall Term IDs
+    |--------------------------------------------------------------------------
+    */
+
+    $springTermIds = $activeTerms
+        ->where('term', 'Spring')
+        ->pluck('id');
+
+    $fallTermIds = $activeTerms
+        ->where('term', 'Fall')
+        ->pluck('id');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HOD Department
+    |--------------------------------------------------------------------------
+    */
+
+    $departmentId = auth()->user()->department_id;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Faculty Members Of Department
+    |--------------------------------------------------------------------------
+    */
+
+    $facultyMembers = User::where('department_id', $departmentId)
+    ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor','Demonstrator'])->pluck('employee_id');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get Course Folder Records
+    |--------------------------------------------------------------------------
+    */
+
+    $records = CompletionOfCourseFolder::with([
+        'facultyMember',
+        'facultyClass',
+        'term'
+    ])
+        ->whereIn('faculty_member_id', $facultyMembers)
+        ->where('status', 2)
+        ->where('form_status', 'HOD')
+        ->whereIn('term_id', $activeTermIds)
+        ->where(
+            'completion_of_Course_folder_indicator_id',
+            $indicator_id
+        )
+        ->latest()
+        ->get();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rating / Status
+    |--------------------------------------------------------------------------
+    */
+
+    foreach ($records as $row) {
+
+        $value = (float) (
+            $row->completion_of_Course_folder ?? 0
+        );
+
+
+        if ($value == 100) {
+
+            $row->rating = 'OS';
+            $row->color = '#6EA8FE';
+            $row->status_folder = 'Completed';
+
+        } elseif ($value >= 70) {
+
+            $row->rating = 'ME';
+            $row->color = '#ffcb9a';
+            $row->status_folder = 'Partially Completed';
+
+        } else {
+
+            $row->rating = 'BE';
+            $row->color = '#ff4c51';
+            $row->status_folder = 'Not Completed';
+        }
+
+
+        $row->score = $value;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Spring Data
+    |--------------------------------------------------------------------------
+    */
+
+    $springData = $records
+        ->whereIn('term_id', $springTermIds)
+        ->values();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fall Data
+    |--------------------------------------------------------------------------
+    */
+
+    $fallData = $records
+        ->whereIn('term_id', $fallTermIds)
+        ->values();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Spring Score
+    |--------------------------------------------------------------------------
+    */
+
+    $springScore = $springData->isNotEmpty()
+
+        ? $springData->avg(function ($record) {
+
+            return (float) (
+                $record->completion_of_Course_folder ?? 0
+            );
+
+        })
+
+        : 0;
+
+
+    $springScore = round($springScore, 2);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fall Score
+    |--------------------------------------------------------------------------
+    */
+
+    $fallScore = $fallData->isNotEmpty()
+
+        ? $fallData->avg(function ($record) {
+
+            return (float) (
+                $record->completion_of_Course_folder ?? 0
+            );
+
+        })
+
+        : 0;
+
+
+    $fallScore = round($fallScore, 2);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Overall Spring + Fall
+    |--------------------------------------------------------------------------
+    */
+
+    if ($springScore > 0 && $fallScore > 0) {
+
+        $avgPercentage = round(
+            ($springScore + $fallScore) / 2,
+            2
+        );
+
+    } elseif ($springScore > 0) {
+
+        $avgPercentage = $springScore;
+
+    } elseif ($fallScore > 0) {
+
+        $avgPercentage = $fallScore;
+
+    } else {
+
+        $avgPercentage = 0;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Weightage
+    |--------------------------------------------------------------------------
+    */
+
+    $weightage = getRoleWeightage(
+        $activeRoleId,
+        'indicator',
+        $indicator_id
+    )['weightage'] ?? 0;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Weighted Score
+    |--------------------------------------------------------------------------
+    */
+
+    $weightedScore = (
+        $avgPercentage * $weightage
+    ) / 100;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Save Percentage
+    |--------------------------------------------------------------------------
+    */
+
+    $facultyId = auth()->user()->employee_id;
+
+    saveIndicatorPercentage100Plus(
+        $facultyId,
+        $activeRoleId,
+        1,
+        3,
+        $indicator_id,
+        $weightedScore,
+        $avgPercentage
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Return
+    |--------------------------------------------------------------------------
+    */
+
+    return [
+
+        'allData' => $records,
+
+        'springData' => $springData,
+
+        'fallData' => $fallData,
+
+        'springScore' => $springScore,
+
+        'fallScore' => $fallScore,
+
+        'avgPercentage' => $avgPercentage,
+
+        'weightedScore' => round(
+            $weightedScore,
+            2
+        ),
+
+        'weightage' => $weightage,
+
+    ];
 }
 
 // function StudentEngagementRateForHOD($activeRoleId, $indicatorId)
