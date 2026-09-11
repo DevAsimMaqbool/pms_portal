@@ -249,14 +249,14 @@
                         <div data-i18n="Line Manager Feedback">Line Manager Feedback</div>
                     </a>
                 </li>
-                <li class="menu-item {{ request()->routeIs('employee.feedback.index') ? 'active' : '' }}"
+                <!-- <li class="menu-item {{ request()->routeIs('employee.feedback.index') ? 'active' : '' }}"
                     data-bs-toggle="tooltip" data-bs-placement="right"
                     data-bs-original-title="Line Manager Event Feedback">
                     <a href="{{ route('employee.feedback.index') }}"" class=" menu-link">
                         <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
                         <div data-i18n="Line Manager Event Feedback">Line Manager Event Feedback</div>
                     </a>
-                </li>
+                </li> -->
                 <li class="menu-item {{ request()->is('kpa/1/category/3/indicator/120') ? 'active' : '' }}"
                     data-bs-toggle="tooltip" data-bs-placement="right"
                     data-bs-original-title="Completion of Course Folder">
