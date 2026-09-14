@@ -35,6 +35,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" data-bs-toggle="tab" href="#form1" role="tab">Research Publication</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#form2" role="tab">Research Target Setting</a>
+                    </li>
                 </ul>
             @endif
             @if(in_array(getRoleName(activeRole()), ['HOD']))
@@ -57,6 +60,12 @@
 
                 {{-- ================= FORM 1 ================= --}}
                 @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor', 'Professor', 'Associate Professor']))
+                @php
+                    $formStatus = in_array('Dean', auth()->user()->roles->pluck('name')->toArray())
+                        ? 'DEAN'
+                        : 'RESEARCHER';
+                        
+                @endphp
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
 
                         <div
@@ -76,7 +85,7 @@
                         <form id="researchForm1" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="indicator_id" value="{{ $indicatorId }}">
-                            <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
+                            <input type="hidden" id="form_status" name="form_status" value="{{ $formStatus }}" required class="pppp">
                             <div class="row g-6 mt-0">
                                 <div class="col-12 col-lg-8">
                                     <div class="card shadow-none bg-transparent border border-primary">
@@ -539,6 +548,140 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="form2" role="tabpanel">
+                        <form id="researchForm2" enctype="multipart/form-data" class="row">
+                            @csrf
+                            <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
+                            <input type="hidden" id="form_status" name="form_status" value="HOD" required>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="faculty_member" class="form-label">Name of Faculty Member</label>
+                                    <select name="faculty_member_id[]" id="select2Success" class="select2 form-select" multiple
+                                        required>
+                                        
+                                        @foreach($facultyMembers as $member)
+                                            <option value="{{ $member->id }}" data-department="{{ $member->department }}"
+                                                data-job_title="{{ $member->job_title }}">
+                                                {{ $member->name }} / 
+                                                
+                                                @if($member->roles->isNotEmpty())
+                                                    ({{ $member->roles->first()->name === 'Teacher' ? 'Lecturer' : $member->roles->first()->name }})
+                                                @endif
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="year" class="form-label">Year</label>
+                                    <select name="year_id" id="year_id"
+                                        class="form-select" required>
+                                        <option value=""> Select year</option>
+                                            @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                        </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="description" class="form-label">Description</label>
+
+                                    <textarea
+                                        class="form-control"
+                                        id="description"
+                                        name="description"
+                                        rows="4"
+                                        placeholder="Enter description"></textarea>
+
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+                            <div class="row g-6 mt-0">
+                                <div class="col-md-3">
+                                    <small class="fw-medium d-block pt-4 mb-4">Scopus</small>
+                                    <div class="input-group mb-4">
+                                        <span class="input-group-text">Scopus</span>
+                                        <input type="number" min="0" class="form-control" name="scopus_q1" id="scopus-q1">
+                                    </div>
+                                    {{-- <div class="input-group mb-4">
+                                        <span class="input-group-text">Q2</span>
+                                        <input type="number" class="form-control" name="scopus_q2" id="scopus-q2">
+                                    </div>
+                                    <div class="input-group mb-4">
+                                        <span class="input-group-text">Q3</span>
+                                        <input type="number" class="form-control" name="scopus_q3" id="scopus-q3">
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Q4</span>
+                                        <input type="number" class="form-control" name="scopus_q4" id="scopus-q4">
+                                    </div> --}}
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="fw-medium d-block pt-4 mb-4">HEC</small>
+                                    <div class="input-group mb-4">
+                                        <span class="input-group-text">HEC</span>
+                                        <input type="number" min="0" class="form-control" name="hec_w" id="hec-w">
+                                    </div>
+                                    {{-- <div class="input-group mb-4">
+                                        <span class="input-group-text">X</span>
+                                        <input type="number" class="form-control" name="hec_x" id="hec-x">
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Y</span>
+                                        <input type="number" class="form-control" name="hec_y" id="hec-y">
+                                    </div> --}}
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="fw-medium d-block pt-4 mb-4">Medical</small>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Medical</span>
+                                        <input type="number" min="0" class="form-control" name="medical_recognized"
+                                            id="medical-recognized">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <small class="fw-medium d-block pt-4 mb-4">Total</small>
+                                    <button type="button" class="btn btn-outline-secondary waves-effect w-100 total-target">Tota
+                                        0</button>
+                                    <input type="text" name="target" class="" style="display:none">
+                                </div>
+                                {{-- <div class="col-md-6">
+                                    <label for="national" class="form-label">National</label>
+                                    <input type="number" id="national" class="form-control" name="national">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="international" class="form-label">Inter National</label>
+                                    <input type="number" id="international" class="form-control" name="international">
+                                </div> --}}
+                            </div>
+                            <div class="col-4 demo-vertical-spacing">
+                                <button class="btn btn-primary waves-effect waves-light">SUBMIT</button>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class="">
+                            <div class="table-responsive">
+                                <table id="geTtargetTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>User</th>
+                                            <th>Indicator</th>
+                                            <th>Target</th>
+                                            <th>Description</th>
+                                            <th>Scopus</th>
+                                            <th>HEC</th>
+                                            <th>Medical</th>
+                                            <th>Year</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="form2" role="tabpanel">
 
                         {{-- <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
                             <thead>
@@ -771,7 +914,12 @@
                         text: res.message || 'Status updated successfully!'
                     });
 
-                    fetchIndicatorForms3();
+                    const table = $('#complaintTable3').DataTable();
+
+                    // Save current page
+                    const currentPage = table.page();
+
+                    fetchIndicatorForms3(currentPage);
                 },
                 error: function (xhr) {
                     Swal.fire({
@@ -1758,7 +1906,67 @@
     @endif
     @if(in_array(getRoleName(activeRole()), ['Dean']))
         <script>
+            function fetchHodTarget() {
+                $.ajax({
+                    url: "{{ route('faculty-target.index') }}",
+                    method: "GET",
+                    data: {
+                        status: "DEAN",
+                        indicator: {{ $indicatorId }}
+                                                                                                                            },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.forms);
+                        const forms = data.forms || [];
 
+                        const rowData = forms.map((form, i) => {
+                            const createdAt = form.created_at
+                                ? new Date(form.created_at).toISOString().split('T')[0]
+                                : 'N/A';
+
+                            // Pass entire form as JSON in button's data attribute
+                            return [
+                                i + 1,
+                                form.user ? form.user.name : 'N/A',
+                                form.indicator ? form.indicator.indicator : 'N/A',
+                                form.target ?? 'N/A',
+                                form.description ?? 'N/A',
+                                form.scopus_q1 ?? 'N/A',
+                                form.hec_w ?? 'N/A',
+                                form.medical_recognized ?? 'N/A',
+                                form.year ? form.year.year : 'N/A'
+                            ];
+                        });
+
+                        if (!$.fn.DataTable.isDataTable('#geTtargetTable')) {
+                            $('#geTtargetTable').DataTable({
+                                data: rowData,
+                                scrollX: false,
+                                scrollCollapse: false,
+                                autoWidth: false,
+                                columns: [
+                                    { title: "#" },
+                                    { title: "User" },
+                                    { title: "Indicator" },
+                                    { title: "Target" },
+                                    { title: "Description" },
+                                    { title: "Scopus" },
+                                    { title: "HEC" },
+                                    { title: "Medical" },
+                                    { title: "Year" }
+
+                                ]
+                            });
+                        } else {
+                            $('#geTtargetTable').DataTable().clear().rows.add(rowData).draw();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error fetching data:', xhr.responseText);
+                        alert('Unable to load data.');
+                    }
+                });
+            }
             function fetchIndicatorForms1() {
                 $.ajax({
                     url: "{{ route('indicator-form.index') }}",
@@ -1817,7 +2025,27 @@
             }
 
             $(document).ready(function () {
+                function updateTotal() {
+                    let ids = [
+                        '#scopus-q1', '#scopus-q2', '#scopus-q3', '#scopus-q4',
+                        '#hec-w', '#hec-x', '#hec-y',
+                        '#medical-recognized'
+                    ];
+
+                    let total = 0;
+                    ids.forEach(id => {
+                        total += Number($(id).val()) || 0;
+                    });
+
+                    $('.total-target').text('Total ' + total);
+                    $('input[name="target"]').val(total);
+                }
+
+                // Trigger on input change
+                $('#scopus-q1, #scopus-q2, #scopus-q3, #scopus-q4, #hec-w, #hec-x, #hec-y, #medical-recognized')
+                    .on('input', updateTotal);
                 fetchIndicatorForms1();
+                fetchHodTarget();
 
                 // Handle click on View button
                 $(document).on('click', '.view-form-btn', function () {
@@ -1990,6 +2218,63 @@
 
 
                     $('#viewFormModal').modal('show');
+                });
+                $('#researchForm2').on('submit', function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    let formData = new FormData(this);
+
+                    // Show loading indicator
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: "{{ route('faculty-target.store') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.close();
+                            Swal.fire({ icon: 'success', title: 'Success', text: response.message });
+                            form[0].reset();
+
+                             // Remove validation errors
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            $('#select2Success').val(null).trigger('change');
+                            fetchHodTarget();
+                        },
+                        error: function (xhr) {
+                            Swal.close();
+                            // Clear previous errors before showing new ones
+                            form.find('.invalid-feedback').remove();
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+
+                                // Loop through all validation errors
+                                $.each(errors, function (field, messages) {
+                                    let input = form.find('[name="' + field + '"]');
+
+                                    if (input.length) {
+                                        input.addClass('is-invalid');
+
+                                        // Show error message under input
+                                        input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
+                                    }
+                                });
+
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong!' });
+                            }
+                        }
+                    });
                 });
 
 
@@ -2307,12 +2592,20 @@
                         |--------------------------------------------------------------------------
                         */
                         else {
-
-                            statusText = `
-                                <span class="badge bg-label-dark text-warning">
-                                    Waiting for HOD Approvel.
-                                </span>
-                            `;
+                             if (row.form_status === 'DEAN') {
+                                         statusText = `
+                                            <span class="badge bg-label-dark text-warning">
+                                                 Waiting for ORIC Approvel.
+                                            </span>
+                                        `;
+                                }else {
+                                
+                                   statusText = `
+                                        <span class="badge bg-label-dark text-warning">
+                                            Waiting for HOD Approvel.
+                                        </span>
+                                    `;
+                                }
                         }
                     }
 
@@ -2492,8 +2785,12 @@
                             title: 'Updated',
                             text: res.message || 'Status updated successfully!'
                         });
+                        const table = $('#complaintTable3').DataTable();
 
-                        fetchIndicatorForms3();
+                        // Save current page
+                        const currentPage = table.page();
+
+                        fetchIndicatorForms3(currentPage);
                     },
                     error: function (xhr) {
                         Swal.fire({
@@ -2586,7 +2883,12 @@
                             }else if (form.reject_status == 2) {
                                statusCell.append(emptyrejectoricRadio);
                             } else  {
-                                statusCell.append(emptyRadio);
+                                 if (form.form_status === 'DEAN') {
+                                        statusCell.append(approveRadio, rejectRadio,onholdRadio);
+                                }else {
+                                   statusCell.append(emptyRadio);
+                                }
+                                
                             }
                         } else {
                             // Append to cell

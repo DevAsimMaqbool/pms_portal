@@ -79,7 +79,7 @@
                             @csrf
                             <input type="hidden" name="indicator_id" value="">
                             <input type="hidden" name="_method" value="PUT">
-                            <input type="hidden" id="form_status" name="form_status" value="RESEARCHER" required>
+                            <input type="hidden" id="form_status" name="form_status" value="" required>
 
                             <div class="row g-6 mt-0">
                                 <div class="col-12 col-lg-8">
@@ -458,6 +458,7 @@
 
                     // Fill main fields
                     $('#researchForm1 [name="indicator_id"]').val(form.id);
+                    $('#researchForm1 [name="form_status"]').val(form.form_status);
                     $('#researchForm1 [name="target_category"]').val(form.target_category);
                     $('#researchForm1 [name="link_of_publications"]').val(form.link_of_publications);
                     $('#researchForm1 [name="journal_clasification"]').val(form.journal_clasification);

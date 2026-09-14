@@ -47,7 +47,7 @@ class FacultyTargetController extends Controller
                 if ($status == "DEAN") {
                          $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator','year'])
                         ->where('created_by', $employee_id)
-                        ->where('form_status', 'DEAN')
+                        ->where('form_status', 'HOD')
                         ->get();    }
                 if ($status == "HOD") {              
                         
