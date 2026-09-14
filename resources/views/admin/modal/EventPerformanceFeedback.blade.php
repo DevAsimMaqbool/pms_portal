@@ -142,11 +142,12 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         Event Performance Feedback
                     </h3>
+                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0 fw-bold text-primary"></h4>
@@ -176,7 +177,7 @@
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-                                            $data = departmentEventFeedbackAverage(Auth::user()->employee_id, $activeRoleId, 13, 28, 189);
+                                            $data = departmentEventFeedbackAverage(Auth::user()->employee_id, $activeRoleId, 13, 28, 189,$currentYear->id);
                                             $rows = $data->rows ?? [];
                                             $totalPercentage = collect($rows)->avg('score');
                                         @endphp
