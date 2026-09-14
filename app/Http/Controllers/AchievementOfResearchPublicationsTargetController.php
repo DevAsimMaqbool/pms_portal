@@ -119,7 +119,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                     'coAuthors'
                 ])
                     ->whereIn('status', [1, 2, 3])
-                    ->where('form_status', 'RESEARCHER')
+                    //->where('form_status', 'RESEARCHER')
                     ->orderBy('id', 'desc');
 
                 return DataTables::eloquent($forms)
