@@ -661,7 +661,7 @@
 
                 <option value="video"
                     {{ old('evidence_type') === 'video' ? 'selected' : '' }}>
-                    Video
+                    Url
                 </option>
 
                 <option value="attachment"
@@ -704,7 +704,7 @@
 
                 <i class="fas fa-video form-label-icon"></i>
 
-                Video URL
+                 URL
 
                 <span class="text-danger">*</span>
 

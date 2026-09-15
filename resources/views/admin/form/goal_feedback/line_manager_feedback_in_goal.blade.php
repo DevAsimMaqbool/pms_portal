@@ -470,7 +470,7 @@
                             @foreach(SelectCurrentYear(1) as $year)
 
                                 <option value="{{ $year->id }}">
-                                    {{ $year->year }}
+                                    {{ $year->year }}-2026
                                 </option>
 
                             @endforeach

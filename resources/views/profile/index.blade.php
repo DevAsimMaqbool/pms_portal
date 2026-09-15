@@ -92,10 +92,64 @@
       </div>
 
     </div>
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12">
+        <!-- About User -->
+        <div class="card mb-6">
+          <div class="card-body"> 
+            <p class="card-text text-uppercase text-body-secondary small mb-0">Reset Password</p>       
+            <form method="post" action="{{ route('password.user.update') }}" class="mt-6 space-y-6">
+        @csrf
+                        <input name="employee_id" type="hidden" value="{{ Auth::id() }}">
+                        {{-- New Password --}}
+                        <div class="mb-6 col-lg-6 col-md-6">
+                            <label class="form-label" for="add-user-password">
+                                New Password
+                            </label>
+
+                            <input type="password"
+                                id="add-user-password"
+                                class="form-control"
+                                placeholder="Enter new password"
+                                name="password"
+                                autocomplete="new-password" />
+
+                            <div class="form-text">
+                                Leave blank to keep the current password.
+                            </div>
+
+                            <div class="invalid-feedback" id="passwordError"></div>
+                        </div>
+
+                        {{-- Confirm Password --}}
+                        <div class="mb-6 col-lg-6 col-md-6">
+                            <label class="form-label" for="add-user-password-confirmation">
+                                Confirm New Password
+                            </label>
+
+                            <input type="password"
+                                id="add-user-password-confirmation"
+                                class="form-control"
+                                placeholder="Confirm new password"
+                                name="password_confirmation"
+                                autocomplete="new-password" />
+
+                            <div class="invalid-feedback" id="password_confirmationError"></div>
+                        </div>
+                         
+                        <button type="submit" class="btn btn-primary me-3 data-submit">Submit</button>
+                        
+                    </form>
+            
+          </div>
+        </div>
+        <!--/ About User -->
+      </div>
+
+    </div>
     <!--/ User Profile Content -->
   </div>
   <!-- / Content -->
-
 
 @endsection
 @push('script')
