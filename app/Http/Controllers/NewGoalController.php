@@ -123,24 +123,24 @@ class NewGoalController extends Controller
         /*
          * Don't allow editing once submitted.
          */
-        if (
-            $newgoal->selfReports()
-                ->whereIn('status', [
-                    'submitted',
-                    'manager_approved',
-                    'manager_rejected',
-                    'hr_approved',
-                    'hr_rejected',
-                ])
-                ->exists()
-        ) {
-            return redirect()
-                ->route('newgoals.index')
-                ->with(
-                    'error',
-                    'This goal can no longer be edited because a self report has been submitted.'
-                );
-        }
+        // if (
+        //     $newgoal->selfReports()
+        //         ->whereIn('status', [
+        //             'submitted',
+        //             'manager_approved',
+        //             'manager_rejected',
+        //             'hr_approved',
+        //             'hr_rejected',
+        //         ])
+        //         ->exists()
+        // ) {
+        //     return redirect()
+        //         ->route('newgoals.index')
+        //         ->with(
+        //             'error',
+        //             'This goal can no longer be edited because a self report has been submitted.'
+        //         );
+        // }
 
         $drivers = S2RDriver::orderBy('driver_name')->get();
 
@@ -162,24 +162,24 @@ class NewGoalController extends Controller
 ) {
     $this->authorizeGoal($newgoal);
 
-    if (
-        $newgoal->selfReports()
-            ->whereIn('status', [
-                'submitted',
-                'manager_approved',
-                'manager_rejected',
-                'hr_approved',
-                'hr_rejected',
-            ])
-            ->exists()
-    ) {
-        return redirect()
-            ->route('newgoals.index')
-            ->with(
-                'error',
-                'This goal can no longer be edited.'
-            );
-    }
+    // if (
+    //     $newgoal->selfReports()
+    //         ->whereIn('status', [
+    //             'submitted',
+    //             'manager_approved',
+    //             'manager_rejected',
+    //             'hr_approved',
+    //             'hr_rejected',
+    //         ])
+    //         ->exists()
+    // ) {
+    //     return redirect()
+    //         ->route('newgoals.index')
+    //         ->with(
+    //             'error',
+    //             'This goal can no longer be edited.'
+    //         );
+    // }
 
     $validated = $request->validate([
         'goal' =>

@@ -236,8 +236,6 @@
 
                                                     </li>
 
-                                                    @if(!$goal->selfReports()->exists())
-
                                                         <li>
 
                                                             <a class="dropdown-item" href="{{ route('newgoals.edit', $goal) }}">
@@ -248,7 +246,7 @@
                                                             </a>
 
                                                         </li>
-
+@if(!$goal->selfReports()->exists())
                                                         <li>
 
                                                             <form method="POST" action="{{ route('newgoals.destroy', $goal) }}"
