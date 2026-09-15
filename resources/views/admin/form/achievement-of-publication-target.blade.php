@@ -884,7 +884,10 @@
                     // Save current page
                     const currentPage = table.page();
 
-                    fetchIndicatorForms3(currentPage);
+                    const currentPageLength = table.page.len();
+
+                    fetchIndicatorForms3(currentPage, currentPageLength);
+                    
                 },
                 error: function (xhr) {
                     Swal.fire({
@@ -919,7 +922,9 @@
                     // Save current page
                     const currentPage = table.page();
 
-                    fetchIndicatorForms3(currentPage);
+                    const currentPageLength = table.page.len();
+
+                    fetchIndicatorForms3(currentPage, currentPageLength);
                 },
                 error: function (xhr) {
                     Swal.fire({
@@ -2393,11 +2398,18 @@
                     }
                 });
             }
-            function fetchIndicatorForms3(page = 0) {
+            function fetchIndicatorForms3(page = 0, pageLength = 10) {
 
-    if ($.fn.DataTable.isDataTable('#complaintTable3')) {
-        $('#complaintTable3').DataTable().destroy();
-    }
+            if ($.fn.DataTable.isDataTable('#complaintTable3')) {
+                const oldTable = $('#complaintTable3').DataTable();
+
+                // Get current page and selected page length
+                page = oldTable.page();
+                pageLength = oldTable.page.len();
+
+                // Destroy old DataTable
+                oldTable.destroy();
+            }
 
     $('#complaintTable3').DataTable({
 
@@ -2426,12 +2438,13 @@
         scrollCollapse: true,
         autoWidth: false,
 
-        pageLength: 10,
+        pageLength: pageLength,
 
         lengthMenu: [
             [10, 25, 50, 100],
             [10, 25, 50, 100]
         ],
+        displayStart: page * pageLength,
 
         columns: [
 
@@ -2746,12 +2759,6 @@
         drawCallback: function () {
             const api = this.api();
 
-            // Restore page only once
-            if (page !== 0) {
-                api.page(page).draw('page');
-                page = 0;
-            }
-
             const tooltipTriggerList =
                 [].slice.call(
                     document.querySelectorAll(
@@ -2790,7 +2797,9 @@
                         // Save current page
                         const currentPage = table.page();
 
-                        fetchIndicatorForms3(currentPage);
+                        const currentPageLength = table.page.len();
+
+                        fetchIndicatorForms3(currentPage, currentPageLength);
                     },
                     error: function (xhr) {
                         Swal.fire({

@@ -24,6 +24,8 @@ class AlumniSatisfactionRate extends Model
         'alumni_engagement_rate',
         'portal_registration',
         'form_status',
+        'year_id',
+        'term_id',
         'status',
         'update_history',
         'created_by',

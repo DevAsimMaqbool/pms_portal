@@ -82,6 +82,14 @@
 
                                     <div id="student-satisfaction-container">
                                         <div class="student-group row g-3 mb-3 border p-3 mt-3 rounded">
+                                           <div class="col-md-4">
+                                                    <label for="year" class="form-label">Year</label>
+                                                    <select name="year_id" id="year_id"
+                                                        class="form-select" required>
+                                                        <option value=""> Select year</option>
+                                                            @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                                        </select>
+                                            </div>
                                             <div class="col-md-4">
                                                 <label for="faculty" class="form-label">Faculty</label>
                                                 <select name="faculty_id" id="faculty_id" class="select2 form-select" required>
@@ -275,6 +283,7 @@
                     $f.find('[name="record_id"]').val(form.id);
                     // Set Faculty first
                     $f.find('[name="faculty_id"]').val(form.faculty.id).trigger('change');
+                    $f.find('[name="year_id"]').val(form.year_id).trigger('change');
                     $f.find('[name="program_level"]').val(form.program_level).trigger('change');
                     // Load Departments for this faculty, then set Department
                     $.ajax({

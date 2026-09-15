@@ -53,6 +53,7 @@ class AlumniSatisfactionRateController extends Controller
         $request->validate([
             'indicator_id' => 'required|exists:indicators,id',
             'form_status' => 'required|string',
+            'year_id' => 'required',
             'faculty_id' => 'required',
             'department_id' => 'required',
             'program_id' => 'required',
@@ -66,6 +67,7 @@ class AlumniSatisfactionRateController extends Controller
             'indicator_id' => $request->indicator_id,
             'form_status' => $request->form_status,
             'faculty_id' => $request->faculty_id,
+            'year_id'=>$request->year_id,
             'department_id' => $request->department_id,
             'program_id' => $request->program_id,
             'program_level' => $request->program_level,
@@ -102,6 +104,7 @@ class AlumniSatisfactionRateController extends Controller
 
         $request->validate([
             'faculty_id' => 'required',
+            'year_id' => 'required',
             'department_id' => 'required',
             'program_id' => 'required',
             'program_level' => 'required',
@@ -112,6 +115,7 @@ class AlumniSatisfactionRateController extends Controller
 
         $data = [
             'faculty_id' => $request->faculty_id,
+            'year_id' => $request->year_id,
             'department_id' => $request->department_id,
             'program_id' => $request->program_id,
             'program_level' => $request->program_level,
